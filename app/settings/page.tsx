@@ -13,22 +13,14 @@ import {
   Text,
   useMantineColorScheme,
 } from '@mantine/core';
-import ExportCSV from './ExportCSV';
-import ImportCSV from './ImportCSV';
-import MigrateHistory from './MigrateHistory';
+import { NextGoalChoice, useAppContext } from '../AppContextProvider';
+import ExportCSV from '../ExportCSV';
+import ImportCSV from '../ImportCSV';
+import MigrateHistory from '../MigrateHistory';
 
-export enum NextGoalChoice {
-  RANDOM = 'RANDOM',
-  PREFER_FEWER_ATTEMPTS = 'PREFER_FEWER_ATTEMPTS',
-}
-
-type Props = {
-  nextGoalChoice: NextGoalChoice;
-  setNextGoalChoice: (nextGoalChoice: NextGoalChoice) => void;
-};
-
-export default function Settings({ nextGoalChoice, setNextGoalChoice }: Props) {
+export default function Settings() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
+  const { nextGoalChoice, setNextGoalChoice } = useAppContext();
   return (
     <Container my="md">
       <Table variant="vertical" withTableBorder>

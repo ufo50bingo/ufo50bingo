@@ -610,7 +610,7 @@ export const STANDARD = [
     },
     { name: 'MORTOL II: Collect 10 keys', types: ['mortolii', 'hard'] },
     {
-      name: 'MORTOL II: Defeat all three mini bosses without using the Bomber',
+      name: 'MORTOL II: Defeat all three mini bosses without damaging them as Bomber',
       types: ['mortolii', 'hard'],
     },
     { name: 'ELFAZAR’S HAT: Clear Stage 3 (Frostin Town)', types: ['elfazarshat', 'hard'] },
@@ -834,3 +834,4 @@ export const STANDARD = [
     },
   ],
 ] as const;
+

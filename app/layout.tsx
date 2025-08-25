@@ -2,8 +2,11 @@ import '@mantine/core/styles.css';
 
 import React from 'react';
 import { GoogleAnalytics } from '@next/third-parties/google';
-import { ColorSchemeScript, mantineHtmlProps, MantineProvider } from '@mantine/core';
+import { AppShell, ColorSchemeScript, mantineHtmlProps, MantineProvider } from '@mantine/core';
 import { theme } from '../theme';
+import { AppContextProvider } from './AppContextProvider';
+import Nav from './Nav';
+import Shell from './Shell';
 
 export const metadata = {
   title: 'UFO 50 Bingo',
@@ -14,7 +17,7 @@ export default function RootLayout({ children }: { children: any }) {
   return (
     <html lang="en" {...mantineHtmlProps}>
       <head>
-        <ColorSchemeScript />
+        <ColorSchemeScript defaultColorScheme="dark" />
         <link rel="shortcut icon" href="/favicon.png" />
         <meta
           name="viewport"
@@ -22,7 +25,14 @@ export default function RootLayout({ children }: { children: any }) {
         />
       </head>
       <body>
-        <MantineProvider theme={theme}>{children}</MantineProvider>
+        <MantineProvider defaultColorScheme="dark" theme={theme}>
+          <AppContextProvider>
+            <Shell>
+              <Nav />
+              {children}
+            </Shell>
+          </AppContextProvider>
+        </MantineProvider>
       </body>
       <GoogleAnalytics gaId="G-FP1JEFSLS3" />
     </html>

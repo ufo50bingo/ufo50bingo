@@ -1,4 +1,6 @@
-import { Card, Container, List, Stack, Text } from '@mantine/core';
+'use client';
+
+import { Card, Container, List } from '@mantine/core';
 
 export default function Resources() {
   return (
@@ -6,11 +8,21 @@ export default function Resources() {
       <Card shadow="sm" padding="sm" radius="md" withBorder>
         <List>
           <List.Item>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdAvsXrzA7V4ug13UZhjTUqkYLy-JMm0758bWRfwHBy1VIaGw/viewform">
+              Sign up for UFO 50 Bingo League Season 2 by September 5!
+            </a>
+          </List.Item>
+          <List.Item>
+            <a href="https://docs.google.com/document/d/1uMWL5f_qtWMTnXwVWRkc8EB29St83zTF6qCghLpVUe8/edit?tab=t.0#heading=h.h24kstbbrpiw">
+              Variants and Overview
+            </a>
+          </List.Item>
+          <List.Item>
             <a
               href="https://docs.google.com/document/d/1VRHljWeJ3lHuN3ou-9R0kMgwoZeCcaEPBsRCI1nWEig/edit?tab=t.0#heading=h.us0d6jom1jp"
               target="_blank"
             >
-              Rules
+              Standard Rules
             </a>
           </List.Item>
           <List.Item>
@@ -30,6 +42,11 @@ export default function Resources() {
             </a>
           </List.Item>
           <List.Item>
+            <a href="https://docs.google.com/spreadsheets/d/1bW8zjoR2bpr74w-dA4HHt04SqvGg1aj8FJeOs3EqdNE/edit?gid=0#gid=0">
+              Stats and VOD links for every goal completion from Bingo League Season 1
+            </a>
+          </List.Item>
+          <List.Item>
             <a
               href="https://docs.google.com/spreadsheets/d/1aYcmIA1KoviLQvQHDNTfzkIyG_BwHrO1cTtgimZtWZw/edit?gid=521253915#gid=521253915"
               target="_blank"
@@ -43,6 +60,12 @@ export default function Resources() {
               target="_blank"
             >
               Bingo League Season 1 (Ended May 4, 2025)
+            </a>
+          </List.Item>
+          <List.Item>
+            <a href="https://gretgor.itch.io/ufo50-bingo-training-dummy">
+              Bingo “training dummy” by Gretgor. Play vs a CPU that also tries to complete goals on
+              a board
             </a>
           </List.Item>
         </List>

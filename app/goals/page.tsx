@@ -1,6 +1,7 @@
 'use client';
 
-import { Dispatch, SetStateAction, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { IconChevronDown, IconChevronUp, IconPlayerPlay, IconSelector } from '@tabler/icons-react';
 import {
   ActionIcon,
@@ -13,20 +14,20 @@ import {
   Tooltip,
   UnstyledButton,
 } from '@mantine/core';
-import { AttemptRow, db } from './db';
-import Duration from './Duration';
-import { compareByDifficulty, SORTED_FLAT_GOALS } from './goals';
-import PlaylistAddButton from './PlaylistAddButton';
-import { GoalStats } from './useGoalStats';
+import { useAppContext } from '../AppContextProvider';
+import { db } from '../db';
+import Duration from '../Duration';
+import { compareByDifficulty, DIFFICULTY_NAMES, GAME_NAMES, SORTED_FLAT_GOALS } from '../goals';
+import PlaylistAddButton from '../PlaylistAddButton';
 
-type Props = {
-  attempts: AttemptRow[];
-  goalStats: Map<string, GoalStats>;
-  selectedGoals: Set<string>;
-  onTryGoal: (goal: string) => void;
-};
+export default function AllGoals() {
+  const router = useRouter();
+  const { goalStats, selectedGoals, setGoal } = useAppContext();
+  const onTryGoal = (goal: string) => {
+    setGoal(goal);
+    router.push('/practice');
+  };
 
-export default function AllGoals({ attempts, goalStats, selectedGoals, onTryGoal }: Props) {
   const allChecked = SORTED_FLAT_GOALS.every((goal) => selectedGoals.has(goal.name));
   const allUnchecked = SORTED_FLAT_GOALS.every((goal) => !selectedGoals.has(goal.name));
 
@@ -175,8 +176,8 @@ export default function AllGoals({ attempts, goalStats, selectedGoals, onTryGoal
                   />
                 </Table.Td>
                 <Table.Td>{goal.name}</Table.Td>
-                <Table.Td>{goal.types[0]}</Table.Td>
-                <Table.Td>{goal.types[1]}</Table.Td>
+                <Table.Td>{GAME_NAMES[goal.types[0]]}</Table.Td>
+                <Table.Td>{DIFFICULTY_NAMES[goal.types[1]]}</Table.Td>
                 <Table.Td>
                   {averageDuration == null ? '-' : <Duration duration={averageDuration} />}
                 </Table.Td>

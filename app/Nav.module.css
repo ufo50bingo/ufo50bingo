@@ -1,0 +1,29 @@
+.header {
+  border-bottom: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4)) !important;
+}
+
+.inner {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+.mainLink {
+  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-1)) !important;
+  padding: 7px var(--mantine-spacing-sm) !important;
+  font-weight: 700 !important;
+  border-bottom: 2px solid transparent !important;
+  transition:
+    border-color 100ms ease
+    color 100ms ease !important;
+
+  @mixin hover {
+    color: light-dark(var(--mantine-color-black), var(--mantine-color-white)) !important;
+    text-decoration: none !important;
+  }
+
+  &[data-active] {
+    color: light-dark(var(--mantine-color-black), var(--mantine-color-white)) !important;
+    border-bottom-color: var(--mantine-color-blue-6) !important;
+  }
+}

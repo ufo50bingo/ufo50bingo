@@ -1,165 +1,353 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
+import Link from 'next/link';
+import { IconCheck, IconDots, IconExclamationMark } from '@tabler/icons-react';
 import {
-  IconBorderAll,
-  IconDeviceGamepad,
-  IconFilter,
-  IconPlaylistAdd,
-  IconScript,
-  IconSettings,
-  IconVs,
-} from '@tabler/icons-react';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { Tabs } from '@mantine/core';
-import AllGoals from './AllGoals';
-import BoardAnalyzer from './BoardAnalyzer';
-import CreateBoard from './CreateBoard';
-import { db } from './db';
-import Playlist from './Playlist';
-import Practice from './Practice';
-import Resources from './Resources';
-import Settings, { NextGoalChoice } from './Settings';
-import useGoalStats, { GoalStats } from './useGoalStats';
-import useSelectedGoals from './useSelectedGoals';
+  ActionIcon,
+  Alert,
+  Button,
+  Card,
+  Checkbox,
+  Container,
+  Group,
+  HoverCard,
+  JsonInput,
+  Menu,
+  SegmentedControl,
+  Stack,
+  Table,
+  Text,
+  TextInput,
+  Title,
+  Tooltip,
+} from '@mantine/core';
+import createPasta, { Pasta } from './createPasta';
+import createPastaWithoutDifficulty from './createPastaWithoutDifficulty';
+import GameChecker from './GameChecker';
+import getDefaultDifficulties from './getDefaultDifficulties';
+import { Game, GAME_NAMES, ORDERED_PROPER_GAMES } from './goals';
+import PastaFilter from './PastaFilter';
+import { METADATA, Variant, VariantMetadata } from './pastas/metadata';
+import VariantHoverCard from './VariantHoverCard';
 
-export default function HomePage() {
-  const [activeTab, setActiveTab] = useState<string | null>('createBoard');
-  const [nextGoalChoice, setNextGoalChoiceRaw] = useState(
-    global.window != undefined &&
-      localStorage?.getItem('nextGoalChoice') === NextGoalChoice.PREFER_FEWER_ATTEMPTS
-      ? NextGoalChoice.PREFER_FEWER_ATTEMPTS
-      : NextGoalChoice.RANDOM
+const options: ReadonlyArray<VariantMetadata> = METADATA.filter((d) => !d.isMenu);
+const menuOptions: ReadonlyArray<VariantMetadata> = METADATA.filter((d) => d.isMenu);
+
+export default function CreateBoard() {
+  const [variant, setVariant] = useState<Variant>(options[0].name);
+  const [custom, setCustom] = useState('');
+  const [checkState, setCheckState] = useState<Map<Game, boolean>>(
+    new Map(ORDERED_PROPER_GAMES.map((key) => [key, true]))
   );
 
-  const setNextGoalChoice = useCallback(
-    (newNextGoalChoice: NextGoalChoice) => {
-      setNextGoalChoiceRaw(newNextGoalChoice);
-      window?.localStorage?.setItem('nextGoalChoice', newNextGoalChoice);
-    },
-    [setNextGoalChoiceRaw]
+  const [customizedPasta, setCustomizedPasta] = useState<null | Pasta>(null);
+
+  const [randomizeGroupings, setRandomizeGroupings] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
+
+  const [roomName, setRoomName] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLockout, setIsLockout] = useState(true);
+  const [isCreationInProgress, setIsCreationInProgress] = useState(false);
+  const [url, setUrl] = useState('');
+  const [error, setError] = useState<Error | null>(null);
+
+  const [showNUX, setShowNUX] = useState(
+    global.window != undefined && localStorage?.getItem('showNUX') !== 'false'
   );
 
-  const attempts = useLiveQuery(() => db.attempts.orderBy('startTime').reverse().toArray()) ?? [];
-  const playlist = useLiveQuery(() => db.playlist.orderBy('priority').toArray()) ?? [];
-  const goalStats = useGoalStats(attempts);
-  const selectedGoals = useSelectedGoals();
+  const metadata = METADATA.find((d) => d.name === variant);
 
-  const getRandomGoal = useCallback(() => {
-    switch (nextGoalChoice) {
-      case NextGoalChoice.PREFER_FEWER_ATTEMPTS:
-        return getGoalPreferFewerAttempts(selectedGoals, goalStats);
-      case NextGoalChoice.RANDOM:
-      default:
-        const items = Array.from(selectedGoals);
-        return items[Math.floor(Math.random() * items.length)];
+  // for some reason it doesn't like checkState.values().filter(...)
+  let checkedGameCount = 0;
+  checkState.forEach((isChecked) => {
+    if (isChecked) {
+      checkedGameCount += 1;
     }
-  }, [nextGoalChoice, selectedGoals, goalStats]);
+  });
+  const hasLessThan25Games = checkedGameCount < 25;
+  const isEligibleForCustomizedPasta = variant === 'Standard' || variant === 'Spicy';
+  const isEligibleForCustomizedPastaWithoutDifficulty = variant === 'Nozzlo' || variant === 'Blitz';
+  const isUsingCustomizedPasta = isEligibleForCustomizedPasta && showFilters;
 
-  const [goal, setGoalRaw] = useState(getRandomGoal());
-  const setGoal = useCallback(
-    (goal: string) => {
-      setGoalRaw(goal);
-      window.scrollTo({ top: 0, behavior: 'instant' });
-    },
-    [setGoalRaw]
-  );
-
-  const goToNextGoal = useCallback(async () => {
-    if (playlist.length > 0) {
-      setGoal(playlist[0].goal);
-      db.playlist.delete(playlist[0].id);
+  const getSerializedPasta = (pretty: boolean) => {
+    if (variant === 'Custom') {
+      return custom;
+    }
+    let structuredPasta;
+    if (variant === 'Game Names') {
+      structuredPasta = showFilters
+        ? Array.from(checkState.entries().filter(([gameKey, checkState]) => checkState)).map(
+            ([gameKey, _]) => ({ name: GAME_NAMES[gameKey] })
+          )
+        : ORDERED_PROPER_GAMES.map((gameKey) => ({ name: GAME_NAMES[gameKey] }));
+    } else if (
+      (showFilters || randomizeGroupings) &&
+      isEligibleForCustomizedPastaWithoutDifficulty &&
+      metadata != null
+    ) {
+      structuredPasta = createPastaWithoutDifficulty(
+        // TODO: Fix typing of pastas to be less strict
+        metadata.pasta as any,
+        showFilters ? checkState : null
+      );
+    } else if (isUsingCustomizedPasta && customizedPasta != null) {
+      structuredPasta = customizedPasta;
+    } else if (metadata?.pasta != null) {
+      structuredPasta = randomizeGroupings
+        ? createPasta(
+            // TODO: Fix typing of pastas to be less strict
+            metadata.pasta as any,
+            getDefaultDifficulties(metadata.pasta as any)
+          )
+        : metadata.pasta;
     } else {
-      setGoal(getRandomGoal());
+      return 'Error constructing pasta';
     }
-  }, [playlist, getRandomGoal, goal, setGoal]);
+    return pretty ? JSON.stringify(structuredPasta, null, 4) : JSON.stringify(structuredPasta);
+  };
 
   return (
-    <Tabs value={activeTab} onChange={setActiveTab}>
-      <Tabs.List>
-        <Tabs.Tab value="createBoard" leftSection={<IconVs size={12} />}>
-          Create Board
-        </Tabs.Tab>
-        <Tabs.Tab value="resources" leftSection={<IconScript size={12} />}>
-          Resources
-        </Tabs.Tab>
-        <Tabs.Tab value="practice" leftSection={<IconDeviceGamepad size={12} />}>
-          Practice
-        </Tabs.Tab>
-        <Tabs.Tab value="allGoals" leftSection={<IconFilter size={12} />}>
-          All Goals
-        </Tabs.Tab>
-        <Tabs.Tab value="playlist" leftSection={<IconPlaylistAdd size={12} />}>
-          Playlist
-        </Tabs.Tab>
-        <Tabs.Tab value="settings" leftSection={<IconSettings size={12} />}>
-          Settings
-        </Tabs.Tab>
-        {/* disabling board analyzer until it's ready */}
-        {false && (
-          <Tabs.Tab value="boardAnalyzer" leftSection={<IconBorderAll size={12} />}>
-            Board Analyzer
-          </Tabs.Tab>
+    <Container my="md">
+      <Stack gap={8}>
+        {showNUX && (
+          <Alert variant="light">
+            <Group justify="space-between">
+              <Link href="/about">
+                <Title order={5}>
+                  If you are new to UFO 50 Bingo, click here for more information!
+                </Title>
+              </Link>
+              <Button
+                variant="subtle"
+                onClick={() => {
+                  setShowNUX(false);
+                  window?.localStorage?.setItem('showNUX', 'false');
+                }}
+              >
+                Don't show this again
+              </Button>
+            </Group>
+          </Alert>
         )}
-      </Tabs.List>
+        <Card shadow="sm" padding="sm" radius="md" withBorder>
+          <Stack gap={8}>
+            <Text>
+              <strong>Choose variant</strong>
+            </Text>
+            <Group gap="sm">
+              <SegmentedControl
+                style={{ flexGrow: 1 }}
+                data={options.map((option) => ({
+                  value: option.name,
+                  label: <VariantHoverCard metadata={option} />,
+                }))}
+                fullWidth={true}
+                onChange={setVariant as unknown as (value: string) => void}
+                value={variant}
+              />
+              <Menu shadow="md" width={200}>
+                <Menu.Target>
+                  <ActionIcon onClick={() => {}} variant="default">
+                    <IconDots size={16} />
+                  </ActionIcon>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  {menuOptions.map((option) => (
+                    <Menu.Item key={option.name} onClick={() => setVariant(option.name)}>
+                      <VariantHoverCard metadata={option} />
+                    </Menu.Item>
+                  ))}
+                </Menu.Dropdown>
+              </Menu>
+            </Group>
+            {metadata?.update_time != null && (
+              <Text size="sm">
+                Last synced:{' '}
+                {new Date(metadata.update_time * 1000).toLocaleString(undefined, {
+                  month: 'numeric',
+                  day: 'numeric',
+                  year: 'numeric',
+                })}
+              </Text>
+            )}
+            {(isEligibleForCustomizedPasta ||
+              isEligibleForCustomizedPastaWithoutDifficulty ||
+              variant === 'Game Names') && (
+              <Group>
+                {variant !== 'Game Names' && (
+                  <Tooltip
+                    label={
+                      <span>
+                        Games will be divided into groups randomly while still respecting the
+                        <br />
+                        difficulty distribution, allowing for greater card variety than using the
+                        <br />
+                        default pasta. This option is always enabled when customizing games and
+                        <br />
+                        difficulty counts.
+                      </span>
+                    }
+                  >
+                    <Checkbox
+                      checked={showFilters || randomizeGroupings}
+                      label="Randomize goal groupings"
+                      onChange={(event) => setRandomizeGroupings(event.currentTarget.checked)}
+                    />
+                  </Tooltip>
+                )}
+                <Checkbox
+                  checked={showFilters}
+                  label={
+                    isEligibleForCustomizedPasta
+                      ? 'Customize games and difficulty counts'
+                      : 'Customize games'
+                  }
+                  onChange={(event) => setShowFilters(event.currentTarget.checked)}
+                />
+              </Group>
+            )}
+            {(isEligibleForCustomizedPastaWithoutDifficulty || variant === 'Game Names') &&
+              showFilters && <GameChecker checkState={checkState} setCheckState={setCheckState} />}
+            {variant === 'Game Names' && showFilters && hasLessThan25Games && (
+              <Alert variant="light" color="red" title="Error: You must select at least 25 games" />
+            )}
+            {metadata != null && isEligibleForCustomizedPasta && showFilters && (
+              <PastaFilter
+                key={variant}
+                checkState={checkState}
+                setCheckState={setCheckState}
+                // TODO: Fix up the typing here to get rid of the any
+                pasta={metadata.pasta as any}
+                onChangePasta={setCustomizedPasta}
+              />
+            )}
+            {variant === 'Custom' && (
+              <JsonInput
+                autosize
+                label="Add your pasta here:"
+                maxRows={12}
+                minRows={2}
+                onChange={setCustom}
+                spellCheck={false}
+                validationError="Invalid JSON"
+                value={custom}
+              />
+            )}
+            <Text>
+              <strong>Configure Room</strong>
+            </Text>
+            <TextInput
+              label="Room name"
+              value={roomName}
+              onChange={(event) => setRoomName(event.currentTarget.value)}
+            />
+            <TextInput
+              label="Password"
+              value={password}
+              onChange={(event) => setPassword(event.currentTarget.value)}
+            />
+            <Checkbox
+              checked={isLockout}
+              label="Lockout"
+              onChange={(event) => setIsLockout(event.currentTarget.checked)}
+            />
+            <Button
+              disabled={
+                isCreationInProgress ||
+                roomName === '' ||
+                password === '' ||
+                (variant === 'Game Names' && showFilters && hasLessThan25Games) ||
+                (variant === 'Custom' && custom === '') ||
+                (isUsingCustomizedPasta && customizedPasta == null)
+              }
+              onClick={async () => {
+                setIsCreationInProgress(true);
 
-      <Tabs.Panel value="createBoard">
-        <CreateBoard />
-      </Tabs.Panel>
-      <Tabs.Panel value="resources">
-        <Resources />
-      </Tabs.Panel>
-      <Tabs.Panel value="practice">
-        <Practice
-          attempts={attempts}
-          goalStats={goalStats}
-          goToNextGoal={goToNextGoal}
-          goal={goal}
-          setGoal={setGoal}
-        />
-      </Tabs.Panel>
-      <Tabs.Panel value="allGoals">
-        <AllGoals
-          attempts={attempts}
-          goalStats={goalStats}
-          selectedGoals={selectedGoals}
-          onTryGoal={(goal) => {
-            setGoal(goal);
-            setActiveTab('practice');
-          }}
-        />
-      </Tabs.Panel>
-      <Tabs.Panel value="playlist">
-        <Playlist playlist={playlist} />
-      </Tabs.Panel>
-      <Tabs.Panel value="settings">
-        <Settings nextGoalChoice={nextGoalChoice} setNextGoalChoice={setNextGoalChoice} />
-      </Tabs.Panel>
-      <Tabs.Panel value="boardAnalyzer">
-        <BoardAnalyzer goalStats={goalStats} />
-      </Tabs.Panel>
-    </Tabs>
+                try {
+                  const url = await tryCreate(
+                    roomName,
+                    password,
+                    variant === 'Game Names',
+                    isLockout,
+                    getSerializedPasta(false)
+                  );
+                  setError(null);
+                  setUrl(url);
+                  setIsCreationInProgress(false);
+                  window.open(url, '_blank');
+                } catch (err: any) {
+                  setIsCreationInProgress(false);
+                  setUrl('');
+                  setError(err);
+                }
+              }}
+              color="green"
+            >
+              Create Bingosync Board
+            </Button>
+            <Button
+              disabled={isUsingCustomizedPasta && customizedPasta == null}
+              onClick={() => {
+                navigator.clipboard.writeText(getSerializedPasta(true));
+              }}
+            >
+              Copy Pasta to Clipboard
+            </Button>
+            {url !== '' && (
+              <Alert variant="light" color="green" title="Success!" icon={<IconCheck />}>
+                Your bingo board is available at{' '}
+                <a href={url} target="_blank">
+                  {url}
+                </a>
+              </Alert>
+            )}
+            {error != null && (
+              <Alert
+                variant="light"
+                color="red"
+                title="Failed to create bingo board"
+                icon={<IconExclamationMark />}
+              >
+                {error.message}
+              </Alert>
+            )}
+          </Stack>
+        </Card>
+      </Stack>
+    </Container>
   );
 }
 
-function getGoalPreferFewerAttempts(
-  selectedGoals: Set<string>,
-  goalStats: Map<string, GoalStats>
-): string {
-  const goals = Array.from(selectedGoals);
-
-  let cumulativeWeight = 0;
-  const allCumulativeWeights: number[] = [];
-  goals.forEach((goal) => {
-    const count = goalStats.get(goal)?.count ?? 0;
-    // if the goal hasn't been done before, it's weighted 4 times as heavily as a single completion
-    const weight = count === 0 ? 4 : 1 / count;
-    cumulativeWeight += weight;
-    allCumulativeWeights.push(cumulativeWeight);
+async function tryCreate(
+  roomName: string,
+  password: string,
+  isGameNames: boolean,
+  isLockout: boolean,
+  pasta: string
+): Promise<string> {
+  const response = await fetch('https://bingosync-proxy-52352836062.us-west1.run.app/create', {
+    method: 'POST',
+    body: new URLSearchParams({
+      room_name: roomName,
+      passphrase: password,
+      nickname: 'ufo50bingobot',
+      game_type: '18',
+      variant_type: isGameNames ? '172' : '187',
+      custom_json: pasta,
+      lockout_mode: isLockout ? '2' : '1',
+      seed: '',
+    }).toString(),
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded',
+    },
   });
 
-  const randomWeight = Math.random() * cumulativeWeight;
-
-  const goalIndex = allCumulativeWeights.findIndex((cutoff) => cutoff >= randomWeight);
-  return goals[goalIndex];
+  const json = await response.json();
+  const url = json.url;
+  if (url === 'https://www.bingosync.com/') {
+    throw new Error('Malformed bingosync request');
+  }
+  return url;
 }

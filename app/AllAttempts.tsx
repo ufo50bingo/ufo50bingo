@@ -82,6 +82,13 @@ export default function AllAttempts({ attempts, goalStats, onRetryGoal }: Props)
               </Table.Tr>
             );
           })}
+          {attempts.length === 0 && (
+            <Table.Tr>
+              <Table.Td colSpan={7}>
+                No goals attempted yet. Click the Start button above to try a goal!
+              </Table.Td>
+            </Table.Tr>
+          )}
           {displayedCount < attempts.length && (
             <Table.Tr>
               <Table.Td colSpan={7}>

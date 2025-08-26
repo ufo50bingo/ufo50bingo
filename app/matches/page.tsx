@@ -2,7 +2,36 @@ import Matches, { Match } from "./Matches";
 import getSQl from "../getSql";
 import { BingosyncColor } from "./refreshMatch";
 
-export default async function MatchesFetcher() {
+const PAGE_SIZE = 20;
+
+export default async function MatchesFetcher(props: {
+  searchParams?: Promise<{
+    page?: string;
+  }>;
+}) {
+  const searchParams = await props.searchParams;
+  const pageNumber = Number(searchParams?.page ?? "1");
+  const [totalPages, matches] = await Promise.all([
+    fetchTotalPages(),
+    fetchMatches(pageNumber),
+  ]);
+  return <Matches matches={matches} totalPages={totalPages} />;
+}
+
+async function fetchTotalPages(): Promise<number> {
+  const sql = getSQl();
+  const result = await sql.query(
+    `SELECT COUNT(id) as total_matches
+    FROM match
+    WHERE
+      is_public = TRUE
+      AND is_deleted = FALSE`
+  );
+  const totalMatches: number = result[0].total_matches;
+  return Math.ceil(totalMatches / PAGE_SIZE);
+}
+
+async function fetchMatches(pageNumber: number): Promise<ReadonlyArray<Match>> {
   const sql = getSQl();
   const result = await sql.query(
     `SELECT
@@ -23,9 +52,11 @@ export default async function MatchesFetcher() {
     WHERE
       is_public = TRUE
       AND is_deleted = FALSE
-    ORDER BY date_created DESC`
+    ORDER BY date_created DESC
+    OFFSET ${(pageNumber - 1) * PAGE_SIZE}
+    LIMIT ${PAGE_SIZE}`
   );
-  const matches: ReadonlyArray<Match> = result.map((rawMatch) => {
+  return await result.map((rawMatch) => {
     const p1_name: null | undefined | string = rawMatch.p1_name;
     const p1_score: null | undefined | number = rawMatch.p1_score;
     const p1_color: null | undefined | ReadonlyArray<BingosyncColor> =
@@ -62,5 +93,4 @@ export default async function MatchesFetcher() {
       boardJson: rawMatch.board_json,
     };
   });
-  return <Matches matches={matches} />;
 }

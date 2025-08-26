@@ -6,6 +6,8 @@ import {
   Container,
   Group,
   Modal,
+  Pagination,
+  Stack,
   Table,
   Tooltip,
 } from "@mantine/core";
@@ -14,6 +16,11 @@ import { BingosyncColor, refreshMatch } from "./refreshMatch";
 import { useState } from "react";
 import ResultModal from "./ResultModal";
 import deleteMatch from "./deleteMatch";
+import {
+  ReadonlyURLSearchParams,
+  usePathname,
+  useSearchParams,
+} from "next/navigation";
 
 interface Player {
   name: string;
@@ -34,9 +41,25 @@ export interface Match {
 
 type Props = {
   matches: ReadonlyArray<Match>;
+  totalPages: number;
 };
 
-export default function Matches({ matches }: Props) {
+export default function Matches({ matches, totalPages }: Props) {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const getPropsForPage = (page: number) => {
+    const params = new URLSearchParams(searchParams);
+    if (page === 1) {
+      params.delete("page");
+    } else {
+      params.set("page", page.toString());
+    }
+    return { component: "a", href: `${pathname}?${params.toString()}` };
+  };
+
+  const page = Number(searchParams.get("page") ?? "1");
+
   const [viewingId, setViewingId] = useState<null | string>(null);
   const [deletingId, setDeletingId] = useState<null | string>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -49,58 +72,80 @@ export default function Matches({ matches }: Props) {
       : matches.find((match) => match.id === deletingId);
   return (
     <Container my="md">
-      <Table striped highlightOnHover withTableBorder>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Room</Table.Th>
-            <Table.Th>P1</Table.Th>
-            <Table.Th>P1 Score</Table.Th>
-            <Table.Th>P2</Table.Th>
-            <Table.Th>P2 Score</Table.Th>
-            <Table.Th style={{ width: "80px" }} />
-            <Table.Th style={{ width: "34px" }} />
-            <Table.Th style={{ width: "34px" }} />
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {matches.map((match) => {
-            return (
-              <Table.Tr key={match.id}>
-                <Table.Td>{match.name}</Table.Td>
-                <Table.Td>{match.p1?.name}</Table.Td>
-                <Table.Td>{match.p1?.score}</Table.Td>
-                <Table.Td>{match.p2?.name}</Table.Td>
-                <Table.Td>{match.p2?.score}</Table.Td>
-                <Table.Td style={{ width: "80px" }}>
-                  <Button
-                    disabled={match.boardJson == null}
-                    onClick={() => setViewingId(match.id)}
-                  >
-                    View Board
-                  </Button>
-                </Table.Td>
-                <Table.Td style={{ width: "34px" }}>
-                  <Tooltip label="Refresh data from Bingosync">
-                    <ActionIcon onClick={() => refreshMatch(match.id)}>
-                      <IconRefresh size={16} />
-                    </ActionIcon>
-                  </Tooltip>
-                </Table.Td>
-                <Table.Td style={{ width: "34px" }}>
-                  <Tooltip label="Delete match">
-                    <ActionIcon
-                      color="red"
-                      onClick={() => setDeletingId(match.id)}
+      <Stack gap={8}>
+        <Table striped highlightOnHover withTableBorder>
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th>Room</Table.Th>
+              <Table.Th>P1</Table.Th>
+              <Table.Th>P1 Score</Table.Th>
+              <Table.Th>P2</Table.Th>
+              <Table.Th>P2 Score</Table.Th>
+              <Table.Th style={{ width: "80px" }} />
+              <Table.Th style={{ width: "34px" }} />
+              <Table.Th style={{ width: "34px" }} />
+            </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody>
+            {matches.map((match) => {
+              return (
+                <Table.Tr key={match.id}>
+                  <Table.Td>{match.name}</Table.Td>
+                  <Table.Td>{match.p1?.name}</Table.Td>
+                  <Table.Td>{match.p1?.score}</Table.Td>
+                  <Table.Td>{match.p2?.name}</Table.Td>
+                  <Table.Td>{match.p2?.score}</Table.Td>
+                  <Table.Td style={{ width: "80px" }}>
+                    <Button
+                      disabled={match.boardJson == null}
+                      onClick={() => setViewingId(match.id)}
                     >
-                      <IconTrash size={16} />
-                    </ActionIcon>
-                  </Tooltip>
-                </Table.Td>
-              </Table.Tr>
-            );
-          })}
-        </Table.Tbody>
-      </Table>
+                      View Board
+                    </Button>
+                  </Table.Td>
+                  <Table.Td style={{ width: "34px" }}>
+                    <Tooltip label="Refresh data from Bingosync">
+                      <ActionIcon onClick={() => refreshMatch(match.id)}>
+                        <IconRefresh size={16} />
+                      </ActionIcon>
+                    </Tooltip>
+                  </Table.Td>
+                  <Table.Td style={{ width: "34px" }}>
+                    <Tooltip label="Delete match">
+                      <ActionIcon
+                        color="red"
+                        onClick={() => setDeletingId(match.id)}
+                      >
+                        <IconTrash size={16} />
+                      </ActionIcon>
+                    </Tooltip>
+                  </Table.Td>
+                </Table.Tr>
+              );
+            })}
+          </Table.Tbody>
+        </Table>
+        <Pagination
+          value={page}
+          total={totalPages}
+          withEdges
+          getItemProps={(pageNumber) => getPropsForPage(pageNumber)}
+          getControlProps={(control) => {
+            switch (control) {
+              case "first":
+                return getPropsForPage(1);
+              case "last":
+                return getPropsForPage(totalPages);
+              case "next":
+                return getPropsForPage(
+                  page < totalPages ? page + 1 : totalPages
+                );
+              case "previous":
+                return getPropsForPage(page > 1 ? page - 1 : 1);
+            }
+          }}
+        />
+      </Stack>
       {viewingMatch != null && (
         <ResultModal match={viewingMatch} onClose={() => setViewingId(null)} />
       )}

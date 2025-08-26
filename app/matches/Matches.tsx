@@ -55,7 +55,9 @@ export default function Matches({ matches, totalPages }: Props) {
     } else {
       params.set("page", page.toString());
     }
-    return { component: "a", href: `${pathname}?${params.toString()}` };
+    const href =
+      params.size > 0 ? `${pathname}?${params.toString()}` : pathname;
+    return { component: "a", href };
   };
 
   const page = Number(searchParams.get("page") ?? "1");

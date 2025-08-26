@@ -2,13 +2,11 @@
 
 import { ActionIcon, Container, Table, Tooltip } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
-import { refreshMatch } from "./refreshMatch";
-
-type BingoColor = "red" | "blue";
+import { BingosyncColor, refreshMatch } from "./refreshMatch";
 
 interface Player {
   name: string;
-  color: BingoColor;
+  color: ReadonlyArray<BingosyncColor>;
   score: number;
 }
 

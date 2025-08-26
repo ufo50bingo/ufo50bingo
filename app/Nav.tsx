@@ -85,7 +85,7 @@ export default function Nav() {
               href={href}
               className={classes.mainLink}
               data-active={pathname === href || undefined}
-              target={isNewTab === true ? "_blank" : "undefined"}
+              target={isNewTab === true ? "_blank" : undefined}
             >
               <Group gap={8}>
                 {icon}

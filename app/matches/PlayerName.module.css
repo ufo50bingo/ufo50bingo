@@ -1,0 +1,45 @@
+/* copied from https://github.com/kbuzsaki/bingosync/blob/b23d3b4e3192e7034573f3e8efc906aa4a83b0b8/bingosync-app/static/bingosync/style.css#L393 */
+
+.blankplayer {
+    color: #c8c8c8;
+}
+
+.greenplayer {
+    color: #62c462;
+}
+
+.redplayer {
+    color: #ee5f5b;
+}
+
+.orangeplayer {
+    color: #f89406;
+}
+
+.blueplayer {
+    color: #5bc0de;
+}
+
+.purpleplayer {
+    color: #822dbf;
+}
+
+.navyplayer {
+    color: #0d48b5;
+}
+
+.tealplayer {
+    color: #419695;
+}
+
+.pinkplayer {
+    color: #de799c;
+}
+
+.brownplayer {
+    color: #ab5c23;
+}
+
+.yellowplayer {
+    color: #c1ba0b;
+}

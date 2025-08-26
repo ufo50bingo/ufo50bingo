@@ -20,7 +20,9 @@ export default async function MatchesFetcher() {
       p2_bingo,
       board_json
     FROM match
-    WHERE is_public = TRUE
+    WHERE
+      is_public = TRUE
+      AND is_deleted = FALSE
     ORDER BY date_created DESC`
   );
   const matches: ReadonlyArray<Match> = result.map((rawMatch) => {

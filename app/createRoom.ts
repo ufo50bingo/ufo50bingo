@@ -31,6 +31,8 @@ export default async function createRoom(
       custom_json: pasta,
       lockout_mode: isLockout ? "2" : "1",
       seed: "",
+      is_spectator: "on",
+      hide_card: "on",
     }).toString(),
   });
 

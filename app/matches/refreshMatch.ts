@@ -127,8 +127,13 @@ export async function refreshMatch(id: string): Promise<void> {
   // sort so that the player with the most goals is first
   playerEntries.sort((a, b) => b[1] - a[1]);
 
-  const [p1_name, p1_score] = playerEntries[0];
-  const p1_color = playerColors[p1_name].join(" ");
+  let p1_name = null;
+  let p1_score = null;
+  let p1_color = null;
+  if (playerEntries.length > 0) {
+    [p1_name, p1_score] = playerEntries[0];
+    p1_color = playerColors[p1_name].join(" ");
+  }
   let p2_name = null;
   let p2_score = null;
   let p2_color = null;

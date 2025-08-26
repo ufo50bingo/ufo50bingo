@@ -40,8 +40,8 @@ export default function Matches({ matches }: Props) {
             <Table.Th>P1 Score</Table.Th>
             <Table.Th>P2</Table.Th>
             <Table.Th>P2 Score</Table.Th>
-            <Table.Th />
-            <Table.Th />
+            <Table.Th style={{ width: "80px" }} />
+            <Table.Th style={{ width: "34px" }} />
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -53,7 +53,7 @@ export default function Matches({ matches }: Props) {
                 <Table.Td>{match.p1?.score}</Table.Td>
                 <Table.Td>{match.p2?.name}</Table.Td>
                 <Table.Td>{match.p2?.score}</Table.Td>
-                <Table.Td>
+                <Table.Td style={{ width: "80px" }}>
                   <Button
                     disabled={match.boardJson == null}
                     onClick={() => setViewingId(match.id)}
@@ -61,7 +61,7 @@ export default function Matches({ matches }: Props) {
                     View Board
                   </Button>
                 </Table.Td>
-                <Table.Td>
+                <Table.Td style={{ width: "34px" }}>
                   <Tooltip label="Refresh data from Bingosync">
                     <ActionIcon onClick={() => refreshMatch(match.id)}>
                       <IconRefresh size={16} />

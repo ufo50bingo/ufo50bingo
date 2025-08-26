@@ -28,7 +28,7 @@ export default function ResultModal({ match, onClose }: Props) {
       title={match.name}
       size="auto"
     >
-      <div style={{ padding: "8px" }} ref={ref}>
+      <div ref={ref}>
         <Board
           rows={board}
           onClickSquare={null}
@@ -54,18 +54,19 @@ export default function ResultModal({ match, onClose }: Props) {
           if (board == null) {
             return;
           }
-          const canvas = await html2canvas(board, {
+          const newDiv = board.cloneNode(true) as HTMLDivElement;
+          newDiv.style.padding = "8px";
+          newDiv.style.width = `${board.clientWidth}px`;
+          document.body.appendChild(newDiv);
+          const canvas = await html2canvas(newDiv, {
             backgroundColor: "rgb(36, 36, 36)",
-            padding: "16px",
           });
+          document.body.removeChild(newDiv);
           canvas.toBlob((blob) => {
             if (blob == null) {
               return;
             }
             const board = new ClipboardItem({ "image/png": blob });
-            // const score = new ClipboardItem({
-            //   "text/plain": "Frank 13\nJohn 10",
-            // });
             navigator.clipboard.write([board]);
           });
         }}

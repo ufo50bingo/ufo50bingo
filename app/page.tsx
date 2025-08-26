@@ -30,7 +30,8 @@ import { Game, GAME_NAMES, ORDERED_PROPER_GAMES } from "./goals";
 import PastaFilter from "./PastaFilter";
 import { METADATA, Variant, VariantMetadata } from "./pastas/metadata";
 import VariantHoverCard from "./VariantHoverCard";
-import createRoom from "./createRoom";
+import createRoom from "./createMatch";
+import createMatch from "./createMatch";
 
 const options: ReadonlyArray<VariantMetadata> = METADATA.filter(
   (d) => !d.isMenu
@@ -54,6 +55,7 @@ export default function CreateBoard() {
   const [roomName, setRoomName] = useState("");
   const [password, setPassword] = useState("");
   const [isLockout, setIsLockout] = useState(true);
+  const [isPublic, setIsPublic] = useState(true);
   const [isCreationInProgress, setIsCreationInProgress] = useState(false);
   const [url, setUrl] = useState("");
   const [error, setError] = useState<Error | null>(null);
@@ -285,11 +287,27 @@ export default function CreateBoard() {
               value={password}
               onChange={(event) => setPassword(event.currentTarget.value)}
             />
-            <Checkbox
-              checked={isLockout}
-              label="Lockout"
-              onChange={(event) => setIsLockout(event.currentTarget.checked)}
-            />
+            <Group>
+              <Checkbox
+                checked={isLockout}
+                label="Lockout"
+                onChange={(event) => setIsLockout(event.currentTarget.checked)}
+              />
+              <Tooltip
+                label={
+                  <span>
+                    Public games will be visible to all users on the Matches
+                    tab.
+                  </span>
+                }
+              >
+                <Checkbox
+                  checked={isPublic}
+                  label="Public"
+                  onChange={(event) => setIsPublic(event.currentTarget.checked)}
+                />
+              </Tooltip>
+            </Group>
             <Button
               disabled={
                 isCreationInProgress ||
@@ -305,13 +323,24 @@ export default function CreateBoard() {
                 setIsCreationInProgress(true);
 
                 try {
-                  const url = await createRoom(
+                  const url = await createMatch({
                     roomName,
                     password,
-                    variant === "Game Names",
+                    isPublic,
+                    variant,
+                    isCustom:
+                      showFilters &&
+                      [
+                        "Standard",
+                        "Spicy",
+                        "Nozzlo",
+                        "Blitz",
+                        "Game Names",
+                      ].includes(variant),
                     isLockout,
-                    getSerializedPasta(false)
-                  );
+                    pasta: getSerializedPasta(false),
+                    leagueSeason: null,
+                  });
                   setError(null);
                   setUrl(url);
                   setIsCreationInProgress(false);

@@ -1,54 +1,60 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import {
   IconBorderAll,
   IconDeviceGamepad,
   IconFilter,
   IconHelp,
   IconPlaylistAdd,
+  IconScoreboard,
   IconScript,
   IconSettings,
   IconVs,
-} from '@tabler/icons-react';
-import { Anchor, Box, Container, Group, Text } from '@mantine/core';
-import classes from './Nav.module.css';
+} from "@tabler/icons-react";
+import { Anchor, Box, Container, Group, Text } from "@mantine/core";
+import classes from "./Nav.module.css";
 
 const LINKS = [
   {
-    href: '/about',
-    text: 'About',
+    href: "/about",
+    text: "About",
     icon: <IconHelp size={12} />,
   },
   {
-    href: '/',
-    text: 'Create Board',
+    href: "/",
+    text: "Create Board",
     icon: <IconVs size={12} />,
   },
   {
-    href: '/resources',
-    text: 'Resources',
+    href: "/matches",
+    text: "Matches",
+    icon: <IconScoreboard size={12} />,
+  },
+  {
+    href: "/resources",
+    text: "Resources",
     icon: <IconScript size={12} />,
   },
   {
-    href: '/practice',
-    text: 'Practice',
+    href: "/practice",
+    text: "Practice",
     icon: <IconDeviceGamepad size={12} />,
   },
   {
-    href: '/goals',
-    text: 'All Goals',
+    href: "/goals",
+    text: "All Goals",
     icon: <IconFilter size={12} />,
   },
   {
-    href: '/playlist',
-    text: 'Playlist',
+    href: "/playlist",
+    text: "Playlist",
     icon: <IconPlaylistAdd size={12} />,
   },
   {
-    href: '/settings',
-    text: 'Settings',
+    href: "/settings",
+    text: "Settings",
     icon: <IconSettings size={12} />,
   },
   // {

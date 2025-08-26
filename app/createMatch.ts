@@ -1,17 +1,35 @@
 "use server";
 
 import getCsrfData from "./getCsrfData";
-import { insertRoom } from "./insertRoom";
+import { insertMatch } from "./insertMatch";
+import { Variant } from "./pastas/metadata";
 
 const BINGOSYNC_BASE_URL = "https://www.bingosync.com/";
 
-export default async function createRoom(
-  roomName: string,
-  password: string,
-  isGameNames: boolean,
-  isLockout: boolean,
-  pasta: string
-): Promise<string> {
+export interface CommonMatchProps {
+  roomName: string;
+  password: string;
+  leagueSeason: number | null;
+  isPublic: boolean;
+  variant: Variant;
+  isCustom: boolean;
+  isLockout: boolean;
+}
+
+interface Props extends CommonMatchProps {
+  pasta: string;
+}
+
+export default async function createMatch({
+  roomName,
+  password,
+  isPublic,
+  variant,
+  isCustom,
+  isLockout,
+  pasta,
+  leagueSeason,
+}: Props): Promise<string> {
   const { cookie, token } = await getCsrfData();
 
   const createResponse = await fetch(BINGOSYNC_BASE_URL, {
@@ -27,7 +45,7 @@ export default async function createRoom(
       passphrase: password,
       nickname: "ufo50bingobot",
       game_type: "18",
-      variant_type: isGameNames ? "172" : "187",
+      variant_type: variant === "Game Names" ? "172" : "187",
       custom_json: pasta,
       lockout_mode: isLockout ? "2" : "1",
       seed: "",
@@ -43,7 +61,16 @@ export default async function createRoom(
   }
 
   // add room to table for tracking
-  insertRoom({ url: roomURL, name: roomName, password });
+  insertMatch({
+    url: roomURL,
+    roomName,
+    password,
+    isPublic,
+    variant,
+    isCustom,
+    isLockout,
+    leagueSeason,
+  });
 
   return createResponse.url;
 }

@@ -1,8 +1,10 @@
 "use client";
 
-import { ActionIcon, Container, Table, Tooltip } from "@mantine/core";
+import { ActionIcon, Button, Container, Table, Tooltip } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
 import { BingosyncColor, refreshMatch } from "./refreshMatch";
+import { useState } from "react";
+import ResultModal from "./ResultModal";
 
 interface Player {
   name: string;
@@ -18,6 +20,7 @@ export interface Match {
   p2: null | Player;
   hasBingo: null | boolean;
   winner: null | "p1" | "p2";
+  boardJson: null | string;
 }
 
 type Props = {
@@ -25,6 +28,8 @@ type Props = {
 };
 
 export default function Matches({ matches }: Props) {
+  const [viewingId, setViewingId] = useState<null | string>(null);
+  const viewingMatch = matches.find((match) => match.id === viewingId);
   return (
     <Container my="md">
       <Table striped highlightOnHover withTableBorder>
@@ -35,6 +40,7 @@ export default function Matches({ matches }: Props) {
             <Table.Th>P1 Score</Table.Th>
             <Table.Th>P2</Table.Th>
             <Table.Th>P2 Score</Table.Th>
+            <Table.Th />
             <Table.Th />
           </Table.Tr>
         </Table.Thead>
@@ -48,6 +54,14 @@ export default function Matches({ matches }: Props) {
                 <Table.Td>{match.p2?.name}</Table.Td>
                 <Table.Td>{match.p2?.score}</Table.Td>
                 <Table.Td>
+                  <Button
+                    disabled={match.boardJson == null}
+                    onClick={() => setViewingId(match.id)}
+                  >
+                    View Board
+                  </Button>
+                </Table.Td>
+                <Table.Td>
                   <Tooltip label="Refresh data from Bingosync">
                     <ActionIcon onClick={() => refreshMatch(match.id)}>
                       <IconRefresh size={16} />
@@ -59,6 +73,9 @@ export default function Matches({ matches }: Props) {
           })}
         </Table.Tbody>
       </Table>
+      {viewingMatch != null && (
+        <ResultModal match={viewingMatch} onClose={() => setViewingId(null)} />
+      )}
     </Container>
   );
 }

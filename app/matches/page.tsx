@@ -17,7 +17,8 @@ export default async function MatchesFetcher() {
       p2_name,
       p2_color,
       p2_score,
-      p2_bingo
+      p2_bingo,
+      board_json
     FROM match
     WHERE is_public = TRUE
     ORDER BY date_created DESC`
@@ -56,6 +57,7 @@ export default async function MatchesFetcher() {
       p2,
       hasBingo: null,
       winner: null,
+      boardJson: rawMatch.board_json,
     };
   });
   return <Matches matches={matches} />;

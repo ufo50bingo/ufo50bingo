@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Card, Container, Divider, List, Stack, Title } from "@mantine/core";
 import Board from "../Board";
 import { STANDARD } from "../pastas/standard";
-import { RawSquare } from "../matches/refreshMatch";
+import { BingosyncColor, RawSquare } from "../matches/refreshMatch";
 import { useState } from "react";
 
 const MAGIC_SQUARE: ReadonlyArray<number> = [
@@ -19,6 +19,8 @@ const MAGIC_SQUARE: ReadonlyArray<number> = [
   // row 5
   11, 18, 25, 2, 9,
 ];
+
+const COLOR: BingosyncColor = "red";
 
 export default function About() {
   const [isHidden, setIsHidden] = useState(true);
@@ -61,7 +63,7 @@ export default function About() {
               const newBoard = [...board];
               const newSquare = { ...board[squareIndex] };
               newSquare["colors"] =
-                newSquare["colors"] === "blank" ? "red" : "blank";
+                newSquare["colors"] === "blank" ? COLOR : "blank";
               newBoard[squareIndex] = newSquare;
               setBoard(newBoard);
             }}

@@ -1,8 +1,7 @@
-import { useState } from "react";
 import { Center } from "@mantine/core";
 import SquareText from "./SquareText";
 import classes from "./Board.module.css";
-import { RawSquare } from "./matches/refreshMatch";
+import { BingosyncColor, RawSquare } from "./matches/refreshMatch";
 
 type Props = {
   rows: ReadonlyArray<RawSquare>;
@@ -10,6 +9,35 @@ type Props = {
   isHidden: boolean;
   setIsHidden: (isHidden: boolean) => void;
 };
+
+function getColorClass(color: string): string {
+  const firstColor = color.split(" ")[0] as BingosyncColor;
+
+  switch (firstColor) {
+    case "blank":
+      return classes.blanksquare;
+    case "red":
+      return classes.redsquare;
+    case "blue":
+      return classes.bluesquare;
+    case "green":
+      return classes.greensquare;
+    case "orange":
+      return classes.orangesquare;
+    case "purple":
+      return classes.purplesquare;
+    case "navy":
+      return classes.navysquare;
+    case "teal":
+      return classes.tealsquare;
+    case "pink":
+      return classes.pinksquare;
+    case "brown":
+      return classes.brownsquare;
+    case "yellow":
+      return classes.yellowsquare;
+  }
+}
 
 export default function Board({
   rows,
@@ -22,11 +50,9 @@ export default function Board({
       {rows.slice(rowIndex * 5, rowIndex * 5 + 5).map((square, squareIndex) => (
         <td
           key={squareIndex}
-          className={
-            rows[rowIndex * 5 + squareIndex].colors === "red"
-              ? `${classes.unselectable} ${classes.square} ${classes.redsquare}`
-              : `${classes.unselectable} ${classes.square} ${classes.blanksquare}`
-          }
+          className={`${classes.unselectable} ${classes.square} ${getColorClass(
+            rows[rowIndex * 5 + squareIndex].colors
+          )}`}
           onClick={() =>
             onClickSquare != null && onClickSquare(rowIndex * 5 + squareIndex)
           }

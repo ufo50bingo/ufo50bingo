@@ -11,6 +11,7 @@ import {
   IconScoreboard,
   IconScript,
   IconSettings,
+  IconTournament,
   IconVs,
 } from "@tabler/icons-react";
 import { Anchor, Box, Container, Group, Text } from "@mantine/core";
@@ -57,6 +58,12 @@ const LINKS = [
     text: "Settings",
     icon: <IconSettings size={12} />,
   },
+  {
+    href: "https://docs.google.com/spreadsheets/d/1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA/edit?gid=521253915#gid=521253915",
+    text: "League",
+    icon: <IconTournament size={12} />,
+    isNewTab: true,
+  },
   // {
   //   href: '/boardanalyzer',
   //   text: 'Board Analyzer',
@@ -71,13 +78,14 @@ export default function Nav() {
     <header className={classes.header}>
       <Container className={classes.inner}>
         <Group gap={0} justify="flex-end">
-          {LINKS.map(({ href, text, icon }) => (
+          {LINKS.map(({ href, text, icon, isNewTab }) => (
             <Anchor
               key={href}
               component={Link}
               href={href}
               className={classes.mainLink}
               data-active={pathname === href || undefined}
+              target={isNewTab === true ? "_blank" : "undefined"}
             >
               <Group gap={8}>
                 {icon}

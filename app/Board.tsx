@@ -1,53 +1,59 @@
-import { useState } from 'react';
-import { Center } from '@mantine/core';
-import SquareText from './SquareText';
-import classes from './Board.module.css';
+import { useState } from "react";
+import { Center } from "@mantine/core";
+import SquareText from "./SquareText";
+import classes from "./Board.module.css";
+import { RawSquare } from "./matches/refreshMatch";
 
 type Props = {
-  rows: ReadonlyArray<ReadonlyArray<string>>;
+  rows: ReadonlyArray<RawSquare>;
+  onClickSquare: null | ((squareIndex: number) => void);
+  isHidden: boolean;
+  setIsHidden: (isHidden: boolean) => void;
 };
 
-export default function Board({ rows }: Props) {
-  const [isHidden, setIsHidden] = useState(true);
-  const [selectedIndices, setSelectedIndices] = useState<ReadonlyArray<ReadonlyArray<boolean>>>(
-    rows.map((row) => row.map((cell) => false))
+export default function Board({
+  rows,
+  onClickSquare,
+  isHidden,
+  setIsHidden,
+}: Props) {
+  const getRow = (rowIndex: number) => (
+    <tr style={{ height: "95px" }} key={rowIndex}>
+      {rows.slice(rowIndex * 5, rowIndex * 5 + 5).map((square, squareIndex) => (
+        <td
+          key={squareIndex}
+          className={
+            rows[rowIndex * 5 + squareIndex].colors === "red"
+              ? `${classes.unselectable} ${classes.square} ${classes.redsquare}`
+              : `${classes.unselectable} ${classes.square} ${classes.blanksquare}`
+          }
+          onClick={() =>
+            onClickSquare != null && onClickSquare(rowIndex * 5 + squareIndex)
+          }
+        >
+          <Center h={85}>
+            <SquareText text={square.name} />
+          </Center>
+        </td>
+      ))}
+    </tr>
   );
   return (
     <div className={classes.boardContainer}>
       <table className={classes.baseTable}>
         <colgroup>
-          <col style={{ width: '105px' }} />
-          <col style={{ width: '105px' }} />
-          <col style={{ width: '105px' }} />
-          <col style={{ width: '105px' }} />
-          <col style={{ width: '105px' }} />
+          <col style={{ width: "105px" }} />
+          <col style={{ width: "105px" }} />
+          <col style={{ width: "105px" }} />
+          <col style={{ width: "105px" }} />
+          <col style={{ width: "105px" }} />
         </colgroup>
         <tbody>
-          {rows.map((row, rowIndex) => (
-            <tr style={{ height: '95px' }} key={rowIndex}>
-              {row.map((goal, cellIndex) => (
-                <td
-                  key={cellIndex}
-                  className={
-                    selectedIndices[rowIndex][cellIndex]
-                      ? `${classes.unselectable} ${classes.square} ${classes.redsquare}`
-                      : `${classes.unselectable} ${classes.square} ${classes.blanksquare}`
-                  }
-                  onClick={() => {
-                    const newRow = [...selectedIndices[rowIndex]];
-                    newRow[cellIndex] = !newRow[cellIndex];
-                    const newSelectedIndices = [...selectedIndices];
-                    newSelectedIndices[rowIndex] = newRow;
-                    setSelectedIndices(newSelectedIndices);
-                  }}
-                >
-                  <Center h={85}>
-                    <SquareText text={goal} />
-                  </Center>
-                </td>
-              ))}
-            </tr>
-          ))}
+          {getRow(0)}
+          {getRow(1)}
+          {getRow(2)}
+          {getRow(3)}
+          {getRow(4)}
         </tbody>
       </table>
       {isHidden && (

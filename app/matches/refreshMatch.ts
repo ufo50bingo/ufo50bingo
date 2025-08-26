@@ -19,7 +19,7 @@ export type BingosyncColor =
   | "brown"
   | "yellow";
 
-type RawSquare = {
+export type RawSquare = {
   // goal text
   name: string;
   // string like slot1, slot2, ..., slot25

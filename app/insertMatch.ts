@@ -30,6 +30,8 @@ export async function insertMatch({
   const id = url.slice(ROOM_PREFIX.length);
   const sql = getSql();
 
+  console.log("inserting new match", id);
+
   await sql`INSERT INTO match (
     id,
     name,
@@ -48,4 +50,6 @@ export async function insertMatch({
     ${bool(isLockout)}
   );`;
   revalidatePath("/matches");
+
+  console.log("finished inserting new match", id);
 }

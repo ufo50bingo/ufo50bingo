@@ -61,7 +61,8 @@ export default async function createMatch({
   }
 
   // add room to table for tracking
-  insertMatch({
+  // shouldn't need the `await` here, but for some reason data isn't making its way to neon immediately...
+  await insertMatch({
     url: roomURL,
     roomName,
     password,

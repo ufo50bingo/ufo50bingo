@@ -1,8 +1,6 @@
 import Matches, { Match } from "./Matches";
 import getSQl from "../getSql";
 
-export const dynamic = "force-dynamic";
-
 export default async function MatchesFetcher() {
   const sql = getSQl();
   const result = await sql.query(

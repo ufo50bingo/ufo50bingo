@@ -1,5 +1,3 @@
-"use server";
-
 const CSRF_REGEX = /name="csrfmiddlewaretoken" value="([a-zA-Z0-9]+)"/;
 const BINGOSYNC_BASE_URL = "https://www.bingosync.com/";
 

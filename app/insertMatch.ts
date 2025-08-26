@@ -1,9 +1,8 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { CommonMatchProps } from "./createMatch";
 import getSql from "./getSql";
-import { Variant } from "./pastas/metadata";
 
 const ROOM_PREFIX = "https://www.bingosync.com/room/";
 
@@ -48,5 +47,5 @@ export async function insertMatch({
     ${bool(isCustom)},
     ${bool(isLockout)}
   );`;
-  revalidateTag("matchlist");
+  revalidatePath("/matches");
 }

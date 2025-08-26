@@ -21,9 +21,7 @@ export default async function MatchesFetcher() {
       p2_bingo
     FROM match
     WHERE is_public = TRUE
-    ORDER BY date_created DESC`,
-    undefined,
-    { fetchOptions: { next: { tags: ["matchlist"] } } }
+    ORDER BY date_created DESC`
   );
   const matches: ReadonlyArray<Match> = result.map((rawMatch) => ({
     id: rawMatch.id,

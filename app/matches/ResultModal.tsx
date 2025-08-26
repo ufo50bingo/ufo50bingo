@@ -1,8 +1,10 @@
-import { Modal } from "@mantine/core";
+import { Button, Group, Modal } from "@mantine/core";
 import { Match } from "./Matches";
 import { RawSquare } from "./refreshMatch";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import Board from "../Board";
+import html2canvas from "html2canvas";
+import PlayerName from "./PlayerName";
 
 type Props = {
   match: Match;
@@ -17,6 +19,7 @@ export default function ResultModal({ match, onClose }: Props) {
     }
     return JSON.parse(boardJson);
   }, [boardJson]);
+  const ref = useRef<HTMLDivElement>(null);
   return (
     <Modal
       centered={true}
@@ -25,12 +28,50 @@ export default function ResultModal({ match, onClose }: Props) {
       title={match.name}
       size="auto"
     >
-      <Board
-        rows={board}
-        onClickSquare={null}
-        isHidden={false}
-        setIsHidden={() => {}}
-      />
+      <div style={{ padding: "8px" }} ref={ref}>
+        <Board
+          rows={board}
+          onClickSquare={null}
+          isHidden={false}
+          setIsHidden={() => {}}
+        />
+        <Group justify="space-between">
+          {match.p1 != null && (
+            <PlayerName color={match.p1.color}>
+              {match.p1.name}: {match.p1.score}
+            </PlayerName>
+          )}
+          {match.p2 != null && (
+            <PlayerName color={match.p2.color}>
+              {match.p2.name}: {match.p2.score}
+            </PlayerName>
+          )}
+        </Group>
+      </div>
+      <Button
+        onClick={async () => {
+          const board = ref.current;
+          if (board == null) {
+            return;
+          }
+          const canvas = await html2canvas(board, {
+            backgroundColor: "rgb(36, 36, 36)",
+            padding: "16px",
+          });
+          canvas.toBlob((blob) => {
+            if (blob == null) {
+              return;
+            }
+            const board = new ClipboardItem({ "image/png": blob });
+            // const score = new ClipboardItem({
+            //   "text/plain": "Frank 13\nJohn 10",
+            // });
+            navigator.clipboard.write([board]);
+          });
+        }}
+      >
+        Copy to Clipboard
+      </Button>
     </Modal>
   );
 }

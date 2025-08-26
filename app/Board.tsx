@@ -2,12 +2,14 @@ import { Center } from "@mantine/core";
 import SquareText from "./SquareText";
 import classes from "./Board.module.css";
 import { BingosyncColor, RawSquare } from "./matches/refreshMatch";
+import { RefObject } from "react";
 
 type Props = {
   rows: ReadonlyArray<RawSquare>;
   onClickSquare: null | ((squareIndex: number) => void);
   isHidden: boolean;
   setIsHidden: (isHidden: boolean) => void;
+  ref?: RefObject<HTMLDivElement | null>;
 };
 
 function getColorClass(color: string): string {
@@ -44,6 +46,7 @@ export default function Board({
   onClickSquare,
   isHidden,
   setIsHidden,
+  ref,
 }: Props) {
   const getRow = (rowIndex: number) => (
     <tr style={{ height: "95px" }} key={rowIndex}>
@@ -65,7 +68,7 @@ export default function Board({
     </tr>
   );
   return (
-    <div className={classes.boardContainer}>
+    <div className={classes.boardContainer} ref={ref}>
       <table className={classes.baseTable}>
         <colgroup>
           <col style={{ width: "105px" }} />

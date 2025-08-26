@@ -3,8 +3,8 @@ import getSQl from "../getSql";
 
 export default async function MatchesFetcher() {
   const sql = getSQl();
-  const result = await sql`
-    SELECT
+  const result = await sql.query(
+    `SELECT
       id,
       name,
       EXTRACT(EPOCH FROM date_created)::INTEGER as date_created,
@@ -19,7 +19,10 @@ export default async function MatchesFetcher() {
       p2_bingo
     FROM match
     WHERE is_public = TRUE
-    ORDER BY date_created DESC`;
+    ORDER BY date_created DESC`,
+    undefined,
+    { fetchOptions: { next: { tags: ["matchlist"] } } }
+  );
   const matches: ReadonlyArray<Match> = result.map((rawMatch) => ({
     id: rawMatch.id,
     name: rawMatch.name,

@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidateTag } from "next/cache";
 import { CommonMatchProps } from "./createMatch";
 import getSql from "./getSql";
 import { Variant } from "./pastas/metadata";
@@ -47,4 +48,5 @@ export async function insertMatch({
     ${bool(isCustom)},
     ${bool(isLockout)}
   );`;
+  revalidateTag("matchlist");
 }

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import Papa from 'papaparse';
-import { Button } from '@mantine/core';
-import { Attempt, db } from './db';
-import downloadCsv from './downloadCsv';
+import Papa from "papaparse";
+import { Button } from "@mantine/core";
+import { Attempt, db } from "./db";
+import downloadCsv from "./downloadCsv";
 
 export default function ExportCSV() {
   return <Button onClick={exportExistingRows}>Export</Button>;
@@ -18,5 +18,5 @@ async function exportExistingRows(): Promise<void> {
       duration: row.duration,
     }))
   );
-  downloadCsv(csv, 'ufo50_bingo_export.csv');
+  downloadCsv(csv, "ufo50_bingo_export.csv");
 }

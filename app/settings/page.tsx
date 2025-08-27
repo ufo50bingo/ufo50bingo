@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { IconMoon, IconSun } from '@tabler/icons-react';
+import { IconMoon, IconSun } from "@tabler/icons-react";
 import {
   Button,
   Center,
@@ -12,11 +12,11 @@ import {
   Table,
   Text,
   useMantineColorScheme,
-} from '@mantine/core';
-import { NextGoalChoice, useAppContext } from '../AppContextProvider';
-import ExportCSV from '../ExportCSV';
-import ImportCSV from '../ImportCSV';
-import MigrateHistory from '../MigrateHistory';
+} from "@mantine/core";
+import { NextGoalChoice, useAppContext } from "../AppContextProvider";
+import ExportCSV from "../ExportCSV";
+import ImportCSV from "../ImportCSV";
+import MigrateHistory from "../MigrateHistory";
 
 export default function Settings() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
@@ -30,11 +30,13 @@ export default function Settings() {
             <Table.Td>
               <NativeSelect
                 value={nextGoalChoice}
-                onChange={(event) => setNextGoalChoice(event.currentTarget.value as NextGoalChoice)}
+                onChange={(event) =>
+                  setNextGoalChoice(event.currentTarget.value as NextGoalChoice)
+                }
                 data={[
-                  { label: 'Fully random', value: NextGoalChoice.RANDOM },
+                  { label: "Fully random", value: NextGoalChoice.RANDOM },
                   {
-                    label: 'Prefer goals with fewer attempts',
+                    label: "Prefer goals with fewer attempts",
                     value: NextGoalChoice.PREFER_FEWER_ATTEMPTS,
                   },
                 ]}
@@ -68,7 +70,9 @@ export default function Settings() {
             <Table.Td>
               <SegmentedControl
                 value={colorScheme}
-                onChange={(newTheme) => setColorScheme(newTheme as MantineColorScheme)}
+                onChange={(newTheme) =>
+                  setColorScheme(newTheme as MantineColorScheme)
+                }
                 data={[
                   {
                     label: (
@@ -77,7 +81,7 @@ export default function Settings() {
                         <span>Dark</span>
                       </Center>
                     ),
-                    value: 'dark',
+                    value: "dark",
                   },
                   {
                     label: (
@@ -86,7 +90,7 @@ export default function Settings() {
                         <span>Light</span>
                       </Center>
                     ),
-                    value: 'light',
+                    value: "light",
                   },
                 ]}
               />

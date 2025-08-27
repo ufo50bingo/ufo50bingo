@@ -1,10 +1,18 @@
-'use client';
+"use client";
 
-import { useCallback, useState } from 'react';
-import { IconInfoCircle } from '@tabler/icons-react';
-import chroma from 'chroma-js';
-import { Alert, Button, Container, Group, Stack, Text, TextInput } from '@mantine/core';
-import { useAppContext } from '../AppContextProvider';
+import { useCallback, useState } from "react";
+import { IconInfoCircle } from "@tabler/icons-react";
+import chroma from "chroma-js";
+import {
+  Alert,
+  Button,
+  Container,
+  Group,
+  Stack,
+  Text,
+  TextInput,
+} from "@mantine/core";
+import { useAppContext } from "../AppContextProvider";
 
 interface CellResponse {
   name: string;
@@ -13,24 +21,35 @@ interface CellResponse {
 export default function BoardAnalyzer() {
   const { goalStats } = useAppContext();
 
-  const [boardID, setBoardID] = useState<string>('');
+  const [boardID, setBoardID] = useState<string>("");
   const [board, setBoard] = useState<string[][] | null>(null);
 
   let scale = null;
   if (board != null) {
     const times = board
       .flat()
-      .map((c) => Math.pow(goalStats.get(c)?.averageDuration ?? 15 * 60 * 1000, -0.5));
+      .map((c) =>
+        Math.pow(goalStats.get(c)?.averageDuration ?? 15 * 60 * 1000, -0.5)
+      );
     const max = Math.max(...times);
     const min = Math.min(...times);
-    scale = chroma.scale(['red', 'purple', 'blue']).domain([min, max]).mode('lrgb');
+    scale = chroma
+      .scale(["red", "purple", "blue"])
+      .domain([min, max])
+      .mode("lrgb");
   }
 
   return (
     <Container my="md">
       <Stack>
-        <Alert variant="light" color="red" title="Work in progress" icon={<IconInfoCircle />}>
-          Board Analyzer is still in development. Board fetching is limited to 50 calls per day.
+        <Alert
+          variant="light"
+          color="red"
+          title="Work in progress"
+          icon={<IconInfoCircle />}
+        >
+          Board Analyzer is still in development. Board fetching is limited to
+          50 calls per day.
         </Alert>
         <Group>
           <TextInput
@@ -68,12 +87,13 @@ export default function BoardAnalyzer() {
           </Button>
         </Group>
         {board != null && scale != null && (
-          <table style={{ borderCollapse: 'collapse' }}>
+          <table style={{ borderCollapse: "collapse" }}>
             <tbody>
               {board.map((row, idx) => (
                 <tr key={idx}>
                   {row.map((cell, idx) => {
-                    const averageDuration = goalStats.get(cell)?.averageDuration;
+                    const averageDuration =
+                      goalStats.get(cell)?.averageDuration;
                     const backgroundColor = scale(
                       Math.pow(averageDuration ?? 15 * 60 * 1000, -0.5)
                     ).css();
@@ -81,14 +101,14 @@ export default function BoardAnalyzer() {
                       <td
                         key={idx}
                         style={{
-                          border: '1px solid',
-                          cursor: 'pointer',
-                          maxWidth: '105px',
-                          height: '95px',
-                          textAlign: 'center',
-                          verticalAlign: 'top',
-                          overflow: 'hidden',
-                          padding: '0 5px',
+                          border: "1px solid",
+                          cursor: "pointer",
+                          maxWidth: "105px",
+                          height: "95px",
+                          textAlign: "center",
+                          verticalAlign: "top",
+                          overflow: "hidden",
+                          padding: "0 5px",
                           backgroundColor,
                         }}
                       >
@@ -97,7 +117,7 @@ export default function BoardAnalyzer() {
                             <Text>{cell}</Text>
                             <Text size="xs">
                               {averageDuration == null
-                                ? 'N/A'
+                                ? "N/A"
                                 : `${(averageDuration / 60000).toFixed(1)} min`}
                             </Text>
                           </Stack>

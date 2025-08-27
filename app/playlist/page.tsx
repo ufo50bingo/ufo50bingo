@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
-import { IconGripVertical, IconPlaylistAdd, IconX } from '@tabler/icons-react';
-import { ActionIcon, Container, Table } from '@mantine/core';
-import { useAppContext } from '../AppContextProvider';
-import { db } from '../db';
-import { PRIORITY_MULTIPLIER } from '../PlaylistAddButton';
+import Link from "next/link";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import { IconGripVertical, IconPlaylistAdd, IconX } from "@tabler/icons-react";
+import { ActionIcon, Container, Table } from "@mantine/core";
+import { useAppContext } from "../AppContextProvider";
+import { db } from "../db";
+import { PRIORITY_MULTIPLIER } from "../PlaylistAddButton";
 
 export default function Playlist() {
   const { playlist } = useAppContext();
@@ -23,10 +23,15 @@ export default function Playlist() {
             }
 
             const destItemWillBeAboveDroppedItem = sourceIndex > destIndex;
-            const lowerIndex = destItemWillBeAboveDroppedItem ? destIndex - 1 : destIndex;
-            const upperIndex = destItemWillBeAboveDroppedItem ? destIndex : destIndex + 1;
+            const lowerIndex = destItemWillBeAboveDroppedItem
+              ? destIndex - 1
+              : destIndex;
+            const upperIndex = destItemWillBeAboveDroppedItem
+              ? destIndex
+              : destIndex + 1;
 
-            const lowerPriority = lowerIndex < 0 ? 0 : playlist[lowerIndex].priority;
+            const lowerPriority =
+              lowerIndex < 0 ? 0 : playlist[lowerIndex].priority;
 
             const upperPriority =
               upperIndex >= playlist.length
@@ -43,12 +48,22 @@ export default function Playlist() {
           <Table striped highlightOnHover withTableBorder>
             <Droppable droppableId="dnd-list" direction="vertical">
               {(provided) => (
-                <Table.Tbody {...provided.droppableProps} ref={provided.innerRef}>
+                <Table.Tbody
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
                   {playlist.map((row, idx) => {
                     return (
-                      <Draggable key={row.id} index={idx} draggableId={row.id.toString()}>
+                      <Draggable
+                        key={row.id}
+                        index={idx}
+                        draggableId={row.id.toString()}
+                      >
                         {(provided) => (
-                          <Table.Tr ref={provided.innerRef} {...provided.draggableProps}>
+                          <Table.Tr
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                          >
                             <Table.Td>
                               <div {...provided.dragHandleProps}>
                                 <IconGripVertical size={16} />
@@ -57,7 +72,10 @@ export default function Playlist() {
                             <Table.Td>{idx + 1}</Table.Td>
                             <Table.Td>{row.goal}</Table.Td>
                             <Table.Td>
-                              <ActionIcon onClick={() => db.playlist.delete(row.id)} color="red">
+                              <ActionIcon
+                                onClick={() => db.playlist.delete(row.id)}
+                                color="red"
+                              >
                                 <IconX size={16} />
                               </ActionIcon>
                             </Table.Td>
@@ -73,11 +91,12 @@ export default function Playlist() {
           </Table>
         </DragDropContext>
       ) : null}
-      Your playlist is empty! Add goals to your playlist by clicking{' '}
+      Your playlist is empty! Add goals to your playlist by clicking{" "}
       <ActionIcon onClick={() => {}} color="green">
         <IconPlaylistAdd size={16} />
-      </ActionIcon>{' '}
-      on the <Link href="/goals">All Goals</Link> or <Link href="/practice">Practice</Link> tabs.
+      </ActionIcon>{" "}
+      on the <Link href="/goals">All Goals</Link> or{" "}
+      <Link href="/practice">Practice</Link> tabs.
     </Container>
   );
 }

@@ -1,14 +1,20 @@
-'use client';
+"use client";
 
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { AttemptRow, db, PlaylistRow } from './db';
-import useGoalStats, { GoalStats } from './useGoalStats';
-import useSelectedGoals from './useSelectedGoals';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
+import { useLiveQuery } from "dexie-react-hooks";
+import { AttemptRow, db, PlaylistRow } from "./db";
+import useGoalStats, { GoalStats } from "./useGoalStats";
+import useSelectedGoals from "./useSelectedGoals";
 
 export enum NextGoalChoice {
-  RANDOM = 'RANDOM',
-  PREFER_FEWER_ATTEMPTS = 'PREFER_FEWER_ATTEMPTS',
+  RANDOM = "RANDOM",
+  PREFER_FEWER_ATTEMPTS = "PREFER_FEWER_ATTEMPTS",
 }
 
 type AppContextType = {
@@ -25,10 +31,15 @@ type AppContextType = {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-export function AppContextProvider({ children }: { children: React.ReactNode }) {
+export function AppContextProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [nextGoalChoice, setNextGoalChoiceRaw] = useState(
     global.window != undefined &&
-      localStorage?.getItem('nextGoalChoice') === NextGoalChoice.PREFER_FEWER_ATTEMPTS
+      localStorage?.getItem("nextGoalChoice") ===
+        NextGoalChoice.PREFER_FEWER_ATTEMPTS
       ? NextGoalChoice.PREFER_FEWER_ATTEMPTS
       : NextGoalChoice.RANDOM
   );
@@ -36,13 +47,16 @@ export function AppContextProvider({ children }: { children: React.ReactNode }) 
   const setNextGoalChoice = useCallback(
     (newNextGoalChoice: NextGoalChoice) => {
       setNextGoalChoiceRaw(newNextGoalChoice);
-      window?.localStorage?.setItem('nextGoalChoice', newNextGoalChoice);
+      window?.localStorage?.setItem("nextGoalChoice", newNextGoalChoice);
     },
     [setNextGoalChoiceRaw]
   );
 
-  const attempts = useLiveQuery(() => db.attempts.orderBy('startTime').reverse().toArray()) ?? [];
-  const playlist = useLiveQuery(() => db.playlist.orderBy('priority').toArray()) ?? [];
+  const attempts =
+    useLiveQuery(() => db.attempts.orderBy("startTime").reverse().toArray()) ??
+    [];
+  const playlist =
+    useLiveQuery(() => db.playlist.orderBy("priority").toArray()) ?? [];
   const goalStats = useGoalStats(attempts);
   const selectedGoals = useSelectedGoals();
 
@@ -61,7 +75,7 @@ export function AppContextProvider({ children }: { children: React.ReactNode }) 
   const setGoal = useCallback(
     (goal: string) => {
       setGoalRaw(goal);
-      window.scrollTo({ top: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, behavior: "instant" });
     },
     [setGoalRaw]
   );
@@ -97,7 +111,7 @@ export function AppContextProvider({ children }: { children: React.ReactNode }) 
 export function useAppContext() {
   const context = useContext(AppContext);
   if (context === undefined) {
-    throw new Error('useAppContext must be used within AppContextProvider');
+    throw new Error("useAppContext must be used within AppContextProvider");
   }
   return context;
 }
@@ -120,6 +134,8 @@ function getGoalPreferFewerAttempts(
 
   const randomWeight = Math.random() * cumulativeWeight;
 
-  const goalIndex = allCumulativeWeights.findIndex((cutoff) => cutoff >= randomWeight);
+  const goalIndex = allCumulativeWeights.findIndex(
+    (cutoff) => cutoff >= randomWeight
+  );
   return goals[goalIndex];
 }

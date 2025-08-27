@@ -1,6 +1,6 @@
-import { IconPlaylistAdd } from '@tabler/icons-react';
-import { ActionIcon, Tooltip } from '@mantine/core';
-import { db } from './db';
+import { IconPlaylistAdd } from "@tabler/icons-react";
+import { ActionIcon, Tooltip } from "@mantine/core";
+import { db } from "./db";
 
 export const PRIORITY_MULTIPLIER = 1024;
 
@@ -17,7 +17,7 @@ export default function PlaylistAddButton({ goal }: Props) {
 }
 
 async function addToPlaylist(goal: string): Promise<void> {
-  db.transaction('rw', db.playlist, async () => {
+  db.transaction("rw", db.playlist, async () => {
     const id = await db.playlist.add({ goal, priority: Infinity });
     return await db.playlist.update(id, { priority: id * PRIORITY_MULTIPLIER });
   });

@@ -1,12 +1,20 @@
-'use client';
+"use client";
 
-import { Dispatch, SetStateAction, useMemo, useState } from 'react';
-import { IconPlayerPlay, IconX } from '@tabler/icons-react';
-import { ActionIcon, Anchor, Button, Group, Modal, Table, Tooltip } from '@mantine/core';
-import { AttemptRow, db } from './db';
-import Duration from './Duration';
-import PlaylistAddButton from './PlaylistAddButton';
-import { GoalStats } from './useGoalStats';
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import { IconPlayerPlay, IconX } from "@tabler/icons-react";
+import {
+  ActionIcon,
+  Anchor,
+  Button,
+  Group,
+  Modal,
+  Table,
+  Tooltip,
+} from "@mantine/core";
+import { AttemptRow, db } from "./db";
+import Duration from "./Duration";
+import PlaylistAddButton from "./PlaylistAddButton";
+import { GoalStats } from "./useGoalStats";
 
 type Props = {
   attempts: AttemptRow[];
@@ -14,8 +22,14 @@ type Props = {
   onRetryGoal: (goal: string) => any;
 };
 
-export default function AllAttempts({ attempts, goalStats, onRetryGoal }: Props) {
-  const [deletingAttempt, setDeletingAttempt] = useState<AttemptRow | null>(null);
+export default function AllAttempts({
+  attempts,
+  goalStats,
+  onRetryGoal,
+}: Props) {
+  const [deletingAttempt, setDeletingAttempt] = useState<AttemptRow | null>(
+    null
+  );
   const [displayedCount, setDisplayedCount] = useState<number>(20);
 
   const displayedAttempts = useMemo(
@@ -49,31 +63,45 @@ export default function AllAttempts({ attempts, goalStats, onRetryGoal }: Props)
                   <Duration duration={attempt.duration} />
                 </Table.Td>
                 <Table.Td>
-                  {averageDuration == null ? '-' : <Duration duration={averageDuration} />}
+                  {averageDuration == null ? (
+                    "-"
+                  ) : (
+                    <Duration duration={averageDuration} />
+                  )}
                 </Table.Td>
                 <Table.Td>
-                  {bestDuration == null ? '-' : <Duration duration={bestDuration} />}
+                  {bestDuration == null ? (
+                    "-"
+                  ) : (
+                    <Duration duration={bestDuration} />
+                  )}
                 </Table.Td>
                 <Table.Td>{stats?.count ?? 0}</Table.Td>
                 <Table.Td>
                   {new Date(attempt.startTime).toLocaleString(undefined, {
-                    month: 'numeric',
-                    day: 'numeric',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                    second: 'numeric',
+                    month: "numeric",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    second: "numeric",
                   })}
                 </Table.Td>
                 <Table.Td>
                   <Group gap={4} wrap="nowrap">
                     <Tooltip label="Attempt this goal again">
                       <ActionIcon>
-                        <IconPlayerPlay size={16} onClick={() => onRetryGoal(attempt.goal)} />
+                        <IconPlayerPlay
+                          size={16}
+                          onClick={() => onRetryGoal(attempt.goal)}
+                        />
                       </ActionIcon>
                     </Tooltip>
                     <PlaylistAddButton goal={attempt.goal} />
                     <Tooltip label="Delete this attempt">
-                      <ActionIcon onClick={() => setDeletingAttempt(attempt)} color="red">
+                      <ActionIcon
+                        onClick={() => setDeletingAttempt(attempt)}
+                        color="red"
+                      >
                         <IconX size={16} />
                       </ActionIcon>
                     </Tooltip>
@@ -85,7 +113,8 @@ export default function AllAttempts({ attempts, goalStats, onRetryGoal }: Props)
           {attempts.length === 0 && (
             <Table.Tr>
               <Table.Td colSpan={7}>
-                No goals attempted yet. Click the Start button above to try a goal!
+                No goals attempted yet. Click the Start button above to try a
+                goal!
               </Table.Td>
             </Table.Tr>
           )}
@@ -93,7 +122,11 @@ export default function AllAttempts({ attempts, goalStats, onRetryGoal }: Props)
             <Table.Tr>
               <Table.Td colSpan={7}>
                 <Anchor
-                  onClick={() => setDisplayedCount((prevDisplayedCount) => prevDisplayedCount + 20)}
+                  onClick={() =>
+                    setDisplayedCount(
+                      (prevDisplayedCount) => prevDisplayedCount + 20
+                    )
+                  }
                 >
                   Show more... ({attempts.length - displayedCount} remaining)
                 </Anchor>

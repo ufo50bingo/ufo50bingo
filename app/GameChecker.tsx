@@ -1,5 +1,5 @@
-import { Checkbox, SimpleGrid, Text } from '@mantine/core';
-import { Game, GAME_NAMES, ORDERED_PROPER_GAMES } from './goals';
+import { Checkbox, SimpleGrid, Text } from "@mantine/core";
+import { Game, GAME_NAMES, ORDERED_PROPER_GAMES } from "./goals";
 
 type Props = {
   checkState: Map<Game, boolean>;
@@ -18,13 +18,15 @@ export default function GameChecker({ checkState, setCheckState }: Props) {
         <Checkbox
           label={
             <strong>
-              <u>{isAllChecked ? 'Deselect All' : 'Select All'}</u>
+              <u>{isAllChecked ? "Deselect All" : "Select All"}</u>
             </strong>
           }
           indeterminate={!isAllChecked && !isNoneChecked}
           checked={isAllChecked}
           onChange={() => {
-            const newState = new Map(ORDERED_PROPER_GAMES.map((key) => [key, !isAllChecked]));
+            const newState = new Map(
+              ORDERED_PROPER_GAMES.map((key) => [key, !isAllChecked])
+            );
             setCheckState(newState);
           }}
         />

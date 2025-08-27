@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { Card, Container, List } from '@mantine/core';
+import { Card, Container, List } from "@mantine/core";
 
 export default function Resources() {
   return (
@@ -43,7 +43,8 @@ export default function Resources() {
           </List.Item>
           <List.Item>
             <a href="https://docs.google.com/spreadsheets/d/1bW8zjoR2bpr74w-dA4HHt04SqvGg1aj8FJeOs3EqdNE/edit?gid=0#gid=0">
-              Stats and VOD links for every goal completion from Bingo League Season 1
+              Stats and VOD links for every goal completion from Bingo League
+              Season 1
             </a>
           </List.Item>
           <List.Item>
@@ -64,8 +65,8 @@ export default function Resources() {
           </List.Item>
           <List.Item>
             <a href="https://gretgor.itch.io/ufo50-bingo-training-dummy">
-              Bingo “training dummy” by Gretgor. Play vs a CPU that also tries to complete goals on
-              a board
+              Bingo “training dummy” by Gretgor. Play vs a CPU that also tries
+              to complete goals on a board
             </a>
           </List.Item>
         </List>

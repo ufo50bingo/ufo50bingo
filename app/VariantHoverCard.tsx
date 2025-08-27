@@ -1,5 +1,5 @@
-import { HoverCard } from '@mantine/core';
-import { VariantMetadata } from './pastas/metadata';
+import { HoverCard } from "@mantine/core";
+import { VariantMetadata } from "./pastas/metadata";
 
 type Props = {
   metadata: VariantMetadata;

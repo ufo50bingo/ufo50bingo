@@ -1,16 +1,21 @@
-import '@mantine/core/styles.css';
+import "@mantine/core/styles.css";
 
-import React from 'react';
-import { GoogleAnalytics } from '@next/third-parties/google';
-import { AppShell, ColorSchemeScript, mantineHtmlProps, MantineProvider } from '@mantine/core';
-import { theme } from '../theme';
-import { AppContextProvider } from './AppContextProvider';
-import Nav from './Nav';
-import Shell from './Shell';
+import React from "react";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import {
+  AppShell,
+  ColorSchemeScript,
+  mantineHtmlProps,
+  MantineProvider,
+} from "@mantine/core";
+import { theme } from "../theme";
+import { AppContextProvider } from "./AppContextProvider";
+import Nav from "./Nav";
+import Shell from "./Shell";
 
 export const metadata = {
-  title: 'UFO 50 Bingo',
-  description: 'Organize games or practice goals!',
+  title: "UFO 50 Bingo",
+  description: "Organize games or practice goals!",
 };
 
 export default function RootLayout({ children }: { children: any }) {

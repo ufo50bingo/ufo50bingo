@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useRef, useState } from 'react';
+import { useRef, useState } from "react";
 import {
   IconArrowForward,
   IconCircleCheck,
   IconPlayerPause,
   IconPlayerPlay,
   IconReload,
-} from '@tabler/icons-react';
-import { Badge, Button, Card, Group, Stack, Text } from '@mantine/core';
-import { db } from './db';
-import Duration from './Duration';
-import { DIFFICULTY_NAMES, SORTED_FLAT_GOALS } from './goals';
-import RunningDuration from './RunningDuration';
+} from "@tabler/icons-react";
+import { Badge, Button, Card, Group, Stack, Text } from "@mantine/core";
+import { db } from "./db";
+import Duration from "./Duration";
+import { DIFFICULTY_NAMES, SORTED_FLAT_GOALS } from "./goals";
+import RunningDuration from "./RunningDuration";
 
 enum State {
   NOT_STARTED,
@@ -39,7 +39,8 @@ export default function Goal({ goal, onNext }: Props) {
 
   const pauseOrEndTimer = () => {
     setAccumulatedDuration(
-      (prevAccumulatedDuration) => prevAccumulatedDuration + Date.now() - curStartTime
+      (prevAccumulatedDuration) =>
+        prevAccumulatedDuration + Date.now() - curStartTime
     );
   };
 

@@ -1,4 +1,4 @@
-import Dexie, { type EntityTable } from 'dexie';
+import Dexie, { type EntityTable } from "dexie";
 
 interface Attempt {
   goal: string;
@@ -20,16 +20,16 @@ interface PlaylistRow {
   priority: number;
 }
 
-const db = new Dexie('UFO50BingoDatabase') as Dexie & {
-  attempts: EntityTable<AttemptRow, 'id'>;
-  unselectedGoals: EntityTable<GoalSelectionRow, 'goal'>;
-  playlist: EntityTable<PlaylistRow, 'id'>;
+const db = new Dexie("UFO50BingoDatabase") as Dexie & {
+  attempts: EntityTable<AttemptRow, "id">;
+  unselectedGoals: EntityTable<GoalSelectionRow, "goal">;
+  playlist: EntityTable<PlaylistRow, "id">;
 };
 
 db.version(1).stores({
-  attempts: '++id, goal, startTime, duration',
-  unselectedGoals: 'goal',
-  playlist: '++id, priority',
+  attempts: "++id, goal, startTime, duration",
+  unselectedGoals: "goal",
+  playlist: "++id, priority",
 });
 
 export type { Attempt, AttemptRow, PlaylistRow };

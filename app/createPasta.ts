@@ -1,5 +1,5 @@
-import { Difficulty, Game, TGoal } from './goals';
-import shuffle from './shuffle';
+import { Difficulty, Game, TGoal } from "./goals";
+import shuffle from "./shuffle";
 
 export type MutablePasta = TGoal[][];
 export type Pasta = ReadonlyArray<ReadonlyArray<TGoal>>;
@@ -11,10 +11,11 @@ export default function createPasta(
   const goalsByDifficultyAndGame = new Map<Difficulty, Map<Game, TGoal[]>>();
   filteredPasta.forEach((group) =>
     group.forEach((goal) => {
-      if (goal.types[1] === 'general') {
+      if (goal.types[1] === "general") {
         return;
       }
-      const gameToGoals = goalsByDifficultyAndGame.get(goal.types[1]) ?? new Map<Game, TGoal[]>();
+      const gameToGoals =
+        goalsByDifficultyAndGame.get(goal.types[1]) ?? new Map<Game, TGoal[]>();
       const goalsArray = gameToGoals.get(goal.types[0]) ?? [];
       goalsArray.push(goal);
       gameToGoals.set(goal.types[0], goalsArray);
@@ -54,11 +55,11 @@ export default function createPasta(
 
   // general goals are special, because they're already sorted into meaningful categories
   const generalGroups = filteredPasta
-    .filter((group) => group.length > 0 && group[0].types[0] === 'general')
+    .filter((group) => group.length > 0 && group[0].types[0] === "general")
     // copy group so we don't accidentally mess up the original pasta
     .map((group) => [...group]);
   shuffle(generalGroups);
-  const numGeneralGroups = difficultyCount.get('general') ?? 0;
+  const numGeneralGroups = difficultyCount.get("general") ?? 0;
   // if there aren't enough general groups, split an existing one as evenly as possible
   while (
     numGeneralGroups > generalGroups.length &&

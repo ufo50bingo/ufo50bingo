@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Papa from 'papaparse';
+import { useState } from "react";
+import Papa from "papaparse";
 import {
   Anchor,
   Button,
@@ -13,16 +13,16 @@ import {
   Stack,
   Text,
   useMantineColorScheme,
-} from '@mantine/core';
-import { Attempt, db } from './db';
-import downloadCsv from './downloadCsv';
-import { SORTED_FLAT_GOALS } from './goals';
+} from "@mantine/core";
+import { Attempt, db } from "./db";
+import downloadCsv from "./downloadCsv";
+import { SORTED_FLAT_GOALS } from "./goals";
 
 export default function ImportCSV() {
   const [isImporting, setIsImporting] = useState(false);
   const [csv, setCsv] = useState<File | null>(null);
-  const [behavior, setBehavior] = useState('merge');
-  const [csvType, setCsvType] = useState('actual');
+  const [behavior, setBehavior] = useState("merge");
+  const [csvType, setCsvType] = useState("actual");
 
   return (
     <>
@@ -42,29 +42,41 @@ export default function ImportCSV() {
               setCsv(null);
             }}
             data={[
-              { label: 'Import full data', value: 'actual' },
-              { label: 'Create estimated data', value: 'estimated' },
+              { label: "Import full data", value: "actual" },
+              { label: "Create estimated data", value: "estimated" },
             ]}
           />
-          {csvType === 'actual' && <Text>CSV format should match the export format.</Text>}
-          {csvType === 'estimated' && (
+          {csvType === "actual" && (
+            <Text>CSV format should match the export format.</Text>
+          )}
+          {csvType === "estimated" && (
             <Text>
-              Download{' '}
+              Download{" "}
               <Anchor
-                onClick={() => downloadCsv(createTemplate(), 'ufo50_bingo_estimated_template.csv')}
+                onClick={() =>
+                  downloadCsv(
+                    createTemplate(),
+                    "ufo50_bingo_estimated_template.csv"
+                  )
+                }
               >
                 this template
-              </Anchor>{' '}
+              </Anchor>{" "}
               and fill in your estimated data.
             </Text>
           )}
-          <FileInput accept="text/csv" value={csv} onChange={setCsv} label="Select CSV" />
+          <FileInput
+            accept="text/csv"
+            value={csv}
+            onChange={setCsv}
+            label="Select CSV"
+          />
           <SegmentedControl
             value={behavior}
             onChange={setBehavior}
             data={[
-              { label: 'Merge with existing history', value: 'merge' },
-              { label: 'Replace existing history', value: 'replace' },
+              { label: "Merge with existing history", value: "merge" },
+              { label: "Replace existing history", value: "replace" },
             ]}
           />
           <Group mt="lg" justify="flex-end">
@@ -73,13 +85,13 @@ export default function ImportCSV() {
               disabled={csv == null}
               onClick={async () => {
                 if (csv == null) {
-                  throw new Error('csv should not be null');
+                  throw new Error("csv should not be null");
                 }
                 const rows =
-                  csvType === 'actual'
+                  csvType === "actual"
                     ? await parseActualCsv(csv)
                     : processEstimatedCsv(await parseEstimatedCsv(csv));
-                await updateDB(rows, behavior === 'merge');
+                await updateDB(rows, behavior === "merge");
                 setIsImporting(false);
               }}
               color="green"
@@ -103,12 +115,12 @@ async function parseActualCsv(csv: File): Promise<Attempt[]> {
         if (
           fields == null ||
           fields.length != 3 ||
-          fields[0] != 'goal' ||
-          fields[1] != 'startTime' ||
-          fields[2] != 'duration'
+          fields[0] != "goal" ||
+          fields[1] != "startTime" ||
+          fields[2] != "duration"
         ) {
-          console.error('Unexpected CSV format', fields);
-          reject(Error('Unexpected CSV format'));
+          console.error("Unexpected CSV format", fields);
+          reject(Error("Unexpected CSV format"));
         }
         resolve(results.data);
       },
@@ -119,10 +131,10 @@ async function parseActualCsv(csv: File): Promise<Attempt[]> {
 
 type Estimate = {
   Goal: string;
-  'Number of attempts': number | null | undefined;
-  'Average time in mins (example: 1.5)': number | null | undefined;
-  '(optional) Best time in mins (example: 1.0)': number | null | undefined;
-  '(optional) Date (example: 2025-04-30)': number | null | undefined;
+  "Number of attempts": number | null | undefined;
+  "Average time in mins (example: 1.5)": number | null | undefined;
+  "(optional) Best time in mins (example: 1.0)": number | null | undefined;
+  "(optional) Date (example: 2025-04-30)": number | null | undefined;
 };
 
 async function parseEstimatedCsv(csv: File): Promise<Estimate[]> {
@@ -135,14 +147,14 @@ async function parseEstimatedCsv(csv: File): Promise<Estimate[]> {
         if (
           fields == null ||
           fields.length != 5 ||
-          fields[0] != 'Goal' ||
-          fields[1] != 'Number of attempts' ||
-          fields[2] != 'Average time in mins (example: 1.5)' ||
-          fields[3] != '(optional) Best time in mins (example: 1.0)' ||
-          fields[4] != '(optional) Date (example: 2025-04-30)'
+          fields[0] != "Goal" ||
+          fields[1] != "Number of attempts" ||
+          fields[2] != "Average time in mins (example: 1.5)" ||
+          fields[3] != "(optional) Best time in mins (example: 1.0)" ||
+          fields[4] != "(optional) Date (example: 2025-04-30)"
         ) {
-          console.error('Unexpected CSV format', fields);
-          reject(Error('Unexpected CSV format'));
+          console.error("Unexpected CSV format", fields);
+          reject(Error("Unexpected CSV format"));
         }
         resolve(results.data);
       },
@@ -155,21 +167,22 @@ function processEstimatedCsv(estimates: Estimate[]): Attempt[] {
   const attempts: Attempt[] = [];
   estimates.forEach((estimate) => {
     const goal = estimate.Goal;
-    const count = Math.round(estimate['Number of attempts'] ?? 0);
-    const averageMins = estimate['Average time in mins (example: 1.5)'];
-    const bestMins = estimate['(optional) Best time in mins (example: 1.0)'];
-    const date = estimate['(optional) Date (example: 2025-04-30)'];
+    const count = Math.round(estimate["Number of attempts"] ?? 0);
+    const averageMins = estimate["Average time in mins (example: 1.5)"];
+    const bestMins = estimate["(optional) Best time in mins (example: 1.0)"];
+    const date = estimate["(optional) Date (example: 2025-04-30)"];
 
     if (count === 0 || averageMins == null) {
       return;
     }
     if (SORTED_FLAT_GOALS.find((item) => item.name === goal) == null) {
-      console.error('Unexpected goal name', goal);
+      console.error("Unexpected goal name", goal);
       return;
     }
 
     const average = Math.round(averageMins * 60000);
-    const bestOffset = bestMins != null ? Math.round((bestMins - averageMins) * 60000) : null;
+    const bestOffset =
+      bestMins != null ? Math.round((bestMins - averageMins) * 60000) : null;
     const startTime = date != null ? new Date(date).getTime() : 0;
 
     let avgCount = count;
@@ -197,7 +210,10 @@ function processEstimatedCsv(estimates: Estimate[]): Attempt[] {
   return attempts;
 }
 
-async function updateDB(csvRows: Attempt[], shouldMerge: boolean): Promise<void> {
+async function updateDB(
+  csvRows: Attempt[],
+  shouldMerge: boolean
+): Promise<void> {
   if (shouldMerge) {
     const existingRows = await db.attempts.toArray();
     const existingRowsJsonSet = new Set();
@@ -210,7 +226,9 @@ async function updateDB(csvRows: Attempt[], shouldMerge: boolean): Promise<void>
         })
       )
     );
-    const newRows = csvRows.filter((row) => !existingRowsJsonSet.has(JSON.stringify(row)));
+    const newRows = csvRows.filter(
+      (row) => !existingRowsJsonSet.has(JSON.stringify(row))
+    );
     await db.attempts.bulkAdd(newRows);
   } else {
     await db.attempts.clear();
@@ -223,10 +241,10 @@ function createTemplate(): string {
     SORTED_FLAT_GOALS.map((row) => {
       const estimate: Estimate = {
         Goal: row.name,
-        'Number of attempts': null,
-        'Average time in mins (example: 1.5)': null,
-        '(optional) Best time in mins (example: 1.0)': null,
-        '(optional) Date (example: 2025-04-30)': null,
+        "Number of attempts": null,
+        "Average time in mins (example: 1.5)": null,
+        "(optional) Best time in mins (example: 1.0)": null,
+        "(optional) Date (example: 2025-04-30)": null,
       };
       return estimate;
     })

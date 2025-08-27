@@ -1,8 +1,13 @@
-'use client';
+"use client";
 
-import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { IconChevronDown, IconChevronUp, IconPlayerPlay, IconSelector } from '@tabler/icons-react';
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  IconChevronDown,
+  IconChevronUp,
+  IconPlayerPlay,
+  IconSelector,
+} from "@tabler/icons-react";
 import {
   ActionIcon,
   Center,
@@ -13,25 +18,34 @@ import {
   Text,
   Tooltip,
   UnstyledButton,
-} from '@mantine/core';
-import { useAppContext } from '../AppContextProvider';
-import { db } from '../db';
-import Duration from '../Duration';
-import { compareByDifficulty, DIFFICULTY_NAMES, GAME_NAMES, SORTED_FLAT_GOALS } from '../goals';
-import PlaylistAddButton from '../PlaylistAddButton';
+} from "@mantine/core";
+import { useAppContext } from "../AppContextProvider";
+import { db } from "../db";
+import Duration from "../Duration";
+import {
+  compareByDifficulty,
+  DIFFICULTY_NAMES,
+  GAME_NAMES,
+  SORTED_FLAT_GOALS,
+} from "../goals";
+import PlaylistAddButton from "../PlaylistAddButton";
 
 export default function AllGoals() {
   const router = useRouter();
   const { goalStats, selectedGoals, setGoal } = useAppContext();
   const onTryGoal = (goal: string) => {
     setGoal(goal);
-    router.push('/practice');
+    router.push("/practice");
   };
 
-  const allChecked = SORTED_FLAT_GOALS.every((goal) => selectedGoals.has(goal.name));
-  const allUnchecked = SORTED_FLAT_GOALS.every((goal) => !selectedGoals.has(goal.name));
+  const allChecked = SORTED_FLAT_GOALS.every((goal) =>
+    selectedGoals.has(goal.name)
+  );
+  const allUnchecked = SORTED_FLAT_GOALS.every(
+    (goal) => !selectedGoals.has(goal.name)
+  );
 
-  const [sortBy, setSortBy] = useState<string>('goal');
+  const [sortBy, setSortBy] = useState<string>("goal");
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
 
   const setSorting = (field: string) => {
@@ -42,12 +56,17 @@ export default function AllGoals() {
 
   const sortedRows = useMemo(() => {
     switch (sortBy) {
-      case 'goal':
-        return reverseSortDirection ? SORTED_FLAT_GOALS.toReversed() : SORTED_FLAT_GOALS;
-      case 'difficulty':
-        const sortedByDifficulty = SORTED_FLAT_GOALS.toSorted(compareByDifficulty);
-        return reverseSortDirection ? sortedByDifficulty.toReversed() : sortedByDifficulty;
-      case 'average':
+      case "goal":
+        return reverseSortDirection
+          ? SORTED_FLAT_GOALS.toReversed()
+          : SORTED_FLAT_GOALS;
+      case "difficulty":
+        const sortedByDifficulty =
+          SORTED_FLAT_GOALS.toSorted(compareByDifficulty);
+        return reverseSortDirection
+          ? sortedByDifficulty.toReversed()
+          : sortedByDifficulty;
+      case "average":
         const sortedByAverageDuration = SORTED_FLAT_GOALS.toSorted((a, b) => {
           const aDur = goalStats.get(a.name)?.averageDuration;
           const bDur = goalStats.get(b.name)?.averageDuration;
@@ -66,7 +85,7 @@ export default function AllGoals() {
         return reverseSortDirection
           ? sortedByAverageDuration.toReversed()
           : sortedByAverageDuration;
-      case 'best':
+      case "best":
         const sortedByBestDuration = SORTED_FLAT_GOALS.toSorted((a, b) => {
           const aDur = goalStats.get(a.name)?.bestDuration;
           const bDur = goalStats.get(b.name)?.bestDuration;
@@ -82,14 +101,18 @@ export default function AllGoals() {
             return aDur - bDur;
           }
         });
-        return reverseSortDirection ? sortedByBestDuration.toReversed() : sortedByBestDuration;
-      case 'count':
+        return reverseSortDirection
+          ? sortedByBestDuration.toReversed()
+          : sortedByBestDuration;
+      case "count":
         const sortedByCount = SORTED_FLAT_GOALS.toSorted((a, b) => {
           const aCount = goalStats.get(a.name)?.count ?? 0;
           const bCount = goalStats.get(b.name)?.count ?? 0;
           return aCount - bCount;
         });
-        return reverseSortDirection ? sortedByCount.toReversed() : sortedByCount;
+        return reverseSortDirection
+          ? sortedByCount.toReversed()
+          : sortedByCount;
       default:
         return SORTED_FLAT_GOALS;
     }
@@ -109,47 +132,47 @@ export default function AllGoals() {
                     await db.unselectedGoals.clear();
                   } else {
                     await db.unselectedGoals.bulkAdd(
-                      SORTED_FLAT_GOALS.filter((goal) => selectedGoals.has(goal.name)).map(
-                        (goal) => ({ goal: goal.name })
-                      )
+                      SORTED_FLAT_GOALS.filter((goal) =>
+                        selectedGoals.has(goal.name)
+                      ).map((goal) => ({ goal: goal.name }))
                     );
                   }
                 }}
               />
             </Table.Th>
             <SortableTh
-              sorted={sortBy === 'goal'}
+              sorted={sortBy === "goal"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting('goal')}
+              onSort={() => setSorting("goal")}
             >
               <ThText>Goal</ThText>
             </SortableTh>
             <Table.Th>Game</Table.Th>
             <SortableTh
-              sorted={sortBy === 'difficulty'}
+              sorted={sortBy === "difficulty"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting('difficulty')}
+              onSort={() => setSorting("difficulty")}
             >
               <ThText>Difficulty</ThText>
             </SortableTh>
             <SortableTh
-              sorted={sortBy === 'average'}
+              sorted={sortBy === "average"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting('average')}
+              onSort={() => setSorting("average")}
             >
               <ThText>Average</ThText>
             </SortableTh>
             <SortableTh
-              sorted={sortBy === 'best'}
+              sorted={sortBy === "best"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting('best')}
+              onSort={() => setSorting("best")}
             >
               <ThText>Best</ThText>
             </SortableTh>
             <SortableTh
-              sorted={sortBy === 'count'}
+              sorted={sortBy === "count"}
               reversed={reverseSortDirection}
-              onSort={() => setSorting('count')}
+              onSort={() => setSorting("count")}
             >
               <ThText>Tries</ThText>
             </SortableTh>
@@ -179,10 +202,18 @@ export default function AllGoals() {
                 <Table.Td>{GAME_NAMES[goal.types[0]]}</Table.Td>
                 <Table.Td>{DIFFICULTY_NAMES[goal.types[1]]}</Table.Td>
                 <Table.Td>
-                  {averageDuration == null ? '-' : <Duration duration={averageDuration} />}
+                  {averageDuration == null ? (
+                    "-"
+                  ) : (
+                    <Duration duration={averageDuration} />
+                  )}
                 </Table.Td>
                 <Table.Td>
-                  {bestDuration == null ? '-' : <Duration duration={bestDuration} />}
+                  {bestDuration == null ? (
+                    "-"
+                  ) : (
+                    <Duration duration={bestDuration} />
+                  )}
                 </Table.Td>
                 <Table.Td>{stats?.count ?? 0}</Table.Td>
                 <Table.Td>
@@ -220,7 +251,11 @@ function ThText({ children }: { children: React.ReactNode }) {
 }
 
 function SortableTh({ children, reversed, sorted, onSort }: SortableThProps) {
-  const Icon = sorted ? (reversed ? IconChevronDown : IconChevronUp) : IconSelector;
+  const Icon = sorted
+    ? reversed
+      ? IconChevronDown
+      : IconChevronUp
+    : IconSelector;
   return (
     <Table.Th>
       <UnstyledButton onClick={onSort}>

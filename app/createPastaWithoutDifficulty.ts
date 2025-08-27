@@ -1,5 +1,5 @@
-import { Difficulty, Game, GoalName } from './goals';
-import shuffle from './shuffle';
+import { Difficulty, Game, GoalName } from "./goals";
+import shuffle from "./shuffle";
 
 export type TGoalWithoutDifficulty = {
   readonly name: GoalName;
@@ -7,7 +7,9 @@ export type TGoalWithoutDifficulty = {
 };
 
 type MutablePasta = TGoalWithoutDifficulty[][];
-type PastaWithoutDifficulty = ReadonlyArray<ReadonlyArray<TGoalWithoutDifficulty>>;
+type PastaWithoutDifficulty = ReadonlyArray<
+  ReadonlyArray<TGoalWithoutDifficulty>
+>;
 
 export default function createPastaWithoutDifficulty(
   pasta: PastaWithoutDifficulty,
@@ -16,7 +18,9 @@ export default function createPastaWithoutDifficulty(
 ): PastaWithoutDifficulty {
   // if present, checkState should have all actual games in it, but not general
   // defaulting to true means general is always included
-  const allGoals = pasta.flat().filter((goal) => checkState?.get(goal.types[0]) ?? true);
+  const allGoals = pasta
+    .flat()
+    .filter((goal) => checkState?.get(goal.types[0]) ?? true);
   shuffle(allGoals);
   // Nozzlo and Blitz have 25 general goals which are mixed in with everything else
   // so we don't actually need to verify that there are >= 25 goals.

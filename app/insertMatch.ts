@@ -28,7 +28,7 @@ export async function insertMatch({
     return;
   }
   const id = url.slice(ROOM_PREFIX.length);
-  const sql = getSql();
+  const sql = getSql(false);
 
   await sql`INSERT INTO match (
     id,

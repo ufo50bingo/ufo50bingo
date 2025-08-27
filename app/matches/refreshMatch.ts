@@ -142,7 +142,7 @@ export async function refreshMatch(id: string): Promise<void> {
     p2_color = playerColors[p2_name].join(" ");
   }
 
-  const sql = getSql();
+  const sql = getSql(false);
   await sql`UPDATE match
     SET
       p1_name = ${p1_name},
@@ -257,7 +257,6 @@ function getPlayerColors(goals: ReadonlyArray<RawGoal>): PlayerToColors {
     // at the time they marked the suare. The player object has
     // their *current color* instead
     const color = goal.player_color;
-    console.log(name, color);
     const colors = playerToColors[name] ?? [];
     if (!colors.includes(color)) {
       playerToColors[name] = [...colors, color];

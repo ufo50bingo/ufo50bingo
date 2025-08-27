@@ -99,7 +99,10 @@ export default function Matches({ matches, totalPages }: Props) {
                   <Table.Td>{match.p2?.score}</Table.Td>
                   <Table.Td style={{ width: "34px" }}>
                     <Tooltip label="View board">
-                      <ActionIcon onClick={() => setViewingId(match.id)}>
+                      <ActionIcon
+                        disabled={match.boardJson == null}
+                        onClick={() => setViewingId(match.id)}
+                      >
                         <IconBorderAll size={16} />
                       </ActionIcon>
                     </Tooltip>

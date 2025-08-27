@@ -1,0 +1,9 @@
+Board state lives forever, but feed does not.
+Need to capture feed at first sync
+Feed data should include
+
+INCLUDE SQUARE MARKING AND REVEAL!!
+- time of event
+- player name
+- color change
+- square index

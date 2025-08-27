@@ -56,10 +56,12 @@ export default function CreateBoard() {
   const [roomName, setRoomName] = useState("");
   const [password, setPassword] = useState("");
   const [isLockout, setIsLockout] = useState(true);
-  const [isPublic, setIsPublic] = useState(HAS_MATCHES);
+  const [isPublicRaw, setIsPublicRaw] = useState(HAS_MATCHES);
   const [isCreationInProgress, setIsCreationInProgress] = useState(false);
   const [url, setUrl] = useState("");
   const [error, setError] = useState<Error | null>(null);
+
+  const isPublic = isPublicRaw && isLockout;
 
   const [showNUX, setShowNUX] = useState(
     global.window != undefined && localStorage?.getItem("showNUX") !== "false"
@@ -297,17 +299,22 @@ export default function CreateBoard() {
               {HAS_MATCHES && (
                 <Tooltip
                   label={
-                    <span>
-                      Public games will be visible to all users on the Matches
-                      tab.
-                    </span>
+                    isLockout ? (
+                      <span>
+                        Public games will be visible to all users on the Matches
+                        tab.
+                      </span>
+                    ) : (
+                      <span>Only Lockout games can be made Public.</span>
+                    )
                   }
                 >
                   <Checkbox
                     checked={isPublic}
+                    disabled={!isLockout}
                     label="Public"
                     onChange={(event) =>
-                      setIsPublic(event.currentTarget.checked)
+                      setIsPublicRaw(event.currentTarget.checked)
                     }
                   />
                 </Tooltip>

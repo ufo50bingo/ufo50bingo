@@ -7,3 +7,6 @@ INCLUDE SQUARE MARKING AND REVEAL!!
 - player name
 - color change
 - square index
+
+remove all events from spectators
+keep reveal events only from players in the final score

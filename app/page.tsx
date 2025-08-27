@@ -32,6 +32,7 @@ import { METADATA, Variant, VariantMetadata } from "./pastas/metadata";
 import VariantHoverCard from "./VariantHoverCard";
 import createRoom from "./createMatch";
 import createMatch from "./createMatch";
+import { HAS_MATCHES } from "./constants";
 
 const options: ReadonlyArray<VariantMetadata> = METADATA.filter(
   (d) => !d.isMenu
@@ -55,7 +56,7 @@ export default function CreateBoard() {
   const [roomName, setRoomName] = useState("");
   const [password, setPassword] = useState("");
   const [isLockout, setIsLockout] = useState(true);
-  const [isPublic, setIsPublic] = useState(true);
+  const [isPublic, setIsPublic] = useState(HAS_MATCHES);
   const [isCreationInProgress, setIsCreationInProgress] = useState(false);
   const [url, setUrl] = useState("");
   const [error, setError] = useState<Error | null>(null);
@@ -293,20 +294,24 @@ export default function CreateBoard() {
                 label="Lockout"
                 onChange={(event) => setIsLockout(event.currentTarget.checked)}
               />
-              <Tooltip
-                label={
-                  <span>
-                    Public games will be visible to all users on the Matches
-                    tab.
-                  </span>
-                }
-              >
-                <Checkbox
-                  checked={isPublic}
-                  label="Public"
-                  onChange={(event) => setIsPublic(event.currentTarget.checked)}
-                />
-              </Tooltip>
+              {HAS_MATCHES && (
+                <Tooltip
+                  label={
+                    <span>
+                      Public games will be visible to all users on the Matches
+                      tab.
+                    </span>
+                  }
+                >
+                  <Checkbox
+                    checked={isPublic}
+                    label="Public"
+                    onChange={(event) =>
+                      setIsPublic(event.currentTarget.checked)
+                    }
+                  />
+                </Tooltip>
+              )}
             </Group>
             <Button
               disabled={

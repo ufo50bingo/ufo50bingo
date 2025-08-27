@@ -11,7 +11,7 @@ import {
   Table,
   Tooltip,
 } from "@mantine/core";
-import { IconRefresh, IconTrash } from "@tabler/icons-react";
+import { IconBorderAll, IconRefresh, IconTrash } from "@tabler/icons-react";
 import { BingosyncColor, refreshMatch } from "./refreshMatch";
 import { useState } from "react";
 import ResultModal from "./ResultModal";
@@ -83,7 +83,7 @@ export default function Matches({ matches, totalPages }: Props) {
               <Table.Th>P1 Score</Table.Th>
               <Table.Th>P2</Table.Th>
               <Table.Th>P2 Score</Table.Th>
-              <Table.Th style={{ width: "80px" }} />
+              <Table.Th style={{ width: "34px" }} />
               <Table.Th style={{ width: "34px" }} />
               <Table.Th style={{ width: "34px" }} />
             </Table.Tr>
@@ -97,17 +97,19 @@ export default function Matches({ matches, totalPages }: Props) {
                   <Table.Td>{match.p1?.score}</Table.Td>
                   <Table.Td>{match.p2?.name}</Table.Td>
                   <Table.Td>{match.p2?.score}</Table.Td>
-                  <Table.Td style={{ width: "80px" }}>
-                    <Button
-                      disabled={match.boardJson == null}
-                      onClick={() => setViewingId(match.id)}
-                    >
-                      View Board
-                    </Button>
+                  <Table.Td style={{ width: "34px" }}>
+                    <Tooltip label="View board">
+                      <ActionIcon onClick={() => setViewingId(match.id)}>
+                        <IconBorderAll size={16} />
+                      </ActionIcon>
+                    </Tooltip>
                   </Table.Td>
                   <Table.Td style={{ width: "34px" }}>
                     <Tooltip label="Refresh data from Bingosync">
-                      <ActionIcon onClick={() => refreshMatch(match.id)}>
+                      <ActionIcon
+                        color="green"
+                        onClick={() => refreshMatch(match.id)}
+                      >
                         <IconRefresh size={16} />
                       </ActionIcon>
                     </Tooltip>

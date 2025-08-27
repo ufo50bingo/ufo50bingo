@@ -16,6 +16,7 @@ import {
 } from "@tabler/icons-react";
 import { Anchor, Box, Container, Group, Text } from "@mantine/core";
 import classes from "./Nav.module.css";
+import { HAS_MATCHES } from "./constants";
 
 const LINKS = [
   {
@@ -78,21 +79,23 @@ export default function Nav() {
     <header className={classes.header}>
       <Container className={classes.inner}>
         <Group gap={0} justify="flex-end">
-          {LINKS.map(({ href, text, icon, isNewTab }) => (
-            <Anchor
-              key={href}
-              component={Link}
-              href={href}
-              className={classes.mainLink}
-              data-active={pathname === href || undefined}
-              target={isNewTab === true ? "_blank" : undefined}
-            >
-              <Group gap={8}>
-                {icon}
-                <Text size="sm">{text}</Text>
-              </Group>
-            </Anchor>
-          ))}
+          {LINKS.filter((l) => HAS_MATCHES || l.text !== "Matches").map(
+            ({ href, text, icon, isNewTab }) => (
+              <Anchor
+                key={href}
+                component={Link}
+                href={href}
+                className={classes.mainLink}
+                data-active={pathname === href || undefined}
+                target={isNewTab === true ? "_blank" : undefined}
+              >
+                <Group gap={8}>
+                  {icon}
+                  <Text size="sm">{text}</Text>
+                </Group>
+              </Anchor>
+            )
+          )}
         </Group>
       </Container>
     </header>

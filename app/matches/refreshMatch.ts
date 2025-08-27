@@ -4,101 +4,22 @@ import { revalidatePath } from "next/cache";
 import getCsrfData from "../getCsrfData";
 import getSql from "../getSql";
 import getSQl from "../getSql";
-import { Match } from "./Matches";
-
-export type BingosyncColor =
-  | "blank"
-  | "red"
-  | "blue"
-  | "green"
-  | "orange"
-  | "purple"
-  | "navy"
-  | "teal"
-  | "pink"
-  | "brown"
-  | "yellow";
-
-export type RawSquare = {
-  // goal text
-  name: string;
-  // string like slot1, slot2, ..., slot25
-  // not needed. First slot is always first in the array
-  // slot is always included from bingosync API, but
-  // marked optional here so we can reuse the type
-  // more easily
-  slot?: string;
-  // colors that have marked this square
-  // if not lockout, colors are separated by spaces
-  colors: string;
-};
-type RawBoard = ReadonlyArray<RawSquare>;
-
-// all events https://github.com/kbuzsaki/bingosync/blob/main/bingosync-app/bingosync/models/events.py#L33
-type RawPlayer = {
-  uuid: string;
-  name: string;
-  color: BingosyncColor;
-  is_spectator: boolean;
-};
-type RawNewCard = {
-  type: "new-card";
-  player: RawPlayer;
-  player_color: BingosyncColor;
-  game: string;
-  seed: number;
-  // whether the card is hidden by default
-  hide_card: boolean;
-  // whether the card is the most recent one
-  // will change over time!
-  is_current: boolean;
-  timestamp: number;
-};
-type RawGoal = {
-  type: "goal";
-  // `player` and `square` seem to have values from AFTER the change was made. So if a square is
-  // marked, `square` will contain the *new* color
-  player: RawPlayer;
-  square: RawSquare;
-  // `player_color` and `color` seem to always be the same for "goal" items.
-  // appears that `player_color` is used to color the name of the player in the chat entry,
-  // and `color` is the color of other text
-  // for color change events, `player_color` is the *old* color and `color` is the *new* color
-  player_color: BingosyncColor;
-  color: BingosyncColor;
-  remove: boolean;
-  timestamp: number;
-};
-type RawChat = {
-  type: "chat";
-};
-type RawColor = {
-  type: "color";
-};
-type RawRevealed = {
-  type: "revealed";
-};
-type RawConnection = {
-  type: "connection";
-};
-// "other" is NEVER ACTUALLY USED BY BINGOSYNC
-// just including here so the types help us not crash in case
-// bingosync adds new event types in the future
-type RawOther = {
-  type: "other";
-};
-type RawFeedItem =
-  | RawNewCard
-  | RawGoal
-  | RawChat
-  | RawColor
-  | RawRevealed
-  | RawConnection
-  | RawOther;
-type RawFeed = {
-  events: ReadonlyArray<RawFeedItem>;
-  allIncluded: boolean;
-};
+import {
+  BingosyncColor,
+  Board,
+  Changelog,
+  getBoard,
+  getChangelogAndPlayers,
+  PlayerToColors,
+  RawBoard,
+  RawFeed,
+  RawGoal,
+} from "./parseBingosyncData";
+import {
+  getFirstBingoPlayer,
+  getIsValid,
+  getPlayerWithLeastRecentClaim,
+} from "./analyzeMatch";
 
 type PlayerScores = { [name: string]: number };
 
@@ -107,53 +28,104 @@ export async function refreshMatch(id: string): Promise<void> {
     fetchBoard(id),
     fetchFeed(id),
   ]);
-  const goalEvents = getGoalEventsForLatestCard(feedJson);
-  const playerColors = getPlayerColors(goalEvents);
+  const board = getBoard(boardJson);
+  const [changelog, playerColors] = getChangelogAndPlayers(feedJson);
 
   const playerScores: PlayerScores = {};
-  boardJson.forEach((square) => {
-    const colors = square.colors.split(" ") as ReadonlyArray<BingosyncColor>;
-    colors.forEach((color) => {
-      Object.keys(playerColors).map((name) => {
-        if (playerColors[name].includes(color)) {
-          const newScore = (playerScores[name] ?? 0) + 1;
-          playerScores[name] = newScore;
-        }
-      });
+  board.forEach((square) => {
+    Object.keys(playerColors).map((name) => {
+      if (playerColors[name].includes(square.color)) {
+        const newScore = (playerScores[name] ?? 0) + 1;
+        playerScores[name] = newScore;
+      }
     });
   });
-
   const playerEntries = Object.entries(playerScores);
   // sort so that the player with the most goals is first
   playerEntries.sort((a, b) => b[1] - a[1]);
 
-  let winner_name = null;
-  let winner_score = null;
-  let winner_color = null;
-  if (playerEntries.length > 0) {
-    [winner_name, winner_score] = playerEntries[0];
-    winner_color = playerColors[winner_name].join(" ");
-  }
-  let opponent_name = null;
-  let opponent_score = null;
-  let opponent_color = null;
-  if (playerEntries.length > 1) {
-    [opponent_name, opponent_score] = playerEntries[1];
-    opponent_color = playerColors[opponent_name].join(" ");
+  const isValid = getIsValid(board, changelog["changes"]);
+  if (!isValid || playerEntries.length === 0) {
+    return await updateMatch(
+      id,
+      board,
+      null,
+      null,
+      null,
+      playerColors,
+      playerScores,
+      false
+    );
   }
 
-  const sql = getSql(false);
-  await sql`UPDATE match
-    SET
-      winner_name = ${winner_name},
-      winner_color = ${winner_color},
-      winner_score = ${winner_score},
-      opponent_name = ${opponent_name},
-      opponent_color = ${opponent_color},
-      opponent_score = ${opponent_score},
-      board_json = ${JSON.stringify(boardJson)}
-    WHERE id = ${id}`;
-  revalidatePath("/matches");
+  const bingoPlayer = getFirstBingoPlayer(changelog["changes"], playerColors);
+  if (bingoPlayer != null) {
+    const bestOpponent =
+      playerEntries.find(([name, _]) => name !== bingoPlayer)?.[0] ?? null;
+    return await updateMatch(
+      id,
+      board,
+      changelog,
+      bingoPlayer,
+      bestOpponent,
+      playerColors,
+      playerScores,
+      true
+    );
+  }
+
+  if (playerEntries.length === 1) {
+    return await updateMatch(
+      id,
+      board,
+      changelog,
+      playerEntries[0][0],
+      null,
+      playerColors,
+      playerScores,
+      false
+    );
+  }
+
+  const bestScore = playerEntries[0][1];
+  const secondBestScore = playerEntries[0][1];
+  if (bestScore > secondBestScore) {
+    return await updateMatch(
+      id,
+      board,
+      changelog,
+      playerEntries[0][0],
+      playerEntries[1][0],
+      playerColors,
+      playerScores,
+      false
+    );
+  }
+
+  const tiedPlayers = playerEntries
+    .filter((entry) => entry[1] === bestScore)
+    .map((entry) => entry[0]);
+
+  let tiedPlayerToColors: PlayerToColors = {};
+  tiedPlayers.forEach((player) => {
+    tiedPlayerToColors[player] = playerColors[player];
+  });
+  const winnerName = getPlayerWithLeastRecentClaim(
+    changelog["changes"],
+    tiedPlayerToColors
+  );
+  const opponentName =
+    tiedPlayers.find((player) => player !== winnerName) ?? null;
+  return await updateMatch(
+    id,
+    board,
+    changelog,
+    winnerName,
+    opponentName,
+    playerColors,
+    playerScores,
+    false
+  );
 }
 
 async function fetchBoard(id: string): Promise<RawBoard> {
@@ -168,6 +140,49 @@ async function fetchBoard(id: string): Promise<RawBoard> {
     }
   );
   return await boardResult.json();
+}
+
+async function updateMatch(
+  id: string,
+  board: Board,
+  changelog: Changelog | null,
+  winnerName: string | null,
+  opponentName: string | null,
+  players: PlayerToColors,
+  scores: PlayerScores,
+  bingo: boolean
+): Promise<void> {
+  const sql = getSql(false);
+
+  let winnerColor: null | string = null;
+  let winnerScore: null | number = null;
+  if (winnerName != null) {
+    winnerColor = players[winnerName].join(" ");
+    winnerScore = scores[winnerName];
+  }
+
+  let opponentColor: null | string = null;
+  let opponentScore: null | number = null;
+  if (opponentName != null) {
+    opponentColor = players[opponentName].join(" ");
+    opponentScore = scores[opponentName];
+  }
+
+  const changelogJson = changelog != null ? JSON.stringify(changelog) : null;
+
+  await sql`UPDATE match
+    SET
+      winner_name = ${winnerName},
+      winner_color = ${winnerColor},
+      winner_score = ${winnerScore},
+      winner_bingo = ${bingo},
+      opponent_name = ${opponentName},
+      opponent_color = ${opponentColor},
+      opponent_score = ${opponentScore},
+      board_json = ${JSON.stringify(board)},
+      changelog_json = ${changelogJson}
+    WHERE id = ${id}`;
+  revalidatePath("/matches");
 }
 
 async function fetchFeed(id: string): Promise<RawFeed> {
@@ -223,53 +238,6 @@ async function fetchFeed(id: string): Promise<RawFeed> {
       Cookie: `${cookie}; ${sessionCookie}`,
     },
   });
-  const feedJson: RawFeed = await await feedResponse.json();
+  const feedJson: RawFeed = await feedResponse.json();
   return feedJson;
-}
-
-function getGoalEventsForLatestCard(feedJson: RawFeed): ReadonlyArray<RawGoal> {
-  const events = feedJson.events;
-  // if no new-card event is found, findLastIndex returns -1
-  // So adding 1 here does make sense in all cases
-  const indexAfterFinalNewCard =
-    events.findLastIndex((item) => item.type === "new-card") + 1;
-  return events
-    .slice(indexAfterFinalNewCard)
-    .filter((event) => event.type === "goal");
-}
-
-type PlayerToColors = { [name: string]: ReadonlyArray<BingosyncColor> };
-function getPlayerColors(goals: ReadonlyArray<RawGoal>): PlayerToColors {
-  const playerToNetAdditions: { [name: string]: number } = {};
-  const playerToColors: PlayerToColors = {};
-  goals.forEach((goal) => {
-    if (goal.player.is_spectator) {
-      return;
-    }
-    const name = goal.player.name;
-
-    const netAdditions = playerToNetAdditions[name] ?? 0;
-    playerToNetAdditions[name] = goal.remove
-      ? netAdditions - 1
-      : netAdditions + 1;
-
-    // use goal.player_color since it's the color the player *was*
-    // at the time they marked the suare. The player object has
-    // their *current color* instead
-    const color = goal.player_color;
-    const colors = playerToColors[name] ?? [];
-    if (!colors.includes(color)) {
-      playerToColors[name] = [...colors, color];
-    }
-  });
-
-  // if removals >= marks, then the player is likely
-  // a ref/streamer instead of a participant
-  Object.keys(playerToNetAdditions).forEach((name) => {
-    const netAdditions = playerToNetAdditions[name];
-    if (netAdditions <= 0) {
-      delete playerToColors[name];
-    }
-  });
-  return playerToColors;
 }

@@ -1,6 +1,6 @@
 import Matches, { Match } from "./Matches";
 import getSQl from "../getSql";
-import { BingosyncColor } from "./refreshMatch";
+import { BingosyncColor } from "./parseBingosyncData";
 
 const PAGE_SIZE = 20;
 
@@ -38,6 +38,8 @@ async function fetchMatches(pageNumber: number): Promise<ReadonlyArray<Match>> {
       id,
       name,
       EXTRACT(EPOCH FROM date_created)::INTEGER as date_created,
+      variant,
+      is_custom,
       winner_name,
       winner_color,
       winner_score,
@@ -54,7 +56,7 @@ async function fetchMatches(pageNumber: number): Promise<ReadonlyArray<Match>> {
     OFFSET ${(pageNumber - 1) * PAGE_SIZE}
     LIMIT ${PAGE_SIZE}`
   );
-  return await result.map((rawMatch) => {
+  return result.map((rawMatch) => {
     const winner_name: null | undefined | string = rawMatch.winner_name;
     const winner_score: null | undefined | number = rawMatch.winner_score;
     const winner_color: null | undefined | ReadonlyArray<BingosyncColor> =
@@ -84,9 +86,11 @@ async function fetchMatches(pageNumber: number): Promise<ReadonlyArray<Match>> {
       id: rawMatch.id,
       name: rawMatch.name,
       dateCreated: rawMatch.date_created,
+      variant: rawMatch.variant,
+      isCustom: rawMatch.is_custom,
       winner,
       opponent,
-      hasBingo: null,
+      hasBingo: rawMatch.winner_bingo === true,
       boardJson: rawMatch.board_json,
     };
   });

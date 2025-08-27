@@ -8,12 +8,13 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { Match } from "./Matches";
-import { RawSquare } from "./refreshMatch";
 import { useMemo, useRef } from "react";
 import Board from "../Board";
 import html2canvas from "html2canvas";
 import PlayerName from "./PlayerName";
 import { IconClipboard } from "@tabler/icons-react";
+import { Board as TBoard } from "./parseBingosyncData";
+import { getVariantText, getWinType } from "./matchUtil";
 
 type Props = {
   match: Match;
@@ -22,13 +23,15 @@ type Props = {
 
 export default function ResultModal({ match, onClose }: Props) {
   const boardJson = match.boardJson;
-  const board = useMemo<ReadonlyArray<RawSquare>>(() => {
+  const board = useMemo<TBoard>(() => {
     if (boardJson == null) {
       return null;
     }
     return JSON.parse(boardJson);
   }, [boardJson]);
   const ref = useRef<HTMLDivElement>(null);
+
+  const winType = getWinType(match);
   return (
     <Modal
       centered={true}
@@ -40,16 +43,18 @@ export default function ResultModal({ match, onClose }: Props) {
       <div ref={ref}>
         <Stack gap={8}>
           <Title order={4}>
-            {match.name} -{" "}
+            {match.name}
+            <br />
             {new Date(match.dateCreated * 1000).toLocaleString(undefined, {
               month: "numeric",
               day: "numeric",
               hour: "numeric",
               minute: "numeric",
-            })}
+            })}{" "}
+            - {getVariantText(match)}
           </Title>
           <Board
-            rows={board}
+            board={board}
             onClickSquare={null}
             isHidden={false}
             setIsHidden={() => {}}
@@ -60,6 +65,7 @@ export default function ResultModal({ match, onClose }: Props) {
                 <Text>
                   <strong>
                     {match.winner.name}: {match.winner.score}
+                    {winType != null && ` (${winType} win)`}
                   </strong>
                 </Text>
               </PlayerName>

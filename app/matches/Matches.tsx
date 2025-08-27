@@ -13,7 +13,7 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { IconBorderAll, IconRefresh, IconTrash } from "@tabler/icons-react";
-import { BingosyncColor, refreshMatch } from "./refreshMatch";
+import { refreshMatch } from "./refreshMatch";
 import { useState } from "react";
 import ResultModal from "./ResultModal";
 import deleteMatch from "./deleteMatch";
@@ -22,6 +22,8 @@ import {
   usePathname,
   useSearchParams,
 } from "next/navigation";
+import { BingosyncColor } from "./parseBingosyncData";
+import { getVariantText, getWinType } from "./matchUtil";
 
 interface Player {
   name: string;
@@ -33,6 +35,8 @@ export interface Match {
   id: string;
   name: string;
   dateCreated: number;
+  variant: string;
+  isCustom: boolean;
   winner: null | Player;
   opponent: null | Player;
   hasBingo: null | boolean;
@@ -79,6 +83,7 @@ export default function Matches({ matches, totalPages }: Props) {
     deletingId == null
       ? null
       : matches.find((match) => match.id === deletingId);
+
   return (
     <Container my="md">
       <Stack gap={8}>
@@ -87,8 +92,10 @@ export default function Matches({ matches, totalPages }: Props) {
             <Table.Tr>
               <Table.Th>Room</Table.Th>
               <Table.Th>Date</Table.Th>
+              <Table.Th>Variant</Table.Th>
               <Table.Th>Winner</Table.Th>
               <Table.Th>Score</Table.Th>
+              <Table.Th>Win by</Table.Th>
               <Table.Th>Opponent</Table.Th>
               <Table.Th>Score</Table.Th>
               <Table.Th style={{ width: "34px" }} />
@@ -120,8 +127,10 @@ export default function Matches({ matches, totalPages }: Props) {
                       }
                     )}
                   </Table.Td>
+                  <Table.Td>{getVariantText(match)}</Table.Td>
                   <Table.Td>{match.winner?.name}</Table.Td>
                   <Table.Td>{match.winner?.score}</Table.Td>
+                  <Table.Td>{getWinType(match)}</Table.Td>
                   <Table.Td>{match.opponent?.name}</Table.Td>
                   <Table.Td>{match.opponent?.score}</Table.Td>
                   <Table.Td style={{ width: "34px" }}>

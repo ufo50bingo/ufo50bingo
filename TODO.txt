@@ -8,5 +8,7 @@ INCLUDE SQUARE MARKING AND REVEAL!!
 - color change
 - square index
 
+color detection is wrong if a player makes a mistake I guess?
+
 remove all events from spectators
 keep reveal events only from players in the final score

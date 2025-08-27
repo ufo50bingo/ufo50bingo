@@ -55,20 +55,20 @@ export default function ResultModal({ match, onClose }: Props) {
             setIsHidden={() => {}}
           />
           <Group justify="space-between">
-            {match.p1 != null && (
-              <PlayerName color={match.p1.color}>
+            {match.winner != null && (
+              <PlayerName color={match.winner.color}>
                 <Text>
                   <strong>
-                    {match.p1.name}: {match.p1.score}
+                    {match.winner.name}: {match.winner.score}
                   </strong>
                 </Text>
               </PlayerName>
             )}
-            {match.p2 != null && (
-              <PlayerName color={match.p2.color}>
+            {match.opponent != null && (
+              <PlayerName color={match.opponent.color}>
                 <Text>
                   <strong>
-                    {match.p2.name}: {match.p2.score}
+                    {match.opponent.name}: {match.opponent.score}
                   </strong>
                 </Text>
               </PlayerName>

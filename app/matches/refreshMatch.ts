@@ -127,30 +127,30 @@ export async function refreshMatch(id: string): Promise<void> {
   // sort so that the player with the most goals is first
   playerEntries.sort((a, b) => b[1] - a[1]);
 
-  let p1_name = null;
-  let p1_score = null;
-  let p1_color = null;
+  let winner_name = null;
+  let winner_score = null;
+  let winner_color = null;
   if (playerEntries.length > 0) {
-    [p1_name, p1_score] = playerEntries[0];
-    p1_color = playerColors[p1_name].join(" ");
+    [winner_name, winner_score] = playerEntries[0];
+    winner_color = playerColors[winner_name].join(" ");
   }
-  let p2_name = null;
-  let p2_score = null;
-  let p2_color = null;
+  let opponent_name = null;
+  let opponent_score = null;
+  let opponent_color = null;
   if (playerEntries.length > 1) {
-    [p2_name, p2_score] = playerEntries[1];
-    p2_color = playerColors[p2_name].join(" ");
+    [opponent_name, opponent_score] = playerEntries[1];
+    opponent_color = playerColors[opponent_name].join(" ");
   }
 
   const sql = getSql(false);
   await sql`UPDATE match
     SET
-      p1_name = ${p1_name},
-      p1_color = ${p1_color},
-      p1_score = ${p1_score},
-      p2_name = ${p2_name},
-      p2_color = ${p2_color},
-      p2_score = ${p2_score},
+      winner_name = ${winner_name},
+      winner_color = ${winner_color},
+      winner_score = ${winner_score},
+      opponent_name = ${opponent_name},
+      opponent_color = ${opponent_color},
+      opponent_score = ${opponent_score},
       board_json = ${JSON.stringify(boardJson)}
     WHERE id = ${id}`;
   revalidatePath("/matches");

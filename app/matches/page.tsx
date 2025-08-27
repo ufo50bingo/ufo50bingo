@@ -38,15 +38,13 @@ async function fetchMatches(pageNumber: number): Promise<ReadonlyArray<Match>> {
       id,
       name,
       EXTRACT(EPOCH FROM date_created)::INTEGER as date_created,
-      p1_name,
-      p1_color,
-      p1_score,
-      p1_bingo,
-      p1_win,
-      p2_name,
-      p2_color,
-      p2_score,
-      p2_bingo,
+      winner_name,
+      winner_color,
+      winner_score,
+      winner_bingo,
+      opponent_name,
+      opponent_color,
+      opponent_score,
       board_json
     FROM match
     WHERE
@@ -57,39 +55,38 @@ async function fetchMatches(pageNumber: number): Promise<ReadonlyArray<Match>> {
     LIMIT ${PAGE_SIZE}`
   );
   return await result.map((rawMatch) => {
-    const p1_name: null | undefined | string = rawMatch.p1_name;
-    const p1_score: null | undefined | number = rawMatch.p1_score;
-    const p1_color: null | undefined | ReadonlyArray<BingosyncColor> =
-      rawMatch.p1_color?.split(" ");
+    const winner_name: null | undefined | string = rawMatch.winner_name;
+    const winner_score: null | undefined | number = rawMatch.winner_score;
+    const winner_color: null | undefined | ReadonlyArray<BingosyncColor> =
+      rawMatch.winner_color?.split(" ");
 
-    const p2_name: null | undefined | string = rawMatch.p2_name;
-    const p2_score: null | undefined | number = rawMatch.p2_score;
-    const p2_color: null | undefined | ReadonlyArray<BingosyncColor> =
-      rawMatch.p2_color?.split(" ");
+    const opponent_name: null | undefined | string = rawMatch.opponent_name;
+    const opponent_score: null | undefined | number = rawMatch.opponent_score;
+    const opponent_color: null | undefined | ReadonlyArray<BingosyncColor> =
+      rawMatch.opponent_color?.split(" ");
 
-    const p1 =
-      p1_name != null &&
-      p1_score != null &&
-      p1_color != null &&
-      p1_color.length > 0
-        ? { name: p1_name, score: p1_score, color: p1_color }
+    const winner =
+      winner_name != null &&
+      winner_score != null &&
+      winner_color != null &&
+      winner_color.length > 0
+        ? { name: winner_name, score: winner_score, color: winner_color }
         : null;
 
-    const p2 =
-      p2_name != null &&
-      p2_score != null &&
-      p2_color != null &&
-      p2_color.length > 0
-        ? { name: p2_name, score: p2_score, color: p2_color }
+    const opponent =
+      opponent_name != null &&
+      opponent_score != null &&
+      opponent_color != null &&
+      opponent_color.length > 0
+        ? { name: opponent_name, score: opponent_score, color: opponent_color }
         : null;
     return {
       id: rawMatch.id,
       name: rawMatch.name,
       dateCreated: rawMatch.date_created,
-      p1,
-      p2,
+      winner,
+      opponent,
       hasBingo: null,
-      winner: null,
       boardJson: rawMatch.board_json,
     };
   });

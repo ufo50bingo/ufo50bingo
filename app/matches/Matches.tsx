@@ -2,6 +2,7 @@
 
 import {
   ActionIcon,
+  Anchor,
   Button,
   Container,
   Group,
@@ -32,10 +33,9 @@ export interface Match {
   id: string;
   name: string;
   dateCreated: number;
-  p1: null | Player;
-  p2: null | Player;
+  winner: null | Player;
+  opponent: null | Player;
   hasBingo: null | boolean;
-  winner: null | "p1" | "p2";
   boardJson: null | string;
 }
 
@@ -79,10 +79,11 @@ export default function Matches({ matches, totalPages }: Props) {
           <Table.Thead>
             <Table.Tr>
               <Table.Th>Room</Table.Th>
-              <Table.Th>P1</Table.Th>
-              <Table.Th>P1 Score</Table.Th>
-              <Table.Th>P2</Table.Th>
-              <Table.Th>P2 Score</Table.Th>
+              <Table.Th>Date</Table.Th>
+              <Table.Th>Winner</Table.Th>
+              <Table.Th>Score</Table.Th>
+              <Table.Th>Opponent</Table.Th>
+              <Table.Th>Score</Table.Th>
               <Table.Th style={{ width: "34px" }} />
               <Table.Th style={{ width: "34px" }} />
               <Table.Th style={{ width: "34px" }} />
@@ -92,11 +93,30 @@ export default function Matches({ matches, totalPages }: Props) {
             {matches.map((match) => {
               return (
                 <Table.Tr key={match.id}>
-                  <Table.Td>{match.name}</Table.Td>
-                  <Table.Td>{match.p1?.name}</Table.Td>
-                  <Table.Td>{match.p1?.score}</Table.Td>
-                  <Table.Td>{match.p2?.name}</Table.Td>
-                  <Table.Td>{match.p2?.score}</Table.Td>
+                  <Table.Td>
+                    <Anchor
+                      size="sm"
+                      href={`https://www.bingosync.com/room/${match.id}`}
+                      target="_blank"
+                    >
+                      {match.name}
+                    </Anchor>
+                  </Table.Td>
+                  <Table.Td>
+                    {new Date(match.dateCreated * 1000).toLocaleString(
+                      undefined,
+                      {
+                        month: "numeric",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                      }
+                    )}
+                  </Table.Td>
+                  <Table.Td>{match.winner?.name}</Table.Td>
+                  <Table.Td>{match.winner?.score}</Table.Td>
+                  <Table.Td>{match.opponent?.name}</Table.Td>
+                  <Table.Td>{match.opponent?.score}</Table.Td>
                   <Table.Td style={{ width: "34px" }}>
                     <Tooltip label="View board">
                       <ActionIcon

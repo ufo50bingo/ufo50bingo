@@ -1,10 +1,19 @@
-import { Button, Group, Modal } from "@mantine/core";
+import {
+  Button,
+  Group,
+  Modal,
+  Stack,
+  Text,
+  Title,
+  Tooltip,
+} from "@mantine/core";
 import { Match } from "./Matches";
 import { RawSquare } from "./refreshMatch";
 import { useMemo, useRef } from "react";
 import Board from "../Board";
 import html2canvas from "html2canvas";
 import PlayerName from "./PlayerName";
+import { IconClipboard } from "@tabler/icons-react";
 
 type Props = {
   match: Match;
@@ -25,54 +34,88 @@ export default function ResultModal({ match, onClose }: Props) {
       centered={true}
       onClose={onClose}
       opened={true}
-      title={match.name}
       size="auto"
+      withCloseButton={false}
     >
       <div ref={ref}>
-        <Board
-          rows={board}
-          onClickSquare={null}
-          isHidden={false}
-          setIsHidden={() => {}}
-        />
-        <Group justify="space-between">
-          {match.p1 != null && (
-            <PlayerName color={match.p1.color}>
-              {match.p1.name}: {match.p1.score}
-            </PlayerName>
-          )}
-          {match.p2 != null && (
-            <PlayerName color={match.p2.color}>
-              {match.p2.name}: {match.p2.score}
-            </PlayerName>
-          )}
-        </Group>
+        <Stack gap={8}>
+          <Title order={4}>
+            {match.name} -{" "}
+            {new Date(match.dateCreated * 1000).toLocaleString(undefined, {
+              month: "numeric",
+              day: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+            })}
+          </Title>
+          <Board
+            rows={board}
+            onClickSquare={null}
+            isHidden={false}
+            setIsHidden={() => {}}
+          />
+          <Group justify="space-between">
+            {match.p1 != null && (
+              <PlayerName color={match.p1.color}>
+                <Text>
+                  <strong>
+                    {match.p1.name}: {match.p1.score}
+                  </strong>
+                </Text>
+              </PlayerName>
+            )}
+            {match.p2 != null && (
+              <PlayerName color={match.p2.color}>
+                <Text>
+                  <strong>
+                    {match.p2.name}: {match.p2.score}
+                  </strong>
+                </Text>
+              </PlayerName>
+            )}
+          </Group>
+        </Stack>
       </div>
-      <Button
-        onClick={async () => {
-          const board = ref.current;
-          if (board == null) {
-            return;
+      <Group mt="lg" justify="flex-end">
+        <Tooltip
+          label={
+            <span>
+              Copies an image of the room name, date, board state, and scores.
+              <br />
+              Paste in the #bingo-chat channel (linked in the page footer) to
+              <br />
+              share your results with the community!
+            </span>
           }
-          const newDiv = board.cloneNode(true) as HTMLDivElement;
-          newDiv.style.padding = "8px";
-          newDiv.style.width = `${board.clientWidth}px`;
-          document.body.appendChild(newDiv);
-          const canvas = await html2canvas(newDiv, {
-            backgroundColor: "rgb(36, 36, 36)",
-          });
-          document.body.removeChild(newDiv);
-          canvas.toBlob((blob) => {
-            if (blob == null) {
-              return;
-            }
-            const board = new ClipboardItem({ "image/png": blob });
-            navigator.clipboard.write([board]);
-          });
-        }}
-      >
-        Copy to Clipboard
-      </Button>
+        >
+          <Button
+            leftSection={<IconClipboard size={16} />}
+            onClick={async () => {
+              const board = ref.current;
+              if (board == null) {
+                return;
+              }
+              const newDiv = board.cloneNode(true) as HTMLDivElement;
+              newDiv.style.padding = "8px";
+              newDiv.style.width = `${board.clientWidth}px`;
+              document.body.appendChild(newDiv);
+              const canvas = await html2canvas(newDiv, {
+                backgroundColor: "rgb(36, 36, 36)",
+              });
+              document.body.removeChild(newDiv);
+              canvas.toBlob((blob) => {
+                if (blob == null) {
+                  return;
+                }
+                const board = new ClipboardItem({ "image/png": blob });
+                navigator.clipboard.write([board]);
+              });
+            }}
+          >
+            Copy to Clipboard
+          </Button>
+        </Tooltip>
+      </Group>
     </Modal>
   );
 }

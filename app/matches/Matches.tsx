@@ -44,6 +44,12 @@ type Props = {
   totalPages: number;
 };
 
+const MS_IN_WEEK = 1000 * 60 * 60 * 24 * 7;
+
+function isTooOld(dateCreated: number): boolean {
+  return Date.now() - dateCreated * 1000 > MS_IN_WEEK;
+}
+
 export default function Matches({ matches, totalPages }: Props) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -65,6 +71,7 @@ export default function Matches({ matches, totalPages }: Props) {
   const [viewingId, setViewingId] = useState<null | string>(null);
   const [deletingId, setDeletingId] = useState<null | string>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [refreshingIDs, setRefreshingIDs] = useState<ReadonlyArray<string>>([]);
 
   const viewingMatch =
     viewingId == null ? null : matches.find((match) => match.id === viewingId);
@@ -128,10 +135,36 @@ export default function Matches({ matches, totalPages }: Props) {
                     </Tooltip>
                   </Table.Td>
                   <Table.Td style={{ width: "34px" }}>
-                    <Tooltip label="Refresh data from Bingosync">
+                    <Tooltip
+                      label={
+                        isTooOld(match.dateCreated) ? (
+                          <>
+                            Matches can only be refreshed within 1 week of their
+                            creation
+                            <br />
+                            because Bingosync deletes data about the match.
+                          </>
+                        ) : (
+                          "Refresh data from Bingosync"
+                        )
+                      }
+                    >
                       <ActionIcon
+                        disabled={
+                          isTooOld(match.dateCreated) ||
+                          refreshingIDs.includes(match.id)
+                        }
                         color="green"
-                        onClick={() => refreshMatch(match.id)}
+                        onClick={async () => {
+                          setRefreshingIDs((prev) => [...prev, match.id]);
+                          try {
+                            await refreshMatch(match.id);
+                          } finally {
+                            setRefreshingIDs((prev) =>
+                              prev.filter((id) => id !== match.id)
+                            );
+                          }
+                        }}
                       >
                         <IconRefresh size={16} />
                       </ActionIcon>

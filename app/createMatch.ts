@@ -61,7 +61,8 @@ export default async function createMatch({
   }
 
   // add room to table for tracking
-  // shouldn't need the `await` here, but for some reason data isn't making its way to neon immediately...
+  // shouldn't need the `await` here, but nextjs complains
+  // if you revalidate while rendering
   await insertMatch({
     url: roomURL,
     roomName,

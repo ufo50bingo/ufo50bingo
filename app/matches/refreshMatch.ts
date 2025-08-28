@@ -86,7 +86,7 @@ export async function refreshMatch(id: string): Promise<void> {
   }
 
   const bestScore = playerEntries[0][1];
-  const secondBestScore = playerEntries[0][1];
+  const secondBestScore = playerEntries[1][1];
   if (bestScore > secondBestScore) {
     return await updateMatch(
       id,

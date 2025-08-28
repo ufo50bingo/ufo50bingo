@@ -142,13 +142,23 @@ export default function ResultModal({ match, onClose }: Props) {
           </Button>
         )}
         {changelog != null && (
-          <Button
-            size="sm"
-            leftSection={<IconList size={16} />}
-            onClick={() => setShowChangelog(!showChangelog)}
+          <Tooltip
+            label={
+              <>
+                If a VOD with timestamp is linked to this match, you can
+                <br />
+                click on changelog items to view that time in the VOD.
+              </>
+            }
           >
-            {showChangelog ? "Hide Changelog" : "Show Changelog"}
-          </Button>
+            <Button
+              size="sm"
+              leftSection={<IconList size={16} />}
+              onClick={() => setShowChangelog(!showChangelog)}
+            >
+              {showChangelog ? "Hide Changelog" : "Show Changelog"}
+            </Button>
+          </Tooltip>
         )}
         <Tooltip
           label={
@@ -202,7 +212,18 @@ export default function ResultModal({ match, onClose }: Props) {
           </Drawer.Header>
           <Drawer.Body>
             {changelog != null && (
-              <ViewChangelog board={board} changelog={changelog} />
+              <ViewChangelog
+                board={board}
+                changelog={changelog}
+                vod={
+                  match.vod != null && match.vod.startSeconds != null
+                    ? {
+                        url: match.vod.url,
+                        startSeconds: match.vod.startSeconds,
+                      }
+                    : null
+                }
+              />
             )}
           </Drawer.Body>
         </Drawer.Content>

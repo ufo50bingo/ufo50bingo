@@ -1,8 +1,8 @@
 import { Match } from "./Matches";
 
-type VodHost = "youtube" | "twitch";
+export type VodHost = "youtube" | "twitch";
 
-function getHost(url: URL): null | VodHost {
+export function getHost(url: URL): null | VodHost {
   if (url.hostname.includes("twitch.tv")) {
     return "twitch";
   } else if (
@@ -24,13 +24,18 @@ function getHrsMinsSecs(time: number): [number, number, number] {
   return [hrs, mins, secs];
 }
 
-function setUrlAtTime(host: VodHost, url: URL, startSeconds: number): void {
+export function setUrlAtTime(
+  host: VodHost,
+  url: URL,
+  startSeconds: number
+): void {
+  const seconds = Math.max(0, Math.round(startSeconds));
   switch (host) {
     case "youtube":
-      url.searchParams.set("t", `${startSeconds}`);
+      url.searchParams.set("t", `${seconds}`);
       return;
     case "twitch":
-      const [hrs, mins, secs] = getHrsMinsSecs(startSeconds);
+      const [hrs, mins, secs] = getHrsMinsSecs(seconds);
       url.searchParams.set("t", `${hrs}h${mins}m${secs}s`);
   }
 }

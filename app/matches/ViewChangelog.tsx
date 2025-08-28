@@ -1,14 +1,50 @@
 import { ReactNode, useMemo } from "react";
 import { Board, Change, Changelog } from "./parseBingosyncData";
 import { Stack } from "@mantine/core";
-import BingosyncColored from "./BingosyncColored";
+import BingosyncColored, { getColorClass } from "./BingosyncColored";
+import { getHost, setUrlAtTime, VodHost } from "./vodUtil";
+import classes from "./ViewChangelog.module.css";
+
+type VodWithStartSeconds = { url: string; startSeconds: number };
 
 type Props = {
+  vod: null | VodWithStartSeconds;
   board: Board;
   changelog: Changelog;
 };
 
-export default function ViewChangelog({ board, changelog }: Props) {
+function getBaseUrlAndHost(
+  vodUrl: null | undefined | string
+): null | [string, VodHost] {
+  if (vodUrl == null) {
+    return null;
+  }
+  try {
+    const url = new URL(vodUrl);
+    const host = getHost(url);
+    if (host == null) {
+      return null;
+    }
+    url.searchParams.delete("t");
+    return [url.toString(), host];
+  } catch {
+    return null;
+  }
+}
+
+export default function ViewChangelog({ board, changelog, vod }: Props) {
+  const firstReveal: null | undefined | number = changelog.reveals?.[0]?.time;
+  // add 60s for reading card
+  const start = firstReveal == null ? null : firstReveal + 60;
+  const urlAndHost = getBaseUrlAndHost(vod?.url);
+  const getLink =
+    start != null && urlAndHost != null
+      ? (time: number) => {
+          const url = new URL(urlAndHost[0]);
+          setUrlAtTime(urlAndHost[1], url, time - start);
+          return url.toString();
+        }
+      : null;
   return (
     <Stack gap={6}>
       {changelog.reveals.map((reveal, index) => (
@@ -21,6 +57,7 @@ export default function ViewChangelog({ board, changelog }: Props) {
           key={changelog.reveals.length + index}
           change={change}
           board={board}
+          getLink={getLink}
         />
       ))}
     </Stack>
@@ -38,16 +75,31 @@ function getTimestamp(time: number): string {
 type ChangeTextProps = {
   board: Board;
   change: Change;
+  getLink: null | ((time: number) => string);
 };
-function ChangeText({ board, change }: ChangeTextProps): ReactNode {
+function ChangeText({ board, change, getLink }: ChangeTextProps): ReactNode {
   const { time, index, name, color } = change;
   const goalText = board[index].name;
   const verb = color === "blank" ? "cleared" : "marked";
+  const text = (
+    <BingosyncColored color={change.color}>
+      {getTimestamp(time)} {name} {verb} <strong>{goalText}</strong>
+    </BingosyncColored>
+  );
+  const link = getLink != null ? getLink(change.time) : null;
   return (
     <span style={{ fontSize: "14px" }}>
-      <BingosyncColored color={change.color}>
-        {getTimestamp(time)} {name} {verb} <strong>{goalText}</strong>
-      </BingosyncColored>
+      {link != null ? (
+        <a
+          href={link}
+          className={classes.changelogLink + " " + getColorClass(change.color)}
+          target="_blank"
+        >
+          {text}
+        </a>
+      ) : (
+        text
+      )}
     </span>
   );
 }

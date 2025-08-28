@@ -7,7 +7,7 @@ type Props = {
   children: ReactNode;
 };
 
-function getColorClass(color: BingosyncColor): string {
+export function getColorClass(color: BingosyncColor): string {
   switch (color) {
     case "blank":
       return classes.blankplayer;

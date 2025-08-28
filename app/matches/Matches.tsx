@@ -199,7 +199,7 @@ export default function Matches({ matches, totalPages }: Props) {
                           : isRefreshing
                           ? "Refreshing..."
                           : match.isBoardVisible
-                          ? "View board"
+                          ? "View board and changelog"
                           : "No goals have been claimed yet!"
                       }
                     >

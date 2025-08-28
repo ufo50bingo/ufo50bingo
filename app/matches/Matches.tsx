@@ -27,7 +27,7 @@ import { getVariantText, getWinType } from "./matchUtil";
 
 interface Player {
   name: string;
-  color: ReadonlyArray<BingosyncColor>;
+  color: BingosyncColor;
   score: number;
 }
 
@@ -41,6 +41,7 @@ export interface Match {
   opponent: null | Player;
   hasBingo: null | boolean;
   boardJson: null | string;
+  changelogJson: null | string;
 }
 
 type Props = {
@@ -134,7 +135,13 @@ export default function Matches({ matches, totalPages }: Props) {
                   <Table.Td>{match.opponent?.name}</Table.Td>
                   <Table.Td>{match.opponent?.score}</Table.Td>
                   <Table.Td style={{ width: "34px" }}>
-                    <Tooltip label="View board">
+                    <Tooltip
+                      label={
+                        match.boardJson == null
+                          ? "You must sync data from Bingosync before viewing the board!"
+                          : "View board"
+                      }
+                    >
                       <ActionIcon
                         disabled={match.boardJson == null}
                         onClick={() => setViewingId(match.id)}

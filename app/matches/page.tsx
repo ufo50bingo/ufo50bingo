@@ -47,7 +47,8 @@ async function fetchMatches(pageNumber: number): Promise<ReadonlyArray<Match>> {
       opponent_name,
       opponent_color,
       opponent_score,
-      board_json
+      board_json,
+      changelog_json
     FROM match
     WHERE
       is_public = TRUE
@@ -59,13 +60,13 @@ async function fetchMatches(pageNumber: number): Promise<ReadonlyArray<Match>> {
   return result.map((rawMatch) => {
     const winner_name: null | undefined | string = rawMatch.winner_name;
     const winner_score: null | undefined | number = rawMatch.winner_score;
-    const winner_color: null | undefined | ReadonlyArray<BingosyncColor> =
-      rawMatch.winner_color?.split(" ");
+    const winner_color: null | undefined | BingosyncColor =
+      rawMatch.winner_color;
 
     const opponent_name: null | undefined | string = rawMatch.opponent_name;
     const opponent_score: null | undefined | number = rawMatch.opponent_score;
-    const opponent_color: null | undefined | ReadonlyArray<BingosyncColor> =
-      rawMatch.opponent_color?.split(" ");
+    const opponent_color: null | undefined | BingosyncColor =
+      rawMatch.opponent_color;
 
     const winner =
       winner_name != null &&
@@ -92,6 +93,7 @@ async function fetchMatches(pageNumber: number): Promise<ReadonlyArray<Match>> {
       opponent,
       hasBingo: rawMatch.winner_bingo === true,
       boardJson: rawMatch.board_json,
+      changelogJson: rawMatch.changelog_json,
     };
   });
 }

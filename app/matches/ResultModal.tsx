@@ -1,5 +1,6 @@
 import {
   Button,
+  Drawer,
   Group,
   Modal,
   Stack,
@@ -8,13 +9,14 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { Match } from "./Matches";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import Board from "../Board";
 import html2canvas from "html2canvas";
-import PlayerName from "./PlayerName";
-import { IconClipboard } from "@tabler/icons-react";
+import { IconClipboard, IconList } from "@tabler/icons-react";
 import { Board as TBoard } from "./parseBingosyncData";
 import { getVariantText, getWinType } from "./matchUtil";
+import BingosyncColored from "./BingosyncColored";
+import ViewChangelog from "./ViewChangelog";
 
 type Props = {
   match: Match;
@@ -31,6 +33,8 @@ export default function ResultModal({ match, onClose }: Props) {
   }, [boardJson]);
   const ref = useRef<HTMLDivElement>(null);
 
+  const [showChangelog, setShowChangelog] = useState(false);
+
   const winType = getWinType(match);
   return (
     <Modal
@@ -42,9 +46,8 @@ export default function ResultModal({ match, onClose }: Props) {
     >
       <div ref={ref}>
         <Stack gap={8}>
-          <Title order={4}>
-            {match.name}
-            <br />
+          <Title order={3}>{match.name}</Title>
+          <Text>
             {new Date(match.dateCreated * 1000).toLocaleString(undefined, {
               month: "numeric",
               day: "numeric",
@@ -52,7 +55,7 @@ export default function ResultModal({ match, onClose }: Props) {
               minute: "numeric",
             })}{" "}
             - {getVariantText(match)}
-          </Title>
+          </Text>
           <Board
             board={board}
             onClickSquare={null}
@@ -61,28 +64,36 @@ export default function ResultModal({ match, onClose }: Props) {
           />
           <Group justify="space-between">
             {match.winner != null && (
-              <PlayerName color={match.winner.color}>
+              <BingosyncColored color={match.winner.color}>
                 <Text>
                   <strong>
                     {match.winner.name}: {match.winner.score}
                     {winType != null && ` (${winType} win)`}
                   </strong>
                 </Text>
-              </PlayerName>
+              </BingosyncColored>
             )}
             {match.opponent != null && (
-              <PlayerName color={match.opponent.color}>
+              <BingosyncColored color={match.opponent.color}>
                 <Text>
                   <strong>
                     {match.opponent.name}: {match.opponent.score}
                   </strong>
                 </Text>
-              </PlayerName>
+              </BingosyncColored>
             )}
           </Group>
         </Stack>
       </div>
       <Group mt="lg" justify="flex-end">
+        {match.changelogJson != null && (
+          <Button
+            leftSection={<IconList size={16} />}
+            onClick={() => setShowChangelog(!showChangelog)}
+          >
+            {showChangelog ? "Hide Changelog" : "Show Changelog"}
+          </Button>
+        )}
         <Tooltip
           label={
             <span>
@@ -122,6 +133,27 @@ export default function ResultModal({ match, onClose }: Props) {
           </Button>
         </Tooltip>
       </Group>
+      <Drawer.Root
+        size={300}
+        position="right"
+        opened={showChangelog}
+        onClose={() => setShowChangelog(false)}
+      >
+        <Drawer.Content>
+          <Drawer.Header>
+            <Drawer.Title>Changelog</Drawer.Title>
+            <Drawer.CloseButton />
+          </Drawer.Header>
+          <Drawer.Body>
+            {match.changelogJson != null && (
+              <ViewChangelog
+                board={board}
+                changelogJson={match.changelogJson}
+              />
+            )}
+          </Drawer.Body>
+        </Drawer.Content>
+      </Drawer.Root>
     </Modal>
   );
 }

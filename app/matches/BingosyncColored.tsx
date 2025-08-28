@@ -1,16 +1,14 @@
 import { ReactNode } from "react";
-import { BingosyncColor } from "./refreshMatch";
 import classes from "./PlayerName.module.css";
+import { BingosyncColor } from "./parseBingosyncData";
 
 type Props = {
-  color: ReadonlyArray<BingosyncColor>;
+  color: BingosyncColor;
   children: ReactNode;
 };
 
-function getColorClass(color: ReadonlyArray<BingosyncColor>): string {
-  const firstColor = color[0];
-
-  switch (firstColor) {
+function getColorClass(color: BingosyncColor): string {
+  switch (color) {
     case "blank":
       return classes.blankplayer;
     case "red":
@@ -36,6 +34,6 @@ function getColorClass(color: ReadonlyArray<BingosyncColor>): string {
   }
 }
 
-export default function PlayerName({ color, children }: Props) {
+export default function BingosyncColored({ color, children }: Props) {
   return <span className={getColorClass(color)}>{children}</span>;
 }

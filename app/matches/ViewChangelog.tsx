@@ -1,0 +1,53 @@
+import { ReactNode, useMemo } from "react";
+import { Board, Change, Changelog } from "./parseBingosyncData";
+import { Stack } from "@mantine/core";
+import BingosyncColored from "./BingosyncColored";
+
+type Props = {
+  board: Board;
+  changelogJson: string;
+};
+
+export default function ViewChangelog({ board, changelogJson }: Props) {
+  const changelog: Changelog = useMemo(
+    () => JSON.parse(changelogJson),
+    [changelogJson]
+  );
+  return (
+    <Stack gap={6}>
+      {changelog.reveals.map((reveal, index) => (
+        <span style={{ fontSize: "14px" }}>
+          {getTimestamp(reveal.time)} {reveal.name} revealed the card
+        </span>
+      ))}
+      {changelog.changes.map((change, index) => (
+        <ChangeText key={index} change={change} board={board} />
+      ))}
+    </Stack>
+  );
+}
+
+function getTimestamp(time: number): string {
+  return new Date(time * 1000).toLocaleString(undefined, {
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+  });
+}
+
+type ChangeTextProps = {
+  board: Board;
+  change: Change;
+};
+function ChangeText({ board, change }: ChangeTextProps): ReactNode {
+  const { time, index, name, color } = change;
+  const goalText = board[index].name;
+  const verb = color === "blank" ? "cleared" : "marked";
+  return (
+    <span style={{ fontSize: "14px" }}>
+      <BingosyncColored color={change.color}>
+        {getTimestamp(time)} {name} {verb} <strong>{goalText}</strong>
+      </BingosyncColored>
+    </span>
+  );
+}

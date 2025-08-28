@@ -1,11 +1,12 @@
-import { Center } from "@mantine/core";
+import { Badge, Center } from "@mantine/core";
 import SquareText from "./SquareText";
 import classes from "./Board.module.css";
-import { RefObject } from "react";
+import { ReactNode, RefObject } from "react";
 import { BingosyncColor, Board as TBoard } from "./matches/parseBingosyncData";
 
 type Props = {
   board: TBoard;
+  overlays?: ReadonlyArray<null | ReactNode>;
   onClickSquare: null | ((squareIndex: number) => void);
   isHidden: boolean;
   setIsHidden: (isHidden: boolean) => void;
@@ -43,6 +44,7 @@ function getColorClass(color: string): string {
 
 export default function Board({
   board,
+  overlays,
   onClickSquare,
   isHidden,
   setIsHidden,
@@ -50,23 +52,25 @@ export default function Board({
 }: Props) {
   const getRow = (rowIndex: number) => (
     <tr style={{ height: "95px" }} key={rowIndex}>
-      {board
-        .slice(rowIndex * 5, rowIndex * 5 + 5)
-        .map((square, squareIndex) => (
+      {board.slice(rowIndex * 5, rowIndex * 5 + 5).map((square, colIndex) => {
+        const squareIndex = rowIndex * 5 + colIndex;
+        return (
           <td
-            key={squareIndex}
+            key={colIndex}
             className={`${classes.unselectable} ${
               classes.square
-            } ${getColorClass(board[rowIndex * 5 + squareIndex].color)}`}
-            onClick={() =>
-              onClickSquare != null && onClickSquare(rowIndex * 5 + squareIndex)
-            }
+            } ${getColorClass(board[squareIndex].color)}`}
+            onClick={() => onClickSquare != null && onClickSquare(squareIndex)}
           >
+            {overlays != null && overlays[squareIndex] != null && (
+              <div className={classes.overlay}>{overlays[squareIndex]}</div>
+            )}
             <Center h={85}>
               <SquareText text={square.name} />
             </Center>
           </td>
-        ))}
+        );
+      })}
     </tr>
   );
   return (

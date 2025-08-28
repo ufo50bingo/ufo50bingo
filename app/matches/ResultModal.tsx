@@ -9,11 +9,15 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { Match } from "./Matches";
-import { useMemo, useRef, useState } from "react";
+import { ReactNode, useMemo, useRef, useState } from "react";
 import Board from "../Board";
 import html2canvas from "html2canvas";
-import { IconClipboard, IconList } from "@tabler/icons-react";
-import { Board as TBoard } from "./parseBingosyncData";
+import {
+  IconCircleNumber1Filled,
+  IconClipboard,
+  IconList,
+} from "@tabler/icons-react";
+import { Change, Changelog, Board as TBoard } from "./parseBingosyncData";
 import { getVariantText, getWinType } from "./matchUtil";
 import BingosyncColored from "./BingosyncColored";
 import ViewChangelog from "./ViewChangelog";
@@ -23,17 +27,59 @@ type Props = {
   onClose: () => void;
 };
 
+function getOverlays(
+  changes: ReadonlyArray<Change>
+): ReadonlyArray<null | ReactNode> {
+  const overlays: (null | number)[] = Array(25).fill(null);
+  let count = 1;
+  changes.forEach((change) => {
+    if (change.color == "blank") {
+      const oldOrder = overlays[change.index];
+      overlays[change.index] = null;
+      if (oldOrder != null) {
+        for (let i = 0; i < 25; i++) {
+          const thisOrder = overlays[i];
+          if (thisOrder != null && thisOrder > oldOrder) {
+            overlays[i] = thisOrder - 1;
+          }
+        }
+      }
+      count -= 1;
+    } else {
+      overlays[change.index] = count;
+      count += 1;
+    }
+  });
+  return overlays;
+}
+
 export default function ResultModal({ match, onClose }: Props) {
   const boardJson = match.boardJson;
   const board = useMemo<TBoard>(() => {
     if (boardJson == null) {
-      return null;
+      throw new Error("boardJson is null in ResultModal");
     }
     return JSON.parse(boardJson);
   }, [boardJson]);
-  const ref = useRef<HTMLDivElement>(null);
 
+  const changelogJson = match.changelogJson;
+  const changelog: null | Changelog = useMemo(() => {
+    if (changelogJson == null) {
+      return null;
+    }
+    return JSON.parse(changelogJson);
+  }, [changelogJson]);
+
+  const overlays = useMemo<null | ReadonlyArray<ReactNode>>(() => {
+    if (changelog == null) {
+      return null;
+    }
+    return getOverlays(changelog.changes);
+  }, [changelog?.changes]);
+
+  const ref = useRef<HTMLDivElement>(null);
   const [showChangelog, setShowChangelog] = useState(false);
+  const [showOverlays, setShowOverlays] = useState(true);
 
   const winType = getWinType(match);
   return (
@@ -58,6 +104,7 @@ export default function ResultModal({ match, onClose }: Props) {
           </Text>
           <Board
             board={board}
+            overlays={showOverlays && overlays != null ? overlays : undefined}
             onClickSquare={null}
             isHidden={false}
             setIsHidden={() => {}}
@@ -85,9 +132,18 @@ export default function ResultModal({ match, onClose }: Props) {
           </Group>
         </Stack>
       </div>
-      <Group mt="lg" justify="flex-end">
-        {match.changelogJson != null && (
+      <Group mt="lg" justify="space-between">
+        {overlays != null && (
           <Button
+            leftSection={<IconCircleNumber1Filled size={16} />}
+            onClick={() => setShowOverlays(!showOverlays)}
+          >
+            {showOverlays ? "Hide Order" : "Show Order"}
+          </Button>
+        )}
+        {changelog != null && (
+          <Button
+            size="sm"
             leftSection={<IconList size={16} />}
             onClick={() => setShowChangelog(!showChangelog)}
           >
@@ -145,11 +201,8 @@ export default function ResultModal({ match, onClose }: Props) {
             <Drawer.CloseButton />
           </Drawer.Header>
           <Drawer.Body>
-            {match.changelogJson != null && (
-              <ViewChangelog
-                board={board}
-                changelogJson={match.changelogJson}
-              />
+            {changelog != null && (
+              <ViewChangelog board={board} changelog={changelog} />
             )}
           </Drawer.Body>
         </Drawer.Content>

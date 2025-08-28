@@ -5,14 +5,10 @@ import BingosyncColored from "./BingosyncColored";
 
 type Props = {
   board: Board;
-  changelogJson: string;
+  changelog: Changelog;
 };
 
-export default function ViewChangelog({ board, changelogJson }: Props) {
-  const changelog: Changelog = useMemo(
-    () => JSON.parse(changelogJson),
-    [changelogJson]
-  );
+export default function ViewChangelog({ board, changelog }: Props) {
   return (
     <Stack gap={6}>
       {changelog.reveals.map((reveal, index) => (

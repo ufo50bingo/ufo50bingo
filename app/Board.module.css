@@ -146,3 +146,18 @@
 .yellowsquare {
     background-image: linear-gradient(#d8d014, #c1ba0b);
 }
+
+.overlay {
+    position: absolute;
+    bottom: 4;
+    right: 4;
+    border: 1px solid #c8c8c8;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(46, 46, 46);
+}

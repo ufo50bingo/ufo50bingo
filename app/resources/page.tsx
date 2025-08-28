@@ -1,16 +1,19 @@
 "use client";
 
-import { Card, Container, List } from "@mantine/core";
+import { Alert, Card, Container, List, Title } from "@mantine/core";
 import Link from "next/link";
 
 export default function Resources() {
   return (
     <Container my="md">
       <Card shadow="sm" padding="sm" radius="md" withBorder>
-        <p>
-          If you are a new player, start by reading the{" "}
-          <a href="/about">About</a> page!
-        </p>
+        <Alert variant="light">
+          <Link href="/about">
+            <Title order={5}>
+              If you are new to UFO 50 Bingo, click here first!
+            </Title>
+          </Link>
+        </Alert>
         <p>Bingo League</p>
         <List>
           <List.Item>

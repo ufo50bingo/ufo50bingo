@@ -48,7 +48,8 @@ async function fetchMatches(pageNumber: number): Promise<ReadonlyArray<Match>> {
       opponent_color,
       opponent_score,
       board_json,
-      changelog_json
+      changelog_json,
+      is_board_visible
     FROM match
     WHERE
       is_public = TRUE
@@ -94,6 +95,7 @@ async function fetchMatches(pageNumber: number): Promise<ReadonlyArray<Match>> {
       hasBingo: rawMatch.winner_bingo === true,
       boardJson: rawMatch.board_json,
       changelogJson: rawMatch.changelog_json,
+      isBoardVisible: rawMatch.is_board_visible,
     };
   });
 }

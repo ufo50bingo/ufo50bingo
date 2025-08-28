@@ -38,6 +38,7 @@ export interface Match {
   hasBingo: null | boolean;
   boardJson: null | string;
   changelogJson: null | string;
+  isBoardVisible: boolean;
 }
 
 type Props = {
@@ -134,12 +135,16 @@ export default function Matches({ matches, totalPages }: Props) {
                     <Tooltip
                       label={
                         match.boardJson == null
-                          ? "You must sync data from Bingosync before viewing the board!"
-                          : "View board"
+                          ? "You must Refresh data from Bingosync before viewing the board!"
+                          : match.isBoardVisible
+                          ? "View board"
+                          : "No goals have been claimed yet!"
                       }
                     >
                       <ActionIcon
-                        disabled={match.boardJson == null}
+                        disabled={
+                          match.boardJson == null || !match.isBoardVisible
+                        }
                         onClick={() => setViewingId(match.id)}
                       >
                         <IconBorderAll size={16} />

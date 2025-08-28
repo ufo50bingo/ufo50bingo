@@ -150,6 +150,8 @@ async function updateMatch(
   scores: PlayerScores,
   bingo: boolean
 ): Promise<void> {
+  const isAllBlank = board.every((square) => square.color === "blank");
+
   const sql = getSql(false);
 
   let winnerColor: null | string = null;
@@ -178,7 +180,8 @@ async function updateMatch(
       opponent_color = ${opponentColor},
       opponent_score = ${opponentScore},
       board_json = ${JSON.stringify(board)},
-      changelog_json = ${changelogJson}
+      changelog_json = ${changelogJson},
+      is_board_visible = ${!isAllBlank}
     WHERE id = ${id}`;
   revalidatePath("/matches");
 }

@@ -150,7 +150,7 @@ function getReveals(
   playerNames: ReadonlyArray<string>
 ): ReadonlyArray<Reveal> {
   const finalReveals: Reveal[] = [];
-  const seenPlayers: ReadonlyArray<string> = [];
+  const seenPlayers: string[] = [];
   relevantEvents.forEach((event) => {
     if (event.type !== "revealed") {
       return;
@@ -159,6 +159,7 @@ function getReveals(
     if (!playerNames.includes(name) || seenPlayers.includes(name)) {
       return;
     }
+    seenPlayers.push(name);
     finalReveals.push({
       time: event.timestamp,
       name,

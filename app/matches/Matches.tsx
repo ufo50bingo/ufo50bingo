@@ -17,11 +17,7 @@ import { refreshMatch } from "./refreshMatch";
 import { useState } from "react";
 import ResultModal from "./ResultModal";
 import deleteMatch from "./deleteMatch";
-import {
-  ReadonlyURLSearchParams,
-  usePathname,
-  useSearchParams,
-} from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { BingosyncColor } from "./parseBingosyncData";
 import { getVariantText, getWinType } from "./matchUtil";
 

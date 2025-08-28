@@ -18,7 +18,7 @@ export default function Practice() {
     } else {
       setGoal(getRandomGoal());
     }
-  }, [playlist, getRandomGoal, goal, setGoal]);
+  }, [playlist, getRandomGoal, setGoal]);
 
   return (
     <Container my="md">

@@ -5,7 +5,6 @@ import getCsrfData from "../getCsrfData";
 import getSql from "../getSql";
 import getSQl from "../getSql";
 import {
-  BingosyncColor,
   Board,
   Changelog,
   getBoard,
@@ -13,7 +12,6 @@ import {
   PlayerToColors,
   RawBoard,
   RawFeed,
-  RawGoal,
 } from "./parseBingosyncData";
 import {
   getFirstBingoPlayer,
@@ -106,7 +104,7 @@ export async function refreshMatch(id: string): Promise<void> {
     .filter((entry) => entry[1] === bestScore)
     .map((entry) => entry[0]);
 
-  let tiedPlayerToColors: PlayerToColors = {};
+  const tiedPlayerToColors: PlayerToColors = {};
   tiedPlayers.forEach((player) => {
     tiedPlayerToColors[player] = playerColors[player];
   });

@@ -136,7 +136,6 @@ export function getChangelogAndPlayers(
   const indexAfterFinalNewCard =
     events.findLastIndex((item) => item.type === "new-card") + 1;
   const relevantEvents = events.slice(indexAfterFinalNewCard);
-  const rawGoals = relevantEvents.filter((event) => event.type === "goal");
 
   const changes = getChanges(relevantEvents);
   const playerColors = getPlayerColors(changes);

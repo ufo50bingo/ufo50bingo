@@ -16,12 +16,16 @@ export default function ViewChangelog({ board, changelogJson }: Props) {
   return (
     <Stack gap={6}>
       {changelog.reveals.map((reveal, index) => (
-        <span style={{ fontSize: "14px" }}>
+        <span key={index} style={{ fontSize: "14px" }}>
           {getTimestamp(reveal.time)} {reveal.name} revealed the card
         </span>
       ))}
       {changelog.changes.map((change, index) => (
-        <ChangeText key={index} change={change} board={board} />
+        <ChangeText
+          key={changelog.reveals.length + index}
+          change={change}
+          board={board}
+        />
       ))}
     </Stack>
   );

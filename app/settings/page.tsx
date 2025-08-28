@@ -2,15 +2,12 @@
 
 import { IconMoon, IconSun } from "@tabler/icons-react";
 import {
-  Button,
   Center,
   Container,
   MantineColorScheme,
   NativeSelect,
   SegmentedControl,
-  Stack,
   Table,
-  Text,
   useMantineColorScheme,
 } from "@mantine/core";
 import { NextGoalChoice, useAppContext } from "../AppContextProvider";

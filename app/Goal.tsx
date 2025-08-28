@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
   IconArrowForward,
   IconCircleCheck,
@@ -24,8 +24,6 @@ enum State {
 type Props = { goal: string; onNext: () => any };
 
 export default function Goal({ goal, onNext }: Props) {
-  const [dummyState, setDummyState] = useState(0);
-
   const [curStartTime, setCurStartTime] = useState(0);
   const [firstStartTime, setFirstStartTime] = useState(0);
   const [accumulatedDuration, setAccumulatedDuration] = useState(0);

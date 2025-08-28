@@ -3,7 +3,6 @@ import "@mantine/core/styles.css";
 import React from "react";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import {
-  AppShell,
   ColorSchemeScript,
   mantineHtmlProps,
   MantineProvider,

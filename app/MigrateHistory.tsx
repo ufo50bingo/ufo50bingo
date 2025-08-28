@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button, Group, Modal, Stack, Table, Text } from "@mantine/core";
-import { Attempt, db } from "./db";
+import { db } from "./db";
 import { GoalName } from "./goals";
 
 // Use the GoalName type to confirm that we're always migrating to a valid goal name

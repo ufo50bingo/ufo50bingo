@@ -11,12 +11,10 @@ import {
   Checkbox,
   Container,
   Group,
-  HoverCard,
   JsonInput,
   Menu,
   SegmentedControl,
   Stack,
-  Table,
   Text,
   TextInput,
   Title,
@@ -30,7 +28,6 @@ import { Game, GAME_NAMES, ORDERED_PROPER_GAMES } from "./goals";
 import PastaFilter from "./PastaFilter";
 import { METADATA, Variant, VariantMetadata } from "./pastas/metadata";
 import VariantHoverCard from "./VariantHoverCard";
-import createRoom from "./createMatch";
 import createMatch from "./createMatch";
 import { HAS_MATCHES } from "./constants";
 
@@ -91,7 +88,7 @@ export default function CreateBoard() {
     if (variant === "Game Names") {
       structuredPasta = showFilters
         ? Array.from(
-            checkState.entries().filter(([gameKey, checkState]) => checkState)
+            checkState.entries().filter(([_gameKey, checkState]) => checkState)
           ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
         : ORDERED_PROPER_GAMES.map((gameKey) => ({
             name: GAME_NAMES[gameKey],

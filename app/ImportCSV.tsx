@@ -5,14 +5,12 @@ import Papa from "papaparse";
 import {
   Anchor,
   Button,
-  Container,
   FileInput,
   Group,
   Modal,
   SegmentedControl,
   Stack,
   Text,
-  useMantineColorScheme,
 } from "@mantine/core";
 import { Attempt, db } from "./db";
 import downloadCsv from "./downloadCsv";

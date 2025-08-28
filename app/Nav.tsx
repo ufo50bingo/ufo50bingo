@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
-  IconBorderAll,
   IconDeviceGamepad,
   IconFilter,
   IconHelp,
@@ -14,7 +13,7 @@ import {
   IconTournament,
   IconVs,
 } from "@tabler/icons-react";
-import { Anchor, Box, Container, Group, Text } from "@mantine/core";
+import { Anchor, Container, Group, Text } from "@mantine/core";
 import classes from "./Nav.module.css";
 import { HAS_MATCHES } from "./constants";
 
@@ -74,7 +73,6 @@ const LINKS = [
 
 export default function Nav() {
   const pathname = usePathname();
-  const router = useRouter();
   return (
     <header className={classes.header}>
       <Container className={classes.inner}>

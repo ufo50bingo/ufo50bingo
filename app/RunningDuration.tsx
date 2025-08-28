@@ -10,7 +10,7 @@ export default function RunningDuration({
   curStartTime,
   accumulatedDuration,
 }: Props) {
-  const [dummyState, setDummyState] = useState(0);
+  const [_dummyState, setDummyState] = useState(0);
   useEffect(() => {
     const interval = setInterval(
       () => setDummyState((prevDummyState) => prevDummyState + 1),

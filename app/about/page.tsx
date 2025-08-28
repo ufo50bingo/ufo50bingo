@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Card, Container, Divider, List, Stack, Title } from "@mantine/core";
+import { Card, Container, Divider, List, Title } from "@mantine/core";
 import Board from "../Board";
 import { STANDARD } from "../pastas/standard";
-import { BingosyncColor, RawSquare } from "../matches/refreshMatch";
 import { useState } from "react";
+import { BingosyncColor, Board as TBoard } from "../matches/parseBingosyncData";
 
 const MAGIC_SQUARE: ReadonlyArray<number> = [
   // row 1
@@ -24,18 +24,17 @@ const COLOR: BingosyncColor = "red";
 
 export default function About() {
   const [isHidden, setIsHidden] = useState(true);
-  const [board, setBoard] = useState(() =>
+  const [board, setBoard] = useState<TBoard>(() =>
     MAGIC_SQUARE.map((indexPlusOne) => {
       const group = STANDARD[indexPlusOne - 1];
       const goal = group[Math.floor(Math.random() * group.length)].name;
       return {
         name: goal,
-        colors: "blank",
+        color: "blank",
       };
     })
   );
 
-  const maxHeight = "95px";
   return (
     <Container my="md">
       <Card
@@ -58,12 +57,11 @@ export default function About() {
         </p>
         <div style={{ alignSelf: "center" }}>
           <Board
-            rows={board}
+            board={board}
             onClickSquare={(squareIndex: number) => {
               const newBoard = [...board];
               const newSquare = { ...board[squareIndex] };
-              newSquare["colors"] =
-                newSquare["colors"] === "blank" ? COLOR : "blank";
+              newSquare.color = newSquare.color === "blank" ? COLOR : "blank";
               newBoard[squareIndex] = newSquare;
               setBoard(newBoard);
             }}

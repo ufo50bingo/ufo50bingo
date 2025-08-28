@@ -6,26 +6,41 @@ import {
   Button,
   Container,
   Group,
+  Menu,
   Modal,
   Pagination,
+  Skeleton,
   Stack,
   Table,
   Tooltip,
 } from "@mantine/core";
-import { IconBorderAll, IconRefresh, IconTrash } from "@tabler/icons-react";
+import {
+  IconBorderAll,
+  IconBrandYoutube,
+  IconEdit,
+  IconRefresh,
+  IconTrash,
+} from "@tabler/icons-react";
 import { refreshMatch } from "./refreshMatch";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import ResultModal from "./ResultModal";
 import deleteMatch from "./deleteMatch";
 import { usePathname, useSearchParams } from "next/navigation";
 import { BingosyncColor } from "./parseBingosyncData";
 import { getVariantText, getWinType } from "./matchUtil";
+import EditVodModal from "./EditVodModal";
+import { getVodLink } from "./vodUtil";
 
 interface Player {
   name: string;
   color: BingosyncColor;
   score: number;
 }
+
+type Vod = {
+  url: string;
+  startSeconds: null | number;
+};
 
 export interface Match {
   id: string;
@@ -39,6 +54,7 @@ export interface Match {
   boardJson: null | string;
   changelogJson: null | string;
   isBoardVisible: boolean;
+  vod: null | Vod;
 }
 
 type Props = {
@@ -72,6 +88,7 @@ export default function Matches({ matches, totalPages }: Props) {
 
   const [viewingId, setViewingId] = useState<null | string>(null);
   const [deletingId, setDeletingId] = useState<null | string>(null);
+  const [editingVodId, setEditingVodId] = useState<null | string>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshingIDs, setRefreshingIDs] = useState<ReadonlyArray<string>>([]);
 
@@ -81,6 +98,10 @@ export default function Matches({ matches, totalPages }: Props) {
     deletingId == null
       ? null
       : matches.find((match) => match.id === deletingId);
+  const editingVodMatch =
+    editingVodId == null
+      ? null
+      : matches.find((match) => match.id === editingVodId);
 
   return (
     <Container my="md">
@@ -103,6 +124,31 @@ export default function Matches({ matches, totalPages }: Props) {
           </Table.Thead>
           <Table.Tbody>
             {matches.map((match) => {
+              const isRefreshing = refreshingIDs.includes(match.id);
+              const dataOrSkeleton = (data: ReactNode) =>
+                isRefreshing ? <Skeleton height={8} /> : data;
+
+              const refreshItem = (
+                <Menu.Item
+                  disabled={isTooOld(match.dateCreated) || isRefreshing}
+                  leftSection={<IconRefresh size={16} />}
+                  onClick={async () => {
+                    setRefreshingIDs((prev) => [...prev, match.id]);
+                    try {
+                      await refreshMatch(match.id);
+                    } finally {
+                      setRefreshingIDs((prev) =>
+                        prev.filter((id) => id !== match.id)
+                      );
+                    }
+                  }}
+                >
+                  Refresh data
+                </Menu.Item>
+              );
+
+              const vodLink = getVodLink(match);
+
               return (
                 <Table.Tr key={match.id}>
                   <Table.Td>
@@ -126,16 +172,32 @@ export default function Matches({ matches, totalPages }: Props) {
                     )}
                   </Table.Td>
                   <Table.Td>{getVariantText(match)}</Table.Td>
-                  <Table.Td>{match.winner?.name}</Table.Td>
-                  <Table.Td>{match.winner?.score}</Table.Td>
-                  <Table.Td>{getWinType(match)}</Table.Td>
-                  <Table.Td>{match.opponent?.name}</Table.Td>
-                  <Table.Td>{match.opponent?.score}</Table.Td>
+                  <Table.Td>{dataOrSkeleton(match.winner?.name)}</Table.Td>
+                  <Table.Td>{dataOrSkeleton(match.winner?.score)}</Table.Td>
+                  <Table.Td>{dataOrSkeleton(getWinType(match))}</Table.Td>
+                  <Table.Td>{dataOrSkeleton(match.opponent?.name)}</Table.Td>
+                  <Table.Td>{dataOrSkeleton(match.opponent?.score)}</Table.Td>
+                  <Table.Td style={{ width: "34px" }}>
+                    {vodLink !== "" && (
+                      <Tooltip label="Watch VOD">
+                        <ActionIcon
+                          component="a"
+                          href={vodLink}
+                          target="_blank"
+                          color="red"
+                        >
+                          <IconBrandYoutube size={16} />
+                        </ActionIcon>
+                      </Tooltip>
+                    )}
+                  </Table.Td>
                   <Table.Td style={{ width: "34px" }}>
                     <Tooltip
                       label={
                         match.boardJson == null
                           ? "You must Refresh data from Bingosync before viewing the board!"
+                          : isRefreshing
+                          ? "Refreshing..."
                           : match.isBoardVisible
                           ? "View board"
                           : "No goals have been claimed yet!"
@@ -143,7 +205,9 @@ export default function Matches({ matches, totalPages }: Props) {
                     >
                       <ActionIcon
                         disabled={
-                          match.boardJson == null || !match.isBoardVisible
+                          match.boardJson == null ||
+                          isRefreshing ||
+                          !match.isBoardVisible
                         }
                         onClick={() => setViewingId(match.id)}
                       >
@@ -151,51 +215,46 @@ export default function Matches({ matches, totalPages }: Props) {
                       </ActionIcon>
                     </Tooltip>
                   </Table.Td>
-                  <Table.Td style={{ width: "34px" }}>
-                    <Tooltip
-                      label={
-                        isTooOld(match.dateCreated) ? (
-                          <>
-                            Matches can only be refreshed within 1 week of their
-                            creation
-                            <br />
-                            because Bingosync deletes data about the match.
-                          </>
+                  <Table.Td>
+                    <Menu shadow="md" width="auto">
+                      <Menu.Target>
+                        <Tooltip label="Edit">
+                          <ActionIcon color="green">
+                            <IconEdit size={16} />
+                          </ActionIcon>
+                        </Tooltip>
+                      </Menu.Target>
+                      <Menu.Dropdown>
+                        <Menu.Item
+                          leftSection={<IconBrandYoutube size={16} />}
+                          onClick={() => setEditingVodId(match.id)}
+                        >
+                          {vodLink !== "" ? "Edit" : "Add"} VOD Link
+                        </Menu.Item>
+                        {isTooOld(match.dateCreated) ? (
+                          <Tooltip
+                            label={
+                              <>
+                                Matches can only be refreshed within 1 week of
+                                their creation
+                                <br />
+                                because Bingosync deletes data about the match.
+                              </>
+                            }
+                          >
+                            {refreshItem}
+                          </Tooltip>
                         ) : (
-                          "Refresh data from Bingosync"
-                        )
-                      }
-                    >
-                      <ActionIcon
-                        disabled={
-                          isTooOld(match.dateCreated) ||
-                          refreshingIDs.includes(match.id)
-                        }
-                        color="green"
-                        onClick={async () => {
-                          setRefreshingIDs((prev) => [...prev, match.id]);
-                          try {
-                            await refreshMatch(match.id);
-                          } finally {
-                            setRefreshingIDs((prev) =>
-                              prev.filter((id) => id !== match.id)
-                            );
-                          }
-                        }}
-                      >
-                        <IconRefresh size={16} />
-                      </ActionIcon>
-                    </Tooltip>
-                  </Table.Td>
-                  <Table.Td style={{ width: "34px" }}>
-                    <Tooltip label="Delete match">
-                      <ActionIcon
-                        color="red"
-                        onClick={() => setDeletingId(match.id)}
-                      >
-                        <IconTrash size={16} />
-                      </ActionIcon>
-                    </Tooltip>
+                          refreshItem
+                        )}
+                        <Menu.Item
+                          leftSection={<IconTrash size={16} />}
+                          onClick={() => setDeletingId(match.id)}
+                        >
+                          Delete match
+                        </Menu.Item>
+                      </Menu.Dropdown>
+                    </Menu>
                   </Table.Td>
                 </Table.Tr>
               );
@@ -225,6 +284,12 @@ export default function Matches({ matches, totalPages }: Props) {
       </Stack>
       {viewingMatch != null && (
         <ResultModal match={viewingMatch} onClose={() => setViewingId(null)} />
+      )}
+      {editingVodMatch != null && (
+        <EditVodModal
+          match={editingVodMatch}
+          onClose={() => setEditingVodId(null)}
+        />
       )}
       {deletingMatch != null && (
         <Modal

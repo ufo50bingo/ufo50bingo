@@ -49,7 +49,9 @@ async function fetchMatches(pageNumber: number): Promise<ReadonlyArray<Match>> {
       opponent_score,
       board_json,
       changelog_json,
-      is_board_visible
+      is_board_visible,
+      vod_url,
+      vod_match_start_seconds
     FROM match
     WHERE
       is_public = TRUE
@@ -84,6 +86,14 @@ async function fetchMatches(pageNumber: number): Promise<ReadonlyArray<Match>> {
       opponent_color.length > 0
         ? { name: opponent_name, score: opponent_score, color: opponent_color }
         : null;
+
+    let vod = null;
+    if (rawMatch.vod_url != null && rawMatch.vod_url != "") {
+      vod = {
+        url: rawMatch.vod_url,
+        startSeconds: rawMatch.vod_match_start_seconds ?? null,
+      };
+    }
     return {
       id: rawMatch.id,
       name: rawMatch.name,
@@ -96,6 +106,7 @@ async function fetchMatches(pageNumber: number): Promise<ReadonlyArray<Match>> {
       boardJson: rawMatch.board_json,
       changelogJson: rawMatch.changelog_json,
       isBoardVisible: rawMatch.is_board_visible,
+      vod,
     };
   });
 }

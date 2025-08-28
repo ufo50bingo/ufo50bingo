@@ -29,7 +29,6 @@ import PastaFilter from "./PastaFilter";
 import { METADATA, Variant, VariantMetadata } from "./pastas/metadata";
 import VariantHoverCard from "./VariantHoverCard";
 import createMatch from "./createMatch";
-import { HAS_MATCHES } from "./constants";
 
 const options: ReadonlyArray<VariantMetadata> = METADATA.filter(
   (d) => !d.isMenu
@@ -53,7 +52,7 @@ export default function CreateBoard() {
   const [roomName, setRoomName] = useState("");
   const [password, setPassword] = useState("");
   const [isLockout, setIsLockout] = useState(true);
-  const [isPublicRaw, setIsPublicRaw] = useState(HAS_MATCHES);
+  const [isPublicRaw, setIsPublicRaw] = useState(true);
   const [isCreationInProgress, setIsCreationInProgress] = useState(false);
   const [url, setUrl] = useState("");
   const [error, setError] = useState<Error | null>(null);
@@ -293,32 +292,30 @@ export default function CreateBoard() {
                 label="Lockout"
                 onChange={(event) => setIsLockout(event.currentTarget.checked)}
               />
-              {HAS_MATCHES && (
-                <Tooltip
-                  label={
-                    isLockout ? (
-                      <span>
-                        Stats about public games will be visible to all users on
-                        the Matches tab.
-                        <br />
-                        Users will still need the password to join the Bingosync
-                        room.
-                      </span>
-                    ) : (
-                      <span>Only Lockout games can be made Public.</span>
-                    )
+              <Tooltip
+                label={
+                  isLockout ? (
+                    <span>
+                      Stats about public games will be visible to all users on
+                      the Matches tab.
+                      <br />
+                      Users will still need the password to join the Bingosync
+                      room.
+                    </span>
+                  ) : (
+                    <span>Only Lockout games can be made Public.</span>
+                  )
+                }
+              >
+                <Checkbox
+                  checked={isPublic}
+                  disabled={!isLockout}
+                  label="Public"
+                  onChange={(event) =>
+                    setIsPublicRaw(event.currentTarget.checked)
                   }
-                >
-                  <Checkbox
-                    checked={isPublic}
-                    disabled={!isLockout}
-                    label="Public"
-                    onChange={(event) =>
-                      setIsPublicRaw(event.currentTarget.checked)
-                    }
-                  />
-                </Tooltip>
-              )}
+                />
+              </Tooltip>
             </Group>
             <Button
               disabled={

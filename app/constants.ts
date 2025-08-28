@@ -1,1 +1,1 @@
-export const HAS_MATCHES = false;
+export const HAS_MATCHES = true;

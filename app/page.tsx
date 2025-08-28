@@ -298,8 +298,11 @@ export default function CreateBoard() {
                   label={
                     isLockout ? (
                       <span>
-                        Public games will be visible to all users on the Matches
-                        tab.
+                        Stats about public games will be visible to all users on
+                        the Matches tab.
+                        <br />
+                        Users will still need the password to join the Bingosync
+                        room.
                       </span>
                     ) : (
                       <span>Only Lockout games can be made Public.</span>

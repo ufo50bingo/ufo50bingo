@@ -84,7 +84,7 @@ export default function Resources() {
             For details about Variants, hover over the variant names on{" "}
             <Link href="/">Create Board</Link>
           </List.Item>
-          <p>Misc</p>
+          <p>Community Tools</p>
           <List.Item>
             <a
               href="https://gretgor.itch.io/ufo50-bingo-training-dummy"

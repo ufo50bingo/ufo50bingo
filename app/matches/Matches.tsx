@@ -194,13 +194,21 @@ export default function Matches({ matches, totalPages }: Props) {
                   <Table.Td style={{ width: "34px" }}>
                     <Tooltip
                       label={
-                        match.boardJson == null
-                          ? "You must Refresh data from Bingosync before viewing the board!"
-                          : isRefreshing
-                          ? "Refreshing..."
-                          : match.isBoardVisible
-                          ? "View board and changelog"
-                          : "No goals have been claimed yet!"
+                        match.boardJson == null ? (
+                          "You must Refresh data from Bingosync before viewing the board!"
+                        ) : isRefreshing ? (
+                          "Refreshing..."
+                        ) : match.isBoardVisible ? (
+                          <>
+                            View board and changelog.
+                            <br />
+                            If a VOD is linked, the changelog also has
+                            <br />
+                            timestamped links to each goal completion.
+                          </>
+                        ) : (
+                          "No goals have been claimed yet!"
+                        )
                       }
                     >
                       <ActionIcon

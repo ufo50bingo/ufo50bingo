@@ -149,8 +149,8 @@
 
 .overlay {
     position: absolute;
-    bottom: 4;
-    right: 4;
+    bottom: 4px;
+    right: 4px;
     border: 1px solid #c8c8c8;
     border-radius: 50%;
     width: 16px;

@@ -1,8 +1,8 @@
 "use server";
 
-import getCsrfData from "./getCsrfData";
+import getCsrfData from "../getCsrfData";
 import { insertMatch } from "./insertMatch";
-import { Variant } from "./pastas/metadata";
+import { Variant } from "../pastas/metadata";
 
 const BINGOSYNC_BASE_URL = "https://www.bingosync.com/";
 

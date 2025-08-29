@@ -2,7 +2,7 @@
 
 import Papa from "papaparse";
 import { Button } from "@mantine/core";
-import { db } from "./db";
+import { db } from "../db";
 import downloadCsv from "./downloadCsv";
 
 export default function ExportCSV() {

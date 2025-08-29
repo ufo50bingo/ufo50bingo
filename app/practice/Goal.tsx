@@ -9,9 +9,9 @@ import {
   IconReload,
 } from "@tabler/icons-react";
 import { Badge, Button, Card, Group, Stack, Text } from "@mantine/core";
-import { db } from "./db";
+import { db } from "../db";
 import Duration from "./Duration";
-import { DIFFICULTY_NAMES, SORTED_FLAT_GOALS } from "./goals";
+import { DIFFICULTY_NAMES, SORTED_FLAT_GOALS } from "../goals";
 import RunningDuration from "./RunningDuration";
 
 enum State {

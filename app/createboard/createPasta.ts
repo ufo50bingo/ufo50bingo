@@ -1,4 +1,4 @@
-import { Difficulty, Game, TGoal } from "./goals";
+import { Difficulty, Game, TGoal } from "../goals";
 import shuffle from "./shuffle";
 
 export type MutablePasta = TGoal[][];

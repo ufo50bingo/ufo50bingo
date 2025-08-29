@@ -20,15 +20,15 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
-import createPasta, { Pasta } from "./createPasta";
-import createPastaWithoutDifficulty from "./createPastaWithoutDifficulty";
-import GameChecker from "./GameChecker";
-import getDefaultDifficulties from "./getDefaultDifficulties";
+import createPasta, { Pasta } from "./createboard/createPasta";
+import createPastaWithoutDifficulty from "./createboard/createPastaWithoutDifficulty";
+import GameChecker from "./createboard/GameChecker";
+import getDefaultDifficulties from "./createboard/getDefaultDifficulties";
 import { Game, GAME_NAMES, ORDERED_PROPER_GAMES } from "./goals";
-import PastaFilter from "./PastaFilter";
+import PastaFilter from "./createboard/PastaFilter";
 import { METADATA, Variant, VariantMetadata } from "./pastas/metadata";
-import VariantHoverCard from "./VariantHoverCard";
-import createMatch from "./createMatch";
+import VariantHoverCard from "./createboard/VariantHoverCard";
+import createMatch from "./createboard/createMatch";
 
 const options: ReadonlyArray<VariantMetadata> = METADATA.filter(
   (d) => !d.isMenu

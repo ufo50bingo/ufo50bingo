@@ -11,9 +11,9 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import { NextGoalChoice, useAppContext } from "../AppContextProvider";
-import ExportCSV from "../ExportCSV";
+import ExportCSV from "./ExportCSV";
 import ImportCSV from "../ImportCSV";
-import MigrateHistory from "../MigrateHistory";
+import MigrateHistory from "./MigrateHistory";
 
 export default function Settings() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();

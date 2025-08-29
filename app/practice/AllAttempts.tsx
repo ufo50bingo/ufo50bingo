@@ -11,10 +11,10 @@ import {
   Table,
   Tooltip,
 } from "@mantine/core";
-import { AttemptRow, db } from "./db";
+import { AttemptRow, db } from "../db";
 import Duration from "./Duration";
-import PlaylistAddButton from "./PlaylistAddButton";
-import { GoalStats } from "./useGoalStats";
+import PlaylistAddButton from "../PlaylistAddButton";
+import { GoalStats } from "../useGoalStats";
 
 type Props = {
   attempts: AttemptRow[];

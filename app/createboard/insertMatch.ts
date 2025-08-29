@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { CommonMatchProps } from "./createMatch";
-import getSql from "./getSql";
+import getSql from "../getSql";
 
 const ROOM_PREFIX = "https://www.bingosync.com/room/";
 

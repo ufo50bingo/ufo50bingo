@@ -1,4 +1,4 @@
-import { Game, GoalName } from "./goals";
+import { Game, GoalName } from "../goals";
 import shuffle from "./shuffle";
 
 export type TGoalWithoutDifficulty = {

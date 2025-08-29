@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { Button, Group, Modal, Stack, Table, Text } from "@mantine/core";
-import { db } from "./db";
-import { GoalName } from "./goals";
+import { db } from "../db";
+import { GoalName } from "../goals";
 
 // Use the GoalName type to confirm that we're always migrating to a valid goal name
 const OLD_GOAL_TO_NEW_GOAL: { [key: string]: GoalName } = {

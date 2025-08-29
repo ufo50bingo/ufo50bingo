@@ -21,7 +21,7 @@ import {
 } from "@mantine/core";
 import { useAppContext } from "../AppContextProvider";
 import { db } from "../db";
-import Duration from "../Duration";
+import Duration from "../practice/Duration";
 import {
   compareByDifficulty,
   DIFFICULTY_NAMES,

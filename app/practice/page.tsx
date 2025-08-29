@@ -2,10 +2,10 @@
 
 import { useCallback } from "react";
 import { Container, Stack } from "@mantine/core";
-import AllAttempts from "../AllAttempts";
+import AllAttempts from "./AllAttempts";
 import { useAppContext } from "../AppContextProvider";
 import { db } from "../db";
-import Goal from "../Goal";
+import Goal from "./Goal";
 
 export default function Practice() {
   const { attempts, goalStats, goal, setGoal, playlist, getRandomGoal } =

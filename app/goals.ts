@@ -1,4 +1,4 @@
-import { RAW_GOALS } from "./rawGoals";
+import { STANDARD } from "./pastas/standard";
 
 export const ORDERED_PROPER_GAMES = [
   "barbuta",
@@ -128,17 +128,24 @@ export const DIFFICULTY_NAMES = {
   general: "General",
 } as const;
 
-export type GoalName = (typeof RAW_GOALS)[number][number]["name"];
+export type GoalName = (typeof STANDARD)[number][number]["name"];
 
 export type TGoal = {
   readonly name: GoalName;
   readonly types: readonly [Game, Difficulty];
 };
 
+// some goals in STANDARD are repeated, so we need to filter them out
+const SEEN_GOALS: Set<GoalName> = new Set();
 // this also verifies that all Game and Difficulty options are consistent between the ordered
-// arrays in this file and the values in RAW_GOALS
-export const SORTED_FLAT_GOALS: ReadonlyArray<TGoal> =
-  RAW_GOALS.flat().toSorted((a, b) => {
+// arrays in this file and the values in STANDARD
+export const SORTED_FLAT_GOALS: ReadonlyArray<TGoal> = STANDARD.flat()
+  .filter((goal) => {
+    const hasSeen = SEEN_GOALS.has(goal.name);
+    SEEN_GOALS.add(goal.name);
+    return !hasSeen;
+  })
+  .toSorted((a, b) => {
     const gameDiff =
       ORDERED_GAMES.indexOf(a.types[0]) - ORDERED_GAMES.indexOf(b.types[0]);
     if (gameDiff !== 0) {

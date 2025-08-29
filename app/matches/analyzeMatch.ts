@@ -2,6 +2,7 @@ import {
   BingosyncColor,
   Board,
   Change,
+  Changelog,
   PlayerToColors,
 } from "./parseBingosyncData";
 
@@ -145,4 +146,79 @@ export function getPlayerWithLeastRecentClaim(
   const minClaimTime = Math.min(...finalClaimTimes);
   const indexOfBest = finalClaimTimes.findIndex((v) => v === minClaimTime);
   return Object.keys(players)[indexOfBest];
+}
+
+// assume match starts 60s after reveal
+export function getMatchStartTime(changelog: Changelog): null | number {
+  const revealTime = changelog.reveals?.[0]?.time;
+  return revealTime == null ? null : revealTime + 60;
+}
+
+export function getSquareCompletionTimes(
+  matchStartTime: null | number,
+  changesWithoutMistakes: ReadonlyArray<Change>
+): ReadonlyArray<number | null> {
+  const finalTimes = Array(25).fill(null);
+  const prevTimeByPlayer: { [player: string]: number } = {};
+
+  changesWithoutMistakes.forEach((change) => {
+    if (change.color === "blank") {
+      finalTimes[change.index] = null;
+    } else {
+      const prevTime: null | number =
+        prevTimeByPlayer[change.name] ?? matchStartTime;
+      if (prevTime != null) {
+        finalTimes[change.index] = change.time - prevTime;
+      }
+      prevTimeByPlayer[change.name] = change.time;
+    }
+  });
+  return finalTimes;
+}
+
+// if a square has its color changed from X to Y then back to X within 5 seconds,
+// it's considered a mistake and both changes are removed
+export function getChangesWithoutMistakes(
+  changes: ReadonlyArray<Change>
+): ReadonlyArray<Change> {
+  const changesBySquare: Change[][] = Array(25)
+    .fill(null)
+    .map((_) => []);
+  changes.forEach((change) => {
+    changesBySquare[change.index].push(change);
+  });
+  changesBySquare.forEach((changesForSquare) =>
+    removeMistakesForSquare(changesForSquare)
+  );
+  const allChanges = changesBySquare.flat();
+  allChanges.sort((x, y) => x.time - y.time);
+  return allChanges;
+}
+
+// changes must ALL CORRESPOND TO THE SAME SQUARE and be ordered
+// chronologically
+function removeMistakesForSquare(changes: Change[]): void {
+  // starting from the end, we check PAIRS of changes. If the pair
+  // updates the color from X to Y to X **AND** the time difference
+  // between the two items in the pair is < 5 seconds, assume that
+  // the first item in the pair was a mistake and the second item
+  // corrects it.
+  // Since we're looking at pairs, start at the next-to-last item
+  let indexOfFirstItem = changes.length - 2;
+  while (indexOfFirstItem >= 0) {
+    const timeDiff =
+      changes[indexOfFirstItem + 1].time - changes[indexOfFirstItem].time;
+    const prevColor =
+      indexOfFirstItem > 0 ? changes[indexOfFirstItem - 1].color : "blank";
+    // changes happened within 5 seconds, and second change canceled out
+    // the first change. So we can remove it
+    if (timeDiff < 5 && prevColor == changes[indexOfFirstItem + 1].color) {
+      // remove the item at indexOfFirstItem and the one after
+      changes.splice(indexOfFirstItem, 2);
+      // rewind 2 so we're looking at the first item in another pair
+      indexOfFirstItem -= 2;
+    } else {
+      indexOfFirstItem -= 1;
+    }
+  }
 }

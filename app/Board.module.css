@@ -151,13 +151,15 @@
     position: absolute;
     bottom: 4px;
     right: 4px;
-    border: 1px solid #c8c8c8;
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
+    border: 1px solid white;
+    border-radius: 4px;
+    padding-left: 2px;
+    padding-right: 2px;
     font-size: 9px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(46, 46, 46);
+    background-color: rgb(46, 46, 46, 0.8);
+    color: white;
+    text-wrap: nowrap;
 }

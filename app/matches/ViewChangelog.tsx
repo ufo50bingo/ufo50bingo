@@ -4,6 +4,7 @@ import { Stack } from "@mantine/core";
 import BingosyncColored, { getColorClass } from "./BingosyncColored";
 import { getHost, setUrlAtTime, VodHost } from "./vodUtil";
 import classes from "./ViewChangelog.module.css";
+import { getMatchStartTime } from "./analyzeMatch";
 
 type VodWithStartSeconds = { url: string; startSeconds: number };
 
@@ -33,15 +34,14 @@ function getBaseUrlAndHost(
 }
 
 export default function ViewChangelog({ board, changelog, vod }: Props) {
-  const firstReveal: null | undefined | number = changelog.reveals?.[0]?.time;
-  // add 60s for reading card
-  const start = firstReveal == null ? null : firstReveal + 60;
+  const start = getMatchStartTime(changelog);
+  const startSeconds = vod?.startSeconds;
   const urlAndHost = getBaseUrlAndHost(vod?.url);
   const getLink =
-    start != null && urlAndHost != null
+    start != null && startSeconds != null && urlAndHost != null
       ? (time: number) => {
           const url = new URL(urlAndHost[0]);
-          setUrlAtTime(urlAndHost[1], url, time - start);
+          setUrlAtTime(urlAndHost[1], url, startSeconds + time - start);
           return url.toString();
         }
       : null;

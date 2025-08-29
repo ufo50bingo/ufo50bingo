@@ -12,44 +12,65 @@ import { Match } from "./Matches";
 import { ReactNode, useMemo, useRef, useState } from "react";
 import Board from "../Board";
 import html2canvas from "html2canvas";
-import {
-  IconCircleNumber1Filled,
-  IconClipboard,
-  IconList,
-} from "@tabler/icons-react";
-import { Change, Changelog, Board as TBoard } from "./parseBingosyncData";
+import { IconClipboard, IconClock, IconList } from "@tabler/icons-react";
+import { Changelog, Board as TBoard } from "./parseBingosyncData";
 import { getVariantText, getWinType } from "./matchUtil";
 import BingosyncColored from "./BingosyncColored";
 import ViewChangelog from "./ViewChangelog";
+import {
+  getChangesWithoutMistakes,
+  getMatchStartTime,
+  getSquareCompletionTimes,
+} from "./analyzeMatch";
 
 type Props = {
   match: Match;
   onClose: () => void;
 };
 
-function getOverlays(
-  changes: ReadonlyArray<Change>
-): ReadonlyArray<null | ReactNode> {
-  const overlays: (null | number)[] = Array(25).fill(null);
+function getOverlays(changelog: Changelog): ReadonlyArray<null | ReactNode> {
+  const orders: (null | number)[] = Array(25).fill(null);
   let count = 1;
+  const matchStartTime = getMatchStartTime(changelog);
+  const changes = getChangesWithoutMistakes(changelog.changes);
+  const times = getSquareCompletionTimes(matchStartTime, changes);
   changes.forEach((change) => {
     if (change.color == "blank") {
-      const oldOrder = overlays[change.index];
-      overlays[change.index] = null;
+      const oldOrder = orders[change.index];
+      orders[change.index] = null;
       if (oldOrder != null) {
         for (let i = 0; i < 25; i++) {
-          const thisOrder = overlays[i];
+          const thisOrder = orders[i];
           if (thisOrder != null && thisOrder > oldOrder) {
-            overlays[i] = thisOrder - 1;
+            orders[i] = thisOrder - 1;
           }
         }
       }
       count -= 1;
     } else {
-      overlays[change.index] = count;
+      orders[change.index] = count;
       count += 1;
     }
   });
+
+  const overlays = Array(25)
+    .fill(null)
+    .map((_, index) => {
+      const order = orders[index];
+      const orderStr = order == null ? "#?" : `#${order}`;
+
+      const time = times[index];
+      const timeStr = time != null ? (time / 60).toFixed(1) : null;
+
+      if (order == null && time == null) {
+        return null;
+      }
+      let finalOverlay = orderStr;
+      if (timeStr != null) {
+        finalOverlay += `, ${timeStr}m`;
+      }
+      return finalOverlay;
+    });
   return overlays;
 }
 
@@ -74,7 +95,7 @@ export default function ResultModal({ match, onClose }: Props) {
     if (changelog == null) {
       return null;
     }
-    return getOverlays(changelog.changes);
+    return getOverlays(changelog);
   }, [changelog?.changes]);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -134,12 +155,22 @@ export default function ResultModal({ match, onClose }: Props) {
       </div>
       <Group mt="lg" justify="space-between">
         {overlays != null && (
-          <Button
-            leftSection={<IconCircleNumber1Filled size={16} />}
-            onClick={() => setShowOverlays(!showOverlays)}
+          <Tooltip
+            label={
+              <>
+                Times assume that the match started 1 min after
+                <br />
+                the card was first revealed.
+              </>
+            }
           >
-            {showOverlays ? "Hide Order" : "Show Order"}
-          </Button>
+            <Button
+              leftSection={<IconClock size={16} />}
+              onClick={() => setShowOverlays(!showOverlays)}
+            >
+              {showOverlays ? "Hide Times" : "Show Times"}
+            </Button>
+          </Tooltip>
         )}
         {changelog != null && (
           <Tooltip

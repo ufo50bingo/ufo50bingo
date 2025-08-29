@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import { Match } from "./Matches";
 import { IconAlertSquareRounded, IconSettings } from "@tabler/icons-react";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { getBaseUrlAndStartSeconds, getVodLink, getWarning } from "./vodUtil";
 import updateVod from "./updateVod";
 

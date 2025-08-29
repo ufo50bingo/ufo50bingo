@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from "react";
+import { ReactNode } from "react";
 import { Board, Change, Changelog } from "./parseBingosyncData";
 import { Stack } from "@mantine/core";
 import BingosyncColored, { getColorClass } from "./BingosyncColored";

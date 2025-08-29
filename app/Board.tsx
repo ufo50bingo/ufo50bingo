@@ -1,4 +1,4 @@
-import { Badge, Center } from "@mantine/core";
+import { Center } from "@mantine/core";
 import SquareText from "./SquareText";
 import classes from "./Board.module.css";
 import { ReactNode, RefObject } from "react";

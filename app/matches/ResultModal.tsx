@@ -96,7 +96,7 @@ export default function ResultModal({ match, onClose }: Props) {
       return null;
     }
     return getOverlays(changelog);
-  }, [changelog?.changes]);
+  }, [changelog]);
 
   const ref = useRef<HTMLDivElement>(null);
   const [showChangelog, setShowChangelog] = useState(false);

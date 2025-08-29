@@ -15,7 +15,6 @@ import {
   Tooltip,
 } from "@mantine/core";
 import {
-  IconBorderAll,
   IconBrandYoutube,
   IconEdit,
   IconRefresh,

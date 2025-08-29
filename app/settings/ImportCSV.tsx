@@ -12,9 +12,9 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
-import { Attempt, db } from "./db";
+import { Attempt, db } from "../db";
 import downloadCsv from "./downloadCsv";
-import { SORTED_FLAT_GOALS } from "./goals";
+import { SORTED_FLAT_GOALS } from "../goals";
 
 export default function ImportCSV() {
   const [isImporting, setIsImporting] = useState(false);

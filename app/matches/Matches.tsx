@@ -109,7 +109,7 @@ export default function Matches({ matches, totalPages }: Props) {
         <Table striped highlightOnHover withTableBorder>
           <Table.Thead>
             <Table.Tr>
-              <Table.Th>Room</Table.Th>
+              <Table.Th>Match</Table.Th>
               <Table.Th>Date</Table.Th>
               <Table.Th>Variant</Table.Th>
               <Table.Th>Winner</Table.Th>
@@ -117,8 +117,6 @@ export default function Matches({ matches, totalPages }: Props) {
               <Table.Th>Win by</Table.Th>
               <Table.Th>Opponent</Table.Th>
               <Table.Th>Score</Table.Th>
-              <Table.Th style={{ width: "34px" }} />
-              <Table.Th style={{ width: "34px" }} />
               <Table.Th style={{ width: "34px" }} />
             </Table.Tr>
           </Table.Thead>
@@ -152,13 +150,53 @@ export default function Matches({ matches, totalPages }: Props) {
               return (
                 <Table.Tr key={match.id}>
                   <Table.Td>
-                    <Anchor
-                      size="sm"
-                      href={`https://www.bingosync.com/room/${match.id}`}
-                      target="_blank"
-                    >
-                      {match.name}
-                    </Anchor>
+                    <Group gap={8}>
+                      {vodLink !== "" && (
+                        <Tooltip label="Watch VOD">
+                          <ActionIcon
+                            size="sm"
+                            component="a"
+                            href={vodLink}
+                            target="_blank"
+                            color="red"
+                          >
+                            <IconBrandYoutube size={16} />
+                          </ActionIcon>
+                        </Tooltip>
+                      )}
+                      <Tooltip
+                        label={
+                          match.boardJson == null ? (
+                            "You must Refresh data from Bingosync before viewing the board!"
+                          ) : isRefreshing ? (
+                            "Refreshing..."
+                          ) : match.isBoardVisible ? (
+                            <>
+                              View board and changelog.
+                              <br />
+                              If a VOD is linked, the changelog also has
+                              <br />
+                              timestamped links to each goal completion.
+                            </>
+                          ) : (
+                            "No goals have been claimed yet!"
+                          )
+                        }
+                      >
+                        {match.boardJson == null ||
+                        isRefreshing ||
+                        !match.isBoardVisible ? (
+                          match.name
+                        ) : (
+                          <Anchor
+                            size="sm"
+                            onClick={() => setViewingId(match.id)}
+                          >
+                            {match.name}
+                          </Anchor>
+                        )}
+                      </Tooltip>
+                    </Group>
                   </Table.Td>
                   <Table.Td>
                     {new Date(match.dateCreated * 1000).toLocaleString(
@@ -177,68 +215,16 @@ export default function Matches({ matches, totalPages }: Props) {
                   <Table.Td>{dataOrSkeleton(getWinType(match))}</Table.Td>
                   <Table.Td>{dataOrSkeleton(match.opponent?.name)}</Table.Td>
                   <Table.Td>{dataOrSkeleton(match.opponent?.score)}</Table.Td>
-                  <Table.Td style={{ width: "34px" }}>
-                    {vodLink !== "" && (
-                      <Tooltip label="Watch VOD">
-                        <ActionIcon
-                          component="a"
-                          href={vodLink}
-                          target="_blank"
-                          color="red"
-                        >
-                          <IconBrandYoutube size={16} />
-                        </ActionIcon>
-                      </Tooltip>
-                    )}
-                  </Table.Td>
-                  <Table.Td style={{ width: "34px" }}>
-                    <Tooltip
-                      label={
-                        match.boardJson == null ? (
-                          "You must Refresh data from Bingosync before viewing the board!"
-                        ) : isRefreshing ? (
-                          "Refreshing..."
-                        ) : match.isBoardVisible ? (
-                          <>
-                            View board and changelog.
-                            <br />
-                            If a VOD is linked, the changelog also has
-                            <br />
-                            timestamped links to each goal completion.
-                          </>
-                        ) : (
-                          "No goals have been claimed yet!"
-                        )
-                      }
-                    >
-                      <ActionIcon
-                        disabled={
-                          match.boardJson == null ||
-                          isRefreshing ||
-                          !match.isBoardVisible
-                        }
-                        onClick={() => setViewingId(match.id)}
-                      >
-                        <IconBorderAll size={16} />
-                      </ActionIcon>
-                    </Tooltip>
-                  </Table.Td>
                   <Table.Td>
                     <Menu shadow="md" width="auto">
                       <Menu.Target>
-                        <Tooltip label="Edit">
+                        <Tooltip label="Refresh/Edit">
                           <ActionIcon color="green">
                             <IconEdit size={16} />
                           </ActionIcon>
                         </Tooltip>
                       </Menu.Target>
                       <Menu.Dropdown>
-                        <Menu.Item
-                          leftSection={<IconBrandYoutube size={16} />}
-                          onClick={() => setEditingVodId(match.id)}
-                        >
-                          {vodLink !== "" ? "Edit" : "Add"} VOD Link
-                        </Menu.Item>
                         {isTooOld(match.dateCreated) ? (
                           <Tooltip
                             label={
@@ -255,6 +241,12 @@ export default function Matches({ matches, totalPages }: Props) {
                         ) : (
                           refreshItem
                         )}
+                        <Menu.Item
+                          leftSection={<IconBrandYoutube size={16} />}
+                          onClick={() => setEditingVodId(match.id)}
+                        >
+                          {vodLink !== "" ? "Edit" : "Add"} VOD Link
+                        </Menu.Item>
                         <Menu.Item
                           leftSection={<IconTrash size={16} />}
                           onClick={() => setDeletingId(match.id)}

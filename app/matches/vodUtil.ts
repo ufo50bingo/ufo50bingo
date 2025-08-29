@@ -54,7 +54,8 @@ export function getVodLink(match: Match): string {
     if (host == null) {
       return vod.url;
     }
-    setUrlAtTime(host, url, vod.startSeconds);
+    // rewind 90s so we're a little before reveal period
+    setUrlAtTime(host, url, Math.max(vod.startSeconds - 90, 0));
     return url.toString();
   } catch {
     return "";

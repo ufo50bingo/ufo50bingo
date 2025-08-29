@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import classes from "./PlayerName.module.css";
+import classes from "./BingosyncColored.module.css";
 import { BingosyncColor } from "./parseBingosyncData";
 
 type Props = {

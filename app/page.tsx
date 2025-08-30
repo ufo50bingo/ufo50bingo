@@ -209,13 +209,15 @@ export default function CreateBoard() {
                       </span>
                     }
                   >
-                    <Checkbox
-                      checked={showFilters || randomizeGroupings}
-                      label="Randomize goal groupings"
-                      onChange={(event) =>
-                        setRandomizeGroupings(event.currentTarget.checked)
-                      }
-                    />
+                    <div>
+                      <Checkbox
+                        checked={showFilters || randomizeGroupings}
+                        label="Randomize goal groupings"
+                        onChange={(event) =>
+                          setRandomizeGroupings(event.currentTarget.checked)
+                        }
+                      />
+                    </div>
                   </Tooltip>
                 )}
                 <Checkbox
@@ -301,14 +303,16 @@ export default function CreateBoard() {
                   )
                 }
               >
-                <Checkbox
-                  checked={isPublic}
-                  disabled={!isLockout}
-                  label="Public"
-                  onChange={(event) =>
-                    setIsPublicRaw(event.currentTarget.checked)
-                  }
-                />
+                <div>
+                  <Checkbox
+                    checked={isPublic}
+                    disabled={!isLockout}
+                    label="Public"
+                    onChange={(event) =>
+                      setIsPublicRaw(event.currentTarget.checked)
+                    }
+                  />
+                </div>
               </Tooltip>
             </Group>
             <Button

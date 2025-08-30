@@ -187,16 +187,20 @@ export default function AllGoals() {
             return (
               <Table.Tr key={goal.name}>
                 <Table.Td>
-                  <Checkbox
-                    checked={selectedGoals.has(goal.name)}
-                    onChange={async (event) => {
-                      if (event.currentTarget.checked) {
-                        await db.unselectedGoals.delete(goal.name);
-                      } else {
-                        await db.unselectedGoals.add({ goal: goal.name });
-                      }
-                    }}
-                  />
+                  <Tooltip
+                    label={<>The Practice tab will exclude unchecked goals</>}
+                  >
+                    <Checkbox
+                      checked={selectedGoals.has(goal.name)}
+                      onChange={async (event) => {
+                        if (event.currentTarget.checked) {
+                          await db.unselectedGoals.delete(goal.name);
+                        } else {
+                          await db.unselectedGoals.add({ goal: goal.name });
+                        }
+                      }}
+                    />
+                  </Tooltip>
                 </Table.Td>
                 <Table.Td>{goal.name}</Table.Td>
                 <Table.Td>{GAME_NAMES[goal.types[0]]}</Table.Td>

@@ -144,12 +144,12 @@ export default function CreateBoard() {
             <Group justify="space-between">
               <Link href="/about">
                 <Title order={5}>
-                  If you are new to UFO 50 Bingo, click here for more
+                  If you're new to UFO 50 Bingo, click here for more
                   information!
                 </Title>
               </Link>
               <Button
-                variant="subtle"
+                variant="outline"
                 onClick={() => {
                   setShowNUX(false);
                   window?.localStorage?.setItem("showNUX", "false");

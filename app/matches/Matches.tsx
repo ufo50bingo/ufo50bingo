@@ -178,7 +178,13 @@ export default function Matches({ matches, totalPages }: Props) {
                               timestamped links to each goal completion.
                             </>
                           ) : (
-                            "No goals have been claimed yet!"
+                            <>
+                              No goals have been claimed yet! The board can be
+                              <br />
+                              viewed after at least one goal has been claimed
+                              <br />
+                              and data has been refreshed.
+                            </>
                           )
                         }
                       >

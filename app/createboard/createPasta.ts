@@ -1,21 +1,25 @@
-import { Difficulty, Game, TGoal } from "../goals";
+import { Difficulty, Game } from "../goals";
+import { GoalWithDifficulty, Pasta } from "../pastas/metadata";
 import shuffle from "./shuffle";
 
-export type MutablePasta = TGoal[][];
-export type Pasta = ReadonlyArray<ReadonlyArray<TGoal>>;
+export type MutablePasta = GoalWithDifficulty[][];
 
 export default function createPasta(
   filteredPasta: Pasta,
   difficultyCount: Map<Difficulty, number>
 ): Pasta {
-  const goalsByDifficultyAndGame = new Map<Difficulty, Map<Game, TGoal[]>>();
+  const goalsByDifficultyAndGame = new Map<
+    Difficulty,
+    Map<Game, GoalWithDifficulty[]>
+  >();
   filteredPasta.forEach((group) =>
     group.forEach((goal) => {
       if (goal.types[1] === "general") {
         return;
       }
       const gameToGoals =
-        goalsByDifficultyAndGame.get(goal.types[1]) ?? new Map<Game, TGoal[]>();
+        goalsByDifficultyAndGame.get(goal.types[1]) ??
+        new Map<Game, GoalWithDifficulty[]>();
       const goalsArray = gameToGoals.get(goal.types[0]) ?? [];
       goalsArray.push(goal);
       gameToGoals.set(goal.types[0], goalsArray);

@@ -6,11 +6,13 @@ import { CLARITY } from "./clarity";
 import { NOZZLO } from "./nozzlo";
 import { SPICY } from "./spicy";
 import { STANDARD } from "./standard";
+import { ReactNode } from "react";
+import { Difficulty, Game } from "../goals";
 
-export const METADATA = [
+const RAW_METADATA = [
   {
+    type: "WithDifficulty",
     name: "Standard",
-    update_time: 1754679600,
     pasta: STANDARD,
     isMenu: false,
     hovercard: (
@@ -46,8 +48,8 @@ export const METADATA = [
     ),
   },
   {
+    type: "WithDifficulty",
     name: "Spicy",
-    update_time: 1754679600,
     pasta: SPICY,
     isMenu: false,
     hovercard: (
@@ -90,8 +92,8 @@ export const METADATA = [
     ),
   },
   {
+    type: "WithoutDifficulty",
     name: "Blitz",
-    update_time: 1754679600,
     pasta: BLITZ,
     isMenu: false,
     hovercard: (
@@ -111,8 +113,8 @@ export const METADATA = [
     ),
   },
   {
+    type: "WithoutDifficulty",
     name: "Nozzlo",
-    update_time: 1754679600,
     pasta: NOZZLO,
     isMenu: false,
     hovercard: (
@@ -150,9 +152,8 @@ export const METADATA = [
     ),
   },
   {
+    type: "GameNames",
     name: "Game Names",
-    update_time: null,
-    pasta: null,
     isMenu: false,
     hovercard: (
       <Stack>
@@ -167,9 +168,8 @@ export const METADATA = [
     ),
   },
   {
+    type: "Custom",
     name: "Custom",
-    update_time: null,
-    pasta: null,
     isMenu: false,
     hovercard: (
       <Stack>
@@ -183,8 +183,8 @@ export const METADATA = [
     ),
   },
   {
+    type: "Other",
     name: "Choco",
-    update_time: 1754679600,
     pasta: CHOCO,
     isMenu: true,
     hovercard: (
@@ -200,8 +200,8 @@ export const METADATA = [
     ),
   },
   {
+    type: "Other",
     name: "Campanella 3",
-    update_time: 1754679600,
     pasta: CAMPANELLA3,
     isMenu: true,
     hovercard: (
@@ -223,8 +223,8 @@ export const METADATA = [
     ),
   },
   {
+    type: "Other",
     name: "Clarity",
-    update_time: 1754679600,
     pasta: CLARITY,
     isMenu: true,
     hovercard: (
@@ -241,5 +241,63 @@ export const METADATA = [
   },
 ] as const;
 
-export type VariantMetadata = (typeof METADATA)[number];
-export type Variant = VariantMetadata["name"];
+export type Variant = (typeof RAW_METADATA)[number]["name"];
+
+export type GoalWithDifficulty = {
+  readonly name: string;
+  readonly types: readonly [Game, Difficulty];
+};
+
+export type GoalWithoutDifficulty = {
+  readonly name: string;
+  readonly types: readonly [Game];
+};
+
+type OtherGoal = {
+  readonly name: string;
+  readonly types: ReadonlyArray<string>;
+};
+
+export type Pasta = ReadonlyArray<ReadonlyArray<GoalWithDifficulty>>;
+export type PastaWithoutDifficulty = ReadonlyArray<
+  ReadonlyArray<GoalWithoutDifficulty>
+>;
+export type OtherPasta = ReadonlyArray<ReadonlyArray<OtherGoal>>;
+
+interface MetadataBase {
+  name: Variant;
+  hovercard: ReactNode;
+  isMenu: boolean;
+}
+
+interface WithDifficulty extends MetadataBase {
+  type: "WithDifficulty";
+  pasta: Pasta;
+}
+
+interface WithoutDifficulty extends MetadataBase {
+  type: "WithoutDifficulty";
+  pasta: PastaWithoutDifficulty;
+}
+
+interface Other extends MetadataBase {
+  type: "Other";
+  pasta: OtherPasta;
+}
+
+interface GameNames extends MetadataBase {
+  type: "GameNames";
+}
+
+interface Custom extends MetadataBase {
+  type: "Custom";
+}
+
+export type VariantMetadata =
+  | WithDifficulty
+  | WithoutDifficulty
+  | GameNames
+  | Custom
+  | Other;
+
+export const METADATA: ReadonlyArray<VariantMetadata> = RAW_METADATA;

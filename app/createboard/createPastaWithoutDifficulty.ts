@@ -1,15 +1,11 @@
 import { Game, GoalName } from "../goals";
+import {
+  GoalWithoutDifficulty,
+  PastaWithoutDifficulty,
+} from "../pastas/metadata";
 import shuffle from "./shuffle";
 
-export type TGoalWithoutDifficulty = {
-  readonly name: GoalName;
-  readonly types: readonly [Game];
-};
-
-type MutablePasta = TGoalWithoutDifficulty[][];
-type PastaWithoutDifficulty = ReadonlyArray<
-  ReadonlyArray<TGoalWithoutDifficulty>
->;
+type MutablePasta = GoalWithoutDifficulty[][];
 
 export default function createPastaWithoutDifficulty(
   pasta: PastaWithoutDifficulty,

@@ -26,7 +26,12 @@ import GameChecker from "./createboard/GameChecker";
 import getDefaultDifficulties from "./createboard/getDefaultDifficulties";
 import { Game, GAME_NAMES, ORDERED_PROPER_GAMES } from "./goals";
 import PastaFilter from "./createboard/PastaFilter";
-import { METADATA, Variant, VariantMetadata } from "./pastas/metadata";
+import {
+  METADATA,
+  OtherPasta,
+  Variant,
+  VariantMetadata,
+} from "./pastas/metadata";
 import VariantHoverCard from "./createboard/VariantHoverCard";
 import createMatch from "./createboard/createMatch";
 
@@ -63,7 +68,7 @@ export default function CreateBoard() {
     global.window != undefined && localStorage?.getItem("showNUX") !== "false"
   );
 
-  const metadata = METADATA.find((d) => d.name === variant);
+  const metadata = METADATA.find((d) => d.name === variant)!;
 
   // for some reason it doesn't like checkState.values().filter(...)
   let checkedGameCount = 0;
@@ -73,51 +78,55 @@ export default function CreateBoard() {
     }
   });
   const hasLessThan25Games = checkedGameCount < 25;
-  const isEligibleForCustomizedPasta =
-    variant === "Standard" || variant === "Spicy";
-  const isEligibleForCustomizedPastaWithoutDifficulty =
-    variant === "Nozzlo" || variant === "Blitz";
-  const isUsingCustomizedPasta = isEligibleForCustomizedPasta && showFilters;
 
-  const getSerializedPasta = (pretty: boolean) => {
-    if (variant === "Custom") {
-      return custom;
+  const getSerializedPasta = (pretty: boolean): string => {
+    const stringify = (
+      structured: OtherPasta | ReadonlyArray<{ name: string }>
+    ) =>
+      pretty ? JSON.stringify(structured, null, 4) : JSON.stringify(structured);
+    switch (metadata.type) {
+      case "Custom":
+        return custom;
+      case "GameNames":
+        return stringify(
+          showFilters
+            ? Array.from(
+                checkState
+                  .entries()
+                  .filter(([_gameKey, checkState]) => checkState)
+              ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
+            : ORDERED_PROPER_GAMES.map((gameKey) => ({
+                name: GAME_NAMES[gameKey],
+              }))
+        );
+      case "WithoutDifficulty":
+        return stringify(
+          showFilters || randomizeGroupings
+            ? createPastaWithoutDifficulty(
+                metadata.pasta,
+                showFilters ? checkState : null
+              )
+            : metadata.pasta
+        );
+      case "WithDifficulty":
+        if (showFilters) {
+          if (customizedPasta != null) {
+            return stringify(customizedPasta);
+          } else {
+            throw new Error("customizedPasta expected to be nonnull");
+          }
+        }
+        return stringify(
+          randomizeGroupings
+            ? createPasta(
+                metadata.pasta,
+                getDefaultDifficulties(metadata.pasta)
+              )
+            : metadata.pasta
+        );
+      case "Other":
+        return stringify(metadata.pasta);
     }
-    let structuredPasta;
-    if (variant === "Game Names") {
-      structuredPasta = showFilters
-        ? Array.from(
-            checkState.entries().filter(([_gameKey, checkState]) => checkState)
-          ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
-        : ORDERED_PROPER_GAMES.map((gameKey) => ({
-            name: GAME_NAMES[gameKey],
-          }));
-    } else if (
-      (showFilters || randomizeGroupings) &&
-      isEligibleForCustomizedPastaWithoutDifficulty &&
-      metadata != null
-    ) {
-      structuredPasta = createPastaWithoutDifficulty(
-        // TODO: Fix typing of pastas to be less strict
-        metadata.pasta as any,
-        showFilters ? checkState : null
-      );
-    } else if (isUsingCustomizedPasta && customizedPasta != null) {
-      structuredPasta = customizedPasta;
-    } else if (metadata?.pasta != null) {
-      structuredPasta = randomizeGroupings
-        ? createPasta(
-            // TODO: Fix typing of pastas to be less strict
-            metadata.pasta as any,
-            getDefaultDifficulties(metadata.pasta as any)
-          )
-        : metadata.pasta;
-    } else {
-      return "Error constructing pasta";
-    }
-    return pretty
-      ? JSON.stringify(structuredPasta, null, 4)
-      : JSON.stringify(structuredPasta);
   };
 
   return (
@@ -178,21 +187,8 @@ export default function CreateBoard() {
                 </Menu.Dropdown>
               </Menu>
             </Group>
-            {metadata?.update_time != null && (
-              <Text size="sm">
-                Last synced:{" "}
-                {new Date(metadata.update_time * 1000).toLocaleString(
-                  undefined,
-                  {
-                    month: "numeric",
-                    day: "numeric",
-                    year: "numeric",
-                  }
-                )}
-              </Text>
-            )}
-            {(isEligibleForCustomizedPasta ||
-              isEligibleForCustomizedPastaWithoutDifficulty ||
+            {(metadata.type === "WithDifficulty" ||
+              metadata.type === "WithoutDifficulty" ||
               variant === "Game Names") && (
               <Group>
                 {variant !== "Game Names" && (
@@ -224,7 +220,7 @@ export default function CreateBoard() {
                 <Checkbox
                   checked={showFilters}
                   label={
-                    isEligibleForCustomizedPasta
+                    metadata.type === "WithDifficulty"
                       ? "Customize games and difficulty counts"
                       : "Customize games"
                   }
@@ -234,7 +230,7 @@ export default function CreateBoard() {
                 />
               </Group>
             )}
-            {(isEligibleForCustomizedPastaWithoutDifficulty ||
+            {(metadata.type === "WithoutDifficulty" ||
               variant === "Game Names") &&
               showFilters && (
                 <GameChecker
@@ -249,18 +245,15 @@ export default function CreateBoard() {
                 title="Error: You must select at least 25 games"
               />
             )}
-            {metadata != null &&
-              isEligibleForCustomizedPasta &&
-              showFilters && (
-                <PastaFilter
-                  key={variant}
-                  checkState={checkState}
-                  setCheckState={setCheckState}
-                  // TODO: Fix up the typing here to get rid of the any
-                  pasta={metadata.pasta as any}
-                  onChangePasta={setCustomizedPasta}
-                />
-              )}
+            {metadata.type === "WithDifficulty" && showFilters && (
+              <PastaFilter
+                key={variant}
+                checkState={checkState}
+                setCheckState={setCheckState}
+                pasta={metadata.pasta}
+                onChangePasta={setCustomizedPasta}
+              />
+            )}
             {variant === "Custom" && (
               <JsonInput
                 autosize
@@ -326,7 +319,9 @@ export default function CreateBoard() {
                   showFilters &&
                   hasLessThan25Games) ||
                 (variant === "Custom" && custom === "") ||
-                (isUsingCustomizedPasta && customizedPasta == null)
+                (metadata.type === "WithDifficulty" &&
+                  showFilters &&
+                  customizedPasta == null)
               }
               onClick={async () => {
                 setIsCreationInProgress(true);
@@ -365,7 +360,11 @@ export default function CreateBoard() {
               Create Bingosync Board
             </Button>
             <Button
-              disabled={isUsingCustomizedPasta && customizedPasta == null}
+              disabled={
+                metadata.type === "WithDifficulty" &&
+                showFilters &&
+                customizedPasta == null
+              }
               onClick={() => {
                 navigator.clipboard.writeText(getSerializedPasta(true));
               }}

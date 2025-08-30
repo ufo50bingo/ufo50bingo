@@ -1,23 +1,136 @@
 "use client";
 
-import { ReactNode } from "react";
-import { AppShell, Group, Text } from "@mantine/core";
+import Link from "next/link";
+import { ReactNode, useState } from "react";
+import { AppShell, Burger, Group, Image, NavLink, Text } from "@mantine/core";
+import {
+  IconCreditCardPay,
+  IconDeviceGamepad,
+  IconFilter,
+  IconHelp,
+  IconPlaylistAdd,
+  IconScoreboard,
+  IconScript,
+  IconSettings,
+  IconTournament,
+  IconUser,
+  IconVs,
+  IconWallet,
+} from "@tabler/icons-react";
+import { usePathname } from "next/navigation";
+
+const LINKS = [
+  {
+    href: "/about",
+    text: "How to Play",
+    icon: <IconHelp size={25} stroke={1.5} />,
+  },
+  {
+    href: "/",
+    text: "Create Board",
+    icon: <IconVs size={25} stroke={1.5} />,
+  },
+  {
+    href: "/matches",
+    text: "Matches",
+    icon: <IconScoreboard size={25} stroke={1.5} />,
+  },
+  {
+    href: "/resources",
+    text: "Resources",
+    icon: <IconScript size={25} stroke={1.5} />,
+  },
+  {
+    href: "/practice",
+    text: "Practice",
+    icon: <IconDeviceGamepad size={25} stroke={1.5} />,
+  },
+  {
+    href: "/playlist",
+    text: "Playlist",
+    icon: <IconPlaylistAdd size={25} stroke={1.5} />,
+  },
+  {
+    href: "/goals",
+    text: "All Goals",
+    icon: <IconFilter size={25} stroke={1.5} />,
+  },
+  {
+    href: "/settings",
+    text: "Settings",
+    icon: <IconSettings size={25} stroke={1.5} />,
+  },
+  {
+    href: "https://docs.google.com/spreadsheets/d/1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA/edit?gid=521253915#gid=521253915",
+    text: "League",
+    icon: <IconTournament size={25} stroke={1.5} />,
+    isNewTab: true,
+  },
+  // {
+  //   href: '/boardanalyzer',
+  //   text: 'Board Analyzer',
+  //   icon: <IconBorderAll size={12} />,
+  // },
+];
 
 type Props = {
   children?: ReactNode;
 };
 
 export default function Shell({ children }: Props) {
+  const [isCollapsedMobile, setIsCollapsedMobile] = useState(true);
+  const pathname = usePathname();
+  const page = LINKS.find((data) => data.href === pathname);
+  const title = page?.text;
+
   return (
-    <AppShell footer={{ height: "24px" }}>
+    <AppShell
+      header={{ height: 45 }}
+      navbar={{
+        width: 160,
+        breakpoint: "sm",
+        collapsed: { mobile: isCollapsedMobile },
+      }}
+      padding="md"
+      footer={{ height: "24px" }}
+    >
+      <AppShell.Header>
+        <Group h="100%" px="md">
+          <Burger
+            opened={!isCollapsedMobile}
+            onClick={() => setIsCollapsedMobile(!isCollapsedMobile)}
+            size="sm"
+            hiddenFrom="sm"
+          />
+          <div>
+            <Image src="./logo.png" height={25} width={25} />
+          </div>
+          <span>
+            {title != null ? `UFO 50 Bingo — ${title}` : "UFO 50 Bingo"}
+          </span>
+        </Group>
+      </AppShell.Header>
+      <AppShell.Navbar>
+        {LINKS.map((data) => (
+          <NavLink
+            key={data.href}
+            active={data.href === pathname}
+            component={Link}
+            href={data.href}
+            leftSection={data.icon}
+            label={data.text}
+            onClick={() => setIsCollapsedMobile(true)}
+          />
+        ))}
+      </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>
       <AppShell.Footer>
         <div style={{ padding: "4px" }}>
           <Group justify="center">
             <Text size="xs">
-              Made by Frank — Got suggestions? Tag me in the{" "}
+              Made by Frank — Suggestions? Tag me in{" "}
               <a href="https://discord.gg/zj2HQGaN" target="_blank">
-                #bingo-chat channel on the UFO 50 discord
+                #bingo-chat on the discord
               </a>
             </Text>
           </Group>

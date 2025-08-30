@@ -9,7 +9,6 @@ import {
 } from "@mantine/core";
 import { theme } from "../theme";
 import { AppContextProvider } from "./AppContextProvider";
-import Nav from "./Nav";
 import Shell from "./Shell";
 
 export const metadata = {
@@ -31,10 +30,7 @@ export default function RootLayout({ children }: { children: any }) {
       <body>
         <MantineProvider defaultColorScheme="dark" theme={theme}>
           <AppContextProvider>
-            <Shell>
-              <Nav />
-              {children}
-            </Shell>
+            <Shell>{children}</Shell>
           </AppContextProvider>
         </MantineProvider>
       </body>

@@ -6,6 +6,7 @@ import { AppShell, Burger, Group, Image, NavLink, Text } from "@mantine/core";
 import {
   IconCreditCardPay,
   IconDeviceGamepad,
+  IconExternalLink,
   IconFilter,
   IconHelp,
   IconPlaylistAdd,
@@ -118,8 +119,14 @@ export default function Shell({ children }: Props) {
             component={Link}
             href={data.href}
             leftSection={data.icon}
+            rightSection={
+              data.isNewTab ? (
+                <IconExternalLink size={25} stroke={1.5} />
+              ) : undefined
+            }
             label={data.text}
             onClick={() => setIsCollapsedMobile(true)}
+            target={data.isNewTab ? "_blank" : undefined}
           />
         ))}
       </AppShell.Navbar>

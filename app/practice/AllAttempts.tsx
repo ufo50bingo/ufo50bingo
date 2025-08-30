@@ -77,7 +77,7 @@ export default function AllAttempts({
                   )}
                 </Table.Td>
                 <Table.Td>{stats?.count ?? 0}</Table.Td>
-                <Table.Td>
+                <Table.Td suppressHydrationWarning={true}>
                   {new Date(attempt.startTime).toLocaleString(undefined, {
                     month: "numeric",
                     day: "numeric",

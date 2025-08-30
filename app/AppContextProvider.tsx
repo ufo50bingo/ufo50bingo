@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -71,7 +72,10 @@ export function AppContextProvider({
     }
   }, [nextGoalChoice, selectedGoals, goalStats]);
 
-  const [goal, setGoalRaw] = useState(getRandomGoal());
+  // useEffect sets the initial state to avoid hydration errors
+  const [goal, setGoalRaw] = useState("");
+  useEffect(() => setGoalRaw(getRandomGoal()), []);
+
   const setGoal = useCallback(
     (goal: string) => {
       setGoalRaw(goal);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { IconCheck, IconDots, IconExclamationMark } from "@tabler/icons-react";
 import {
@@ -65,8 +65,14 @@ export default function CreateBoard() {
 
   const isPublic = isPublicRaw && isLockout;
 
-  const [showNUX, setShowNUX] = useState(
-    global.window != undefined && localStorage?.getItem("showNUX") !== "false"
+  const [showNUX, setShowNUX] = useState(false);
+  useEffect(
+    () =>
+      setShowNUX(
+        global.window != undefined &&
+          localStorage?.getItem("showNUX") !== "false"
+      ),
+    []
   );
 
   const metadata = METADATA.find((d) => d.name === variant)!;
@@ -134,7 +140,7 @@ export default function CreateBoard() {
     <Container my="md">
       <Stack gap={8}>
         {showNUX && (
-          <Alert variant="light">
+          <Alert variant="light" suppressHydrationWarning={true}>
             <Group justify="space-between">
               <Link href="/about">
                 <Title order={5}>

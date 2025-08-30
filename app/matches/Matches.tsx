@@ -203,7 +203,7 @@ export default function Matches({ matches, totalPages }: Props) {
                       </Tooltip>
                     </Group>
                   </Table.Td>
-                  <Table.Td>
+                  <Table.Td suppressHydrationWarning={true}>
                     {new Date(match.dateCreated * 1000).toLocaleString(
                       undefined,
                       {

@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { Alert, Group, NumberInput, Stack, Text } from "@mantine/core";
-import createPasta, { Pasta } from "./createPasta";
+import createPasta from "./createPasta";
 import GameChecker from "./GameChecker";
 import getDefaultDifficulties from "./getDefaultDifficulties";
 import { Difficulty, DIFFICULTY_NAMES, Game } from "../goals";
+import { Pasta } from "../pastas/metadata";
 
 type Props = {
   checkState: Map<Game, boolean>;

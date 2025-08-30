@@ -1,5 +1,5 @@
-import { Pasta } from "./createPasta";
 import { Difficulty } from "../goals";
+import { Pasta } from "../pastas/metadata";
 
 export default function getDefaultDifficulties(
   pasta: Pasta

@@ -20,7 +20,7 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
-import createPasta, { Pasta } from "./createboard/createPasta";
+import createPasta from "./createboard/createPasta";
 import createPastaWithoutDifficulty from "./createboard/createPastaWithoutDifficulty";
 import GameChecker from "./createboard/GameChecker";
 import getDefaultDifficulties from "./createboard/getDefaultDifficulties";
@@ -29,6 +29,7 @@ import PastaFilter from "./createboard/PastaFilter";
 import {
   METADATA,
   OtherPasta,
+  Pasta,
   Variant,
   VariantMetadata,
 } from "./pastas/metadata";

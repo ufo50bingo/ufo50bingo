@@ -185,7 +185,7 @@ export default function Matches({ matches, totalPages }: Props) {
                         {match.boardJson == null ||
                         isRefreshing ||
                         !match.isBoardVisible ? (
-                          match.name
+                          <span>{match.name}</span>
                         ) : (
                           <Anchor
                             size="sm"

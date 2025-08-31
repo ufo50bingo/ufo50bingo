@@ -75,22 +75,22 @@ export default function Board({
   );
   return (
     <div className={classes.boardContainer} ref={ref}>
-      <table className={classes.baseTable}>
-        <colgroup>
-          <col style={{ width: "105px" }} />
-          <col style={{ width: "105px" }} />
-          <col style={{ width: "105px" }} />
-          <col style={{ width: "105px" }} />
-          <col style={{ width: "105px" }} />
-        </colgroup>
-        <tbody>
-          {getRow(0)}
-          {getRow(1)}
-          {getRow(2)}
-          {getRow(3)}
-          {getRow(4)}
-        </tbody>
-      </table>
+      {board.map((square, squareIndex) => (
+        <div
+          key={squareIndex}
+          className={`${classes.unselectable} ${classes.square} ${getColorClass(
+            board[squareIndex].color
+          )}`}
+          onClick={() => onClickSquare != null && onClickSquare(squareIndex)}
+        >
+          {overlays != null && overlays[squareIndex] != null && (
+            <div className={classes.overlay}>{overlays[squareIndex]}</div>
+          )}
+          <Center h={85}>
+            <SquareText text={square.name} />
+          </Center>
+        </div>
+      ))}
       {isHidden && (
         <div
           className={`${classes.boardCover} ${classes.unselectable}`}

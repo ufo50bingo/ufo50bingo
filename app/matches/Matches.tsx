@@ -29,6 +29,7 @@ import { BingosyncColor } from "./parseBingosyncData";
 import { getVariantText, getWinType } from "./matchUtil";
 import EditVodModal from "./EditVodModal";
 import { getVodLink } from "./vodUtil";
+import classes from "./Matches.module.css";
 
 interface Player {
   name: string;
@@ -149,59 +150,58 @@ export default function Matches({ matches, totalPages }: Props) {
               return (
                 <Table.Tr key={match.id}>
                   <Table.Td>
-                    <Group gap={8}>
-                      {vodLink !== "" && (
-                        <Tooltip label="Watch VOD">
-                          <ActionIcon
-                            size="sm"
-                            component="a"
-                            href={vodLink}
-                            target="_blank"
-                            color="red"
-                          >
-                            <IconBrandYoutube size={16} />
-                          </ActionIcon>
-                        </Tooltip>
-                      )}
-                      <Tooltip
-                        label={
-                          match.boardJson == null ? (
-                            "You must Refresh data from Bingosync before viewing the board!"
-                          ) : isRefreshing ? (
-                            "Refreshing..."
-                          ) : match.isBoardVisible ? (
-                            <>
-                              View board and changelog.
-                              <br />
-                              If a VOD is linked, the changelog also has
-                              <br />
-                              timestamped links to each goal completion.
-                            </>
-                          ) : (
-                            <>
-                              No goals have been claimed yet! The board can be
-                              <br />
-                              viewed after at least one goal has been claimed
-                              <br />
-                              and data has been refreshed.
-                            </>
-                          )
-                        }
-                      >
-                        {match.boardJson == null ||
+                    {vodLink !== "" && (
+                      <Tooltip label="Watch VOD">
+                        <ActionIcon
+                          className={classes.vodButton}
+                          size="sm"
+                          component="a"
+                          href={vodLink}
+                          target="_blank"
+                          color="red"
+                        >
+                          <IconBrandYoutube size={16} />
+                        </ActionIcon>
+                      </Tooltip>
+                    )}
+                    <Tooltip
+                      label={
+                        match.boardJson == null ? (
+                          "You must Refresh data from Bingosync before viewing the board!"
+                        ) : isRefreshing ? (
+                          "Refreshing..."
+                        ) : match.isBoardVisible ? (
+                          <>
+                            View board and changelog.
+                            <br />
+                            If a VOD is linked, the changelog also has
+                            <br />
+                            timestamped links to each goal completion.
+                          </>
+                        ) : (
+                          <>
+                            No goals have been claimed yet! The board can be
+                            <br />
+                            viewed after at least one goal has been claimed
+                            <br />
+                            and data has been refreshed.
+                          </>
+                        )
+                      }
+                    >
+                      {match.boardJson == null ||
                         isRefreshing ||
                         !match.isBoardVisible ? (
-                          <span>{match.name}</span>
-                        ) : (
-                          <Anchor
-                            size="sm"
-                            onClick={() => setViewingId(match.id)}
-                          >
-                            {match.name}
-                          </Anchor>
-                        )}
-                      </Tooltip>
-                    </Group>
+                        <span>{match.name}</span>
+                      ) : (
+                        <Anchor
+                          size="sm"
+                          onClick={() => setViewingId(match.id)}
+                        >
+                          {match.name}
+                        </Anchor>
+                      )}
+                    </Tooltip>
                   </Table.Td>
                   <Table.Td suppressHydrationWarning={true}>
                     {new Date(match.dateCreated * 1000).toLocaleString(

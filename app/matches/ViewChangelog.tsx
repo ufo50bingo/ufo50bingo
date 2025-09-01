@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Board, Change, Changelog } from "./parseBingosyncData";
+import { TBoard, Change, Changelog } from "./parseBingosyncData";
 import { Stack } from "@mantine/core";
 import BingosyncColored, { getColorClass } from "./BingosyncColored";
 import { getHost, setUrlAtTime, VodHost } from "./vodUtil";
@@ -10,7 +10,7 @@ type VodWithStartSeconds = { url: string; startSeconds: number };
 
 type Props = {
   vod: null | VodWithStartSeconds;
-  board: Board;
+  board: TBoard;
   changelog: Changelog;
 };
 
@@ -73,7 +73,7 @@ function getTimestamp(time: number): string {
 }
 
 type ChangeTextProps = {
-  board: Board;
+  board: TBoard;
   change: Change;
   getLink: null | ((time: number) => string);
 };

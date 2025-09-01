@@ -46,6 +46,11 @@ const LINKS = [
     text: "Practice",
     icon: <IconDeviceGamepad size={25} stroke={1.5} />,
   },
+  // {
+  //   href: "/practiceboard",
+  //   text: "Practice Board",
+  //   icon: <IconDeviceGamepad size={25} stroke={1.5} />,
+  // },
   {
     href: "/playlist",
     text: "Playlist",

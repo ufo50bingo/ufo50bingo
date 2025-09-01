@@ -5,7 +5,7 @@ import getCsrfData from "../getCsrfData";
 import getSql from "../getSql";
 import getSQl from "../getSql";
 import {
-  Board,
+  TBoard,
   Changelog,
   getBoard,
   getChangelogAndPlayers,
@@ -142,7 +142,7 @@ async function fetchBoard(id: string): Promise<RawBoard> {
 
 async function updateMatch(
   id: string,
-  board: Board,
+  board: TBoard,
   changelog: Changelog | null,
   winnerName: string | null,
   opponentName: string | null,

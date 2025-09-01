@@ -13,7 +13,7 @@ import { ReactNode, useMemo, useRef, useState } from "react";
 import Board from "../Board";
 import html2canvas from "html2canvas";
 import { IconClipboard, IconClock, IconList } from "@tabler/icons-react";
-import { Changelog, Board as TBoard } from "./parseBingosyncData";
+import { Changelog, TBoard } from "./parseBingosyncData";
 import { getVariantText, getWinType } from "./matchUtil";
 import BingosyncColored from "./BingosyncColored";
 import ViewChangelog from "./ViewChangelog";
@@ -128,7 +128,7 @@ export default function ResultModal({ match, onClose }: Props) {
             overlays={showOverlays && overlays != null ? overlays : undefined}
             onClickSquare={null}
             isHidden={false}
-            setIsHidden={() => { }}
+            setIsHidden={() => {}}
           />
           <Group justify="space-between">
             {match.winner != null && (
@@ -250,9 +250,9 @@ export default function ResultModal({ match, onClose }: Props) {
                 vod={
                   match.vod != null && match.vod.startSeconds != null
                     ? {
-                      url: match.vod.url,
-                      startSeconds: match.vod.startSeconds,
-                    }
+                        url: match.vod.url,
+                        startSeconds: match.vod.startSeconds,
+                      }
                     : null
                 }
               />

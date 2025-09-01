@@ -1,6 +1,6 @@
 import {
   BingosyncColor,
-  Board,
+  TBoard,
   Change,
   Changelog,
   PlayerToColors,
@@ -26,7 +26,7 @@ const BINGO_LINES = [
 
 // check whether the final board state can be recreated from the changelog
 export function getIsValid(
-  board: Board,
+  board: TBoard,
   changes: ReadonlyArray<Change>
 ): boolean {
   const boardFromChangelog = getFinalColors(changes);

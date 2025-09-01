@@ -117,9 +117,9 @@ export type RawFeed = {
   allIncluded: boolean;
 };
 
-export type Board = ReadonlyArray<Square>;
+export type TBoard = ReadonlyArray<Square>;
 
-export function getBoard(board: RawBoard): Board {
+export function getBoard(board: RawBoard): TBoard {
   return board.map((rawSquare) => ({
     name: rawSquare.name,
     color: rawSquare.colors,

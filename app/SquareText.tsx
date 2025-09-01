@@ -9,16 +9,19 @@ export default function SquareText({ text }: Props) {
   const [fontSize, setFontSize] = useState(100);
 
   useLayoutEffect(() => {
+    console.log("running layout effect");
     const cur = divRef.current;
     if (cur == null) {
+      console.log("no ref", text);
       return;
     }
     const { height } = cur.getBoundingClientRect();
     // 95px allowed height, 10px padding
+    console.log("height is", height, text);
     if (height > 85) {
-      setFontSize(fontSize - 2);
+      setFontSize(fontSize - 1);
     }
-  }, [fontSize]);
+  }, [fontSize, text]);
 
   return (
     <div ref={divRef} style={{ fontSize: `${fontSize}%` }}>

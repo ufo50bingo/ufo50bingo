@@ -5,7 +5,7 @@ import { Card, Container, Divider, List, Title } from "@mantine/core";
 import Board from "../Board";
 import { STANDARD } from "../pastas/standard";
 import { useState } from "react";
-import { BingosyncColor, Board as TBoard } from "../matches/parseBingosyncData";
+import { BingosyncColor, TBoard } from "../matches/parseBingosyncData";
 
 const MAGIC_SQUARE: ReadonlyArray<number> = [
   // row 1

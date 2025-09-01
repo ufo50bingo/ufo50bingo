@@ -128,7 +128,7 @@ export default function ResultModal({ match, onClose }: Props) {
             overlays={showOverlays && overlays != null ? overlays : undefined}
             onClickSquare={null}
             isHidden={false}
-            setIsHidden={() => {}}
+            setIsHidden={() => { }}
           />
           <Group justify="space-between">
             {match.winner != null && (
@@ -215,6 +215,7 @@ export default function ResultModal({ match, onClose }: Props) {
               document.body.appendChild(newDiv);
               const canvas = await html2canvas(newDiv, {
                 backgroundColor: "rgb(36, 36, 36)",
+                scale: 4,
               });
               document.body.removeChild(newDiv);
               canvas.toBlob((blob) => {
@@ -249,9 +250,9 @@ export default function ResultModal({ match, onClose }: Props) {
                 vod={
                   match.vod != null && match.vod.startSeconds != null
                     ? {
-                        url: match.vod.url,
-                        startSeconds: match.vod.startSeconds,
-                      }
+                      url: match.vod.url,
+                      startSeconds: match.vod.startSeconds,
+                    }
                     : null
                 }
               />

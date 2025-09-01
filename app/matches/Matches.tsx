@@ -62,10 +62,10 @@ type Props = {
   totalPages: number;
 };
 
-const MS_IN_WEEK = 1000 * 60 * 60 * 24 * 7;
+const MS_IN_DAY = 1000 * 60 * 60 * 24;
 
 function isTooOld(dateCreated: number): boolean {
-  return Date.now() - dateCreated * 1000 > MS_IN_WEEK;
+  return Date.now() - dateCreated * 1000 > MS_IN_DAY;
 }
 
 export default function Matches({ matches, totalPages }: Props) {
@@ -234,7 +234,7 @@ export default function Matches({ matches, totalPages }: Props) {
                           <Tooltip
                             label={
                               <>
-                                Matches can only be refreshed within 1 week of
+                                Matches can only be refreshed within 1 day of
                                 their creation
                                 <br />
                                 because Bingosync deletes data about the match.

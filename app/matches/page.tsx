@@ -51,7 +51,8 @@ async function fetchMatches(pageNumber: number): Promise<ReadonlyArray<Match>> {
       changelog_json,
       is_board_visible,
       vod_url,
-      vod_match_start_seconds
+      vod_match_start_seconds,
+      analysis_seconds
     FROM match
     WHERE
       is_public = TRUE
@@ -106,6 +107,7 @@ async function fetchMatches(pageNumber: number): Promise<ReadonlyArray<Match>> {
       boardJson: rawMatch.board_json,
       changelogJson: rawMatch.changelog_json,
       isBoardVisible: rawMatch.is_board_visible,
+      analysisSeconds: rawMatch.analysis_seconds ?? 60,
       vod,
     };
   });

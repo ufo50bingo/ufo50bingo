@@ -55,6 +55,7 @@ export interface Match {
   changelogJson: null | string;
   isBoardVisible: boolean;
   vod: null | Vod;
+  analysisSeconds: number;
 }
 
 type Props = {

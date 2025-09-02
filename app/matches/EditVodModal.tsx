@@ -23,7 +23,9 @@ type Props = {
 export default function EditVodModal({ match, onClose }: Props) {
   const oldVodLink = getVodLink(match) ?? "";
   const [newVodLink, setNewVodLink] = useState<string>(oldVodLink);
-  const [analysisSeconds, setAnalysisSeconds] = useState<number | string>(60);
+  const [analysisSeconds, setAnalysisSeconds] = useState<number | string>(
+    match.analysisSeconds
+  );
   const [isSaving, setIsSaving] = useState(false);
 
   const warning = getWarning(oldVodLink, newVodLink);
@@ -80,7 +82,11 @@ export default function EditVodModal({ match, onClose }: Props) {
         <Group mt="lg" justify="flex-end">
           <Button onClick={onClose}>Cancel</Button>
           <Button
-            disabled={oldVodLink === newVodLink || isSaving}
+            disabled={
+              (oldVodLink === newVodLink &&
+                analysisSeconds === match.analysisSeconds) ||
+              isSaving
+            }
             onClick={async () => {
               try {
                 setIsSaving(true);

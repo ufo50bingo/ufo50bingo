@@ -28,10 +28,13 @@ type Props = {
   onClose: () => void;
 };
 
-function getOverlays(changelog: Changelog): ReadonlyArray<null | ReactNode> {
+function getOverlays(
+  changelog: Changelog,
+  analysisSeconds: number
+): ReadonlyArray<null | ReactNode> {
   const orders: (null | number)[] = Array(25).fill(null);
   let count = 1;
-  const matchStartTime = getMatchStartTime(changelog);
+  const matchStartTime = getMatchStartTime(changelog, analysisSeconds);
   const changes = getChangesWithoutMistakes(changelog.changes);
   const times = getSquareCompletionTimes(matchStartTime, changes);
   changes.forEach((change) => {
@@ -91,12 +94,13 @@ export default function ResultModal({ match, onClose }: Props) {
     return JSON.parse(changelogJson);
   }, [changelogJson]);
 
+  const analysisSeconds = match.analysisSeconds;
   const overlays = useMemo<null | ReadonlyArray<ReactNode>>(() => {
     if (changelog == null) {
       return null;
     }
-    return getOverlays(changelog);
-  }, [changelog]);
+    return getOverlays(changelog, analysisSeconds);
+  }, [changelog, analysisSeconds]);
 
   const ref = useRef<HTMLDivElement>(null);
   const [showChangelog, setShowChangelog] = useState(false);
@@ -255,6 +259,7 @@ export default function ResultModal({ match, onClose }: Props) {
                       }
                     : null
                 }
+                analysisSeconds={match.analysisSeconds}
               />
             )}
           </Drawer.Body>

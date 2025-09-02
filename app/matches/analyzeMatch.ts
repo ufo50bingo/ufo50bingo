@@ -148,10 +148,12 @@ export function getPlayerWithLeastRecentClaim(
   return Object.keys(players)[indexOfBest];
 }
 
-// assume match starts 60s after reveal
-export function getMatchStartTime(changelog: Changelog): null | number {
+export function getMatchStartTime(
+  changelog: Changelog,
+  analysisSeconds: number
+): null | number {
   const revealTime = changelog.reveals?.[0]?.time;
-  return revealTime == null ? null : revealTime + 60;
+  return revealTime == null ? null : revealTime + analysisSeconds;
 }
 
 export function getSquareCompletionTimes(

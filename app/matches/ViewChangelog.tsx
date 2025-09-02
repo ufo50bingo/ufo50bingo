@@ -12,6 +12,7 @@ type Props = {
   vod: null | VodWithStartSeconds;
   board: TBoard;
   changelog: Changelog;
+  analysisSeconds: number;
 };
 
 function getBaseUrlAndHost(
@@ -33,8 +34,13 @@ function getBaseUrlAndHost(
   }
 }
 
-export default function ViewChangelog({ board, changelog, vod }: Props) {
-  const start = getMatchStartTime(changelog);
+export default function ViewChangelog({
+  board,
+  changelog,
+  vod,
+  analysisSeconds,
+}: Props) {
+  const start = getMatchStartTime(changelog, analysisSeconds);
   const startSeconds = vod?.startSeconds;
   const urlAndHost = getBaseUrlAndHost(vod?.url);
   const getLink =

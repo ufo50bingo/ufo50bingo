@@ -1,7 +1,7 @@
 import { Center } from "@mantine/core";
 import SquareText from "./SquareText";
 import classes from "./Board.module.css";
-import { ReactNode, RefObject } from "react";
+import { ReactNode, RefObject, useState } from "react";
 import { BingosyncColor, TBoard } from "./matches/parseBingosyncData";
 
 type Props = {
@@ -50,6 +50,7 @@ export default function Board({
   setIsHidden,
   hiddenText,
 }: Props) {
+  const [starred, setStarred] = useState<ReadonlyArray<number>>([]);
   return (
     <div className={classes.boardContainer}>
       {board.map((square, squareIndex) => (
@@ -59,7 +60,16 @@ export default function Board({
             board[squareIndex].color
           )}`}
           onClick={() => onClickSquare != null && onClickSquare(squareIndex)}
+          onContextMenu={(event) => {
+            event.preventDefault();
+            if (starred.includes(squareIndex)) {
+              setStarred(starred.filter((idx) => idx !== squareIndex));
+            } else {
+              setStarred([...starred, squareIndex]);
+            }
+          }}
         >
+          {starred.includes(squareIndex) && <div className={classes.starred} />}
           {overlays != null && overlays[squareIndex] != null && (
             <div className={classes.overlay}>{overlays[squareIndex]}</div>
           )}

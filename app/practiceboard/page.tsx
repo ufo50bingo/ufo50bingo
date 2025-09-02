@@ -7,6 +7,14 @@ import getSrlV5Board from "./getSrlV5Board";
 import { STANDARD } from "../pastas/standard";
 import { Container, Card } from "@mantine/core";
 import RunningDuration from "../practice/RunningDuration";
+import useTimer from "../useTimer";
+
+enum State {
+  NOT_STARTED,
+  RUNNING,
+  PAUSED,
+  DONE,
+}
 
 export default function PracticeBoard() {
   const [isHidden, setIsHidden] = useState(true);
@@ -16,7 +24,11 @@ export default function PracticeBoard() {
       .map((_) => ({ name: "", color: "blank" }))
   );
   useEffect(() => setBoard(getSrlV5Board(STANDARD)), []);
-  const [startTime, setStartTime] = useState(Date.now());
+
+  const { timer } = useTimer({
+    isRunning: false,
+    durationMS: -60000,
+  });
 
   return (
     <Container my="md">
@@ -39,10 +51,7 @@ export default function PracticeBoard() {
           isHidden={isHidden}
           setIsHidden={setIsHidden}
         />
-        <RunningDuration
-          curStartTime={startTime}
-          accumulatedDuration={-60000}
-        />
+        {timer}
       </Card>
     </Container>
   );

@@ -10,9 +10,8 @@ import {
 } from "@tabler/icons-react";
 import { Badge, Button, Card, Group, Stack, Text } from "@mantine/core";
 import { db } from "../db";
-import Duration from "./Duration";
 import { DIFFICULTY_NAMES, SORTED_FLAT_GOALS } from "../goals";
-import RunningDuration from "./RunningDuration";
+import useTimer from "../useTimer";
 
 enum State {
   NOT_STARTED,
@@ -24,22 +23,14 @@ enum State {
 type Props = { goal: string; onNext: () => any };
 
 export default function Goal({ goal, onNext }: Props) {
-  const [curStartTime, setCurStartTime] = useState(0);
+  const { start, pause, reset, timer, getDurationMS } = useTimer();
   const [firstStartTime, setFirstStartTime] = useState(0);
-  const [accumulatedDuration, setAccumulatedDuration] = useState(0);
 
   const [state, setState] = useState(State.NOT_STARTED);
 
   const startTimer = () => {
-    setCurStartTime(Date.now());
+    start();
     setState(State.RUNNING);
-  };
-
-  const pauseOrEndTimer = () => {
-    setAccumulatedDuration(
-      (prevAccumulatedDuration) =>
-        prevAccumulatedDuration + Date.now() - curStartTime
-    );
   };
 
   const doneButton = (
@@ -47,20 +38,16 @@ export default function Goal({ goal, onNext }: Props) {
       leftSection={<IconCircleCheck />}
       color="green"
       onClick={() => {
-        if (state === State.RUNNING) {
-          pauseOrEndTimer();
-        }
-        setState(State.DONE);
-        const duration =
-          state === State.RUNNING
-            ? accumulatedDuration + Date.now() - curStartTime
-            : accumulatedDuration;
         const newRow = {
           goal,
           startTime: firstStartTime,
-          duration,
+          duration: getDurationMS(),
         };
         db.attempts.add(newRow);
+        if (state === State.RUNNING) {
+          pause();
+        }
+        setState(State.DONE);
       }}
     >
       Done
@@ -95,16 +82,11 @@ export default function Goal({ goal, onNext }: Props) {
     case State.RUNNING: {
       content = (
         <>
-          <Text>
-            <RunningDuration
-              accumulatedDuration={accumulatedDuration}
-              curStartTime={curStartTime}
-            />
-          </Text>
+          <Text>{timer}</Text>
           <Button
             leftSection={<IconPlayerPause />}
             onClick={() => {
-              pauseOrEndTimer();
+              pause();
               setState(State.PAUSED);
             }}
           >
@@ -118,9 +100,7 @@ export default function Goal({ goal, onNext }: Props) {
     case State.PAUSED: {
       content = (
         <>
-          <Text>
-            <Duration duration={accumulatedDuration} />
-          </Text>
+          <Text>{timer}</Text>
           <Button leftSection={<IconPlayerPlay />} onClick={startTimer}>
             Resume
           </Button>
@@ -132,13 +112,11 @@ export default function Goal({ goal, onNext }: Props) {
     case State.DONE:
       content = (
         <>
-          <Text>
-            <Duration duration={accumulatedDuration} />
-          </Text>
+          <Text>{timer}</Text>
           <Button
             leftSection={<IconReload />}
             onClick={() => {
-              setAccumulatedDuration(0);
+              reset();
               setState(State.NOT_STARTED);
             }}
           >

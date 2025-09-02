@@ -4,6 +4,7 @@ import {
   Group,
   List,
   Modal,
+  NumberInput,
   Space,
   Stack,
   TextInput,
@@ -22,6 +23,7 @@ type Props = {
 export default function EditVodModal({ match, onClose }: Props) {
   const oldVodLink = getVodLink(match) ?? "";
   const [newVodLink, setNewVodLink] = useState<string>(oldVodLink);
+  const [analysisSeconds, setAnalysisSeconds] = useState<number | string>(60);
   const [isSaving, setIsSaving] = useState(false);
 
   const warning = getWarning(oldVodLink, newVodLink);
@@ -59,6 +61,12 @@ export default function EditVodModal({ match, onClose }: Props) {
           onChange={(event) => setNewVodLink(event.target.value)}
           placeholder="Example: https://youtu.be/CLreXQuyzjs?t=759"
         />
+        <NumberInput
+          label="Seconds between first board reveal and match start (leave at 60 for most Standard matches)"
+          min={0}
+          value={analysisSeconds}
+          onChange={setAnalysisSeconds}
+        />
         {warning != null && (
           <Alert
             variant="light"
@@ -78,7 +86,12 @@ export default function EditVodModal({ match, onClose }: Props) {
                 setIsSaving(true);
                 const [baseUrl, startSeconds] =
                   getBaseUrlAndStartSeconds(newVodLink);
-                await updateVod(match.id, baseUrl, startSeconds);
+                await updateVod(
+                  match.id,
+                  baseUrl,
+                  startSeconds,
+                  analysisSeconds == "" ? 60 : Number(analysisSeconds)
+                );
                 onClose();
               } finally {
                 setIsSaving(false);

@@ -89,7 +89,6 @@ function getStartSeconds(url: URL, host: VodHost): null | number {
   switch (host) {
     case "youtube":
       const seconds = url.searchParams.get("t");
-      console.log(seconds);
       if (seconds == null || seconds === "") {
         return null;
       }

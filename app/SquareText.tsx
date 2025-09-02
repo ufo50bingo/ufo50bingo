@@ -9,7 +9,6 @@ export default function SquareText({ text }: Props) {
   const [fontSize, setFontSize] = useState(100);
 
   useLayoutEffect(() => {
-    console.log("running layout effect");
     const cur = divRef.current;
     if (cur == null) {
       return;

@@ -12,12 +12,10 @@ export default function SquareText({ text }: Props) {
     console.log("running layout effect");
     const cur = divRef.current;
     if (cur == null) {
-      console.log("no ref", text);
       return;
     }
     const { height } = cur.getBoundingClientRect();
     // 95px allowed height, 10px padding
-    console.log("height is", height, text);
     if (height > 85) {
       setFontSize(fontSize - 1);
     }

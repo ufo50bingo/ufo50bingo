@@ -9,6 +9,7 @@ type Input = {
 };
 
 type Return = {
+  isRunning: boolean;
   getDurationMS: () => number;
   timer: ReactNode;
   start: () => void;
@@ -51,6 +52,7 @@ export default function useTimer(input?: Input): Return {
   };
 
   return {
+    isRunning,
     getDurationMS,
     start,
     pause,

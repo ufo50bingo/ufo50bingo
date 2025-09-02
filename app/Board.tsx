@@ -10,7 +10,7 @@ type Props = {
   onClickSquare: null | ((squareIndex: number) => void);
   isHidden: boolean;
   setIsHidden: (isHidden: boolean) => void;
-  ref?: RefObject<HTMLDivElement | null>;
+  hiddenText?: ReactNode;
 };
 
 function getColorClass(color: string): string {
@@ -48,33 +48,10 @@ export default function Board({
   onClickSquare,
   isHidden,
   setIsHidden,
-  ref,
+  hiddenText,
 }: Props) {
-  const getRow = (rowIndex: number) => (
-    <tr style={{ height: "95px" }} key={rowIndex}>
-      {board.slice(rowIndex * 5, rowIndex * 5 + 5).map((square, colIndex) => {
-        const squareIndex = rowIndex * 5 + colIndex;
-        return (
-          <td
-            key={colIndex}
-            className={`${classes.unselectable} ${
-              classes.square
-            } ${getColorClass(board[squareIndex].color)}`}
-            onClick={() => onClickSquare != null && onClickSquare(squareIndex)}
-          >
-            {overlays != null && overlays[squareIndex] != null && (
-              <div className={classes.overlay}>{overlays[squareIndex]}</div>
-            )}
-            <Center h={85}>
-              <SquareText text={square.name} />
-            </Center>
-          </td>
-        );
-      })}
-    </tr>
-  );
   return (
-    <div className={classes.boardContainer} ref={ref}>
+    <div className={classes.boardContainer}>
       {board.map((square, squareIndex) => (
         <div
           key={squareIndex}
@@ -96,7 +73,7 @@ export default function Board({
           className={`${classes.boardCover} ${classes.unselectable}`}
           onClick={() => setIsHidden(false)}
         >
-          <span>Click to Reveal</span>
+          {hiddenText ?? <span>Click to Reveal</span>}
         </div>
       )}
     </div>

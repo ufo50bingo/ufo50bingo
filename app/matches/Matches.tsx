@@ -190,8 +190,8 @@ export default function Matches({ matches, totalPages }: Props) {
                       }
                     >
                       {match.boardJson == null ||
-                        isRefreshing ||
-                        !match.isBoardVisible ? (
+                      isRefreshing ||
+                      !match.isBoardVisible ? (
                         <span>{match.name}</span>
                       ) : (
                         <Anchor

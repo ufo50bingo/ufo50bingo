@@ -70,12 +70,15 @@ export default function Board({
           }}
         >
           {starred.includes(squareIndex) && <div className={classes.starred} />}
+          <SquareText
+            text={square.name}
+            maxHeight={
+              overlays != null && overlays[squareIndex] != null ? 65 : 85
+            }
+          />
           {overlays != null && overlays[squareIndex] != null && (
             <div className={classes.overlay}>{overlays[squareIndex]}</div>
           )}
-          <Center h={85}>
-            <SquareText text={square.name} />
-          </Center>
         </div>
       ))}
       {isHidden && (

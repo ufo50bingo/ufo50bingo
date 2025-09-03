@@ -152,15 +152,16 @@
 }
 
 .overlay {
+    box-sizing: border-box;
     border: 1px solid white;
     border-radius: 4px;
-    padding-left: 2px;
-    padding-right: 2px;
+    padding: 2px;
     font-size: 9px;
-    line-height: 11px;
+    line-height: 9px;
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     background-color: rgb(46, 46, 46, 0.8);
     color: white;
     text-wrap: nowrap;

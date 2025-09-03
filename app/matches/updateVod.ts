@@ -21,9 +21,9 @@ export default async function updateVod(
     WHERE id = ${id}
     RETURNING ${MATCH_FIELDS}`;
   revalidatePath("/matches");
-  // try {
-  const rawMatch = result[0];
-  const match = getMatchFromRaw(rawMatch);
-  await syncToGSheet(match);
-  // } catch {}
+  try {
+    const rawMatch = result[0];
+    const match = getMatchFromRaw(rawMatch);
+    await syncToGSheet(match);
+  } catch {}
 }

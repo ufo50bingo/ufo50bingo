@@ -63,6 +63,7 @@ export interface Match {
   isBoardVisible: boolean;
   vod: null | Vod;
   analysisSeconds: number;
+  leagueSeason: null | number;
 }
 
 type Props = {

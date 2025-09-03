@@ -125,7 +125,10 @@ export default function Matches({ matches, totalPages }: Props) {
             </ActionIcon>{" "}
             icon to Refresh data from Bingosync and add a VOD Link, if
             available. Matches with VOD links are automatically synced to{" "}
-            <Anchor href="" target="_blank">
+            <Anchor
+              href="https://docs.google.com/spreadsheets/d/1bW8zjoR2bpr74w-dA4HHt04SqvGg1aj8FJeOs3EqdNE/edit?gid=0#gid=0"
+              target="_blank"
+            >
               UFO 50 Bingo VOD Links and Stats
             </Anchor>
             !

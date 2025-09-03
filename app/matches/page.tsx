@@ -31,41 +31,43 @@ async function fetchTotalPages(): Promise<number> {
   return Math.ceil(totalMatches / PAGE_SIZE);
 }
 
+export const MATCH_FIELDS = getSQl()`
+  id,
+  name,
+  EXTRACT(EPOCH FROM date_created)::INTEGER as date_created,
+  variant,
+  is_custom,
+  winner_name,
+  winner_color,
+  winner_score,
+  winner_bingo,
+  opponent_name,
+  opponent_color,
+  opponent_score,
+  board_json,
+  changelog_json,
+  is_board_visible,
+  vod_url,
+  vod_match_start_seconds,
+  analysis_seconds,
+  league_season`;
+
 async function fetchMatches(pageNumber: number): Promise<ReadonlyArray<Match>> {
   const sql = getSQl();
-  const result = await sql.query(
-    `SELECT
-      id,
-      name,
-      EXTRACT(EPOCH FROM date_created)::INTEGER as date_created,
-      variant,
-      is_custom,
-      winner_name,
-      winner_color,
-      winner_score,
-      winner_bingo,
-      opponent_name,
-      opponent_color,
-      opponent_score,
-      board_json,
-      changelog_json,
-      is_board_visible,
-      vod_url,
-      vod_match_start_seconds,
-      analysis_seconds,
-      league_season
+  const result = await sql`
+    SELECT
+      ${MATCH_FIELDS}
     FROM match
     WHERE
       is_public = TRUE
       AND is_deleted = FALSE
     ORDER BY date_created DESC
     OFFSET ${(pageNumber - 1) * PAGE_SIZE}
-    LIMIT ${PAGE_SIZE}`
-  );
+    LIMIT ${PAGE_SIZE}`;
   return result.map(getMatchFromRaw);
 }
 
-function getMatchFromRaw(rawMatch: Record<string, any>): Match {
+export function getMatchFromRaw(rawMatch: Record<string, any>): Match {
   const winner_name: null | undefined | string = rawMatch.winner_name;
   const winner_score: null | undefined | number = rawMatch.winner_score;
   const winner_color: null | undefined | BingosyncColor = rawMatch.winner_color;

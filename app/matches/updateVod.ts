@@ -2,6 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import getSql from "../getSql";
+import { getMatchFromRaw, MATCH_FIELDS } from "./page";
+import syncToGSheet from "./syncToGSheet";
 
 export default async function updateVod(
   id: string,
@@ -11,11 +13,17 @@ export default async function updateVod(
 ): Promise<void> {
   const sql = getSql(false);
 
-  await sql`UPDATE match
+  const result = await sql`UPDATE match
     SET
       vod_url = ${url},
       vod_match_start_seconds = ${startSeconds},
       analysis_seconds = ${analysisSeconds}
-    WHERE id = ${id}`;
+    WHERE id = ${id}
+    RETURNING ${MATCH_FIELDS}`;
   revalidatePath("/matches");
+  // try {
+  const rawMatch = result[0];
+  const match = getMatchFromRaw(rawMatch);
+  await syncToGSheet(match);
+  // } catch {}
 }

@@ -20,7 +20,7 @@ import ViewChangelog from "./ViewChangelog";
 import {
   getChangesWithoutMistakes,
   getMatchStartTime,
-  getSquareCompletionTimes,
+  getSquareCompletionRanges,
 } from "./analyzeMatch";
 
 type Props = {
@@ -36,7 +36,7 @@ function getOverlays(
   let count = 1;
   const matchStartTime = getMatchStartTime(changelog, analysisSeconds);
   const changes = getChangesWithoutMistakes(changelog.changes);
-  const times = getSquareCompletionTimes(matchStartTime, changes);
+  const ranges = getSquareCompletionRanges(matchStartTime, changes);
   changes.forEach((change) => {
     if (change.color == "blank") {
       const oldOrder = orders[change.index];
@@ -62,12 +62,14 @@ function getOverlays(
       const order = orders[index];
       const orderStr = order == null ? "#?" : `#${order}`;
 
-      const time = times[index];
-      const timeStr = time != null ? (time / 60).toFixed(1) : null;
-
-      if (order == null && time == null) {
+      const range = ranges[index];
+      if (order == null && range == null) {
         return null;
       }
+
+      const timeStr =
+        range != null ? ((range[2] - range[1]) / 60).toFixed(1) : null;
+
       let finalOverlay = orderStr;
       if (timeStr != null) {
         finalOverlay += `, ${timeStr}m`;

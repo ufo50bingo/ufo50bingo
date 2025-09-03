@@ -5,6 +5,7 @@ import BingosyncColored, { getColorClass } from "./BingosyncColored";
 import { getHost, setUrlAtTime, VodHost } from "./vodUtil";
 import classes from "./ViewChangelog.module.css";
 import { getMatchStartTime } from "./analyzeMatch";
+import getBaseUrlAndHost from "./getBaseUrlAndHost";
 
 type VodWithStartSeconds = { url: string; startSeconds: number };
 
@@ -14,25 +15,6 @@ type Props = {
   changelog: Changelog;
   analysisSeconds: number;
 };
-
-function getBaseUrlAndHost(
-  vodUrl: null | undefined | string
-): null | [string, VodHost] {
-  if (vodUrl == null) {
-    return null;
-  }
-  try {
-    const url = new URL(vodUrl);
-    const host = getHost(url);
-    if (host == null) {
-      return null;
-    }
-    url.searchParams.delete("t");
-    return [url.toString(), host];
-  } catch {
-    return null;
-  }
-}
 
 export default function ViewChangelog({
   board,

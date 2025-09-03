@@ -156,11 +156,11 @@ export function getMatchStartTime(
   return revealTime == null ? null : revealTime + analysisSeconds;
 }
 
-export function getSquareCompletionTimes(
+export function getSquareCompletionRanges(
   matchStartTime: null | number,
   changesWithoutMistakes: ReadonlyArray<Change>
-): ReadonlyArray<number | null> {
-  const finalTimes = Array(25).fill(null);
+): ReadonlyArray<[string, number, number] | null> {
+  const finalTimes: ([string, number, number] | null)[] = Array(25).fill(null);
   const prevTimeByPlayer: { [player: string]: number } = {};
 
   changesWithoutMistakes.forEach((change) => {
@@ -170,7 +170,7 @@ export function getSquareCompletionTimes(
       const prevTime: null | number =
         prevTimeByPlayer[change.name] ?? matchStartTime;
       if (prevTime != null) {
-        finalTimes[change.index] = change.time - prevTime;
+        finalTimes[change.index] = [change.name, prevTime, change.time];
       }
       prevTimeByPlayer[change.name] = change.time;
     }

@@ -2,6 +2,7 @@
 
 import {
   ActionIcon,
+  Alert,
   Anchor,
   Button,
   Container,
@@ -12,6 +13,7 @@ import {
   Skeleton,
   Stack,
   Table,
+  Text,
   Tooltip,
 } from "@mantine/core";
 import {
@@ -115,6 +117,20 @@ export default function Matches({ matches, totalPages }: Props) {
   return (
     <>
       <Stack gap={8}>
+        <Alert variant="light">
+          <Text size="sm">
+            When you finish your match, please use the{" "}
+            <ActionIcon color="green" onClick={() => {}}>
+              <IconEdit size={16} />
+            </ActionIcon>{" "}
+            icon to Refresh data from Bingosync and add a VOD Link, if
+            available. Matches with VOD links are automatically synced to{" "}
+            <Anchor href="" target="_blank">
+              UFO 50 Bingo VOD Links and Stats
+            </Anchor>
+            !
+          </Text>
+        </Alert>
         <Table striped highlightOnHover withTableBorder>
           <Table.Thead>
             <Table.Tr>

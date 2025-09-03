@@ -18,6 +18,8 @@ import {
   getIsValid,
   getPlayerWithLeastRecentClaim,
 } from "./analyzeMatch";
+import { getMatchFromRaw, MATCH_FIELDS } from "./page";
+import syncToGSheet from "./syncToGSheet";
 
 type PlayerScores = { [name: string]: number };
 
@@ -170,7 +172,7 @@ async function updateMatch(
 
   const changelogJson = changelog != null ? JSON.stringify(changelog) : null;
 
-  await sql`UPDATE match
+  const result = await sql`UPDATE match
     SET
       winner_name = ${winnerName},
       winner_color = ${winnerColor},
@@ -182,8 +184,14 @@ async function updateMatch(
       board_json = ${JSON.stringify(board)},
       changelog_json = ${changelogJson},
       is_board_visible = ${!isAllBlank}
-    WHERE id = ${id}`;
+    WHERE id = ${id}
+    RETURNING ${MATCH_FIELDS}`;
   revalidatePath("/matches");
+  try {
+    const rawMatch = result[0];
+    const match = getMatchFromRaw(rawMatch);
+    await syncToGSheet(match);
+  } catch {}
 }
 
 async function fetchFeed(id: string): Promise<RawFeed> {

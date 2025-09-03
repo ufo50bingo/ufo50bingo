@@ -59,7 +59,7 @@ export default function Resources() {
               target="_blank"
             >
               Stats and VOD links for every goal completion from Bingo League
-              Season 1
+              Season 1 and every Public match
             </a>
           </List.Item>
         </List>

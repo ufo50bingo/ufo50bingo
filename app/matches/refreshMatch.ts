@@ -18,8 +18,8 @@ import {
   getIsValid,
   getPlayerWithLeastRecentClaim,
 } from "./analyzeMatch";
-import { getMatchFromRaw, MATCH_FIELDS } from "./page";
 import syncToGSheet from "./syncToGSheet";
+import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 
 type PlayerScores = { [name: string]: number };
 

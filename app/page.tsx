@@ -393,6 +393,7 @@ export default function CreateBoard() {
                 <a href={url} target="_blank">
                   {url}
                 </a>
+                .
               </Alert>
             )}
             {error != null && (

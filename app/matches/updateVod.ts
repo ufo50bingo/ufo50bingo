@@ -2,8 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import getSql from "../getSql";
-import { getMatchFromRaw, MATCH_FIELDS } from "./page";
 import syncToGSheet from "./syncToGSheet";
+import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 
 export default async function updateVod(
   id: string,

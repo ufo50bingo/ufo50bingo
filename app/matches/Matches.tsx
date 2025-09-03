@@ -31,6 +31,13 @@ import EditVodModal from "./EditVodModal";
 import { getVodLink } from "./vodUtil";
 import classes from "./Matches.module.css";
 
+import lazy from "next/dynamic";
+import { Suspense } from "react";
+const DateFormatter = lazy(() => import("./DateFormatter"), {
+  ssr: false,
+  loading: () => <Skeleton height={8} />,
+});
+
 interface Player {
   name: string;
   color: BingosyncColor;
@@ -204,16 +211,10 @@ export default function Matches({ matches, totalPages }: Props) {
                       )}
                     </Tooltip>
                   </Table.Td>
-                  <Table.Td suppressHydrationWarning={true}>
-                    {new Date(match.dateCreated * 1000).toLocaleString(
-                      undefined,
-                      {
-                        month: "numeric",
-                        day: "numeric",
-                        hour: "numeric",
-                        minute: "numeric",
-                      }
-                    )}
+                  <Table.Td>
+                    <Suspense>
+                      <DateFormatter unixtime={match.dateCreated} />
+                    </Suspense>
                   </Table.Td>
                   <Table.Td>{getVariantText(match)}</Table.Td>
                   <Table.Td>{dataOrSkeleton(match.winner?.name)}</Table.Td>

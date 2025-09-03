@@ -112,7 +112,7 @@ export default function Matches({ matches, totalPages }: Props) {
       : matches.find((match) => match.id === editingVodId);
 
   return (
-    <Container my="md">
+    <>
       <Stack gap={8}>
         <Table striped highlightOnHover withTableBorder>
           <Table.Thead>
@@ -330,6 +330,6 @@ export default function Matches({ matches, totalPages }: Props) {
           </Group>
         </Modal>
       )}
-    </Container>
+    </>
   );
 }

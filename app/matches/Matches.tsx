@@ -17,6 +17,7 @@ import {
   Tooltip,
 } from "@mantine/core";
 import {
+  IconBrandTwitch,
   IconBrandYoutube,
   IconEdit,
   IconRefresh,
@@ -30,7 +31,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { BingosyncColor } from "./parseBingosyncData";
 import { getVariantText, getWinType } from "./matchUtil";
 import EditVodModal from "./EditVodModal";
-import { getVodLink } from "./vodUtil";
+import { getHost, getVodLink } from "./vodUtil";
 import classes from "./Matches.module.css";
 
 import lazy from "next/dynamic";
@@ -173,6 +174,13 @@ export default function Matches({ matches, totalPages }: Props) {
                 </Menu.Item>
               );
 
+              let isTwitch = false;
+              const vod = match.vod;
+              if (vod != null) {
+                const url = new URL(vod.url);
+                const host = getHost(url);
+                isTwitch = host === "twitch";
+              }
               const vodLink = getVodLink(match);
 
               return (
@@ -186,9 +194,13 @@ export default function Matches({ matches, totalPages }: Props) {
                           component="a"
                           href={vodLink}
                           target="_blank"
-                          color="red"
+                          color={isTwitch ? "violet" : "red"}
                         >
-                          <IconBrandYoutube size={16} />
+                          {isTwitch ? (
+                            <IconBrandTwitch size={16} />
+                          ) : (
+                            <IconBrandYoutube size={16} />
+                          )}
                         </ActionIcon>
                       </Tooltip>
                     )}

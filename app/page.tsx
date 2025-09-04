@@ -35,6 +35,9 @@ import {
 } from "./pastas/metadata";
 import VariantHoverCard from "./createboard/VariantHoverCard";
 import createMatch from "./createboard/createMatch";
+import { db } from "./db";
+
+const ROOM_PREFIX = "https://www.bingosync.com/room/";
 
 const options: ReadonlyArray<VariantMetadata> = METADATA.filter(
   (d) => !d.isMenu
@@ -356,6 +359,8 @@ export default function CreateBoard() {
                     pasta: getSerializedPasta(false),
                     leagueSeason: null,
                   });
+                  const id = url.slice(ROOM_PREFIX.length);
+                  db.createdMatches.add({ id });
                   setError(null);
                   setUrl(url);
                   setIsCreationInProgress(false);

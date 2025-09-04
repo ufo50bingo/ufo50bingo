@@ -2,22 +2,30 @@
 
 import { IconMoon, IconSun } from "@tabler/icons-react";
 import {
+  Button,
   Center,
   Container,
   MantineColorScheme,
+  Modal,
   NativeSelect,
   SegmentedControl,
   Table,
+  TextInput,
   useMantineColorScheme,
 } from "@mantine/core";
 import { NextGoalChoice, useAppContext } from "../AppContextProvider";
 import ExportCSV from "./ExportCSV";
 import ImportCSV from "./ImportCSV";
 import MigrateHistory from "./MigrateHistory";
+import { useState } from "react";
+
+const ADMIN_PASSWORD = "R54o7h1OEXbGCUBGYvAV";
 
 export default function Settings() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
-  const { nextGoalChoice, setNextGoalChoice } = useAppContext();
+  const { nextGoalChoice, setNextGoalChoice, isAdmin, setIsAdmin } =
+    useAppContext();
+  const [isAdminModalShown, setIsAdminModalShown] = useState(false);
   return (
     <Container my="md">
       <Table variant="vertical" withTableBorder>
@@ -91,6 +99,27 @@ export default function Settings() {
                   },
                 ]}
               />
+            </Table.Td>
+          </Table.Tr>
+          <Table.Tr>
+            <Table.Th>Admin</Table.Th>
+            <Table.Td>
+              <Button onClick={() => setIsAdminModalShown(true)}>
+                Enable admin tools
+              </Button>
+              <Modal
+                centered={true}
+                onClose={() => setIsAdminModalShown(false)}
+                opened={isAdminModalShown}
+                title="Enable admin tools"
+              >
+                <TextInput
+                  label="Enter password"
+                  onChange={(event) =>
+                    setIsAdmin(event.target.value === ADMIN_PASSWORD)
+                  }
+                />
+              </Modal>
             </Table.Td>
           </Table.Tr>
         </Table.Tbody>

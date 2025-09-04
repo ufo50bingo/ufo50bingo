@@ -36,6 +36,7 @@ import classes from "./Matches.module.css";
 
 import lazy from "next/dynamic";
 import { Suspense } from "react";
+import { useAppContext } from "../AppContextProvider";
 const DateFormatter = lazy(() => import("./DateFormatter"), {
   ssr: false,
   loading: () => <Skeleton height={8} />,
@@ -81,6 +82,8 @@ function isTooOld(dateCreated: number): boolean {
 }
 
 export default function Matches({ matches, totalPages }: Props) {
+  const { createdMatchIDs, isAdmin } = useAppContext();
+
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
@@ -171,6 +174,16 @@ export default function Matches({ matches, totalPages }: Props) {
                   }}
                 >
                   Refresh data
+                </Menu.Item>
+              );
+
+              const deleteItem = (
+                <Menu.Item
+                  disabled={!createdMatchIDs.has(match.id) && !isAdmin}
+                  leftSection={<IconTrash size={16} />}
+                  onClick={() => setDeletingId(match.id)}
+                >
+                  Delete match
                 </Menu.Item>
               );
 
@@ -286,12 +299,13 @@ export default function Matches({ matches, totalPages }: Props) {
                         >
                           {vodLink !== "" ? "Edit" : "Add"} VOD Link
                         </Menu.Item>
-                        <Menu.Item
-                          leftSection={<IconTrash size={16} />}
-                          onClick={() => setDeletingId(match.id)}
-                        >
-                          Delete match
-                        </Menu.Item>
+                        {!createdMatchIDs.has(match.id) && !isAdmin ? (
+                          <Tooltip label="You can only delete matches you created.">
+                            {deleteItem}
+                          </Tooltip>
+                        ) : (
+                          deleteItem
+                        )}
                       </Menu.Dropdown>
                     </Menu>
                   </Table.Td>

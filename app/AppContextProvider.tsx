@@ -28,6 +28,9 @@ type AppContextType = {
   setNextGoalChoice: (newNextGoalChoice: NextGoalChoice) => void;
   nextGoalChoice: NextGoalChoice;
   goal: string;
+  createdMatchIDs: Set<string>;
+  isAdmin: boolean;
+  setIsAdmin: (newIsAdmin: boolean) => void;
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -58,6 +61,11 @@ export function AppContextProvider({
     [];
   const playlist =
     useLiveQuery(() => db.playlist.orderBy("priority").toArray()) ?? [];
+  const createdMatches = useLiveQuery(() => db.createdMatches.toArray()) ?? [];
+  const createdMatchIDs = useMemo(
+    () => new Set(createdMatches.map((match) => match.id)),
+    [createdMatches]
+  );
   const goalStats = useGoalStats(attempts);
   const selectedGoals = useSelectedGoals();
 
@@ -75,6 +83,21 @@ export function AppContextProvider({
   // useEffect sets the initial state to avoid hydration errors
   const [goal, setGoalRaw] = useState("");
   useEffect(() => setGoalRaw(getRandomGoal()), []);
+
+  // super insecure, but good enough to stop most people
+  const [isAdmin, setIsAdminRaw] = useState(false);
+  useEffect(() => {
+    setIsAdminRaw(
+      global.window != undefined && localStorage?.getItem("isAdmin") === "true"
+    );
+  }, []);
+  const setIsAdmin = useCallback(
+    (newIsAdmin: boolean) => {
+      setIsAdminRaw(newIsAdmin);
+      window?.localStorage?.setItem("isAdmin", newIsAdmin ? "true" : "false");
+    },
+    [setIsAdminRaw]
+  );
 
   const setGoal = useCallback(
     (goal: string) => {
@@ -95,6 +118,9 @@ export function AppContextProvider({
       getRandomGoal,
       setNextGoalChoice,
       nextGoalChoice,
+      createdMatchIDs,
+      isAdmin,
+      setIsAdmin,
     }),
     [
       goal,
@@ -106,6 +132,9 @@ export function AppContextProvider({
       getRandomGoal,
       setNextGoalChoice,
       nextGoalChoice,
+      createdMatchIDs,
+      isAdmin,
+      setIsAdmin,
     ]
   );
 

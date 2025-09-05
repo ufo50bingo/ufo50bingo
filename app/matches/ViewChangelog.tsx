@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { TBoard, Change, Changelog } from "./parseBingosyncData";
 import { Stack } from "@mantine/core";
 import BingosyncColored, { getColorClass } from "./BingosyncColored";
-import { getHost, setUrlAtTime, VodHost } from "./vodUtil";
+import { setUrlAtTime } from "./vodUtil";
 import classes from "./ViewChangelog.module.css";
 import { getMatchStartTime } from "./analyzeMatch";
 import getBaseUrlAndHost from "./getBaseUrlAndHost";

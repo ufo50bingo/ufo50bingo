@@ -23,8 +23,7 @@ const ADMIN_PASSWORD = "R54o7h1OEXbGCUBGYvAV";
 
 export default function Settings() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
-  const { nextGoalChoice, setNextGoalChoice, isAdmin, setIsAdmin } =
-    useAppContext();
+  const { nextGoalChoice, setNextGoalChoice, setIsAdmin } = useAppContext();
   const [isAdminModalShown, setIsAdminModalShown] = useState(false);
   return (
     <Container my="md">

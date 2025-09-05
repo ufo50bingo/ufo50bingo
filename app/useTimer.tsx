@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode, useState } from "react";
+import { ReactNode, useState } from "react";
 import RunningDuration from "./practice/RunningDuration";
 import Duration from "./practice/Duration";
 

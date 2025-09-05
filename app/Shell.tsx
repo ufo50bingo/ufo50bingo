@@ -4,7 +4,6 @@ import Link from "next/link";
 import { ReactNode, useState } from "react";
 import { AppShell, Burger, Group, Image, NavLink, Text } from "@mantine/core";
 import {
-  IconCreditCardPay,
   IconDeviceGamepad,
   IconExternalLink,
   IconFilter,
@@ -14,9 +13,7 @@ import {
   IconScript,
   IconSettings,
   IconTournament,
-  IconUser,
   IconVs,
-  IconWallet,
 } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
 

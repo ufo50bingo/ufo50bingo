@@ -3,17 +3,14 @@
 import {
   Container,
   Stack,
-  Alert,
-  Group,
   Title,
-  Button,
   Card,
   Text,
   SegmentedControl,
   Tooltip,
 } from "@mantine/core";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NonLeagueMatch from "./createboard/NonLeagueMatch";
 import LeagueMatch from "./createboard/LeagueMatch";
 
@@ -24,12 +21,6 @@ export default function CreateBoard() {
     null
   );
 
-  const matchCreatorSection =
-    matchType === "league" ? (
-      <LeagueMatch />
-    ) : matchType === "non-league" ? (
-      <NonLeagueMatch />
-    ) : null;
   return (
     <Container my="md">
       <Stack gap={8}>

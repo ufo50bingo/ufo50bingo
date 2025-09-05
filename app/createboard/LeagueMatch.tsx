@@ -1,14 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { IconCheck, IconDots, IconExclamationMark } from "@tabler/icons-react";
+import { IconCheck, IconExclamationMark } from "@tabler/icons-react";
 import {
   Alert,
   Button,
-  Card,
   Select,
   Stack,
-  Text,
   TextInput,
   Tooltip,
 } from "@mantine/core";

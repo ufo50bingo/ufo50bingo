@@ -1,7 +1,6 @@
 export default function srl_generator_v5(bingoList, opts) {
   var LANG = opts.lang || "name";
   var MODE = opts.mode || "normal";
-  var cardType = "Normal";
   var SEED = opts.seed || Math.ceil(999999 * Math.random()).toString();
   var size = 5;
 
@@ -13,8 +12,6 @@ export default function srl_generator_v5(bingoList, opts) {
   }
 
   if (true) {
-    var MAX_SEED = 999999;
-
     var lineCheckList = [];
     if (size == 5) {
       lineCheckList[1] = [1, 2, 3, 4, 5, 10, 15, 20, 6, 12, 18, 24];
@@ -44,19 +41,6 @@ export default function srl_generator_v5(bingoList, opts) {
       lineCheckList[23] = [2, 7, 12, 17, 20, 21, 23, 24];
       lineCheckList[24] = [20, 21, 22, 24, 3, 8, 13, 18];
       lineCheckList[25] = [0, 6, 12, 18, 20, 21, 22, 23, 19, 14, 9, 4];
-    }
-
-    function mirror(i) {
-      if (i == 0) {
-        i = 4;
-      } else if (i == 1) {
-        i = 3;
-      } else if (i == 3) {
-        i = 1;
-      } else if (i == 4) {
-        i = 0;
-      }
-      return i;
     }
 
     function difficulty(i) {

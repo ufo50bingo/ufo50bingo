@@ -20,7 +20,7 @@ enum State {
   DONE,
 }
 
-type Props = { goal: string; onNext: () => any };
+type Props = { goal: string; onNext: () => void };
 
 export default function Goal({ goal, onNext }: Props) {
   const { start, pause, reset, timer, getDurationMS } = useTimer();

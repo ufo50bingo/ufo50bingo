@@ -1,4 +1,4 @@
-import { Game, GoalName } from "../goals";
+import { Game } from "../goals";
 import {
   GoalWithoutDifficulty,
   PastaWithoutDifficulty,

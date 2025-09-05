@@ -4,7 +4,6 @@ export default function downloadCsv(csv: string, name: string): void {
   const url = URL.createObjectURL(blob);
   link.href = url;
   link.download = name;
-  const event = document.createEvent("MouseEvents");
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

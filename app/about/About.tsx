@@ -3,22 +3,8 @@
 import Link from "next/link";
 import { Card, Container, Divider, List, Title } from "@mantine/core";
 import Board from "../Board";
-import { STANDARD } from "../pastas/standard";
 import { useState } from "react";
 import { BingosyncColor, TBoard } from "../matches/parseBingosyncData";
-
-const MAGIC_SQUARE: ReadonlyArray<number> = [
-  // row 1
-  17, 24, 1, 8, 15,
-  // row 2
-  23, 5, 7, 14, 16,
-  // row 3
-  4, 6, 13, 20, 22,
-  // row 4
-  10, 12, 19, 21, 3,
-  // row 5
-  11, 18, 25, 2, 9,
-];
 
 const COLOR: BingosyncColor = "red";
 

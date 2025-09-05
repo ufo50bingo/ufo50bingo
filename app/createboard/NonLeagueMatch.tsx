@@ -1,15 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { IconCheck, IconDots, IconExclamationMark } from "@tabler/icons-react";
 import {
   ActionIcon,
   Alert,
   Button,
-  Card,
   Checkbox,
-  Container,
   Group,
   JsonInput,
   Menu,
@@ -17,7 +14,6 @@ import {
   Stack,
   Text,
   TextInput,
-  Title,
   Tooltip,
 } from "@mantine/core";
 import createPasta from "./createPasta";
@@ -67,17 +63,6 @@ export default function NonLeagueMatch() {
   const [error, setError] = useState<Error | null>(null);
 
   const isPublic = isPublicRaw && isLockout;
-
-  const [showNUX, setShowNUX] = useState(false);
-  useEffect(
-    () =>
-      setShowNUX(
-        global.window != undefined &&
-          localStorage?.getItem("showNUX") !== "false"
-      ),
-    []
-  );
-
   const metadata = METADATA.find((d) => d.name === variant)!;
 
   // for some reason it doesn't like checkState.values().filter(...)

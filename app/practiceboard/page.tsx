@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BingosyncColor, TBoard } from "../matches/parseBingosyncData";
+import { TBoard } from "../matches/parseBingosyncData";
 import Board from "../Board";
 import getSrlV5Board from "./getSrlV5Board";
 import { STANDARD } from "../pastas/standard";
 import { Container, Card, Text, Button, Stack } from "@mantine/core";
-import RunningDuration from "../practice/RunningDuration";
 import useTimer from "../useTimer";
 
 enum State {

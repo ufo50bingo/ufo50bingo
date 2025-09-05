@@ -8,7 +8,7 @@ import {
   getSquareCompletionRanges,
 } from "./analyzeMatch";
 import { Match } from "./Matches";
-import { getVodLink, setUrlAtTime } from "./vodUtil";
+import { setUrlAtTime } from "./vodUtil";
 import getBaseUrlAndHost from "./getBaseUrlAndHost";
 import { GAME_NAMES } from "../goals";
 

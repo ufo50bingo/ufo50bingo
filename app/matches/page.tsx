@@ -1,6 +1,5 @@
 import Matches, { Match } from "./Matches";
 import getSQl from "../getSql";
-import { BingosyncColor } from "./parseBingosyncData";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 
 const PAGE_SIZE = 20;

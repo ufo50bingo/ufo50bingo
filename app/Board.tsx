@@ -1,7 +1,6 @@
-import { Center } from "@mantine/core";
 import SquareText from "./SquareText";
 import classes from "./Board.module.css";
-import { ReactNode, RefObject, useState } from "react";
+import { ReactNode, useState } from "react";
 import { BingosyncColor, TBoard } from "./matches/parseBingosyncData";
 
 type Props = {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Combobox, Input, InputBase, useCombobox } from "@mantine/core";
+import { Combobox, InputBase, useCombobox } from "@mantine/core";
 import { ALL_PLAYERS } from "./leagueConstants";
 
 type Props = {

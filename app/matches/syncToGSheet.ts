@@ -14,18 +14,19 @@ import { GAME_NAMES } from "../goals";
 
 const SHEET_ID = "1bW8zjoR2bpr74w-dA4HHt04SqvGg1aj8FJeOs3EqdNE";
 const NON_LEAGUE_NAME = "Non-League";
+const SEASON_2_NAME = "Season 2";
 export default async function syncToGSheet(match: Match): Promise<void> {
   const vodURL = match.vod?.url;
   const vodStartSeconds = match.vod?.startSeconds;
   const boardJson = match.boardJson;
   const changelogJson = match.changelogJson;
+  const sheetName = getSheetName(match.leagueInfo?.season);
   if (
     vodURL == null ||
     vodStartSeconds == null ||
     boardJson == null ||
     changelogJson == null ||
-    // TODO: Update to account for league matches
-    match.leagueInfo != null
+    sheetName == null
   ) {
     return;
   }
@@ -57,10 +58,11 @@ export default async function syncToGSheet(match: Match): Promise<void> {
       const player = range[0];
       const opponent =
         player === match.winner?.name ? match.opponent?.name ?? "" : player;
-      // sheet is
+      // For Non-League, sheet is
       // Room Name,	Date,	Player,	Opponent,	Game,	Goal,	Time (mins),	Start,	End, Match ID
-      return [
-        match.name,
+      // For League, sheet is
+      // Week, Tier, Date, Player, Opponent, Game, Goal, Time (mins), Start, End, Match ID
+      const remainingColumns = [
         new Date(match.dateCreated * 1000).toLocaleDateString("en-US", {
           timeZone: "America/New_York",
         }),
@@ -73,6 +75,13 @@ export default async function syncToGSheet(match: Match): Promise<void> {
         getLink(range[2]),
         match.id,
       ];
+      return match.leagueInfo?.season != null
+        ? [
+            match.leagueInfo?.week ?? "",
+            match.leagueInfo?.tier ?? "",
+            ...remainingColumns,
+          ]
+        : [match.name, ...remainingColumns];
     })
     .filter((row) => row != null);
 
@@ -83,9 +92,10 @@ export default async function syncToGSheet(match: Match): Promise<void> {
   });
   const sheet = google.sheets("v4");
 
+  const idRange = match.leagueInfo?.season == null ? "J2:J" : "K2:K";
   const result = await sheet.spreadsheets.values.get({
     spreadsheetId: SHEET_ID,
-    range: `'${NON_LEAGUE_NAME}'!J2:J`,
+    range: `'${sheetName}'!${idRange}`,
     auth,
     fields: "values",
   });
@@ -94,7 +104,7 @@ export default async function syncToGSheet(match: Match): Promise<void> {
     auth,
   });
   const nonLeagueId = metadata.data.sheets?.find(
-    (s) => s.properties?.title === NON_LEAGUE_NAME
+    (s) => s.properties?.title === sheetName
   )?.properties?.sheetId;
   const values: ReadonlyArray<ReadonlyArray<string>> = result.data.values ?? [];
   if (nonLeagueId == null) {
@@ -127,12 +137,22 @@ export default async function syncToGSheet(match: Match): Promise<void> {
   await sheet.spreadsheets.values.append({
     spreadsheetId: SHEET_ID,
     auth: auth,
-    range: NON_LEAGUE_NAME,
+    range: sheetName,
     valueInputOption: "RAW",
     requestBody: {
       values: rows,
     },
   });
+}
+
+function getSheetName(season: number | null | undefined): null | string {
+  if (season == null) {
+    return NON_LEAGUE_NAME;
+  } else if (season === 2) {
+    return SEASON_2_NAME;
+  } else {
+    return null;
+  }
 }
 
 function getRangesToDelete(

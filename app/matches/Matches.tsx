@@ -197,7 +197,8 @@ export default function Matches({ matches, totalPages }: Props) {
                 const host = getHost(url);
                 isTwitch = host === "twitch";
               }
-              const vodLink = getVodLink(match);
+              // rewind 90 seconds to get the lead-up to the reveal
+              const vodLink = getVodLink(match, -90);
 
               return (
                 <Table.Tr key={match.id}>

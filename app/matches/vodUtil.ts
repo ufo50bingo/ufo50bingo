@@ -40,7 +40,7 @@ export function setUrlAtTime(
   }
 }
 
-export function getVodLink(match: Match): string {
+export function getVodLink(match: Match, offsetFromStart: number): string {
   try {
     const vod = match.vod;
     if (vod == null) {
@@ -54,8 +54,7 @@ export function getVodLink(match: Match): string {
     if (host == null) {
       return vod.url;
     }
-    // rewind 90s so we're a little before reveal period
-    setUrlAtTime(host, url, Math.max(vod.startSeconds - 90, 0));
+    setUrlAtTime(host, url, Math.max(vod.startSeconds + offsetFromStart, 0));
     return url.toString();
   } catch {
     return "";

@@ -21,7 +21,7 @@ type Props = {
 };
 
 export default function EditVodModal({ match, onClose }: Props) {
-  const oldVodLink = getVodLink(match) ?? "";
+  const oldVodLink = getVodLink(match, 0) ?? "";
   const [newVodLink, setNewVodLink] = useState<string>(oldVodLink);
   const [analysisSeconds, setAnalysisSeconds] = useState<number | string>(
     match.analysisSeconds

@@ -23,16 +23,6 @@ export default function Resources() {
             >
               Bingo League Season 2 (September 8 - November 23).
             </a>
-            <List>
-              <List.Item>
-                <a
-                  href="https://docs.google.com/forms/d/e/1FAIpQLSdAvsXrzA7V4ug13UZhjTUqkYLy-JMm0758bWRfwHBy1VIaGw/viewform"
-                  target="_blank"
-                >
-                  Sign up here by September 5!
-                </a>
-              </List.Item>
-            </List>
           </List.Item>
           <List.Item>
             <a

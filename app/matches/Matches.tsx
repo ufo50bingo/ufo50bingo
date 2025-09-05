@@ -149,9 +149,9 @@ export default function Matches({ matches, totalPages }: Props) {
               <Table.Th>Variant</Table.Th>
               <Table.Th>Winner</Table.Th>
               <Table.Th>Score</Table.Th>
-              <Table.Th>Win by</Table.Th>
               <Table.Th>Opponent</Table.Th>
               <Table.Th>Score</Table.Th>
+              <Table.Th>Win by</Table.Th>
               <Table.Th style={{ width: "34px" }} />
             </Table.Tr>
           </Table.Thead>
@@ -271,9 +271,9 @@ export default function Matches({ matches, totalPages }: Props) {
                   <Table.Td>{getVariantText(match)}</Table.Td>
                   <Table.Td>{dataOrSkeleton(match.winner?.name)}</Table.Td>
                   <Table.Td>{dataOrSkeleton(match.winner?.score)}</Table.Td>
-                  <Table.Td>{dataOrSkeleton(getWinType(match))}</Table.Td>
                   <Table.Td>{dataOrSkeleton(match.opponent?.name)}</Table.Td>
                   <Table.Td>{dataOrSkeleton(match.opponent?.score)}</Table.Td>
+                  <Table.Td>{dataOrSkeleton(getWinType(match))}</Table.Td>
                   <Table.Td>
                     <Menu shadow="md" width="auto">
                       <Menu.Target>

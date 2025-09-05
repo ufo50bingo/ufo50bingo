@@ -24,7 +24,8 @@ export default async function syncToGSheet(match: Match): Promise<void> {
     vodStartSeconds == null ||
     boardJson == null ||
     changelogJson == null ||
-    match.leagueSeason === 1
+    // TODO: Update to account for league matches
+    match.leagueInfo != null
   ) {
     return;
   }

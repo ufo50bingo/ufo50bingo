@@ -71,3 +71,5 @@ Object.keys(TIER_TO_PLAYERS).forEach((tier) => {
 export const ALL_PLAYERS: ReadonlyArray<string> = Object.keys(
   PLAYER_TO_TIER
 ).toSorted((a, b) => a.toLocaleLowerCase().localeCompare(b.toLowerCase()));
+
+export const IS_LEAGUE_DISABLED = true;

@@ -45,8 +45,10 @@ import { Suspense } from "react";
 import { useAppContext } from "../AppContextProvider";
 import { LeagueInfo } from "../createboard/createMatch";
 import Link from "next/link";
-import { ALL_PLAYERS } from "../createboard/leagueConstants";
-import { IS_LEAGUE_DISABLED } from "../page";
+import {
+  ALL_PLAYERS,
+  IS_LEAGUE_DISABLED,
+} from "../createboard/leagueConstants";
 const DateFormatter = lazy(() => import("./DateFormatter"), {
   ssr: false,
   loading: () => <Skeleton height={8} />,

@@ -36,6 +36,7 @@ import classes from "./Matches.module.css";
 import lazy from "next/dynamic";
 import { Suspense } from "react";
 import { useAppContext } from "../AppContextProvider";
+import { LeagueInfo } from "../createboard/createMatch";
 const DateFormatter = lazy(() => import("./DateFormatter"), {
   ssr: false,
   loading: () => <Skeleton height={8} />,
@@ -66,7 +67,7 @@ export interface Match {
   isBoardVisible: boolean;
   vod: null | Vod;
   analysisSeconds: number;
-  leagueSeason: null | number;
+  leagueInfo: null | LeagueInfo;
 }
 
 type Props = {
@@ -141,6 +142,9 @@ export default function Matches({ matches, totalPages }: Props) {
           <Table.Thead>
             <Table.Tr>
               <Table.Th>Match</Table.Th>
+              <Table.Th>Season</Table.Th>
+              <Table.Th>Tier</Table.Th>
+              <Table.Th>Week</Table.Th>
               <Table.Th>Date</Table.Th>
               <Table.Th>Variant</Table.Th>
               <Table.Th>Winner</Table.Th>
@@ -255,6 +259,9 @@ export default function Matches({ matches, totalPages }: Props) {
                       )}
                     </Tooltip>
                   </Table.Td>
+                  <Table.Td>{match.leagueInfo?.season}</Table.Td>
+                  <Table.Td>{match.leagueInfo?.tier}</Table.Td>
+                  <Table.Td>{match.leagueInfo?.week}</Table.Td>
                   <Table.Td>
                     <Suspense>
                       <DateFormatter unixtime={match.dateCreated} />

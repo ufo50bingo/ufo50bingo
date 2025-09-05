@@ -6,7 +6,7 @@ import { Variant } from "../pastas/metadata";
 
 const BINGOSYNC_BASE_URL = "https://www.bingosync.com/";
 
-type LeagueInfo = {
+export type LeagueInfo = {
   season: number;
   tier: string;
   week: string;

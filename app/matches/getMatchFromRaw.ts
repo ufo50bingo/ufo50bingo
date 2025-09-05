@@ -21,7 +21,11 @@ export const MATCH_FIELDS = getSQl()`
   vod_url,
   vod_match_start_seconds,
   analysis_seconds,
-  league_season`;
+  league_season,
+  league_tier,
+  league_week,
+  league_p1,
+  league_p2`;
 
 export function getMatchFromRaw(rawMatch: Record<string, any>): Match {
   const winner_name: null | undefined | string = rawMatch.winner_name;
@@ -56,6 +60,23 @@ export function getMatchFromRaw(rawMatch: Record<string, any>): Match {
       startSeconds: rawMatch.vod_match_start_seconds ?? null,
     };
   }
+
+  let leagueInfo = null;
+  if (
+    rawMatch.league_season != null &&
+    rawMatch.league_tier != null &&
+    rawMatch.league_week != null &&
+    rawMatch.league_p1 != null &&
+    rawMatch.league_p2 != null
+  ) {
+    leagueInfo = {
+      season: rawMatch.league_season,
+      tier: rawMatch.league_tier,
+      week: rawMatch.league_week,
+      p1: rawMatch.league_p1,
+      p2: rawMatch.league_p2,
+    };
+  }
   return {
     id: rawMatch.id,
     name: rawMatch.name,
@@ -70,6 +91,6 @@ export function getMatchFromRaw(rawMatch: Record<string, any>): Match {
     isBoardVisible: rawMatch.is_board_visible,
     analysisSeconds: rawMatch.analysis_seconds ?? 60,
     vod,
-    leagueSeason: rawMatch.league_season ?? null,
+    leagueInfo,
   };
 }

@@ -13,6 +13,7 @@ import Link from "next/link";
 import { useState } from "react";
 import NonLeagueMatch from "./createboard/NonLeagueMatch";
 import LeagueMatch from "./createboard/LeagueMatch";
+import { IS_LEAGUE_DISABLED } from "./createboard/leagueConstants";
 
 export default function CreateBoard() {
   const [matchType, setMatchType] = useState<"league" | "non-league" | null>(

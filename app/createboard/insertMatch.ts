@@ -22,6 +22,7 @@ export async function insertMatch({
   variant,
   isCustom,
   isLockout,
+  leagueInfo,
 }: Props): Promise<void> {
   if (!url.startsWith(ROOM_PREFIX)) {
     console.error("Unexpected bingosync room URL", url);
@@ -37,7 +38,12 @@ export async function insertMatch({
     is_public,
     variant,
     is_custom,
-    is_lockout
+    is_lockout,
+    league_season,
+    league_week,
+    league_tier,
+    league_p1,
+    league_p2
   ) VALUES (
     ${id},
     ${roomName},
@@ -45,7 +51,12 @@ export async function insertMatch({
     ${bool(isPublic)},
     ${variant},
     ${bool(isCustom)},
-    ${bool(isLockout)}
+    ${bool(isLockout)},
+    ${leagueInfo?.season},
+    ${leagueInfo?.week},
+    ${leagueInfo?.tier},
+    ${leagueInfo?.p1},
+    ${leagueInfo?.p2}
   );`;
   revalidatePath("/matches");
 }

@@ -6,10 +6,18 @@ import { Variant } from "../pastas/metadata";
 
 const BINGOSYNC_BASE_URL = "https://www.bingosync.com/";
 
+type LeagueInfo = {
+  season: number;
+  tier: string;
+  week: string;
+  p1: string;
+  p2: string;
+};
+
 export interface CommonMatchProps {
   roomName: string;
   password: string;
-  leagueSeason: number | null;
+  leagueInfo: LeagueInfo | null;
   isPublic: boolean;
   variant: Variant;
   isCustom: boolean;
@@ -28,7 +36,7 @@ export default async function createMatch({
   isCustom,
   isLockout,
   pasta,
-  leagueSeason,
+  leagueInfo,
 }: Props): Promise<string> {
   const { cookie, token } = await getCsrfData();
 
@@ -71,7 +79,7 @@ export default async function createMatch({
     variant,
     isCustom,
     isLockout,
-    leagueSeason,
+    leagueInfo,
   });
 
   return createResponse.url;

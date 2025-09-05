@@ -28,7 +28,7 @@ const LINKS = [
   },
   {
     href: "/",
-    text: "Create Board",
+    text: "Create Match",
     icon: <IconVs size={25} stroke={1.5} />,
   },
   {

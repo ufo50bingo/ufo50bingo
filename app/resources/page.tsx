@@ -84,8 +84,8 @@ export default function Resources() {
             (including new goal suggestions)
           </List.Item>
           <List.Item>
-            For details about Variants, hover over the variant names on{" "}
-            <Link href="/">Create Board</Link>
+            For details about Variants, hover over the variant names on the
+            Non-League section of <Link href="/">Create Match</Link>
           </List.Item>
           <p>Community Tools</p>
           <List.Item>

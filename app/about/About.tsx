@@ -47,7 +47,7 @@ export default function About({ initialBoard }: Props) {
           players!
           <br />
           When you first join a game, you will be presented with a hidden board.
-          Once all players area ready, everyone should reveal the board
+          Once all players are ready, everyone should reveal the board
           simultaneously. For example, you might see a board like this:
         </p>
         <div style={{ alignSelf: "center" }}>
@@ -123,8 +123,9 @@ export default function About({ initialBoard }: Props) {
         <p>Creating a standard match is simple!</p>
         <List type="ordered">
           <List.Item>
-            Go to the <Link href="/">Create Board</Link> tab
+            Go to the <Link href="/">Create Match</Link> tab
           </List.Item>
+          <List.Item>Click on "Non-League"</List.Item>
           <List.Item>Enter a Room Name and Password.</List.Item>
           <List.Item>Click "Create Bingosync Board"</List.Item>
           <List.Item>
@@ -144,22 +145,24 @@ export default function About({ initialBoard }: Props) {
         <p>
           Most players use the Standard variant (goal list), but UFO 50 Bingo
           supports other variants as well. Hover over the names of variants on
-          the <Link href="/">Create Board</Link> tab to explore them!
+          the Non-League section of the <Link href="/">Create Match</Link> tab
+          to explore them!
         </p>
         <p>
           In addition to selecting alternate goal lists, the "Customize game and
-          difficulty counts" checkbox on the <Link href="/">Create Board</Link>{" "}
-          tab allows you to change which goals will appear in your match. You
-          can choose games to include/exclude from your match, or update the
-          difficulty distribution to have an easier or harder match than usual.
+          difficulty counts" checkbox on the Non-League section of the{" "}
+          <Link href="/">Create Match</Link> tab allows you to change which
+          goals will appear in your match. You can choose games to
+          include/exclude from your match, or update the difficulty distribution
+          to have an easier or harder match than usual.
         </p>
         <Title order={2}>Practice Tools</Title>
         <p>
-          If you want to practice goals on your own, you can either use the{" "}
-          <Link href="/">Create Board</Link> tab to create a board for yourself,
-          or use the <Link href="/practice">Practice</Link> tab, which
-          automatically selects goals for you to attempt with built-in stat
-          tracking.
+          If you want to practice goals on your own, you can either use the
+          Non-League section of the <Link href="/">Create Match</Link> tab to
+          create a board for yourself, or use the{" "}
+          <Link href="/practice">Practice</Link> tab, which automatically
+          selects goals for you to attempt with built-in stat tracking.
         </p>
         <p>
           The <Link href="goals">All Goals</Link> tab contains the full list of

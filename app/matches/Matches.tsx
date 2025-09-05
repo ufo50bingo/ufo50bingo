@@ -4,11 +4,13 @@ import {
   ActionIcon,
   Alert,
   Anchor,
+  Autocomplete,
   Button,
   Group,
   Menu,
   Modal,
   Pagination,
+  Select,
   Skeleton,
   Stack,
   Table,
@@ -19,6 +21,7 @@ import {
   IconBrandTwitch,
   IconBrandYoutube,
   IconEdit,
+  IconFilter,
   IconRefresh,
   IconTrash,
 } from "@tabler/icons-react";
@@ -26,7 +29,11 @@ import { refreshMatch } from "./refreshMatch";
 import { ReactNode, useState } from "react";
 import ResultModal from "./ResultModal";
 import deleteMatch from "./deleteMatch";
-import { usePathname, useSearchParams } from "next/navigation";
+import {
+  ReadonlyURLSearchParams,
+  usePathname,
+  useSearchParams,
+} from "next/navigation";
 import { BingosyncColor } from "./parseBingosyncData";
 import { getVariantText, getWinType } from "./matchUtil";
 import EditVodModal from "./EditVodModal";
@@ -37,6 +44,9 @@ import lazy from "next/dynamic";
 import { Suspense } from "react";
 import { useAppContext } from "../AppContextProvider";
 import { LeagueInfo } from "../createboard/createMatch";
+import Link from "next/link";
+import { ALL_PLAYERS } from "../createboard/leagueConstants";
+import { IS_LEAGUE_DISABLED } from "../page";
 const DateFormatter = lazy(() => import("./DateFormatter"), {
   ssr: false,
   loading: () => <Skeleton height={8} />,
@@ -81,6 +91,49 @@ function isTooOld(dateCreated: number): boolean {
   return Date.now() - dateCreated * 1000 > MS_IN_DAY;
 }
 
+const SEASONS = ["Season 2", "Non-League"] as const;
+type Season = (typeof SEASONS)[number];
+
+function getHrefFromParams(pathname: string, params: URLSearchParams): string {
+  return params.size > 0 ? `${pathname}?${params.toString()}` : pathname;
+}
+
+function getSeasonStr(
+  season: null | undefined | Season
+): null | undefined | string {
+  switch (season) {
+    case null:
+    case undefined:
+      return null;
+    case "Non-League":
+      return "0";
+    case "Season 2":
+      return "2";
+  }
+}
+
+function getFilterHref(
+  pathname: string,
+  curParams: ReadonlyURLSearchParams,
+  season: null | undefined | Season,
+  player: undefined | string
+): string {
+  const params = new URLSearchParams(curParams);
+  const seasonStr = getSeasonStr(season);
+  if (seasonStr == null) {
+    params.delete("season");
+  } else {
+    params.set("season", seasonStr);
+  }
+  if (player == null || player == "") {
+    params.delete("player");
+  } else {
+    params.set("player", player);
+  }
+  params.delete("page");
+  return getHrefFromParams(pathname, params);
+}
+
 export default function Matches({ matches, totalPages }: Props) {
   const { createdMatchIDs, isAdmin } = useAppContext();
 
@@ -94,9 +147,7 @@ export default function Matches({ matches, totalPages }: Props) {
     } else {
       params.set("page", page.toString());
     }
-    const href =
-      params.size > 0 ? `${pathname}?${params.toString()}` : pathname;
-    return { component: "a", href };
+    return { component: "a", href: getHrefFromParams(pathname, params) };
   };
 
   const page = Number(searchParams.get("page") ?? "1");
@@ -106,6 +157,13 @@ export default function Matches({ matches, totalPages }: Props) {
   const [editingVodId, setEditingVodId] = useState<null | string>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshingIDs, setRefreshingIDs] = useState<ReadonlyArray<string>>([]);
+  const [season, setSeason] = useState<null | undefined | Season>(null);
+  const [player, setPlayer] = useState<undefined | string>(undefined);
+
+  const isDirty =
+    (getSeasonStr(season) ?? null) !== (searchParams.get("season") ?? null) ||
+    (player == null || player === "" ? null : player) !==
+      (searchParams.get("player") ?? null);
 
   const viewingMatch =
     viewingId == null ? null : matches.find((match) => match.id === viewingId);
@@ -138,6 +196,33 @@ export default function Matches({ matches, totalPages }: Props) {
             !
           </Text>
         </Alert>
+        <Group>
+          <Select
+            clearable={true}
+            data={SEASONS}
+            value={season}
+            onChange={(newSeason) =>
+              setSeason(newSeason as unknown as null | Season)
+            }
+            placeholder="Filter by season"
+          />
+          <Autocomplete
+            clearable={true}
+            data={IS_LEAGUE_DISABLED ? undefined : ALL_PLAYERS}
+            value={player}
+            onChange={setPlayer}
+            placeholder="Filter by player"
+            spellCheck={false}
+          />
+          <Button
+            leftSection={<IconFilter size={16} />}
+            component={Link}
+            disabled={!isDirty}
+            href={getFilterHref(pathname, searchParams, season, player)}
+          >
+            Apply Filters
+          </Button>
+        </Group>
         <Table striped highlightOnHover withTableBorder>
           <Table.Thead>
             <Table.Tr>
@@ -156,169 +241,178 @@ export default function Matches({ matches, totalPages }: Props) {
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
-            {matches.map((match) => {
-              const isRefreshing = refreshingIDs.includes(match.id);
-              const dataOrSkeleton = (data: ReactNode) =>
-                isRefreshing ? <Skeleton height={8} /> : data;
+            {matches.length === 0 ? (
+              <Table.Tr>
+                <Table.Td colSpan={12}>
+                  No matches meet your filter criteria!
+                </Table.Td>
+              </Table.Tr>
+            ) : (
+              matches.map((match) => {
+                const isRefreshing = refreshingIDs.includes(match.id);
+                const dataOrSkeleton = (data: ReactNode) =>
+                  isRefreshing ? <Skeleton height={8} /> : data;
 
-              const refreshItem = (
-                <Menu.Item
-                  disabled={isTooOld(match.dateCreated) || isRefreshing}
-                  leftSection={<IconRefresh size={16} />}
-                  onClick={async () => {
-                    setRefreshingIDs((prev) => [...prev, match.id]);
-                    try {
-                      await refreshMatch(match.id);
-                    } finally {
-                      setRefreshingIDs((prev) =>
-                        prev.filter((id) => id !== match.id)
-                      );
-                    }
-                  }}
-                >
-                  Refresh data
-                </Menu.Item>
-              );
-
-              const deleteItem = (
-                <Menu.Item
-                  disabled={!createdMatchIDs.has(match.id) && !isAdmin}
-                  leftSection={<IconTrash size={16} />}
-                  onClick={() => setDeletingId(match.id)}
-                >
-                  Delete match
-                </Menu.Item>
-              );
-
-              let isTwitch = false;
-              const vod = match.vod;
-              if (vod != null) {
-                const url = new URL(vod.url);
-                const host = getHost(url);
-                isTwitch = host === "twitch";
-              }
-              // rewind 90 seconds to get the lead-up to the reveal
-              const vodLink = getVodLink(match, -90);
-
-              return (
-                <Table.Tr key={match.id}>
-                  <Table.Td>
-                    {vodLink !== "" && (
-                      <Tooltip label="Watch VOD">
-                        <ActionIcon
-                          className={classes.vodButton}
-                          size="sm"
-                          component="a"
-                          href={vodLink}
-                          target="_blank"
-                          color={isTwitch ? "violet" : "red"}
-                        >
-                          {isTwitch ? (
-                            <IconBrandTwitch size={16} />
-                          ) : (
-                            <IconBrandYoutube size={16} />
-                          )}
-                        </ActionIcon>
-                      </Tooltip>
-                    )}
-                    <Tooltip
-                      label={
-                        match.boardJson == null ? (
-                          "You must Refresh data from Bingosync before viewing the board!"
-                        ) : isRefreshing ? (
-                          "Refreshing..."
-                        ) : match.isBoardVisible ? (
-                          <>
-                            View board and changelog.
-                            <br />
-                            If a VOD is linked, the changelog also has
-                            <br />
-                            timestamped links to each goal completion.
-                          </>
-                        ) : (
-                          <>
-                            No goals have been claimed yet! The board can be
-                            <br />
-                            viewed after at least one goal has been claimed
-                            <br />
-                            and data has been refreshed.
-                          </>
-                        )
+                const refreshItem = (
+                  <Menu.Item
+                    disabled={isTooOld(match.dateCreated) || isRefreshing}
+                    leftSection={<IconRefresh size={16} />}
+                    onClick={async () => {
+                      setRefreshingIDs((prev) => [...prev, match.id]);
+                      try {
+                        await refreshMatch(match.id);
+                      } finally {
+                        setRefreshingIDs((prev) =>
+                          prev.filter((id) => id !== match.id)
+                        );
                       }
-                    >
-                      {match.boardJson == null ||
-                      isRefreshing ||
-                      !match.isBoardVisible ? (
-                        <span>{match.name}</span>
-                      ) : (
-                        <Anchor
-                          size="sm"
-                          onClick={() => setViewingId(match.id)}
-                        >
-                          {match.name}
-                        </Anchor>
-                      )}
-                    </Tooltip>
-                  </Table.Td>
-                  <Table.Td>{match.leagueInfo?.season}</Table.Td>
-                  <Table.Td>{match.leagueInfo?.tier}</Table.Td>
-                  <Table.Td>{match.leagueInfo?.week}</Table.Td>
-                  <Table.Td>
-                    <Suspense>
-                      <DateFormatter unixtime={match.dateCreated} />
-                    </Suspense>
-                  </Table.Td>
-                  <Table.Td>{getVariantText(match)}</Table.Td>
-                  <Table.Td>{dataOrSkeleton(match.winner?.name)}</Table.Td>
-                  <Table.Td>{dataOrSkeleton(match.winner?.score)}</Table.Td>
-                  <Table.Td>{dataOrSkeleton(match.opponent?.name)}</Table.Td>
-                  <Table.Td>{dataOrSkeleton(match.opponent?.score)}</Table.Td>
-                  <Table.Td>{dataOrSkeleton(getWinType(match))}</Table.Td>
-                  <Table.Td>
-                    <Menu shadow="md" width="auto">
-                      <Menu.Target>
-                        <Tooltip label="Refresh/Edit">
-                          <ActionIcon color="green">
-                            <IconEdit size={16} />
+                    }}
+                  >
+                    Refresh data
+                  </Menu.Item>
+                );
+
+                const deleteItem = (
+                  <Menu.Item
+                    disabled={!createdMatchIDs.has(match.id) && !isAdmin}
+                    leftSection={<IconTrash size={16} />}
+                    onClick={() => setDeletingId(match.id)}
+                  >
+                    Delete match
+                  </Menu.Item>
+                );
+
+                let isTwitch = false;
+                const vod = match.vod;
+                if (vod != null) {
+                  const url = new URL(vod.url);
+                  const host = getHost(url);
+                  isTwitch = host === "twitch";
+                }
+                // rewind 90 seconds to get the lead-up to the reveal
+                const vodLink = getVodLink(match, -90);
+
+                return (
+                  <Table.Tr key={match.id}>
+                    <Table.Td>
+                      {vodLink !== "" && (
+                        <Tooltip label="Watch VOD">
+                          <ActionIcon
+                            className={classes.vodButton}
+                            size="sm"
+                            component="a"
+                            href={vodLink}
+                            target="_blank"
+                            color={isTwitch ? "violet" : "red"}
+                          >
+                            {isTwitch ? (
+                              <IconBrandTwitch size={16} />
+                            ) : (
+                              <IconBrandYoutube size={16} />
+                            )}
                           </ActionIcon>
                         </Tooltip>
-                      </Menu.Target>
-                      <Menu.Dropdown>
-                        {isTooOld(match.dateCreated) ? (
-                          <Tooltip
-                            label={
-                              <>
-                                Matches can only be refreshed within 1 day of
-                                their creation
-                                <br />
-                                because Bingosync deletes data about the match.
-                              </>
-                            }
+                      )}
+                      <Tooltip
+                        label={
+                          match.boardJson == null ? (
+                            "You must Refresh data from Bingosync before viewing the board!"
+                          ) : isRefreshing ? (
+                            "Refreshing..."
+                          ) : match.isBoardVisible ? (
+                            <>
+                              View board and changelog.
+                              <br />
+                              If a VOD is linked, the changelog also has
+                              <br />
+                              timestamped links to each goal completion.
+                            </>
+                          ) : (
+                            <>
+                              No goals have been claimed yet! The board can be
+                              <br />
+                              viewed after at least one goal has been claimed
+                              <br />
+                              and data has been refreshed.
+                            </>
+                          )
+                        }
+                      >
+                        {match.boardJson == null ||
+                        isRefreshing ||
+                        !match.isBoardVisible ? (
+                          <span>{match.name}</span>
+                        ) : (
+                          <Anchor
+                            size="sm"
+                            onClick={() => setViewingId(match.id)}
                           >
-                            {refreshItem}
-                          </Tooltip>
-                        ) : (
-                          refreshItem
+                            {match.name}
+                          </Anchor>
                         )}
-                        <Menu.Item
-                          leftSection={<IconBrandYoutube size={16} />}
-                          onClick={() => setEditingVodId(match.id)}
-                        >
-                          {vodLink !== "" ? "Edit" : "Add"} VOD Link
-                        </Menu.Item>
-                        {!createdMatchIDs.has(match.id) && !isAdmin ? (
-                          <Tooltip label="You can only delete matches you created.">
-                            {deleteItem}
+                      </Tooltip>
+                    </Table.Td>
+                    <Table.Td>{match.leagueInfo?.season}</Table.Td>
+                    <Table.Td>{match.leagueInfo?.tier}</Table.Td>
+                    <Table.Td>{match.leagueInfo?.week}</Table.Td>
+                    <Table.Td>
+                      <Suspense>
+                        <DateFormatter unixtime={match.dateCreated} />
+                      </Suspense>
+                    </Table.Td>
+                    <Table.Td>{getVariantText(match)}</Table.Td>
+                    <Table.Td>{dataOrSkeleton(match.winner?.name)}</Table.Td>
+                    <Table.Td>{dataOrSkeleton(match.winner?.score)}</Table.Td>
+                    <Table.Td>{dataOrSkeleton(match.opponent?.name)}</Table.Td>
+                    <Table.Td>{dataOrSkeleton(match.opponent?.score)}</Table.Td>
+                    <Table.Td>{dataOrSkeleton(getWinType(match))}</Table.Td>
+                    <Table.Td>
+                      <Menu shadow="md" width="auto">
+                        <Menu.Target>
+                          <Tooltip label="Refresh/Edit">
+                            <ActionIcon color="green">
+                              <IconEdit size={16} />
+                            </ActionIcon>
                           </Tooltip>
-                        ) : (
-                          deleteItem
-                        )}
-                      </Menu.Dropdown>
-                    </Menu>
-                  </Table.Td>
-                </Table.Tr>
-              );
-            })}
+                        </Menu.Target>
+                        <Menu.Dropdown>
+                          {isTooOld(match.dateCreated) ? (
+                            <Tooltip
+                              label={
+                                <>
+                                  Matches can only be refreshed within 1 day of
+                                  their creation
+                                  <br />
+                                  because Bingosync deletes data about the
+                                  match.
+                                </>
+                              }
+                            >
+                              {refreshItem}
+                            </Tooltip>
+                          ) : (
+                            refreshItem
+                          )}
+                          <Menu.Item
+                            leftSection={<IconBrandYoutube size={16} />}
+                            onClick={() => setEditingVodId(match.id)}
+                          >
+                            {vodLink !== "" ? "Edit" : "Add"} VOD Link
+                          </Menu.Item>
+                          {!createdMatchIDs.has(match.id) && !isAdmin ? (
+                            <Tooltip label="You can only delete matches you created.">
+                              {deleteItem}
+                            </Tooltip>
+                          ) : (
+                            deleteItem
+                          )}
+                        </Menu.Dropdown>
+                      </Menu>
+                    </Table.Td>
+                  </Table.Tr>
+                );
+              })
+            )}
           </Table.Tbody>
         </Table>
         <Pagination

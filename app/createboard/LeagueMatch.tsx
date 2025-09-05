@@ -14,9 +14,13 @@ import createPasta from "./createPasta";
 import getDefaultDifficulties from "./getDefaultDifficulties";
 import createMatch from "./createMatch";
 import { db } from "../db";
-import PlayerSelector from "./PlayerSelector";
 import { STANDARD } from "../pastas/standard";
-import { getCurrentWeek, PLAYER_TO_TIER, WEEKS } from "./leagueConstants";
+import {
+  ALL_PLAYERS,
+  getCurrentWeek,
+  PLAYER_TO_TIER,
+  WEEKS,
+} from "./leagueConstants";
 
 const ROOM_PREFIX = "https://www.bingosync.com/room/";
 const LEAGUE_SEASON = 2;
@@ -38,8 +42,22 @@ export default function LeagueMatch() {
   return (
     <Stack gap={8}>
       <Select label="Week" data={WEEKS} value={week} onChange={setWeek} />
-      <PlayerSelector label="First player" player={p1} setPlayer={setP1} />
-      <PlayerSelector label="Second player" player={p2} setPlayer={setP2} />
+      <Select
+        spellCheck={false}
+        searchable={true}
+        data={ALL_PLAYERS}
+        label="First player"
+        value={p1}
+        onChange={setP1}
+      />
+      <Select
+        spellCheck={false}
+        searchable={true}
+        data={ALL_PLAYERS}
+        label="Second player"
+        value={p2}
+        onChange={setP2}
+      />
       {tierMismatch && (
         <Alert
           variant="light"
@@ -51,6 +69,7 @@ export default function LeagueMatch() {
         </Alert>
       )}
       <TextInput
+        spellCheck={false}
         label="Choose password"
         value={password}
         onChange={(event) => setPassword(event.currentTarget.value)}

@@ -14,7 +14,7 @@ import { useState } from "react";
 import NonLeagueMatch from "./createboard/NonLeagueMatch";
 import LeagueMatch from "./createboard/LeagueMatch";
 
-const IS_LEAGUE_DISABLED = true;
+export const IS_LEAGUE_DISABLED = true;
 
 export default function CreateBoard() {
   const [matchType, setMatchType] = useState<"league" | "non-league" | null>(

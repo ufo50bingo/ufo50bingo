@@ -22,6 +22,7 @@ import {
   getMatchStartTime,
   getSquareCompletionRanges,
 } from "./analyzeMatch";
+import { useMediaQuery } from "@mantine/hooks";
 
 type Props = {
   match: Match;
@@ -108,14 +109,18 @@ export default function ResultModal({ match, onClose }: Props) {
   const [showChangelog, setShowChangelog] = useState(false);
   const [showOverlays, setShowOverlays] = useState(true);
 
+  // 48em is the same as the sm breakpoint for the nav sidebar
+  const isMobile = useMediaQuery("(max-width: 525px)");
+
   const winType = getWinType(match);
   return (
     <Modal
+      fullScreen={isMobile}
       centered={true}
       onClose={onClose}
       opened={true}
       size="auto"
-      withCloseButton={false}
+      withCloseButton={isMobile}
     >
       <div ref={ref}>
         <Stack gap={8}>

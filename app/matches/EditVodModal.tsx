@@ -16,11 +16,12 @@ import { getBaseUrlAndStartSeconds, getVodLink, getWarning } from "./vodUtil";
 import updateVod from "./updateVod";
 
 type Props = {
+  isMobile: boolean;
   match: Match;
   onClose: () => void;
 };
 
-export default function EditVodModal({ match, onClose }: Props) {
+export default function EditVodModal({ isMobile, match, onClose }: Props) {
   const oldVodLink = getVodLink(match, 0) ?? "";
   const [newVodLink, setNewVodLink] = useState<string>(oldVodLink);
   const [analysisSeconds, setAnalysisSeconds] = useState<number | string>(
@@ -31,6 +32,7 @@ export default function EditVodModal({ match, onClose }: Props) {
   const warning = getWarning(oldVodLink, newVodLink);
   return (
     <Modal
+      fullScreen={isMobile}
       centered={true}
       onClose={onClose}
       opened={true}

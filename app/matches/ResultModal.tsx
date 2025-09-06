@@ -22,9 +22,10 @@ import {
   getMatchStartTime,
   getSquareCompletionRanges,
 } from "./analyzeMatch";
-import { useMediaQuery } from "@mantine/hooks";
+import { isModuleDeclaration } from "typescript";
 
 type Props = {
+  isMobile: boolean;
   match: Match;
   onClose: () => void;
 };
@@ -80,7 +81,7 @@ function getOverlays(
   return overlays;
 }
 
-export default function ResultModal({ match, onClose }: Props) {
+export default function ResultModal({ isMobile, match, onClose }: Props) {
   const boardJson = match.boardJson;
   const board = useMemo<TBoard>(() => {
     if (boardJson == null) {
@@ -109,10 +110,8 @@ export default function ResultModal({ match, onClose }: Props) {
   const [showChangelog, setShowChangelog] = useState(false);
   const [showOverlays, setShowOverlays] = useState(true);
 
-  // 48em is the same as the sm breakpoint for the nav sidebar
-  const isMobile = useMediaQuery("(max-width: 525px)");
-
   const winType = getWinType(match);
+
   return (
     <Modal
       fullScreen={isMobile}
@@ -177,7 +176,7 @@ export default function ResultModal({ match, onClose }: Props) {
           >
             <Button
               leftSection={<IconClock size={16} />}
-              onClick={() => setShowOverlays(!showOverlays)}
+              onClick={() => setIsFullscreen(!isFullscreen)}
             >
               {showOverlays ? "Hide Times" : "Show Times"}
             </Button>

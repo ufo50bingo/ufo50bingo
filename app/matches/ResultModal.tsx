@@ -22,7 +22,6 @@ import {
   getMatchStartTime,
   getSquareCompletionRanges,
 } from "./analyzeMatch";
-import { isModuleDeclaration } from "typescript";
 
 type Props = {
   isMobile: boolean;
@@ -176,7 +175,7 @@ export default function ResultModal({ isMobile, match, onClose }: Props) {
           >
             <Button
               leftSection={<IconClock size={16} />}
-              onClick={() => setIsFullscreen(!isFullscreen)}
+              onClick={() => setShowOverlays(!showOverlays)}
             >
               {showOverlays ? "Hide Times" : "Show Times"}
             </Button>

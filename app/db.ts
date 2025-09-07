@@ -24,11 +24,16 @@ interface CreatedMatchRow {
   id: string;
 }
 
+interface RevealedMatchRow {
+  id: string;
+}
+
 const db = new Dexie("UFO50BingoDatabase") as Dexie & {
   attempts: EntityTable<AttemptRow, "id">;
   unselectedGoals: EntityTable<GoalSelectionRow, "goal">;
   playlist: EntityTable<PlaylistRow, "id">;
   createdMatches: EntityTable<CreatedMatchRow, "id">;
+  revealedMatches: EntityTable<RevealedMatchRow, "id">;
 };
 
 db.version(1).stores({
@@ -36,6 +41,7 @@ db.version(1).stores({
   unselectedGoals: "goal",
   playlist: "++id, priority",
   createdMatches: "id",
+  revealedMatches: "id",
 });
 
 export type { Attempt, AttemptRow, PlaylistRow };

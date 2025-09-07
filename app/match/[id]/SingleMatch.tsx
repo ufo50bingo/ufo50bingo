@@ -11,7 +11,7 @@ type Props = {
 export default function SingleMatch({ match }: Props) {
   return (
     <Card style={{ alignSelf: "center", justifySelf: "center" }}>
-      <MatchView isModal={false} match={match} />
+      <MatchView match={match} />
     </Card>
   );
 }

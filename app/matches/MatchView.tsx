@@ -35,9 +35,10 @@ import {
 } from "./analyzeMatch";
 import { refreshMatch } from "./refreshMatch";
 import EditVodModal from "./EditVodModal";
+import { useAppContext } from "../AppContextProvider";
+import { db } from "../db";
 
 type Props = {
-  isModal: boolean;
   match: Match;
 };
 
@@ -92,11 +93,16 @@ function getOverlays(
   return overlays;
 }
 
-export default function MatchView({ isModal, match }: Props) {
+export default function MatchView({ match }: Props) {
+  const { revealedMatchIDs } = useAppContext();
+
   const boardJson = match.boardJson;
   const board = useMemo<TBoard>(() => {
     if (boardJson == null) {
-      throw new Error("boardJson is null in MatchView");
+      return Array(25).fill({
+        name: "BARBUTA: Collect the reward from a green skull",
+        color: "blank",
+      });
     }
     return JSON.parse(boardJson);
   }, [boardJson]);
@@ -148,6 +154,8 @@ export default function MatchView({ isModal, match }: Props) {
     leagueInfo == null
       ? `${date} — ${getVariantText(match)}`
       : `${date} — Season ${leagueInfo.season}, Tier ${leagueInfo.tier}, ${leagueInfo.week}`;
+
+  const isRevealed = revealedMatchIDs.has(match.id);
 
   const refreshItem = (
     <Button
@@ -212,144 +220,165 @@ export default function MatchView({ isModal, match }: Props) {
               board={board}
               overlays={showOverlays && overlays != null ? overlays : undefined}
               onClickSquare={null}
-              isHidden={false}
-              setIsHidden={() => {}}
+              isHidden={!isRevealed || !match.isBoardVisible}
+              setIsHidden={async (newIsHidden) => {
+                if (!newIsHidden && match.isBoardVisible) {
+                  await db.revealedMatches.add({ id: match.id });
+                }
+              }}
+              hiddenText={
+                match.isBoardVisible ? (
+                  "Click to reveal match details"
+                ) : (
+                  <>
+                    No goals have been claimed yet! The board can be
+                    <br />
+                    viewed after at least one goal has been claimed
+                    <br />
+                    and data has been refreshed.
+                  </>
+                )
+              }
             />
-            <Group justify="space-between">
-              {match.winner != null && (
-                <BingosyncColored color={match.winner.color}>
-                  <Text>
-                    <strong>
-                      {match.winner.name}: {match.winner.score}
-                      {winType != null && ` (${winType} win)`}
-                    </strong>
-                  </Text>
-                </BingosyncColored>
-              )}
-              {match.opponent != null && (
-                <BingosyncColored color={match.opponent.color}>
-                  <Text>
-                    <strong>
-                      {match.opponent.name}: {match.opponent.score}
-                    </strong>
-                  </Text>
-                </BingosyncColored>
-              )}
-            </Group>
+            {isRevealed && (
+              <Group justify="space-between">
+                {match.winner != null && (
+                  <BingosyncColored color={match.winner.color}>
+                    <Text>
+                      <strong>
+                        {match.winner.name}: {match.winner.score}
+                        {winType != null && ` (${winType} win)`}
+                      </strong>
+                    </Text>
+                  </BingosyncColored>
+                )}
+                {match.opponent != null && (
+                  <BingosyncColored color={match.opponent.color}>
+                    <Text>
+                      <strong>
+                        {match.opponent.name}: {match.opponent.score}
+                      </strong>
+                    </Text>
+                  </BingosyncColored>
+                )}
+              </Group>
+            )}
           </Stack>
         </div>
-        <Group justify="end">
-          {overlays != null && (
-            <Tooltip
-              label={
-                <>
-                  Times assume that the match started 1 min after
-                  <br />
-                  the card was first revealed.
-                </>
-              }
-            >
-              <Button
-                leftSection={<IconClock size={16} />}
-                onClick={() => setShowOverlays(!showOverlays)}
-              >
-                {showOverlays ? "Hide Times" : "Show Times"}
-              </Button>
-            </Tooltip>
-          )}
-          {changelog != null && (
-            <Tooltip
-              label={
-                <>
-                  If a VOD with timestamp is linked to this match, you can
-                  <br />
-                  click on changelog items to view that time in the VOD.
-                </>
-              }
-            >
-              <Button
-                size="sm"
-                leftSection={<IconList size={16} />}
-                onClick={() => setShowChangelog(!showChangelog)}
-              >
-                {showChangelog ? "Hide Changelog" : "Show Changelog"}
-              </Button>
-            </Tooltip>
-          )}
-          <Tooltip
-            label={
-              <span>
-                Copies an image of the room name, date, board state, and scores.
-                <br />
-                Paste in the #bingo-chat channel (linked in the page footer) to
-                <br />
-                share your results with the community!
-              </span>
-            }
-          >
-            <Button
-              leftSection={<IconClipboard size={16} />}
-              onClick={async () => {
-                const board = ref.current;
-                if (board == null) {
-                  return;
-                }
-                const canvas = await html2canvas(board, {
-                  onclone(cloneDoc, element) {
-                    const vodLink = cloneDoc.getElementById(vodId);
-                    if (vodLink != null) {
-                      vodLink.style.display = "none";
-                    }
-                    const permalink = cloneDoc.getElementById(permalinkId);
-                    if (permalink != null) {
-                      permalink.style.display = "none";
-                    }
-                    element.className;
-                    element.style.padding = "8px";
-                    element.style.width = "541px";
-                  },
-                  backgroundColor: "rgb(36, 36, 36)",
-                  scale: 4,
-                });
-                canvas.toBlob((blob) => {
-                  if (blob == null) {
-                    return;
-                  }
-                  const board = new ClipboardItem({ "image/png": blob });
-                  navigator.clipboard.write([board]);
-                });
-              }}
-            >
-              Copy to Clipboard
-            </Button>
-          </Tooltip>
-        </Group>
-        {isModal === false && (
+        {isRevealed && match.isBoardVisible && (
           <Group justify="end">
-            {isTooOld(match.dateCreated) ? (
+            {overlays != null && (
               <Tooltip
                 label={
                   <>
-                    Matches can only be refreshed within 1 day of their creation
+                    Times assume that the match started 1 min after
                     <br />
-                    because Bingosync deletes data about the match.
+                    the card was first revealed.
                   </>
                 }
               >
-                {refreshItem}
+                <Button
+                  leftSection={<IconClock size={16} />}
+                  onClick={() => setShowOverlays(!showOverlays)}
+                >
+                  {showOverlays ? "Hide Times" : "Show Times"}
+                </Button>
               </Tooltip>
-            ) : (
-              refreshItem
             )}
-            <Button
-              color="green"
-              leftSection={<IconBrandYoutube size={16} />}
-              onClick={() => setIsEditingVod(true)}
+            {changelog != null && (
+              <Tooltip
+                label={
+                  <>
+                    If a VOD with timestamp is linked to this match, you can
+                    <br />
+                    click on changelog items to view that time in the VOD.
+                  </>
+                }
+              >
+                <Button
+                  size="sm"
+                  leftSection={<IconList size={16} />}
+                  onClick={() => setShowChangelog(!showChangelog)}
+                >
+                  {showChangelog ? "Hide Changelog" : "Show Changelog"}
+                </Button>
+              </Tooltip>
+            )}
+            <Tooltip
+              label={
+                <span>
+                  Copies an image of the room name, date, board state, and
+                  scores.
+                  <br />
+                  Paste in the #bingo-chat channel (linked in the page footer)
+                  to
+                  <br />
+                  share your results with the community!
+                </span>
+              }
             >
-              {vodLink !== "" ? "Edit" : "Add"} VOD Link
-            </Button>
+              <Button
+                leftSection={<IconClipboard size={16} />}
+                onClick={async () => {
+                  const board = ref.current;
+                  if (board == null) {
+                    return;
+                  }
+                  const canvas = await html2canvas(board, {
+                    onclone(cloneDoc, element) {
+                      const vodLink = cloneDoc.getElementById(vodId);
+                      if (vodLink != null) {
+                        vodLink.style.display = "none";
+                      }
+                      const permalink = cloneDoc.getElementById(permalinkId);
+                      if (permalink != null) {
+                        permalink.style.display = "none";
+                      }
+                      element.className;
+                      element.style.padding = "8px";
+                      element.style.width = "541px";
+                    },
+                    backgroundColor: "rgb(36, 36, 36)",
+                    scale: 4,
+                  });
+                  canvas.toBlob((blob) => {
+                    if (blob == null) {
+                      return;
+                    }
+                    const board = new ClipboardItem({ "image/png": blob });
+                    navigator.clipboard.write([board]);
+                  });
+                }}
+              >
+                Copy to Clipboard
+              </Button>
+            </Tooltip>
           </Group>
         )}
+        <Group justify="end">
+          {isTooOld(match.dateCreated) ? (
+            <Tooltip
+              label={
+                <>
+                  Matches can only be refreshed within 1 day of their creation
+                  <br />
+                  because Bingosync deletes data about the match.
+                </>
+              }
+            >
+              {refreshItem}
+            </Tooltip>
+          ) : (
+            refreshItem
+          )}
+          <Button
+            color="green"
+            leftSection={<IconBrandYoutube size={16} />}
+            onClick={() => setIsEditingVod(true)}
+          >
+            {vodLink !== "" ? "Edit" : "Add"} VOD Link
+          </Button>
+        </Group>
       </Stack>
       <Drawer.Root
         size={300}

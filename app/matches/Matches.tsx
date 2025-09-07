@@ -50,6 +50,7 @@ import {
   IS_LEAGUE_DISABLED,
 } from "../createboard/leagueConstants";
 import { useMediaQuery } from "@mantine/hooks";
+import { db } from "../db";
 const DateFormatter = lazy(() => import("../DateFormatter"), {
   ssr: false,
   loading: () => <Skeleton height={8} />,
@@ -138,7 +139,7 @@ function getFilterHref(
 }
 
 export default function Matches({ matches, totalPages }: Props) {
-  const { createdMatchIDs, isAdmin } = useAppContext();
+  const { createdMatchIDs, isAdmin, revealedMatchIDs } = useAppContext();
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -321,43 +322,22 @@ export default function Matches({ matches, totalPages }: Props) {
                         )}
                         <Tooltip
                           label={
-                            match.boardJson == null ? (
-                              "You must Refresh data from Bingosync before viewing the board!"
-                            ) : isRefreshing ? (
-                              "Refreshing..."
-                            ) : match.isBoardVisible ? (
-                              <>
-                                View board and changelog.
-                                <br />
-                                If a VOD is linked, the changelog also has
-                                <br />
-                                timestamped links to each goal completion.
-                              </>
-                            ) : (
-                              <>
-                                No goals have been claimed yet! The board can be
-                                <br />
-                                viewed after at least one goal has been claimed
-                                <br />
-                                and data has been refreshed.
-                              </>
-                            )
+                            <>
+                              View board and changelog.
+                              <br />
+                              If a VOD is linked, the changelog also has
+                              <br />
+                              timestamped links to each goal completion.
+                            </>
                           }
                         >
-                          {match.boardJson == null ||
-                          isRefreshing ||
-                          !match.isBoardVisible ? (
+                          {isRefreshing ? (
                             <span>{match.name}</span>
                           ) : (
                             <Anchor
                               size="sm"
                               onClick={() => {
                                 setViewingId(match.id);
-                                window.history.pushState(
-                                  {},
-                                  "",
-                                  `/match/${match.id}`
-                                );
                               }}
                             >
                               {match.name}
@@ -374,15 +354,36 @@ export default function Matches({ matches, totalPages }: Props) {
                         </Suspense>
                       </Table.Td>
                       <Table.Td>{getVariantText(match)}</Table.Td>
-                      <Table.Td>{dataOrSkeleton(match.winner?.name)}</Table.Td>
-                      <Table.Td>{dataOrSkeleton(match.winner?.score)}</Table.Td>
-                      <Table.Td>
-                        {dataOrSkeleton(match.opponent?.name)}
-                      </Table.Td>
-                      <Table.Td>
-                        {dataOrSkeleton(match.opponent?.score)}
-                      </Table.Td>
-                      <Table.Td>{dataOrSkeleton(getWinType(match))}</Table.Td>
+                      {revealedMatchIDs.has(match.id) ? (
+                        <>
+                          <Table.Td>
+                            {dataOrSkeleton(match.winner?.name)}
+                          </Table.Td>
+                          <Table.Td>
+                            {dataOrSkeleton(match.winner?.score)}
+                          </Table.Td>
+                          <Table.Td>
+                            {dataOrSkeleton(match.opponent?.name)}
+                          </Table.Td>
+                          <Table.Td>
+                            {dataOrSkeleton(match.opponent?.score)}
+                          </Table.Td>
+                          <Table.Td>
+                            {dataOrSkeleton(getWinType(match))}
+                          </Table.Td>
+                        </>
+                      ) : (
+                        <Table.Td colSpan={5} style={{ textAlign: "center" }}>
+                          <Anchor
+                            onClick={async () =>
+                              await db.revealedMatches.add({ id: match.id })
+                            }
+                            size="sm"
+                          >
+                            Click to reveal match details
+                          </Anchor>
+                        </Table.Td>
+                      )}
                       <Table.Td>
                         <Menu shadow="md" width="auto">
                           <Menu.Target>
@@ -433,26 +434,38 @@ export default function Matches({ matches, totalPages }: Props) {
             </Table.Tbody>
           </Table>
         </div>
-        <Pagination
-          value={page}
-          total={totalPages}
-          withEdges
-          getItemProps={(pageNumber) => getPropsForPage(pageNumber)}
-          getControlProps={(control) => {
-            switch (control) {
-              case "first":
-                return getPropsForPage(1);
-              case "last":
-                return getPropsForPage(totalPages);
-              case "next":
-                return getPropsForPage(
-                  page < totalPages ? page + 1 : totalPages
-                );
-              case "previous":
-                return getPropsForPage(page > 1 ? page - 1 : 1);
-            }
-          }}
-        />
+        <Group justify="space-between">
+          <Pagination
+            value={page}
+            total={totalPages}
+            withEdges
+            getItemProps={(pageNumber) => getPropsForPage(pageNumber)}
+            getControlProps={(control) => {
+              switch (control) {
+                case "first":
+                  return getPropsForPage(1);
+                case "last":
+                  return getPropsForPage(totalPages);
+                case "next":
+                  return getPropsForPage(
+                    page < totalPages ? page + 1 : totalPages
+                  );
+                case "previous":
+                  return getPropsForPage(page > 1 ? page - 1 : 1);
+              }
+            }}
+          />
+          <Button
+            onClick={async () => {
+              const unrevealedIds = matches
+                .filter((match) => !revealedMatchIDs.has(match.id))
+                .map((match) => ({ id: match.id }));
+              await db.revealedMatches.bulkAdd(unrevealedIds);
+            }}
+          >
+            Reveal all matches
+          </Button>
+        </Group>
       </Stack>
       {viewingMatch != null && (
         <ResultModal
@@ -460,7 +473,6 @@ export default function Matches({ matches, totalPages }: Props) {
           match={viewingMatch}
           onClose={() => {
             setViewingId(null);
-            window.history.back();
           }}
         />
       )}

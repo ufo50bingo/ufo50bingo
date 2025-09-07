@@ -29,6 +29,7 @@ type AppContextType = {
   nextGoalChoice: NextGoalChoice;
   goal: string;
   createdMatchIDs: Set<string>;
+  revealedMatchIDs: Set<string>;
   isAdmin: boolean;
   setIsAdmin: (newIsAdmin: boolean) => void;
 };
@@ -65,6 +66,12 @@ export function AppContextProvider({
   const createdMatchIDs = useMemo(
     () => new Set(createdMatches.map((match) => match.id)),
     [createdMatches]
+  );
+  const revealedMatches =
+    useLiveQuery(() => db.revealedMatches.toArray()) ?? [];
+  const revealedMatchIDs = useMemo(
+    () => new Set(revealedMatches.map((match) => match.id)),
+    [revealedMatches]
   );
   const goalStats = useGoalStats(attempts);
   const selectedGoals = useSelectedGoals();
@@ -119,6 +126,7 @@ export function AppContextProvider({
       setNextGoalChoice,
       nextGoalChoice,
       createdMatchIDs,
+      revealedMatchIDs,
       isAdmin,
       setIsAdmin,
     }),
@@ -133,6 +141,7 @@ export function AppContextProvider({
       setNextGoalChoice,
       nextGoalChoice,
       createdMatchIDs,
+      revealedMatchIDs,
       isAdmin,
       setIsAdmin,
     ]

@@ -1,4 +1,6 @@
+import { ReactNode } from "react";
 import { Match } from "./Matches";
+import { Anchor } from "@mantine/core";
 
 export type VodHost = "youtube" | "twitch";
 
@@ -124,7 +126,7 @@ export function getBaseUrlAndStartSeconds(
 export function getWarning(
   oldVodLink: string,
   newVodLink: string
-): null | [string, undefined | string] {
+): null | [string, undefined | ReactNode] {
   if (oldVodLink === newVodLink) {
     return null;
   }
@@ -146,7 +148,20 @@ export function getWarning(
     if (time == null) {
       return [
         "No timestamp found in link.",
-        "Follow the instructions above to copy a link at the correct time.",
+        <>
+          Please follow the instructions above to copy a link at the correct
+          time!
+          <br />
+          Including a timestamp enables extra features enables links to watch
+          specific goals from the Changelog and integrations with{" "}
+          <Anchor
+            href="https://docs.google.com/spreadsheets/d/1bW8zjoR2bpr74w-dA4HHt04SqvGg1aj8FJeOs3EqdNE/edit?gid=0#gid=0"
+            target="_blank"
+          >
+            UFO 50 Bingo VOD Links and Stats
+          </Anchor>
+          .
+        </>,
       ];
     }
 

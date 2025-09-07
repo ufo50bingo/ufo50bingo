@@ -74,7 +74,7 @@ export default function EditVodModal({ isMobile, match, onClose }: Props) {
         {warning != null && (
           <Alert
             variant="light"
-            color="red"
+            color="yellow"
             title={warning[0]}
             icon={<IconAlertSquareRounded />}
           >

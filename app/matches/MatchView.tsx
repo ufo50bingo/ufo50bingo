@@ -207,7 +207,9 @@ export default function MatchView({ match }: Props) {
                   style={{ marginLeft: "8px" }}
                   size="sm"
                   onClick={() =>
-                    navigator.clipboard.writeText(window.location.href)
+                    navigator.clipboard.writeText(
+                      `https://ufo50.bingo/match/${match.id}`
+                    )
                   }
                   variant="subtle"
                 >

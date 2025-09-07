@@ -1,3 +1,4 @@
+import { SequenceMatcher } from "difflib";
 import {
   BingosyncColor,
   TBoard,
@@ -223,4 +224,66 @@ function removeMistakesForSquare(changes: Change[]): void {
       indexOfFirstItem -= 1;
     }
   }
+}
+
+function getTopPlayer(playerToNetAdditiosn: {
+  [player: string]: number;
+}): string {
+  return Object.keys(playerToNetAdditiosn).reduce((a, b) =>
+    playerToNetAdditiosn[a] > playerToNetAdditiosn[b] ? a : b
+  );
+}
+
+export function getColorToVerifiedName(
+  changes: ReadonlyArray<Change>,
+  verifiedP1: string,
+  verifiedP2: string
+): {
+  [color: string]: string;
+} {
+  const board = Array(25).fill("blank");
+  const colorToPlayerToNetAdditions: {
+    [color: string]: { [player: string]: number };
+  } = {};
+  changes.forEach((change) => {
+    let relevantColor = change.color;
+    if (change.color === "blank") {
+      relevantColor = board[change.index];
+      if (relevantColor === "blank") {
+        return;
+      }
+    }
+    board[change.index] = change.color;
+    const playerToAdditions = colorToPlayerToNetAdditions[relevantColor] ?? {};
+    const curCount = playerToAdditions[change.name] ?? 0;
+    const newCount = change.color === "blank" ? curCount - 1 : curCount + 1;
+    playerToAdditions[change.name] = newCount;
+    colorToPlayerToNetAdditions[relevantColor] = playerToAdditions;
+  });
+
+  if (Object.keys(colorToPlayerToNetAdditions).length === 2) {
+    const c1 = Object.keys(colorToPlayerToNetAdditions)[0];
+    const c2 = Object.keys(colorToPlayerToNetAdditions)[1];
+    const c1Player = getTopPlayer(colorToPlayerToNetAdditions[c1]);
+    const c2Player = getTopPlayer(colorToPlayerToNetAdditions[c2]);
+
+    const sumP1EqC1 =
+      new SequenceMatcher(null, verifiedP1, c1Player).ratio() +
+      new SequenceMatcher(null, verifiedP2, c2Player).ratio();
+    const sumP1EqC2 =
+      new SequenceMatcher(null, verifiedP1, c2Player).ratio() +
+      new SequenceMatcher(null, verifiedP2, c1Player).ratio();
+
+    const result: { [color: string]: string } = {};
+    if (sumP1EqC1 >= sumP1EqC2) {
+      result[c1] = verifiedP1;
+      result[c2] = verifiedP2;
+    } else {
+      result[c1] = verifiedP2;
+      result[c2] = verifiedP1;
+    }
+    return result;
+  }
+
+  return {};
 }

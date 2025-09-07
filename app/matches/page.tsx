@@ -11,6 +11,7 @@ type FilterParams = {
   tier?: string;
   week?: string;
   player?: string;
+  admin?: string;
 };
 
 type SQL = NeonQueryPromise<false, false, Record<string, any>[]>;
@@ -67,7 +68,12 @@ function getFilterSql(searchParams: FilterParams | undefined): SQL {
     )`
       : sql``;
 
-  return sql`${seasonSql} ${weekSql} ${tierSql} ${playerSql}`;
+  const missingTimestamps = searchParams?.admin === "missingTimestamps";
+  const missingTimestampsSql = missingTimestamps
+    ? sql`AND vod_url IS NOT NULL AND vod_url != '' AND vod_match_start_seconds IS NULL`
+    : sql``;
+
+  return sql`${seasonSql} ${weekSql} ${tierSql} ${playerSql} ${missingTimestampsSql}`;
 }
 
 async function fetchTotalPages(filterSql: SQL): Promise<number> {

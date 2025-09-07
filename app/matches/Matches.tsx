@@ -59,6 +59,13 @@ const DateFormatter = lazy(() => import("../DateFormatter"), {
   loading: () => <Skeleton height={8} />,
 });
 
+const ADMIN_FILTERS = [
+  {
+    value: "missingTimestamps",
+    label: "Missing Timestamps",
+  },
+];
+
 interface Player {
   name: string;
   color: BingosyncColor;
@@ -125,7 +132,8 @@ function getFilterHref(
   season: null | undefined | Season,
   tier: null | undefined | string,
   week: null | undefined | string,
-  player: undefined | string
+  player: undefined | string,
+  admin: null | undefined | string
 ): string {
   const params = new URLSearchParams(curParams);
 
@@ -152,6 +160,12 @@ function getFilterHref(
     params.delete("player");
   } else {
     params.set("player", player);
+  }
+
+  if (admin == null || admin == "") {
+    params.delete("admin");
+  } else {
+    params.set("admin", admin);
   }
 
   params.delete("page");
@@ -189,6 +203,13 @@ function getWeekFromParams(
 ): undefined | string {
   const week = params.get("week");
   return week == null || week === "" ? undefined : week;
+}
+
+function getAdminFromParams(
+  params: ReadonlyURLSearchParams
+): undefined | string {
+  const admin = params.get("admin");
+  return admin == null || admin === "" ? undefined : admin;
 }
 
 export default function Matches({ matches, totalPages }: Props) {
@@ -233,6 +254,9 @@ export default function Matches({ matches, totalPages }: Props) {
   const [player, setPlayer] = useState<undefined | string>(
     getPlayerFromParams(searchParams)
   );
+  const [admin, setAdmin] = useState<null | undefined | string>(
+    getAdminFromParams(searchParams)
+  );
 
   const isDirty =
     (getSeasonStr(season) ?? null) !== (searchParams.get("season") ?? null) ||
@@ -241,7 +265,9 @@ export default function Matches({ matches, totalPages }: Props) {
     (week == null || week === "" ? null : week) !==
       (searchParams.get("week") ?? null) ||
     (player == null || player === "" ? null : player) !==
-      (searchParams.get("player") ?? null);
+      (searchParams.get("player") ?? null) ||
+    (admin == null || admin === "" ? null : admin) !==
+      (searchParams.get("admin") ?? null);
 
   const viewingMatch =
     viewingId == null ? null : matches.find((match) => match.id === viewingId);
@@ -316,6 +342,16 @@ export default function Matches({ matches, totalPages }: Props) {
               placeholder="Filter by player"
               spellCheck={false}
             />
+            {isAdmin && (
+              <Select
+                style={{ width: "150px" }}
+                data={ADMIN_FILTERS}
+                clearable={true}
+                value={admin}
+                onChange={setAdmin}
+                placeholder="Admin filters"
+              />
+            )}
             <Button
               leftSection={<IconFilter size={16} />}
               component={Link}
@@ -326,7 +362,8 @@ export default function Matches({ matches, totalPages }: Props) {
                 season,
                 tier,
                 week,
-                player
+                player,
+                admin
               )}
             >
               Apply Filters

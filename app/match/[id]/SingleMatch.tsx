@@ -10,14 +10,21 @@ type Props = {
 
 export default function SingleMatch({ match }: Props) {
   return (
-    <Card
+    <div
       style={{
-        alignSelf: "center",
-        justifySelf: "center",
-        width: "fit-content",
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
       }}
     >
-      <MatchView match={match} />
-    </Card>
+      <Card
+        style={{
+          width: "fit-content",
+        }}
+      >
+        <MatchView match={match} />
+      </Card>
+    </div>
   );
 }

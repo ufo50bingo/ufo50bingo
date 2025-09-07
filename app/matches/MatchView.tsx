@@ -94,7 +94,7 @@ function getOverlays(
 }
 
 export default function MatchView({ match }: Props) {
-  const { revealedMatchIDs } = useAppContext();
+  const { hideByDefault, revealedMatchIDs } = useAppContext();
 
   const boardJson = match.boardJson;
   const board = useMemo<TBoard>(() => {
@@ -155,7 +155,7 @@ export default function MatchView({ match }: Props) {
       ? `${date} — ${getVariantText(match)}`
       : `${date} — Season ${leagueInfo.season}, Tier ${leagueInfo.tier}, ${leagueInfo.week}`;
 
-  const isRevealed = revealedMatchIDs.has(match.id);
+  const isRevealed = !hideByDefault || revealedMatchIDs.has(match.id);
 
   const refreshItem = (
     <Button

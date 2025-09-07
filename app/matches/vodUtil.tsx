@@ -155,6 +155,7 @@ export function getWarning(
           Including a timestamp enables extra features enables links to watch
           specific goals from the Changelog and integrations with{" "}
           <Anchor
+            size="sm"
             href="https://docs.google.com/spreadsheets/d/1bW8zjoR2bpr74w-dA4HHt04SqvGg1aj8FJeOs3EqdNE/edit?gid=0#gid=0"
             target="_blank"
           >

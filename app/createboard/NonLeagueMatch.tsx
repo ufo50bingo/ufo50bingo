@@ -32,6 +32,7 @@ import {
 import VariantHoverCard from "./VariantHoverCard";
 import createMatch from "./createMatch";
 import { db } from "../db";
+import Link from "next/link";
 
 const ROOM_PREFIX = "https://www.bingosync.com/room/";
 
@@ -61,6 +62,8 @@ export default function NonLeagueMatch() {
   const [isCreationInProgress, setIsCreationInProgress] = useState(false);
   const [url, setUrl] = useState("");
   const [error, setError] = useState<Error | null>(null);
+
+  const id = url.slice(ROOM_PREFIX.length);
 
   const isPublic = isPublicRaw && isLockout;
   const metadata = METADATA.find((d) => d.name === variant)!;
@@ -344,7 +347,10 @@ export default function NonLeagueMatch() {
           <a href={url} target="_blank">
             {url}
           </a>
-          .
+          .<br />
+          <Link href={`/match/${id}`} target="_blank">
+            Your Match results can be viewed here.
+          </Link>
         </Alert>
       )}
       {error != null && (

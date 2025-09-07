@@ -5,17 +5,34 @@ import { NeonQueryPromise } from "@neondatabase/serverless";
 
 const PAGE_SIZE = 20;
 
+type FilterParams = {
+  page?: string;
+  season?: string;
+  tier?: string;
+  week?: string;
+  player?: string;
+};
+
 type SQL = NeonQueryPromise<false, false, Record<string, any>[]>;
 
 export default async function MatchesFetcher(props: {
-  searchParams?: Promise<{
-    page?: string;
-    player?: string;
-    season?: string;
-  }>;
+  searchParams?: Promise<FilterParams>;
 }) {
   const sql = getSQl();
   const searchParams = await props.searchParams;
+  const filterSql = getFilterSql(searchParams);
+
+  const pageNumber = Number(searchParams?.page ?? "1");
+  const [totalPages, matches] = await Promise.all([
+    fetchTotalPages(filterSql),
+    fetchMatches(pageNumber, filterSql),
+  ]);
+  return <Matches matches={matches} totalPages={totalPages} />;
+}
+
+function getFilterSql(searchParams: FilterParams | undefined): SQL {
+  const sql = getSQl();
+
   const seasonStr = searchParams?.season;
   const season = seasonStr == null ? null : Number(seasonStr);
   const seasonSql =
@@ -24,6 +41,19 @@ export default async function MatchesFetcher(props: {
       : season == 0
       ? sql`AND league_season IS NULL`
       : sql`AND league_season = ${season}`;
+
+  const weekStr = searchParams?.week;
+  const weekSql =
+    weekStr == null || weekStr === ""
+      ? sql``
+      : sql`AND league_week = ${weekStr}`;
+
+  const tierStr = searchParams?.tier;
+  const tierSql =
+    tierStr == null || tierStr === ""
+      ? sql``
+      : sql`AND league_tier = ${tierStr}`;
+
   const playerStr = searchParams?.player;
   const player = playerStr == null ? null : playerStr.toLowerCase();
   const playerSql =
@@ -37,14 +67,7 @@ export default async function MatchesFetcher(props: {
     )`
       : sql``;
 
-  const filterSql = sql`${seasonSql} ${playerSql}`;
-
-  const pageNumber = Number(searchParams?.page ?? "1");
-  const [totalPages, matches] = await Promise.all([
-    fetchTotalPages(filterSql),
-    fetchMatches(pageNumber, filterSql),
-  ]);
-  return <Matches matches={matches} totalPages={totalPages} />;
+  return sql`${seasonSql} ${weekSql} ${tierSql} ${playerSql}`;
 }
 
 async function fetchTotalPages(filterSql: SQL): Promise<number> {

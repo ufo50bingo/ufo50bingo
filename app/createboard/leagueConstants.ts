@@ -147,4 +147,6 @@ export const ALL_PLAYERS: ReadonlyArray<string> = Object.keys(
   PLAYER_TO_TIER
 ).toSorted((a, b) => a.toLocaleLowerCase().localeCompare(b.toLowerCase()));
 
+export const ALL_TIERS = Object.keys(TIER_TO_PLAYERS);
+
 export const IS_LEAGUE_DISABLED = false;

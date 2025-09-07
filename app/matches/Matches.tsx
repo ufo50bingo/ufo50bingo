@@ -47,7 +47,9 @@ import { LeagueInfo } from "../createboard/createMatch";
 import Link from "next/link";
 import {
   ALL_PLAYERS,
+  ALL_TIERS,
   IS_LEAGUE_DISABLED,
+  WEEKS,
 } from "../createboard/leagueConstants";
 import { useMediaQuery } from "@mantine/hooks";
 import { db } from "../db";
@@ -120,22 +122,72 @@ function getFilterHref(
   pathname: string,
   curParams: ReadonlyURLSearchParams,
   season: null | undefined | Season,
+  tier: null | undefined | string,
+  week: null | undefined | string,
   player: undefined | string
 ): string {
   const params = new URLSearchParams(curParams);
+
   const seasonStr = getSeasonStr(season);
   if (seasonStr == null) {
     params.delete("season");
   } else {
     params.set("season", seasonStr);
   }
+
+  if (tier == null || tier === "") {
+    params.delete("tier");
+  } else {
+    params.set("tier", tier);
+  }
+
+  if (week == null || week === "") {
+    params.delete("week");
+  } else {
+    params.set("week", week);
+  }
+
   if (player == null || player == "") {
     params.delete("player");
   } else {
     params.set("player", player);
   }
+
   params.delete("page");
   return getHrefFromParams(pathname, params);
+}
+
+function getSeasonFromParams(params: ReadonlyURLSearchParams): null | Season {
+  const season = params.get("season");
+  switch (season) {
+    case "2":
+      return "Season 2";
+    case "0":
+      return "Non-League";
+    default:
+      return null;
+  }
+}
+
+function getPlayerFromParams(
+  params: ReadonlyURLSearchParams
+): undefined | string {
+  const player = params.get("player");
+  return player == null || player === "" ? undefined : player;
+}
+
+function getTierFromParams(
+  params: ReadonlyURLSearchParams
+): undefined | string {
+  const tier = params.get("tier");
+  return tier == null || tier === "" ? undefined : tier;
+}
+
+function getWeekFromParams(
+  params: ReadonlyURLSearchParams
+): undefined | string {
+  const week = params.get("week");
+  return week == null || week === "" ? undefined : week;
 }
 
 export default function Matches({ matches, totalPages }: Props) {
@@ -161,11 +213,25 @@ export default function Matches({ matches, totalPages }: Props) {
   const [editingVodId, setEditingVodId] = useState<null | string>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshingIDs, setRefreshingIDs] = useState<ReadonlyArray<string>>([]);
-  const [season, setSeason] = useState<null | undefined | Season>(null);
-  const [player, setPlayer] = useState<undefined | string>(undefined);
+  const [season, setSeason] = useState<null | undefined | Season>(
+    getSeasonFromParams(searchParams)
+  );
+  const [tier, setTier] = useState<null | undefined | string>(
+    getTierFromParams(searchParams)
+  );
+  const [week, setWeek] = useState<null | undefined | string>(
+    getWeekFromParams(searchParams)
+  );
+  const [player, setPlayer] = useState<undefined | string>(
+    getPlayerFromParams(searchParams)
+  );
 
   const isDirty =
     (getSeasonStr(season) ?? null) !== (searchParams.get("season") ?? null) ||
+    (tier == null || tier === "" ? null : tier) !==
+      (searchParams.get("tier") ?? null) ||
+    (week == null || week === "" ? null : week) !==
+      (searchParams.get("week") ?? null) ||
     (player == null || player === "" ? null : player) !==
       (searchParams.get("player") ?? null);
 
@@ -204,6 +270,7 @@ export default function Matches({ matches, totalPages }: Props) {
         </Alert>
         <Group>
           <Select
+            style={{ width: "150px" }}
             clearable={true}
             data={SEASONS}
             value={season}
@@ -211,6 +278,22 @@ export default function Matches({ matches, totalPages }: Props) {
               setSeason(newSeason as unknown as null | Season)
             }
             placeholder="Filter by season"
+          />
+          <Select
+            style={{ width: "150px" }}
+            clearable={true}
+            data={ALL_TIERS}
+            value={tier}
+            onChange={(newTier) => setTier(newTier)}
+            placeholder="Filter by tier"
+          />
+          <Select
+            style={{ width: "150px" }}
+            clearable={true}
+            data={WEEKS}
+            value={week}
+            onChange={(newWeek) => setWeek(newWeek)}
+            placeholder="Filter by week"
           />
           <Autocomplete
             clearable={true}
@@ -224,7 +307,14 @@ export default function Matches({ matches, totalPages }: Props) {
             leftSection={<IconFilter size={16} />}
             component={Link}
             disabled={!isDirty}
-            href={getFilterHref(pathname, searchParams, season, player)}
+            href={getFilterHref(
+              pathname,
+              searchParams,
+              season,
+              tier,
+              week,
+              player
+            )}
           >
             Apply Filters
           </Button>
@@ -434,38 +524,40 @@ export default function Matches({ matches, totalPages }: Props) {
             </Table.Tbody>
           </Table>
         </div>
-        <Group justify="space-between">
-          <Pagination
-            value={page}
-            total={totalPages}
-            withEdges
-            getItemProps={(pageNumber) => getPropsForPage(pageNumber)}
-            getControlProps={(control) => {
-              switch (control) {
-                case "first":
-                  return getPropsForPage(1);
-                case "last":
-                  return getPropsForPage(totalPages);
-                case "next":
-                  return getPropsForPage(
-                    page < totalPages ? page + 1 : totalPages
-                  );
-                case "previous":
-                  return getPropsForPage(page > 1 ? page - 1 : 1);
-              }
-            }}
-          />
-          <Button
-            onClick={async () => {
-              const unrevealedIds = matches
-                .filter((match) => !revealedMatchIDs.has(match.id))
-                .map((match) => ({ id: match.id }));
-              await db.revealedMatches.bulkAdd(unrevealedIds);
-            }}
-          >
-            Reveal all matches
-          </Button>
-        </Group>
+        {matches.length > 0 && (
+          <Group justify="space-between">
+            <Pagination
+              value={page}
+              total={totalPages}
+              withEdges
+              getItemProps={(pageNumber) => getPropsForPage(pageNumber)}
+              getControlProps={(control) => {
+                switch (control) {
+                  case "first":
+                    return getPropsForPage(1);
+                  case "last":
+                    return getPropsForPage(totalPages);
+                  case "next":
+                    return getPropsForPage(
+                      page < totalPages ? page + 1 : totalPages
+                    );
+                  case "previous":
+                    return getPropsForPage(page > 1 ? page - 1 : 1);
+                }
+              }}
+            />
+            <Button
+              onClick={async () => {
+                const unrevealedIds = matches
+                  .filter((match) => !revealedMatchIDs.has(match.id))
+                  .map((match) => ({ id: match.id }));
+                await db.revealedMatches.bulkAdd(unrevealedIds);
+              }}
+            >
+              Reveal all matches
+            </Button>
+          </Group>
+        )}
       </Stack>
       {viewingMatch != null && (
         <ResultModal

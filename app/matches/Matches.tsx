@@ -257,7 +257,7 @@ export default function Matches({ matches, totalPages }: Props) {
   // 525px is the width of the board, which is also the default width of the modal
   const isMobile = useMediaQuery("(max-width: 525px)");
 
-  if (!isMounted) {
+  if (!isMounted || (hideByDefault && revealedMatchIDs == null)) {
     return null;
   }
   return (
@@ -409,7 +409,7 @@ export default function Matches({ matches, totalPages }: Props) {
                   const vodLink = getVodLink(match, -90);
 
                   const isRevealed =
-                    !hideByDefault || revealedMatchIDs.has(match.id);
+                    !hideByDefault || revealedMatchIDs?.has(match.id);
 
                   return (
                     <Table.Tr key={match.id}>

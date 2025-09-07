@@ -187,6 +187,7 @@ async function updateMatch(
     WHERE id = ${id}
     RETURNING ${MATCH_FIELDS}`;
   revalidatePath("/matches");
+  revalidatePath(`/match/${id}`);
   try {
     const rawMatch = result[0];
     const match = getMatchFromRaw(rawMatch);

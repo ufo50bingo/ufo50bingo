@@ -50,7 +50,7 @@ import {
   IS_LEAGUE_DISABLED,
 } from "../createboard/leagueConstants";
 import { useMediaQuery } from "@mantine/hooks";
-const DateFormatter = lazy(() => import("./DateFormatter"), {
+const DateFormatter = lazy(() => import("../DateFormatter"), {
   ssr: false,
   loading: () => <Skeleton height={8} />,
 });
@@ -90,7 +90,7 @@ type Props = {
 
 const MS_IN_DAY = 1000 * 60 * 60 * 24;
 
-function isTooOld(dateCreated: number): boolean {
+export function isTooOld(dateCreated: number): boolean {
   return Date.now() - dateCreated * 1000 > MS_IN_DAY;
 }
 
@@ -351,7 +351,14 @@ export default function Matches({ matches, totalPages }: Props) {
                           ) : (
                             <Anchor
                               size="sm"
-                              onClick={() => setViewingId(match.id)}
+                              onClick={() => {
+                                setViewingId(match.id);
+                                window.history.pushState(
+                                  {},
+                                  "",
+                                  `/match/${match.id}`
+                                );
+                              }}
                             >
                               {match.name}
                             </Anchor>
@@ -451,7 +458,10 @@ export default function Matches({ matches, totalPages }: Props) {
         <ResultModal
           isMobile={isMobile}
           match={viewingMatch}
-          onClose={() => setViewingId(null)}
+          onClose={() => {
+            setViewingId(null);
+            window.history.back();
+          }}
         />
       )}
       {editingVodMatch != null && (

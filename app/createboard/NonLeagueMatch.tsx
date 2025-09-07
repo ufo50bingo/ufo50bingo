@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IconCheck, IconDots, IconExclamationMark } from "@tabler/icons-react";
 import {
   ActionIcon,

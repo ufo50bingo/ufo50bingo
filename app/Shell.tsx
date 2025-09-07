@@ -84,7 +84,10 @@ export default function Shell({ children }: Props) {
   const [isCollapsedMobile, setIsCollapsedMobile] = useState(true);
   const pathname = usePathname();
   const page = LINKS.find((data) => data.href === pathname);
-  const title = page?.text;
+  let title = page?.text;
+  if (title == null && pathname.startsWith("/match/")) {
+    title = "Matches";
+  }
 
   return (
     <AppShell
@@ -106,7 +109,7 @@ export default function Shell({ children }: Props) {
             hiddenFrom="sm"
           />
           <div>
-            <Image src="./logo.png" height={25} width={25} />
+            <Image src="/logo.png" height={25} width={25} />
           </div>
           <span>
             {title != null ? `UFO 50 Bingo — ${title}` : "UFO 50 Bingo"}
@@ -117,7 +120,10 @@ export default function Shell({ children }: Props) {
         {LINKS.map((data) => (
           <NavLink
             key={data.href}
-            active={data.href === pathname}
+            active={
+              data.href === pathname ||
+              (data.href === "/matches" && pathname.startsWith("/match/"))
+            }
             component={Link}
             href={data.href}
             leftSection={data.icon}

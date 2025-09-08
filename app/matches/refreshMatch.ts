@@ -183,7 +183,8 @@ async function updateMatch(
       opponent_score = ${opponentScore},
       board_json = ${JSON.stringify(board)},
       changelog_json = ${changelogJson},
-      is_board_visible = ${!isAllBlank}
+      is_board_visible = ${!isAllBlank},
+      last_refreshed = CURRENT_TIMESTAMP
     WHERE id = ${id}
     RETURNING ${MATCH_FIELDS}`;
   revalidatePath("/matches");

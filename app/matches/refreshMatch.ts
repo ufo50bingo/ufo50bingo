@@ -23,13 +23,87 @@ import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 
 type PlayerScores = { [name: string]: number };
 
+async function fetchExistingMatch(id: string): Promise<[TBoard, Changelog]> {
+  const sql = getSQl();
+  const result = await sql`
+    SELECT
+      board_json,
+      changelog_json
+    FROM match
+    WHERE id = ${id}
+  `;
+  const boardJson = result?.[0]?.board_json;
+  const changelogJson = result?.[0]?.changelog_json;
+  const board = boardJson != null ? JSON.parse(boardJson) : null;
+  const changelog = changelogJson != null ? JSON.parse(changelogJson) : null;
+  return [board, changelog];
+}
+
+function areBoardsEqual(a: TBoard, b: TBoard): boolean {
+  for (let i = 0; i < 25; i++) {
+    const aSquare = a[i];
+    const bSquare = b[i];
+    if (aSquare.color !== bSquare.color || aSquare.name !== bSquare.name) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function almostEqual(a: number, b: number): boolean {
+  return Math.abs(a - b) < 0.1;
+}
+
+function areChangelogsEqual(a: Changelog, b: Changelog): boolean {
+  const aRev = a.reveals;
+  const bRev = b.reveals;
+  if (aRev.length !== bRev.length) {
+    return false;
+  }
+  for (let i = 0; i < aRev.length; i++) {
+    if (
+      aRev[i].name !== bRev[i].name ||
+      !almostEqual(aRev[i].time, bRev[i].time)
+    ) {
+      return false;
+    }
+  }
+
+  const aChanges = a.changes;
+  const bChanges = b.changes;
+
+  if (aChanges.length !== bChanges.length) {
+    return false;
+  }
+  for (let i = 0; i < aChanges.length; i++) {
+    const aChange = aChanges[i];
+    const bChange = bChanges[i];
+    if (
+      aChange.color !== bChange.color ||
+      aChange.name !== bChange.name ||
+      aChange.index !== bChange.index ||
+      !almostEqual(aChange.time, bChange.time)
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
 export async function refreshMatch(id: string): Promise<void> {
-  const [boardJson, feedJson] = await Promise.all([
-    fetchBoard(id),
-    fetchFeed(id),
-  ]);
+  const [boardJson, feedJson, [existingBoard, existingChangelog]] =
+    await Promise.all([fetchBoard(id), fetchFeed(id), fetchExistingMatch(id)]);
   const board = getBoard(boardJson);
   const [changelog, playerColors] = getChangelogAndPlayers(feedJson);
+
+  if (
+    existingBoard != null &&
+    existingChangelog != null &&
+    areBoardsEqual(existingBoard, board) &&
+    areChangelogsEqual(existingChangelog, changelog)
+  ) {
+    return;
+  }
 
   const playerScores: PlayerScores = {};
   board.forEach((square) => {

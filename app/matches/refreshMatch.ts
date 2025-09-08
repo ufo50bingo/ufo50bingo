@@ -171,6 +171,11 @@ async function updateMatch(
   }
 
   const changelogJson = changelog != null ? JSON.stringify(changelog) : null;
+  const changes = changelog?.changes;
+  const lastColorTime =
+    changes != null && changes.length > 0
+      ? changes[changes.length - 1].time
+      : null;
 
   const result = await sql`UPDATE match
     SET
@@ -184,7 +189,8 @@ async function updateMatch(
       board_json = ${JSON.stringify(board)},
       changelog_json = ${changelogJson},
       is_board_visible = ${!isAllBlank},
-      last_refreshed = CURRENT_TIMESTAMP
+      last_refreshed = CURRENT_TIMESTAMP,
+      last_color_time = TO_TIMESTAMP(${lastColorTime})
     WHERE id = ${id}
     RETURNING ${MATCH_FIELDS}`;
   revalidatePath("/matches");

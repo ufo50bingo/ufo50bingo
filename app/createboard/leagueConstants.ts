@@ -147,6 +147,47 @@ const TIER_TO_PLAYERS: { [tier: string]: ReadonlyArray<string> } = {
   ],
 };
 
+const S1_PLAYERS = [
+  "A guy",
+  "amarettosis",
+  "boardsofhannahda",
+  "bob salad",
+  "bobbaro",
+  "CodeMeRight1",
+  "Cosmoing",
+  "CuthBucket",
+  "dahdumbguy",
+  "Dom",
+  "Flesh177",
+  "Flick",
+  "Frank",
+  "Frogmoss10",
+  "Ghost",
+  "glove",
+  "goose",
+  "Gurizuri",
+  "Hugo",
+  "Kanvas",
+  "KeiperDontCare",
+  "Khana",
+  "Marshmallow",
+  "Matt",
+  "may",
+  "Mordaak",
+  "Morzis",
+  "parchmentEng",
+  "Peter Peladon",
+  "pizzapartytime",
+  "RedRobot",
+  "sio",
+  "Smo",
+  "Spooty",
+  "stnfwds",
+  "tutes",
+  "Tyler233",
+  "Val1407",
+];
+
 export const PLAYER_TO_TIER: { [player: string]: string } = {};
 Object.keys(TIER_TO_PLAYERS).forEach((tier) => {
   TIER_TO_PLAYERS[tier].forEach((player) => {
@@ -154,10 +195,14 @@ Object.keys(TIER_TO_PLAYERS).forEach((tier) => {
   });
 });
 
-export const ALL_PLAYERS: ReadonlyArray<string> = Object.keys(
-  PLAYER_TO_TIER
-).toSorted((a, b) => a.toLocaleLowerCase().localeCompare(b.toLowerCase()));
+const PLAYERS_WITH_DUPES = [...Object.keys(PLAYER_TO_TIER), ...S1_PLAYERS];
+const UNIQUE_PLAYERS = [...new Set(PLAYERS_WITH_DUPES)];
 
-export const ALL_TIERS = Object.keys(TIER_TO_PLAYERS);
+export const ALL_PLAYERS: ReadonlyArray<string> = UNIQUE_PLAYERS.toSorted(
+  (a, b) => a.toLocaleLowerCase().localeCompare(b.toLowerCase())
+);
+
+// manually defining because tiers are different in S1 and S2
+export const ALL_TIERS = ["A", "B", "B1", "B2", "C", "C1", "C2"];
 
 export const IS_LEAGUE_DISABLED = false;

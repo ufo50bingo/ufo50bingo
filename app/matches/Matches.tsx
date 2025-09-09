@@ -105,7 +105,7 @@ export function isTooOld(dateCreated: number): boolean {
   return Date.now() - dateCreated * 1000 > MS_IN_DAY;
 }
 
-const SEASONS = ["Season 2", "Non-League"] as const;
+const SEASONS = ["Season 2", "Season 1", "Non-League"] as const;
 type Season = (typeof SEASONS)[number];
 
 function getHrefFromParams(pathname: string, params: URLSearchParams): string {
@@ -123,6 +123,8 @@ function getSeasonStr(
       return "0";
     case "Season 2":
       return "2";
+    case "Season 1":
+      return "1";
   }
 }
 

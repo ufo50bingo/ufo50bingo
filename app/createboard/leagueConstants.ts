@@ -145,7 +145,7 @@ const TIER_TO_PLAYERS: { [tier: string]: ReadonlyArray<string> } = {
     "Sleepy",
     "Vanstrummer",
   ],
-};
+} as const;
 
 const S1_PLAYERS = [
   "A guy",
@@ -187,6 +187,25 @@ const S1_PLAYERS = [
   "Tyler233",
   "Val1407",
 ];
+
+export const ALIASES: { [verified: string]: ReadonlyArray<string> } = {
+  amarettosis: ["vanilla"],
+  parchmentEng: ["parchment"],
+  Gurizuri: ["Guri"],
+  dahdumbguy: ["ddg"],
+  Cosmoing: ["Cosmo"],
+  boardsofhannahda: ["hannahda", "hannah"],
+  chocolatecake5000: ["choco"],
+  Val1407: ["Val"],
+  "A Ghost House": ["Ghost", "A Ghost"],
+  Flesh177: ["Flesh"],
+  frogmoss10: ["frogmoss"],
+  "Keeny Peeny Weeny": ["Keeny"],
+  "Aha! Eeeeerr Uhm Oh-oh!": ["Aha"],
+  "bosco!!": ["bosco", "boscosticc"],
+  aBeautifulDave: ["dave"],
+  Firelion348: ["firelion"],
+};
 
 export const PLAYER_TO_TIER: { [player: string]: string } = {};
 Object.keys(TIER_TO_PLAYERS).forEach((tier) => {

@@ -6,6 +6,8 @@ import {
   Changelog,
   PlayerToColors,
 } from "./parseBingosyncData";
+import { ALIASES } from "../createboard/leagueConstants";
+import { PlayerScores } from "./refreshMatch";
 
 const BINGO_LINES = [
   // rows
@@ -236,11 +238,20 @@ function getTopPlayer(playerToNetAdditiosn: {
   );
 }
 
+function getSimilarity(verifiedName: string, name: string): number {
+  const aliases = ALIASES[verifiedName] ?? [];
+  const allNames = [verifiedName, ...aliases];
+  const allScores = allNames.map((verifiedOrAlias) =>
+    new SequenceMatcher(null, verifiedOrAlias, name).ratio()
+  );
+  return Math.max(...allScores);
+}
+
 export function getColorToVerifiedName(
   changes: ReadonlyArray<Change>,
   verifiedP1: string,
   verifiedP2: string
-): {
+): null | {
   [color: string]: string;
 } {
   const board = Array(25).fill("blank");
@@ -270,11 +281,9 @@ export function getColorToVerifiedName(
     const c2Player = getTopPlayer(colorToPlayerToNetAdditions[c2]);
 
     const sumP1EqC1 =
-      new SequenceMatcher(null, verifiedP1, c1Player).ratio() +
-      new SequenceMatcher(null, verifiedP2, c2Player).ratio();
+      getSimilarity(verifiedP1, c1Player) + getSimilarity(verifiedP2, c2Player);
     const sumP1EqC2 =
-      new SequenceMatcher(null, verifiedP1, c2Player).ratio() +
-      new SequenceMatcher(null, verifiedP2, c1Player).ratio();
+      getSimilarity(verifiedP1, c2Player) + getSimilarity(verifiedP2, c1Player);
 
     const result: { [color: string]: string } = {};
     if (sumP1EqC1 >= sumP1EqC2) {
@@ -286,6 +295,30 @@ export function getColorToVerifiedName(
     }
     return result;
   }
+  return null;
+}
 
-  return {};
+export function getVerifiedPlayerToColors(
+  changes: ReadonlyArray<Change>,
+  leagueP1: string | null | undefined,
+  leagueP2: string | null | undefined
+): null | PlayerToColors {
+  if (leagueP1 == null || leagueP2 == null) {
+    return null;
+  }
+  const colorToVerifiedName = getColorToVerifiedName(
+    changes,
+    leagueP1,
+    leagueP2
+  );
+  if (colorToVerifiedName == null) {
+    return null;
+  }
+  const playerToColors: PlayerToColors = {};
+  Object.keys(colorToVerifiedName).forEach((color) => {
+    playerToColors[colorToVerifiedName[color]] = [
+      color as unknown as BingosyncColor,
+    ];
+  });
+  return playerToColors;
 }

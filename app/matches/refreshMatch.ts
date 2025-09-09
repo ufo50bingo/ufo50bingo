@@ -14,19 +14,29 @@ import {
   RawFeed,
 } from "./parseBingosyncData";
 import {
+  getColorToVerifiedName,
   getFirstBingoPlayer,
   getIsValid,
   getPlayerWithLeastRecentClaim,
+  getVerifiedPlayerToColors,
 } from "./analyzeMatch";
 import syncToGSheet from "./syncToGSheet";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 
-type PlayerScores = { [name: string]: number };
+export type PlayerScores = { [name: string]: number };
 
-async function fetchExistingMatch(id: string): Promise<[TBoard, Changelog]> {
+type ExistingMatch = {
+  leagueP1: string | null | undefined;
+  leagueP2: string | null | undefined;
+  board: TBoard;
+  changelog: Changelog;
+};
+async function fetchExistingMatch(id: string): Promise<ExistingMatch> {
   const sql = getSQl();
   const result = await sql`
     SELECT
+      league_p1,
+      league_p2,
       board_json,
       changelog_json
     FROM match
@@ -36,7 +46,12 @@ async function fetchExistingMatch(id: string): Promise<[TBoard, Changelog]> {
   const changelogJson = result?.[0]?.changelog_json;
   const board = boardJson != null ? JSON.parse(boardJson) : null;
   const changelog = changelogJson != null ? JSON.parse(changelogJson) : null;
-  return [board, changelog];
+  return {
+    leagueP1: result?.[0]?.league_p1,
+    leagueP2: result?.[0]?.league_p2,
+    board,
+    changelog,
+  };
 }
 
 function areBoardsEqual(a: TBoard, b: TBoard): boolean {
@@ -91,10 +106,18 @@ function areChangelogsEqual(a: Changelog, b: Changelog): boolean {
 }
 
 export async function refreshMatch(id: string): Promise<void> {
-  const [boardJson, feedJson, [existingBoard, existingChangelog]] =
-    await Promise.all([fetchBoard(id), fetchFeed(id), fetchExistingMatch(id)]);
+  const [
+    boardJson,
+    feedJson,
+    { leagueP1, leagueP2, board: existingBoard, changelog: existingChangelog },
+  ] = await Promise.all([
+    fetchBoard(id),
+    fetchFeed(id),
+    fetchExistingMatch(id),
+  ]);
   const board = getBoard(boardJson);
-  const [changelog, playerColors] = getChangelogAndPlayers(feedJson);
+  const cAndP = getChangelogAndPlayers(feedJson);
+  const changelog = cAndP[0];
 
   if (
     existingBoard != null &&
@@ -105,7 +128,19 @@ export async function refreshMatch(id: string): Promise<void> {
     return;
   }
 
+  const verifiedPlayerToColors = getVerifiedPlayerToColors(
+    changelog.changes,
+    leagueP1,
+    leagueP2
+  );
+  const playerColors = verifiedPlayerToColors ?? cAndP[1];
   const playerScores: PlayerScores = {};
+  if (verifiedPlayerToColors != null) {
+    // initialize to 0 in case this player didn't actually score a point
+    Object.keys(verifiedPlayerToColors).forEach((verifiedPlayer) => {
+      playerScores[verifiedPlayer] = 0;
+    });
+  }
   board.forEach((square) => {
     Object.keys(playerColors).map((name) => {
       if (playerColors[name].includes(square.color)) {

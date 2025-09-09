@@ -47,7 +47,7 @@ const WEEK_DATA = [
     end: WEEK_1_END + 10 * SEC_IN_WEEK,
   },
   {
-    name: "Thrid Place",
+    name: "Third Place",
     end: null,
   },
   {
@@ -59,7 +59,10 @@ const WEEK_DATA = [
 export const WEEKS = WEEK_DATA.map((data) => data.name);
 
 export function getCurrentWeek(): null | string {
-  return WEEK_DATA.find((data) => data.end != null && data.end * 1000 > Date.now())?.name ?? null;
+  return (
+    WEEK_DATA.find((data) => data.end != null && data.end * 1000 > Date.now())
+      ?.name ?? null
+  );
 }
 
 const TIER_TO_PLAYERS: { [tier: string]: ReadonlyArray<string> } = {

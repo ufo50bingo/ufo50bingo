@@ -61,10 +61,15 @@ const DateFormatter = lazy(() => import("../DateFormatter"), {
 
 const ADMIN_FILTERS = [
   {
+    value: "leagueMissingVods",
+    label: "League Missing VODs",
+  },
+  {
     value: "missingTimestamps",
     label: "Missing Timestamps",
   },
-];
+] as const;
+export type AdminFilter = (typeof ADMIN_FILTERS)[number]["value"];
 
 interface Player {
   name: string;

@@ -1,7 +1,7 @@
-import Matches, { Match } from "./Matches";
+import Matches, { AdminFilter, Match } from "./Matches";
 import getSQl from "../getSql";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
-import { NeonQueryPromise } from "@neondatabase/serverless";
+import { NeonQueryFunction, NeonQueryPromise } from "@neondatabase/serverless";
 
 const PAGE_SIZE = 20;
 
@@ -29,6 +29,18 @@ export default async function MatchesFetcher(props: {
     fetchMatches(pageNumber, filterSql),
   ]);
   return <Matches matches={matches} totalPages={totalPages} />;
+}
+
+function getAdminFilterSql(
+  adminFilter: AdminFilter,
+  sql: NeonQueryFunction<false, false>
+): SQL {
+  switch (adminFilter) {
+    case "missingTimestamps":
+      return sql`AND vod_url IS NOT NULL AND vod_url != '' AND vod_match_start_seconds IS NULL`;
+    case "leagueMissingVods":
+      return sql`AND league_season IS NOT NULL AND (vod_url IS NULL OR vod_url = '')`;
+  }
 }
 
 function getFilterSql(searchParams: FilterParams | undefined): SQL {
@@ -68,12 +80,13 @@ function getFilterSql(searchParams: FilterParams | undefined): SQL {
     )`
       : sql``;
 
-  const missingTimestamps = searchParams?.admin === "missingTimestamps";
-  const missingTimestampsSql = missingTimestamps
-    ? sql`AND vod_url IS NOT NULL AND vod_url != '' AND vod_match_start_seconds IS NULL`
-    : sql``;
+  const admin = searchParams?.admin;
+  const adminSql =
+    admin != null
+      ? getAdminFilterSql(admin as unknown as AdminFilter, sql)
+      : sql``;
 
-  return sql`${seasonSql} ${weekSql} ${tierSql} ${playerSql} ${missingTimestampsSql}`;
+  return sql`${seasonSql} ${weekSql} ${tierSql} ${playerSql} ${adminSql}`;
 }
 
 async function fetchTotalPages(filterSql: SQL): Promise<number> {

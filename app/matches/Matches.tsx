@@ -50,6 +50,7 @@ import {
   ALL_PLAYERS,
   ALL_TIERS,
   IS_LEAGUE_DISABLED,
+  PLAYERS_FOR_FILTER,
   WEEKS,
 } from "../createboard/leagueConstants";
 import { useMediaQuery } from "@mantine/hooks";
@@ -343,7 +344,7 @@ export default function Matches({ matches, totalPages }: Props) {
             />
             <Autocomplete
               clearable={true}
-              data={IS_LEAGUE_DISABLED ? undefined : ALL_PLAYERS}
+              data={IS_LEAGUE_DISABLED ? undefined : PLAYERS_FOR_FILTER}
               value={player}
               onChange={setPlayer}
               placeholder="Filter by player"

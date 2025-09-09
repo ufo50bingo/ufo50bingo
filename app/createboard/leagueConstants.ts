@@ -217,9 +217,14 @@ Object.keys(TIER_TO_PLAYERS).forEach((tier) => {
 const PLAYERS_WITH_DUPES = [...Object.keys(PLAYER_TO_TIER), ...S1_PLAYERS];
 const UNIQUE_PLAYERS = [...new Set(PLAYERS_WITH_DUPES)];
 
-export const ALL_PLAYERS: ReadonlyArray<string> = UNIQUE_PLAYERS.toSorted(
-  (a, b) => a.toLocaleLowerCase().localeCompare(b.toLowerCase())
-);
+export const ALL_PLAYERS: ReadonlyArray<string> = Object.keys(
+  PLAYER_TO_TIER
+).toSorted((a, b) => a.toLocaleLowerCase().localeCompare(b.toLowerCase()));
+
+export const PLAYERS_FOR_FILTER: ReadonlyArray<string> =
+  UNIQUE_PLAYERS.toSorted((a, b) =>
+    a.toLocaleLowerCase().localeCompare(b.toLowerCase())
+  );
 
 // manually defining because tiers are different in S1 and S2
 export const ALL_TIERS = ["A", "B", "B1", "B2", "C", "C1", "C2"];

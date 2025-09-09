@@ -48,8 +48,7 @@ export default function Resources() {
               href="https://docs.google.com/spreadsheets/d/1bW8zjoR2bpr74w-dA4HHt04SqvGg1aj8FJeOs3EqdNE/edit?gid=0#gid=0"
               target="_blank"
             >
-              Stats and VOD links for every goal completion from Bingo League
-              Season 1 and every Public match
+              Stats and VOD links for every goal completion from streamed matches
             </a>
           </List.Item>
         </List>

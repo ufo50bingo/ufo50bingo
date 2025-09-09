@@ -213,9 +213,11 @@ function removeMistakesForSquare(changes: Change[]): void {
       changes[indexOfFirstItem + 1].time - changes[indexOfFirstItem].time;
     const prevColor =
       indexOfFirstItem > 0 ? changes[indexOfFirstItem - 1].color : "blank";
-    // changes happened within 5 seconds, and second change canceled out
-    // the first change. So we can remove it
-    if (timeDiff < 5 && prevColor == changes[indexOfFirstItem + 1].color) {
+    // changes happened within 6 seconds, and second change canceled out
+    // the first change. So we can remove it.
+    // NOTE: Using < 6 instead of < 5 because the data from S1 only has
+    // 5s resolution, so it's impossible for changes to be < 5s apart
+    if (timeDiff < 6 && prevColor == changes[indexOfFirstItem + 1].color) {
       // remove the item at indexOfFirstItem and the one after
       changes.splice(indexOfFirstItem, 2);
       // rewind 2 so we're looking at the first item in another pair

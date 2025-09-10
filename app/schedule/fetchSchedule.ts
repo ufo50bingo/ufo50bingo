@@ -93,7 +93,6 @@ function fetchImplementation(
 ) {
   return fetch(input, {
     ...init,
-    next: { revalidate: 60 }, // revalidate once per minute
-    // cache: "force-cache",
+    cache: "no-cache",
   });
 }

@@ -12,7 +12,7 @@ export function CopyToDiscord({ children, matches }: Props) {
   return (
     <Group className={classes.container}>
       {children}
-      <Tooltip label="Copy with Discord formatting">
+      <Tooltip label="Copy daily schedule with Discord formatting">
         <ActionIcon
           className={classes.discordButton}
           size="sm"

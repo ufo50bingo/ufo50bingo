@@ -1,6 +1,7 @@
-import { Container, Card, Stack, Title, Alert } from "@mantine/core";
+import { Container, Card, Stack, Title, Alert, Anchor } from "@mantine/core";
 import { ScheduledMatch } from "./fetchSchedule";
 import ScheduledMatchView from "./ScheduledMatchView";
+import { revalidateSchedule } from "./revalidateSchedule";
 
 type Props = {
   schedule: ReadonlyArray<ScheduledMatch>;
@@ -39,14 +40,18 @@ export default function Schedule({ schedule }: Props) {
     <Container>
       <Stack>
         <Alert title="All times and dates are in your local timezone.">
-          All data here is synced from the{" "}
-          <a
+          Data is synced from the{" "}
+          <Anchor
+            size="sm"
             href="https://docs.google.com/spreadsheets/d/1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA/edit?gid=0#gid=0"
             target="_blank"
           >
             official Season 2 schedule
-          </a>
-          .
+          </Anchor>{" "}
+          once per hour. To force an immediate sync,{" "}
+          <Anchor size="sm" onClick={async () => await revalidateSchedule()}>
+            click here.
+          </Anchor>
         </Alert>
         <Card>
           <Stack>

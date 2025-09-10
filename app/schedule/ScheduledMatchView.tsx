@@ -1,4 +1,4 @@
-import { IconBrandTwitch } from "@tabler/icons-react";
+import { IconBrandTwitch, IconBrandYoutube } from "@tabler/icons-react";
 import { ScheduledMatch } from "./fetchSchedule";
 import { ActionIcon, Anchor, Text, Tooltip } from "@mantine/core";
 
@@ -29,9 +29,16 @@ export default function ScheduledMatchView({ match, includeDate }: Props) {
       <Tooltip label="No stream link found">{match.streamer}</Tooltip>
     ) : (
       <Anchor href={match.streamLink} target="_blank">
-        <ActionIcon size="sm" color="violet">
-          <IconBrandTwitch size={16} />
-        </ActionIcon>{" "}
+        {match.streamLink.includes("youtube") ||
+        match.streamLink.includes("youtu.be") ? (
+          <ActionIcon size="sm" color="red">
+            <IconBrandYoutube size={16} />
+          </ActionIcon>
+        ) : (
+          <ActionIcon size="sm" color="violet">
+            <IconBrandTwitch size={16} />
+          </ActionIcon>
+        )}{" "}
         {match.streamer}
       </Anchor>
     );

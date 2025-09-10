@@ -1,7 +1,16 @@
-import { Container, Card, Stack, Title, Alert, Anchor } from "@mantine/core";
+import {
+  Container,
+  Card,
+  Stack,
+  Title,
+  Alert,
+  Anchor,
+  ActionIcon,
+} from "@mantine/core";
 import { ScheduledMatch } from "./fetchSchedule";
 import ScheduledMatchView from "./ScheduledMatchView";
 import { revalidateSchedule } from "./revalidateSchedule";
+import { CopyToDiscord } from "./CopyToDiscord";
 
 type Props = {
   schedule: ReadonlyArray<ScheduledMatch>;
@@ -55,7 +64,9 @@ export default function Schedule({ schedule }: Props) {
         </Alert>
         <Card>
           <Stack>
-            <Title order={3}>Yesterday</Title>
+            <CopyToDiscord matches={yesterdayMatches}>
+              <Title order={3}>Yesterday</Title>
+            </CopyToDiscord>
             {yesterdayMatches.map((m) => (
               <ScheduledMatchView
                 key={m.name + m.time.toString()}
@@ -63,7 +74,9 @@ export default function Schedule({ schedule }: Props) {
                 includeDate={false}
               />
             ))}
-            <Title order={3}>Today</Title>
+            <CopyToDiscord matches={todayMatches}>
+              <Title order={3}>Today</Title>
+            </CopyToDiscord>
             {todayMatches.map((m) => (
               <ScheduledMatchView
                 key={m.name + m.time.toString()}
@@ -71,7 +84,9 @@ export default function Schedule({ schedule }: Props) {
                 includeDate={false}
               />
             ))}
-            <Title order={3}>Tomorrow</Title>
+            <CopyToDiscord matches={tomorrowMatches}>
+              <Title order={3}>Tomorrow</Title>
+            </CopyToDiscord>
             {tomorrowMatches.map((m) => (
               <ScheduledMatchView
                 key={m.name + m.time.toString()}

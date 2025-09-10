@@ -49,7 +49,12 @@ export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMat
     const streamer: string | null = streamerRow[0];
     const link: string | null = streamerRow[2];
     if (streamer != null && link != null) {
-      streamerToLink[streamer] = link;
+      if (!link.startsWith("https://")) {
+      }
+      streamerToLink[streamer] =
+        link.startsWith("https://") || link.startsWith("http://")
+          ? link
+          : "https://" + link;
     }
   });
 

@@ -1,4 +1,3 @@
-import { List } from "@mantine/core";
 import { fetchSchedule } from "./fetchSchedule";
 import ScheduleWrapper from "./ScheduleWrapper";
 

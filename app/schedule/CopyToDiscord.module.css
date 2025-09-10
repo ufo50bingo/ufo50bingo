@@ -1,0 +1,9 @@
+.container {}
+
+.discordButton {
+  display: none;
+}
+
+.container:hover .discordButton {
+  display: block;
+}

@@ -1,7 +1,8 @@
 import { google } from "googleapis";
 import { DateTime } from "luxon";
 
-const LEAGUE_SHEET_ID = "1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA";
+// const LEAGUE_SHEET_ID = "1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA";
+const LEAGUE_SHEET_ID = "1NdF25XWmISftQzATmOjSTLz-nE0dhwLIjbllgxDDTMk";
 
 export type ScheduledMatch = {
   name: string;
@@ -20,18 +21,26 @@ export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMat
   const sheet = google.sheets("v4");
 
   const [matchesResult, streamersResult] = await Promise.all([
-    sheet.spreadsheets.values.get({
-      spreadsheetId: LEAGUE_SHEET_ID,
-      range: `Matches!A1:G400`,
-      auth,
-      fields: "values",
-    }),
-    sheet.spreadsheets.values.get({
-      spreadsheetId: LEAGUE_SHEET_ID,
-      range: `Casters!B5:D50`,
-      auth,
-      fields: "values",
-    }),
+    sheet.spreadsheets.values.get(
+      {
+        spreadsheetId: LEAGUE_SHEET_ID,
+        range: `Matches!A1:G400`,
+        auth,
+        fields: "values",
+      },
+      {
+        fetchImplementation,
+      }
+    ),
+    sheet.spreadsheets.values.get(
+      {
+        spreadsheetId: LEAGUE_SHEET_ID,
+        range: `Casters!B5:D50`,
+        auth,
+        fields: "values",
+      },
+      { fetchImplementation }
+    ),
   ]);
 
   const streamerToLink: { [streamer: string]: string } = {};
@@ -76,4 +85,15 @@ export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMat
   }
   scheduled.sort((a, b) => a.time - b.time);
   return scheduled ?? null;
+}
+
+function fetchImplementation(
+  input: string | URL | globalThis.Request,
+  init?: RequestInit
+) {
+  return fetch(input, {
+    ...init,
+    next: { revalidate: 60 }, // revalidate once per minute
+    // cache: "force-cache",
+  });
 }

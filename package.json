@@ -24,6 +24,7 @@
     "difflib": "^0.2.4",
     "googleapis": "^159.0.0",
     "html2canvas": "^1.4.1",
+    "luxon": "^3.7.2",
     "next": "^15.4.6",
     "papaparse": "^5.5.3",
     "react": "19.1.0",
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/luxon": "^3.7.1",
     "@types/node": "^20.19.11",
     "@types/react": "^19",
     "@types/react-dom": "^19",

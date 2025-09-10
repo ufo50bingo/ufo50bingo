@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ReactNode, useState } from "react";
 import { AppShell, Burger, Group, Image, NavLink, Text } from "@mantine/core";
 import {
+  IconCalendarWeek,
   IconDeviceGamepad,
   IconExternalLink,
   IconFilter,
@@ -32,6 +33,11 @@ const LINKS = [
     href: "/matches",
     text: "Matches",
     icon: <IconScoreboard size={25} stroke={1.5} />,
+  },
+  {
+    href: "/schedule",
+    text: "Schedule",
+    icon: <IconCalendarWeek size={25} stroke={1.5} />,
   },
   {
     href: "/resources",

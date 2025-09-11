@@ -577,7 +577,7 @@ export const STANDARD = [
       types: ["pilotquest", "medium"],
     },
     {
-      name: "QUIBBLE RACE: WILD-BETS allowed; have $25,000",
+      name: "QUIBBLE RACE: WILD-BETS allowed; have $25,000+",
       types: ["quibblerace", "medium"],
     },
     { name: "QUIBBLE RACE: Win 5 bets", types: ["quibblerace", "medium"] },
@@ -1019,7 +1019,7 @@ export const STANDARD = [
       name: "RAKSHASA: Revive yourself 6 times in one run",
       types: ["rakshasa", "hard"],
     },
-    { name: "RAKSHASA: Score 25,000 points", types: ["rakshasa", "hard"] },
+    { name: "RAKSHASA: Score 25,000+ points", types: ["rakshasa", "hard"] },
     { name: "MINI & MAX: Collect a big shiny", types: ["miniandmax", "hard"] },
     {
       name: "MINI & MAX: Collect 150 shinies without obtaining the Shrink Potion",

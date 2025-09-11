@@ -101,7 +101,9 @@ const OLD_GOAL_TO_NEW_GOAL: { [key: string]: GoalName } = {
     "PINGOLF: Score -2 or better on 3 different courses",
   "PINGOLF: Score under par on 5 courses": "PINGOLF: Under par on 5 courses",
   "QUIBBLE RACE: WILD-BETS allowed; Have $25,000":
-    "QUIBBLE RACE: WILD-BETS allowed; have $25,000",
+    "QUIBBLE RACE: WILD-BETS allowed; have $25,000+",
+  "QUIBBLE RACE: WILD-BETS allowed; have $25,000":
+    "QUIBBLE RACE: WILD-BETS allowed; have $25,000+",
   "RAIL HEIST: GOOD-SPUR allowed; Beat Fowl Business with all chickens and lawmen killed":
     "RAIL HEIST: GOOD-SPUR allowed; beat Fowl Business with all chickens and lawmen killed",
   "RAIL HEIST: LAZY-COPS allowed; Beat Root Around while destroying every barrel":
@@ -110,7 +112,8 @@ const OLD_GOAL_TO_NEW_GOAL: { [key: string]: GoalName } = {
     "RAIL HEIST: LAZY-COPS allowed; beat Vengeance! and The Final Score",
   "RAKSHASA: Beat the first Mid Boss w/ 4+ skulls":
     "RAKSHASA: Beat the green bridge mini-boss by arriving w/ 4+ skulls",
-  "RAKSHASA: Score 25,000": "RAKSHASA: Score 25,000 points",
+  "RAKSHASA: Score 25,000": "RAKSHASA: Score 25,000+ points",
+  "RAKSHASA: Score 25,000 points": "RAKSHASA: Score 25,000+ points",
   "ROCK ON! ISLAND: Beat Initial Encounter w/o cavemen":
     "ROCK ON! ISLAND: Beat Initial Encounter without cavemen",
   "ROCK ON! ISLAND: CLUB-PASS allowed; Beat Wasteland without chickens":

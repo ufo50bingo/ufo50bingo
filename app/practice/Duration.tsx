@@ -3,11 +3,12 @@ type DurationProps = {
 };
 
 export default function Duration({ duration }: DurationProps) {
-  const totalSeconds = Math.abs(duration / 1000);
+  // round to nearest 10th of a second
+  const totalSeconds = Math.round(Math.abs(duration / 100)) / 10;
   const totalMinutes = Math.floor(totalSeconds / 60);
   const hours = Math.floor(totalMinutes / 60);
-  const minutes = totalMinutes - hours * 60;
-  const seconds = totalSeconds - totalMinutes * 60;
+  let minutes = totalMinutes - hours * 60;
+  let seconds = totalSeconds - totalMinutes * 60;
 
   let finalStr = seconds.toFixed(1).padStart(4, "0");
   finalStr =

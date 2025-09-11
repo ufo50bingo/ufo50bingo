@@ -56,7 +56,7 @@ export default function Resources() {
         <List>
           <List.Item>
             <a
-              href="https://docs.google.com/document/d/1VRHljWeJ3lHuN3ou-9R0kMgwoZeCcaEPBsRCI1nWEig/edit?tab=t.0#heading=h.us0d6jom1jp"
+              href="https://docs.google.com/document/d/11kIVxD6NOsoXXXdv22owLPM_nj5oKiCpY53K418muW8/edit?usp=sharing"
               target="_blank"
             >
               Standard Rules
@@ -65,7 +65,7 @@ export default function Resources() {
           </List.Item>
           <List.Item>
             <a
-              href="https://docs.google.com/document/d/11kIVxD6NOsoXXXdv22owLPM_nj5oKiCpY53K418muW8/edit?usp=sharing"
+              href="https://docs.google.com/document/d/1XyEh20vdf7jtfYW94iIRHmf5YOQ0B-lZ2yh9lJjMMbM/edit?usp=sharing"
               target="_blank"
             >
               Official goal list
@@ -98,4 +98,5 @@ export default function Resources() {
     </Container>
   );
 }
+
 

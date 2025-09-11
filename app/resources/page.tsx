@@ -65,7 +65,7 @@ export default function Resources() {
           </List.Item>
           <List.Item>
             <a
-              href="https://docs.google.com/document/d/1XyEh20vdf7jtfYW94iIRHmf5YOQ0B-lZ2yh9lJjMMbM/edit?tab=t.kp6kpouepb5x#heading=h.j62u031oka5t"
+              href="https://docs.google.com/document/d/11kIVxD6NOsoXXXdv22owLPM_nj5oKiCpY53K418muW8/edit?usp=sharing"
               target="_blank"
             >
               Official goal list
@@ -98,3 +98,4 @@ export default function Resources() {
     </Container>
   );
 }
+

@@ -116,6 +116,35 @@ export function getFirstBingoPlayer(
   return validBingoLines.length > 0 ? validBingoLines[0].player : null;
 }
 
+export function getColorWithLeastRecentClaim(
+  changes: ReadonlyArray<Change>,
+  colors: ReadonlyArray<BingosyncColor>
+): string {
+  // time that color most recently claimed each square
+  // has null if square is not claimed. Set back to null
+  // if square is claimed and then unclaimed.
+  // The "time" is the position in the changelog
+  const colorClaimTimes: { [color: string]: (null | number)[] } = {};
+  colors.forEach((color) => (colorClaimTimes[color] = Array(25).fill(null)));
+
+  changes.forEach((change, changePosition) => {
+    if (change.color === "blank") {
+      colors.forEach((color) => {
+        colorClaimTimes[color][change.index] = null;
+      });
+      return;
+    }
+    colorClaimTimes[change.color][change.index] = changePosition;
+  });
+
+  const finalClaimTimes = colors.map((color) =>
+    Math.max(...colorClaimTimes[color].filter((time) => time != null))
+  );
+  const minClaimTime = Math.min(...finalClaimTimes);
+  const indexOfBest = finalClaimTimes.findIndex((v) => v === minClaimTime);
+  return colors[indexOfBest];
+}
+
 export function getPlayerWithLeastRecentClaim(
   changes: ReadonlyArray<Change>,
   players: PlayerToColors

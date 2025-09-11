@@ -80,6 +80,8 @@ const OLD_GOAL_TO_NEW_GOAL: { [key: string]: GoalName } = {
     "MORTOL: OPEN-TOMB allowed; clear all world 3 levels",
   "MORTOL II: Defeat all three mini bosses without using the Bomber":
     "MORTOL II: Defeat all three mini bosses without damaging them as Bomber",
+  "MORTOL II: In one run, kill 6 chickens without using the Bomber":
+    "MORTOL II: In one run, kill 6 chickens without damaging them as Bomber",
   "ONION DELIVERY: Complete the 4 days in a run with 7+ deliveries each":
     "ONION DELIVERY: Complete 4 days in a run with 7+ deliveries each",
   "OVERBOLD: Cherry disk": "OVERBOLD: Cherry Disk",

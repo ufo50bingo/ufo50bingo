@@ -185,7 +185,7 @@ export const STANDARD = [
     },
     { name: "DIVERS: Reach level 3", types: ["divers", "easy"] },
     {
-      name: "MORTOL II: In one run, kill 6 chickens without using the Bomber",
+      name: "MORTOL II: In one run, kill 6 chickens without damaging them as Bomber",
       types: ["mortolii", "easy"],
     },
     {

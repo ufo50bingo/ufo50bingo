@@ -4,6 +4,7 @@ import { google } from "googleapis";
 import { Changelog, TBoard } from "./parseBingosyncData";
 import {
   getChangesWithoutMistakes,
+  getColorToVerifiedName,
   getMatchStartTime,
   getSquareCompletionRanges,
 } from "./analyzeMatch";
@@ -48,7 +49,28 @@ export default async function syncToGSheet(match: Match): Promise<void> {
   };
 
   const changes = getChangesWithoutMistakes(changelog.changes);
-  const ranges = getSquareCompletionRanges(matchStartTime, changes);
+  let colorToVerifiedName = null;
+  if (match.leagueInfo != null) {
+    colorToVerifiedName = getColorToVerifiedName(
+      changelog.changes,
+      match.leagueInfo.p1,
+      match.leagueInfo.p2
+    );
+  }
+  const changesWithCorrectedNames =
+    colorToVerifiedName != null
+      ? changes.map((change) => {
+          const correctedName = colorToVerifiedName[change.color];
+          return {
+            ...change,
+            name: correctedName ?? change.name,
+          };
+        })
+      : changes;
+  const ranges = getSquareCompletionRanges(
+    matchStartTime,
+    changesWithCorrectedNames
+  );
   const rows = ranges
     .map((range, squareIndex) => {
       if (range == null) {
@@ -57,7 +79,11 @@ export default async function syncToGSheet(match: Match): Promise<void> {
       const goal = board[squareIndex].name;
       const player = range[0];
       const opponent =
-        player === match.winner?.name ? match.opponent?.name ?? "" : player;
+        player === match.winner?.name
+          ? match.opponent?.name ?? ""
+          : player === match.opponent?.name
+          ? match.winner?.name ?? ""
+          : "";
       // For Non-League, sheet is
       // Room Name,	Date,	Player,	Opponent,	Game,	Goal,	Time (mins),	Start,	End, Match ID
       // For League, sheet is

@@ -388,7 +388,8 @@ export const SPICY = [
 	{"name": "ALPHA TRILOGY II: Cherry Disk Velgress, Overbold, and Quibble Race as Alpha", "types": ["general", "general"]},
 {"name": "ARCADE ACE II: Cherry Disk any 4 of the 16 “ARCADE” games", "types": ["general", "general"]},
 {"name": "RACER II: Cherry Disk Paint Chase, The Big Bell Race, and Quibble Race", "types": ["general", "general"]},
-{"name": "DAY JOB II: Earn the gift in any 2 and gold disk in the third: Rail Heist, Bug Hunter, Onion Delivery"},
+{"name": "DAY JOB II: Earn the gift in any 2 and gold disk in the third: Rail Heist, Bug Hunter, Onion Delivery", "types": ["general", "general"]},
 {"name": "PILOT PARTY II: Collect the Gift in ALL 6 games: Campanella 1/2/3, Planet Zoldath, Pilot Quest, The Big Bell Race", "types": ["general", "general"]}
   ]
 ] as const;
+

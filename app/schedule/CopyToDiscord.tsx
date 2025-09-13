@@ -23,7 +23,7 @@ export function CopyToDiscord({ children, matches }: Props) {
               matches
                 .map(
                   (match) =>
-                    `<t:${match.time}:t> — ${match.tier} — ${match.name} — [${match.streamer}](${match.streamLink})`
+                    `<t:${match.time}:t> — ${match.tier} — ${match.name} — [${match.streamer}](<${match.streamLink}>)`
                 )
                 .join("\n")
             )

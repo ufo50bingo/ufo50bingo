@@ -68,6 +68,8 @@ const OLD_GOAL_TO_NEW_GOAL: { [key: string]: GoalName } = {
   "HYPER CONTENDER: Win 4 fights in a row without rematches on default ring settings":
     "HYPER CONTENDER: Win 4 fights in one tournament on default ring settings",
   "Increase your max HP in 6 games": "Increase your base HP in 6 games",
+  "LORDS OF DISKONIA: Destroy 2+ enemy disks in one move":
+    "LORDS OF DISKONIA: Destroy 2+ enemy disks in one shot",
   "MAGIC GARDEN: Use OVER-GROW; Save 30+ oppies in a run":
     "MAGIC GARDEN: Use OVER-GROW; save 30+ oppies in a run",
   "METROIDVANIA: Collect Upgrades: 3 in Porgy, 2 in Vainger, 1 in Golfaria":
@@ -78,6 +80,8 @@ const OLD_GOAL_TO_NEW_GOAL: { [key: string]: GoalName } = {
     "MORTOL: OPEN-TOMB allowed; clear all world 2 levels",
   "MORTOL: OPEN-TOMB allowed; Clear all world 3 levels":
     "MORTOL: OPEN-TOMB allowed; clear all world 3 levels",
+  "MORTOL II: Activate all three switches without ever using Scout":
+    "MORTOL II: Activate all three switches without using portals or double jumps",
   "MORTOL II: Defeat all three mini bosses without using the Bomber":
     "MORTOL II: Defeat all three mini bosses without damaging them as Bomber",
   "MORTOL II: In one run, kill 6 chickens without using the Bomber":

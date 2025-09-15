@@ -432,7 +432,7 @@ export const STANDARD = [
       types: ["lordsofdiskonia", "medium"],
     },
     {
-      name: "LORDS OF DISKONIA: Destroy 2+ enemy disks in one move",
+      name: "LORDS OF DISKONIA: Destroy 2+ enemy disks in one shot",
       types: ["lordsofdiskonia", "medium"],
     },
     {
@@ -1146,7 +1146,7 @@ export const STANDARD = [
       types: ["pingolf", "veryhard"],
     },
     {
-      name: "MORTOL II: Activate all three switches without ever using Scout",
+      name: "MORTOL II: Activate all three switches without using portals or double jumps",
       types: ["mortolii", "veryhard"],
     },
     { name: "FIST HELL: Clear the 4th scare", types: ["fisthell", "veryhard"] },
@@ -1329,3 +1329,4 @@ export const STANDARD = [
     },
   ],
 ] as const;
+

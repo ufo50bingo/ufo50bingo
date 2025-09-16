@@ -210,15 +210,35 @@ export function getSquareCompletionRanges(
   return finalTimes;
 }
 
+function getChangesWithoutDuplicates(
+  changes: ReadonlyArray<Change>
+): ReadonlyArray<Change> {
+  return changes.filter((change, idx) => {
+    if (idx === 0) {
+      return true;
+    }
+    const prevChange = changes[idx - 1];
+    return (
+      prevChange.color !== change.color ||
+      prevChange.name !== change.name ||
+      prevChange.index !== change.index ||
+      Math.abs(change.time - prevChange.time) > 1
+    );
+  });
+}
+
 // if a square has its color changed from X to Y then back to X within 5 seconds,
 // it's considered a mistake and both changes are removed
+// bingosync also sometimes includes the same item in the the feed with very
+// slightly different timestamps, so remove those as well
 export function getChangesWithoutMistakes(
   changes: ReadonlyArray<Change>
 ): ReadonlyArray<Change> {
+  const withouDuplicates = getChangesWithoutDuplicates(changes);
   const changesBySquare: Change[][] = Array(25)
     .fill(null)
     .map((_) => []);
-  changes.forEach((change) => {
+  withouDuplicates.forEach((change) => {
     changesBySquare[change.index].push(change);
   });
   changesBySquare.forEach((changesForSquare) =>

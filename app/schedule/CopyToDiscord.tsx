@@ -22,8 +22,14 @@ export function CopyToDiscord({ children, matches }: Props) {
             navigator.clipboard.writeText(
               matches
                 .map(
-                  (match) =>
-                    `<t:${match.time}:t> — ${match.tier} — ${match.name} — [${match.streamer}](<${match.streamLink}>)`
+                  (match) => {
+                    const stream = match.streamer != null && match.streamer != '' && match.streamLink != null && match.streamLink != ''
+                      ? `[${match.streamer}](<${match.streamLink}>)`
+                      : match.streamer != null && match.streamer != ''
+                        ? match.streamer
+                        : 'No streamer yet';
+                    return `<t:${match.time}:t> — ${match.tier} — ${match.name} — ${stream}`;
+                  }
                 )
                 .join("\n")
             )

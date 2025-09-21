@@ -216,7 +216,7 @@ export async function refreshMatch(id: string): Promise<void> {
               ? colorToPlayers[bestOpponentColor].join(" / ")
               : null,
             bestOpponentColor,
-            bestOpponentColor != null ? colorScores[bingoColor] : null,
+            bestOpponentColor != null ? colorScores[bestOpponentColor] : null,
             true
           );
         }
@@ -449,7 +449,7 @@ async function updateMatchBase(
     const rawMatch = result[0];
     const match = getMatchFromRaw(rawMatch);
     await syncToGSheet(match);
-  } catch {}
+  } catch { }
 }
 
 async function fetchFeed(id: string): Promise<RawFeed> {

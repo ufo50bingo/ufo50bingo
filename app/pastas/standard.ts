@@ -440,7 +440,7 @@ export const STANDARD = [
       types: ["cyberowls", "medium"],
     },
     {
-      name: "CYBER OWLS: GETM-EOUT allowed; rescue each owl in the mini-game",
+      name: "CYBER OWLS: GETM-EOUT allowed; Beat the rescue game using each owl",
       types: ["cyberowls", "medium"],
     },
   ],
@@ -1329,3 +1329,4 @@ export const STANDARD = [
     },
   ],
 ] as const;
+

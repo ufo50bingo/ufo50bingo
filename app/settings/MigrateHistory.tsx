@@ -50,7 +50,9 @@ const OLD_GOAL_TO_NEW_GOAL: { [key: string]: GoalName } = {
   "COMBATANTS: ANTS-ANTS allowed; Beat ‘This Is It’":
     "COMBATANTS: ANTS-ANTS allowed; beat ‘This Is It’",
   "CYBER OWLS: GETM-EOUT allowed; Rescue each owl in the mini-game":
-    "CYBER OWLS: GETM-EOUT allowed; rescue each owl in the mini-game",
+    "CYBER OWLS: GETM-EOUT allowed; Beat the rescue game using each owl",
+  "CYBER OWLS: GETM-EOUT allowed; rescue each owl in the mini-game":
+    "CYBER OWLS: GETM-EOUT allowed; Beat the rescue game using each owl",
   "CYBER OWLS: HAWK-BASE allowed; Beat Antarctica":
     "CYBER OWLS: HAWK-BASE allowed; beat Antarctica",
   "DEVILITION: Beat three levels while placing the maximum number of pieces each round":

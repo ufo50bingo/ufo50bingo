@@ -14,7 +14,7 @@ type FilterParams = {
   admin?: string;
 };
 
-type SQL = NeonQueryPromise<false, false, Record<string, any>[]>;
+export type SQL = NeonQueryPromise<false, false, Record<string, any>[]>;
 
 export default async function MatchesFetcher(props: {
   searchParams?: Promise<FilterParams>;

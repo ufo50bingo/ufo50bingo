@@ -8,11 +8,12 @@ import {
   TBoard,
   Changelog,
   getBoard,
-  getChangelogAndPlayers,
   PlayerToColors,
   RawBoard,
   RawFeed,
   BingosyncColor,
+  getChangelog,
+  getPlayerColors,
 } from "./parseBingosyncData";
 import {
   getColorWithLeastRecentClaim,
@@ -23,6 +24,7 @@ import {
 } from "./analyzeMatch";
 import syncToGSheet from "./syncToGSheet";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
+import { SQL } from "./page";
 
 export type PlayerScores = { [name: string]: number };
 
@@ -117,8 +119,7 @@ export async function refreshMatch(id: string): Promise<void> {
     fetchExistingMatch(id),
   ]);
   const board = getBoard(boardJson);
-  const cAndP = getChangelogAndPlayers(feedJson);
-  const changelog = cAndP[0];
+  const changelog = getChangelog(feedJson);
 
   if (
     existingBoard != null &&
@@ -129,12 +130,115 @@ export async function refreshMatch(id: string): Promise<void> {
     return;
   }
 
+  const result = getResult(board, changelog, leagueP1, leagueP2);
+  const isAllBlank = board.every((square) => square.color === "blank");
+
+  const changelogJson = changelog != null ? JSON.stringify(changelog) : null;
+  const changes = changelog?.changes;
+  const lastColorTime =
+    changes != null && changes.length > 0
+      ? changes[changes.length - 1].time
+      : null;
+
+  const sql = getSql(false);
+  const sqlResult = await sql`
+    UPDATE match
+    SET
+      ${getResultSql(result)},
+      board_json = ${JSON.stringify(board)},
+      changelog_json = ${changelogJson},
+      is_board_visible = ${!isAllBlank},
+      last_refreshed = CURRENT_TIMESTAMP,
+      last_color_time = TO_TIMESTAMP(${lastColorTime})
+    WHERE id = ${id}
+    RETURNING ${MATCH_FIELDS}`;
+
+  revalidatePath("/matches");
+  revalidatePath(`/match/${id}`);
+  try {
+    const rawMatch = sqlResult[0];
+    const match = getMatchFromRaw(rawMatch);
+    await syncToGSheet(match);
+  } catch {}
+}
+
+async function fetchBoard(id: string): Promise<RawBoard> {
+  const boardResult = await fetch(
+    `https://www.bingosync.com/room/${id}/board`,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return await boardResult.json();
+}
+
+type MatchResult = {
+  winnerName: string;
+  winnerColor: string;
+  winnerScore: number;
+  winnerBingo: boolean;
+  opponentName: string | null;
+  opponentColor: string | null;
+  opponentScore: number | null;
+};
+
+function getResultSql(result: null | MatchResult): SQL {
+  return getSQl()`
+      winner_name = ${result?.winnerName},
+      winner_color = ${result?.winnerColor},
+      winner_score = ${result?.winnerScore},
+      winner_bingo = ${result?.winnerBingo ?? false},
+      opponent_name = ${result?.opponentName},
+      opponent_color = ${result?.opponentColor},
+      opponent_score = ${result?.opponentScore}
+  `;
+}
+
+function getStandardResult(
+  winnerName: string,
+  opponentName: string | null,
+  players: PlayerToColors,
+  scores: PlayerScores,
+  winnerBingo: boolean
+): MatchResult {
+  const winnerColor = players[winnerName].join(" ");
+  const winnerScore = scores[winnerName];
+
+  let opponentColor: null | string = null;
+  let opponentScore: null | number = null;
+  if (opponentName != null) {
+    opponentColor = players[opponentName].join(" ");
+    opponentScore = scores[opponentName];
+  }
+
+  return {
+    winnerName,
+    winnerColor,
+    winnerScore,
+    winnerBingo,
+    opponentName,
+    opponentColor,
+    opponentScore,
+  };
+}
+
+function getResult(
+  board: TBoard,
+  changelog: Changelog,
+  leagueP1: string | null | undefined,
+  leagueP2: string | null | undefined
+): null | MatchResult {
   const verifiedPlayerToColors = getVerifiedPlayerToColors(
     changelog.changes,
     leagueP1,
     leagueP2
   );
-  const playerColors = verifiedPlayerToColors ?? cAndP[1];
+  const playerColors =
+    verifiedPlayerToColors ?? getPlayerColors(changelog.changes);
   const playerScores: PlayerScores = {};
   if (verifiedPlayerToColors != null) {
     // initialize to 0 in case this player didn't actually score a point
@@ -156,16 +260,7 @@ export async function refreshMatch(id: string): Promise<void> {
 
   const isValid = getIsValid(board, changelog["changes"]);
   if (!isValid || playerEntries.length === 0) {
-    return await updateMatch(
-      id,
-      board,
-      null,
-      null,
-      null,
-      playerColors,
-      playerScores,
-      false
-    );
+    return null;
   }
 
   const bingoPlayer = getFirstBingoPlayer(changelog["changes"], playerColors);
@@ -205,50 +300,43 @@ export async function refreshMatch(id: string): Promise<void> {
           const bestOpponentColor =
             colorEntries.find(([color, _]) => color !== bingoColor)?.[0] ??
             null;
-          return await updateMatchBase(
-            id,
-            board,
-            changelog,
-            colorToPlayers[bingoColor].join(" / "),
-            bingoColor,
-            colorScores[bingoColor],
-            bestOpponentColor != null
-              ? colorToPlayers[bestOpponentColor].join(" / ")
-              : null,
-            bestOpponentColor,
-            bestOpponentColor != null ? colorScores[bestOpponentColor] : null,
-            true
-          );
+          return {
+            winnerName: colorToPlayers[bingoColor].join(" / "),
+            winnerColor: bingoColor,
+            winnerScore: colorScores[bingoColor],
+            winnerBingo: true,
+            opponentName:
+              bestOpponentColor != null
+                ? colorToPlayers[bestOpponentColor].join(" / ")
+                : null,
+            opponentColor: bestOpponentColor,
+            opponentScore:
+              bestOpponentColor != null ? colorScores[bestOpponentColor] : null,
+          };
         }
         if (colorEntries.length === 1) {
-          return await updateMatchBase(
-            id,
-            board,
-            changelog,
-            colorToPlayers[colorEntries[0][0]].join(" / "),
-            colorEntries[0][0],
-            colorScores[colorEntries[0][0]],
-            null,
-            null,
-            null,
-            false
-          );
+          return {
+            winnerName: colorToPlayers[colorEntries[0][0]].join(" / "),
+            winnerColor: colorEntries[0][0],
+            winnerScore: colorScores[colorEntries[0][0]],
+            winnerBingo: false,
+            opponentName: null,
+            opponentColor: null,
+            opponentScore: null,
+          };
         }
         const bestScore = colorEntries[0][1];
         const secondBestScore = colorEntries[1][1];
         if (bestScore > secondBestScore) {
-          return await updateMatchBase(
-            id,
-            board,
-            changelog,
-            colorToPlayers[colorEntries[0][0]].join(" / "),
-            colorEntries[0][0],
-            colorScores[colorEntries[0][0]],
-            colorToPlayers[colorEntries[1][0]].join(" / "),
-            colorEntries[1][0],
-            colorScores[colorEntries[1][0]],
-            false
-          );
+          return {
+            winnerName: colorToPlayers[colorEntries[0][0]].join(" / "),
+            winnerColor: colorEntries[0][0],
+            winnerScore: colorScores[colorEntries[0][0]],
+            winnerBingo: false,
+            opponentName: colorToPlayers[colorEntries[1][0]].join(" / "),
+            opponentColor: colorEntries[1][0],
+            opponentScore: colorScores[colorEntries[1][0]],
+          };
         }
         const tiedColors = colorEntries
           .filter((entry) => entry[1] === bestScore)
@@ -260,18 +348,15 @@ export async function refreshMatch(id: string): Promise<void> {
         const opponentColor: BingosyncColor = tiedColors.find(
           (player) => player !== winnerName
         ) as unknown as BingosyncColor;
-        return await updateMatchBase(
-          id,
-          board,
-          changelog,
-          colorToPlayers[winningColor].join(" / "),
-          winningColor,
-          colorScores[winningColor],
-          colorToPlayers[opponentColor].join(" / "),
-          opponentColor,
-          colorScores[opponentColor],
-          false
-        );
+        return {
+          winnerName: colorToPlayers[winningColor].join(" / "),
+          winnerColor: winningColor,
+          winnerScore: colorScores[winningColor],
+          winnerBingo: false,
+          opponentName: colorToPlayers[opponentColor].join(" / "),
+          opponentColor: opponentColor,
+          opponentScore: colorScores[opponentColor],
+        };
       }
     }
   }
@@ -279,10 +364,7 @@ export async function refreshMatch(id: string): Promise<void> {
   if (bingoPlayer != null) {
     const bestOpponent =
       playerEntries.find(([name, _]) => name !== bingoPlayer)?.[0] ?? null;
-    return await updateMatch(
-      id,
-      board,
-      changelog,
+    return getStandardResult(
       bingoPlayer,
       bestOpponent,
       playerColors,
@@ -292,10 +374,7 @@ export async function refreshMatch(id: string): Promise<void> {
   }
 
   if (playerEntries.length === 1) {
-    return await updateMatch(
-      id,
-      board,
-      changelog,
+    return getStandardResult(
       playerEntries[0][0],
       null,
       playerColors,
@@ -307,10 +386,7 @@ export async function refreshMatch(id: string): Promise<void> {
   const bestScore = playerEntries[0][1];
   const secondBestScore = playerEntries[1][1];
   if (bestScore > secondBestScore) {
-    return await updateMatch(
-      id,
-      board,
-      changelog,
+    return getStandardResult(
       playerEntries[0][0],
       playerEntries[1][0],
       playerColors,
@@ -333,123 +409,13 @@ export async function refreshMatch(id: string): Promise<void> {
   );
   const opponentName =
     tiedPlayers.find((player) => player !== winnerName) ?? null;
-  return await updateMatch(
-    id,
-    board,
-    changelog,
+  return getStandardResult(
     winnerName,
     opponentName,
     playerColors,
     playerScores,
     false
   );
-}
-
-async function fetchBoard(id: string): Promise<RawBoard> {
-  const boardResult = await fetch(
-    `https://www.bingosync.com/room/${id}/board`,
-    {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  return await boardResult.json();
-}
-
-async function updateMatch(
-  id: string,
-  board: TBoard,
-  changelog: Changelog | null,
-  winnerName: string | null,
-  opponentName: string | null,
-  players: PlayerToColors,
-  scores: PlayerScores,
-  bingo: boolean
-): Promise<void> {
-  let winnerColor: null | string = null;
-  let winnerScore: null | number = null;
-  if (winnerName != null) {
-    winnerColor = players[winnerName].join(" ");
-    winnerScore = scores[winnerName];
-  }
-
-  let opponentColor: null | string = null;
-  let opponentScore: null | number = null;
-  if (opponentName != null) {
-    opponentColor = players[opponentName].join(" ");
-    opponentScore = scores[opponentName];
-  }
-
-  const changelogJson = changelog != null ? JSON.stringify(changelog) : null;
-  const changes = changelog?.changes;
-  const lastColorTime =
-    changes != null && changes.length > 0
-      ? changes[changes.length - 1].time
-      : null;
-
-  return await updateMatchBase(
-    id,
-    board,
-    changelog,
-    winnerName,
-    winnerColor,
-    winnerScore,
-    opponentName,
-    opponentColor,
-    opponentScore,
-    bingo
-  );
-}
-
-async function updateMatchBase(
-  id: string,
-  board: TBoard,
-  changelog: Changelog | null,
-  winnerName: string | null,
-  winnerColor: string | null,
-  winnerScore: number | null,
-  opponentName: string | null,
-  opponentColor: string | null,
-  opponentScore: number | null,
-  bingo: boolean
-): Promise<void> {
-  const isAllBlank = board.every((square) => square.color === "blank");
-
-  const changelogJson = changelog != null ? JSON.stringify(changelog) : null;
-  const changes = changelog?.changes;
-  const lastColorTime =
-    changes != null && changes.length > 0
-      ? changes[changes.length - 1].time
-      : null;
-
-  const sql = getSql(false);
-  const result = await sql`UPDATE match
-    SET
-      winner_name = ${winnerName},
-      winner_color = ${winnerColor},
-      winner_score = ${winnerScore},
-      winner_bingo = ${bingo},
-      opponent_name = ${opponentName},
-      opponent_color = ${opponentColor},
-      opponent_score = ${opponentScore},
-      board_json = ${JSON.stringify(board)},
-      changelog_json = ${changelogJson},
-      is_board_visible = ${!isAllBlank},
-      last_refreshed = CURRENT_TIMESTAMP,
-      last_color_time = TO_TIMESTAMP(${lastColorTime})
-    WHERE id = ${id}
-    RETURNING ${MATCH_FIELDS}`;
-
-  revalidatePath("/matches");
-  revalidatePath(`/match/${id}`);
-  try {
-    const rawMatch = result[0];
-    const match = getMatchFromRaw(rawMatch);
-    await syncToGSheet(match);
-  } catch { }
 }
 
 async function fetchFeed(id: string): Promise<RawFeed> {

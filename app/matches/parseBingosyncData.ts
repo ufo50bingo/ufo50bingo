@@ -126,10 +126,7 @@ export function getBoard(board: RawBoard): TBoard {
   }));
 }
 
-// NOTE: RawFeed is expected to be sorted by time
-export function getChangelogAndPlayers(
-  feed: RawFeed
-): [Changelog, PlayerToColors] {
+export function getChangelog(feed: RawFeed): Changelog {
   const events = feed.events;
   // if no new-card event is found, findLastIndex returns -1
   // So adding 1 here does make sense in all cases
@@ -142,7 +139,7 @@ export function getChangelogAndPlayers(
   const playerNames = Object.keys(playerColors);
   const reveals = getReveals(relevantEvents, playerNames);
 
-  return [{ reveals, changes }, playerColors];
+  return { reveals, changes };
 }
 
 function getReveals(

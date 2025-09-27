@@ -18,6 +18,7 @@ import {
   IconBrandYoutube,
   IconLink,
   IconRefresh,
+  IconTournament,
 } from "@tabler/icons-react";
 import html2canvas from "html2canvas";
 import { useMemo, ReactNode, useRef, useState } from "react";
@@ -37,6 +38,8 @@ import { refreshMatch } from "./refreshMatch";
 import EditVodModal from "./EditVodModal";
 import { useAppContext } from "../AppContextProvider";
 import { db } from "../db";
+import EditLeagueModal from "./EditLeagueModal";
+import { useMediaQuery } from "@mantine/hooks";
 
 type Props = {
   match: Match;
@@ -94,7 +97,18 @@ function getOverlays(
 }
 
 export default function MatchView({ match }: Props) {
-  const { hideByDefault, isMounted, revealedMatchIDs } = useAppContext();
+  const {
+    createdMatchIDs,
+    hideByDefault,
+    isAdmin,
+    isMounted,
+    revealedMatchIDs,
+  } = useAppContext();
+
+  const canEdit =
+    (isAdmin || createdMatchIDs.has(match.id)) &&
+    match.variant === "Standard" &&
+    match.isCustom === false;
 
   const boardJson = match.boardJson;
   const board = useMemo<TBoard>(() => {
@@ -128,6 +142,7 @@ export default function MatchView({ match }: Props) {
   const [showOverlays, setShowOverlays] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isEditingVod, setIsEditingVod] = useState(false);
+  const [isEditingLeague, setIsEditingLeague] = useState(false);
 
   const winType = getWinType(match);
 
@@ -157,6 +172,9 @@ export default function MatchView({ match }: Props) {
 
   const isRevealed = !hideByDefault || revealedMatchIDs?.has(match.id);
 
+  // 525px is the width of the board, which is also the default width of the modal
+  const isMobile = useMediaQuery("(max-width: 525px)");
+
   const refreshItem = (
     <Button
       color="green"
@@ -172,6 +190,17 @@ export default function MatchView({ match }: Props) {
       }}
     >
       Refresh Data
+    </Button>
+  );
+
+  const editItem = (
+    <Button
+      color="green"
+      leftSection={<IconTournament size={16} />}
+      disabled={!canEdit}
+      onClick={() => setIsEditingLeague(true)}
+    >
+      Edit League Info
     </Button>
   );
 
@@ -376,6 +405,13 @@ export default function MatchView({ match }: Props) {
           ) : (
             refreshItem
           )}
+          {!canEdit ? (
+            <Tooltip label="You can only edit Standard matches you created.">
+              {editItem}
+            </Tooltip>
+          ) : (
+            editItem
+          )}
           <Button
             color="green"
             leftSection={<IconBrandYoutube size={16} />}
@@ -417,9 +453,16 @@ export default function MatchView({ match }: Props) {
       </Drawer.Root>
       {isEditingVod && (
         <EditVodModal
-          isMobile={false}
+          isMobile={isMobile}
           match={match}
           onClose={() => setIsEditingVod(false)}
+        />
+      )}
+      {isEditingLeague && (
+        <EditLeagueModal
+          isMobile={isMobile}
+          match={match}
+          onClose={() => setIsEditingLeague(false)}
         />
       )}
     </>

@@ -6,13 +6,13 @@ import { Variant } from "../pastas/metadata";
 
 const BINGOSYNC_BASE_URL = "https://www.bingosync.com/";
 
-export type LeagueInfo = {
+export interface LeagueInfo {
   season: number;
   tier: string;
   week: string;
   p1: string;
   p2: string;
-};
+}
 
 export interface CommonMatchProps {
   roomName: string;

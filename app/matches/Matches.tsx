@@ -24,6 +24,7 @@ import {
   IconEdit,
   IconFilter,
   IconRefresh,
+  IconTournament,
   IconTrash,
 } from "@tabler/icons-react";
 import { refreshMatch } from "./refreshMatch";
@@ -55,6 +56,7 @@ import {
 } from "../createboard/leagueConstants";
 import { useMediaQuery } from "@mantine/hooks";
 import { db } from "../db";
+import EditLeagueModal from "./EditLeagueModal";
 const DateFormatter = lazy(() => import("../DateFormatter"), {
   ssr: false,
   loading: () => <Skeleton height={8} />,
@@ -248,6 +250,7 @@ export default function Matches({ matches, totalPages }: Props) {
   const [viewingId, setViewingId] = useState<null | string>(null);
   const [deletingId, setDeletingId] = useState<null | string>(null);
   const [editingVodId, setEditingVodId] = useState<null | string>(null);
+  const [editingLeagueId, setEditingLeagueId] = useState<null | string>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshingIDs, setRefreshingIDs] = useState<ReadonlyArray<string>>([]);
   const [season, setSeason] = useState<null | undefined | Season>(
@@ -287,6 +290,10 @@ export default function Matches({ matches, totalPages }: Props) {
     editingVodId == null
       ? null
       : matches.find((match) => match.id === editingVodId);
+  const editingLeagueMatch =
+    editingLeagueId == null
+      ? null
+      : matches.find((match) => match.id === editingLeagueId);
 
   // 525px is the width of the board, which is also the default width of the modal
   const isMobile = useMediaQuery("(max-width: 525px)");
@@ -433,13 +440,31 @@ export default function Matches({ matches, totalPages }: Props) {
                     </Menu.Item>
                   );
 
+                  const isCreatorOrAdmin =
+                    createdMatchIDs.has(match.id) || isAdmin;
+
+                  const canEditLeague =
+                    isCreatorOrAdmin &&
+                    match.variant == "Standard" &&
+                    match.isCustom === false;
+
                   const deleteItem = (
                     <Menu.Item
-                      disabled={!createdMatchIDs.has(match.id) && !isAdmin}
+                      disabled={!isCreatorOrAdmin}
                       leftSection={<IconTrash size={16} />}
                       onClick={() => setDeletingId(match.id)}
                     >
                       Delete match
+                    </Menu.Item>
+                  );
+
+                  const editLeagueItem = (
+                    <Menu.Item
+                      disabled={!canEditLeague}
+                      leftSection={<IconTournament size={16} />}
+                      onClick={() => setEditingLeagueId(match.id)}
+                    >
+                      Edit League Info
                     </Menu.Item>
                   );
 
@@ -580,7 +605,14 @@ export default function Matches({ matches, totalPages }: Props) {
                             >
                               {vodLink !== "" ? "Edit" : "Add"} VOD Link
                             </Menu.Item>
-                            {!createdMatchIDs.has(match.id) && !isAdmin ? (
+                            {!canEditLeague ? (
+                              <Tooltip label="You can only edit Standard matches you created.">
+                                {editLeagueItem}
+                              </Tooltip>
+                            ) : (
+                              editLeagueItem
+                            )}
+                            {!isCreatorOrAdmin ? (
                               <Tooltip label="You can only delete matches you created.">
                                 {deleteItem}
                               </Tooltip>
@@ -634,6 +666,13 @@ export default function Matches({ matches, totalPages }: Props) {
           isMobile={isMobile}
           match={editingVodMatch}
           onClose={() => setEditingVodId(null)}
+        />
+      )}
+      {editingLeagueMatch != null && (
+        <EditLeagueModal
+          isMobile={isMobile}
+          match={editingLeagueMatch}
+          onClose={() => setEditingLeagueId(null)}
         />
       )}
       {deletingMatch != null && (

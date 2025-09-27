@@ -16,7 +16,7 @@ export default async function MatchPage({
   return <SingleMatchWrapper match={match} />;
 }
 
-async function fetchMatch(id: string): Promise<null | Match> {
+export async function fetchMatch(id: string): Promise<null | Match> {
   const sql = getSQl();
   const result = await sql`
     SELECT

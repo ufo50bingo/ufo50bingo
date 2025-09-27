@@ -4,12 +4,12 @@ import { revalidatePath } from "next/cache";
 import syncToGSheet from "./syncToGSheet";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 import { LeagueInfo } from "../createboard/createMatch";
-import { fetchMatch } from "../match/[id]/page";
 import { SQL } from "./page";
 import getSQl from "../getSql";
 import { Changelog, TBoard } from "./parseBingosyncData";
 import { getResult, getResultSql } from "./computeResult";
 import { Match } from "./Matches";
+import fetchMatch from "./fetchMatch";
 
 interface LeagueUpdate extends LeagueInfo {
   type: "league";

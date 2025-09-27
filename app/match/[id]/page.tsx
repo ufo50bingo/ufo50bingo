@@ -2,6 +2,7 @@ import getSQl from "@/app/getSql";
 import { getMatchFromRaw, MATCH_FIELDS } from "@/app/matches/getMatchFromRaw";
 import { Match } from "@/app/matches/Matches";
 import SingleMatchWrapper from "./SingleMatchWrapper";
+import fetchMatch from "@/app/matches/fetchMatch";
 
 export default async function MatchPage({
   params,
@@ -14,18 +15,4 @@ export default async function MatchPage({
     return `Failed to find match with ID ${id}`;
   }
   return <SingleMatchWrapper match={match} />;
-}
-
-export async function fetchMatch(id: string): Promise<null | Match> {
-  const sql = getSQl();
-  const result = await sql`
-    SELECT
-      ${MATCH_FIELDS}
-    FROM match
-    WHERE
-      id = ${id}`;
-  if (result.length === 0) {
-    return null;
-  }
-  return getMatchFromRaw(result[0]);
 }

@@ -368,7 +368,6 @@ export default function MatchView({ match }: Props) {
                       if (permalink != null) {
                         permalink.style.display = "none";
                       }
-                      element.className;
                       element.style.padding = "8px";
                       element.style.width = "541px";
                     },

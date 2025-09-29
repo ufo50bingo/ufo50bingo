@@ -314,10 +314,14 @@ export default function NonLeagueMatch() {
             setUrl(url);
             setIsCreationInProgress(false);
             window.open(url, "_blank");
-          } catch (err: any) {
+          } catch (err: unknown) {
             setIsCreationInProgress(false);
             setUrl("");
-            setError(err);
+            if (err instanceof Error) {
+              setError(err);
+            } else {
+              setError(new Error("unknown error!"));
+            }
           }
         }}
         color="green"

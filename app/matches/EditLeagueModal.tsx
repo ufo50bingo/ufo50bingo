@@ -23,18 +23,8 @@ type Props = {
   onClose: () => void;
 };
 
-const CURRENT_SEASON = 2;
 const SEASONS = ["Season 2", "Non-League"] as const;
 type Season = (typeof SEASONS)[number];
-
-function getSeasonNumber(season: Season): null | number {
-  switch (season) {
-    case "Season 2":
-      return 2;
-    case "Non-League":
-      return null;
-  }
-}
 
 function getSeason(num: null | number): null | Season {
   switch (num) {

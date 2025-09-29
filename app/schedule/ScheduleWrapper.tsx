@@ -1,6 +1,5 @@
 "use client";
 
-import { Match } from "@/app/matches/Matches";
 import dynamic from "next/dynamic";
 import { ScheduledMatch } from "./fetchSchedule";
 

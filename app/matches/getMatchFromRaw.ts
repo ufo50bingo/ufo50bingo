@@ -27,6 +27,7 @@ export const MATCH_FIELDS = getSQl()`
   league_p1,
   league_p2`;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getMatchFromRaw(rawMatch: Record<string, any>): Match {
   const winner_name: null | undefined | string = rawMatch.winner_name;
   const winner_score: null | undefined | number = rawMatch.winner_score;

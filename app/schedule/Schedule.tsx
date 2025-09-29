@@ -1,12 +1,4 @@
-import {
-  Container,
-  Card,
-  Stack,
-  Title,
-  Alert,
-  Anchor,
-  ActionIcon,
-} from "@mantine/core";
+import { Container, Card, Stack, Title, Alert, Anchor } from "@mantine/core";
 import { ScheduledMatch } from "./fetchSchedule";
 import ScheduledMatchView from "./ScheduledMatchView";
 import { revalidateSchedule } from "./revalidateSchedule";

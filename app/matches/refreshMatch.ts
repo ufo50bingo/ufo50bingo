@@ -8,23 +8,12 @@ import {
   TBoard,
   Changelog,
   getBoard,
-  PlayerToColors,
   RawBoard,
   RawFeed,
-  BingosyncColor,
   getChangelog,
-  getPlayerColors,
 } from "./parseBingosyncData";
-import {
-  getColorWithLeastRecentClaim,
-  getFirstBingoPlayer,
-  getIsValid,
-  getPlayerWithLeastRecentClaim,
-  getVerifiedPlayerToColors,
-} from "./analyzeMatch";
 import syncToGSheet from "./syncToGSheet";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
-import { SQL } from "./page";
 import { getResult, getResultSql } from "./computeResult";
 
 export type PlayerScores = { [name: string]: number };

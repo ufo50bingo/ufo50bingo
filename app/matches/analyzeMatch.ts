@@ -7,7 +7,6 @@ import {
   PlayerToColors,
 } from "./parseBingosyncData";
 import { ALIASES } from "../createboard/leagueConstants";
-import { PlayerScores } from "./refreshMatch";
 
 const BINGO_LINES = [
   // rows

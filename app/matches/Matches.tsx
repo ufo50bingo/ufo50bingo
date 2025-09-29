@@ -42,13 +42,10 @@ import EditVodModal from "./EditVodModal";
 import { getHost, getVodLink } from "./vodUtil";
 import classes from "./Matches.module.css";
 
-import lazy from "next/dynamic";
-import { Suspense } from "react";
 import { useAppContext } from "../AppContextProvider";
 import { LeagueInfo } from "../createboard/createMatch";
 import Link from "next/link";
 import {
-  ALL_PLAYERS,
   ALL_TIERS,
   IS_LEAGUE_DISABLED,
   PLAYERS_FOR_FILTER,
@@ -57,10 +54,6 @@ import {
 import { useMediaQuery } from "@mantine/hooks";
 import { db } from "../db";
 import EditLeagueModal from "./EditLeagueModal";
-const DateFormatter = lazy(() => import("../DateFormatter"), {
-  ssr: false,
-  loading: () => <Skeleton height={8} />,
-});
 
 const ADMIN_FILTERS = [
   {

@@ -8,13 +8,6 @@ import { STANDARD } from "../pastas/standard";
 import { Container, Card, Text, Button, Stack } from "@mantine/core";
 import useTimer from "../useTimer";
 
-enum State {
-  NOT_STARTED,
-  RUNNING,
-  PAUSED,
-  DONE,
-}
-
 export default function PracticeBoard() {
   const [isHidden, setIsHidden] = useState(true);
   const [board, setBoard] = useState<TBoard>(() =>

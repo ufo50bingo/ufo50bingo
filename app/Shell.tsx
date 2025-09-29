@@ -115,7 +115,7 @@ export default function Shell({ children }: Props) {
             hiddenFrom="sm"
           />
           <div>
-            <Image src="/logo.png" height={25} width={25} />
+            <Image src="/logo.png" alt="" height={25} width={25} />
           </div>
           <span>
             {title != null ? `UFO 50 Bingo — ${title}` : "UFO 50 Bingo"}

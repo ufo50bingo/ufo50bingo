@@ -14,12 +14,12 @@ type FilterParams = {
   admin?: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type SQL = NeonQueryPromise<false, false, Record<string, any>[]>;
 
 export default async function MatchesFetcher(props: {
   searchParams?: Promise<FilterParams>;
 }) {
-  const sql = getSQl();
   const searchParams = await props.searchParams;
   const filterSql = getFilterSql(searchParams);
 

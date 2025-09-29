@@ -1,6 +1,3 @@
-import getSQl from "@/app/getSql";
-import { getMatchFromRaw, MATCH_FIELDS } from "@/app/matches/getMatchFromRaw";
-import { Match } from "@/app/matches/Matches";
 import SingleMatchWrapper from "./SingleMatchWrapper";
 import fetchMatch from "@/app/matches/fetchMatch";
 

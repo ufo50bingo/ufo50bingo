@@ -19,7 +19,7 @@ import { GoalStats } from "../useGoalStats";
 type Props = {
   attempts: AttemptRow[];
   goalStats: Map<string, GoalStats>;
-  onRetryGoal: (goal: string) => any;
+  onRetryGoal: (goal: string) => unknown;
 };
 
 export default function AllAttempts({

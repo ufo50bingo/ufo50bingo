@@ -1,6 +1,6 @@
 import "@mantine/core/styles.css";
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import {
   ColorSchemeScript,
@@ -16,7 +16,7 @@ export const metadata = {
   description: "Organize games or practice goals!",
 };
 
-export default function RootLayout({ children }: { children: any }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" {...mantineHtmlProps}>
       <head>

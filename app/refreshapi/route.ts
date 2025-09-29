@@ -1,6 +1,3 @@
-import getSQl from "../getSql";
-import { refreshMatch } from "../matches/refreshMatch";
-
 // https://github.com/kbuzsaki/bingosync/issues/401#issuecomment-2972818382
 // https://github.com/kbuzsaki/bingosync/issues/233
 // curl -X POST http://localhost:3000/refreshapi

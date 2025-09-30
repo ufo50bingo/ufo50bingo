@@ -6,13 +6,12 @@ import {
   TBoard,
   Changelog,
   getBoard,
-  RawBoard,
-  RawFeed,
   getChangelog,
 } from "./parseBingosyncData";
 import syncToGSheet from "./syncToGSheet";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 import { getResult, getResultSql } from "./computeResult";
+import { fetchBoard, fetchFeed, getSessionCookie } from "../fetchMatchInfo";
 
 export type PlayerScores = { [name: string]: number };
 
@@ -97,13 +96,14 @@ function areChangelogsEqual(a: Changelog, b: Changelog): boolean {
 }
 
 export async function refreshMatch(id: string): Promise<void> {
+  const cookie = await getSessionCookie(id);
   const [
     boardJson,
     feedJson,
     { leagueP1, leagueP2, board: existingBoard, changelog: existingChangelog },
   ] = await Promise.all([
     fetchBoard(id),
-    fetchFeed(id),
+    fetchFeed(id, cookie),
     fetchExistingMatch(id),
   ]);
   const board = getBoard(boardJson);
@@ -148,46 +148,4 @@ export async function refreshMatch(id: string): Promise<void> {
     const match = getMatchFromRaw(rawMatch);
     await syncToGSheet(match);
   } catch {}
-}
-
-async function fetchBoard(id: string): Promise<RawBoard> {
-  const boardResult = await fetch(
-    `https://www.bingosync.com/room/${id}/board`,
-    {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  return await boardResult.json();
-}
-
-async function fetchFeed(id: string): Promise<RawFeed> {
-  const roomURL = `https://www.bingosync.com/room/${id}`;
-
-  const sql = getSql();
-  const sqlResult =
-    await sql`SELECT sessionid_cookie FROM match WHERE id = ${id}`;
-  const cookie: null | void | string = sqlResult?.[0]?.sessionid_cookie;
-
-  if (cookie == null) {
-    throw new Error(`Failed to find cookie for match ${id}`);
-  }
-
-  const url = new URL(`${roomURL}/feed`);
-  url.search = new URLSearchParams({
-    full: "true",
-  }).toString();
-
-  const feedResponse = await fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Cookie: cookie,
-    },
-  });
-  const feedJson: RawFeed = await feedResponse.json();
-  return feedJson;
 }

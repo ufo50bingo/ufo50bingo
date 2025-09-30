@@ -104,7 +104,7 @@ type RawConnection = {
 type RawOther = {
   type: "other";
 };
-type RawFeedItem =
+export type RawFeedItem =
   | RawNewCard
   | RawGoal
   | RawChat

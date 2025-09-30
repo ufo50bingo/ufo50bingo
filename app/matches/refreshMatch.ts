@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import getCsrfData from "../getCsrfData";
 import getSql from "../getSql";
 import {
   TBoard,

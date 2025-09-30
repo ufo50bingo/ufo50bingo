@@ -63,11 +63,14 @@ export function AppContextProvider({
     [setNextGoalChoiceRaw]
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const attempts =
     useLiveQuery(() => db.attempts.orderBy("startTime").reverse().toArray()) ??
     [];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const playlist =
     useLiveQuery(() => db.playlist.orderBy("priority").toArray()) ?? [];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const createdMatches = useLiveQuery(() => db.createdMatches.toArray()) ?? [];
   const createdMatchIDs = useMemo(
     () => new Set(createdMatches.map((match) => match.id)),
@@ -96,6 +99,8 @@ export function AppContextProvider({
 
   // useEffect sets the initial state to avoid hydration errors
   const [goal, setGoalRaw] = useState("");
+  // This should intentionally run only once
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => setGoalRaw(getRandomGoal()), []);
 
   // super insecure, but good enough to stop most people

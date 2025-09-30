@@ -63,7 +63,13 @@ export default function PastaFilter({
         ? null
         : createPasta(filteredPasta, difficultyCount)
     );
-  }, [hasWrongSum, hasTooFewGoals, filteredPasta, difficultyCount]);
+  }, [
+    hasWrongSum,
+    hasTooFewGoals,
+    filteredPasta,
+    difficultyCount,
+    onChangePasta,
+  ]);
   return (
     <Stack>
       <GameChecker checkState={checkState} setCheckState={setCheckState} />

@@ -2,17 +2,18 @@
 
 import { Button, Stack, TextInput } from "@mantine/core";
 import { useState } from "react";
+import getSocketKey from "./getSocketKey";
 
 export default function CastPage() {
-  const [session, setSession] = useState("");
+  const [roomId, setRoomId] = useState("");
   const [socketKey, setSocketKey] = useState("");
   const [_socket, setSocket] = useState<null | WebSocket>(null);
   return (
     <Stack>
       <TextInput
-        label="Session Cookie"
-        value={session}
-        onChange={(event) => setSession(event.target.value)}
+        label="Room ID"
+        value={roomId}
+        onChange={(event) => setRoomId(event.target.value)}
       />
       <TextInput
         label="Socket Key"
@@ -21,7 +22,7 @@ export default function CastPage() {
       />
       <Button
         onClick={async () => {
-          // await getSocketKey(roomID, session);
+          const socketKey = await getSocketKey(roomId);
           const url = "wss://sockets.bingosync.com/broadcast";
           const newSocket = new WebSocket(url);
           newSocket.onopen = () =>

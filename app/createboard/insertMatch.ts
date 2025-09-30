@@ -4,10 +4,9 @@ import { revalidatePath } from "next/cache";
 import { CommonMatchProps } from "./createMatch";
 import getSql from "../getSql";
 
-const ROOM_PREFIX = "https://www.bingosync.com/room/";
-
 interface Props extends CommonMatchProps {
-  url: string;
+  id: string;
+  cookie: string;
 }
 
 function bool(val: boolean): "TRUE" | "FALSE" {
@@ -15,7 +14,7 @@ function bool(val: boolean): "TRUE" | "FALSE" {
 }
 
 export async function insertMatch({
-  url,
+  id,
   roomName,
   password,
   isPublic,
@@ -23,12 +22,8 @@ export async function insertMatch({
   isCustom,
   isLockout,
   leagueInfo,
+  cookie,
 }: Props): Promise<void> {
-  if (!url.startsWith(ROOM_PREFIX)) {
-    console.error("Unexpected bingosync room URL", url);
-    return;
-  }
-  const id = url.slice(ROOM_PREFIX.length);
   const sql = getSql(false);
 
   await sql`INSERT INTO match (
@@ -43,7 +38,8 @@ export async function insertMatch({
     league_week,
     league_tier,
     league_p1,
-    league_p2
+    league_p2,
+    sessionid_cookie
   ) VALUES (
     ${id},
     ${roomName},
@@ -56,7 +52,8 @@ export async function insertMatch({
     ${leagueInfo?.week},
     ${leagueInfo?.tier},
     ${leagueInfo?.p1},
-    ${leagueInfo?.p2}
+    ${leagueInfo?.p2},
+    ${cookie}
   );`;
   revalidatePath("/matches");
 }

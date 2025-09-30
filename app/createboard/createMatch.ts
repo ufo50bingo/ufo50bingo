@@ -42,6 +42,7 @@ export default async function createMatch({
 
   const createResponse = await fetch(BINGOSYNC_BASE_URL, {
     method: "POST",
+    redirect: "manual",
     credentials: "include",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -62,17 +63,29 @@ export default async function createMatch({
     }).toString(),
   });
 
-  const roomURL = createResponse.url;
+  if (createResponse.status !== 302) {
+    throw new Error(
+      `Bingosync failed to redirect to room page with status ${createResponse.status}`
+    );
+  }
 
-  if (roomURL === BINGOSYNC_BASE_URL || roomURL === "") {
-    throw new Error("Malformed bingosync request");
+  const location = createResponse.headers.get("location");
+  if (!location?.startsWith("/room/")) {
+    throw new Error(`Bingosync redirected to ${location}. Expected /room/<id>`);
+  }
+  // strip off /room/ prefix
+  const id = location.slice(6);
+
+  const sessionCookie = createResponse.headers.get("Set-Cookie");
+  if (sessionCookie == null) {
+    throw new Error(`Failed to fetch session cookie for id ${id}`);
   }
 
   // add room to table for tracking
   // shouldn't need the `await` here, but nextjs complains
   // if you revalidate while rendering
   await insertMatch({
-    url: roomURL,
+    id,
     roomName,
     password,
     isPublic,
@@ -80,7 +93,8 @@ export default async function createMatch({
     isCustom,
     isLockout,
     leagueInfo,
+    cookie: sessionCookie,
   });
 
-  return createResponse.url;
+  return `https://www.bingosync.com/room/${id}`;
 }

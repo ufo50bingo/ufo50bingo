@@ -6,13 +6,14 @@ import classes from "./CopyToDiscord.module.css";
 type Props = {
   children: ReactNode;
   matches: ReadonlyArray<ScheduledMatch>;
+  includeDate: boolean;
 };
 
-export function CopyToDiscord({ children, matches }: Props) {
+export function CopyToDiscord({ children, matches, includeDate }: Props) {
   return (
     <Group className={classes.container}>
       {children}
-      <Tooltip label="Copy daily schedule with Discord formatting">
+      <Tooltip label="Copy schedule with Discord formatting">
         <ActionIcon
           className={classes.discordButton}
           size="sm"
@@ -21,16 +22,20 @@ export function CopyToDiscord({ children, matches }: Props) {
           onClick={() =>
             navigator.clipboard.writeText(
               matches
-                .map(
-                  (match) => {
-                    const stream = match.streamer != null && match.streamer != '' && match.streamLink != null && match.streamLink != ''
+                .map((match) => {
+                  const stream =
+                    match.streamer != null &&
+                    match.streamer != "" &&
+                    match.streamLink != null &&
+                    match.streamLink != ""
                       ? `[${match.streamer}](<${match.streamLink}>)`
-                      : match.streamer != null && match.streamer != ''
-                        ? match.streamer
-                        : 'No streamer yet';
-                    return `<t:${match.time}:t> — ${match.tier} — ${match.name} — ${stream}`;
-                  }
-                )
+                      : match.streamer != null && match.streamer != ""
+                      ? match.streamer
+                      : "No streamer yet";
+                  return `<t:${match.time}:${includeDate ? "f" : "t"}> — ${
+                    match.tier
+                  } — ${match.name} — ${stream}`;
+                })
                 .join("\n")
             )
           }

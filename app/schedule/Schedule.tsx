@@ -16,6 +16,38 @@ function getMatches(
   return schedule.filter((m) => m.time >= startOfDay && m.time < endOfDay);
 }
 
+function ScheduledMatchList({
+  title,
+  matches,
+  includeDate,
+}: {
+  title: string;
+  matches: ReadonlyArray<ScheduledMatch>;
+  includeDate: boolean;
+}) {
+  const titleElement = <Title order={3}>{title}</Title>;
+  return (
+    <>
+      {matches.length > 0 ? (
+        <CopyToDiscord matches={matches} includeDate={includeDate}>
+          {titleElement}
+        </CopyToDiscord>
+      ) : (
+        titleElement
+      )}
+      {matches.length > 0
+        ? matches.map((m) => (
+            <ScheduledMatchView
+              key={m.name + m.time.toString()}
+              match={m}
+              includeDate={includeDate}
+            />
+          ))
+        : "No matches found!"}
+    </>
+  );
+}
+
 export default function Schedule({ schedule }: Props) {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
@@ -56,44 +88,26 @@ export default function Schedule({ schedule }: Props) {
         </Alert>
         <Card>
           <Stack>
-            <CopyToDiscord matches={yesterdayMatches}>
-              <Title order={3}>Yesterday</Title>
-            </CopyToDiscord>
-            {yesterdayMatches.map((m) => (
-              <ScheduledMatchView
-                key={m.name + m.time.toString()}
-                match={m}
-                includeDate={false}
-              />
-            ))}
-            <CopyToDiscord matches={todayMatches}>
-              <Title order={3}>Today</Title>
-            </CopyToDiscord>
-            {todayMatches.map((m) => (
-              <ScheduledMatchView
-                key={m.name + m.time.toString()}
-                match={m}
-                includeDate={false}
-              />
-            ))}
-            <CopyToDiscord matches={tomorrowMatches}>
-              <Title order={3}>Tomorrow</Title>
-            </CopyToDiscord>
-            {tomorrowMatches.map((m) => (
-              <ScheduledMatchView
-                key={m.name + m.time.toString()}
-                match={m}
-                includeDate={false}
-              />
-            ))}
-            <Title order={3}>Later</Title>
-            {laterMatches.map((m) => (
-              <ScheduledMatchView
-                key={m.name + m.time.toString()}
-                match={m}
-                includeDate={true}
-              />
-            ))}
+            <ScheduledMatchList
+              title="Yesterday"
+              matches={yesterdayMatches}
+              includeDate={false}
+            />
+            <ScheduledMatchList
+              title="Today"
+              matches={todayMatches}
+              includeDate={false}
+            />
+            <ScheduledMatchList
+              title="Tomorrow"
+              matches={tomorrowMatches}
+              includeDate={false}
+            />
+            <ScheduledMatchList
+              title="Later"
+              matches={laterMatches}
+              includeDate={true}
+            />
           </Stack>
         </Card>
       </Stack>

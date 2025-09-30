@@ -22,7 +22,16 @@ export default function CastPage() {
       />
       <Button
         onClick={async () => {
-          const socketKey = await getSocketKey(roomId);
+          // socket keys expire after 5 minutes
+          // need to keep the session cookie and generate a new socket key from it
+          const newSocketKey = await getSocketKey(roomId);
+          setSocketKey(newSocketKey);
+        }}
+      >
+        Get New Socket Key
+      </Button>
+      <Button
+        onClick={async () => {
           const url = "wss://sockets.bingosync.com/broadcast";
           const newSocket = new WebSocket(url);
           newSocket.onopen = () =>
@@ -35,7 +44,7 @@ export default function CastPage() {
           setSocket(newSocket);
         }}
       >
-        Connect to Websocket
+        Connect
       </Button>
     </Stack>
   );

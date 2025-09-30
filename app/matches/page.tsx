@@ -1,5 +1,5 @@
 import Matches, { AdminFilter, Match } from "./Matches";
-import getSQl from "../getSql";
+import getSql from "../getSql";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 import { NeonQueryFunction, NeonQueryPromise } from "@neondatabase/serverless";
 
@@ -44,7 +44,7 @@ function getAdminFilterSql(
 }
 
 function getFilterSql(searchParams: FilterParams | undefined): SQL {
-  const sql = getSQl();
+  const sql = getSql();
 
   const seasonStr = searchParams?.season;
   const season = seasonStr == null ? null : Number(seasonStr);
@@ -90,7 +90,7 @@ function getFilterSql(searchParams: FilterParams | undefined): SQL {
 }
 
 async function fetchTotalPages(filterSql: SQL): Promise<number> {
-  const sql = getSQl();
+  const sql = getSql();
   const result = await sql`
     SELECT COUNT(id) as total_matches
     FROM match
@@ -106,7 +106,7 @@ async function fetchMatches(
   pageNumber: number,
   filterSql: SQL
 ): Promise<ReadonlyArray<Match>> {
-  const sql = getSQl();
+  const sql = getSql();
   const result = await sql`
     SELECT
       ${MATCH_FIELDS}

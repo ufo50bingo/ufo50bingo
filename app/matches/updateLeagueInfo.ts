@@ -5,7 +5,7 @@ import syncToGSheet from "./syncToGSheet";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 import { LeagueInfo } from "../createboard/createMatch";
 import { SQL } from "./page";
-import getSQl from "../getSql";
+import getSql from "../getSql";
 import { Changelog, TBoard } from "./parseBingosyncData";
 import { getResult, getResultSql } from "./computeResult";
 import { Match } from "./Matches";
@@ -29,7 +29,7 @@ export default async function updateLeagueInfo(
   const match = await fetchMatch(id);
   const matchResultSql = getMatchResultSql(match, update);
 
-  const sql = getSQl(false);
+  const sql = getSql(false);
   const result =
     update.type === "league"
       ? await sql`
@@ -75,7 +75,7 @@ function getMatchResultSql(
     match.changelogJson === ""
   ) {
     // shouldn't need this, but for some reason interpolating the empty string fails
-    return getSQl()`
+    return getSql()`
       winner_name = NULL,
       winner_color = NULL,
       winner_score = NULL,

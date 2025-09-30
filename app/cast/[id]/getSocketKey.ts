@@ -1,13 +1,13 @@
 "use server";
 
 import getCsrfData from "@/app/getCsrfData";
-import getSQl from "@/app/getSql";
+import getSql from "@/app/getSql";
 
 const SOCKET_KEY_REGEX = /var temporarySocketKey = "([a-zA-Z0-9-_]+)";/;
 
 export default async function getSocketKey(id: string): Promise<string> {
   const roomURL = `https://www.bingosync.com/room/${id}`;
-  const sql = getSQl();
+  const sql = getSql();
   const [{ cookie, token }, sqlResult] = await Promise.all([
     getCsrfData(),
     sql`SELECT name, password FROM match WHERE id = ${id}`,

@@ -1,8 +1,8 @@
-import getSQl from "../getSql";
+import getSql from "../getSql";
 import { Match } from "./Matches";
 import { BingosyncColor } from "./parseBingosyncData";
 
-export const MATCH_FIELDS = getSQl()`
+export const MATCH_FIELDS = getSql()`
   id,
   name,
   EXTRACT(EPOCH FROM date_created)::INTEGER as date_created,

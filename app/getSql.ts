@@ -1,6 +1,6 @@
 import { neon, NeonQueryFunction } from "@neondatabase/serverless";
 
-export default function getSQl(
+export default function getSql(
   forceCache: boolean = true
 ): NeonQueryFunction<false, false> {
   const dbUrl = process.env.DATABASE_URL;

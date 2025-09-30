@@ -6,7 +6,7 @@ export async function POST(_request: Request) {
   await sleep(120000);
   console.log("done sleeping");
   // try {
-  //   const sql = getSQl(false);
+  //   const sql = getSql(false);
   //   const recentMatches = await sql`
   //     SELECT id, board_json, changelog_json
   //     FROM match

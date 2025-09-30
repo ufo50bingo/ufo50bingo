@@ -3,7 +3,6 @@
 import { revalidatePath } from "next/cache";
 import getCsrfData from "../getCsrfData";
 import getSql from "../getSql";
-import getSQl from "../getSql";
 import {
   TBoard,
   Changelog,
@@ -25,7 +24,7 @@ type ExistingMatch = {
   changelog: Changelog;
 };
 async function fetchExistingMatch(id: string): Promise<ExistingMatch> {
-  const sql = getSQl();
+  const sql = getSql();
   const result = await sql`
     SELECT
       league_p1,
@@ -169,7 +168,7 @@ async function fetchBoard(id: string): Promise<RawBoard> {
 async function fetchFeed(id: string): Promise<RawFeed> {
   const roomURL = `https://www.bingosync.com/room/${id}`;
 
-  const sql = getSQl();
+  const sql = getSql();
   const [{ cookie, token }, sqlResult] = await Promise.all([
     getCsrfData(),
     sql`SELECT name, password FROM match WHERE id = ${id}`,

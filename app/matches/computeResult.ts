@@ -1,4 +1,4 @@
-import getSQl from "../getSql";
+import getSql from "../getSql";
 import {
   getColorWithLeastRecentClaim,
   getFirstBingoPlayer,
@@ -27,7 +27,7 @@ type MatchResult = {
 };
 
 export function getResultSql(result: null | MatchResult): SQL {
-  return getSQl()`
+  return getSql()`
       winner_name = ${result?.winnerName ?? null},
       winner_color = ${result?.winnerColor ?? null},
       winner_score = ${result?.winnerScore ?? null},

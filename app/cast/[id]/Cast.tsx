@@ -70,6 +70,7 @@ export default function Cast({
         setIsHidden={() => false}
         showDifficulty={true}
       />
+      {/* reference: https://github.com/kbuzsaki/bingosync/blob/b23d3b4e3192e7034573f3e8efc906aa4a83b0b8/bingosync-app/static/bingosync/room/chat_panel.js#L16 */}
       {rawFeed.events.map((event, index) => (
         <div key={index}>{JSON.stringify(event)}</div>
       ))}

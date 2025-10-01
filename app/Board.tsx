@@ -116,6 +116,7 @@ export default function Board({
           {starred.includes(squareIndex) && <div className={classes.starred} />}
           {showDifficulty && getDifficulty(square.name)}
           <SquareText
+            key={square.name}
             text={square.name}
             maxHeight={
               overlays != null && overlays[squareIndex] != null ? 65 : 85

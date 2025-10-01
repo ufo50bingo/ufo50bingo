@@ -21,7 +21,7 @@ export default function SquareText({ text, maxHeight }: Props) {
     if (height > heightThreshold) {
       setFontSize(fontSize - 1);
     }
-  }, [fontSize, heightThreshold, text]);
+  }, [fontSize, heightThreshold]);
 
   return (
     <div ref={divRef} style={{ fontSize: `${fontSize}%` }}>

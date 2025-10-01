@@ -2,6 +2,7 @@ import SquareText from "./SquareText";
 import classes from "./Board.module.css";
 import { ReactNode, useState } from "react";
 import { BingosyncColor, TBoard } from "./matches/parseBingosyncData";
+import { Difficulty, Game, SORTED_FLAT_GOALS } from "./goals";
 
 type Props = {
   board: TBoard;
@@ -10,7 +11,13 @@ type Props = {
   isHidden: boolean;
   setIsHidden: (isHidden: boolean) => void;
   hiddenText?: ReactNode;
+  showDifficulty: boolean;
 };
+
+const GOAL_TO_TYPES: { [name: string]: readonly [Game, Difficulty] } = {};
+SORTED_FLAT_GOALS.forEach((goal) => {
+  GOAL_TO_TYPES[goal.name] = goal.types;
+});
 
 function getColorClass(color: string): string {
   const firstColor = color.split(" ")[0] as BingosyncColor;
@@ -41,6 +48,43 @@ function getColorClass(color: string): string {
   }
 }
 
+function getDifficulty(name: string): null | ReactNode {
+  const difficulty = GOAL_TO_TYPES[name][1];
+  if (difficulty == null) {
+    return null;
+  }
+  let difficultyClass;
+  let letter;
+  switch (difficulty) {
+    case "easy":
+      difficultyClass = classes.easy;
+      letter = "E";
+      break;
+    case "medium":
+      difficultyClass = classes.medium;
+      letter = "M";
+      break;
+    case "hard":
+      difficultyClass = classes.hard;
+      letter = "H";
+      break;
+    case "veryhard":
+      difficultyClass = classes.veryhard;
+      letter = "V";
+      break;
+    case "general":
+      difficultyClass = classes.general;
+      letter = "G";
+      break;
+  }
+  return (
+    <>
+      <div className={`${classes.difficulty} ${difficultyClass}`} />
+      <div className={classes.difficultyLetter}>{letter}</div>
+    </>
+  );
+}
+
 export default function Board({
   board,
   overlays,
@@ -48,6 +92,7 @@ export default function Board({
   isHidden,
   setIsHidden,
   hiddenText,
+  showDifficulty,
 }: Props) {
   const [starred, setStarred] = useState<ReadonlyArray<number>>([]);
   return (
@@ -69,6 +114,7 @@ export default function Board({
           }}
         >
           {starred.includes(squareIndex) && <div className={classes.starred} />}
+          {showDifficulty && getDifficulty(square.name)}
           <SquareText
             text={square.name}
             maxHeight={

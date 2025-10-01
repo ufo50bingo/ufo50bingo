@@ -62,6 +62,7 @@ export default function Cast({
         onClickSquare={null}
         isHidden={false}
         setIsHidden={() => false}
+        showDifficulty={true}
       />
       {rawFeed.events.map((event, index) => (
         <div key={index}>{JSON.stringify(event)}</div>

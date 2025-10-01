@@ -273,6 +273,7 @@ export default function MatchView({ match }: Props) {
                   </>
                 )
               }
+              showDifficulty={false}
             />
             {isRevealed && (
               <Group justify="space-between">

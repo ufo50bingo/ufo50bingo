@@ -54,6 +54,48 @@
     font-size: 14px;
 }
 
+.difficulty {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 18px 18px 0;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    right: 0;
+    top: 0;
+    position: absolute;
+}
+
+.easy {
+    border-right-color: #2b8a3e;
+}
+
+.medium {
+    border-right-color: #f59f00;
+}
+
+.hard {
+    border-right-color: #e8590c;
+}
+
+.veryhard {
+    border-right-color: #c92a2a;
+}
+
+.general {
+    border-right-color: #495057;
+}
+
+.difficultyLetter {
+    right: 2;
+    top: 0;
+    position: absolute;
+    font-size: 8px;
+    color: rgb(255,255,255);
+    line-height: 8px;
+}
+
 /* plain old square */
 .square {
     box-sizing: border-box;

@@ -46,6 +46,7 @@ export default function PracticeBoard() {
               start();
               setIsHidden(false);
             }}
+            showDifficulty={false}
           />
           <Text style={{ alignSelf: "center" }} size="xl">
             {timer}

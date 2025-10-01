@@ -1,17 +1,20 @@
 "use client";
 
 import Board from "@/app/Board";
-import { RawFeed, RawFeedItem, TBoard } from "@/app/matches/parseBingosyncData";
+import { fetchBoard } from "@/app/fetchMatchInfo";
+import { getBoard, RawFeed, RawFeedItem, TBoard } from "@/app/matches/parseBingosyncData";
 import { Stack } from "@mantine/core";
 import { useEffect, useState } from "react";
 
 type Props = {
+  id: string;
   board: TBoard;
   rawFeed: RawFeed;
   socketKey: string;
 };
 
 export default function Cast({
+  id,
   board: initialBoard,
   rawFeed: initialRawFeed,
   socketKey,
@@ -29,7 +32,7 @@ export default function Cast({
       console.log("*** Disconnected from server, try refreshing. ***");
     };
 
-    socket.onmessage = (evt) => {
+    socket.onmessage = async (evt) => {
       const rawItem: RawFeedItem = JSON.parse(evt.data);
       setRawFeed((prevRawFeed) => ({
         events: [...prevRawFeed.events, rawItem],
@@ -47,6 +50,9 @@ export default function Cast({
           newBoard[slotIndex] = square;
           return newBoard;
         });
+      } else if (rawItem.type === 'new-card') {
+        const rawBoard = await fetchBoard(id);
+        setBoard(getBoard(rawBoard));
       }
     };
 

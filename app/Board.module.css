@@ -88,8 +88,8 @@
 }
 
 .difficultyLetter {
-    right: 2;
-    top: 0;
+    right: 2px;
+    top: 0px;
     position: absolute;
     font-size: 8px;
     color: rgb(255,255,255);

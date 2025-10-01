@@ -4,10 +4,11 @@ import FeedEntry from "./FeedEntry";
 import ChatInput from "./ChatInput";
 
 type Props = {
+  cookie: string;
   rawFeed: RawFeed;
 };
 
-export default function Feed({ rawFeed }: Props) {
+export default function Feed({ cookie, rawFeed }: Props) {
   return (
     <Card
       shadow="sm"
@@ -29,7 +30,7 @@ export default function Feed({ rawFeed }: Props) {
         </Stack>
       </Card.Section>
       <Card.Section inheritPadding={true} withBorder={true} py="sm">
-        <ChatInput />
+        <ChatInput cookie={cookie} />
       </Card.Section>
     </Card>
   );

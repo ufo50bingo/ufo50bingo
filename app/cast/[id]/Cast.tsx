@@ -8,9 +8,8 @@ import {
   RawFeedItem,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
-import { Group, Stack } from "@mantine/core";
+import { Group } from "@mantine/core";
 import { useEffect, useState } from "react";
-import FeedEntry from "./FeedEntry";
 import Feed from "./Feed";
 
 type Props = {
@@ -18,10 +17,12 @@ type Props = {
   board: TBoard;
   rawFeed: RawFeed;
   socketKey: string;
+  botCookie: string;
 };
 
 export default function Cast({
   id,
+  botCookie,
   board: initialBoard,
   rawFeed: initialRawFeed,
   socketKey,
@@ -77,7 +78,7 @@ export default function Cast({
         setIsHidden={() => false}
         showDifficulty={true}
       />
-      <Feed rawFeed={rawFeed} />
+      <Feed cookie={botCookie} rawFeed={rawFeed} />
     </Group>
   );
 }

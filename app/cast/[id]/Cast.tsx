@@ -2,9 +2,16 @@
 
 import Board from "@/app/Board";
 import { fetchBoard } from "@/app/fetchMatchInfo";
-import { getBoard, RawFeed, RawFeedItem, TBoard } from "@/app/matches/parseBingosyncData";
-import { Stack } from "@mantine/core";
+import {
+  getBoard,
+  RawFeed,
+  RawFeedItem,
+  TBoard,
+} from "@/app/matches/parseBingosyncData";
+import { Group, Stack } from "@mantine/core";
 import { useEffect, useState } from "react";
+import FeedEntry from "./FeedEntry";
+import Feed from "./Feed";
 
 type Props = {
   id: string;
@@ -50,7 +57,7 @@ export default function Cast({
           newBoard[slotIndex] = square;
           return newBoard;
         });
-      } else if (rawItem.type === 'new-card') {
+      } else if (rawItem.type === "new-card") {
         const rawBoard = await fetchBoard(id);
         setBoard(getBoard(rawBoard));
       }
@@ -59,10 +66,10 @@ export default function Cast({
     return () => {
       socket.close();
     };
-  }, [socketKey]);
+  }, [socketKey, id]);
 
   return (
-    <Stack>
+    <Group>
       <Board
         board={board}
         onClickSquare={null}
@@ -70,10 +77,7 @@ export default function Cast({
         setIsHidden={() => false}
         showDifficulty={true}
       />
-      {/* reference: https://github.com/kbuzsaki/bingosync/blob/b23d3b4e3192e7034573f3e8efc906aa4a83b0b8/bingosync-app/static/bingosync/room/chat_panel.js#L16 */}
-      {rawFeed.events.map((event, index) => (
-        <div key={index}>{JSON.stringify(event)}</div>
-      ))}
-    </Stack>
+      <Feed rawFeed={rawFeed} />
+    </Group>
   );
 }

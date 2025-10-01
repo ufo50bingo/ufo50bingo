@@ -85,9 +85,17 @@ export type RawGoal = {
 };
 type RawChat = {
   type: "chat";
+  player: RawPlayer;
+  player_color: BingosyncColor;
+  text: string;
+  timestamp: number;
 };
 type RawColor = {
   type: "color";
+  player: RawPlayer;
+  player_color: BingosyncColor;
+  color: BingosyncColor;
+  timestamp: number;
 };
 type RawRevealed = {
   type: "revealed";
@@ -97,12 +105,19 @@ type RawRevealed = {
 };
 type RawConnection = {
   type: "connection";
+  event_type: "connected" | "disconnected";
+  player: RawPlayer;
+  player_color: BingosyncColor;
+  timestamp: number;
 };
 // "other" is NEVER ACTUALLY USED BY BINGOSYNC
 // just including here so the types help us not crash in case
 // bingosync adds new event types in the future
 type RawOther = {
   type: "other";
+  player: RawPlayer;
+  player_color: BingosyncColor;
+  timestamp: number;
 };
 export type RawFeedItem =
   | RawNewCard

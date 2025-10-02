@@ -2,7 +2,7 @@ import SquareText from "./SquareText";
 import classes from "./Board.module.css";
 import { ReactNode, useState } from "react";
 import { BingosyncColor, TBoard } from "./matches/parseBingosyncData";
-import { Difficulty, Game, SORTED_FLAT_GOALS } from "./goals";
+import { GOAL_TO_TYPES } from "./cast/[id]/goalToTypes";
 
 type Props = {
   board: TBoard;
@@ -13,11 +13,6 @@ type Props = {
   hiddenText?: ReactNode;
   showDifficulty: boolean;
 };
-
-const GOAL_TO_TYPES: { [name: string]: readonly [Game, Difficulty] } = {};
-SORTED_FLAT_GOALS.forEach((goal) => {
-  GOAL_TO_TYPES[goal.name] = goal.types;
-});
 
 function getColorClass(color: string): string {
   const firstColor = color.split(" ")[0] as BingosyncColor;

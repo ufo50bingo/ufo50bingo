@@ -69,6 +69,7 @@ export default function Countdown() {
     };
     return (
         <Stack>
+            <span>WARNING! You should not minimize your browser after starting a countdown!</span>
             <NumberInput
                 label="Scanning time (min 10 seconds)"
                 value={analysisSeconds} min={10}

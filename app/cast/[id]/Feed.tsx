@@ -2,7 +2,7 @@ import { RawFeed } from "@/app/matches/parseBingosyncData";
 import { Card, Stack } from "@mantine/core";
 import FeedEntry from "./FeedEntry";
 import ChatInput from "./ChatInput";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 
 type Props = {
   cookie: string;
@@ -11,7 +11,7 @@ type Props = {
 
 export default function Feed({ cookie, rawFeed }: Props) {
   const feedRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (feedRef.current != null) {
       feedRef.current.scrollTop = feedRef.current.scrollHeight;
     }

@@ -22,14 +22,14 @@ export default function Feed({ cookie, rawFeed }: Props) {
       padding="sm"
       radius="md"
       withBorder={true}
-      style={{ maxWidth: "356px" }}
+      style={{ maxWidth: "356px", height: "475px" }}
     >
       <Card.Section
         ref={feedRef}
         inheritPadding={true}
         withBorder={true}
         py="sm"
-        style={{ height: "475px", overflowY: "auto" }}
+        style={{ overflowY: "auto" }}
       >
         <Stack gap={0}>
           {rawFeed.events.map((entry, index) => (

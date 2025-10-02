@@ -9,7 +9,7 @@ import {
   TBoard,
 } from "@/app/matches/parseBingosyncData";
 import { Group } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Feed from "./Feed";
 
 type Props = {
@@ -29,7 +29,6 @@ export default function Cast({
 }: Props) {
   const [board, setBoard] = useState(initialBoard);
   const [rawFeed, setRawFeed] = useState(initialRawFeed);
-
   useEffect(() => {
     const socket = new WebSocket("wss://sockets.bingosync.com/broadcast");
 

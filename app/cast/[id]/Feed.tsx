@@ -2,6 +2,7 @@ import { RawFeed } from "@/app/matches/parseBingosyncData";
 import { Card, Stack } from "@mantine/core";
 import FeedEntry from "./FeedEntry";
 import ChatInput from "./ChatInput";
+import { useEffect, useRef } from "react";
 
 type Props = {
   cookie: string;
@@ -9,6 +10,12 @@ type Props = {
 };
 
 export default function Feed({ cookie, rawFeed }: Props) {
+  const feedRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (feedRef.current != null) {
+      feedRef.current.scrollTop = feedRef.current.scrollHeight;
+    }
+  }, [rawFeed]);
   return (
     <Card
       shadow="sm"
@@ -18,6 +25,7 @@ export default function Feed({ cookie, rawFeed }: Props) {
       style={{ maxWidth: "356px" }}
     >
       <Card.Section
+        ref={feedRef}
         inheritPadding={true}
         withBorder={true}
         py="sm"

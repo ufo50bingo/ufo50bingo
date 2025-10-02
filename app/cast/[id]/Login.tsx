@@ -11,6 +11,12 @@ export default function Login() {
 
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
+
+    const submit = async () => {
+        if (name !== '' && password !== '') {
+            await createSession(id, name, password);
+        }
+    }
     return (<Container>
         <Card
             shadow="sm"
@@ -28,9 +34,17 @@ export default function Login() {
             <Card.Section inheritPadding={true} py="sm" withBorder={true}>
                 <Stack>
                     <Text size="sm"><strong>If you have the bingosync password</strong>, you can access the full view, where you can chat and use admin features.</Text>
-                    <TextInput label="Nickname" value={name} onChange={event => setName(event.target.value)} />
-                    <TextInput label="Password" value={password} onChange={event => setPassword(event.target.value)} />
-                    <Button onClick={async () => await createSession(id, name, password)}>Access admin view</Button>
+                    <TextInput onKeyDown={async (event) => {
+                        if (event.key === "Enter") {
+                            await submit();
+                        }
+                    }} label="Nickname" value={name} onChange={event => setName(event.target.value)} />
+                    <TextInput onKeyDown={async (event) => {
+                        if (event.key === "Enter") {
+                            await submit();
+                        }
+                    }} label="Password" value={password} onChange={event => setPassword(event.target.value)} />
+                    <Button disabled={name === '' || password === ''} onClick={submit}>Access admin view</Button>
                 </Stack>
             </Card.Section>
         </Card>

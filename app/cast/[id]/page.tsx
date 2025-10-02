@@ -1,12 +1,10 @@
 import {
     fetchBoard,
     fetchFeed,
-    getSessionCookie,
     getSocketKey,
 } from "@/app/fetchMatchInfo";
 import { getBoard } from "@/app/matches/parseBingosyncData";
 import Cast from "./Cast";
-import { cookies } from "next/headers";
 import Login from "./Login";
 import getCookie from "./getCookie";
 

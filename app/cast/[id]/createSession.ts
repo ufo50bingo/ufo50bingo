@@ -1,6 +1,5 @@
 'use server';
 
-import getCsrfData from "@/app/getCsrfData";
 import { cookies } from "next/headers";
 
 const SESSIONID_REGEX = /sessionid=([^;]+);/;

@@ -6,25 +6,17 @@ import { cookies } from "next/headers";
 const SESSIONID_REGEX = /sessionid=([^;]+);/;
 
 export default async function createSession(id: string, name: string, password: string) {
-    const { cookie, token } = await getCsrfData();
-    const joinResponse = await fetch(`https://www.bingosync.com/room/${id}`, {
+    const joinResponse = await fetch(`https://www.bingosync.com/api/join-room`, {
         method: "POST",
         redirect: "manual",
-        credentials: "include",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
-            Cookie: cookie,
         },
-        body: new URLSearchParams({
-            csrfmiddlewaretoken: token,
-            encoded_room_uuid: id,
-            // these dummy fields are required by the form validation even though they aren't used
-            room_name: "dummy",
-            creator_name: "dummy",
-            game_name: "dummy",
-            player_name: name,
-            passphrase: password,
-            is_spectator: "on",
+        body: JSON.stringify({
+            room: id,
+            nickname: name,
+            password,
+            is_spectator: true,
         }).toString(),
     });
 

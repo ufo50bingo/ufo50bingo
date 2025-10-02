@@ -11,6 +11,7 @@ import {
 import { Group } from "@mantine/core";
 import { useEffect, useState } from "react";
 import Feed from "./Feed";
+import Countdown from "./Countdown";
 
 type Props = {
   id: string;
@@ -76,6 +77,7 @@ export default function Cast({
         showDifficulty={true}
       />
       <Feed rawFeed={rawFeed} />
+      <Countdown />
     </Group>
   );
 }

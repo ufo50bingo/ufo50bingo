@@ -9,7 +9,7 @@ import {
   TBoard,
 } from "@/app/matches/parseBingosyncData";
 import { Group } from "@mantine/core";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Feed from "./Feed";
 
 type Props = {

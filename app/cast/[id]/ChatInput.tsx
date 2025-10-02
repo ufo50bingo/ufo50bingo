@@ -1,29 +1,30 @@
-import { Button, Group, TextInput } from "@mantine/core";
+import { Button, Group, TextInput, Tooltip } from "@mantine/core";
 import { useState } from "react";
 import sendChat from "./sendChat";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
-type Props = { cookie: string };
-
-export default function ChatInput({ cookie }: Props) {
+export default function ChatInput() {
   const [text, setText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const { id } = useParams<{ id: string }>();
+  const useBot = useSearchParams().get('use_bot') === 'true';
 
   const submit = async () => {
     if (text !== "" && !isSubmitting) {
       setIsSubmitting(true);
       try {
-        await sendChat(id, text, cookie);
+        await sendChat(id, text);
       } finally {
         setIsSubmitting(false);
       }
       setText("");
     }
   };
-  return (
+  const input = (
     <Group>
       <TextInput
+        disabled={useBot}
         style={{ flexGrow: "1" }}
         value={text}
         onChange={(event) => setText(event.currentTarget.value)}
@@ -33,9 +34,12 @@ export default function ChatInput({ cookie }: Props) {
           }
         }}
       />
-      <Button disabled={text === "" || isSubmitting} onClick={submit}>
+      <Button disabled={text === "" || isSubmitting || useBot} onClick={submit}>
         Send
       </Button>
     </Group>
   );
+  return useBot
+    ? <Tooltip label="You have read-only access, so you cannot chat">{input}</Tooltip>
+    : input;
 }

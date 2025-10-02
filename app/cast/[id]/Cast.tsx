@@ -17,12 +17,10 @@ type Props = {
   board: TBoard;
   rawFeed: RawFeed;
   socketKey: string;
-  botCookie: string;
 };
 
 export default function Cast({
   id,
-  botCookie,
   board: initialBoard,
   rawFeed: initialRawFeed,
   socketKey,
@@ -77,7 +75,7 @@ export default function Cast({
         setIsHidden={() => false}
         showDifficulty={true}
       />
-      <Feed cookie={botCookie} rawFeed={rawFeed} />
+      <Feed rawFeed={rawFeed} />
     </Group>
   );
 }

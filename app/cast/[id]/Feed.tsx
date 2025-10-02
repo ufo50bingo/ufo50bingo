@@ -5,11 +5,10 @@ import ChatInput from "./ChatInput";
 import { useLayoutEffect, useRef } from "react";
 
 type Props = {
-  cookie: string;
   rawFeed: RawFeed;
 };
 
-export default function Feed({ cookie, rawFeed }: Props) {
+export default function Feed({ rawFeed }: Props) {
   const feedRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     if (feedRef.current != null) {
@@ -38,7 +37,7 @@ export default function Feed({ cookie, rawFeed }: Props) {
         </Stack>
       </Card.Section>
       <Card.Section inheritPadding={true} withBorder={true} py="sm">
-        <ChatInput cookie={cookie} />
+        <ChatInput />
       </Card.Section>
     </Card>
   );

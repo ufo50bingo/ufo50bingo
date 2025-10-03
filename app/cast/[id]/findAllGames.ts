@@ -20,7 +20,8 @@ export default function findAllGames(board: TBoard): Set<Game> {
     }
     const strippedGoal = square.name.toLowerCase().replace(/[^a-z0-9]/g, "");
     ORDERED_PROPER_GAMES.forEach((name) => {
-      if (strippedGoal.includes(name)) {
+      const testName = name === "miniandmax" ? "minimax" : name;
+      if (strippedGoal.includes(testName)) {
         games.add(name);
       }
     });

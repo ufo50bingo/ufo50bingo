@@ -205,6 +205,6 @@ const GAME_NAMES_STRINGS: { [strippedName: string]: string } = GAME_NAMES;
 function getGameForGoal(goal: string): string {
   const beforeColon = goal.split(":")[0];
   const search = beforeColon.toLowerCase().replace(/[^0-9a-z]/gi, "");
-  const game = GAME_NAMES_STRINGS[search];
+  const game = search === "minimax" ? "Mini & Max" : GAME_NAMES_STRINGS[search];
   return game ?? "General";
 }

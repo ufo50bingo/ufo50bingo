@@ -45,7 +45,7 @@ export default function GeneralGoal({ allGames, name }: Props) {
       padding="sm"
       radius="md"
       withBorder={true}
-      style={{ height: "475px" }}
+      style={{ height: "300px" }}
     >
       <Card.Section inheritPadding={true} withBorder={true} py="sm">
         <Title order={5}>{name}</Title>

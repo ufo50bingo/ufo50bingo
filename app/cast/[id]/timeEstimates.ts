@@ -1,11 +1,11 @@
 import { Game } from "@/app/goals";
 
 export const GOLD_TIMES: ReadonlyArray<[Game, number]> = [
-  ["waldorfsjourney", 2.5],
   ["nightmanor", 2.5],
-  ["velgress", 3],
-  ["mortolii", 3],
+  ["mortolii", 2.5],
+  ["waldorfsjourney", 2.5],
   ["bushidoball", 3.5],
+  ["velgress", 3],
   ["mooncat", 4],
   ["magicgarden", 5],
   ["pingolf", 5],

@@ -8,7 +8,7 @@ export default function ChatInput() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { id } = useParams<{ id: string }>();
-  const useBot = useSearchParams().get('use_bot') === 'true';
+  const useBot = useSearchParams().get("use_bot") === "true";
 
   const submit = async () => {
     if (text !== "" && !isSubmitting) {
@@ -39,7 +39,11 @@ export default function ChatInput() {
       </Button>
     </Group>
   );
-  return useBot
-    ? <Tooltip label="You have read-only access, so you cannot chat">{input}</Tooltip>
-    : input;
+  return useBot ? (
+    <Tooltip label="You have read-only access, so you cannot chat">
+      {input}
+    </Tooltip>
+  ) : (
+    input
+  );
 }

@@ -158,3 +158,27 @@ export const GIFT_TIMES: ReadonlyArray<[Game, number]> = [
   ["rockonisland", 30],
   ["lordsofdiskonia", 60],
 ];
+
+export const TOP_3: ReadonlyArray<[Game, string]> = [
+  ["magicgarden", "8k"],
+  ["ninpek", "8k"],
+  ["starwaspir", "100k"],
+  ["campanella", "15k"],
+  ["kickclub", "75k"],
+  ["rakshasa", "30k"],
+  ["seasidedrive", "100k"],
+  ["caramelcaramel", "60k"],
+  ["paintchase", "320"],
+];
+
+export const TOP_5: ReadonlyArray<[Game, string]> = [
+  ["campanella", "5k"],
+  ["magicgarden", "6k"],
+  ["ninpek", "5k"],
+  ["starwaspir", "60k"],
+  ["caramelcaramel", "20k"],
+  ["kickclub", "25k"],
+  ["rakshasa", "10k"],
+  ["seasidedrive", "40k"],
+  ["paintchase", "240"],
+];

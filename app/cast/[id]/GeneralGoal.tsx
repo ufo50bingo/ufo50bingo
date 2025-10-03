@@ -1,7 +1,13 @@
 import { Game, GAME_NAMES, GoalName } from "@/app/goals";
 import { Card, List, Title } from "@mantine/core";
 import { ReactNode } from "react";
-import { GOLD_TIMES, CHERRY_TIMES, GIFT_TIMES } from "./timeEstimates";
+import {
+  GOLD_TIMES,
+  CHERRY_TIMES,
+  GIFT_TIMES,
+  TOP_3,
+  TOP_5,
+} from "./timeEstimates";
 
 type Props = {
   allGames: Set<Game>;
@@ -35,6 +41,29 @@ export default function GeneralGoal({ allGames, name }: Props) {
       <List>
         {CHERRY_TIMES.filter((entry) => allGames.has(entry[0])).map((entry) => (
           <List.Item key={entry[0]}>{GAME_NAMES[entry[0]]}</List.Item>
+        ))}
+      </List>
+    );
+  } else if (
+    name === "Enter a top 3 score on 2 arcade leaderboards" ||
+    name === "Enter a top 3 score on 3 arcade leaderboards"
+  ) {
+    content = (
+      <List>
+        {TOP_3.map((entry) => (
+          <List.Item key={entry[0]}>
+            {GAME_NAMES[entry[0]]} ({entry[1]})
+          </List.Item>
+        ))}
+      </List>
+    );
+  } else if (name === "Enter a top 5 score on 4 arcade leaderboards") {
+    content = (
+      <List>
+        {TOP_5.map((entry) => (
+          <List.Item key={entry[0]}>
+            {GAME_NAMES[entry[0]]} ({entry[1]})
+          </List.Item>
         ))}
       </List>
     );

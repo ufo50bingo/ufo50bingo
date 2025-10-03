@@ -48,7 +48,7 @@ export default function About({ initialBoard }: Props) {
             }}
             isHidden={isHidden}
             setIsHidden={setIsHidden}
-            showDifficulty={false}
+            shownDifficulties={[]}
           />
         </div>
         <p>

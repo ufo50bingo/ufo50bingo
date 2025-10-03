@@ -8,11 +8,12 @@ import {
   RawFeedItem,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
-import { Group } from "@mantine/core";
+import { Card, Checkbox, Group, Stack } from "@mantine/core";
 import { useEffect, useState } from "react";
 import Feed from "./Feed";
 import Countdown from "./Countdown";
 import GeneralGoals from "./GeneralGoals";
+import { Difficulty, DIFFICULTY_NAMES, ORDERED_DIFFICULTY } from "@/app/goals";
 
 type Props = {
   id: string;
@@ -29,6 +30,9 @@ export default function Cast({
 }: Props) {
   const [board, setBoard] = useState(initialBoard);
   const [rawFeed, setRawFeed] = useState(initialRawFeed);
+  const [shownDifficulties, setShownDifficulties] = useState<
+    ReadonlyArray<Difficulty>
+  >(["veryhard", "general"]);
   useEffect(() => {
     const socket = new WebSocket("wss://sockets.bingosync.com/broadcast");
 
@@ -75,11 +79,32 @@ export default function Cast({
         onClickSquare={null}
         isHidden={false}
         setIsHidden={() => false}
-        showDifficulty={true}
+        shownDifficulties={shownDifficulties}
       />
       <Feed rawFeed={rawFeed} />
       <GeneralGoals board={board} />
-      <Countdown />
+      <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
+        <Countdown />
+      </Card>
+      <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
+        <Stack>
+          <span>Display difficulty tags for:</span>
+          {ORDERED_DIFFICULTY.map((difficulty) => (
+            <Checkbox
+              key={difficulty}
+              checked={shownDifficulties.includes(difficulty)}
+              onChange={(event) =>
+                setShownDifficulties(
+                  event.currentTarget.checked
+                    ? [...shownDifficulties, difficulty]
+                    : shownDifficulties.filter((d) => d !== difficulty)
+                )
+              }
+              label={DIFFICULTY_NAMES[difficulty]}
+            />
+          ))}
+        </Stack>
+      </Card>
     </Group>
   );
 }

@@ -46,7 +46,7 @@ export default function PracticeBoard() {
               start();
               setIsHidden(false);
             }}
-            showDifficulty={false}
+            shownDifficulties={[]}
           />
           <Text style={{ alignSelf: "center" }} size="xl">
             {timer}

@@ -3,6 +3,7 @@ import classes from "./Board.module.css";
 import { ReactNode, useState } from "react";
 import { BingosyncColor, TBoard } from "./matches/parseBingosyncData";
 import { GOAL_TO_TYPES } from "./cast/[id]/goalToTypes";
+import { Difficulty } from "./goals";
 
 type Props = {
   board: TBoard;
@@ -11,7 +12,7 @@ type Props = {
   isHidden: boolean;
   setIsHidden: (isHidden: boolean) => void;
   hiddenText?: ReactNode;
-  showDifficulty: boolean;
+  shownDifficulties: ReadonlyArray<Difficulty>;
 };
 
 function getColorClass(color: string): string {
@@ -43,9 +44,12 @@ function getColorClass(color: string): string {
   }
 }
 
-function getDifficulty(name: string): null | ReactNode {
+function getDifficulty(
+  name: string,
+  shownDifficulties: ReadonlyArray<Difficulty>
+): null | ReactNode {
   const difficulty = GOAL_TO_TYPES[name][1];
-  if (difficulty == null) {
+  if (difficulty == null || !shownDifficulties.includes(difficulty)) {
     return null;
   }
   let difficultyClass;
@@ -87,7 +91,7 @@ export default function Board({
   isHidden,
   setIsHidden,
   hiddenText,
-  showDifficulty,
+  shownDifficulties,
 }: Props) {
   const [starred, setStarred] = useState<ReadonlyArray<number>>([]);
   return (
@@ -109,7 +113,8 @@ export default function Board({
           }}
         >
           {starred.includes(squareIndex) && <div className={classes.starred} />}
-          {showDifficulty && getDifficulty(square.name)}
+          {shownDifficulties.length > 0 &&
+            getDifficulty(square.name, shownDifficulties)}
           <SquareText
             key={square.name}
             text={square.name}

@@ -20,6 +20,51 @@ const CHERRY_DISKS = /Collect \d+ cherry disks from games on this card/i;
 
 export default function GeneralGoal({ allGames, name }: Props) {
   let content: ReactNode = "No info for this goal yet!";
+  // switch (name) {
+  //   case "Collect 2 cherry disks from games on this card":
+  //   case "Collect 3 cherry disks from games on this card":
+  //   case "Collect 4 cherry disks from games on this card":
+  //     break;
+  //   case "Collect 3 gold disks from games on this card":
+  //   case "Collect 4 gold disks from games on this card":
+  //   case "Collect 5 gold disks from games on this card":
+  //     break;
+  //   case "Collect 4 gifts from games on this card":
+  //   case "Collect 6 gifts from games on this card":
+  //   case "Collect 8 gifts from games on this card":
+  //     break;
+  //   case "ARCADE ACE: Gold Disk any 3 of the 16 “ARCADE” games":
+  //     break;
+  //   case "TRIATHLON: Gold Disk any 3 of the 5 “SPORT” games":
+  //     break;
+  //   case "Beat 2 levels in 8 different games":
+  //   case "Beat 4 levels in 5 different games":
+  //   case "Beat 8 levels in 3 different games":
+  //   case "Collect a beverage in 6 games":
+  //   case "Collect a food item in 8 games":
+  //   case "Collect a key in 7 games":
+  //   case "Open 2 chests in 5 games":
+  //   case "Buy an item from a shop in 10 games":
+  //   case "Defeat 2 bosses in 4 different games":
+  //   case "Defeat 7 bosses":
+  //   case "Defeat a boss in 6 different games":
+  //   case "Earn an extra life/1UP in 8 games":
+  //   case "Find an easter egg UFO in 5 games":
+  //   case "Find an egg in 10 games":
+  //   case "Increase your base HP in 6 games":
+  //   case "PILOT PARTY: Collect 4 gifts: Campanella 1/2/3, Planet Zoldath, Pilot Quest, The Big Bell Race":
+
+  //   case "ALPHA TRILOGY: Gold Velgress, Overbold, and Quibble Race as Alpha":
+  //   case "AMY: Playing as Amy, beat 1 level in Party House, 2 in Hot Foot, 2 in Fist Hell":
+  //   case "CAMPANELLA TRILOGY: Beat two worlds in Campanella, two in Campanella 2, one in Campanella 3":
+  //   case "DAY JOB: Beat 1 level in Bug Hunter, 2 in Onion Delivery, 3 in Rail Heist":
+  //   case "METROIDVANIA: Collect Abilities: 3 in Porgy, 2 in Vainger, 1 in Golfaria":
+  //   case "PUZZLER: Beat 5 levels in Block Koala, Camouflage, Warptank":
+  //   case "RACER: Win 4 races in Paint Chase, The Big Bell Race, Quibble Race":
+  //   case "ROLE-PLAYER: Level up all your characters twice in Divers, Valbrace, Grimstone":
+  //   case "WAR IS BAD: Win 3 battles in Attactics, Avianos, Combatants":
+  //     break;
+  // }
   if (GIFTS.test(name)) {
     content = (
       <List>

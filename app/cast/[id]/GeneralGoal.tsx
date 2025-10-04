@@ -10,6 +10,7 @@ import {
 } from "./timeEstimates";
 
 type Props = {
+  isChecked: boolean;
   allGames: Set<Game>;
   name: GoalName;
 };
@@ -18,7 +19,7 @@ const GIFTS = /Collect \d+ gifts from games on this card/i;
 const GOLD_DISKS = /Collect \d+ gold disks from games on this card/i;
 const CHERRY_DISKS = /Collect \d+ cherry disks from games on this card/i;
 
-export default function GeneralGoal({ allGames, name }: Props) {
+export default function GeneralGoal({ allGames, name, isChecked }: Props) {
   let content: ReactNode = "No info for this goal yet!";
   // switch (name) {
   //   case "Collect 2 cherry disks from games on this card":
@@ -136,7 +137,7 @@ export default function GeneralGoal({ allGames, name }: Props) {
       style={{ height: "300px" }}
     >
       <Card.Section inheritPadding={true} withBorder={true} py="sm">
-        <Title order={5}>{name}</Title>
+        <Title order={5}>{isChecked ? <s>{name}</s> : name}</Title>
       </Card.Section>
       <Card.Section
         inheritPadding={true}

@@ -11,14 +11,19 @@ type Props = {
 };
 
 export default function GeneralGoals({ board }: Props) {
-  const generals = board
-    .filter((square) => GOAL_TO_TYPES[square.name][1] === "general")
-    .map((square) => square.name);
+  const generals = board.filter(
+    (square) => GOAL_TO_TYPES[square.name][1] === "general"
+  );
   const allGames = useMemo(() => findAllGames(board), [board]);
   return (
     <SimpleGrid cols={generals.length}>
       {generals.map((g) => (
-        <GeneralGoal key={g} allGames={allGames} name={g as GoalName} />
+        <GeneralGoal
+          key={g.name}
+          allGames={allGames}
+          name={g.name as GoalName}
+          isChecked={g.color !== "blank"}
+        />
       ))}
     </SimpleGrid>
   );

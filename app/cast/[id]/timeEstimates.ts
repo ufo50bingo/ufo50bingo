@@ -555,6 +555,7 @@ export const BOSS: ReadonlyArray<Game> = [
   "lordsofdiskonia",
 ];
 
+// separate by recommended, synergy only, always hidden
 export const TWO_BOSSES: ReadonlyArray<Game> = [
   "campanella",
   "starwaspir",

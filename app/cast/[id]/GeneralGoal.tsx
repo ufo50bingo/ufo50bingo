@@ -37,21 +37,33 @@ export default function GeneralGoal({ allGames, name }: Props) {
   //     break;
   //   case "TRIATHLON: Gold Disk any 3 of the 5 “SPORT” games":
   //     break;
+  //   case "Collect a beverage in 6 games":
+  //   case "Collect a food item in 8 games":
+  //     break;
   //   case "Beat 2 levels in 8 different games":
   //   case "Beat 4 levels in 5 different games":
   //   case "Beat 8 levels in 3 different games":
-  //   case "Collect a beverage in 6 games":
-  //   case "Collect a food item in 8 games":
+  //     // needs sort still
+  //     break;
   //   case "Collect a key in 7 games":
   //   case "Open 2 chests in 5 games":
+  //     break;
   //   case "Buy an item from a shop in 10 games":
+  //     break;
+  //   case "Find an easter egg UFO in 5 games":
+  //     break;
+  //   case "Earn an extra life/1UP in 8 games":
+  //     break;
+  //   case "Find an egg in 10 games":
+  //     break;
+  //   case "Increase your base HP in 6 games":
+  //     break;
+
   //   case "Defeat 2 bosses in 4 different games":
   //   case "Defeat 7 bosses":
   //   case "Defeat a boss in 6 different games":
-  //   case "Earn an extra life/1UP in 8 games":
-  //   case "Find an easter egg UFO in 5 games":
-  //   case "Find an egg in 10 games":
-  //   case "Increase your base HP in 6 games":
+  //     break;
+
   //   case "PILOT PARTY: Collect 4 gifts: Campanella 1/2/3, Planet Zoldath, Pilot Quest, The Big Bell Race":
 
   //   case "ALPHA TRILOGY: Gold Velgress, Overbold, and Quibble Race as Alpha":
@@ -69,7 +81,9 @@ export default function GeneralGoal({ allGames, name }: Props) {
     content = (
       <List>
         {GIFT_TIMES.filter((entry) => allGames.has(entry[0])).map((entry) => (
-          <List.Item key={entry[0]}>{GAME_NAMES[entry[0]]}</List.Item>
+          <List.Item key={entry[0]}>
+            {GAME_NAMES[entry[0]]} ({entry[1]})
+          </List.Item>
         ))}
       </List>
     );

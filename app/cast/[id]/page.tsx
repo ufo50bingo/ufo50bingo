@@ -3,6 +3,7 @@ import { getBoard } from "@/app/matches/parseBingosyncData";
 import Cast from "./Cast";
 import Login from "./Login";
 import getCookie from "./getCookie";
+import getSeed from "./getSeed";
 // import { STANDARD } from "@/app/pastas/standard";
 // import getSrlV5Board from "@/app/practiceboard/getSrlV5Board";
 
@@ -24,12 +25,21 @@ export default async function CastPage({
   if (cookie == null) {
     return <Login />;
   }
-  const [rawBoard, rawFeed, socketKey] = await Promise.all([
+  const [rawBoard, rawFeed, socketKey, seed] = await Promise.all([
     fetchBoard(id),
     fetchFeed(id, cookie),
     getSocketKey(id, cookie),
+    getSeed(id),
   ]);
   const board = getBoard(rawBoard);
   // const board = getSrlV5Board(STANDARD);
-  return <Cast id={id} board={board} rawFeed={rawFeed} socketKey={socketKey} />;
+  return (
+    <Cast
+      id={id}
+      board={board}
+      rawFeed={rawFeed}
+      socketKey={socketKey}
+      seed={seed}
+    />
+  );
 }

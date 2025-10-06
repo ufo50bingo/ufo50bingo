@@ -25,6 +25,7 @@ type Props = {
   board: TBoard;
   rawFeed: RawFeed;
   socketKey: string;
+  seed: number;
 };
 
 export default function Cast({
@@ -32,6 +33,7 @@ export default function Cast({
   board: initialBoard,
   rawFeed: initialRawFeed,
   socketKey,
+  seed,
 }: Props) {
   const [board, setBoard] = useState(initialBoard);
   const [rawFeed, setRawFeed] = useState(initialRawFeed);

@@ -1,5 +1,5 @@
 import { Game, GAME_NAMES, GoalName } from "@/app/goals";
-import { Card, List, Title, Tooltip } from "@mantine/core";
+import { Anchor, Card, Checkbox, List, Stack, Title, Tooltip } from "@mantine/core";
 import { useState } from "react";
 import {
   TOP_3,
@@ -54,8 +54,8 @@ function getOtherGoals(entry: TerminalEntry, gameToGoals: GameToGoals, goal: Goa
 }
 
 export default function GeneralGoal({ gameToGoals, name, isChecked, terminalCodes }: Props) {
-  const [showAll, _setShowAll] = useState(false);
-  const [progress, _setProgress] = useState(0);
+  const [showAll, setShowAll] = useState(false);
+  const [checked, setChecked] = useState<Set<Game>>(new Set());
 
   let target: number;
   let recommendations: RecommendationsWithTerminal;
@@ -175,7 +175,7 @@ export default function GeneralGoal({ gameToGoals, name, isChecked, terminalCode
       recommendations = BOSSES;
       break;
     case "Defeat a boss in 6 different games":
-      target = 7;
+      target = 6;
       recommendations = BOSSES;
       break;
     case "Enter a top 3 score on 2 arcade leaderboards":
@@ -241,9 +241,12 @@ export default function GeneralGoal({ gameToGoals, name, isChecked, terminalCode
   const synergyWithOnCard: ReadonlyArray<[TerminalEntry, null | ReadonlyArray<GoalName>]> = recommendations.synergy.map(e => [e, getOtherGoals(e, gameToGoals, name)]);
   const neverWithOnCard: ReadonlyArray<[TerminalEntry, null | ReadonlyArray<GoalName>]> = recommendations.never.map(e => [e, getOtherGoals(e, gameToGoals, name)]);
 
+  const allEntries = [...alwaysWithOnCard, ...synergyWithOnCard, ...neverWithOnCard];
   const entries = showAll
-    ? [...alwaysWithOnCard, ...synergyWithOnCard, ...neverWithOnCard]
+    ? allEntries
     : [...alwaysWithOnCard, ...synergyWithOnCard.filter(e => e[1])];
+
+  const hasMore = allEntries.length > entries.length;
 
   const nullableEntries: ReadonlyArray<null | [Game, null | ReadonlyArray<GoalName>]> = entries.map(pair => {
     const e = pair[0];
@@ -260,7 +263,7 @@ export default function GeneralGoal({ gameToGoals, name, isChecked, terminalCode
     ? nonNullEntries.filter(e => e[1] != null)
     : nonNullEntries;
 
-  const title = `${name} (${progress}/${target})`;
+  const title = `${name} (${checked.size}/${target})`;
   return (
     <Card
       shadow="sm"
@@ -278,7 +281,7 @@ export default function GeneralGoal({ gameToGoals, name, isChecked, terminalCode
         py="sm"
         style={{ overflowY: "auto" }}
       >
-        <List>
+        <Stack gap={4}>
           {finalEntries.map(e => {
             const [game, otherGoals] = e;
             const gameName = otherGoals != null
@@ -289,11 +292,20 @@ export default function GeneralGoal({ gameToGoals, name, isChecked, terminalCode
               : null;
             const descriptionText = description != null
               ? ` (${description})`
-              : null;
-            return <List.Item key={game}>{gameName} {descriptionText}</List.Item>
+              : '';
+            return <Checkbox key={game} checked={checked.has(game)} onChange={(event) => {
+              const newSet = new Set(checked);
+              if (event.currentTarget.checked) {
+                newSet.add(game);
+              } else {
+                newSet.delete(game);
+              }
+              setChecked(newSet);
+            }} label={<>{gameName}{descriptionText}</>} />
           })}
-        </List>
+          {hasMore ? <Anchor onClick={() => setShowAll(true)}>Show non-recommended games</Anchor> : null}
+        </Stack>
       </Card.Section>
-    </Card>
+    </Card >
   );
 }

@@ -297,7 +297,7 @@ export default function GeneralGoal({
           );
         })}
         {hasMore ? (
-          <Anchor onClick={() => setShowAll(true)}>Show all options</Anchor>
+          <Anchor onClick={() => setShowAll(true)} size="sm">Show all options</Anchor>
         ) : null}
       </Stack>
     </InfoCard>

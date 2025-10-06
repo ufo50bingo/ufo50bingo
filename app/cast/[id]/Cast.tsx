@@ -9,22 +9,20 @@ import {
   Square,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
-import { Card, Checkbox, Group, Stack } from "@mantine/core";
+import { Group, Stack } from "@mantine/core";
 import { useEffect, useMemo, useState } from "react";
 import Feed from "./Feed";
-import Countdown from "./Countdown";
 import {
   Difficulty,
-  DIFFICULTY_NAMES,
   Game,
   GoalName,
-  ORDERED_DIFFICULTY,
 } from "@/app/goals";
 import { getAllTerminalCodes, getGameToGoals } from "./findAllGames";
 import { GOAL_TO_TYPES } from "./goalToTypes";
 import GeneralGoal from "./GeneralGoal";
 import InfoCard from "./InfoCard";
 import GameInfo from "./GameInfo";
+import CastSettings from "./CastSettings";
 
 type Props = {
   id: string;
@@ -109,55 +107,34 @@ export default function Cast({
     ));
 
   return (
-    <Group>
-      <Board
-        board={board}
-        onClickSquare={null}
-        isHidden={false}
-        setIsHidden={() => false}
-        shownDifficulties={shownDifficulties}
-      />
-      <Feed rawFeed={rawFeed} />
+    <>
       <Group>
-        {generalGoals.map((g) => (
-          <GeneralGoal
-            key={g.name}
-            gameToGoals={gameToGoals}
-            name={g.name as GoalName}
-            isChecked={g.color !== "blank"}
-            terminalCodes={terminalCodes}
-          />
-        ))}
-        <InfoCard title="Multi-goal games">
-          <Stack gap={4}>
-            {multiGoalGames.length > 0
-              ? multiGoalGames
-              : "No multi-goal games on this card!"}
-          </Stack>
-        </InfoCard>
-      </Group>
-      <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
-        <Countdown />
-      </Card>
-      <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
-        <Stack>
-          <span>Display difficulty tags for:</span>
-          {ORDERED_DIFFICULTY.map((difficulty) => (
-            <Checkbox
-              key={difficulty}
-              checked={shownDifficulties.includes(difficulty)}
-              onChange={(event) =>
-                setShownDifficulties(
-                  event.currentTarget.checked
-                    ? [...shownDifficulties, difficulty]
-                    : shownDifficulties.filter((d) => d !== difficulty)
-                )
-              }
-              label={DIFFICULTY_NAMES[difficulty]}
+        <Board
+          board={board}
+          onClickSquare={null}
+          isHidden={false}
+          setIsHidden={() => false}
+          shownDifficulties={shownDifficulties}
+        />
+        <Feed rawFeed={rawFeed} />
+        <Group>
+          {generalGoals.map((g) => (
+            <GeneralGoal
+              key={g.name}
+              gameToGoals={gameToGoals}
+              name={g.name as GoalName}
+              isChecked={g.color !== "blank"}
+              terminalCodes={terminalCodes}
             />
           ))}
-        </Stack>
-      </Card>
-    </Group>
+          <InfoCard title="Multi-goal games">
+            <Stack gap={4}>
+              {multiGoalGames.length > 0 ? multiGoalGames : 'No multi-goal games on this card!'}
+            </Stack>
+          </InfoCard>
+        </Group>
+      </Group>
+      <CastSettings shownDifficulties={shownDifficulties} setShownDifficulties={setShownDifficulties} />
+    </>
   );
 }

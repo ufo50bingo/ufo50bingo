@@ -86,6 +86,10 @@ export default function Cast({
     };
   }, [socketKey, id]);
 
+  const multiGoalGames = Object.keys(gameToGoals).filter(game => gameToGoals[game].length > 1).map(game =>
+    <GameInfo key={game} game={game as Game} goals={gameToGoals[game]} description={null} />
+  );
+
   return (
     <Group>
       <Board
@@ -108,9 +112,7 @@ export default function Cast({
         ))}
         <InfoCard title="Multi-goal games">
           <Stack gap={4}>
-            {Object.keys(gameToGoals).filter(game => gameToGoals[game].length > 1).map(game =>
-              <GameInfo key={game} game={game as Game} goals={gameToGoals[game]} description={null} />
-            )}
+            {multiGoalGames.length > 0 ? multiGoalGames : 'No multi-goal games on this card!'}
           </Stack>
         </InfoCard>
       </SimpleGrid>

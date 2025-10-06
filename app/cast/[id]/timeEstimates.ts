@@ -669,7 +669,6 @@ export const BOSSES: RecommendationsWithTerminal = {
         "vainger",
         "campanella3",
         "velgress",
-        "kickclub",
         "caramelcaramel",
         "mooncat",
         "porgy",

@@ -31,6 +31,8 @@ import {
   TOP_5_SCORES,
 } from "./timeEstimates";
 import { findGamesForGoal, GameToGoals } from "./findAllGames";
+import InfoCard from "./InfoCard";
+import GameInfo from "./GameInfo";
 
 type Props = {
   isChecked: boolean;
@@ -215,27 +217,14 @@ export default function GeneralGoal({ gameToGoals, name, isChecked, terminalCode
       break;
     default:
       return (
-        <Card
-          shadow="sm"
-          padding="sm"
-          radius="md"
-          withBorder={true}
-          style={{ height: "300px" }}
-        >
-          <Card.Section inheritPadding={true} withBorder={true} py="sm">
-            <Title order={5}>{isChecked ? <s>{name}</s> : name}</Title>
-          </Card.Section>
-          <Card.Section
-            inheritPadding={true}
-            withBorder={true}
-            py="sm"
-            style={{ overflowY: "auto" }}
-          >
-            No info for this goal yet!
-          </Card.Section>
-        </Card>
+        <InfoCard title={isChecked ? <s>{name}</s> : name}>
+          No info for this goal yet!
+        </InfoCard>
       );
   }
+
+  const titleStr = `${name} (${checked.size}/${target})`;
+  const title = isChecked ? <s>{titleStr}</s> : titleStr;
 
   const alwaysWithOnCard: ReadonlyArray<[TerminalEntry, null | ReadonlyArray<GoalName>]> = recommendations.always.map(e => [e, getOtherGoals(e, gameToGoals, name)]);
   const synergyWithOnCard: ReadonlyArray<[TerminalEntry, null | ReadonlyArray<GoalName>]> = recommendations.synergy.map(e => [e, getOtherGoals(e, gameToGoals, name)]);
@@ -262,50 +251,33 @@ export default function GeneralGoal({ gameToGoals, name, isChecked, terminalCode
   const finalEntries = onCardOnly
     ? nonNullEntries.filter(e => e[1] != null)
     : nonNullEntries;
-
-  const title = `${name} (${checked.size}/${target})`;
   return (
-    <Card
-      shadow="sm"
-      padding="sm"
-      radius="md"
-      withBorder={true}
-      style={{ height: "300px" }}
-    >
-      <Card.Section inheritPadding={true} withBorder={true} py="sm">
-        <Title order={5}>{isChecked ? <s>{title}</s> : title}</Title>
-      </Card.Section>
-      <Card.Section
-        inheritPadding={true}
-        withBorder={true}
-        py="sm"
-        style={{ overflowY: "auto" }}
-      >
-        <Stack gap={4}>
-          {finalEntries.map(e => {
-            const [game, otherGoals] = e;
-            const gameName = otherGoals != null
-              ? <Tooltip label={otherGoals.map((g, index) => index === 0 ? g : <><br />{g}</>)}><u><strong>{GAME_NAMES[game]}</strong></u></Tooltip>
-              : GAME_NAMES[game];
-            const description = descriptions != null
-              ? descriptions[game]
-              : null;
-            const descriptionText = description != null
-              ? ` (${description})`
-              : '';
-            return <Checkbox key={game} checked={checked.has(game)} onChange={(event) => {
-              const newSet = new Set(checked);
-              if (event.currentTarget.checked) {
-                newSet.add(game);
-              } else {
-                newSet.delete(game);
-              }
-              setChecked(newSet);
-            }} label={<>{gameName}{descriptionText}</>} />
-          })}
-          {hasMore ? <Anchor onClick={() => setShowAll(true)}>Show non-recommended games</Anchor> : null}
-        </Stack>
-      </Card.Section>
-    </Card >
+    <InfoCard title={title}>
+      <Stack gap={4}>
+        {finalEntries.map(e => {
+          const [game, otherGoals] = e;
+          const description = descriptions != null
+            ? descriptions[game]
+            : null;
+          return (
+            <Checkbox
+              key={game}
+              checked={checked.has(game)}
+              onChange={(event) => {
+                const newSet = new Set(checked);
+                if (event.currentTarget.checked) {
+                  newSet.add(game);
+                } else {
+                  newSet.delete(game);
+                }
+                setChecked(newSet);
+              }}
+              label={<GameInfo game={game} goals={otherGoals} description={description} />}
+            />
+          );
+        })}
+        {hasMore ? <Anchor onClick={() => setShowAll(true)}>Show non-recommended games</Anchor> : null}
+      </Stack>
+    </InfoCard>
   );
 }

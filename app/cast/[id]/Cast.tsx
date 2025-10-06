@@ -13,10 +13,12 @@ import { Card, Checkbox, Group, SimpleGrid, Stack } from "@mantine/core";
 import { useEffect, useMemo, useState } from "react";
 import Feed from "./Feed";
 import Countdown from "./Countdown";
-import { Difficulty, DIFFICULTY_NAMES, GoalName, ORDERED_DIFFICULTY } from "@/app/goals";
+import { Difficulty, DIFFICULTY_NAMES, Game, GoalName, ORDERED_DIFFICULTY } from "@/app/goals";
 import { getAllTerminalCodes, getGameToGoals } from "./findAllGames";
 import { GOAL_TO_TYPES } from "./goalToTypes";
 import GeneralGoal from "./GeneralGoal";
+import InfoCard from "./InfoCard";
+import GameInfo from "./GameInfo";
 
 type Props = {
   id: string;
@@ -104,6 +106,13 @@ export default function Cast({
             terminalCodes={terminalCodes}
           />
         ))}
+        <InfoCard title="Multi-goal games">
+          <Stack gap={4}>
+            {Object.keys(gameToGoals).filter(game => gameToGoals[game].length > 1).map(game =>
+              <GameInfo key={game} game={game as Game} goals={gameToGoals[game]} description={null} />
+            )}
+          </Stack>
+        </InfoCard>
       </SimpleGrid>
       <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
         <Countdown />

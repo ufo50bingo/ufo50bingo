@@ -12,11 +12,7 @@ import {
 import { Group, Stack } from "@mantine/core";
 import { useEffect, useMemo, useState } from "react";
 import Feed from "./Feed";
-import {
-  Difficulty,
-  Game,
-  GoalName,
-} from "@/app/goals";
+import { Difficulty, Game, GoalName } from "@/app/goals";
 import { getAllTerminalCodes, getGameToGoals } from "./findAllGames";
 import { GOAL_TO_TYPES } from "./goalToTypes";
 import GeneralGoal from "./GeneralGoal";
@@ -129,12 +125,17 @@ export default function Cast({
           ))}
           <InfoCard title="Multi-goal games">
             <Stack gap={4}>
-              {multiGoalGames.length > 0 ? multiGoalGames : 'No multi-goal games on this card!'}
+              {multiGoalGames.length > 0
+                ? multiGoalGames
+                : "No multi-goal games on this card!"}
             </Stack>
           </InfoCard>
         </Group>
       </Group>
-      <CastSettings shownDifficulties={shownDifficulties} setShownDifficulties={setShownDifficulties} />
+      <CastSettings
+        shownDifficulties={shownDifficulties}
+        setShownDifficulties={setShownDifficulties}
+      />
     </>
   );
 }

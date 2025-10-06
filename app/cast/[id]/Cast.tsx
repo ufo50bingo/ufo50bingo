@@ -6,14 +6,17 @@ import {
   getBoard,
   RawFeed,
   RawFeedItem,
+  Square,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
-import { Card, Checkbox, Group, Stack } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { Card, Checkbox, Group, SimpleGrid, Stack } from "@mantine/core";
+import { useEffect, useMemo, useState } from "react";
 import Feed from "./Feed";
 import Countdown from "./Countdown";
-import GeneralGoals from "./GeneralGoals";
-import { Difficulty, DIFFICULTY_NAMES, ORDERED_DIFFICULTY } from "@/app/goals";
+import { Difficulty, DIFFICULTY_NAMES, GoalName, ORDERED_DIFFICULTY } from "@/app/goals";
+import { getAllTerminalCodes, getGameToGoals } from "./findAllGames";
+import { GOAL_TO_TYPES } from "./goalToTypes";
+import GeneralGoal from "./GeneralGoal";
 
 type Props = {
   id: string;
@@ -33,6 +36,12 @@ export default function Cast({
   const [shownDifficulties, setShownDifficulties] = useState<
     ReadonlyArray<Difficulty>
   >(["veryhard", "general"]);
+  const [gameToGoals, setGameToGoals] = useState(() => getGameToGoals(initialBoard));
+  const generalGoals = useMemo<ReadonlyArray<Square>>(() => board.filter(
+    (square) => GOAL_TO_TYPES[square.name][1] === "general"
+  ), [board]);
+  const [terminalCodes, setTerminalCodes] = useState(() => getAllTerminalCodes(initialBoard))
+
   useEffect(() => {
     const socket = new WebSocket("wss://sockets.bingosync.com/broadcast");
 
@@ -63,7 +72,10 @@ export default function Cast({
         });
       } else if (rawItem.type === "new-card") {
         const rawBoard = await fetchBoard(id);
-        setBoard(getBoard(rawBoard));
+        const newBoard = getBoard(rawBoard);
+        setGameToGoals(getGameToGoals(newBoard));
+        setTerminalCodes(getAllTerminalCodes(newBoard));
+        setBoard(newBoard);
       }
     };
 
@@ -82,7 +94,17 @@ export default function Cast({
         shownDifficulties={shownDifficulties}
       />
       <Feed rawFeed={rawFeed} />
-      <GeneralGoals board={board} />
+      <SimpleGrid cols={3}>
+        {generalGoals.map((g) => (
+          <GeneralGoal
+            key={g.name}
+            gameToGoals={gameToGoals}
+            name={g.name as GoalName}
+            isChecked={g.color !== "blank"}
+            terminalCodes={terminalCodes}
+          />
+        ))}
+      </SimpleGrid>
       <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
         <Countdown />
       </Card>

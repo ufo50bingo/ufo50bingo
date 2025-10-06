@@ -24,7 +24,7 @@ export type RawSquare = {
 };
 export type RawBoard = ReadonlyArray<RawSquare>;
 
-type Square = {
+export type Square = {
   name: string;
   color: BingosyncColor;
 };

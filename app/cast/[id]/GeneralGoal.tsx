@@ -1,5 +1,5 @@
-import { Game, GAME_NAMES, GoalName } from "@/app/goals";
-import { Anchor, Card, Checkbox, List, Stack, Title, Tooltip } from "@mantine/core";
+import { Game, GoalName } from "@/app/goals";
+import { Anchor, Checkbox, Stack } from "@mantine/core";
 import { useState } from "react";
 import {
   TOP_3,

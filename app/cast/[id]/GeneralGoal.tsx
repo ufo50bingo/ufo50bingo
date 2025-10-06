@@ -74,11 +74,6 @@ export default function GeneralGoal({ gameToGoals, name, isChecked, terminalCode
       recommendations = CHERRIES;
       onCardOnly = true;
       break;
-    case "Collect 4 cherry disks from games on this card":
-      target = 4;
-      recommendations = CHERRIES;
-      onCardOnly = true;
-      break;
     case "Collect 3 gold disks from games on this card":
       target = 3;
       recommendations = GOLDS;
@@ -89,19 +84,14 @@ export default function GeneralGoal({ gameToGoals, name, isChecked, terminalCode
       recommendations = GOLDS;
       onCardOnly = true;
       break;
-    case "Collect 5 gold disks from games on this card":
-      target = 5;
-      recommendations = GOLDS;
-      onCardOnly = true;
-      break;
-    case "Collect 4 gifts from games on this card":
-      target = 4;
+    case "Collect 6 gifts from games on this card":
+      target = 6;
       recommendations = GIFTS;
       onCardOnly = true;
       descriptions = GIFT_DESCRIPTIONS;
       break;
-    case "Collect 6 gifts from games on this card":
-      target = 6;
+    case "Collect 7 gifts from games on this card":
+      target = 7;
       recommendations = GIFTS;
       onCardOnly = true;
       descriptions = GIFT_DESCRIPTIONS;

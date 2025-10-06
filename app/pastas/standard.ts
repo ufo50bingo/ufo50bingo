@@ -8,7 +8,7 @@ export const STANDARD = [
 {"name": "MAGIC GARDEN: Defeat an enemy worth at least 500 points", "types": ["magicgarden", "easy"]},
 {"name": "MORTOL: Earn six 1-ups by killing enemies", "types": ["mortol", "easy"]},
 {"name": "MORTOL: Beat 2 levels without killing any enemies", "types": ["mortol", "easy"]},
-{"name": "KICK CLUB: Beat Racket World with 19,000 points or less", "types": ["kickclub", "easy"]},
+{"name": "KICK CLUB: Reach Track World with 19,000 points or less", "types": ["kickclub", "easy"]},
 {"name": "KICK CLUB: Score 50,000+ points", "types": ["kickclub", "easy"]},
 {"name": "FIST HELL: Clear the first scare and enter the shop with $20 or more", "types": ["fisthell", "easy"]},
 {"name": "FIST HELL: Survive 6 waves in the gym as Cat", "types": ["fisthell", "easy"]},
@@ -436,5 +436,6 @@ export const STANDARD = [
 {"name": "RACER: Win 4 races in Paint Chase, The Big Bell Race, Quibble Race", "types": ["general", "general"]}
 ]
 ] as const;
+
 
 

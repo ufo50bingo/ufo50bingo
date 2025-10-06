@@ -9,11 +9,17 @@ import {
   Square,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
-import { Card, Checkbox, Group, SimpleGrid, Stack } from "@mantine/core";
+import { Card, Checkbox, Group, Stack } from "@mantine/core";
 import { useEffect, useMemo, useState } from "react";
 import Feed from "./Feed";
 import Countdown from "./Countdown";
-import { Difficulty, DIFFICULTY_NAMES, Game, GoalName, ORDERED_DIFFICULTY } from "@/app/goals";
+import {
+  Difficulty,
+  DIFFICULTY_NAMES,
+  Game,
+  GoalName,
+  ORDERED_DIFFICULTY,
+} from "@/app/goals";
 import { getAllTerminalCodes, getGameToGoals } from "./findAllGames";
 import { GOAL_TO_TYPES } from "./goalToTypes";
 import GeneralGoal from "./GeneralGoal";
@@ -38,11 +44,16 @@ export default function Cast({
   const [shownDifficulties, setShownDifficulties] = useState<
     ReadonlyArray<Difficulty>
   >(["veryhard", "general"]);
-  const [gameToGoals, setGameToGoals] = useState(() => getGameToGoals(initialBoard));
-  const generalGoals = useMemo<ReadonlyArray<Square>>(() => board.filter(
-    (square) => GOAL_TO_TYPES[square.name][1] === "general"
-  ), [board]);
-  const [terminalCodes, setTerminalCodes] = useState(() => getAllTerminalCodes(initialBoard))
+  const [gameToGoals, setGameToGoals] = useState(() =>
+    getGameToGoals(initialBoard)
+  );
+  const generalGoals = useMemo<ReadonlyArray<Square>>(
+    () => board.filter((square) => GOAL_TO_TYPES[square.name][1] === "general"),
+    [board]
+  );
+  const [terminalCodes, setTerminalCodes] = useState(() =>
+    getAllTerminalCodes(initialBoard)
+  );
 
   useEffect(() => {
     const socket = new WebSocket("wss://sockets.bingosync.com/broadcast");
@@ -86,9 +97,16 @@ export default function Cast({
     };
   }, [socketKey, id]);
 
-  const multiGoalGames = Object.keys(gameToGoals).filter(game => gameToGoals[game].length > 1).map(game =>
-    <GameInfo key={game} game={game as Game} goals={gameToGoals[game]} description={null} />
-  );
+  const multiGoalGames = Object.keys(gameToGoals)
+    .filter((game) => gameToGoals[game].length > 1)
+    .map((game) => (
+      <GameInfo
+        key={game}
+        game={game as Game}
+        goals={gameToGoals[game]}
+        description={null}
+      />
+    ));
 
   return (
     <Group>
@@ -112,7 +130,9 @@ export default function Cast({
         ))}
         <InfoCard title="Multi-goal games">
           <Stack gap={4}>
-            {multiGoalGames.length > 0 ? multiGoalGames : 'No multi-goal games on this card!'}
+            {multiGoalGames.length > 0
+              ? multiGoalGames
+              : "No multi-goal games on this card!"}
           </Stack>
         </InfoCard>
       </Group>

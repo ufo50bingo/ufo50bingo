@@ -28,7 +28,7 @@ export default function Feed({ rawFeed }: Props) {
         inheritPadding={true}
         withBorder={true}
         py="sm"
-        style={{ height: '100%', overflowY: "auto" }}
+        style={{ height: "100%", overflowY: "auto" }}
       >
         <Stack gap={0}>
           {rawFeed.events.map((entry, index) => (

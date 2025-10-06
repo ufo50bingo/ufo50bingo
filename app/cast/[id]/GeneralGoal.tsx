@@ -38,24 +38,29 @@ type Props = {
   isChecked: boolean;
   gameToGoals: GameToGoals;
   name: GoalName;
-  terminalCodes: Set<string>,
+  terminalCodes: Set<string>;
 };
 
-function getOtherGoals(entry: TerminalEntry, gameToGoals: GameToGoals, goal: GoalName): null | ReadonlyArray<GoalName> {
-  const game = typeof entry === 'string'
-    ? entry
-    : entry.game;
+function getOtherGoals(
+  entry: TerminalEntry,
+  gameToGoals: GameToGoals,
+  goal: GoalName
+): null | ReadonlyArray<GoalName> {
+  const game = typeof entry === "string" ? entry : entry.game;
   const goals = gameToGoals[game];
   if (goals == null || goals.length === 0) {
     return null;
   }
-  const otherGoals = goals.filter(g => g !== goal);
-  return otherGoals.length === 0
-    ? null
-    : otherGoals;
+  const otherGoals = goals.filter((g) => g !== goal);
+  return otherGoals.length === 0 ? null : otherGoals;
 }
 
-export default function GeneralGoal({ gameToGoals, name, isChecked, terminalCodes }: Props) {
+export default function GeneralGoal({
+  gameToGoals,
+  name,
+  isChecked,
+  terminalCodes,
+}: Props) {
   const [showAll, setShowAll] = useState(false);
   const [checked, setChecked] = useState<Set<Game>>(new Set());
 
@@ -202,7 +207,7 @@ export default function GeneralGoal({ gameToGoals, name, isChecked, terminalCode
         always: findGamesForGoal(name),
         synergy: [],
         never: [],
-      }
+      };
       target = recommendations.always.length;
       break;
     default:
@@ -216,39 +221,58 @@ export default function GeneralGoal({ gameToGoals, name, isChecked, terminalCode
   const titleStr = `${name} (${checked.size}/${target})`;
   const title = isChecked ? <s>{titleStr}</s> : titleStr;
 
-  const alwaysWithOnCard: ReadonlyArray<[TerminalEntry, null | ReadonlyArray<GoalName>]> = recommendations.always.map(e => [e, getOtherGoals(e, gameToGoals, name)]);
-  const synergyWithOnCard: ReadonlyArray<[TerminalEntry, null | ReadonlyArray<GoalName>]> = recommendations.synergy.map(e => [e, getOtherGoals(e, gameToGoals, name)]);
-  const neverWithOnCard: ReadonlyArray<[TerminalEntry, null | ReadonlyArray<GoalName>]> = recommendations.never.map(e => [e, getOtherGoals(e, gameToGoals, name)]);
+  const alwaysWithOnCard: ReadonlyArray<
+    [TerminalEntry, null | ReadonlyArray<GoalName>]
+  > = recommendations.always.map((e) => [
+    e,
+    getOtherGoals(e, gameToGoals, name),
+  ]);
+  const synergyWithOnCard: ReadonlyArray<
+    [TerminalEntry, null | ReadonlyArray<GoalName>]
+  > = recommendations.synergy.map((e) => [
+    e,
+    getOtherGoals(e, gameToGoals, name),
+  ]);
+  const neverWithOnCard: ReadonlyArray<
+    [TerminalEntry, null | ReadonlyArray<GoalName>]
+  > = recommendations.never.map((e) => [
+    e,
+    getOtherGoals(e, gameToGoals, name),
+  ]);
 
-  const allEntries = [...alwaysWithOnCard, ...synergyWithOnCard, ...neverWithOnCard];
+  const allEntries = [
+    ...alwaysWithOnCard,
+    ...synergyWithOnCard,
+    ...neverWithOnCard,
+  ];
   const entries = showAll
     ? allEntries
-    : [...alwaysWithOnCard, ...synergyWithOnCard.filter(e => e[1])];
+    : [...alwaysWithOnCard, ...synergyWithOnCard.filter((e) => e[1])];
 
   const hasMore = allEntries.length > entries.length;
 
-  const nullableEntries: ReadonlyArray<null | [Game, null | ReadonlyArray<GoalName>]> = entries.map(pair => {
+  const nullableEntries: ReadonlyArray<
+    null | [Game, null | ReadonlyArray<GoalName>]
+  > = entries.map((pair) => {
     const e = pair[0];
-    if (typeof e === 'string') {
+    if (typeof e === "string") {
       return [e, pair[1]];
     }
-    return terminalCodes.has(e.code) === (e.type === 'include')
+    return terminalCodes.has(e.code) === (e.type === "include")
       ? [e.game, pair[1]]
       : null;
   });
 
-  const nonNullEntries = nullableEntries.filter(e => e != null);
+  const nonNullEntries = nullableEntries.filter((e) => e != null);
   const finalEntries = onCardOnly
-    ? nonNullEntries.filter(e => e[1] != null)
+    ? nonNullEntries.filter((e) => e[1] != null)
     : nonNullEntries;
   return (
     <InfoCard title={title}>
       <Stack gap={4}>
-        {finalEntries.map(e => {
+        {finalEntries.map((e) => {
           const [game, otherGoals] = e;
-          const description = descriptions != null
-            ? descriptions[game]
-            : null;
+          const description = descriptions != null ? descriptions[game] : null;
           return (
             <Checkbox
               key={game}
@@ -262,11 +286,19 @@ export default function GeneralGoal({ gameToGoals, name, isChecked, terminalCode
                 }
                 setChecked(newSet);
               }}
-              label={<GameInfo game={game} goals={otherGoals} description={description} />}
+              label={
+                <GameInfo
+                  game={game}
+                  goals={otherGoals}
+                  description={description}
+                />
+              }
             />
           );
         })}
-        {hasMore ? <Anchor onClick={() => setShowAll(true)}>Show all options</Anchor> : null}
+        {hasMore ? (
+          <Anchor onClick={() => setShowAll(true)}>Show all options</Anchor>
+        ) : null}
       </Stack>
     </InfoCard>
   );

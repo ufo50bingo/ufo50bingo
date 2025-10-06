@@ -33,7 +33,7 @@ export function getGameToGoals(board: TBoard): GameToGoals {
   board.forEach((square) => {
     const goal = square.name as GoalName;
     const gamesForGoal = findGamesForGoal(goal);
-    gamesForGoal.forEach(game => {
+    gamesForGoal.forEach((game) => {
       const existingGoals = gameToGoals[game] ?? [];
       existingGoals.push(goal);
       gameToGoals[game] = existingGoals;
@@ -53,7 +53,7 @@ export function getTerminalCode(goal: string): null | string {
 
 export function getAllTerminalCodes(board: TBoard): Set<string> {
   const codes = new Set<string>();
-  board.forEach(square => {
+  board.forEach((square) => {
     const code = getTerminalCode(square.name);
     if (code != null) {
       codes.add(code);

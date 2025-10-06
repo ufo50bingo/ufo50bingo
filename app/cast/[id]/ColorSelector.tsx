@@ -1,5 +1,5 @@
-import { ReactNode, useState } from 'react';
-import { Input, InputBase, Combobox, useCombobox } from '@mantine/core';
+import { ReactNode } from 'react';
+import { InputBase, Combobox, useCombobox } from '@mantine/core';
 import { BingosyncColor } from '@/app/matches/parseBingosyncData';
 import BingosyncColored from '@/app/matches/BingosyncColored';
 

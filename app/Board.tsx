@@ -79,6 +79,7 @@ function getDifficulty(
   return (
     <>
       <div className={`${classes.difficulty} ${difficultyClass}`} />
+      <div className={classes.difficultyBorder} />
       <div className={classes.difficultyLetter}>{letter}</div>
     </>
   );

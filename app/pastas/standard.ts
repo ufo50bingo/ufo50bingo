@@ -186,7 +186,7 @@ export const STANDARD = [
     { "name": "RAKSHASA: Beat the first stage", "types": ["rakshasa", "medium"] },
     { "name": "PILOT QUEST: Defeat Big Borlg (large alien in the central ruins)", "types": ["pilotquest", "medium"] },
     { "name": "PILOT QUEST: Defeat Unktomi (Spider boss)", "types": ["pilotquest", "medium"] },
-    { "name": "QUIBBLE RACE: WILD-BETS allowed; have $25,000", "types": ["quibblerace", "medium"] },
+    { "name": "QUIBBLE RACE: WILD-BETS allowed; have $25,000+", "types": ["quibblerace", "medium"] },
     { "name": "QUIBBLE RACE: Win 5 bets", "types": ["quibblerace", "medium"] }
   ],
   [
@@ -329,7 +329,7 @@ export const STANDARD = [
     { "name": "CAMPANELLA 2: Clear Moire Woods II or Rink II", "types": ["campanella2", "hard"] },
     { "name": "CAMPANELLA 2: Collect two scrolls in one run", "types": ["campanella2", "hard"] },
     { "name": "RAKSHASA: Revive yourself 6 times in one run", "types": ["rakshasa", "hard"] },
-    { "name": "RAKSHASA: Score 25,000 points", "types": ["rakshasa", "hard"] },
+    { "name": "RAKSHASA: Score 25,000+ points", "types": ["rakshasa", "hard"] },
     { "name": "MINI & MAX: Collect a big shiny", "types": ["miniandmax", "hard"] },
     { "name": "MINI & MAX: Collect 150 shinies without obtaining the Shrink Potion", "types": ["miniandmax", "hard"] },
     { "name": "COMBATANTS: Slay a spider", "types": ["combatants", "hard"] },

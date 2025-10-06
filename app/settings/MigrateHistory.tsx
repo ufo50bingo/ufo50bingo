@@ -27,8 +27,6 @@ const OLD_GOAL_TO_NEW_GOAL: { [key: string]: GoalName } = {
     "BLOCK KOALA: WORM-1234 allowed; beat level 14",
   "BLOCK KOALA: WORM-1234 allowed; Clear 9 story levels":
     "BLOCK KOALA: WORM-1234 allowed; beat any 9 story levels",
-  "BUG HUNTER: Earn 3 kills with one module use":
-    "BUG HUNTER: Get 3 kills with one module use",
   "BUSHIDO BALL: Gold disk with Default Options":
     "BUSHIDO BALL: Gold disk w/ Default Options",
   "BUSHIDO BALL: Win a 16-point match on Hyper speed with all other options default":
@@ -57,7 +55,6 @@ const OLD_GOAL_TO_NEW_GOAL: { [key: string]: GoalName } = {
     "CYBER OWLS: HAWK-BASE allowed; beat Antarctica",
   "DEVILITION: Beat three levels while placing the maximum number of pieces each round":
     "DEVILITION: Beat 3 rounds while placing the maximum number of pieces each round",
-  "DEVILITION: Beat 5 rounds": "DEVILITION: Beat 5 rounds in one run",
   "Find an egg in 10 different games": "Find an egg in 10 games",
   "FIST HELL: Beat the 4th scare (Boardwalk Bash)":
     "FIST HELL: Clear the 4th scare",

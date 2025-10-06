@@ -1,10 +1,9 @@
 import { Game, GAME_NAMES, GoalName } from "@/app/goals";
 import { Card, List, Title, Tooltip } from "@mantine/core";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import {
   TOP_3,
   TOP_5,
-  Recommendations,
   RecommendationsWithTerminal,
   Descriptions,
   CHERRIES,
@@ -55,8 +54,8 @@ function getOtherGoals(entry: TerminalEntry, gameToGoals: GameToGoals, goal: Goa
 }
 
 export default function GeneralGoal({ gameToGoals, name, isChecked, terminalCodes }: Props) {
-  const [showAll, setShowAll] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [showAll, _setShowAll] = useState(false);
+  const [progress, _setProgress] = useState(0);
 
   let target: number;
   let recommendations: RecommendationsWithTerminal;
@@ -256,7 +255,10 @@ export default function GeneralGoal({ gameToGoals, name, isChecked, terminalCode
       : null;
   });
 
-  const finalEntries = nullableEntries.filter(e => e != null);
+  const nonNullEntries = nullableEntries.filter(e => e != null);
+  const finalEntries = onCardOnly
+    ? nonNullEntries.filter(e => e[1] != null)
+    : nonNullEntries;
 
   const title = `${name} (${progress}/${target})`;
   return (

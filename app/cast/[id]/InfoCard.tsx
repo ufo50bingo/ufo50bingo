@@ -13,7 +13,7 @@ export default function InfoCard({ title, children }: Props) {
             padding="sm"
             radius="md"
             withBorder={true}
-            style={{ height: "300px" }}
+            style={{ height: "300px", flexBasis: '240px' }}
         >
             <Card.Section inheritPadding={true} withBorder={true} py="sm">
                 <Title order={5}>{title}</Title>

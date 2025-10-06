@@ -266,7 +266,7 @@ export default function GeneralGoal({ gameToGoals, name, isChecked, terminalCode
             />
           );
         })}
-        {hasMore ? <Anchor onClick={() => setShowAll(true)}>Show non-recommended games</Anchor> : null}
+        {hasMore ? <Anchor onClick={() => setShowAll(true)}>Show all options</Anchor> : null}
       </Stack>
     </InfoCard>
   );

@@ -100,7 +100,7 @@ export default function Cast({
         shownDifficulties={shownDifficulties}
       />
       <Feed rawFeed={rawFeed} />
-      <SimpleGrid cols={3}>
+      <Group>
         {generalGoals.map((g) => (
           <GeneralGoal
             key={g.name}
@@ -115,7 +115,7 @@ export default function Cast({
             {multiGoalGames.length > 0 ? multiGoalGames : 'No multi-goal games on this card!'}
           </Stack>
         </InfoCard>
-      </SimpleGrid>
+      </Group>
       <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
         <Countdown />
       </Card>

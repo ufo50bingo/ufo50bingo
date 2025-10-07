@@ -1,5 +1,5 @@
 import { Game, GAME_NAMES, GoalName } from "@/app/goals";
-import { Tooltip } from "@mantine/core";
+import { Text, Tooltip } from "@mantine/core";
 import React from "react";
 
 type Props = {
@@ -32,9 +32,9 @@ export default function GameInfo({ game, description, goals }: Props) {
     );
   const descriptionText = description != null ? ` (${description})` : "";
   return (
-    <>
+    <Text size="sm">
       {gameName}
       {descriptionText}
-    </>
+    </Text>
   );
 }

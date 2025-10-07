@@ -96,7 +96,7 @@ export default function useCasterState(id: string, seed: number): CasterState {
 
 const DEFAULT_STATE: StateOnly = {
   leftColor: "red",
-  rightColor: "blue",
+  rightColor: "red",
   generals: {},
   shownDifficulties: ["veryhard", "general"],
 };

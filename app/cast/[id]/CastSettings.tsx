@@ -23,7 +23,7 @@ export default function CastSettings({
   shownDifficulties,
   setShownDifficulties,
 }: Props) {
-  const [isShown, setIsShown] = useState(true);
+  const [isShown, setIsShown] = useState(leftColor === rightColor);
 
   return (
     <>

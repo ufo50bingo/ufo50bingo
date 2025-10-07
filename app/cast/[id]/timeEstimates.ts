@@ -232,23 +232,24 @@ export const GIFTS: Recommendations = {
   never: ["grimstone", "warptank", "rockonisland", "lordsofdiskonia"],
 };
 
-const TOP_3_ENTRIES: ReadonlyArray<[Game, string]> = [
-  ["magicgarden", "8k"],
-  ["ninpek", "8k"],
-  ["starwaspir", "100k"],
-  ["campanella", "15k"],
-  ["kickclub", "75k"],
-  ["rakshasa", "30k"],
-  ["seasidedrive", "100k"],
-  ["caramelcaramel", "60k"],
-  ["paintchase", "320"],
-];
-export const TOP_3_SCORES: Descriptions = Object.fromEntries(TOP_3_ENTRIES);
-export const TOP_3: Recommendations = {
-  always: ["magicgarden", "ninpek", "starwaspir", "campanella"],
-  synergy: ["kickclub", "rakshasa", "seasidedrive", "caramelcaramel"],
-  never: ["paintchase"],
-};
+// TOP 3 has been removed. Keeping here in case it comes back later
+// const TOP_3_ENTRIES: ReadonlyArray<[Game, string]> = [
+//   ["magicgarden", "8k"],
+//   ["ninpek", "8k"],
+//   ["starwaspir", "100k"],
+//   ["campanella", "15k"],
+//   ["kickclub", "75k"],
+//   ["rakshasa", "30k"],
+//   ["seasidedrive", "100k"],
+//   ["caramelcaramel", "60k"],
+//   ["paintchase", "320"],
+// ];
+// export const TOP_3_SCORES: Descriptions = Object.fromEntries(TOP_3_ENTRIES);
+// export const TOP_3: Recommendations = {
+//   always: ["magicgarden", "ninpek", "starwaspir", "campanella"],
+//   synergy: ["kickclub", "rakshasa", "seasidedrive", "caramelcaramel"],
+//   never: ["paintchase"],
+// };
 
 const TOP_5_ENTRIES: ReadonlyArray<[Game, string]> = [
   ["campanella", "5k"],

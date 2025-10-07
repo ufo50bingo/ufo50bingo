@@ -1,7 +1,7 @@
 import { Game, GoalName } from "@/app/goals";
 import { Anchor, Button, Checkbox, Group, Stack } from "@mantine/core";
 import {
-  TOP_3,
+  // TOP_3,
   TOP_5,
   RecommendationsWithTerminal,
   Descriptions,
@@ -26,7 +26,7 @@ import {
   HP,
   TWO_BOSSES,
   BOSSES,
-  TOP_3_SCORES,
+  // TOP_3_SCORES,
   TOP_5_SCORES,
 } from "./timeEstimates";
 import { findGamesForGoal, GameToGoals } from "./findAllGames";
@@ -153,14 +153,14 @@ export default function GeneralGoal({
     case "Defeat a boss in 6 different games":
       recommendations = BOSSES;
       break;
-    case "Enter a top 3 score on 2 arcade leaderboards":
-      recommendations = TOP_3;
-      descriptions = TOP_3_SCORES;
-      break;
-    case "Enter a top 3 score on 3 arcade leaderboards":
-      recommendations = TOP_3;
-      descriptions = TOP_3_SCORES;
-      break;
+    // case "Enter a top 3 score on 2 arcade leaderboards":
+    //   recommendations = TOP_3;
+    //   descriptions = TOP_3_SCORES;
+    //   break;
+    // case "Enter a top 3 score on 3 arcade leaderboards":
+    //   recommendations = TOP_3;
+    //   descriptions = TOP_3_SCORES;
+    //   break;
     case "Enter a top 5 score on 4 arcade leaderboards":
       recommendations = TOP_5;
       descriptions = TOP_5_SCORES;

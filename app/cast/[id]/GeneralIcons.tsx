@@ -132,8 +132,8 @@ function getIconSrc(goal: GoalName): null | string {
     case "Defeat 7 bosses":
     case "Defeat a boss in 6 different games":
       return "/general/IconBoss.png";
-    case "Enter a top 3 score on 2 arcade leaderboards":
-    case "Enter a top 3 score on 3 arcade leaderboards":
+    // case "Enter a top 3 score on 2 arcade leaderboards":
+    // case "Enter a top 3 score on 3 arcade leaderboards":
     case "Enter a top 5 score on 4 arcade leaderboards":
       return "/general/IconLeaderboard.png";
     case "PILOT PARTY: Collect 4 gifts: Campanella 1/2/3, Planet Zoldath, Pilot Quest, The Big Bell Race":

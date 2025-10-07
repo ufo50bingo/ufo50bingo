@@ -19,8 +19,9 @@ import GeneralGoal from "./GeneralGoal";
 import InfoCard from "./InfoCard";
 import GameInfo from "./GameInfo";
 import CastSettings from "./CastSettings";
+import useCasterState from "./useCasterState";
 
-type Props = {
+export type CastProps = {
   id: string;
   board: TBoard;
   rawFeed: RawFeed;
@@ -34,12 +35,10 @@ export default function Cast({
   rawFeed: initialRawFeed,
   socketKey,
   seed,
-}: Props) {
+}: CastProps) {
+  const { generals, setGeneral, shownDifficulties, setShownDifficulties } = useCasterState(id, seed);
   const [board, setBoard] = useState(initialBoard);
   const [rawFeed, setRawFeed] = useState(initialRawFeed);
-  const [shownDifficulties, setShownDifficulties] = useState<
-    ReadonlyArray<Difficulty>
-  >(["veryhard", "general"]);
   const [gameToGoals, setGameToGoals] = useState(() =>
     getGameToGoals(initialBoard)
   );
@@ -121,8 +120,10 @@ export default function Cast({
               key={g.name}
               gameToGoals={gameToGoals}
               name={g.name as GoalName}
-              isChecked={g.color !== "blank"}
+              isFinished={g.color !== "blank"}
               terminalCodes={terminalCodes}
+              generalState={generals[g.name]}
+              setGeneral={setGeneral}
             />
           ))}
           <InfoCard title="Multi-goal games">

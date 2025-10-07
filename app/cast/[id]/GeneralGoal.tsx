@@ -1,6 +1,5 @@
 import { Game, GoalName } from "@/app/goals";
 import { Anchor, Checkbox, Stack } from "@mantine/core";
-import { useState } from "react";
 import {
   TOP_3,
   TOP_5,
@@ -33,12 +32,15 @@ import {
 import { findGamesForGoal, GameToGoals } from "./findAllGames";
 import InfoCard from "./InfoCard";
 import GameInfo from "./GameInfo";
+import { GeneralGoalState } from "./useCasterState";
 
 type Props = {
-  isChecked: boolean;
+  isFinished: boolean;
   gameToGoals: GameToGoals;
   name: GoalName;
   terminalCodes: Set<string>;
+  generalState: null | undefined | GeneralGoalState;
+  setGeneral: (goal: GoalName, newGenerals: GeneralGoalState) => unknown;
 };
 
 function getOtherGoals(
@@ -58,11 +60,16 @@ function getOtherGoals(
 export default function GeneralGoal({
   gameToGoals,
   name,
-  isChecked,
+  isFinished,
   terminalCodes,
+  generalState,
+  setGeneral,
 }: Props) {
-  const [showAll, setShowAll] = useState(false);
-  const [checked, setChecked] = useState<Set<Game>>(new Set());
+  const showAll = generalState?.showAll ?? false;
+  const checked = generalState?.leftChecked ?? new Set();
+  const rightChecked = generalState?.rightChecked ?? new Set();
+
+  console.log('checked is', checked);
 
   let target: number;
   let recommendations: RecommendationsWithTerminal;
@@ -212,14 +219,14 @@ export default function GeneralGoal({
       break;
     default:
       return (
-        <InfoCard title={isChecked ? <s>{name}</s> : name}>
+        <InfoCard title={isFinished ? <s>{name}</s> : name}>
           No info for this goal yet!
         </InfoCard>
       );
   }
 
   const titleStr = `${name} (${checked.size}/${target})`;
-  const title = isChecked ? <s>{titleStr}</s> : titleStr;
+  const title = isFinished ? <s>{titleStr}</s> : titleStr;
 
   const alwaysWithOnCard: ReadonlyArray<
     [TerminalEntry, null | ReadonlyArray<GoalName>]
@@ -284,7 +291,11 @@ export default function GeneralGoal({
                 } else {
                   newSet.delete(game);
                 }
-                setChecked(newSet);
+                setGeneral(name, {
+                  showAll,
+                  rightChecked,
+                  leftChecked: newSet,
+                });
               }}
               label={
                 <GameInfo
@@ -297,11 +308,15 @@ export default function GeneralGoal({
           );
         })}
         {hasMore ? (
-          <Anchor onClick={() => setShowAll(true)} size="sm">
+          <Anchor onClick={() => setGeneral(name, {
+            showAll: true,
+            rightChecked,
+            leftChecked: checked,
+          })} size="sm">
             Show all options
           </Anchor>
         ) : null}
       </Stack>
-    </InfoCard>
+    </InfoCard >
   );
 }

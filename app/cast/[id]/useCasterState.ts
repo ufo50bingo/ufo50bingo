@@ -49,7 +49,9 @@ export default function useCasterState(id: string, seed: number): CasterState {
     initialState.rightColor
   );
   const [generals, setGeneralsRaw] = useState<Generals>(initialState.generals);
-  const [shownDifficulties, setShownDifficultiesRaw] = useState<ReadonlyArray<Difficulty>>(initialState.shownDifficulties);
+  const [shownDifficulties, setShownDifficultiesRaw] = useState<
+    ReadonlyArray<Difficulty>
+  >(initialState.shownDifficulties);
 
   return useMemo(() => {
     const fullState = {
@@ -71,18 +73,23 @@ export default function useCasterState(id: string, seed: number): CasterState {
         ...generals,
         [goal]: newGeneralState,
       };
-      console.log('new generals', newGenerals);
+      console.log("new generals", newGenerals);
       setGeneralsRaw(newGenerals);
       setLocalStorage(key, { ...fullState, generals: newGenerals });
-    }
+    };
     const clearGenerals = () => {
       setGeneralsRaw({});
       setLocalStorage(key, { ...fullState, generals: {} });
-    }
-    const setShownDifficulties = (newShownDifficulties: ReadonlyArray<Difficulty>) => {
+    };
+    const setShownDifficulties = (
+      newShownDifficulties: ReadonlyArray<Difficulty>
+    ) => {
       setShownDifficultiesRaw(newShownDifficulties);
-      setLocalStorage(key, { ...fullState, shownDifficulties: newShownDifficulties });
-    }
+      setLocalStorage(key, {
+        ...fullState,
+        shownDifficulties: newShownDifficulties,
+      });
+    };
     return {
       ...fullState,
       setLeftColor,
@@ -90,7 +97,7 @@ export default function useCasterState(id: string, seed: number): CasterState {
       setGeneral,
       clearGenerals,
       setShownDifficulties,
-    }
+    };
   }, [leftColor, rightColor, generals, shownDifficulties, key]);
 }
 
@@ -133,12 +140,12 @@ function setLocalStorage(key: string, state: StateOnly): void {
 function toJsonState(state: StateOnly): JsonState {
   const generals = state.generals;
   const newGenerals: { [name: string]: GeneralGoalJsonState } = {};
-  Object.keys(generals).forEach(g => {
+  Object.keys(generals).forEach((g) => {
     newGenerals[g] = {
       showAll: generals[g].showAll,
       leftChecked: Array.from(generals[g].leftChecked),
       rightChecked: Array.from(generals[g].rightChecked),
-    }
+    };
   });
   return { ...state, generals: newGenerals };
 }
@@ -146,12 +153,12 @@ function toJsonState(state: StateOnly): JsonState {
 function fromJsonState(state: JsonState): StateOnly {
   const generals = state.generals;
   const newGenerals: { [name: string]: GeneralGoalState } = {};
-  Object.keys(generals).forEach(g => {
+  Object.keys(generals).forEach((g) => {
     newGenerals[g] = {
       showAll: generals[g].showAll,
       leftChecked: new Set(generals[g].leftChecked),
       rightChecked: new Set(generals[g].rightChecked),
-    }
+    };
   });
   return { ...state, generals: newGenerals };
 }

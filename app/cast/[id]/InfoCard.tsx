@@ -8,7 +8,12 @@ type Props = {
   width?: null | undefined | number;
 };
 
-export default function InfoCard({ title, children, height, width = 268 }: Props) {
+export default function InfoCard({
+  title,
+  children,
+  height,
+  width = 268,
+}: Props) {
   return (
     <Card
       shadow="sm"

@@ -7,8 +7,8 @@ import ColorSelector from "./ColorSelector";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 
 type Props = {
-  leftColor: BingosyncColor,
-  rightColor: BingosyncColor,
+  leftColor: BingosyncColor;
+  rightColor: BingosyncColor;
   setLeftColor: (newColor: BingosyncColor) => unknown;
   setRightColor: (newColor: BingosyncColor) => unknown;
   shownDifficulties: ReadonlyArray<Difficulty>;

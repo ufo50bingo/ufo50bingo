@@ -168,7 +168,10 @@ export default function GeneralGoal({
       descriptions = GIFT_DESCRIPTIONS;
       const allGames = findGamesForGoal(name);
       recommendations = {
-        always: GIFTS.always.concat(GIFTS.synergy).concat(GIFTS.never).filter(gift => allGames.includes(gift)),
+        always: GIFTS.always
+          .concat(GIFTS.synergy)
+          .concat(GIFTS.never)
+          .filter((gift) => allGames.includes(gift)),
         synergy: [],
         never: [],
       };
@@ -196,7 +199,16 @@ export default function GeneralGoal({
       );
   }
 
-  const titleEl = <>{name} (<BingosyncColored color={leftColor}>{leftChecked.size}</BingosyncColored> <BingosyncColored color={rightColor}>{rightChecked.size}</BingosyncColored>)</>
+  const titleEl = (
+    <>
+      {name} (
+      <BingosyncColored color={leftColor}>{leftChecked.size}</BingosyncColored>{" "}
+      <BingosyncColored color={rightColor}>
+        {rightChecked.size}
+      </BingosyncColored>
+      )
+    </>
+  );
   const title = isFinished ? <s>{titleEl}</s> : titleEl;
 
   const alwaysWithOnCard: ReadonlyArray<
@@ -293,14 +305,19 @@ export default function GeneralGoal({
                 description={description}
               />
             </Group>
-          )
+          );
         })}
         {hasMore ? (
-          <Anchor onClick={() => setGeneral(name, {
-            showAll: true,
-            rightChecked,
-            leftChecked,
-          })} size="sm">
+          <Anchor
+            onClick={() =>
+              setGeneral(name, {
+                showAll: true,
+                rightChecked,
+                leftChecked,
+              })
+            }
+            size="sm"
+          >
             Show all options
           </Anchor>
         ) : null}

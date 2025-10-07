@@ -37,25 +37,35 @@ export default function Cast({
   socketKey,
   seed,
 }: CastProps) {
-  const { leftColor, setLeftColor, rightColor, setRightColor, generals, setGeneral, shownDifficulties, setShownDifficulties } = useCasterState(id, seed);
+  const {
+    leftColor,
+    setLeftColor,
+    rightColor,
+    setRightColor,
+    generals,
+    setGeneral,
+    shownDifficulties,
+    setShownDifficulties,
+  } = useCasterState(id, seed);
   const [board, setBoard] = useState(initialBoard);
   const [rawFeed, setRawFeed] = useState(initialRawFeed);
   const [gameToGoals, setGameToGoals] = useState(() =>
     getGameToGoals(initialBoard)
   );
-  const generalGoals = useMemo<ReadonlyArray<Square>>(
-    () => {
-      const filtered = board.filter((square) => GOAL_TO_TYPES[square.name][1] === "general");
-      const giftGoldCherry = filtered.findIndex(square => isGiftGoldCherry(square.name as GoalName));
-      if (giftGoldCherry < 0) {
-        return filtered;
-      }
-      const [toMove] = filtered.splice(giftGoldCherry, 1);
-      filtered.unshift(toMove);
+  const generalGoals = useMemo<ReadonlyArray<Square>>(() => {
+    const filtered = board.filter(
+      (square) => GOAL_TO_TYPES[square.name][1] === "general"
+    );
+    const giftGoldCherry = filtered.findIndex((square) =>
+      isGiftGoldCherry(square.name as GoalName)
+    );
+    if (giftGoldCherry < 0) {
       return filtered;
-    },
-    [board]
-  );
+    }
+    const [toMove] = filtered.splice(giftGoldCherry, 1);
+    filtered.unshift(toMove);
+    return filtered;
+  }, [board]);
   const [terminalCodes, setTerminalCodes] = useState(() =>
     getAllTerminalCodes(initialBoard)
   );
@@ -132,7 +142,13 @@ export default function Cast({
     <>
       <Group>
         <Group gap={0}>
-          <GeneralIcons isLeft={true} color={leftColor} score={board.filter(square => square.color === leftColor).length} generalGoals={generalGoals} generalState={generals} />
+          <GeneralIcons
+            isLeft={true}
+            color={leftColor}
+            score={board.filter((square) => square.color === leftColor).length}
+            generalGoals={generalGoals}
+            generalState={generals}
+          />
           <Board
             board={board}
             onClickSquare={null}
@@ -140,12 +156,18 @@ export default function Cast({
             setIsHidden={() => false}
             shownDifficulties={shownDifficulties}
           />
-          <GeneralIcons isLeft={false} color={rightColor} score={board.filter(square => square.color === rightColor).length} generalGoals={generalGoals} generalState={generals} />
+          <GeneralIcons
+            isLeft={false}
+            color={rightColor}
+            score={board.filter((square) => square.color === rightColor).length}
+            generalGoals={generalGoals}
+            generalState={generals}
+          />
         </Group>
         <Feed rawFeed={rawFeed} />
         {getCard(generalGoals[0], 475)}
         <Group w="100%">
-          {generalGoals.slice(1).map(g => getCard(g, null))}
+          {generalGoals.slice(1).map((g) => getCard(g, null))}
           <InfoCard title="Multi-goal games" height={null} width={205}>
             <Stack gap={4}>
               {multiGoalGames.length > 0

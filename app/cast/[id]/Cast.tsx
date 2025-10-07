@@ -63,13 +63,18 @@ export default function Cast({
     const filtered = board.filter(
       (square) => GOAL_TO_TYPES[square.name][1] === "general"
     );
-    const giftGoldCherry = filtered.findIndex((square) =>
-      isGiftGoldCherry(square.name as GoalName)
+    let spliceIndex = filtered.findIndex((square) =>
+      isGift(square.name as GoalName)
     );
-    if (giftGoldCherry < 0) {
+    if (spliceIndex < 0) {
+      spliceIndex = filtered.findIndex((square) =>
+        isGoldCherry(square.name as GoalName)
+      );
+    }
+    if (spliceIndex < 0) {
       return filtered;
     }
-    const [toMove] = filtered.splice(giftGoldCherry, 1);
+    const [toMove] = filtered.splice(spliceIndex, 1);
     filtered.unshift(toMove);
     return filtered;
   }, [board]);
@@ -207,15 +212,23 @@ export default function Cast({
   );
 }
 
-function isGiftGoldCherry(goal: GoalName): boolean {
+function isGift(goal: GoalName): boolean {
+  switch (goal) {
+    case "Collect 6 gifts from games on this card":
+    case "Collect 7 gifts from games on this card":
+    case "Collect 8 gifts from games on this card":
+      return true;
+    default:
+      return false;
+  }
+}
+
+function isGoldCherry(goal: GoalName): boolean {
   switch (goal) {
     case "Collect 2 cherry disks from games on this card":
     case "Collect 3 cherry disks from games on this card":
     case "Collect 3 gold disks from games on this card":
     case "Collect 4 gold disks from games on this card":
-    case "Collect 6 gifts from games on this card":
-    case "Collect 7 gifts from games on this card":
-    case "Collect 8 gifts from games on this card":
       return true;
     default:
       return false;

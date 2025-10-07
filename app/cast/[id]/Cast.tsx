@@ -21,6 +21,7 @@ import GameInfo from "./GameInfo";
 import CastSettings from "./CastSettings";
 import useCasterState from "./useCasterState";
 import GeneralIcons from "./GeneralIcons";
+import EditSquare from "./EditSquare";
 
 export type CastProps = {
   id: string;
@@ -56,6 +57,8 @@ export default function Cast({
   const [gameToGoals, setGameToGoals] = useState(() =>
     getGameToGoals(initialBoard)
   );
+  const [editingIndex, setEditingIndex] = useState<null | number>(null);
+
   const generalGoals = useMemo<ReadonlyArray<Square>>(() => {
     const filtered = board.filter(
       (square) => GOAL_TO_TYPES[square.name][1] === "general"
@@ -156,7 +159,7 @@ export default function Cast({
           />
           <Board
             board={board}
-            onClickSquare={null}
+            onClickSquare={setEditingIndex}
             isHidden={false}
             setIsHidden={() => false}
             shownDifficulties={shownDifficulties}
@@ -190,6 +193,14 @@ export default function Cast({
         shownDifficulties={shownDifficulties}
         setShownDifficulties={setShownDifficulties}
       />
+      {editingIndex != null && (
+        <EditSquare
+          id={id}
+          board={board}
+          editingIndex={editingIndex}
+          setEditingIndex={setEditingIndex}
+        />
+      )}
     </>
   );
 }

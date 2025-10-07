@@ -19,14 +19,18 @@ const COLORS: ReadonlyArray<BingosyncColor> = [
 function displayColor(color: BingosyncColor): ReactNode {
   return (
     <BingosyncColored color={color}>
-      <strong>{color.charAt(0).toUpperCase() + color.slice(1)}</strong>
+      <strong>
+        {color === "blank"
+          ? "Clear"
+          : color.charAt(0).toUpperCase() + color.slice(1)}
+      </strong>
     </BingosyncColored>
   );
 }
 
 type Props = {
   label: string;
-  color: BingosyncColor;
+  color: null | BingosyncColor;
   setColor: (newColor: BingosyncColor) => unknown;
 };
 
@@ -52,7 +56,7 @@ export default function ColorSelector({ label, color, setColor }: Props) {
           rightSectionPointerEvents="none"
           onClick={() => combobox.toggleDropdown()}
         >
-          {displayColor(color)}
+          {color == null ? "Select a color" : displayColor(color)}
         </InputBase>
       </Combobox.Target>
 

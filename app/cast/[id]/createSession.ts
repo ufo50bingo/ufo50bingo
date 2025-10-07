@@ -19,7 +19,8 @@ export default async function createSession(
       room: id,
       nickname: name,
       password,
-      is_spectator: true,
+      // typo in bingosync code
+      is_specator: true,
     }).toString(),
   });
 

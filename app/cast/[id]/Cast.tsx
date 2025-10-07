@@ -186,6 +186,8 @@ export default function Cast({
         </Group>
       </Group>
       <CastSettings
+        id={id}
+        seed={seed}
         leftColor={leftColor}
         setLeftColor={setLeftColor}
         rightColor={rightColor}

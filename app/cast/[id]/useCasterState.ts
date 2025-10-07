@@ -1,16 +1,10 @@
-import { Difficulty, Game, GoalName } from "@/app/goals";
+import { Difficulty, GoalName } from "@/app/goals";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { useMemo, useState } from "react";
 
 export type GeneralGoalState = {
-  leftChecked: Set<Game>;
-  rightChecked: Set<Game>;
-  showAll: boolean;
-};
-
-type GeneralGoalJsonState = {
-  leftChecked: ReadonlyArray<Game>;
-  rightChecked: ReadonlyArray<Game>;
+  leftCounts: { [game: string]: number };
+  rightCounts: { [game: string]: number };
   showAll: boolean;
 };
 
@@ -24,10 +18,6 @@ interface BaseState {
 
 interface StateOnly extends BaseState {
   generals: Generals;
-}
-
-interface JsonState extends BaseState {
-  generals: { [name: string]: GeneralGoalJsonState };
 }
 
 export interface CasterState extends StateOnly {
@@ -117,7 +107,7 @@ function getInitialState(key: string): StateOnly {
     return DEFAULT_STATE;
   }
   try {
-    const parsed = fromJsonState(JSON.parse(fromStorage));
+    const parsed = JSON.parse(fromStorage);
     return {
       leftColor: parsed.leftColor ?? DEFAULT_STATE.leftColor,
       rightColor: parsed.rightColor ?? DEFAULT_STATE.rightColor,
@@ -134,31 +124,5 @@ function setLocalStorage(key: string, state: StateOnly): void {
   if (global.window == undefined || localStorage == null) {
     return;
   }
-  localStorage.setItem(key, JSON.stringify(toJsonState(state)));
-}
-
-function toJsonState(state: StateOnly): JsonState {
-  const generals = state.generals;
-  const newGenerals: { [name: string]: GeneralGoalJsonState } = {};
-  Object.keys(generals).forEach((g) => {
-    newGenerals[g] = {
-      showAll: generals[g].showAll,
-      leftChecked: Array.from(generals[g].leftChecked),
-      rightChecked: Array.from(generals[g].rightChecked),
-    };
-  });
-  return { ...state, generals: newGenerals };
-}
-
-function fromJsonState(state: JsonState): StateOnly {
-  const generals = state.generals;
-  const newGenerals: { [name: string]: GeneralGoalState } = {};
-  Object.keys(generals).forEach((g) => {
-    newGenerals[g] = {
-      showAll: generals[g].showAll,
-      leftChecked: new Set(generals[g].leftChecked),
-      rightChecked: new Set(generals[g].rightChecked),
-    };
-  });
-  return { ...state, generals: newGenerals };
+  localStorage.setItem(key, JSON.stringify(state));
 }

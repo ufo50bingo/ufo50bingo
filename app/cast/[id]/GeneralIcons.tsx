@@ -65,16 +65,23 @@ export default function GeneralIcons({
         </div>
       </Cell>
       {generalGoals.map((square) => {
-        const checkState = isLeft
-          ? generalState[square.name]?.leftChecked
-          : generalState[square.name]?.rightChecked;
+        const countState = isLeft
+          ? generalState[square.name]?.leftCounts
+          : generalState[square.name]?.rightCounts;
         return (
           <Icon
             key={square.name}
             goal={square.name}
             color={color}
             squareColor={square.color}
-            count={checkState?.size ?? 0}
+            count={
+              countState == null
+                ? 0
+                : Object.keys(countState).reduce(
+                    (acc, game) => acc + countState[game],
+                    0
+                  )
+            }
             src={getIconSrc(square.name as GoalName) ?? ""}
           />
         );

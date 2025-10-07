@@ -1,5 +1,5 @@
 import { Game, GoalName } from "@/app/goals";
-import { Anchor, Checkbox, Group, Stack } from "@mantine/core";
+import { Anchor, Button, Checkbox, Group, Stack } from "@mantine/core";
 import {
   TOP_3,
   TOP_5,
@@ -75,12 +75,13 @@ export default function GeneralGoal({
   height,
 }: Props) {
   const showAll = generalState?.showAll ?? false;
-  const leftChecked = generalState?.leftChecked ?? new Set();
-  const rightChecked = generalState?.rightChecked ?? new Set();
+  const leftCounts = generalState?.leftCounts ?? {};
+  const rightCounts = generalState?.rightCounts ?? {};
 
   let recommendations: RecommendationsWithTerminal;
   let onCardOnly = false;
   let descriptions: null | Descriptions = null;
+  let isChecks = true;
   switch (name) {
     case "Collect 2 cherry disks from games on this card":
     case "Collect 3 cherry disks from games on this card":
@@ -147,6 +148,7 @@ export default function GeneralGoal({
       break;
     case "Defeat 7 bosses":
       recommendations = BOSSES;
+      isChecks = false;
       break;
     case "Defeat a boss in 6 different games":
       recommendations = BOSSES;
@@ -202,9 +204,17 @@ export default function GeneralGoal({
   const titleEl = (
     <>
       {name} (
-      <BingosyncColored color={leftColor}>{leftChecked.size}</BingosyncColored>{" "}
+      <BingosyncColored color={leftColor}>
+        {Object.keys(leftCounts).reduce(
+          (acc, game) => acc + leftCounts[game],
+          0
+        )}
+      </BingosyncColored>{" "}
       <BingosyncColored color={rightColor}>
-        {rightChecked.size}
+        {Object.keys(rightCounts).reduce(
+          (acc, game) => acc + rightCounts[game],
+          0
+        )}
       </BingosyncColored>
       )
     </>
@@ -258,47 +268,121 @@ export default function GeneralGoal({
     ? nonNullEntries.filter((e) => e[1] != null)
     : nonNullEntries;
   return (
-    <InfoCard height={height} title={title}>
+    <InfoCard
+      height={height}
+      title={title}
+      description={
+        isChecks ? undefined : "Left click increases, right click decreases"
+      }
+    >
       <Stack gap={4}>
         {finalEntries.map((e) => {
           const [game, otherGoals] = e;
           const description = descriptions != null ? descriptions[game] : null;
           return (
             <Group key={game} gap={6}>
-              <Checkbox
-                color={getColorHex(leftColor)}
-                checked={leftChecked.has(game)}
-                onChange={(event) => {
-                  const newSet = new Set(leftChecked);
-                  if (event.currentTarget.checked) {
-                    newSet.add(game);
-                  } else {
-                    newSet.delete(game);
-                  }
-                  setGeneral(name, {
-                    showAll,
-                    rightChecked,
-                    leftChecked: newSet,
-                  });
-                }}
-              />
-              <Checkbox
-                color={getColorHex(rightColor)}
-                checked={rightChecked.has(game)}
-                onChange={(event) => {
-                  const newSet = new Set(rightChecked);
-                  if (event.currentTarget.checked) {
-                    newSet.add(game);
-                  } else {
-                    newSet.delete(game);
-                  }
-                  setGeneral(name, {
-                    showAll,
-                    rightChecked: newSet,
-                    leftChecked,
-                  });
-                }}
-              />
+              {isChecks ? (
+                <>
+                  <Checkbox
+                    color={getColorHex(leftColor)}
+                    checked={(leftCounts[game] ?? 0) > 0}
+                    onChange={(event) => {
+                      const newCounts = {
+                        ...leftCounts,
+                        [game]: event.currentTarget.checked ? 1 : 0,
+                      };
+                      setGeneral(name, {
+                        showAll,
+                        rightCounts,
+                        leftCounts: newCounts,
+                      });
+                    }}
+                  />
+                  <Checkbox
+                    color={getColorHex(rightColor)}
+                    checked={(rightCounts[game] ?? 0) > 0}
+                    onChange={(event) => {
+                      const newCounts = {
+                        ...rightCounts,
+                        [game]: event.currentTarget.checked ? 1 : 0,
+                      };
+                      setGeneral(name, {
+                        showAll,
+                        rightCounts: newCounts,
+                        leftCounts,
+                      });
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  <Button
+                    color={getColorHex(leftColor)}
+                    h={18}
+                    w={18}
+                    p={0}
+                    size="compact-xs"
+                    onClick={() => {
+                      const newCounts = {
+                        ...leftCounts,
+                        [game]: (leftCounts[game] ?? 0) + 1,
+                      };
+                      setGeneral(name, {
+                        showAll,
+                        rightCounts,
+                        leftCounts: newCounts,
+                      });
+                    }}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      const newCounts = {
+                        ...leftCounts,
+                        [game]: Math.max(0, (leftCounts[game] ?? 0) - 1),
+                      };
+                      setGeneral(name, {
+                        showAll,
+                        rightCounts,
+                        leftCounts: newCounts,
+                      });
+                    }}
+                  >
+                    {leftCounts[game] ?? 0}
+                  </Button>
+                  <Button
+                    color={getColorHex(rightColor)}
+                    h={18}
+                    w={18}
+                    p={0}
+                    size="compact-xs"
+                    onClick={() => {
+                      const newCounts = {
+                        ...rightCounts,
+                        [game]: (rightCounts[game] ?? 0) + 1,
+                      };
+                      setGeneral(name, {
+                        showAll,
+                        rightCounts: newCounts,
+                        leftCounts,
+                      });
+                    }}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      const newCounts = {
+                        ...rightCounts,
+                        [game]: Math.max(0, (rightCounts[game] ?? 0) - 1),
+                      };
+                      setGeneral(name, {
+                        showAll,
+                        rightCounts: newCounts,
+                        leftCounts,
+                      });
+                    }}
+                  >
+                    {rightCounts[game] ?? 0}
+                  </Button>
+                </>
+              )}
+
               <GameInfo
                 game={game}
                 goals={otherGoals}
@@ -312,8 +396,8 @@ export default function GeneralGoal({
             onClick={() =>
               setGeneral(name, {
                 showAll: true,
-                rightChecked,
-                leftChecked,
+                rightCounts,
+                leftCounts,
               })
             }
             size="sm"

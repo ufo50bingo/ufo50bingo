@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 
 type Props = {
   title: ReactNode;
+  description?: ReactNode;
   children: ReactNode;
   height?: null | undefined | number;
   width?: null | undefined | number;
@@ -10,6 +11,7 @@ type Props = {
 
 export default function InfoCard({
   title,
+  description,
   children,
   height,
   width = 268,
@@ -24,6 +26,7 @@ export default function InfoCard({
     >
       <Card.Section inheritPadding={true} withBorder={true} py="sm">
         <Title order={5}>{title}</Title>
+        <span style={{ fontSize: "12px" }}>{description}</span>
       </Card.Section>
       <Card.Section
         inheritPadding={true}

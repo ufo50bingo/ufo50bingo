@@ -1,5 +1,5 @@
 import { Game, GoalName } from "@/app/goals";
-import { Anchor, Checkbox, Stack } from "@mantine/core";
+import { Anchor, Checkbox, Group, Stack } from "@mantine/core";
 import {
   TOP_3,
   TOP_5,
@@ -33,6 +33,9 @@ import { findGamesForGoal, GameToGoals } from "./findAllGames";
 import InfoCard from "./InfoCard";
 import GameInfo from "./GameInfo";
 import { GeneralGoalState } from "./useCasterState";
+import { BingosyncColor } from "@/app/matches/parseBingosyncData";
+import getColorHex from "./getColorHex";
+import BingosyncColored from "@/app/matches/BingosyncColored";
 
 type Props = {
   isFinished: boolean;
@@ -41,6 +44,8 @@ type Props = {
   terminalCodes: Set<string>;
   generalState: null | undefined | GeneralGoalState;
   setGeneral: (goal: GoalName, newGenerals: GeneralGoalState) => unknown;
+  leftColor: BingosyncColor;
+  rightColor: BingosyncColor;
 };
 
 function getOtherGoals(
@@ -64,12 +69,12 @@ export default function GeneralGoal({
   terminalCodes,
   generalState,
   setGeneral,
+  leftColor,
+  rightColor,
 }: Props) {
   const showAll = generalState?.showAll ?? false;
-  const checked = generalState?.leftChecked ?? new Set();
+  const leftChecked = generalState?.leftChecked ?? new Set();
   const rightChecked = generalState?.rightChecked ?? new Set();
-
-  console.log('checked is', checked);
 
   let target: number;
   let recommendations: RecommendationsWithTerminal;
@@ -225,8 +230,8 @@ export default function GeneralGoal({
       );
   }
 
-  const titleStr = `${name} (${checked.size}/${target})`;
-  const title = isFinished ? <s>{titleStr}</s> : titleStr;
+  const titleEl = <>{name} (<BingosyncColored color={leftColor}>{leftChecked.size}</BingosyncColored> <BingosyncColored color={rightColor}>{rightChecked.size}</BingosyncColored>)</>
+  const title = isFinished ? <s>{titleEl}</s> : titleEl;
 
   const alwaysWithOnCard: ReadonlyArray<
     [TerminalEntry, null | ReadonlyArray<GoalName>]
@@ -281,37 +286,54 @@ export default function GeneralGoal({
           const [game, otherGoals] = e;
           const description = descriptions != null ? descriptions[game] : null;
           return (
-            <Checkbox
-              key={game}
-              checked={checked.has(game)}
-              onChange={(event) => {
-                const newSet = new Set(checked);
-                if (event.currentTarget.checked) {
-                  newSet.add(game);
-                } else {
-                  newSet.delete(game);
-                }
-                setGeneral(name, {
-                  showAll,
-                  rightChecked,
-                  leftChecked: newSet,
-                });
-              }}
-              label={
-                <GameInfo
-                  game={game}
-                  goals={otherGoals}
-                  description={description}
-                />
-              }
-            />
-          );
+            <Group key={game}>
+              <Checkbox
+                color={getColorHex(leftColor)}
+                checked={leftChecked.has(game)}
+                onChange={(event) => {
+                  const newSet = new Set(leftChecked);
+                  if (event.currentTarget.checked) {
+                    newSet.add(game);
+                  } else {
+                    newSet.delete(game);
+                  }
+                  setGeneral(name, {
+                    showAll,
+                    rightChecked,
+                    leftChecked: newSet,
+                  });
+                }}
+              />
+              <Checkbox
+                color={getColorHex(rightColor)}
+                checked={rightChecked.has(game)}
+                onChange={(event) => {
+                  const newSet = new Set(rightChecked);
+                  if (event.currentTarget.checked) {
+                    newSet.add(game);
+                  } else {
+                    newSet.delete(game);
+                  }
+                  setGeneral(name, {
+                    showAll,
+                    rightChecked: newSet,
+                    leftChecked,
+                  });
+                }}
+              />
+              <GameInfo
+                game={game}
+                goals={otherGoals}
+                description={description}
+              />
+            </Group>
+          )
         })}
         {hasMore ? (
           <Anchor onClick={() => setGeneral(name, {
             showAll: true,
             rightChecked,
-            leftChecked: checked,
+            leftChecked,
           })} size="sm">
             Show all options
           </Anchor>

@@ -124,6 +124,8 @@ export default function Cast({
               terminalCodes={terminalCodes}
               generalState={generals[g.name]}
               setGeneral={setGeneral}
+              leftColor={leftColor}
+              rightColor={rightColor}
             />
           ))}
           <InfoCard title="Multi-goal games">

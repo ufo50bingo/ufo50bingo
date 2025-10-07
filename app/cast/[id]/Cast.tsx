@@ -20,6 +20,7 @@ import InfoCard from "./InfoCard";
 import GameInfo from "./GameInfo";
 import CastSettings from "./CastSettings";
 import useCasterState from "./useCasterState";
+import GeneralIcons from "./GeneralIcons";
 
 export type CastProps = {
   id: string;
@@ -106,13 +107,17 @@ export default function Cast({
   return (
     <>
       <Group>
-        <Board
-          board={board}
-          onClickSquare={null}
-          isHidden={false}
-          setIsHidden={() => false}
-          shownDifficulties={shownDifficulties}
-        />
+        <Group gap={0}>
+          <GeneralIcons isLeft={true} color={leftColor} score={13} generalGoals={generalGoals} generalState={generals} />
+          <Board
+            board={board}
+            onClickSquare={null}
+            isHidden={false}
+            setIsHidden={() => false}
+            shownDifficulties={shownDifficulties}
+          />
+          <GeneralIcons isLeft={false} color={rightColor} score={13} generalGoals={generalGoals} generalState={generals} />
+        </Group>
         <Feed rawFeed={rawFeed} />
         <Group>
           {generalGoals.map((g) => (

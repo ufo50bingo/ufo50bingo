@@ -14,7 +14,7 @@ type GeneralGoalJsonState = {
   showAll: boolean;
 };
 
-type Generals = { [name: string]: GeneralGoalState };
+export type Generals = { [name: string]: GeneralGoalState };
 
 interface BaseState {
   leftColor: BingosyncColor;

@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 type Props = {
   title: ReactNode;
   children: ReactNode;
-  height: null | undefined | number;
+  height?: null | undefined | number;
   width?: null | undefined | number;
 };
 
@@ -15,7 +15,7 @@ export default function InfoCard({ title, children, height, width = 268 }: Props
       padding="sm"
       radius="md"
       withBorder={true}
-      style={{ height: `${height ?? 300}px`, flexBasis: `${width ?? 268}px` }}
+      style={{ height: `${height ?? 300}px`, flexBasis: `${width}px` }}
     >
       <Card.Section inheritPadding={true} withBorder={true} py="sm">
         <Title order={5}>{title}</Title>

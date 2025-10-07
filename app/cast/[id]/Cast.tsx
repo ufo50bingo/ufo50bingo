@@ -144,9 +144,9 @@ export default function Cast({
         </Group>
         <Feed rawFeed={rawFeed} />
         {getCard(generalGoals[0], 475)}
-        <Group>
+        <Group w="100%">
           {generalGoals.slice(1).map(g => getCard(g, null))}
-          <InfoCard title="Multi-goal games" height={300} width={205}>
+          <InfoCard title="Multi-goal games" height={null} width={205}>
             <Stack gap={4}>
               {multiGoalGames.length > 0
                 ? multiGoalGames

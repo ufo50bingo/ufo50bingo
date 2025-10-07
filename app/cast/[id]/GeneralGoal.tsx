@@ -96,7 +96,8 @@ export default function GeneralGoal({
     case "Collect 7 gifts from games on this card":
     case "Collect 8 gifts from games on this card":
       recommendations = GIFTS;
-      onCardOnly = true;
+      // change back to true
+      onCardOnly = false;
       descriptions = GIFT_DESCRIPTIONS;
       break;
     case "ARCADE ACE: Gold Disk any 3 of the 16 “ARCADE” games":
@@ -165,7 +166,13 @@ export default function GeneralGoal({
 
     case "PILOT PARTY: Collect 4 gifts: Campanella 1/2/3, Planet Zoldath, Pilot Quest, The Big Bell Race":
       descriptions = GIFT_DESCRIPTIONS;
-    // intentional fall-through
+      const allGames = findGamesForGoal(name);
+      recommendations = {
+        always: GIFTS.always.concat(GIFTS.synergy).concat(GIFTS.never).filter(gift => allGames.includes(gift)),
+        synergy: [],
+        never: [],
+      };
+      break;
     case "ALPHA TRILOGY: Gold Velgress, Overbold, and Quibble Race as Alpha":
     case "AMY: Playing as Amy, beat 1 level in Party House, 2 in Hot Foot, 2 in Fist Hell":
     case "CAMPANELLA TRILOGY: Beat two worlds in Campanella, two in Campanella 2, one in Campanella 3":
@@ -245,7 +252,7 @@ export default function GeneralGoal({
           const [game, otherGoals] = e;
           const description = descriptions != null ? descriptions[game] : null;
           return (
-            <Group key={game}>
+            <Group key={game} gap={6}>
               <Checkbox
                 color={getColorHex(leftColor)}
                 checked={leftChecked.has(game)}
@@ -298,6 +305,6 @@ export default function GeneralGoal({
           </Anchor>
         ) : null}
       </Stack>
-    </InfoCard >
+    </InfoCard>
   );
 }

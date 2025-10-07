@@ -130,7 +130,7 @@ function getIconSrc(goal: GoalName): null | string {
         case "RACER: Win 4 races in Paint Chase, The Big Bell Race, Quibble Race":
             return '/general/IconRacer.png';
         case "ROLE-PLAYER: Level up all your characters twice in Divers, Valbrace, Grimstone":
-            return '/general/IconRolePlayer.png';
+            return '/general/IconRoleplayer.png';
         case "WAR IS BAD: Win 3 battles in Attactics, Avianos, Combatants":
             return '/general/IconWarIsBad.png';
         default:

@@ -24,7 +24,7 @@ type IconProps = {
 };
 
 function Icon({ goal, src, count, color, squareColor }: IconProps) {
-    const imgClass = squareColor !== 'blank' && color !== squareColor ? `${classes.icon} ${classes.grayscale}` : classes.icon;
+    const imgClass = squareColor !== 'blank' ? `${classes.icon} ${classes.grayscale}` : classes.icon;
     const tag = squareColor === color
         ? <IconCircleCheckFilled className={classes.tagPosition} color="green" size={24} />
         : <div className={classes.tag}>{count}</div>;

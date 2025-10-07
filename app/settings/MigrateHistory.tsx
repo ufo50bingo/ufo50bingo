@@ -63,7 +63,9 @@ const OLD_GOAL_TO_NEW_GOAL: { [key: string]: GoalName } = {
   "HYPER CONTENDER: Use PAST-RULE; Beat Draft Mode twice":
     "HYPER CONTENDER: Use PAST-RULE; beat Draft Mode twice",
   "HYPER CONTENDER: Use PAST-RULE; Beat Tournament Mode (Default settings)":
-    "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode (Default settings)",
+    "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode",
+  "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode (Default settings)":
+    "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode",
   "HYPER CONTENDER: Win 4 fights in a row without rematches on default ring settings":
     "HYPER CONTENDER: Win 4 fights in one tournament on default ring settings",
   "Increase your max HP in 6 games": "Increase your base HP in 6 games",

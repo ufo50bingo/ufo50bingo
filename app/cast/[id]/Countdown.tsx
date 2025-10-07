@@ -1,4 +1,4 @@
-import { Button, NumberInput, Stack } from "@mantine/core";
+import { Alert, Button, NumberInput, Stack } from "@mantine/core";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import sendChat from "./sendChat";
@@ -35,7 +35,7 @@ export default function Countdown() {
       { text: "2", delay: 1000 },
       { text: "1", delay: 1000 },
       { text: "REVEAL!", delay: 1000 },
-      { text: "5", delay: (analysisSeconds - 5) * 1000 },
+      { text: "Start in 5", delay: (analysisSeconds - 5) * 1000 },
       { text: "4", delay: 1000 },
       { text: "3", delay: 1000 },
       { text: "2", delay: 1000 },
@@ -43,7 +43,7 @@ export default function Countdown() {
       { text: "START!", delay: 1000 },
     ];
 
-    sendChat(id, "5");
+    sendChat(id, "Reveal in 5");
     for (const { text, delay } of sequence) {
       if (cancelRef.current) {
         break;
@@ -69,10 +69,9 @@ export default function Countdown() {
   };
   return (
     <Stack>
-      <span>
-        WARNING! You should not minimize your browser after starting a
-        countdown!
-      </span>
+      <Alert color="yellow" title="WARNING!">
+        You should not minimize your browser after starting a countdown!
+      </Alert>
       <NumberInput
         label="Scanning time (min 10 seconds)"
         value={analysisSeconds}

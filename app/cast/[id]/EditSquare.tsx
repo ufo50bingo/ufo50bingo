@@ -59,6 +59,7 @@ export default function EditSquare({
                 const color = isClearing ? square.color : nullthrows(newColor);
                 try {
                   await changeColor(id, editingIndex, color, isClearing);
+                  setEditingIndex(null);
                 } finally {
                   setIsSaving(false);
                 }

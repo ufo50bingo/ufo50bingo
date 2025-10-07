@@ -4,8 +4,8 @@ import Login from "./Login";
 import getCookie from "./getCookie";
 import getSeed from "./getSeed";
 import CastWrapper from "./CastWrapper";
-import { STANDARD } from "@/app/pastas/standard";
-import getSrlV5Board from "@/app/practiceboard/getSrlV5Board";
+// import { STANDARD } from "@/app/pastas/standard";
+// import getSrlV5Board from "@/app/practiceboard/getSrlV5Board";
 
 type FilterParams = {
   use_bot: string;
@@ -31,8 +31,8 @@ export default async function CastPage({
     getSocketKey(id, cookie),
     getSeed(id),
   ]);
-  // const board = getBoard(rawBoard);
-  const board = getSrlV5Board(STANDARD);
+  const board = getBoard(rawBoard);
+  // const board = getSrlV5Board(STANDARD);
   return (
     <CastWrapper
       id={id}

@@ -10,7 +10,7 @@ import {
   TBoard,
 } from "@/app/matches/parseBingosyncData";
 import { Group, Stack } from "@mantine/core";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Feed from "./Feed";
 import { Game, GoalName } from "@/app/goals";
 import { getAllTerminalCodes, getGameToGoals } from "./findAllGames";
@@ -46,7 +46,11 @@ export default function Cast({
     setGeneral,
     shownDifficulties,
     setShownDifficulties,
+    clearGenerals,
   } = useCasterState(id, seed);
+  const clearGeneralsRef = useRef(clearGenerals);
+  clearGeneralsRef.current = clearGenerals;
+
   const [board, setBoard] = useState(initialBoard);
   const [rawFeed, setRawFeed] = useState(initialRawFeed);
   const [gameToGoals, setGameToGoals] = useState(() =>
@@ -103,6 +107,7 @@ export default function Cast({
         const newBoard = getBoard(rawBoard);
         setGameToGoals(getGameToGoals(newBoard));
         setTerminalCodes(getAllTerminalCodes(newBoard));
+        clearGeneralsRef.current();
         setBoard(newBoard);
       }
     };

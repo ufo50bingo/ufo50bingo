@@ -76,129 +76,87 @@ export default function GeneralGoal({
   const leftChecked = generalState?.leftChecked ?? new Set();
   const rightChecked = generalState?.rightChecked ?? new Set();
 
-  let target: number;
   let recommendations: RecommendationsWithTerminal;
   let onCardOnly = false;
   let descriptions: null | Descriptions = null;
   switch (name) {
     case "Collect 2 cherry disks from games on this card":
-      target = 2;
-      recommendations = CHERRIES;
-      onCardOnly = true;
-      break;
     case "Collect 3 cherry disks from games on this card":
-      target = 3;
       recommendations = CHERRIES;
       onCardOnly = true;
       break;
     case "Collect 3 gold disks from games on this card":
-      target = 3;
-      recommendations = GOLDS;
-      onCardOnly = true;
-      break;
     case "Collect 4 gold disks from games on this card":
-      target = 4;
       recommendations = GOLDS;
       onCardOnly = true;
       break;
     case "Collect 6 gifts from games on this card":
-      target = 6;
-      recommendations = GIFTS;
-      onCardOnly = true;
-      descriptions = GIFT_DESCRIPTIONS;
-      break;
     case "Collect 7 gifts from games on this card":
-      target = 7;
-      recommendations = GIFTS;
-      onCardOnly = true;
-      descriptions = GIFT_DESCRIPTIONS;
-      break;
     case "Collect 8 gifts from games on this card":
-      target = 8;
       recommendations = GIFTS;
       onCardOnly = true;
       descriptions = GIFT_DESCRIPTIONS;
       break;
     case "ARCADE ACE: Gold Disk any 3 of the 16 “ARCADE” games":
-      target = 3;
       recommendations = ARCADE;
       break;
     case "TRIATHLON: Gold Disk any 3 of the 5 “SPORT” games":
-      target = 3;
       recommendations = SPORT;
       break;
     case "Collect a beverage in 6 games":
-      target = 6;
       recommendations = BEVERAGE;
       break;
     case "Collect a food item in 8 games":
-      target = 8;
       recommendations = FOOD;
       break;
     case "Beat 2 levels in 8 different games":
-      target = 8;
       recommendations = TWO_LEVELS;
       break;
     case "Beat 4 levels in 5 different games":
-      target = 5;
       recommendations = FOUR_LEVELS;
       break;
     case "Beat 8 levels in 3 different games":
-      target = 3;
       recommendations = EIGHT_LEVELS;
       break;
     case "Collect a key in 7 games":
-      target = 7;
       recommendations = KEYS;
       break;
     case "Open 2 chests in 5 games":
-      target = 5;
       recommendations = TWO_CHESTS;
       break;
     case "Buy an item from a shop in 10 games":
-      target = 10;
       recommendations = SHOPS;
       break;
     case "Find an easter egg UFO in 5 games":
-      target = 5;
       recommendations = UFOS;
       break;
     case "Earn an extra life/1UP in 8 games":
-      target = 8;
       recommendations = LIVES;
       break;
     case "Find an egg in 10 games":
-      target = 10;
       recommendations = EGGS;
       break;
     case "Increase your base HP in 6 games":
-      target = 6;
       recommendations = HP;
       break;
     case "Defeat 2 bosses in 4 different games":
-      target = 4;
       recommendations = TWO_BOSSES;
       break;
     case "Defeat 7 bosses":
-      target = 7;
       recommendations = BOSSES;
       break;
     case "Defeat a boss in 6 different games":
-      target = 6;
       recommendations = BOSSES;
       break;
     case "Enter a top 3 score on 2 arcade leaderboards":
-      target = 2;
       recommendations = TOP_3;
       descriptions = TOP_3_SCORES;
       break;
     case "Enter a top 3 score on 3 arcade leaderboards":
-      target = 3;
       recommendations = TOP_3;
       descriptions = TOP_3_SCORES;
       break;
     case "Enter a top 5 score on 4 arcade leaderboards":
-      target = 4;
       recommendations = TOP_5;
       descriptions = TOP_5_SCORES;
       break;
@@ -220,7 +178,6 @@ export default function GeneralGoal({
         synergy: [],
         never: [],
       };
-      target = recommendations.always.length;
       break;
     default:
       return (

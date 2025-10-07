@@ -12,7 +12,7 @@ import {
 import { Group, Stack } from "@mantine/core";
 import { useEffect, useMemo, useState } from "react";
 import Feed from "./Feed";
-import { Difficulty, Game, GoalName } from "@/app/goals";
+import { Game, GoalName } from "@/app/goals";
 import { getAllTerminalCodes, getGameToGoals } from "./findAllGames";
 import { GOAL_TO_TYPES } from "./goalToTypes";
 import GeneralGoal from "./GeneralGoal";

@@ -16,20 +16,21 @@ function Cell({ children }: { children: ReactNode }) {
 }
 
 type IconProps = {
+    goal: string;
     color: BingosyncColor;
     squareColor: BingosyncColor;
     src: string;
     count: number;
 };
 
-function Icon({ src, count, color, squareColor }: IconProps) {
+function Icon({ goal, src, count, color, squareColor }: IconProps) {
     const imgClass = squareColor !== 'blank' && color !== squareColor ? `${classes.icon} ${classes.grayscale}` : classes.icon;
     const tag = squareColor === color
         ? <IconCircleCheckFilled className={classes.tagPosition} color="green" size={24} />
         : <div className={classes.tag}>{count}</div>;
     return (
         <Cell>
-            <img className={imgClass} src={src} />
+            <img className={imgClass} src={src} alt={goal} />
             {tag}
         </Cell>
     );
@@ -54,6 +55,7 @@ export default function GeneralIcons({ color, score, generalGoals, generalState,
                 return (
                     <Icon
                         key={square.name}
+                        goal={square.name}
                         color={color}
                         squareColor={square.color}
                         count={checkState?.size ?? 0}

@@ -36,7 +36,7 @@ export default function Cast({
   socketKey,
   seed,
 }: CastProps) {
-  const { generals, setGeneral, shownDifficulties, setShownDifficulties } = useCasterState(id, seed);
+  const { leftColor, setLeftColor, rightColor, setRightColor, generals, setGeneral, shownDifficulties, setShownDifficulties } = useCasterState(id, seed);
   const [board, setBoard] = useState(initialBoard);
   const [rawFeed, setRawFeed] = useState(initialRawFeed);
   const [gameToGoals, setGameToGoals] = useState(() =>
@@ -136,6 +136,10 @@ export default function Cast({
         </Group>
       </Group>
       <CastSettings
+        leftColor={leftColor}
+        setLeftColor={setLeftColor}
+        rightColor={rightColor}
+        setRightColor={setRightColor}
         shownDifficulties={shownDifficulties}
         setShownDifficulties={setShownDifficulties}
       />

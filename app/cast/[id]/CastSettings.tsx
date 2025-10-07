@@ -7,17 +7,23 @@ import ColorSelector from "./ColorSelector";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 
 type Props = {
+  leftColor: BingosyncColor,
+  rightColor: BingosyncColor,
+  setLeftColor: (newColor: BingosyncColor) => unknown;
+  setRightColor: (newColor: BingosyncColor) => unknown;
   shownDifficulties: ReadonlyArray<Difficulty>;
   setShownDifficulties: (newShown: ReadonlyArray<Difficulty>) => unknown;
 };
 
 export default function CastSettings({
+  leftColor,
+  rightColor,
+  setLeftColor,
+  setRightColor,
   shownDifficulties,
   setShownDifficulties,
 }: Props) {
   const [isShown, setIsShown] = useState(true);
-  const [leftColor, setLeftColor] = useState<BingosyncColor>("red");
-  const [rightColor, setRightColor] = useState<BingosyncColor>("red");
 
   return (
     <>

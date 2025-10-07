@@ -44,7 +44,16 @@ export default function Cast({
     getGameToGoals(initialBoard)
   );
   const generalGoals = useMemo<ReadonlyArray<Square>>(
-    () => board.filter((square) => GOAL_TO_TYPES[square.name][1] === "general"),
+    () => {
+      const filtered = board.filter((square) => GOAL_TO_TYPES[square.name][1] === "general");
+      const giftGoldCherry = filtered.findIndex(square => isGiftGoldCherry(square.name as GoalName));
+      if (giftGoldCherry < 0) {
+        return filtered;
+      }
+      const [toMove] = filtered.splice(giftGoldCherry, 1);
+      filtered.unshift(toMove);
+      return filtered;
+    },
     [board]
   );
   const [terminalCodes, setTerminalCodes] = useState(() =>
@@ -104,6 +113,21 @@ export default function Cast({
       />
     ));
 
+  const getCard = (g: Square, h: null | undefined | number) => (
+    <GeneralGoal
+      key={g.name}
+      gameToGoals={gameToGoals}
+      name={g.name as GoalName}
+      isFinished={g.color !== "blank"}
+      terminalCodes={terminalCodes}
+      generalState={generals[g.name]}
+      setGeneral={setGeneral}
+      leftColor={leftColor}
+      rightColor={rightColor}
+      height={h}
+    />
+  );
+
   return (
     <>
       <Group>
@@ -119,21 +143,10 @@ export default function Cast({
           <GeneralIcons isLeft={false} color={rightColor} score={board.filter(square => square.color === rightColor).length} generalGoals={generalGoals} generalState={generals} />
         </Group>
         <Feed rawFeed={rawFeed} />
+        {getCard(generalGoals[0], 475)}
         <Group>
-          {generalGoals.map((g) => (
-            <GeneralGoal
-              key={g.name}
-              gameToGoals={gameToGoals}
-              name={g.name as GoalName}
-              isFinished={g.color !== "blank"}
-              terminalCodes={terminalCodes}
-              generalState={generals[g.name]}
-              setGeneral={setGeneral}
-              leftColor={leftColor}
-              rightColor={rightColor}
-            />
-          ))}
-          <InfoCard title="Multi-goal games">
+          {generalGoals.slice(1).map(g => getCard(g, null))}
+          <InfoCard title="Multi-goal games" height={300} width={205}>
             <Stack gap={4}>
               {multiGoalGames.length > 0
                 ? multiGoalGames
@@ -152,4 +165,19 @@ export default function Cast({
       />
     </>
   );
+}
+
+function isGiftGoldCherry(goal: GoalName): boolean {
+  switch (goal) {
+    case "Collect 2 cherry disks from games on this card":
+    case "Collect 3 cherry disks from games on this card":
+    case "Collect 3 gold disks from games on this card":
+    case "Collect 4 gold disks from games on this card":
+    case "Collect 6 gifts from games on this card":
+    case "Collect 7 gifts from games on this card":
+    case "Collect 8 gifts from games on this card":
+      return true;
+    default:
+      return false;
+  }
 }

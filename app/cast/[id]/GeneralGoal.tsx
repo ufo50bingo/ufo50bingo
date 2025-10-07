@@ -46,6 +46,7 @@ type Props = {
   setGeneral: (goal: GoalName, newGenerals: GeneralGoalState) => unknown;
   leftColor: BingosyncColor;
   rightColor: BingosyncColor;
+  height: null | undefined | number;
 };
 
 function getOtherGoals(
@@ -71,6 +72,7 @@ export default function GeneralGoal({
   setGeneral,
   leftColor,
   rightColor,
+  height,
 }: Props) {
   const showAll = generalState?.showAll ?? false;
   const leftChecked = generalState?.leftChecked ?? new Set();
@@ -237,7 +239,7 @@ export default function GeneralGoal({
     ? nonNullEntries.filter((e) => e[1] != null)
     : nonNullEntries;
   return (
-    <InfoCard title={title}>
+    <InfoCard height={height} title={title}>
       <Stack gap={4}>
         {finalEntries.map((e) => {
           const [game, otherGoals] = e;

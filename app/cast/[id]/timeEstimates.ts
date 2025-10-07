@@ -561,7 +561,6 @@ export const HP: Recommendations = {
     "elfazarshat",
     "lordsofdiskonia",
     "overbold",
-    "miniandmax",
     "golfaria",
     "grimstone",
     "divers",

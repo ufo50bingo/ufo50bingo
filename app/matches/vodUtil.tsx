@@ -89,11 +89,15 @@ function parseTwitchTime(time: string): null | number {
 function getStartSeconds(url: URL, host: VodHost): null | number {
   switch (host) {
     case "youtube":
-      const seconds = url.searchParams.get("t");
-      if (seconds == null || seconds === "") {
+      const ytTime = url.searchParams.get("t");
+      if (ytTime == null || ytTime === "") {
         return null;
       }
-      return Number(seconds);
+      const num = Number(ytTime);
+      if (isNaN(num)) {
+        return parseTwitchTime(ytTime);
+      }
+      return num;
     case "twitch":
       const time = url.searchParams.get("t");
       if (time == null) {

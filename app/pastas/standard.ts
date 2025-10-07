@@ -135,7 +135,7 @@ export const STANDARD = [
 {"name": "PORGY: Reach the Abyss (lowest depth area)", "types": ["porgy", "medium"]},
 {"name": "PORGY: Collect 4 torpedo upgrades", "types": ["porgy", "medium"]},
 {"name": "HYPER CONTENDER: Beat Draft Mode (Default settings)", "types": ["hypercontender", "medium"]},
-{"name": "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode (Default settings)", "types": ["hypercontender", "medium"]},
+{"name": "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode", "types": ["hypercontender", "medium"]},
 {"name": "LORDS OF DISKONIA: Have 50+ gold", "types": ["lordsofdiskonia", "medium"]},
 {"name": "LORDS OF DISKONIA: Destroy 2+ enemy disks in one shot", "types": ["lordsofdiskonia", "medium"]},
 {"name": "CYBER OWLS: Complete 2 non-rescue missions", "types": ["cyberowls", "medium"]},
@@ -434,4 +434,5 @@ export const STANDARD = [
 {"name": "RACER: Win 4 races in Paint Chase, The Big Bell Race, Quibble Race", "types": ["general", "general"]}
 ]
 ] as const;
+
 

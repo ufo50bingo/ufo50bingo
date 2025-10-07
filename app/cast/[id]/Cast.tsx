@@ -108,7 +108,7 @@ export default function Cast({
     <>
       <Group>
         <Group gap={0}>
-          <GeneralIcons isLeft={true} color={leftColor} score={13} generalGoals={generalGoals} generalState={generals} />
+          <GeneralIcons isLeft={true} color={leftColor} score={board.filter(square => square.color === leftColor).length} generalGoals={generalGoals} generalState={generals} />
           <Board
             board={board}
             onClickSquare={null}
@@ -116,7 +116,7 @@ export default function Cast({
             setIsHidden={() => false}
             shownDifficulties={shownDifficulties}
           />
-          <GeneralIcons isLeft={false} color={rightColor} score={13} generalGoals={generalGoals} generalState={generals} />
+          <GeneralIcons isLeft={false} color={rightColor} score={board.filter(square => square.color === rightColor).length} generalGoals={generalGoals} generalState={generals} />
         </Group>
         <Feed rawFeed={rawFeed} />
         <Group>

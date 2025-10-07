@@ -57,8 +57,16 @@
 }
 
 .score {
-    font-size: 48px;
+    font-size: 44px;
     font-weight: bold;
+    color: white;
+    border-radius: 8px;
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .icon {
@@ -69,4 +77,48 @@
 
 .grayscale {
     filter: grayscale(1);
+}
+
+.blankplayer {
+    background-color: #c8c8c8;
+}
+
+.greenplayer {
+    background-color: #62c462;
+}
+
+.redplayer {
+    background-color: #ee5f5b;
+}
+
+.orangeplayer {
+    background-color: #f89406;
+}
+
+.blueplayer {
+    background-color: #5bc0de;
+}
+
+.purpleplayer {
+    background-color: #822dbf;
+}
+
+.navyplayer {
+    background-color: #0d48b5;
+}
+
+.tealplayer {
+    background-color: #419695;
+}
+
+.pinkplayer {
+    background-color: #de799c;
+}
+
+.brownplayer {
+    background-color: #ab5c23;
+}
+
+.yellowplayer {
+    background-color: #c1ba0b;
 }

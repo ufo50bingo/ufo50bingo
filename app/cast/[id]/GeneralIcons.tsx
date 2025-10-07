@@ -1,10 +1,10 @@
 import { ReactNode } from "react";
 
 import classes from "./GeneralIcons.module.css";
+import boardClasses from "@/app/Board.module.css";
 import { IconCircleCheckFilled } from "@tabler/icons-react";
 import { BingosyncColor, Square } from "@/app/matches/parseBingosyncData";
 import { Generals } from "./useCasterState";
-import { getColorClass } from "@/app/matches/BingosyncColored";
 import { GoalName } from "@/app/goals";
 
 function Cell({ children }: { children: ReactNode }) {
@@ -47,7 +47,7 @@ type Props = {
 export default function GeneralIcons({ color, score, generalGoals, generalState, isLeft }: Props) {
     return (
         <div className={classes.container}>
-            <Cell><span className={`${classes.score} ${getColorClass(color)}`}>{score}</span></Cell>
+            <Cell><div className={`${classes.score} ${getColorClass(color)}`}>{score}</div></Cell>
             {generalGoals.map(square => {
                 const checkState = isLeft
                     ? generalState[square.name]?.leftChecked
@@ -135,5 +135,32 @@ function getIconSrc(goal: GoalName): null | string {
             return '/general/IconWarIsBad.png';
         default:
             return null;
+    }
+}
+
+export function getColorClass(color: BingosyncColor): string {
+    switch (color) {
+        case "blank":
+            return ''
+        case "red":
+            return boardClasses.redsquare;
+        case "blue":
+            return boardClasses.bluesquare;
+        case "green":
+            return boardClasses.greensquare;
+        case "orange":
+            return boardClasses.orangesquare;
+        case "purple":
+            return boardClasses.purplesquare;
+        case "navy":
+            return boardClasses.navysquare;
+        case "teal":
+            return boardClasses.tealsquare;
+        case "pink":
+            return boardClasses.pinksquare;
+        case "brown":
+            return boardClasses.brownsquare;
+        case "yellow":
+            return boardClasses.yellowsquare;
     }
 }

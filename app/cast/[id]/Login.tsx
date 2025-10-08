@@ -49,7 +49,7 @@ export default function Login() {
               <ListItem>General goals display a list of all relevant games, sorted by rough time estimates.</ListItem>
               <ListItem>Possible synergies are underlined, and hovering shows the relevant other goals.</ListItem>
               <ListItem>A countdown button can automatically count down to board reveal and match start in chat.</ListItem>
-              <ListItem>Admins can clear or grant squares to players without needing to log in on a separate window.</ListItem>
+              <ListItem>Casters can clear or grant squares to players without needing to log in on a separate window. Just click on a square!</ListItem>
               <ListItem>Leaderboard thresholds and gift requirements are displayed for every game.</ListItem>
               <ListItem>The "Create new board" button allows creating a new board without having to paste anything.</ListItem>
               <ListItem>Disconnections are detected automatically.</ListItem>

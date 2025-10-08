@@ -38,7 +38,6 @@ export default async function createSession(
   (await cookies()).set("sessionid", sessionId, {
     expires: Date.now() + 2 * 7 * 24 * 60 * 60 * 1000,
     maxAge: 2 * 7 * 24 * 60 * 60,
-    httpOnly: true,
     sameSite: "lax",
     path: `/cast/${id}`,
   });

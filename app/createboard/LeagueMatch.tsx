@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { IconCheck, IconExclamationMark } from "@tabler/icons-react";
+import { IconBrandTwitch, IconCheck, IconExclamationMark } from "@tabler/icons-react";
 import {
   Alert,
   Button,
@@ -160,6 +160,15 @@ export default function LeagueMatch() {
           Copy Pasta to Clipboard
         </Button>
       </Tooltip>
+      {url !== "" && (
+        <Alert
+          variant="light"
+          title="New casting tools!"
+          icon={<IconBrandTwitch />}
+        >
+          We have new casting tools! <Link href={`/cast/${id}`}>Try them out here!</Link>
+        </Alert>
+      )}
       {url !== "" && (
         <Alert
           variant="light"

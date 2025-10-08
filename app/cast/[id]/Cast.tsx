@@ -317,6 +317,3 @@ function isGoldCherry(goal: GoalName): boolean {
       return false;
   }
 }
-function computeResult(board: TBoard, changelog: any, arg2: null, arg3: null) {
-  throw new Error("Function not implemented.");
-}

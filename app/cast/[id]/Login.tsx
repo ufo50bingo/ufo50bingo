@@ -10,7 +10,7 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import { useParams, usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import createSession from "./createSession";
 import { useState } from "react";
 import Link from "next/link";

@@ -7,7 +7,6 @@ import {
   List,
   ListItem,
   Stack,
-  Text,
   TextInput,
   Title,
 } from "@mantine/core";
@@ -17,7 +16,6 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function Login() {
-  const pathname = usePathname();
   const { id } = useParams<{ id: string }>();
 
   const [name, setName] = useState("");

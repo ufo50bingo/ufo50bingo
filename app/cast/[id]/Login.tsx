@@ -4,6 +4,8 @@ import {
   Button,
   Card,
   Container,
+  List,
+  ListItem,
   Stack,
   Text,
   TextInput,
@@ -12,6 +14,7 @@ import {
 import { useParams, usePathname } from "next/navigation";
 import createSession from "./createSession";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Login() {
   const pathname = usePathname();
@@ -30,31 +33,33 @@ export default function Login() {
       <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
         <Card.Section inheritPadding={true} py="sm" withBorder={true}>
           <Stack>
-            <Title order={1}>Spectate Match</Title>
-            <Text size="sm">
-              You can use this page to spectate an in-progress match.
-            </Text>
+            <Title order={1}>Cast a Match</Title>
+            <span>
+              <strong>
+                If you are a player, please go to the{' '}
+                <Link href={`https://www.bingosync.com/room/${id}`}>official Bingosync room</Link>{' '}
+                instead!
+              </strong>
+            </span>
+            <span>Use this page to cast a match! Features include:</span>
+            <List>
+              <ListItem>The live board view can also display difficulty tags on squares.</ListItem>
+              <ListItem>Player score are computed automatically and displayed next to the board.</ListItem>
+              <ListItem>The full-featured general goad tracker also displays progress next to the board.</ListItem>
+              <ListItem>General goals display a list of all relevant games, sorted by rough time estimates.</ListItem>
+              <ListItem>Possible synergies are underlined, and hovering shows the relevant other goals.</ListItem>
+              <ListItem>A countdown button can automatically count down to board reveal and match start in chat.</ListItem>
+              <ListItem>Admins can clear or grant squares to players without needing to log in on a separate window.</ListItem>
+              <ListItem>Leaderboard thresholds and gift requirements are displayed for every game.</ListItem>
+              <ListItem>The "Create new board" button allows creating a new board without having to paste anything.</ListItem>
+              <ListItem>Disconnections are detected automatically.</ListItem>
+            </List>
           </Stack>
         </Card.Section>
         <Card.Section inheritPadding={true} py="sm" withBorder={true}>
           <Stack>
-            <Text size="sm">
-              <strong>If you do not have the bingosync password</strong>, you
-              can access a read-only view, where chatting and admin features are
-              disabled.
-            </Text>
-            <Button component="a" href={`${pathname}?use_bot=true`}>
-              Access read-only view
-            </Button>
-          </Stack>
-        </Card.Section>
-        <Card.Section inheritPadding={true} py="sm" withBorder={true}>
-          <Stack>
-            <Text size="sm">
-              <strong>If you have the bingosync password</strong>, you can
-              access the full view, where you can chat and use admin features.
-            </Text>
             <TextInput
+              autoFocus={true}
               onKeyDown={async (event) => {
                 if (event.key === "Enter") {
                   await submit();
@@ -75,7 +80,7 @@ export default function Login() {
               onChange={(event) => setPassword(event.target.value)}
             />
             <Button disabled={name === "" || password === ""} onClick={submit}>
-              Access admin view
+              Access caster view
             </Button>
           </Stack>
         </Card.Section>

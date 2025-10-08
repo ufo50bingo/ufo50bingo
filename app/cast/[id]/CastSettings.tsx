@@ -9,6 +9,7 @@ import {
   Group,
   Modal,
   Stack,
+  Text,
 } from "@mantine/core";
 import { IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
@@ -17,6 +18,7 @@ import ColorSelector from "./ColorSelector";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import createNewCard from "./createNewCard";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 type Props = {
   id: string;
@@ -90,7 +92,7 @@ export default function CastSettings({
               </Card>
               <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
                 <Stack>
-                  <span>Display difficulty tags for:</span>
+                  <Text size="sm">Display difficulty tags for:</Text>
                   {ORDERED_DIFFICULTY.map((difficulty) => (
                     <Checkbox
                       key={difficulty}
@@ -107,10 +109,10 @@ export default function CastSettings({
                   ))}
                 </Stack>
               </Card>
-              <Button onClick={() => setIsCreating(true)}>
+              <Button color="green" onClick={() => setIsCreating(true)}>
                 Create new board
               </Button>
-              <Button onClick={() => setIsDisconnecting(true)}>
+              <Button color="red" onClick={() => setIsDisconnecting(true)}>
                 Disconnect
               </Button>
             </Stack>
@@ -128,12 +130,12 @@ export default function CastSettings({
           <Stack>
             <Alert title="Players may need to refresh">
               After creating a new card, players may need to refresh their
-              pages, especially if they are connected on multiple devices.
+              pages, especially if they are connected on multiple devices or multiple windows.
               <br />
               <br />
-              Bingosync only allows each player to load the board once every 15
-              seconds, so connecting from multiple devices may cause one or more
-              devices to have stale data.
+              Bingosync rate-limits players, so connecting from multiple devices or multiple windows
+              may cause the board to fail to refresh when a new card is generated, and players may see
+              stale goals on one or more devices/windows when they reveal the card.
             </Alert>
             <Alert color="yellow" title="Are you sure?">
               This will create a new{" "}
@@ -142,7 +144,12 @@ export default function CastSettings({
               <br />
               <br />
               Creating a new board will overwrite the existing board, and is not
-              reversible. Are you sure you want to continue?
+              reversible. All data for the current board will be inaccessible on ufo50.bingo.
+              Please only use this to correct a mistake! If you've already completed a game and
+              want to start a new one, go to <Link href="/">Create Board</Link> and create a new board instead!
+              <br />
+              <br />
+              Are you sure you want to continue?
             </Alert>
             <Group justify="end">
               <Button onClick={() => setIsCreating(false)}>Cancel</Button>

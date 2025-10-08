@@ -9,7 +9,7 @@ import {
   Square,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
-import { Group, Stack } from "@mantine/core";
+import { Button, Group, Modal, Stack } from "@mantine/core";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Feed from "./Feed";
 import { Game, GoalName } from "@/app/goals";
@@ -58,6 +58,8 @@ export default function Cast({
     getGameToGoals(initialBoard)
   );
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
+  const [shouldReconnect, setShouldReconnect] = useState(false);
+  const socketRef = useRef<null | WebSocket>(null);
 
   const generalGoals = useMemo<ReadonlyArray<Square>>(() => {
     const filtered = board.filter(
@@ -85,11 +87,18 @@ export default function Cast({
   useEffect(() => {
     const socket = new WebSocket("wss://sockets.bingosync.com/broadcast");
 
-    socket.onopen = () =>
+    socket.onopen = () => {
       socket.send(JSON.stringify({ socket_key: socketKey }));
+      setShouldReconnect(false);
+    }
 
     socket.onclose = () => {
       console.log("*** Disconnected from server, try refreshing. ***");
+      setTimeout(() => {
+        if (socketRef.current == null || socketRef.current.readyState !== socketRef.current.OPEN) {
+          setShouldReconnect(true);
+        }
+      }, 1000);
     };
 
     socket.onmessage = async (evt) => {
@@ -120,8 +129,11 @@ export default function Cast({
       }
     };
 
+    socketRef.current = socket;
+
     return () => {
       socket.close();
+      socketRef.current = null;
     };
   }, [socketKey, id]);
 
@@ -208,6 +220,30 @@ export default function Cast({
           setEditingIndex={setEditingIndex}
         />
       )}
+      {shouldReconnect && (
+        <Modal
+          fullScreen={false}
+          centered={true}
+          onClose={() => setShouldReconnect(false)}
+          opened={true}
+          title="Reconnection needed"
+        >
+          <Stack>
+            <span>You have been disconnected from Bingosync! Please refresh your page.</span>
+            <Group justify="end">
+              <Button onClick={() => setShouldReconnect(false)}>Ignore</Button>
+              <Button
+                color="green"
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                Refresh
+              </Button>
+            </Group>
+          </Stack>
+        </Modal>
+      )}
     </>
   );
 }
@@ -234,3 +270,4 @@ function isGoldCherry(goal: GoalName): boolean {
       return false;
   }
 }
+

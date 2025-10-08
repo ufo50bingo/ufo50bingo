@@ -62,9 +62,10 @@ export default function Cast({
   const socketRef = useRef<null | WebSocket>(null);
 
   const generalGoals = useMemo<ReadonlyArray<Square>>(() => {
-    const filtered = board.filter(
-      (square) => GOAL_TO_TYPES[square.name][1] === "general"
-    );
+    const filtered = board.filter((square) => {
+      const types = GOAL_TO_TYPES[square.name];
+      return types != null && types[1] === "general";
+    });
     let spliceIndex = filtered.findIndex((square) =>
       isGift(square.name as GoalName)
     );
@@ -90,12 +91,15 @@ export default function Cast({
     socket.onopen = () => {
       socket.send(JSON.stringify({ socket_key: socketKey }));
       setShouldReconnect(false);
-    }
+    };
 
     socket.onclose = () => {
       console.log("*** Disconnected from server, try refreshing. ***");
       setTimeout(() => {
-        if (socketRef.current == null || socketRef.current.readyState !== socketRef.current.OPEN) {
+        if (
+          socketRef.current == null ||
+          socketRef.current.readyState !== socketRef.current.OPEN
+        ) {
           setShouldReconnect(true);
         }
       }, 1000);
@@ -229,7 +233,10 @@ export default function Cast({
           title="Reconnection needed"
         >
           <Stack>
-            <span>You have been disconnected from Bingosync! Please refresh your page.</span>
+            <span>
+              You have been disconnected from Bingosync! Please refresh your
+              page.
+            </span>
             <Group justify="end">
               <Button onClick={() => setShouldReconnect(false)}>Ignore</Button>
               <Button
@@ -270,4 +277,3 @@ function isGoldCherry(goal: GoalName): boolean {
       return false;
   }
 }
-

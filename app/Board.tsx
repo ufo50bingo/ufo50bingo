@@ -48,7 +48,11 @@ function getDifficulty(
   name: string,
   shownDifficulties: ReadonlyArray<Difficulty>
 ): null | ReactNode {
-  const difficulty = GOAL_TO_TYPES[name][1];
+  const types = GOAL_TO_TYPES[name];
+  if (types == null) {
+    return null;
+  }
+  const difficulty = types[1];
   if (difficulty == null || !shownDifficulties.includes(difficulty)) {
     return null;
   }

@@ -5,7 +5,12 @@ import { GOAL_TO_TYPES } from "./goalToTypes";
 export type GameToGoals = { [game: string]: ReadonlyArray<GoalName> };
 
 export function findGamesForGoal(goal: GoalName): Game[] {
-  const game = GOAL_TO_TYPES[goal][0];
+  const types = GOAL_TO_TYPES[goal];
+  // this is an old goal!
+  if (types == null) {
+    return [];
+  }
+  const game = types[0];
   if (game == null) {
     return [];
   }

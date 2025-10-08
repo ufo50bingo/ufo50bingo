@@ -18,8 +18,8 @@ const MANUAL_MATCHES: ReadonlyArray<ScheduledMatch> = [
     name: "Random Name vs morraconda",
     tier: "Blind Beginner Bingo",
     time: 1760814000,
-    streamer: null,
-    streamLink: null,
+    streamer: 'Matt',
+    streamLink: 'https://www.twitch.tv/kg28_/',
   },
 ];
 

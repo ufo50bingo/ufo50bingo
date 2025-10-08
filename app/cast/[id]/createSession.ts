@@ -17,7 +17,7 @@ export default async function createSession(
     },
     body: JSON.stringify({
       room: id,
-      nickname: name,
+      nickname: name + ' (admin)',
       password,
       // typo in bingosync code
       is_specator: true,

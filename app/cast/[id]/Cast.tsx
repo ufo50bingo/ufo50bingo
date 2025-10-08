@@ -3,7 +3,9 @@
 import Board from "@/app/Board";
 import { fetchBoard } from "@/app/fetchMatchInfo";
 import {
+  BingosyncColor,
   getBoard,
+  getChangelog,
   RawFeed,
   RawFeedItem,
   Square,
@@ -22,6 +24,7 @@ import CastSettings from "./CastSettings";
 import useCasterState from "./useCasterState";
 import GeneralIcons from "./GeneralIcons";
 import EditSquare from "./EditSquare";
+import { getResult } from "@/app/matches/computeResult";
 
 export type CastProps = {
   id: string;
@@ -60,6 +63,41 @@ export default function Cast({
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
   const [shouldReconnect, setShouldReconnect] = useState(false);
   const socketRef = useRef<null | WebSocket>(null);
+
+  const leftScore = board.filter((square) => square.color === leftColor).length;
+  const rightScore = board.filter(
+    (square) => square.color === rightColor
+  ).length;
+
+  const tiebreakWinner = useMemo<BingosyncColor | null>(() => {
+    try {
+      if (
+        leftScore !== rightScore ||
+        leftColor === rightColor ||
+        leftScore === 0
+      ) {
+        return null;
+      }
+      const changelog = getChangelog(rawFeed);
+      const result = getResult(board, changelog, null, null);
+      if (result == null) {
+        return null;
+      }
+      const isValid =
+        result.winnerScore === leftScore &&
+        result.opponentScore === leftScore &&
+        (result.winnerColor === leftColor ||
+          result.winnerColor === rightColor) &&
+        (result.opponentColor === leftColor ||
+          result.opponentColor === rightColor);
+      if (!isValid) {
+        return null;
+      }
+      return result.winnerColor as BingosyncColor;
+    } catch {
+      return null;
+    }
+  }, [leftScore, rightScore, leftColor, rightColor, rawFeed, board]);
 
   const generalGoals = useMemo<ReadonlyArray<Square>>(() => {
     const filtered = board.filter((square) => {
@@ -174,9 +212,10 @@ export default function Cast({
           <GeneralIcons
             isLeft={true}
             color={leftColor}
-            score={board.filter((square) => square.color === leftColor).length}
+            score={leftScore}
             generalGoals={generalGoals}
             generalState={generals}
+            hasTiebreaker={tiebreakWinner === leftColor}
           />
           <Board
             board={board}
@@ -188,9 +227,10 @@ export default function Cast({
           <GeneralIcons
             isLeft={false}
             color={rightColor}
-            score={board.filter((square) => square.color === rightColor).length}
+            score={rightScore}
             generalGoals={generalGoals}
             generalState={generals}
+            hasTiebreaker={tiebreakWinner === rightColor}
           />
         </Group>
         <Feed rawFeed={rawFeed} />
@@ -276,4 +316,7 @@ function isGoldCherry(goal: GoalName): boolean {
     default:
       return false;
   }
+}
+function computeResult(board: TBoard, changelog: any, arg2: null, arg3: null) {
+  throw new Error("Function not implemented.");
 }

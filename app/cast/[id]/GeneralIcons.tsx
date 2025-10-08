@@ -48,6 +48,7 @@ type Props = {
   generalGoals: ReadonlyArray<Square>;
   generalState: Generals;
   isLeft: boolean;
+  hasTiebreaker: boolean;
 };
 
 export default function GeneralIcons({
@@ -56,12 +57,13 @@ export default function GeneralIcons({
   generalGoals,
   generalState,
   isLeft,
+  hasTiebreaker,
 }: Props) {
   return (
     <div className={classes.container}>
       <Cell>
         <div className={`${classes.score} ${getColorClass(color)}`}>
-          {score}
+          {hasTiebreaker ? <u>{score}</u> : score}
         </div>
       </Cell>
       {generalGoals.map((square) => {

@@ -13,6 +13,16 @@ export type ScheduledMatch = {
   streamLink: null | string;
 };
 
+const MANUAL_MATCHES: ReadonlyArray<ScheduledMatch> = [
+  {
+    name: "Random Name vs morraconda",
+    tier: "Blind Beginner Bingo",
+    time: 1760814000,
+    streamer: null,
+    streamLink: null,
+  },
+];
+
 export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMatch>> {
   const auth = new google.auth.JWT({
     email: process.env.GSHEETS_ACCOUNT_EMAIL,
@@ -62,7 +72,7 @@ export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMat
   // we want to show yesterday onward in the viewer's timezone
   // we don't know what the timezone is, so include 48 hrs
   const cutoff = currentTime - 2 * 24 * 60 * 60;
-  const scheduled = matchesResult.data.values
+  const scheduled: null | undefined | ReadonlyArray<ScheduledMatch> = matchesResult.data.values
     ?.map((row) => {
       const [_week, tier, p1, p2, time, date, streamer] = row;
       if (date == null || time == null) {
@@ -89,8 +99,9 @@ export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMat
   if (scheduled == null) {
     return null;
   }
-  scheduled.sort((a, b) => a.time - b.time);
-  return scheduled ?? null;
+  const final = scheduled.concat(MANUAL_MATCHES);
+  final.sort((a, b) => a.time - b.time);
+  return final;
 }
 
 function fetchImplementation(

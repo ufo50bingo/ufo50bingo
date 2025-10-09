@@ -21,17 +21,21 @@ import GeneralGoal from "./GeneralGoal";
 import InfoCard from "./InfoCard";
 import GameInfo from "./GameInfo";
 import CastSettings from "./CastSettings";
-import useCasterState from "./useCasterState";
 import GeneralIcons from "./GeneralIcons";
 import EditSquare from "./EditSquare";
 import { getResult } from "@/app/matches/computeResult";
+import useSyncedState, { CountState } from "./useSyncedState";
+import useLocalState from "./useLocalState";
 
 export type CastProps = {
   id: string;
   board: TBoard;
   rawFeed: RawFeed;
   socketKey: string;
-  seed: number;
+  initialSeed: number;
+  initialCounts: { [goal: string]: CountState };
+  initialLeftColor: BingosyncColor;
+  initialRightColor: BingosyncColor;
 };
 
 export default function Cast({
@@ -39,21 +43,27 @@ export default function Cast({
   board: initialBoard,
   rawFeed: initialRawFeed,
   socketKey,
-  seed,
+  initialSeed,
+  initialCounts,
+  initialLeftColor,
+  initialRightColor,
 }: CastProps) {
+  const [seed, setSeed] = useState(initialSeed);
+
   const {
     leftColor,
     setLeftColor,
     rightColor,
     setRightColor,
     generals,
-    setGeneral,
+    setGeneralGameCount,
+  } = useSyncedState({ id, seed, initialCounts, initialLeftColor, initialRightColor });
+  const {
     shownDifficulties,
+    showAll,
     setShownDifficulties,
-    clearGenerals,
-  } = useCasterState(id, seed);
-  const clearGeneralsRef = useRef(clearGenerals);
-  clearGeneralsRef.current = clearGenerals;
+    addShowAll,
+  } = useLocalState(id, seed);
 
   const [board, setBoard] = useState(initialBoard);
   const [rawFeed, setRawFeed] = useState(initialRawFeed);
@@ -162,11 +172,11 @@ export default function Cast({
           return newBoard;
         });
       } else if (rawItem.type === "new-card") {
+        setSeed(rawItem.seed);
         const rawBoard = await fetchBoard(id);
         const newBoard = getBoard(rawBoard);
         setGameToGoals(getGameToGoals(newBoard));
         setTerminalCodes(getAllTerminalCodes(newBoard));
-        clearGeneralsRef.current();
         setBoard(newBoard);
       }
     };
@@ -197,8 +207,10 @@ export default function Cast({
       name={g.name as GoalName}
       isFinished={g.color !== "blank"}
       terminalCodes={terminalCodes}
-      generalState={generals[g.name]}
-      setGeneral={setGeneral}
+      countState={generals[g.name]}
+      showAll={showAll.includes(g.name as GoalName)}
+      setGeneralGameCount={setGeneralGameCount}
+      addShowAll={addShowAll}
       leftColor={leftColor}
       rightColor={rightColor}
       height={h}

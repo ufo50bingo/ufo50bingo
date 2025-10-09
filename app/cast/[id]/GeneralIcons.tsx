@@ -4,8 +4,8 @@ import classes from "./GeneralIcons.module.css";
 import boardClasses from "@/app/Board.module.css";
 import { IconCircleCheckFilled } from "@tabler/icons-react";
 import { BingosyncColor, Square } from "@/app/matches/parseBingosyncData";
-import { Generals } from "./useCasterState";
 import { GoalName } from "@/app/goals";
+import { GeneralCounts } from "./page";
 
 function Cell({ children }: { children: ReactNode }) {
   return <div className={classes.item}>{children}</div>;
@@ -46,7 +46,7 @@ type Props = {
   color: BingosyncColor;
   score: number;
   generalGoals: ReadonlyArray<Square>;
-  generalState: Generals;
+  generalState: GeneralCounts;
   isLeft: boolean;
   hasTiebreaker: boolean;
 };
@@ -80,9 +80,9 @@ export default function GeneralIcons({
               countState == null
                 ? 0
                 : Object.keys(countState).reduce(
-                    (acc, game) => acc + countState[game],
-                    0
-                  )
+                  (acc, game) => acc + countState[game],
+                  0
+                )
             }
             src={getIconSrc(square.name as GoalName) ?? ""}
           />

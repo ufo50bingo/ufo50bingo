@@ -32,18 +32,20 @@ import {
 import { findGamesForGoal, GameToGoals } from "./findAllGames";
 import InfoCard from "./InfoCard";
 import GameInfo from "./GameInfo";
-import { GeneralGoalState } from "./useCasterState";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import getColorHex from "./getColorHex";
 import BingosyncColored from "@/app/matches/BingosyncColored";
+import { CountChange, CountState } from "./useSyncedState";
 
 type Props = {
+  showAll: boolean;
   isFinished: boolean;
   gameToGoals: GameToGoals;
   name: GoalName;
   terminalCodes: Set<string>;
-  generalState: null | undefined | GeneralGoalState;
-  setGeneral: (goal: GoalName, newGenerals: GeneralGoalState) => unknown;
+  countState: null | undefined | CountState;
+  setGeneralGameCount: (change: CountChange) => unknown;
+  addShowAll: (goal: GoalName) => unknown;
   leftColor: BingosyncColor;
   rightColor: BingosyncColor;
   height: null | undefined | number;
@@ -64,19 +66,20 @@ function getOtherGoals(
 }
 
 export default function GeneralGoal({
+  showAll,
   gameToGoals,
   name,
   isFinished,
   terminalCodes,
-  generalState,
-  setGeneral,
+  countState,
+  setGeneralGameCount,
+  addShowAll,
   leftColor,
   rightColor,
   height,
 }: Props) {
-  const showAll = generalState?.showAll ?? false;
-  const leftCounts = generalState?.leftCounts ?? {};
-  const rightCounts = generalState?.rightCounts ?? {};
+  const leftCounts = countState?.leftCounts ?? {};
+  const rightCounts = countState?.rightCounts ?? {};
 
   let recommendations: RecommendationsWithTerminal;
   let onCardOnly = false;
@@ -286,32 +289,20 @@ export default function GeneralGoal({
                   <Checkbox
                     color={getColorHex(leftColor)}
                     checked={(leftCounts[game] ?? 0) > 0}
-                    onChange={(event) => {
-                      const newCounts = {
-                        ...leftCounts,
-                        [game]: event.currentTarget.checked ? 1 : 0,
-                      };
-                      setGeneral(name, {
-                        showAll,
-                        rightCounts,
-                        leftCounts: newCounts,
-                      });
-                    }}
+                    onChange={(event) =>
+                      setGeneralGameCount({
+                        goal: name, is_left: true, game, count: event.currentTarget.checked ? 1 : 0
+                      })
+                    }
                   />
                   <Checkbox
                     color={getColorHex(rightColor)}
                     checked={(rightCounts[game] ?? 0) > 0}
-                    onChange={(event) => {
-                      const newCounts = {
-                        ...rightCounts,
-                        [game]: event.currentTarget.checked ? 1 : 0,
-                      };
-                      setGeneral(name, {
-                        showAll,
-                        rightCounts: newCounts,
-                        leftCounts,
-                      });
-                    }}
+                    onChange={(event) =>
+                      setGeneralGameCount({
+                        goal: name, is_left: false, game, count: event.currentTarget.checked ? 1 : 0
+                      })
+                    }
                   />
                 </>
               ) : (
@@ -323,27 +314,15 @@ export default function GeneralGoal({
                     p={0}
                     size="compact-xs"
                     onClick={() => {
-                      const newCounts = {
-                        ...leftCounts,
-                        [game]: (leftCounts[game] ?? 0) + 1,
-                      };
-                      setGeneral(name, {
-                        showAll,
-                        rightCounts,
-                        leftCounts: newCounts,
-                      });
+                      setGeneralGameCount({
+                        goal: name, is_left: true, game, count: (leftCounts[game] ?? 0) + 1,
+                      })
                     }}
                     onContextMenu={(e) => {
                       e.preventDefault();
-                      const newCounts = {
-                        ...leftCounts,
-                        [game]: Math.max(0, (leftCounts[game] ?? 0) - 1),
-                      };
-                      setGeneral(name, {
-                        showAll,
-                        rightCounts,
-                        leftCounts: newCounts,
-                      });
+                      setGeneralGameCount({
+                        goal: name, is_left: true, game, count: Math.max(0, (leftCounts[game] ?? 0) - 1),
+                      })
                     }}
                   >
                     {leftCounts[game] ?? 0}
@@ -355,27 +334,15 @@ export default function GeneralGoal({
                     p={0}
                     size="compact-xs"
                     onClick={() => {
-                      const newCounts = {
-                        ...rightCounts,
-                        [game]: (rightCounts[game] ?? 0) + 1,
-                      };
-                      setGeneral(name, {
-                        showAll,
-                        rightCounts: newCounts,
-                        leftCounts,
-                      });
+                      setGeneralGameCount({
+                        goal: name, is_left: false, game, count: (rightCounts[game] ?? 0) + 1,
+                      })
                     }}
                     onContextMenu={(e) => {
                       e.preventDefault();
-                      const newCounts = {
-                        ...rightCounts,
-                        [game]: Math.max(0, (rightCounts[game] ?? 0) - 1),
-                      };
-                      setGeneral(name, {
-                        showAll,
-                        rightCounts: newCounts,
-                        leftCounts,
-                      });
+                      setGeneralGameCount({
+                        goal: name, is_left: false, game, count: Math.max(0, (rightCounts[game] ?? 0) - 1),
+                      })
                     }}
                   >
                     {rightCounts[game] ?? 0}
@@ -393,13 +360,7 @@ export default function GeneralGoal({
         })}
         {hasMore ? (
           <Anchor
-            onClick={() =>
-              setGeneral(name, {
-                showAll: true,
-                rightCounts,
-                leftCounts,
-              })
-            }
+            onClick={() => addShowAll(name)}
             size="sm"
           >
             Show all options

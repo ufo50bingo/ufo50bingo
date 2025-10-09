@@ -2,7 +2,7 @@ import { Game, GoalName, ORDERED_PROPER_GAMES } from "@/app/goals";
 import { TBoard } from "@/app/matches/parseBingosyncData";
 import { GOAL_TO_TYPES } from "./goalToTypes";
 
-export type GameToGoals = { [game: string]: ReadonlyArray<GoalName> };
+export type GameToGoals = { [game: string]: ReadonlyArray<[GoalName, number]> };
 
 export function findGamesForGoal(goal: GoalName): Game[] {
   const types = GOAL_TO_TYPES[goal];
@@ -34,13 +34,13 @@ export function findGamesForGoal(goal: GoalName): Game[] {
 }
 
 export function getGameToGoals(board: TBoard): GameToGoals {
-  const gameToGoals: { [game: string]: GoalName[] } = {};
-  board.forEach((square) => {
+  const gameToGoals: { [game: string]: [GoalName, number][] } = {};
+  board.forEach((square, index) => {
     const goal = square.name as GoalName;
     const gamesForGoal = findGamesForGoal(goal);
     gamesForGoal.forEach((game) => {
       const existingGoals = gameToGoals[game] ?? [];
-      existingGoals.push(goal);
+      existingGoals.push([goal, index]);
       gameToGoals[game] = existingGoals;
     });
   });

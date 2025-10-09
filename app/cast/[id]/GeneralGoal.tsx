@@ -53,13 +53,13 @@ function getOtherGoals(
   entry: TerminalEntry,
   gameToGoals: GameToGoals,
   goal: GoalName
-): null | ReadonlyArray<GoalName> {
+): null | ReadonlyArray<[GoalName, number]> {
   const game = typeof entry === "string" ? entry : entry.game;
   const goals = gameToGoals[game];
   if (goals == null || goals.length === 0) {
     return null;
   }
-  const otherGoals = goals.filter((g) => g !== goal);
+  const otherGoals = goals.filter((g) => g[0] !== goal);
   return otherGoals.length === 0 ? null : otherGoals;
 }
 
@@ -222,19 +222,19 @@ export default function GeneralGoal({
   const title = isFinished ? <s>{titleEl}</s> : titleEl;
 
   const alwaysWithOnCard: ReadonlyArray<
-    [TerminalEntry, null | ReadonlyArray<GoalName>]
+    [TerminalEntry, null | ReadonlyArray<[GoalName, number]>]
   > = recommendations.always.map((e) => [
     e,
     getOtherGoals(e, gameToGoals, name),
   ]);
   const synergyWithOnCard: ReadonlyArray<
-    [TerminalEntry, null | ReadonlyArray<GoalName>]
+    [TerminalEntry, null | ReadonlyArray<[GoalName, number]>]
   > = recommendations.synergy.map((e) => [
     e,
     getOtherGoals(e, gameToGoals, name),
   ]);
   const neverWithOnCard: ReadonlyArray<
-    [TerminalEntry, null | ReadonlyArray<GoalName>]
+    [TerminalEntry, null | ReadonlyArray<[GoalName, number]>]
   > = recommendations.never.map((e) => [
     e,
     getOtherGoals(e, gameToGoals, name),
@@ -252,7 +252,7 @@ export default function GeneralGoal({
   const hasMore = allEntries.length > entries.length;
 
   const nullableEntries: ReadonlyArray<
-    null | [Game, null | ReadonlyArray<GoalName>]
+    null | [Game, null | ReadonlyArray<[GoalName, number]>]
   > = entries.map((pair) => {
     const e = pair[0];
     if (typeof e === "string") {

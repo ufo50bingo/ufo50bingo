@@ -5,23 +5,24 @@ import React from "react";
 type Props = {
   game: Game;
   description: null | string;
-  goals: null | ReadonlyArray<GoalName>;
+  goals: null | ReadonlyArray<[GoalName, number]>;
 };
 
 export default function GameInfo({ game, description, goals }: Props) {
   const gameName =
     goals != null ? (
       <Tooltip
-        label={goals.map((g, index) =>
-          index === 0 ? (
-            <React.Fragment key={g}>{g}</React.Fragment>
+        label={goals.map((g, index) => {
+          const coordinates = `[${Math.floor(g[1] / 5) + 1},${(g[1] % 5) + 1}]`;
+          return index === 0 ? (
+            <React.Fragment key={g[0]}>{g[0]} {coordinates}</React.Fragment>
           ) : (
-            <React.Fragment key={g}>
+            <React.Fragment key={g[0]}>
               <br />
-              {g}
+              {g[0]} {coordinates}
             </React.Fragment>
-          )
-        )}
+          );
+        })}
       >
         <u>
           <strong>{GAME_NAMES[game]}</strong>

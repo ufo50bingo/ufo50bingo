@@ -18,7 +18,9 @@ export default function useLocalState(id: string, seed: number): CasterState {
   const [shownDifficulties, setShownDifficultiesRaw] = useState<
     ReadonlyArray<Difficulty>
   >(initialState.shownDifficulties);
-  const [showAll, setShowAllRaw] = useState<ReadonlyArray<GoalName>>(initialState.showAll);
+  const [showAll, setShowAllRaw] = useState<ReadonlyArray<GoalName>>(
+    initialState.showAll
+  );
 
   return useMemo(() => {
     const addShowAll = (goal: GoalName) => {

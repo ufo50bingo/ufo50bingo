@@ -15,12 +15,12 @@ type Props = {
   initialCounts: GeneralCounts;
   initialLeftColor: BingosyncColor;
   initialRightColor: BingosyncColor;
-}
+};
 
 interface ColorChangeSync {
   is_left: boolean;
   color: BingosyncColor;
-};
+}
 
 interface ColorChangeRow extends ColorChangeSync {
   room_id: string;
@@ -31,15 +31,15 @@ export interface CountChange {
   is_left: boolean;
   game: Game;
   count: number;
-};
+}
 
 interface CountChangeSync extends CountChange {
   seed: number;
-};
+}
 
 export interface CountChangeRow extends CountChangeSync {
   room_id: string;
-};
+}
 
 export type SyncedState = {
   leftColor: BingosyncColor;
@@ -50,19 +50,25 @@ export type SyncedState = {
   setGeneralGameCount: (change: CountChange) => unknown;
 };
 
-export default function useSyncedState({ id, seed, initialCounts, initialLeftColor, initialRightColor }: Props): SyncedState {
+export default function useSyncedState({
+  id,
+  seed,
+  initialCounts,
+  initialLeftColor,
+  initialRightColor,
+}: Props): SyncedState {
   const supabase = getSupabaseClient();
 
-  const [leftColor, setLeftColorRaw] = useState<BingosyncColor>(
-    initialLeftColor
-  );
-  const [rightColor, setRightColorRaw] = useState<BingosyncColor>(
-    initialRightColor
-  );
+  const [leftColor, setLeftColorRaw] =
+    useState<BingosyncColor>(initialLeftColor);
+  const [rightColor, setRightColorRaw] =
+    useState<BingosyncColor>(initialRightColor);
   const [generals, setGeneralsRaw] = useState<GeneralCounts>(initialCounts);
 
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
-  const setGeneralGameCountRef = useRef<null | ((change: CountChange, shouldBroadcast: boolean) => unknown)>(null);
+  const setGeneralGameCountRef = useRef<
+    null | ((change: CountChange, shouldBroadcast: boolean) => unknown)
+  >(null);
   const seedRef = useRef<number>(seed);
   if (seedRef.current !== seed) {
     setGeneralsRaw({});
@@ -70,23 +76,36 @@ export default function useSyncedState({ id, seed, initialCounts, initialLeftCol
   }
 
   useEffect(() => {
-    const newChannel = supabase.channel(`cast:${id}:sync`, { config: { private: false } });
+    const newChannel = supabase.channel(`cast:${id}:sync`, {
+      config: { private: false },
+    });
 
     newChannel
-      .on('broadcast', { event: 'change_count' }, (payload: { payload: CountChangeSync }) => {
-        const change = payload.payload;
-        if (setGeneralGameCountRef.current != null && seedRef.current === change.seed) {
-          setGeneralGameCountRef.current(change, false);
+      .on(
+        "broadcast",
+        { event: "change_count" },
+        (payload: { payload: CountChangeSync }) => {
+          const change = payload.payload;
+          if (
+            setGeneralGameCountRef.current != null &&
+            seedRef.current === change.seed
+          ) {
+            setGeneralGameCountRef.current(change, false);
+          }
         }
-      })
-      .on('broadcast', { event: 'change_color' }, (payload: { payload: ColorChangeSync }) => {
-        const change = payload.payload;
-        if (change.is_left) {
-          setLeftColorRaw(change.color);
-        } else {
-          setRightColorRaw(change.color);
+      )
+      .on(
+        "broadcast",
+        { event: "change_color" },
+        (payload: { payload: ColorChangeSync }) => {
+          const change = payload.payload;
+          if (change.is_left) {
+            setLeftColorRaw(change.color);
+          } else {
+            setRightColorRaw(change.color);
+          }
         }
-      })
+      )
       .subscribe();
 
     channelRef.current = newChannel;
@@ -94,8 +113,8 @@ export default function useSyncedState({ id, seed, initialCounts, initialLeftCol
     return () => {
       supabase.removeChannel(newChannel);
       channelRef.current = null;
-    }
-  }, [id]);
+    };
+  }, [id, supabase]);
 
   return useMemo(() => {
     const syncColor = async (newColor: BingosyncColor, isLeft: boolean) => {
@@ -103,13 +122,13 @@ export default function useSyncedState({ id, seed, initialCounts, initialLeftCol
       const rowChange: ColorChangeRow = { ...syncChange, room_id: id };
       if (channelRef.current != null) {
         channelRef.current.send({
-          type: 'broadcast',
-          event: 'change_color',
+          type: "broadcast",
+          event: "change_color",
           payload: syncChange,
         });
       }
       await supabase.from("color").upsert(rowChange);
-    }
+    };
     const setLeftColor = async (newColor: BingosyncColor) => {
       setLeftColorRaw(newColor);
       await syncColor(newColor, true);
@@ -118,20 +137,26 @@ export default function useSyncedState({ id, seed, initialCounts, initialLeftCol
       setRightColorRaw(newColor);
       await syncColor(newColor, false);
     };
-    const setGeneralGameCount = async (change: CountChange, shouldBroadcast: boolean = true) => {
+    const setGeneralGameCount = async (
+      change: CountChange,
+      shouldBroadcast: boolean = true
+    ) => {
       const leftCounts = generals[change.goal]?.leftCounts ?? {};
       const rightCounts = generals[change.goal]?.rightCounts ?? {};
-      const newCounts = (change.is_left ? generals[change.goal]?.leftCounts : generals[change.goal]?.rightCounts) ?? {};
+      const newCounts =
+        (change.is_left
+          ? generals[change.goal]?.leftCounts
+          : generals[change.goal]?.rightCounts) ?? {};
       newCounts[change.game] = change.count;
       const newGeneralState = change.is_left
         ? {
-          leftCounts: newCounts,
-          rightCounts,
-        }
+            leftCounts: newCounts,
+            rightCounts,
+          }
         : {
-          leftCounts,
-          rightCounts: newCounts,
-        };
+            leftCounts,
+            rightCounts: newCounts,
+          };
       const newGenerals = {
         ...generals,
         [change.goal]: newGeneralState,
@@ -143,14 +168,14 @@ export default function useSyncedState({ id, seed, initialCounts, initialLeftCol
         const rowChange: CountChangeRow = { ...syncChange, room_id: id };
         if (channelRef.current != null) {
           channelRef.current.send({
-            type: 'broadcast',
-            event: 'change_count',
+            type: "broadcast",
+            event: "change_count",
             payload: syncChange,
           });
         }
         await supabase.from("general_count").upsert(rowChange);
       }
-    }
+    };
     setGeneralGameCountRef.current = setGeneralGameCount;
 
     return {
@@ -161,5 +186,5 @@ export default function useSyncedState({ id, seed, initialCounts, initialLeftCol
       setRightColor,
       setGeneralGameCount,
     };
-  }, [leftColor, rightColor, generals]);
+  }, [leftColor, rightColor, generals, id, seed, supabase]);
 }

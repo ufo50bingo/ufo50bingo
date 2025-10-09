@@ -63,7 +63,6 @@ export default function useCasterState(id: string, seed: number): CasterState {
         ...generals,
         [goal]: newGeneralState,
       };
-      console.log("new generals", newGenerals);
       setGeneralsRaw(newGenerals);
       setLocalStorage(key, { ...fullState, generals: newGenerals });
     };

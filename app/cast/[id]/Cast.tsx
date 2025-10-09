@@ -14,7 +14,7 @@ import {
 import { Button, Group, Modal, Stack } from "@mantine/core";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Feed from "./Feed";
-import { Game, GoalName } from "@/app/goals";
+import { Game, GoalName, ORDERED_GAMES } from "@/app/goals";
 import { getAllTerminalCodes, getGameToGoals } from "./findAllGames";
 import { GOAL_TO_TYPES } from "./goalToTypes";
 import GeneralGoal from "./GeneralGoal";
@@ -57,12 +57,20 @@ export default function Cast({
     setRightColor,
     generals,
     setGeneralGameCount,
-  } = useSyncedState({ id, seed, initialCounts, initialLeftColor, initialRightColor });
+  } = useSyncedState({
+    id,
+    seed,
+    initialCounts,
+    initialLeftColor,
+    initialRightColor,
+  });
   const {
     shownDifficulties,
     showAll,
     setShownDifficulties,
     addShowAll,
+    sortType,
+    setSortType,
   } = useLocalState(id, seed);
 
   const [board, setBoard] = useState(initialBoard);
@@ -189,16 +197,29 @@ export default function Cast({
     };
   }, [socketKey, id]);
 
-  const multiGoalGames = Object.keys(gameToGoals)
-    .filter((game) => gameToGoals[game].length > 1)
-    .map((game) => (
-      <GameInfo
-        key={game}
-        game={game as Game}
-        goals={gameToGoals[game]}
-        description={null}
-      />
-    ));
+  const multiGoalGames = Object.keys(gameToGoals).filter(
+    (game) => gameToGoals[game].length > 1
+  );
+  switch (sortType) {
+    case "fast":
+    case "alphabetical":
+      multiGoalGames.sort((a, b) => a.localeCompare(b));
+      break;
+    case "chronological":
+      multiGoalGames.sort(
+        (a, b) =>
+          ORDERED_GAMES.indexOf(a as Game) - ORDERED_GAMES.indexOf(b as Game)
+      );
+      break;
+  }
+  const multiGoalGameElements = multiGoalGames.map((game) => (
+    <GameInfo
+      key={game}
+      game={game as Game}
+      goals={gameToGoals[game]}
+      description={null}
+    />
+  ));
 
   const getCard = (g: Square, h: null | undefined | number) => (
     <GeneralGoal
@@ -214,6 +235,7 @@ export default function Cast({
       leftColor={leftColor}
       rightColor={rightColor}
       height={h}
+      sortType={sortType}
     />
   );
 
@@ -251,8 +273,8 @@ export default function Cast({
           {generalGoals.slice(1).map((g) => getCard(g, null))}
           <InfoCard title="Multi-goal games" height={null} width={205}>
             <Stack gap={4}>
-              {multiGoalGames.length > 0
-                ? multiGoalGames
+              {multiGoalGameElements.length > 0
+                ? multiGoalGameElements
                 : "No multi-goal games on this card!"}
             </Stack>
           </InfoCard>
@@ -267,6 +289,8 @@ export default function Cast({
         setRightColor={setRightColor}
         shownDifficulties={shownDifficulties}
         setShownDifficulties={setShownDifficulties}
+        sortType={sortType}
+        setSortType={setSortType}
       />
       {editingIndex != null && (
         <EditSquare

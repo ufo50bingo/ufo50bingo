@@ -1,4 +1,4 @@
-import { Game, GoalName } from "@/app/goals";
+import { Game, GoalName, ORDERED_GAMES } from "@/app/goals";
 import { Anchor, Button, Checkbox, Group, Stack } from "@mantine/core";
 import {
   // TOP_3,
@@ -36,6 +36,7 @@ import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import getColorHex from "./getColorHex";
 import BingosyncColored from "@/app/matches/BingosyncColored";
 import { CountChange, CountState } from "./useSyncedState";
+import { SortType } from "./useLocalState";
 
 type Props = {
   showAll: boolean;
@@ -49,6 +50,7 @@ type Props = {
   leftColor: BingosyncColor;
   rightColor: BingosyncColor;
   height: null | undefined | number;
+  sortType: SortType;
 };
 
 function getOtherGoals(
@@ -77,6 +79,7 @@ export default function GeneralGoal({
   leftColor,
   rightColor,
   height,
+  sortType,
 }: Props) {
   const leftCounts = countState?.leftCounts ?? {};
   const rightCounts = countState?.rightCounts ?? {};
@@ -270,6 +273,20 @@ export default function GeneralGoal({
   const finalEntries = onCardOnly
     ? nonNullEntries.filter((e) => e[1] != null)
     : nonNullEntries;
+
+  switch (sortType) {
+    case "fast":
+      break;
+    case "alphabetical":
+      finalEntries.sort((a, b) => a[0].localeCompare(b[0]));
+      break;
+    case "chronological":
+      finalEntries.sort(
+        (a, b) => ORDERED_GAMES.indexOf(a[0]) - ORDERED_GAMES.indexOf(b[0])
+      );
+      break;
+  }
+
   return (
     <InfoCard
       height={height}
@@ -291,7 +308,10 @@ export default function GeneralGoal({
                     checked={(leftCounts[game] ?? 0) > 0}
                     onChange={(event) =>
                       setGeneralGameCount({
-                        goal: name, is_left: true, game, count: event.currentTarget.checked ? 1 : 0
+                        goal: name,
+                        is_left: true,
+                        game,
+                        count: event.currentTarget.checked ? 1 : 0,
                       })
                     }
                   />
@@ -300,7 +320,10 @@ export default function GeneralGoal({
                     checked={(rightCounts[game] ?? 0) > 0}
                     onChange={(event) =>
                       setGeneralGameCount({
-                        goal: name, is_left: false, game, count: event.currentTarget.checked ? 1 : 0
+                        goal: name,
+                        is_left: false,
+                        game,
+                        count: event.currentTarget.checked ? 1 : 0,
                       })
                     }
                   />
@@ -315,14 +338,20 @@ export default function GeneralGoal({
                     size="compact-xs"
                     onClick={() => {
                       setGeneralGameCount({
-                        goal: name, is_left: true, game, count: (leftCounts[game] ?? 0) + 1,
-                      })
+                        goal: name,
+                        is_left: true,
+                        game,
+                        count: (leftCounts[game] ?? 0) + 1,
+                      });
                     }}
                     onContextMenu={(e) => {
                       e.preventDefault();
                       setGeneralGameCount({
-                        goal: name, is_left: true, game, count: Math.max(0, (leftCounts[game] ?? 0) - 1),
-                      })
+                        goal: name,
+                        is_left: true,
+                        game,
+                        count: Math.max(0, (leftCounts[game] ?? 0) - 1),
+                      });
                     }}
                   >
                     {leftCounts[game] ?? 0}
@@ -335,14 +364,20 @@ export default function GeneralGoal({
                     size="compact-xs"
                     onClick={() => {
                       setGeneralGameCount({
-                        goal: name, is_left: false, game, count: (rightCounts[game] ?? 0) + 1,
-                      })
+                        goal: name,
+                        is_left: false,
+                        game,
+                        count: (rightCounts[game] ?? 0) + 1,
+                      });
                     }}
                     onContextMenu={(e) => {
                       e.preventDefault();
                       setGeneralGameCount({
-                        goal: name, is_left: false, game, count: Math.max(0, (rightCounts[game] ?? 0) - 1),
-                      })
+                        goal: name,
+                        is_left: false,
+                        game,
+                        count: Math.max(0, (rightCounts[game] ?? 0) - 1),
+                      });
                     }}
                   >
                     {rightCounts[game] ?? 0}
@@ -359,10 +394,7 @@ export default function GeneralGoal({
           );
         })}
         {hasMore ? (
-          <Anchor
-            onClick={() => addShowAll(name)}
-            size="sm"
-          >
+          <Anchor onClick={() => addShowAll(name)} size="sm">
             Show all options
           </Anchor>
         ) : null}

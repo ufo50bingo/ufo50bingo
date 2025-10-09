@@ -8,6 +8,7 @@ import {
   Drawer,
   Group,
   Modal,
+  Select,
   Stack,
   Text,
 } from "@mantine/core";
@@ -19,6 +20,7 @@ import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import createNewCard from "./createNewCard";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { SortType } from "./useLocalState";
 
 type Props = {
   id: string;
@@ -29,6 +31,8 @@ type Props = {
   setRightColor: (newColor: BingosyncColor) => unknown;
   shownDifficulties: ReadonlyArray<Difficulty>;
   setShownDifficulties: (newShown: ReadonlyArray<Difficulty>) => unknown;
+  sortType: SortType;
+  setSortType: (newSortType: SortType) => unknown;
 };
 
 export default function CastSettings({
@@ -40,6 +44,8 @@ export default function CastSettings({
   setRightColor,
   shownDifficulties,
   setShownDifficulties,
+  sortType,
+  setSortType,
 }: Props) {
   const pathname = usePathname();
 
@@ -109,6 +115,18 @@ export default function CastSettings({
                   ))}
                 </Stack>
               </Card>
+              <Select
+                label="Sort type"
+                data={[
+                  { value: "fast", label: "Fastest" },
+                  { value: "alphabetical", label: "Alphabetical" },
+                  { value: "chronological", label: "Chronological" },
+                ]}
+                value={sortType}
+                onChange={(newSortType: string | null) =>
+                  setSortType((newSortType ?? "fast") as SortType)
+                }
+              />
               <Button color="green" onClick={() => setIsCreating(true)}>
                 Create new board
               </Button>
@@ -130,12 +148,14 @@ export default function CastSettings({
           <Stack>
             <Alert title="Players may need to refresh">
               After creating a new card, players may need to refresh their
-              pages, especially if they are connected on multiple devices or multiple windows.
+              pages, especially if they are connected on multiple devices or
+              multiple windows.
               <br />
               <br />
-              Bingosync rate-limits players, so connecting from multiple devices or multiple windows
-              may cause the board to fail to refresh when a new card is generated, and players may see
-              stale goals on one or more devices/windows when they reveal the card.
+              Bingosync rate-limits players, so connecting from multiple devices
+              or multiple windows may cause the board to fail to refresh when a
+              new card is generated, and players may see stale goals on one or
+              more devices/windows when they reveal the card.
             </Alert>
             <Alert color="yellow" title="Are you sure?">
               This will create a new{" "}
@@ -144,9 +164,10 @@ export default function CastSettings({
               <br />
               <br />
               Creating a new board will overwrite the existing board, and is not
-              reversible. All data for the current board will be inaccessible on ufo50.bingo.
-              Please only use this to correct a mistake! If you've already completed a game and
-              want to start a new one, go to <Link href="/">Create Board</Link> and create a new board instead!
+              reversible. All data for the current board will be inaccessible on
+              ufo50.bingo. Please only use this to correct a mistake! If you've
+              already completed a game and want to start a new one, go to{" "}
+              <Link href="/">Create Board</Link> and create a new board instead!
               <br />
               <br />
               Are you sure you want to continue?

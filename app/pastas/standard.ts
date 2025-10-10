@@ -62,7 +62,7 @@ export const STANDARD = [
 {"name": "MORTOL II: Activate all the switches", "types": ["mortolii", "easy"]},
 {"name": "STAR WASPIR: Complete wave 1 without attacking the boss", "types": ["starwaspir", "easy"]},
 {"name": "STAR WASPIR: Beat wave 1 with 1500+ points (before bonus points) without touching any letters", "types": ["starwaspir", "easy"]},
-{"name": "SEASIDE DRIVE: Win the bonus game", "types": ["seasidedrive", "easy"]},
+{"name": "SEASIDE DRIVE: Collect a coin by winning a bonus game", "types": ["seasidedrive", "easy"]},
 {"name": "SEASIDE DRIVE: Clear Stage 1 with 3 lives and exactly 10,000 points (defeat only the boss)", "types": ["seasidedrive", "easy"]}
 ],
 [
@@ -82,7 +82,7 @@ export const STANDARD = [
 {"name": "PINGOLF: Par or better on 5 courses, dunking every stroke", "types": ["pingolf", "easy"]},
 {"name": "NIGHT MANOR: Successfully complete the hiding minigame twice", "types": ["nightmanor", "easy"]},
 {"name": "NIGHT MANOR: Find 10 journal entries", "types": ["nightmanor", "easy"]},
-{"name": "MINI & MAX: Rid the books of Silverfish", "types": ["miniandmax", "easy"]},
+{"name": "MINI & MAX: Collect the reward for ridding the books of Silverfish", "types": ["miniandmax", "easy"]},
 {"name": "MINI & MAX: Slay the Water Bear in the west pot", "types": ["miniandmax", "easy"]},
 {"name": "QUIBBLE RACE: Bet against your sponsored Quibble and win the round", "types": ["quibblerace", "easy"]},
 {"name": "QUIBBLE RACE: Have your sponsored Quibble win the race, while boosting a different one", "types": ["quibblerace", "easy"]}
@@ -135,7 +135,7 @@ export const STANDARD = [
 {"name": "PORGY: Reach the Abyss (lowest depth area)", "types": ["porgy", "medium"]},
 {"name": "PORGY: Collect 4 torpedo upgrades", "types": ["porgy", "medium"]},
 {"name": "HYPER CONTENDER: Beat Draft Mode (Default settings)", "types": ["hypercontender", "medium"]},
-{"name": "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode", "types": ["hypercontender", "medium"]},
+{"name": "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode (Default settings)", "types": ["hypercontender", "medium"]},
 {"name": "LORDS OF DISKONIA: Have 50+ gold", "types": ["lordsofdiskonia", "medium"]},
 {"name": "LORDS OF DISKONIA: Destroy 2+ enemy disks in one shot", "types": ["lordsofdiskonia", "medium"]},
 {"name": "CYBER OWLS: Complete 2 non-rescue missions", "types": ["cyberowls", "medium"]},
@@ -155,7 +155,7 @@ export const STANDARD = [
 {"name": "NIGHT MANOR: Gold disk", "types": ["nightmanor", "medium"]},
 {"name": "NIGHT MANOR: Collect the diamond", "types": ["nightmanor", "medium"]},
 {"name": "MINI & MAX: Return the stolen Termite Egg to the outlet", "types": ["miniandmax", "medium"]},
-{"name": "MINI & MAX: Save the brainwashed mouse near the portrait", "types": ["miniandmax", "medium"]}
+{"name": "MINI & MAX: Collect the reward for saving the brainwashed mouse near the portrait", "types": ["miniandmax", "medium"]}
 ],
 [
 {"name": "MAGIC GARDEN: Reach a score of 10,000+ before saving 50 Oppies", "types": ["magicgarden", "medium"]},
@@ -434,5 +434,6 @@ export const STANDARD = [
 {"name": "RACER: Win 4 races in Paint Chase, The Big Bell Race, Quibble Race", "types": ["general", "general"]}
 ]
 ] as const;
+
 
 

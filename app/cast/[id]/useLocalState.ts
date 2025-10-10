@@ -2,6 +2,7 @@ import { Difficulty, GoalName } from "@/app/goals";
 import { useMemo, useState } from "react";
 
 export type SortType = "fast" | "alphabetical" | "chronological";
+export type IconType = 'winnerbit' | 'sprites';
 
 interface BaseState {
   shownDifficulties: ReadonlyArray<Difficulty>;
@@ -13,6 +14,8 @@ export interface CasterState extends BaseState {
   setShownDifficulties: (newDifficulties: ReadonlyArray<Difficulty>) => unknown;
   sortType: SortType;
   setSortType: (newSortType: SortType) => unknown;
+  iconType: IconType;
+  setIconType: (newIconType: IconType) => unknown;
 }
 
 export default function useLocalState(id: string, seed: number): CasterState {
@@ -44,6 +47,25 @@ export default function useLocalState(id: string, seed: number): CasterState {
         return "fast";
     }
   });
+  const [iconType, setIconTypeRaw] = useState<IconType>(() => {
+    if (global.window == undefined || localStorage == null) {
+      return "winnerbit";
+    }
+    const fromStorage = localStorage.getItem("icon_type");
+    if (fromStorage == null || fromStorage === "") {
+      return "winnerbit";
+    }
+    switch (fromStorage) {
+      case "sprites":
+        return "sprites";
+      case "winnerbit":
+        return "winnerbit";
+      default:
+        return "winnerbit";
+    }
+  });
+
+  console.log('iconType', iconType);
 
   return useMemo(() => {
     const addShowAll = (goal: GoalName) => {
@@ -67,6 +89,13 @@ export default function useLocalState(id: string, seed: number): CasterState {
       }
       localStorage.setItem("sort_type", newSortType);
     };
+    const setIconType = (newIconType: IconType) => {
+      setIconTypeRaw(newIconType);
+      if (global.window == undefined || localStorage == null) {
+        return;
+      }
+      localStorage.setItem("icon_type", newIconType);
+    };
     return {
       showAll,
       shownDifficulties,
@@ -74,8 +103,10 @@ export default function useLocalState(id: string, seed: number): CasterState {
       addShowAll,
       sortType,
       setSortType,
+      iconType,
+      setIconType,
     };
-  }, [showAll, shownDifficulties, sortType, key]);
+  }, [showAll, shownDifficulties, sortType, key, iconType]);
 }
 
 const DEFAULT_STATE: BaseState = {

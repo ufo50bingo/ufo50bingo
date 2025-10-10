@@ -20,7 +20,7 @@ import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import createNewCard from "./createNewCard";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { SortType } from "./useLocalState";
+import { IconType, SortType } from "./useLocalState";
 
 type Props = {
   id: string;
@@ -33,6 +33,8 @@ type Props = {
   setShownDifficulties: (newShown: ReadonlyArray<Difficulty>) => unknown;
   sortType: SortType;
   setSortType: (newSortType: SortType) => unknown;
+  iconType: IconType;
+  setIconType: (newIconType: IconType) => unknown;
 };
 
 export default function CastSettings({
@@ -46,6 +48,8 @@ export default function CastSettings({
   setShownDifficulties,
   sortType,
   setSortType,
+  iconType,
+  setIconType,
 }: Props) {
   const pathname = usePathname();
 
@@ -125,6 +129,17 @@ export default function CastSettings({
                 value={sortType}
                 onChange={(newSortType: string | null) =>
                   setSortType((newSortType ?? "fast") as SortType)
+                }
+              />
+              <Select
+                label="Icon type"
+                data={[
+                  { value: "winnerbit", label: "WinnerBit" },
+                  { value: "sprites", label: "Sprites" },
+                ]}
+                value={iconType}
+                onChange={(newIconType: string | null) =>
+                  setIconType((newIconType ?? "winnerbit") as IconType)
                 }
               />
               <Button color="green" onClick={() => setIsCreating(true)}>

@@ -71,6 +71,8 @@ export default function Cast({
     addShowAll,
     sortType,
     setSortType,
+    iconType,
+    setIconType,
   } = useLocalState(id, seed);
 
   const [board, setBoard] = useState(initialBoard);
@@ -250,6 +252,7 @@ export default function Cast({
             generalGoals={generalGoals}
             generalState={generals}
             hasTiebreaker={tiebreakWinner === leftColor}
+            iconType={iconType}
           />
           <Board
             board={board}
@@ -265,6 +268,7 @@ export default function Cast({
             generalGoals={generalGoals}
             generalState={generals}
             hasTiebreaker={tiebreakWinner === rightColor}
+            iconType={iconType}
           />
         </Group>
         <Feed rawFeed={rawFeed} />
@@ -291,6 +295,8 @@ export default function Cast({
         setShownDifficulties={setShownDifficulties}
         sortType={sortType}
         setSortType={setSortType}
+        iconType={iconType}
+        setIconType={setIconType}
       />
       {editingIndex != null && (
         <EditSquare

@@ -16,6 +16,8 @@ export interface CasterState extends BaseState {
   setSortType: (newSortType: SortType) => unknown;
   iconType: IconType;
   setIconType: (newIconType: IconType) => unknown;
+  hideByDefault: boolean;
+  setHideByDefault: (newHideByDefault: boolean) => unknown;
 }
 
 export default function useLocalState(id: string, seed: number): CasterState {
@@ -65,7 +67,13 @@ export default function useLocalState(id: string, seed: number): CasterState {
     }
   });
 
-  console.log('iconType', iconType);
+  const [hideByDefault, setHideByDefaultRaw] = useState<boolean>(() => {
+    if (global.window == undefined || localStorage == null) {
+      return false;
+    }
+    const fromStorage = localStorage.getItem("hide_by_default");
+    return fromStorage === 'true';
+  });
 
   return useMemo(() => {
     const addShowAll = (goal: GoalName) => {
@@ -96,6 +104,13 @@ export default function useLocalState(id: string, seed: number): CasterState {
       }
       localStorage.setItem("icon_type", newIconType);
     };
+    const setHideByDefault = (newHideByDefault: boolean) => {
+      setHideByDefaultRaw(newHideByDefault);
+      if (global.window == undefined || localStorage == null) {
+        return;
+      }
+      localStorage.setItem("hide_by_default", newHideByDefault ? 'true' : 'false');
+    };
     return {
       showAll,
       shownDifficulties,
@@ -105,8 +120,10 @@ export default function useLocalState(id: string, seed: number): CasterState {
       setSortType,
       iconType,
       setIconType,
+      hideByDefault,
+      setHideByDefault,
     };
-  }, [showAll, shownDifficulties, sortType, key, iconType]);
+  }, [showAll, shownDifficulties, sortType, key, iconType, hideByDefault]);
 }
 
 const DEFAULT_STATE: BaseState = {

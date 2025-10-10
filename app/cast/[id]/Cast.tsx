@@ -73,8 +73,11 @@ export default function Cast({
     setSortType,
     iconType,
     setIconType,
+    hideByDefault,
+    setHideByDefault,
   } = useLocalState(id, seed);
 
+  const [isHiddenRaw, setIsHidden] = useState(hideByDefault);
   const [board, setBoard] = useState(initialBoard);
   const [rawFeed, setRawFeed] = useState(initialRawFeed);
   const [gameToGoals, setGameToGoals] = useState(() =>
@@ -88,6 +91,8 @@ export default function Cast({
   const rightScore = board.filter(
     (square) => square.color === rightColor
   ).length;
+
+  const isHidden = isHiddenRaw && leftScore === 0 && rightScore === 0;
 
   const tiebreakWinner = useMemo<BingosyncColor | null>(() => {
     try {
@@ -253,13 +258,15 @@ export default function Cast({
             generalState={generals}
             hasTiebreaker={tiebreakWinner === leftColor}
             iconType={iconType}
+            isHidden={isHidden}
           />
           <Board
             board={board}
             onClickSquare={setEditingIndex}
-            isHidden={false}
-            setIsHidden={() => false}
+            isHidden={isHidden}
+            setIsHidden={setIsHidden}
             shownDifficulties={shownDifficulties}
+            hiddenText="Click or start Countdown to reveal"
           />
           <GeneralIcons
             isLeft={false}
@@ -269,6 +276,7 @@ export default function Cast({
             generalState={generals}
             hasTiebreaker={tiebreakWinner === rightColor}
             iconType={iconType}
+            isHidden={isHidden}
           />
         </Group>
         <Feed rawFeed={rawFeed} />
@@ -297,6 +305,9 @@ export default function Cast({
         setSortType={setSortType}
         iconType={iconType}
         setIconType={setIconType}
+        hideByDefault={hideByDefault}
+        setHideByDefault={setHideByDefault}
+        setIsHidden={setIsHidden}
       />
       {editingIndex != null && (
         <EditSquare

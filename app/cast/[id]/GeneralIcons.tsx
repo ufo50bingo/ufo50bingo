@@ -55,6 +55,7 @@ type Props = {
   isLeft: boolean;
   hasTiebreaker: boolean;
   iconType: IconType;
+  isHidden: boolean;
 };
 
 export default function GeneralIcons({
@@ -65,6 +66,7 @@ export default function GeneralIcons({
   isLeft,
   hasTiebreaker,
   iconType,
+  isHidden,
 }: Props) {
   return (
     <div className={classes.container}>
@@ -94,8 +96,8 @@ export default function GeneralIcons({
             iconType={iconType}
             src={
               iconType === 'sprites'
-                ? getSpritesSrc(square.name as GoalName) ?? ""
-                : getWinnerBitSrc(square.name as GoalName)
+                ? getSpritesSrc(square.name as GoalName, isHidden)
+                : getWinnerBitSrc(square.name as GoalName, isHidden)
             }
           />
         );
@@ -104,7 +106,10 @@ export default function GeneralIcons({
   );
 }
 
-function getWinnerBitSrc(goal: GoalName): string {
+function getWinnerBitSrc(goal: GoalName, isHidden: boolean): string {
+  if (isHidden) {
+    return "/general/winnerbit/Icon_Unrevealed_Goal.png";
+  }
   switch (goal) {
     case "Collect 2 cherry disks from games on this card":
     case "Collect 3 cherry disks from games on this card":
@@ -164,7 +169,10 @@ function getWinnerBitSrc(goal: GoalName): string {
   }
 }
 
-function getSpritesSrc(goal: GoalName): null | string {
+function getSpritesSrc(goal: GoalName, isHidden: boolean): string {
+  if (isHidden) {
+    return "/general/sprites/IconUnknown.png";
+  }
   switch (goal) {
     case "Collect 2 cherry disks from games on this card":
     case "Collect 3 cherry disks from games on this card":
@@ -231,7 +239,7 @@ function getSpritesSrc(goal: GoalName): null | string {
     case "WAR IS BAD: Win 3 battles in Attactics, Avianos, Combatants":
       return "/general/sprites/IconWarIsBad.png";
     default:
-      return null;
+      return "/general/sprites/IconUnknown.png";
   }
 }
 

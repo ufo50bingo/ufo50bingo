@@ -35,6 +35,9 @@ type Props = {
   setSortType: (newSortType: SortType) => unknown;
   iconType: IconType;
   setIconType: (newIconType: IconType) => unknown;
+  hideByDefault: boolean;
+  setHideByDefault: (newHideByDefault: boolean) => unknown;
+  setIsHidden: (newIsHidden: boolean) => unknown;
 };
 
 export default function CastSettings({
@@ -50,6 +53,9 @@ export default function CastSettings({
   setSortType,
   iconType,
   setIconType,
+  hideByDefault,
+  setHideByDefault,
+  setIsHidden,
 }: Props) {
   const pathname = usePathname();
 
@@ -98,7 +104,7 @@ export default function CastSettings({
                 setColor={setRightColor}
               />
               <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
-                <Countdown />
+                <Countdown setIsHidden={setIsHidden} />
               </Card>
               <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
                 <Stack>
@@ -141,6 +147,11 @@ export default function CastSettings({
                 onChange={(newIconType: string | null) =>
                   setIconType((newIconType ?? "winnerbit") as IconType)
                 }
+              />
+              <Checkbox
+                label="Hide board by default"
+                checked={hideByDefault}
+                onChange={event => setHideByDefault(event.target.checked)}
               />
               <Button color="green" onClick={() => setIsCreating(true)}>
                 Create new board

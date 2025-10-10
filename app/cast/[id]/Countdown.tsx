@@ -3,7 +3,13 @@ import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import sendChat from "./sendChat";
 
-export default function Countdown() {
+type Props = {
+  setIsHidden: (newSetIsHidden: boolean) => unknown;
+}
+
+const REVEAL_STEP = "REVEAL!";
+
+export default function Countdown({ setIsHidden }: Props) {
   const { id } = useParams<{ id: string }>();
   const useBot = useSearchParams().get("use_bot") === "true";
 
@@ -34,7 +40,7 @@ export default function Countdown() {
       { text: "3", delay: 1000 },
       { text: "2", delay: 1000 },
       { text: "1", delay: 1000 },
-      { text: "REVEAL!", delay: 1000 },
+      { text: REVEAL_STEP, delay: 1000 },
       { text: "Start in 5", delay: (analysisSeconds - 5) * 1000 },
       { text: "4", delay: 1000 },
       { text: "3", delay: 1000 },
@@ -53,6 +59,9 @@ export default function Countdown() {
       });
       if (cancelRef.current) {
         break;
+      }
+      if (text === REVEAL_STEP) {
+        setIsHidden(false);
       }
       sendChat(id, text);
     }

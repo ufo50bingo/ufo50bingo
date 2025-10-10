@@ -103,8 +103,7 @@ export default function GeneralGoal({
     case "Collect 7 gifts from games on this card":
     case "Collect 8 gifts from games on this card":
       recommendations = GIFTS;
-      // change back to true
-      onCardOnly = false;
+      onCardOnly = true;
       descriptions = GIFT_DESCRIPTIONS;
       break;
     case "ARCADE ACE: Gold Disk any 3 of the 16 “ARCADE” games":

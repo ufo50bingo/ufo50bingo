@@ -63,9 +63,9 @@ const OLD_GOAL_TO_NEW_GOAL: { [key: string]: GoalName } = {
   "HYPER CONTENDER: Use PAST-RULE; Beat Draft Mode twice":
     "HYPER CONTENDER: Use PAST-RULE; beat Draft Mode twice",
   "HYPER CONTENDER: Use PAST-RULE; Beat Tournament Mode (Default settings)":
-    "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode",
-  "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode (Default settings)":
-    "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode",
+    "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode (Default settings)",
+  "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode":
+    "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode (Default settings)",
   "HYPER CONTENDER: Win 4 fights in a row without rematches on default ring settings":
     "HYPER CONTENDER: Win 4 fights in one tournament on default ring settings",
   "Increase your max HP in 6 games": "Increase your base HP in 6 games",
@@ -75,6 +75,10 @@ const OLD_GOAL_TO_NEW_GOAL: { [key: string]: GoalName } = {
     "MAGIC GARDEN: Use OVER-GROW; save 30+ oppies in a run",
   "METROIDVANIA: Collect Upgrades: 3 in Porgy, 2 in Vainger, 1 in Golfaria":
     "METROIDVANIA: Collect Abilities: 3 in Porgy, 2 in Vainger, 1 in Golfaria",
+  "MINI & MAX: Rid the books of Silverfish":
+    "MINI & MAX: Collect the reward for ridding the books of Silverfish",
+  "MINI & MAX: Save the brainwashed mouse near the portrait":
+    "MINI & MAX: Collect the reward for saving the brainwashed mouse near the portrait",
   "MORTOL: Beat a level with a total of 30 or more additional lives than you began the run with":
     "MORTOL: Have 50+ Lives (No BENS-MODE)",
   "MORTOL: OPEN-TOMB allowed; Clear all world 2 levels":
@@ -129,6 +133,8 @@ const OLD_GOAL_TO_NEW_GOAL: { [key: string]: GoalName } = {
     "ROCK ON! ISLAND: CLUB-PASS allowed; perfect two levels that aren’t Initial Encounter",
   "ROCK ON! ISLAND: CLUB-PASS allowed; survive the first 5 waves of The Four Emperors w/o getting hit":
     "ROCK ON! ISLAND: CLUB-PASS allowed; survive the first 5 waves of The Four Emperors w/o losing health",
+  "SEASIDE DRIVE: Win the bonus game":
+    "SEASIDE DRIVE: Collect a coin by winning a bonus game",
   "VAINGER: Collect 1 keycode": "VAINGER: Collect a Keycode from a major boss",
   "VAINGER: Get the Force Mod from Verde Sector":
     "VAINGER: Obtain the Force Mod from Verde Sector",

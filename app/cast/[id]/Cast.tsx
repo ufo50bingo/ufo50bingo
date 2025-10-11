@@ -280,7 +280,7 @@ export default function Cast({
           />
         </Group>
         <Feed rawFeed={rawFeed} />
-        {getCard(generalGoals[0], 475)}
+        {generalGoals.length > 0 && getCard(generalGoals[0], 475)}
         <Group w="100%">
           {generalGoals.slice(1).map((g) => getCard(g, null))}
           <InfoCard title="Multi-goal games" height={null} width={205}>

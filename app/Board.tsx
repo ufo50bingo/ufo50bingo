@@ -4,6 +4,7 @@ import { ReactNode, useState } from "react";
 import { BingosyncColor, TBoard } from "./matches/parseBingosyncData";
 import { GOAL_TO_TYPES } from "./cast/[id]/goalToTypes";
 import { Difficulty } from "./goals";
+import { SPICY_GOAL_TO_TYPES } from "./cast/[id]/spicyGoalToTypes";
 
 type Props = {
   board: TBoard;
@@ -48,9 +49,12 @@ function getDifficulty(
   name: string,
   shownDifficulties: ReadonlyArray<Difficulty>
 ): null | ReactNode {
-  const types = GOAL_TO_TYPES[name];
+  let types = GOAL_TO_TYPES[name];
   if (types == null) {
-    return null;
+    types = SPICY_GOAL_TO_TYPES[name];
+    if (types == null) {
+      return null;
+    }
   }
   const difficulty = types[1];
   if (difficulty == null || !shownDifficulties.includes(difficulty)) {

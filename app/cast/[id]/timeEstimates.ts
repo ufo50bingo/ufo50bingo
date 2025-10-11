@@ -161,7 +161,7 @@ const GIFT_DESCRIPTION_ENTRIES: ReadonlyArray<[Game, string]> = [
   ["campanella2", "Bracelet"],
   ["barbuta", "25 rooms"],
   ["camouflage", "30%"],
-  ["porgy", "Boss"],
+  ["porgy", "Lamia"],
   ["planetzoldath", "1 Map"],
   ["hypercontender", "Draft"],
   ["kickclub", "Track World"],

@@ -151,8 +151,14 @@ export default function CastSettings({
               <Checkbox
                 label="Hide board by default"
                 checked={hideByDefault}
-                onChange={event => setHideByDefault(event.target.checked)}
+                onChange={(event) => setHideByDefault(event.target.checked)}
               />
+              <Button
+                component="a"
+                href={`https://www.bingosync.com/room/${id}`}
+              >
+                View Bingosync room
+              </Button>
               <Button color="green" onClick={() => setIsCreating(true)}>
                 Create new board
               </Button>

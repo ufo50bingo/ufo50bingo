@@ -566,6 +566,7 @@ export const HP: Recommendations = {
     "grimstone",
     "divers",
     "miniandmax",
+    "campanella2",
     "vainger",
   ],
   synergy: ["valbrace"],

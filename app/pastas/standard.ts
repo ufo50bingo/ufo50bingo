@@ -116,7 +116,7 @@ export const STANDARD = [
 {"name": "NINPEK: Collect a coffee without ever firing a shot", "types": ["ninpek", "medium"]},
 {"name": "AVIANOS: Win a Custom game with 8 Mountains (change no other settings)", "types": ["avianos", "medium"]},
 {"name": "AVIANOS: Win the campaign Hatchling game without using any miracles", "types": ["avianos", "medium"]},
-{"name": "THE BIG BELL RACE: Win a race, KOing each opponent at least once", "types": ["thebigbellrace", "medium"]},
+{"name": "THE BIG BELL RACE: Win a race, having every opponent die at least once", "types": ["thebigbellrace", "medium"]},
 {"name": "THE BIG BELL RACE: Win 3 different races without collecting power-ups", "types": ["thebigbellrace", "medium"]},
 {"name": "HOT FOOT: Win 2 games in a row without jumping", "types": ["hotfoot", "medium"]},
 {"name": "HOT FOOT: Win 4 games in one tournament", "types": ["hotfoot", "medium"]},
@@ -291,7 +291,7 @@ export const STANDARD = [
 {"name": "DIVERS: Obtain any Lance weapon", "types": ["divers", "hard"]},
 {"name": "DIVERS: Pull 2 levers", "types": ["divers", "hard"]},
 {"name": "STAR WASPIR: Clear waves 1 and 2 without using powerups (EEE, GGG, or GEE)", "types": ["starwaspir", "hard"]},
-{"name": "STAR WASPIR: As Red, have 3 bombs stored and 3 UFOs on screen at once in wave 2 or later", "types": ["starwaspir", "hard"]},
+{"name": "STAR WASPIR: As red, summon 5 UFOs with 3 bombs stored in wave 2 or later", "types": ["starwaspir", "hard"]},
 {"name": "GRIMSTONE: Reach Level 4 with any character", "types": ["grimstone", "hard"]},
 {"name": "GRIMSTONE: Have 4 items equipped to everyone in a posse of 4", "types": ["grimstone", "hard"]},
 {"name": "CYBER OWLS: Have 2000 total points at HQ without playing Congo", "types": ["cyberowls", "hard"]},
@@ -434,4 +434,5 @@ export const STANDARD = [
 {"name": "RACER: Win 4 races in Paint Chase, The Big Bell Race, Quibble Race", "types": ["general", "general"]}
 ]
 ] as const;
+
 

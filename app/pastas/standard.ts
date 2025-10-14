@@ -212,7 +212,7 @@ export const STANDARD = [
 {"name": "MOONCAT: Defeat 6 unique enemy types", "types": ["mooncat", "medium"]},
 {"name": "BUSHIDO BALL: Win a 16-point match on Hyper speed (other options default)", "types": ["bushidoball", "medium"]},
 {"name": "BUSHIDO BALL: Win a 16-point match on Hyper speed (other options default)", "types": ["bushidoball", "medium"]},
-{"name": "ROCK ON! ISLAND: CLUB-PASS allowed; beat Oasis", "types": ["rockonisland", "medium"]},
+{"name": "ROCK ON! ISLAND: CLUB-PASS allowed; beat The Oasis", "types": ["rockonisland", "medium"]},
 {"name": "ROCK ON! ISLAND: CLUB-PASS allowed; beat Jungle Rush", "types": ["rockonisland", "medium"]},
 {"name": "VAINGER: Collect a Keycode from a major boss", "types": ["vainger", "medium"]},
 {"name": "VAINGER: Beat 3 bosses", "types": ["vainger", "medium"]},
@@ -434,5 +434,6 @@ export const STANDARD = [
 {"name": "RACER: Win 4 races in Paint Chase, The Big Bell Race, Quibble Race", "types": ["general", "general"]}
 ]
 ] as const;
+
 
 

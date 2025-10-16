@@ -21,9 +21,14 @@ export default function Login() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
 
-  const submit = async () => {
+  const submitCast = async () => {
     if (name !== "" && password !== "") {
-      await createSession(id, name, password);
+      await createSession(id, name, password, true);
+    }
+  };
+  const submitPlay = async () => {
+    if (name !== "" && password !== "") {
+      await createSession(id, name, password, false);
     }
   };
   return (
@@ -108,8 +113,11 @@ export default function Login() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />
-            <Button disabled={name === "" || password === ""} onClick={submit}>
+            <Button disabled={name === "" || password === ""} onClick={submitCast}>
               Access caster view
+            </Button>
+            <Button disabled={name === "" || password === ""} onClick={submitPlay}>
+              Access player view
             </Button>
           </Stack>
         </Card.Section>

@@ -7,8 +7,7 @@ const SESSIONID_REGEX = /sessionid=([^;]+);/;
 export default async function createSession(
   id: string,
   name: string,
-  password: string,
-  isCast: boolean,
+  password: string
 ) {
   const joinResponse = await fetch(`https://www.bingosync.com/api/join-room`, {
     method: "POST",
@@ -18,10 +17,10 @@ export default async function createSession(
     },
     body: JSON.stringify({
       room: id,
-      nickname: name + isCast ? ' (admin)' : '',
+      nickname: name + ' (admin)',
       password,
       // typo in bingosync code
-      is_specator: isCast,
+      is_specator: true,
     }).toString(),
   });
 
@@ -40,6 +39,6 @@ export default async function createSession(
     expires: Date.now() + 2 * 7 * 24 * 60 * 60 * 1000,
     maxAge: 2 * 7 * 24 * 60 * 60,
     sameSite: "lax",
-    path: isCast ? `/cast/${id}` : `/play/${id}`,
+    path: `/cast/${id}`,
   });
 }

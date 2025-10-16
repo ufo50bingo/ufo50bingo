@@ -1,18 +1,15 @@
 "use client";
 
 import Board from "@/app/Board";
-import { fetchBoard } from "@/app/fetchMatchInfo";
 import {
   BingosyncColor,
-  getBoard,
   getChangelog,
   RawFeed,
-  RawFeedItem,
   Square,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
-import { Button, Group, Modal, Stack } from "@mantine/core";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Group, Stack } from "@mantine/core";
+import { useCallback, useMemo, useState } from "react";
 import Feed from "./Feed";
 import { Game, GoalName, ORDERED_GAMES } from "@/app/goals";
 import { getAllTerminalCodes, getGameToGoals } from "./findAllGames";
@@ -26,6 +23,7 @@ import EditSquare from "./EditSquare";
 import { getResult } from "@/app/matches/computeResult";
 import useSyncedState, { CountState } from "./useSyncedState";
 import useLocalState from "./useLocalState";
+import useBingosyncSocket from "./useBingosyncSocket";
 
 export type CastProps = {
   id: string;
@@ -48,7 +46,27 @@ export default function Cast({
   initialLeftColor,
   initialRightColor,
 }: CastProps) {
-  const [seed, setSeed] = useState(initialSeed);
+  const [gameToGoals, setGameToGoals] = useState(() =>
+    getGameToGoals(initialBoard)
+  );
+  const [terminalCodes, setTerminalCodes] = useState(() =>
+    getAllTerminalCodes(initialBoard)
+  );
+  const [editingIndex, setEditingIndex] = useState<null | number>(null);
+
+  const onNewCard = useCallback((newBoard: TBoard) => {
+    setGameToGoals(getGameToGoals(newBoard));
+    setTerminalCodes(getAllTerminalCodes(newBoard));
+  }, []);
+
+  const { board, rawFeed, seed, reconnectModal } = useBingosyncSocket({
+    id,
+    initialBoard,
+    initialRawFeed,
+    initialSeed,
+    socketKey,
+    onNewCard,
+  });
 
   const {
     leftColor,
@@ -78,14 +96,6 @@ export default function Cast({
   } = useLocalState(id, seed);
 
   const [isHiddenRaw, setIsHidden] = useState(hideByDefault);
-  const [board, setBoard] = useState(initialBoard);
-  const [rawFeed, setRawFeed] = useState(initialRawFeed);
-  const [gameToGoals, setGameToGoals] = useState(() =>
-    getGameToGoals(initialBoard)
-  );
-  const [editingIndex, setEditingIndex] = useState<null | number>(null);
-  const [shouldReconnect, setShouldReconnect] = useState(false);
-  const socketRef = useRef<null | WebSocket>(null);
 
   const leftScore = board.filter((square) => square.color === leftColor).length;
   const rightScore = board.filter(
@@ -144,65 +154,6 @@ export default function Cast({
     filtered.unshift(toMove);
     return filtered;
   }, [board]);
-  const [terminalCodes, setTerminalCodes] = useState(() =>
-    getAllTerminalCodes(initialBoard)
-  );
-
-  useEffect(() => {
-    const socket = new WebSocket("wss://sockets.bingosync.com/broadcast");
-
-    socket.onopen = () => {
-      socket.send(JSON.stringify({ socket_key: socketKey }));
-      setShouldReconnect(false);
-    };
-
-    socket.onclose = () => {
-      console.log("*** Disconnected from server, try refreshing. ***");
-      setTimeout(() => {
-        if (
-          socketRef.current == null ||
-          socketRef.current.readyState !== socketRef.current.OPEN
-        ) {
-          setShouldReconnect(true);
-        }
-      }, 1000);
-    };
-
-    socket.onmessage = async (evt) => {
-      const rawItem: RawFeedItem = JSON.parse(evt.data);
-      setRawFeed((prevRawFeed) => ({
-        events: [...prevRawFeed.events, rawItem],
-        allIncluded: true,
-      }));
-
-      if (rawItem.type === "goal") {
-        setBoard((prevBoard) => {
-          const newBoard = [...prevBoard];
-          const slot = rawItem.square.slot;
-          const color = rawItem.square.colors;
-          const slotIndex = Number(slot.slice(4)) - 1;
-
-          const square = { ...prevBoard[slotIndex], color };
-          newBoard[slotIndex] = square;
-          return newBoard;
-        });
-      } else if (rawItem.type === "new-card") {
-        setSeed(rawItem.seed);
-        const rawBoard = await fetchBoard(id);
-        const newBoard = getBoard(rawBoard);
-        setGameToGoals(getGameToGoals(newBoard));
-        setTerminalCodes(getAllTerminalCodes(newBoard));
-        setBoard(newBoard);
-      }
-    };
-
-    socketRef.current = socket;
-
-    return () => {
-      socket.close();
-      socketRef.current = null;
-    };
-  }, [socketKey, id]);
 
   const multiGoalGames = Object.keys(gameToGoals).filter(
     (game) => gameToGoals[game].length > 1
@@ -317,33 +268,7 @@ export default function Cast({
           setEditingIndex={setEditingIndex}
         />
       )}
-      {shouldReconnect && (
-        <Modal
-          fullScreen={false}
-          centered={true}
-          onClose={() => setShouldReconnect(false)}
-          opened={true}
-          title="Reconnection needed"
-        >
-          <Stack>
-            <span>
-              You have been disconnected from Bingosync! Please refresh your
-              page.
-            </span>
-            <Group justify="end">
-              <Button onClick={() => setShouldReconnect(false)}>Ignore</Button>
-              <Button
-                color="green"
-                onClick={() => {
-                  window.location.reload();
-                }}
-              >
-                Refresh
-              </Button>
-            </Group>
-          </Stack>
-        </Modal>
-      )}
+      {reconnectModal}
     </>
   );
 }

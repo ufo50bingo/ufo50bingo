@@ -229,7 +229,7 @@ export default function CastSettings({
         <Modal
           fullScreen={false}
           centered={true}
-          onClose={() => setIsCreating(false)}
+          onClose={() => setIsDisconnecting(false)}
           opened={true}
           title="Disconnect"
         >

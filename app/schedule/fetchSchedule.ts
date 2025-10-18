@@ -17,9 +17,9 @@ const MANUAL_MATCHES: ReadonlyArray<ScheduledMatch> = [
   {
     name: "Random Name vs morraconda",
     tier: "Blind Beginner Bingo",
-    time: 1760814000,
-    streamer: 'Matt',
-    streamLink: 'https://www.twitch.tv/kg28_/',
+    time: 1760817600,
+    streamer: "Matt",
+    streamLink: "https://www.twitch.tv/kg28_/",
   },
 ];
 
@@ -72,30 +72,31 @@ export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMat
   // we want to show yesterday onward in the viewer's timezone
   // we don't know what the timezone is, so include 48 hrs
   const cutoff = currentTime - 2 * 24 * 60 * 60;
-  const scheduled: null | undefined | ReadonlyArray<ScheduledMatch> = matchesResult.data.values
-    ?.map((row) => {
-      const [_week, tier, p1, p2, time, date, streamer] = row;
-      if (date == null || time == null) {
-        return null;
-      }
-      const dt = DateTime.fromFormat(date + " " + time, "M/d/yyyy h:mm a", {
-        zone: "America/New_York",
-      });
-      if (!dt.isValid) {
-        return null;
-      }
-      if (dt.toSeconds() < cutoff) {
-        return null;
-      }
-      return {
-        name: `${p1} vs ${p2}`,
-        tier: tier,
-        time: dt.toSeconds(),
-        streamer: streamer,
-        streamLink: streamerToLink[streamer],
-      };
-    })
-    .filter((match) => match != null);
+  const scheduled: null | undefined | ReadonlyArray<ScheduledMatch> =
+    matchesResult.data.values
+      ?.map((row) => {
+        const [_week, tier, p1, p2, time, date, streamer] = row;
+        if (date == null || time == null) {
+          return null;
+        }
+        const dt = DateTime.fromFormat(date + " " + time, "M/d/yyyy h:mm a", {
+          zone: "America/New_York",
+        });
+        if (!dt.isValid) {
+          return null;
+        }
+        if (dt.toSeconds() < cutoff) {
+          return null;
+        }
+        return {
+          name: `${p1} vs ${p2}`,
+          tier: tier,
+          time: dt.toSeconds(),
+          streamer: streamer,
+          streamLink: streamerToLink[streamer],
+        };
+      })
+      .filter((match) => match != null);
   if (scheduled == null) {
     return null;
   }

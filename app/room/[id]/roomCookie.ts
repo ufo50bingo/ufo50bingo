@@ -27,6 +27,7 @@ function deserializeRoomCookie(
   serialized: null | undefined | string
 ): null | RoomCookie {
   if (serialized == null) {
+    console.log("null 1");
     return null;
   }
   try {
@@ -35,10 +36,12 @@ function deserializeRoomCookie(
     const name: null | undefined | string = parsed?.name;
     const view: null | undefined | RoomView = toRoomView(parsed?.view);
     if (id == null || name == null || view == null) {
+      console.log("null 2", parsed);
       return null;
     }
     return { id, name, view };
   } catch {
+    console.log("null 3");
     return null;
   }
 }

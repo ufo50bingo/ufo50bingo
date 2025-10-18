@@ -2,6 +2,7 @@
 
 import { redirect, RedirectType } from "next/navigation";
 import { cookies } from "next/headers";
+import { RoomView } from "./roomCookie";
 
 const SESSIONID_REGEX = /sessionid=([^;]+);/;
 

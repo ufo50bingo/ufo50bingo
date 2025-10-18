@@ -1,5 +1,5 @@
 import { Alert, Button, Drawer, Stack } from "@mantine/core";
-import ColorSelector from "./ColorSelector";
+import ColorSelector from "../common/ColorSelector";
 import { useState } from "react";
 import { BingosyncColor, TBoard } from "@/app/matches/parseBingosyncData";
 import changeColor from "./changeColor";

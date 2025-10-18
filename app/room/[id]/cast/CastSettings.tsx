@@ -15,12 +15,12 @@ import {
 import { IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
 import Countdown from "./Countdown";
-import ColorSelector from "./ColorSelector";
+import ColorSelector from "../common/ColorSelector";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import createNewCard from "./createNewCard";
 import Link from "next/link";
 import { IconType, SortType } from "./useLocalState";
-import DisconnectButton from "./DisconnectButton";
+import DisconnectButton from "../common/DisconnectButton";
 
 type Props = {
   id: string;

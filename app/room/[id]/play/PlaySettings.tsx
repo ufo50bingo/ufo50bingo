@@ -11,10 +11,10 @@ import {
 import { IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
-import ColorSelector from "@/app/cast/[id]/ColorSelector";
 import { Ding } from "./useDings";
-import DisconnectButton from "@/app/cast/[id]/DisconnectButton";
 import RequestPauseButton from "./RequestPauseButton";
+import ColorSelector from "../common/ColorSelector";
+import DisconnectButton from "../common/DisconnectButton";
 
 type Props = {
   id: string;

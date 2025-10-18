@@ -15,7 +15,7 @@ import { useParams } from "next/navigation";
 import createSession from "./createSession";
 import { useState } from "react";
 
-type ViewType = 'playing' | 'casting';
+type ViewType = "playing" | "casting";
 
 export default function Login() {
   const { id } = useParams<{ id: string }>();
@@ -26,7 +26,7 @@ export default function Login() {
 
   const submit = async () => {
     if (name !== "" && password !== "" && viewType != null) {
-      await createSession(id, name, password, viewType === 'casting');
+      await createSession(id, name, password, viewType === "casting");
     }
   };
   return (
@@ -36,8 +36,13 @@ export default function Login() {
           <Stack>
             <Title order={1}>Play or Cast a Match</Title>
             <span>
-              Please copy this URL and send it to all players and casters!<br />
-              If you prefer to use the standard Bingosync page, <a href={`https://www.bingosync.com/room/${id}`} target="_blank">click here</a>.
+              Please copy this URL and send it to all players and casters!
+              <br />
+              If you prefer to use the standard Bingosync page,{" "}
+              <a href={`https://www.bingosync.com/room/${id}`} target="_blank">
+                click here
+              </a>
+              .
             </span>
             <span>Are you playing or casting?</span>
             <SegmentedControl
@@ -68,13 +73,13 @@ export default function Login() {
                 </ListItem>
                 <ListItem>
                   General goal progress has per-game tracking for each player.
-                  Progress is synced between all casters and displayed next to the
-                  board.
+                  Progress is synced between all casters and displayed next to
+                  the board.
                 </ListItem>
                 <ListItem>
-                  General goals display a list of all relevant games, with fastest
-                  games first by default. Alphabetical and chronological sorting
-                  options are available also.
+                  General goals display a list of all relevant games, with
+                  fastest games first by default. Alphabetical and chronological
+                  sorting options are available also.
                 </ListItem>
                 <ListItem>
                   Possible synergies are underlined, and hovering shows the
@@ -82,12 +87,12 @@ export default function Login() {
                   column] format.
                 </ListItem>
                 <ListItem>
-                  A countdown button can automatically count down to board reveal
-                  and match start in chat.
+                  A countdown button can automatically count down to board
+                  reveal and match start in chat.
                 </ListItem>
                 <ListItem>
-                  Casters can clear or grant squares to players without needing to
-                  log in on a separate window. Just click on a square!
+                  Casters can clear or grant squares to players without needing
+                  to log in on a separate window. Just click on a square!
                 </ListItem>
                 <ListItem>
                   Leaderboard thresholds and gift requirements are displayed for
@@ -99,7 +104,8 @@ export default function Login() {
                 </ListItem>
                 <ListItem>Disconnections are detected automatically.</ListItem>
                 <ListItem>
-                  Pauses can be requested, and players on the ufo50.bingo page will have their board hidden and hear a notification sound.
+                  Pauses can be requested, and players on the ufo50.bingo page
+                  will have their board hidden and hear a notification sound.
                 </ListItem>
               </List>
             </Stack>
@@ -111,18 +117,18 @@ export default function Login() {
               <span>Use this view to play a match! Features include:</span>
               <List>
                 <ListItem>Built-in timer and score tracking.</ListItem>
-                <ListItem>
-                  General goals are tagged automatically.
-                </ListItem>
+                <ListItem>General goals are tagged automatically.</ListItem>
                 <ListItem>
                   Your device will not sleep while the page is open.
                 </ListItem>
                 <ListItem>Disconnections are detected automatically.</ListItem>
                 <ListItem>
-                  Notification sounds can be played when pauses are requested, chat messages are received, or squares are marked.
+                  Notification sounds can be played when pauses are requested,
+                  chat messages are received, or squares are marked.
                 </ListItem>
                 <ListItem>
-                  Pauses can be requested, and players on the ufo50.bingo page will have their board hidden and hear a notification sound.
+                  Pauses can be requested, and players on the ufo50.bingo page
+                  will have their board hidden and hear a notification sound.
                 </ListItem>
               </List>
             </Stack>
@@ -156,7 +162,7 @@ export default function Login() {
                 disabled={name === "" || password === ""}
                 onClick={submit}
               >
-                Access {viewType === 'casting' ? 'caster' : 'player'} view
+                Access {viewType === "casting" ? "caster" : "player"} view
               </Button>
             </Stack>
           </Card.Section>

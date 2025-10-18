@@ -5,8 +5,8 @@ import boardClasses from "@/app/Board.module.css";
 import { IconCircleCheckFilled } from "@tabler/icons-react";
 import { BingosyncColor, Square } from "@/app/matches/parseBingosyncData";
 import { GoalName } from "@/app/goals";
-import { GeneralCounts } from "./page";
 import { IconType } from "./useLocalState";
+import { GeneralCounts } from "./CastPage";
 
 function Cell({ children }: { children: ReactNode }) {
   return <div className={classes.item}>{children}</div>;
@@ -22,13 +22,12 @@ type IconProps = {
 };
 
 function Icon({ goal, src, count, color, squareColor, iconType }: IconProps) {
-  const iconClass = iconType === 'sprites'
-    ? `${classes.icon} ${classes.spritesIcon}`
-    : classes.icon;
+  const iconClass =
+    iconType === "sprites"
+      ? `${classes.icon} ${classes.spritesIcon}`
+      : classes.icon;
   const imgClass =
-    squareColor !== "blank"
-      ? `${iconClass} ${classes.grayscale}`
-      : iconClass;
+    squareColor !== "blank" ? `${iconClass} ${classes.grayscale}` : iconClass;
   const tag =
     squareColor === color ? (
       <IconCircleCheckFilled
@@ -89,13 +88,13 @@ export default function GeneralIcons({
               countState == null
                 ? 0
                 : Object.keys(countState).reduce(
-                  (acc, game) => acc + countState[game],
-                  0
-                )
+                    (acc, game) => acc + countState[game],
+                    0
+                  )
             }
             iconType={iconType}
             src={
-              iconType === 'sprites'
+              iconType === "sprites"
                 ? getSpritesSrc(square.name as GoalName, isHidden)
                 : getWinnerBitSrc(square.name as GoalName, isHidden)
             }

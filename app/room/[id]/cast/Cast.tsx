@@ -10,7 +10,7 @@ import {
 } from "@/app/matches/parseBingosyncData";
 import { Group, Stack } from "@mantine/core";
 import { useCallback, useMemo, useState } from "react";
-import Feed from "./Feed";
+import Feed from "../common/Feed";
 import { Game, GoalName, ORDERED_GAMES } from "@/app/goals";
 import { getAllTerminalCodes, getGameToGoals } from "./findAllGames";
 import { GOAL_TO_TYPES } from "./goalToTypes";
@@ -23,7 +23,7 @@ import EditSquare from "./EditSquare";
 import { getResult } from "@/app/matches/computeResult";
 import useSyncedState, { CountState } from "./useSyncedState";
 import useLocalState from "./useLocalState";
-import useBingosyncSocket from "./useBingosyncSocket";
+import useBingosyncSocket from "../common/useBingosyncSocket";
 
 export type CastProps = {
   id: string;

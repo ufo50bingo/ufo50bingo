@@ -1,5 +1,5 @@
 import CastPage from "./cast/CastPage";
-import Login from "./cast/Login";
+import Login from "./Login";
 import PlayPage from "./play/PlayPage";
 import { readRoomCookie } from "./roomCookie";
 // import { STANDARD } from "@/app/pastas/standard";

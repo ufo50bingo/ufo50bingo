@@ -14,6 +14,7 @@ type Props = {
   setIsHidden: (isHidden: boolean) => void;
   hiddenText?: ReactNode;
   shownDifficulties: ReadonlyArray<Difficulty>;
+  onReveal?: () => unknown;
 };
 
 function getColorClass(color: string): string {
@@ -101,6 +102,7 @@ export default function Board({
   setIsHidden,
   hiddenText,
   shownDifficulties,
+  onReveal,
 }: Props) {
   const [starred, setStarred] = useState<ReadonlyArray<number>>([]);
   return (
@@ -139,7 +141,12 @@ export default function Board({
       {isHidden && (
         <div
           className={`${classes.boardCover} ${classes.unselectable}`}
-          onClick={() => setIsHidden(false)}
+          onClick={() => {
+            setIsHidden(false);
+            if (onReveal != null) {
+              onReveal();
+            }
+          }}
         >
           {hiddenText ?? <span>Click to Reveal</span>}
         </div>

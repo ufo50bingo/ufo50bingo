@@ -21,6 +21,7 @@ import createNewCard from "./createNewCard";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { IconType, SortType } from "./useLocalState";
+import DisconnectButton from "./DisconnectButton";
 
 type Props = {
   id: string;
@@ -57,11 +58,8 @@ export default function CastSettings({
   setHideByDefault,
   setIsHidden,
 }: Props) {
-  const pathname = usePathname();
-
   const [isShown, setIsShown] = useState(leftColor === rightColor);
   const [isCreating, setIsCreating] = useState(false);
-  const [isDisconnecting, setIsDisconnecting] = useState(false);
   const [isSavingNewCard, setIsSavingNewCard] = useState(false);
 
   return (
@@ -162,9 +160,7 @@ export default function CastSettings({
               <Button color="green" onClick={() => setIsCreating(true)}>
                 Create new board
               </Button>
-              <Button color="red" onClick={() => setIsDisconnecting(true)}>
-                Disconnect
-              </Button>
+              <DisconnectButton />
             </Stack>
           </Drawer.Body>
         </Drawer.Content>
@@ -220,31 +216,6 @@ export default function CastSettings({
                 }}
               >
                 Create new board
-              </Button>
-            </Group>
-          </Stack>
-        </Modal>
-      )}
-      {isDisconnecting && (
-        <Modal
-          fullScreen={false}
-          centered={true}
-          onClose={() => setIsDisconnecting(false)}
-          opened={true}
-          title="Disconnect"
-        >
-          <Stack>
-            <span>Are you sure you want to disconnect?</span>
-            <Group justify="end">
-              <Button onClick={() => setIsDisconnecting(false)}>Cancel</Button>
-              <Button
-                color="red"
-                onClick={() => {
-                  document.cookie = `sessionid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${pathname};`;
-                  window.location.reload();
-                }}
-              >
-                Disconnect
               </Button>
             </Group>
           </Stack>

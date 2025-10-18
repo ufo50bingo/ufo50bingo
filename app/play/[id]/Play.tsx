@@ -85,9 +85,10 @@ export default function Play({
         <Board
           board={board}
           onClickSquare={async (squareIndex) => {
-            const isClearing = board[squareIndex].color === color;
+            const selectedColor = color ?? "red";
+            const isClearing = board[squareIndex].color === selectedColor;
             try {
-              await changeColor(id, squareIndex, color ?? "red", isClearing);
+              await changeColor(id, squareIndex, selectedColor, isClearing);
             } catch {}
           }}
           isHidden={isHidden}

@@ -299,7 +299,7 @@ export default function NonLeagueMatch() {
           setIsCreationInProgress(true);
 
           try {
-            const url = await createMatch({
+            const id = await createMatch({
               roomName,
               password,
               isPublic,
@@ -313,7 +313,10 @@ export default function NonLeagueMatch() {
               pasta: getSerializedPasta(false),
               leagueInfo: null,
             });
-            const id = url.slice(ROOM_PREFIX.length);
+            const passwordParams = new URLSearchParams({
+              p: password,
+            }).toString();
+            const url = `/room/${id}?${passwordParams}`;
             db.createdMatches.add({ id });
             setError(null);
             setUrl(url);

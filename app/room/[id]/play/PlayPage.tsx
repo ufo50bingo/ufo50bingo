@@ -28,6 +28,7 @@ export default async function PlayPage({ id, roomCookie }: Props) {
       rawFeed={rawFeed}
       socketKey={socketKey}
       initialSeed={seed}
+      playerName={roomCookie.name}
     />
   );
 }

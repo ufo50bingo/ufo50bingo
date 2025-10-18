@@ -1,7 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { IconBrandTwitch, IconCheck, IconExclamationMark } from "@tabler/icons-react";
+import {
+  IconBrandTwitch,
+  IconCheck,
+  IconExclamationMark,
+} from "@tabler/icons-react";
 import {
   Alert,
   Button,
@@ -98,7 +102,7 @@ export default function LeagueMatch() {
             ) {
               throw new Error("Unexpected null when creating match");
             }
-            const url = await createMatch({
+            const id = await createMatch({
               roomName: `${p1} vs ${p2}`,
               password,
               isPublic: true,
@@ -116,7 +120,10 @@ export default function LeagueMatch() {
                 tier: p1Tier,
               },
             });
-            const id = url.slice(ROOM_PREFIX.length);
+            const passwordParams = new URLSearchParams({
+              p: password,
+            }).toString();
+            const url = `/room/${id}?${passwordParams}`;
             db.createdMatches.add({ id });
             setError(null);
             setUrl(url);
@@ -166,7 +173,8 @@ export default function LeagueMatch() {
           title="New casting tools!"
           icon={<IconBrandTwitch />}
         >
-          We have new casting tools! <Link href={`/cast/${id}`}>Try them out here!</Link>
+          We have new casting tools!{" "}
+          <Link href={`/cast/${id}`}>Try them out here!</Link>
         </Alert>
       )}
       {url !== "" && (

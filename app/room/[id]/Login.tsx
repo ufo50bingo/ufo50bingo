@@ -14,18 +14,24 @@ import {
 import { useState } from "react";
 import { RoomView } from "./roomCookie";
 import createRoomCookie from "./createRoomCookie";
+import useDefaultName from "./useDefaultName";
+import { useSearchParams } from "next/navigation";
 
 type Props = {
   id: string;
 };
 
 export default function Login({ id }: Props) {
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
+  const searchParams = useSearchParams();
+  const [defaultName, setDefaultName] = useDefaultName();
+
+  const [name, setName] = useState(defaultName);
+  const [password, setPassword] = useState(searchParams.get("p") ?? "");
   const [view, setView] = useState<null | RoomView>(null);
 
   const submit = async () => {
     if (name !== "" && password !== "" && view != null) {
+      setDefaultName(name);
       await createRoomCookie(id, name, password, view);
     }
   };

@@ -9,7 +9,6 @@ import PlaySettings from "./PlaySettings";
 import useColor from "./useColor";
 import useShownDifficulties from "./useShownDifficulties";
 import useDings from "./useDings";
-import usePlayerName from "./usePlayerName";
 import { REQUEST_PAUSE_CHAT } from "../common/REQUEST_PAUSE_CHAT";
 import useWakeLock from "./useWakeLock";
 import changeColor from "../cast/changeColor";
@@ -22,6 +21,7 @@ export type Props = {
   rawFeed: RawFeed;
   socketKey: string;
   initialSeed: number;
+  playerName: string;
 };
 
 export default function Play({
@@ -30,8 +30,8 @@ export default function Play({
   rawFeed: initialRawFeed,
   socketKey,
   initialSeed,
+  playerName,
 }: Props) {
-  const playerName = usePlayerName();
   const [shownDifficulties, setShownDifficulties] = useShownDifficulties();
   const [dings, setDings] = useDings();
   const [color, setColor] = useColor(id);

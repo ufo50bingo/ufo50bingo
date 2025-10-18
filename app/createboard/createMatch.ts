@@ -96,5 +96,5 @@ export default async function createMatch({
     cookie: sessionCookie,
   });
 
-  return `https://www.bingosync.com/room/${id}`;
+  return id;
 }

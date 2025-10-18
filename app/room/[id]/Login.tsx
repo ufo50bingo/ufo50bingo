@@ -11,22 +11,22 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import { useParams } from "next/navigation";
-import createSession from "./createSession";
 import { useState } from "react";
+import { RoomView } from "./roomCookie";
+import createRoomCookie from "./createRoomCookie";
 
-type ViewType = "playing" | "casting";
+type Props = {
+  id: string;
+};
 
-export default function Login() {
-  const { id } = useParams<{ id: string }>();
-
+export default function Login({ id }: Props) {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [viewType, setViewType] = useState<null | ViewType>(null);
+  const [view, setView] = useState<null | RoomView>(null);
 
   const submit = async () => {
-    if (name !== "" && password !== "" && viewType != null) {
-      await createSession(id, name, password, viewType === "casting");
+    if (name !== "" && password !== "" && view != null) {
+      await createRoomCookie(id, name, password, view);
     }
   };
   return (
@@ -54,12 +54,12 @@ export default function Login() {
                 { value: "casting", label: "Casting" },
               ]}
               fullWidth={true}
-              onChange={setViewType as unknown as (value: string) => void}
-              value={viewType as unknown as string}
+              onChange={setView as unknown as (value: string) => void}
+              value={view as unknown as string}
             />
           </Stack>
         </Card.Section>
-        {viewType === "casting" && (
+        {view === "cast" && (
           <Card.Section inheritPadding={true} py="sm" withBorder={true}>
             <Stack>
               <span>Use this view to cast a match! Features include:</span>
@@ -111,7 +111,7 @@ export default function Login() {
             </Stack>
           </Card.Section>
         )}
-        {viewType === "playing" && (
+        {view === "play" && (
           <Card.Section inheritPadding={true} py="sm" withBorder={true}>
             <Stack>
               <span>Use this view to play a match! Features include:</span>
@@ -134,7 +134,7 @@ export default function Login() {
             </Stack>
           </Card.Section>
         )}
-        {viewType != null && (
+        {view != null && (
           <Card.Section inheritPadding={true} py="sm" withBorder={true}>
             <Stack>
               <TextInput
@@ -162,7 +162,7 @@ export default function Login() {
                 disabled={name === "" || password === ""}
                 onClick={submit}
               >
-                Access {viewType === "casting" ? "caster" : "player"} view
+                Access {view === "cast" ? "caster" : "player"} view
               </Button>
             </Stack>
           </Card.Section>

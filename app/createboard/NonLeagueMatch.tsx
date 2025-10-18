@@ -352,7 +352,7 @@ export default function NonLeagueMatch() {
           icon={<IconBrandTwitch />}
         >
           We have new casting tools!{" "}
-          <Link href={`/cast/${id}`}>Try them out here!</Link>
+          <Link href={`/room/${id}`}>Try them out here!</Link>
         </Alert>
       )}
       {url !== "" && (

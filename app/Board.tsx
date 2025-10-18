@@ -2,9 +2,9 @@ import SquareText from "./SquareText";
 import classes from "./Board.module.css";
 import { ReactNode, useState } from "react";
 import { BingosyncColor, TBoard } from "./matches/parseBingosyncData";
-import { GOAL_TO_TYPES } from "./cast/[id]/goalToTypes";
 import { Difficulty } from "./goals";
-import { SPICY_GOAL_TO_TYPES } from "./cast/[id]/spicyGoalToTypes";
+import { GOAL_TO_TYPES } from "./room/[id]/cast/goalToTypes";
+import { SPICY_GOAL_TO_TYPES } from "./room/[id]/cast/spicyGoalToTypes";
 
 type Props = {
   board: TBoard;

@@ -13,6 +13,7 @@ import useColor from "./useColor";
 import useShownDifficulties from "./useShownDifficulties";
 import useDings from "./useDings";
 import usePlayerName from "./usePlayerName";
+import { REQUEST_PAUSE_CHAT } from "./REQUEST_PAUSE_CHAT";
 
 export type Props = {
   id: string;
@@ -34,17 +35,31 @@ export default function Play({
   const [dings, setDings] = useDings();
   const [color, setColor] = useColor(id);
   const [isHidden, setIsHidden] = useState(true);
+  const [pauseRequestName, setPauseRequestName] = useState<string | null>(null);
+
   const dingRef = useRef<HTMLAudioElement | null>(null);
+  const alarmRef = useRef<HTMLAudioElement | null>(null);
 
   const onMessage = useCallback(
     (newItem: RawFeedItem) => {
-      if (dingRef.current != null) {
-        console.log(newItem.player.uuid);
-        if (
-          ((dings.includes("chat") && newItem.type === "chat") ||
-            (dings.includes("square") && newItem.type === "goal")) &&
-          newItem.player.name !== playerName
-        ) {
+      if (newItem.player.name === playerName) {
+        return;
+      }
+      if (newItem.type === "chat") {
+        if (newItem.text === REQUEST_PAUSE_CHAT) {
+          setPauseRequestName(newItem.player.name);
+          if (dings.includes("pause") && alarmRef.current != null) {
+            alarmRef.current.play();
+          } else if (dings.includes("chat") && dingRef.current != null) {
+            dingRef.current.play();
+          }
+        } else {
+          if (dings.includes("chat") && dingRef.current != null) {
+            dingRef.current.play();
+          }
+        }
+      } else if (newItem.type === "goal") {
+        if (dings.includes("square") && dingRef.current != null) {
           dingRef.current.play();
         }
       }
@@ -77,6 +92,8 @@ export default function Play({
           shownDifficulties={shownDifficulties}
           hiddenText="Click to reveal"
           onReveal={async () => await revealBoard(id)}
+          pauseRequestName={pauseRequestName}
+          clearPauseRequest={() => setPauseRequestName(null)}
         />
         <Feed rawFeed={rawFeed} />
       </Group>
@@ -91,7 +108,10 @@ export default function Play({
         setDings={setDings}
       />
       {dings.length > 0 && (
-        <audio preload="none" src="/ding.mp3" ref={dingRef} />
+        <>
+          <audio preload="none" src="/ding.mp3" ref={dingRef} />
+          <audio preload="none" src="/alarm.mp3" ref={alarmRef} />
+        </>
       )}
       {reconnectModal}
     </>

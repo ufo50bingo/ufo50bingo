@@ -5,18 +5,16 @@ import {
   Card,
   Checkbox,
   Drawer,
-  Group,
-  Modal,
   Stack,
   Text,
 } from "@mantine/core";
 import { IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
-import { usePathname } from "next/navigation";
 import ColorSelector from "@/app/cast/[id]/ColorSelector";
 import { Ding } from "./useDings";
 import DisconnectButton from "@/app/cast/[id]/DisconnectButton";
+import RequestPauseButton from "./RequestPauseButton";
 
 type Props = {
   id: string;
@@ -28,6 +26,12 @@ type Props = {
   dings: ReadonlyArray<Ding>;
   setDings: (newDings: ReadonlyArray<Ding>) => unknown;
 };
+
+const ALL_DINGS: ReadonlyArray<{ value: Ding; name: string }> = [
+  { value: "pause", name: "Pause is requested" },
+  { value: "chat", name: "Chat message is received" },
+  { value: "square", name: "Square is marked" },
+];
 
 export default function PlaySettings({
   id,
@@ -87,31 +91,24 @@ export default function PlaySettings({
               </Card>
               <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
                 <Stack>
-                  <Text size="sm">Play chime for:</Text>
-                  <Checkbox
-                    checked={dings.includes("chat")}
-                    onChange={(event) =>
-                      setDings(
-                        event.currentTarget.checked
-                          ? [...dings, "chat"]
-                          : dings.filter((d) => d !== "chat")
-                      )
-                    }
-                    label="Chat messages"
-                  />
-                  <Checkbox
-                    checked={dings.includes("square")}
-                    onChange={(event) =>
-                      setDings(
-                        event.currentTarget.checked
-                          ? [...dings, "square"]
-                          : dings.filter((d) => d !== "square")
-                      )
-                    }
-                    label="Square claimed"
-                  />
+                  <Text size="sm">Play notification sound when:</Text>
+                  {ALL_DINGS.map((ding) => (
+                    <Checkbox
+                      key={ding.value}
+                      checked={dings.includes(ding.value)}
+                      onChange={(event) =>
+                        setDings(
+                          event.currentTarget.checked
+                            ? [...dings, ding.value]
+                            : dings.filter((d) => d !== ding.value)
+                        )
+                      }
+                      label={ding.name}
+                    />
+                  ))}
                 </Stack>
               </Card>
+              <RequestPauseButton id={id} />
               <Button
                 component="a"
                 href={`https://www.bingosync.com/room/${id}`}

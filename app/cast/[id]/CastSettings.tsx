@@ -18,7 +18,6 @@ import Countdown from "./Countdown";
 import ColorSelector from "./ColorSelector";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import createNewCard from "./createNewCard";
-import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { IconType, SortType } from "./useLocalState";
 import DisconnectButton from "./DisconnectButton";

@@ -21,6 +21,13 @@ const MANUAL_MATCHES: ReadonlyArray<ScheduledMatch> = [
     streamer: "Matt",
     streamLink: "https://www.twitch.tv/kg28_/",
   },
+  {
+    name: "Random Name vs morraconda",
+    tier: "Blind Beginner Bingo... 2!",
+    time: 1761422400,
+    streamer: null,
+    streamLink: null,
+  },
 ];
 
 export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMatch>> {

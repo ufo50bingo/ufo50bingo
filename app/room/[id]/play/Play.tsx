@@ -187,7 +187,7 @@ export default function Play({
               </div>
             </div>
             <div onClick={start}>{timer}</div>
-            <div onClick={pause}>Seed</div>
+            <div onClick={pause}>Seed: {seed}</div>
           </Group>
         </Stack>
         <Feed rawFeed={rawFeed} />

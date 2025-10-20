@@ -14,13 +14,13 @@ export default function RunningMatchTime({
     useEffect(() => {
         const interval = setInterval(
             () => setDummyState((prevDummyState) => prevDummyState + 1),
-            100
+            1000
         );
         return () => clearInterval(interval);
     }, []);
     const totalRemaining = Math.max(0, curEndTime - Date.now());
     const timeToDisplay = totalRemaining > matchTime ? totalRemaining - matchTime : totalRemaining;
     return (
-        <Duration duration={timeToDisplay} />
+        <Duration duration={timeToDisplay} showDecimal={false} />
     );
 }

@@ -8,7 +8,7 @@ import {
   RawFeedItem,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
-import { Group, Stack } from "@mantine/core";
+import { Group, Stack, Text } from "@mantine/core";
 import { useCallback, useMemo, useRef, useState } from "react";
 import revealBoard from "./revealBoard";
 import PlaySettings from "./PlaySettings";
@@ -186,8 +186,15 @@ export default function Play({
                 />
               </div>
             </div>
-            <div onClick={start}>{timer}</div>
-            <div onClick={pause}>Seed: {seed}</div>
+            <div onClick={start} style={{
+              textAlign: "right",
+              fontVariantNumeric: 'tabular-nums'
+            }}>
+              <Text size="44px">
+                {timer}
+              </Text>
+            </div>
+            <div onClick={pause}>Seed: <strong>{seed}</strong></div>
           </Group>
         </Stack>
         <Feed rawFeed={rawFeed} />

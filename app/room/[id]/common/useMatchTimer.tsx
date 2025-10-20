@@ -1,49 +1,108 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useCallback, useState } from "react";
 import RunningMatchTime from "./RunningMatchTime";
 import Duration from "@/app/practice/Duration";
 
 // uses MILLISECONDS
 type Input = {
   key: string;
-  scanTime: number;
-  matchTime: number;
+  scanMs: number;
+  matchMs: number;
 };
+
+type TimerState = RunningState | PausedState;
+
+interface BaseState {
+  scanMs: number;
+  matchMs: number;
+}
+
+interface RunningState extends BaseState {
+  type: "running";
+  endTime: number;
+}
+
+interface PausedState extends BaseState {
+  type: "paused";
+  remainingMs: number;
+}
 
 type Return = {
   timer: ReactNode;
   start: () => void;
   pause: () => void;
+  setState: (newState: TimerState) => void;
 };
 
-export default function useMatchTimer(input: Input): Return {
-  const [remainingMs, setRemainingMs] = useState(input.scanTime + input.matchTime);
-  const [curEndTime, setCurEndTime] = useState<null | number>(null);
+export default function useMatchTimer({ key, scanMs, matchMs }: Input): Return {
+  const timerKey = "timer-" + key;
+  const [state, setStateRaw] = useState<TimerState>(() => {
+    const defaultState: PausedState = {
+      type: "paused",
+      remainingMs: scanMs + matchMs,
+      scanMs,
+      matchMs,
+    };
+    if (global.window == undefined || localStorage == null) {
+      return defaultState;
+    }
+    const fromStorage = localStorage.getItem(timerKey);
+    if (fromStorage == null || fromStorage === "") {
+      return defaultState;
+    }
+    return JSON.parse(fromStorage);
+  });
+
+  const setState = useCallback(
+    (newState: TimerState) => {
+      setStateRaw(newState);
+      if (global.window == undefined || localStorage == null) {
+        return;
+      }
+      localStorage.setItem(timerKey, JSON.stringify(newState));
+    },
+    [timerKey]
+  );
 
   const start = () => {
-    setCurEndTime(Date.now() + remainingMs);
-  };
-
-  const pause = () => {
-    if (curEndTime != null) {
-      setRemainingMs(
-        Math.max(curEndTime - Date.now(), 0)
-      );
-      setCurEndTime(null);
+    if (state.type === "paused") {
+      setState({
+        type: "running",
+        scanMs,
+        matchMs,
+        endTime: Date.now() + state.remainingMs,
+      });
     }
   };
 
-  const timer = curEndTime != null ? (
-    <RunningMatchTime
-      curEndTime={curEndTime}
-      matchTime={input.matchTime}
-    />
-  ) : (
-    <Duration showDecimal={false} duration={remainingMs > input.matchTime ? remainingMs - input.matchTime : remainingMs} />
-  );
+  const pause = () => {
+    if (state.type === "running") {
+      setState({
+        type: "paused",
+        scanMs,
+        matchMs,
+        remainingMs: state.endTime - Date.now(),
+      });
+    }
+  };
+
+  const timer =
+    state.type === "running" ? (
+      <RunningMatchTime curEndTime={state.endTime} matchTime={state.matchMs} />
+    ) : (
+      <Duration
+        showDecimal={false}
+        duration={
+          state.remainingMs > state.matchMs
+            ? state.remainingMs - state.matchMs
+            : state.remainingMs
+        }
+      />
+    );
 
   return {
     start,
     pause,
     timer,
+    setState,
   };
 }

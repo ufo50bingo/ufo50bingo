@@ -142,9 +142,9 @@ export default function Play({
   }, [opponent, myScore, selectedColor, rawFeed, board]);
 
   const { timer, start, pause } = useMatchTimer({
-    key: '',
-    scanTime: 60000,
-    matchTime: 1000 * 105 * 60,
+    key: `${id}-${seed}`,
+    scanMs: 60000,
+    matchMs: 1000 * 105 * 60,
   });
 
   return (
@@ -157,7 +157,7 @@ export default function Play({
               const isClearing = board[squareIndex].color === selectedColor;
               try {
                 await changeColor(id, squareIndex, selectedColor, isClearing);
-              } catch { }
+              } catch {}
             }}
             isHidden={isHidden}
             setIsHidden={setIsHidden}
@@ -186,15 +186,18 @@ export default function Play({
                 />
               </div>
             </div>
-            <div onClick={start} style={{
-              textAlign: "right",
-              fontVariantNumeric: 'tabular-nums'
-            }}>
-              <Text size="44px">
-                {timer}
-              </Text>
+            <div
+              onClick={start}
+              style={{
+                textAlign: "right",
+                fontVariantNumeric: "tabular-nums",
+              }}
+            >
+              <Text size="44px">{timer}</Text>
             </div>
-            <div onClick={pause}>Seed: <strong>{seed}</strong></div>
+            <div onClick={pause}>
+              Seed: <strong>{seed}</strong>
+            </div>
           </Group>
         </Stack>
         <Feed rawFeed={rawFeed} height="545px" />

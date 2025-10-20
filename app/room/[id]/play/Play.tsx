@@ -197,7 +197,7 @@ export default function Play({
             <div onClick={pause}>Seed: <strong>{seed}</strong></div>
           </Group>
         </Stack>
-        <Feed rawFeed={rawFeed} />
+        <Feed rawFeed={rawFeed} height="545px" />
       </Group>
       <PlaySettings
         id={id}

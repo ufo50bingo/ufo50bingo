@@ -11,7 +11,7 @@ export default function RunningMatchTime({ curEndTime, matchTime }: Props) {
   useEffect(() => {
     const interval = setInterval(
       () => setDummyState((prevDummyState) => prevDummyState + 1),
-      1000
+      100
     );
     return () => clearInterval(interval);
   }, []);

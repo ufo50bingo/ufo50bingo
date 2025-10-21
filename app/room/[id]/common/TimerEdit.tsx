@@ -2,6 +2,7 @@ import { Button, Group, Modal, Stack } from "@mantine/core";
 import { TimerState } from "./useMatchTimer";
 import { useState } from "react";
 import DurationInput from "./DurationInput";
+import { IconStopwatch } from "@tabler/icons-react";
 
 interface Props {
   state: TimerState;
@@ -16,7 +17,7 @@ export default function TimerEdit(props: Props) {
   const [isEditing, setIsEditing] = useState(false);
   return (
     <>
-      <Button onClick={() => setIsEditing(true)}>Edit Timer</Button>
+      <Button onClick={() => setIsEditing(true)} leftSection={<IconStopwatch />}>Edit Timer</Button>
       {isEditing && <TimerModal {...props} close={() => setIsEditing(false)} />}
     </>
   );

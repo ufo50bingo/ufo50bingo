@@ -2,6 +2,7 @@ import { Button, Modal, Stack, Group, List } from "@mantine/core";
 import { useState } from "react";
 import { REQUEST_PAUSE_CHAT } from "../common/REQUEST_PAUSE_CHAT";
 import sendChat from "../common/sendChat";
+import { IconPlayerPause } from "@tabler/icons-react";
 
 type Props = {
   id: string;
@@ -11,7 +12,7 @@ export default function RequestPauseButton({ id }: Props) {
   const [isRequesting, setIsRequesting] = useState(false);
   return (
     <>
-      <Button onClick={() => setIsRequesting(true)}>Request Pause</Button>
+      <Button onClick={() => setIsRequesting(true)} leftSection={<IconPlayerPause />}>Request Pause</Button>
       {isRequesting && (
         <Modal
           fullScreen={false}

@@ -84,7 +84,14 @@ export default function PlaySettings({
                 color={color}
                 setColor={setColor}
               />
+              <RequestPauseButton id={id} />
               <TimerEdit state={timerState} setState={setTimerState} />
+              <Button
+                component="a"
+                href={`https://www.bingosync.com/room/${id}`}
+              >
+                View Bingosync room
+              </Button>
               <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
                 <Checkbox
                   checked={shownDifficulties.includes("general")}
@@ -115,13 +122,6 @@ export default function PlaySettings({
                   ))}
                 </Stack>
               </Card>
-              <RequestPauseButton id={id} />
-              <Button
-                component="a"
-                href={`https://www.bingosync.com/room/${id}`}
-              >
-                View Bingosync room
-              </Button>
               <DisconnectButton />
             </Stack>
           </Drawer.Body>

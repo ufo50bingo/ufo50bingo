@@ -9,7 +9,7 @@ type Input = {
   matchMs: number;
 };
 
-type TimerState = RunningState | PausedState;
+export type TimerState = RunningState | PausedState;
 
 interface BaseState {
   scanMs: number;
@@ -31,6 +31,7 @@ type Return = {
   start: () => void;
   pause: () => void;
   setState: (newState: TimerState) => void;
+  state: TimerState;
 };
 
 export default function useMatchTimer({ key, scanMs, matchMs }: Input): Return {
@@ -125,5 +126,6 @@ export default function useMatchTimer({ key, scanMs, matchMs }: Input): Return {
     pause,
     timer,
     setState,
+    state,
   };
 }

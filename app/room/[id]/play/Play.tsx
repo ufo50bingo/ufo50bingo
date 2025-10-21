@@ -94,7 +94,13 @@ export default function Play({
     onMessage,
   });
 
-  const { timer, start, pause } = useMatchTimer({
+  const {
+    timer,
+    start,
+    pause,
+    state: timerState,
+    setState: setTimerState,
+  } = useMatchTimer({
     key: `${id}-${seed}`,
     scanMs: 60000,
     matchMs: 1000 * 105 * 60,
@@ -196,7 +202,6 @@ export default function Play({
               </div>
             </div>
             <div
-              onClick={start}
               style={{
                 textAlign: "right",
                 fontVariantNumeric: "tabular-nums",
@@ -204,7 +209,7 @@ export default function Play({
             >
               <Text size="44px">{timer}</Text>
             </div>
-            <div onClick={pause}>
+            <div>
               Seed: <strong>{seed}</strong>
             </div>
           </Group>
@@ -220,6 +225,8 @@ export default function Play({
         setShownDifficulties={setShownDifficulties}
         dings={dings}
         setDings={setDings}
+        timerState={timerState}
+        setTimerState={setTimerState}
       />
       {dings.length > 0 && (
         <>

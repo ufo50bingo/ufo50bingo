@@ -24,6 +24,7 @@ import { getResult } from "@/app/matches/computeResult";
 import useSyncedState, { CountState } from "./useSyncedState";
 import useLocalState from "./useLocalState";
 import useBingosyncSocket from "../common/useBingosyncSocket";
+import useDings from "../play/useDings";
 
 export type CastProps = {
   id: string;
@@ -46,6 +47,7 @@ export default function Cast({
   initialCounts,
   initialLeftColor,
   initialRightColor,
+  playerName,
 }: CastProps) {
   const [gameToGoals, setGameToGoals] = useState(() =>
     getGameToGoals(initialBoard)
@@ -60,6 +62,9 @@ export default function Cast({
     setTerminalCodes(getAllTerminalCodes(newBoard));
   }, []);
 
+  const [pauseRequestName, setPauseRequestName] = useState<string | null>(null);
+  const [dings, setDings] = useDings('cast');
+
   const { board, rawFeed, seed, reconnectModal } = useBingosyncSocket({
     id,
     initialBoard,
@@ -67,6 +72,9 @@ export default function Cast({
     initialSeed,
     socketKey,
     onNewCard,
+    playerName,
+    setPauseRequestName,
+    dings,
   });
 
   const {
@@ -219,6 +227,8 @@ export default function Cast({
             setIsHidden={setIsHidden}
             shownDifficulties={shownDifficulties}
             hiddenText="Click or start Countdown to reveal"
+            pauseRequestName={pauseRequestName}
+            clearPauseRequest={() => setPauseRequestName(null)}
           />
           <GeneralIcons
             isLeft={false}
@@ -260,6 +270,8 @@ export default function Cast({
         hideByDefault={hideByDefault}
         setHideByDefault={setHideByDefault}
         setIsHidden={setIsHidden}
+        dings={dings}
+        setDings={setDings}
       />
       {editingIndex != null && (
         <EditSquare

@@ -42,57 +42,26 @@ export default function Play({
   playerName,
 }: Props) {
   const [shownDifficulties, setShownDifficulties] = useShownDifficulties();
-  const [dings, setDings] = useDings();
+  const [dings, setDings] = useDings("play");
   const [color, setColor] = useColor(id);
   const [isHidden, setIsHidden] = useState(true);
   const [pauseRequestName, setPauseRequestName] = useState<string | null>(null);
   const pauseRef = useRef<null | (() => unknown)>(null);
 
-  const dingRef = useRef<HTMLAudioElement | null>(null);
-  const alarmRef = useRef<HTMLAudioElement | null>(null);
-
   const selectedColor = color ?? "red";
 
   useWakeLock();
 
-  const onMessage = useCallback(
-    (newItem: RawFeedItem) => {
-      const isPause = newItem.type === "chat" && newItem.text === REQUEST_PAUSE_CHAT;
-      if (isPause) {
-        if (pauseRef.current != null) {
-          pauseRef.current();
-        }
-        setPauseRequestName(newItem.player.name);
-      }
-      if (newItem.player.name === playerName) {
-        return;
-      }
-      if (newItem.type === "chat") {
-        if (isPause && dings.includes("pause") && alarmRef.current != null) {
-          alarmRef.current.play();
-        } else if (dings.includes("chat") && dingRef.current != null) {
-          dingRef.current.play();
-        } else {
-          if (dings.includes("chat") && dingRef.current != null) {
-            dingRef.current.play();
-          }
-        }
-      } else if (newItem.type === "goal") {
-        if (dings.includes("square") && dingRef.current != null) {
-          dingRef.current.play();
-        }
-      }
-    },
-    [dings, playerName]
-  );
-
-  const { board, rawFeed, seed, reconnectModal } = useBingosyncSocket({
+  const { board, rawFeed, seed, reconnectModal, dingAudio } = useBingosyncSocket({
     id,
     initialBoard,
     initialRawFeed,
     initialSeed,
     socketKey,
-    onMessage,
+    pauseRef,
+    playerName,
+    setPauseRequestName,
+    dings,
   });
 
   const {
@@ -229,13 +198,8 @@ export default function Play({
         timerState={timerState}
         setTimerState={setTimerState}
       />
-      {dings.length > 0 && (
-        <>
-          <audio preload="none" src="/ding.mp3" ref={dingRef} />
-          <audio preload="none" src="/alarm.mp3" ref={alarmRef} />
-        </>
-      )}
       {reconnectModal}
+      {dingAudio}
     </>
   );
 }

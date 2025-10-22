@@ -6,7 +6,6 @@ import {
   Checkbox,
   Drawer,
   Stack,
-  Text,
 } from "@mantine/core";
 import { IconSettings } from "@tabler/icons-react";
 import { useState } from "react";

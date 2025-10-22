@@ -3,10 +3,24 @@
 import { revalidatePath } from "next/cache";
 import { CommonMatchProps } from "./createMatch";
 import getSql from "../getSql";
+import { Variant } from "../pastas/metadata";
 
 interface Props extends CommonMatchProps {
   id: string;
   cookie: string;
+}
+
+function getDefaultAnalysisSeconds(variant: Variant): number {
+  switch (variant) {
+    case "Choco":
+      return 0;
+    case "Blitz":
+      return 30;
+    case "Spicy":
+      return 90;
+    default:
+      return 60;
+  }
 }
 
 function bool(val: boolean): "TRUE" | "FALSE" {
@@ -39,7 +53,8 @@ export async function insertMatch({
     league_tier,
     league_p1,
     league_p2,
-    sessionid_cookie
+    sessionid_cookie,
+    analysis_seconds
   ) VALUES (
     ${id},
     ${roomName},
@@ -53,7 +68,8 @@ export async function insertMatch({
     ${leagueInfo?.tier},
     ${leagueInfo?.p1},
     ${leagueInfo?.p2},
-    ${cookie}
+    ${cookie},
+    ${getDefaultAnalysisSeconds(variant)}
   );`;
   revalidatePath("/matches");
 }

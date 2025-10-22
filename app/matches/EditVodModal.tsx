@@ -94,11 +94,12 @@ export default function EditVodModal({ isMobile, match, onClose }: Props) {
                 setIsSaving(true);
                 const [baseUrl, startSeconds] =
                   getBaseUrlAndStartSeconds(newVodLink);
+                console.log(analysisSeconds);
                 await updateVod(
                   match.id,
                   baseUrl,
                   startSeconds,
-                  analysisSeconds == "" ? 60 : Number(analysisSeconds)
+                  analysisSeconds === "" ? 60 : Number(analysisSeconds)
                 );
                 onClose();
               } finally {

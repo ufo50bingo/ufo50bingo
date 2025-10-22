@@ -19,7 +19,6 @@ export function findGamesForGoal(goal: GoalName): Game[] {
   }
   const games: Game[] = [];
   if (goal.includes("Campanella 1/2/3")) {
-    games.push("campanella");
     games.push("campanella2");
     games.push("campanella3");
   }

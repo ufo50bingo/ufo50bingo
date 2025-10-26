@@ -22,7 +22,7 @@ export default function Feed({ rawFeed, height = '475px' }: Props) {
       padding="sm"
       radius="md"
       withBorder={true}
-      style={{ width: "356px", height }}
+      style={{ width: "356px", height, resize: "both" }}
     >
       <Card.Section
         ref={feedRef}

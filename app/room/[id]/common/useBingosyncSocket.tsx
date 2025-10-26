@@ -51,6 +51,8 @@ export default function useBingosyncSocket({
 
   const dingRef = useRef<HTMLAudioElement | null>(null);
   const alarmRef = useRef<HTMLAudioElement | null>(null);
+  const selectedDingsRef = useRef<ReadonlyArray<Ding>>(dings);
+  selectedDingsRef.current = dings;
 
 
   const onMessage = useCallback(
@@ -66,22 +68,22 @@ export default function useBingosyncSocket({
         return;
       }
       if (newItem.type === "chat") {
-        if (isPause && dings.includes("pause") && alarmRef.current != null) {
+        if (isPause && selectedDingsRef.current.includes("pause") && alarmRef.current != null) {
           alarmRef.current.play();
-        } else if (dings.includes("chat") && dingRef.current != null) {
+        } else if (selectedDingsRef.current.includes("chat") && dingRef.current != null) {
           dingRef.current.play();
         } else {
-          if (dings.includes("chat") && dingRef.current != null) {
+          if (selectedDingsRef.current.includes("chat") && dingRef.current != null) {
             dingRef.current.play();
           }
         }
       } else if (newItem.type === "goal") {
-        if (dings.includes("square") && dingRef.current != null) {
+        if (selectedDingsRef.current.includes("square") && dingRef.current != null) {
           dingRef.current.play();
         }
       }
     },
-    [dings, playerName, pauseRef]
+    [playerName, pauseRef]
   );
 
   useEffect(() => {

@@ -3,17 +3,16 @@
 import { useState } from "react";
 import { TBoard } from "../matches/parseBingosyncData";
 import Board from "../Board";
-import { Container, Card, Text, Button, Stack } from "@mantine/core";
+import { Container, Card, Text, Button, Stack, Title } from "@mantine/core";
 import useTimer from "../useTimer";
-import clearDaily from "./clearDaily";
+import { LocalDate, toISODate } from "./localDate";
 
 type Props = {
-    date: string;
-    random: string;
+    date: LocalDate;
     board: ReadonlyArray<string>;
 };
 
-export default function Daily({ date, board: plainBoard, random }: Props) {
+export default function Daily({ date, board: plainBoard }: Props) {
     const [isHidden, setIsHidden] = useState(true);
     const [board, setBoard] = useState<TBoard>(() =>
         plainBoard
@@ -29,6 +28,7 @@ export default function Daily({ date, board: plainBoard, random }: Props) {
         <Container>
             <Card shadow="sm" padding="sm" radius="md" withBorder>
                 <Stack gap={4} style={{ alignSelf: "center" }}>
+                    <Title order={1}>Daily Bingo — ({toISODate(date)})</Title>
                     <Board
                         board={board}
                         onClickSquare={(squareIndex: number) => {
@@ -60,8 +60,6 @@ export default function Daily({ date, board: plainBoard, random }: Props) {
                     >
                         {isRunning ? "Pause" : "Resume"}
                     </Button>
-                    <Button onClick={async () => await clearDaily(date)}>Clear daily</Button>
-                    {random}
                 </Stack>
             </Card>
         </Container>

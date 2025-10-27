@@ -25,6 +25,7 @@ import useSyncedState, { CountState } from "./useSyncedState";
 import useLocalState from "./useLocalState";
 import useBingosyncSocket from "../common/useBingosyncSocket";
 import useDings from "../play/useDings";
+import { isGift, isGoldCherry } from "@/app/daily/giftGoldCherry";
 
 export type CastProps = {
   id: string;
@@ -288,27 +289,4 @@ export default function Cast({
       {dingAudio}
     </>
   );
-}
-
-function isGift(goal: GoalName): boolean {
-  switch (goal) {
-    case "Collect 6 gifts from games on this card":
-    case "Collect 7 gifts from games on this card":
-    case "Collect 8 gifts from games on this card":
-      return true;
-    default:
-      return false;
-  }
-}
-
-function isGoldCherry(goal: GoalName): boolean {
-  switch (goal) {
-    case "Collect 2 cherry disks from games on this card":
-    case "Collect 3 cherry disks from games on this card":
-    case "Collect 3 gold disks from games on this card":
-    case "Collect 4 gold disks from games on this card":
-      return true;
-    default:
-      return false;
-  }
 }

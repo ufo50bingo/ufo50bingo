@@ -6,15 +6,13 @@ import {
   Card,
   Checkbox,
   Drawer,
-  Stack,
 } from "@mantine/core";
 import { IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { Ding } from "./useDings";
 import ColorSelector from "../common/ColorSelector";
-import DisconnectButton from "../common/DisconnectButton";
-import TimerEdit from "../common/TimerEdit";
+import TimerSection from "../common/TimerSection";
 import { TimerState } from "../common/useMatchTimer";
 import NotificationsSection from "../common/NotificationsSection";
 import RequestPauseSection from "../common/RequestPauseSection";
@@ -84,24 +82,26 @@ export default function PlaySettings({
                   />
                 </Accordion.Panel>
               </Accordion.Item>
-              <CountdownSection view="cast" />
               <RequestPauseSection id={id} />
+              <TimerSection state={timerState} setState={setTimerState} />
+              <CountdownSection view="play" />
               <NotificationsSection dings={dings} setDings={setDings} />
-              <CreateBoardSection id={id} />
-
               {/* TODO Store directory handle in local state!!!*/}
-              <TimerEdit state={timerState} setState={setTimerState} />
-              <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
-                <Checkbox
-                  checked={shownDifficulties.includes("general")}
-                  onChange={(event) =>
-                    setShownDifficulties(
-                      event.target.checked ? ["general"] : []
-                    )
-                  }
-                  label="Label general goals"
-                />
-              </Card>
+              <Accordion.Item value="display">
+                <Accordion.Control>Display Settings</Accordion.Control>
+                <Accordion.Panel>
+                  <Checkbox
+                    checked={shownDifficulties.includes("general")}
+                    onChange={(event) =>
+                      setShownDifficulties(
+                        event.target.checked ? ["general"] : []
+                      )
+                    }
+                    label="Label general goals"
+                  />
+                </Accordion.Panel>
+              </Accordion.Item>
+              <CreateBoardSection id={id} />
             </Accordion>
             <BottomSection id={id} />
           </Drawer.Body>

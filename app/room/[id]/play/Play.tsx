@@ -129,7 +129,7 @@ export default function Play({
 
   return (
     <>
-      <Group>
+      <Group align="start">
         <Stack gap={8}>
           <Board
             board={board}
@@ -183,19 +183,19 @@ export default function Play({
           </Group>
         </Stack>
         <Feed rawFeed={rawFeed} height="545px" />
+        <PlaySettings
+          id={id}
+          seed={seed}
+          color={color}
+          setColor={setColor}
+          shownDifficulties={shownDifficulties}
+          setShownDifficulties={setShownDifficulties}
+          dings={dings}
+          setDings={setDings}
+          timerState={timerState}
+          setTimerState={setTimerState}
+        />
       </Group>
-      <PlaySettings
-        id={id}
-        seed={seed}
-        color={color}
-        setColor={setColor}
-        shownDifficulties={shownDifficulties}
-        setShownDifficulties={setShownDifficulties}
-        dings={dings}
-        setDings={setDings}
-        timerState={timerState}
-        setTimerState={setTimerState}
-      />
       {reconnectModal}
       {dingAudio}
     </>

@@ -94,21 +94,21 @@ export default function NonLeagueMatch() {
         return stringify(
           showFilters
             ? Array.from(
-                checkState
-                  .entries()
-                  .filter(([_gameKey, checkState]) => checkState)
-              ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
+              checkState
+                .entries()
+                .filter(([_gameKey, checkState]) => checkState)
+            ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
             : ORDERED_PROPER_GAMES.map((gameKey) => ({
-                name: GAME_NAMES[gameKey],
-              }))
+              name: GAME_NAMES[gameKey],
+            }))
         );
       case "WithoutDifficulty":
         return stringify(
           showFilters || randomizeGroupings
             ? createPastaWithoutDifficulty(
-                metadata.pasta,
-                showFilters ? checkState : null
-              )
+              metadata.pasta,
+              showFilters ? checkState : null
+            )
             : metadata.pasta
         );
       case "WithDifficulty":
@@ -122,9 +122,9 @@ export default function NonLeagueMatch() {
         return stringify(
           randomizeGroupings
             ? createPasta(
-                metadata.pasta,
-                getDefaultDifficulties(metadata.pasta)
-              )
+              metadata.pasta,
+              getDefaultDifficulties(metadata.pasta)
+            )
             : metadata.pasta
         );
       case "Other":
@@ -150,7 +150,7 @@ export default function NonLeagueMatch() {
         />
         <Menu shadow="md" width={200}>
           <Menu.Target>
-            <ActionIcon onClick={() => {}} variant="default">
+            <ActionIcon onClick={() => { }} variant="default">
               <IconDots size={16} />
             </ActionIcon>
           </Menu.Target>
@@ -169,46 +169,46 @@ export default function NonLeagueMatch() {
       {(metadata.type === "WithDifficulty" ||
         metadata.type === "WithoutDifficulty" ||
         variant === "Game Names") && (
-        <Group>
-          {variant !== "Game Names" && (
-            <Tooltip
+          <Group>
+            {variant !== "Game Names" && (
+              <Tooltip
+                label={
+                  <span>
+                    Games will be divided into groups randomly while still
+                    respecting the
+                    <br />
+                    difficulty distribution, allowing for greater card variety
+                    than using the
+                    <br />
+                    default pasta. This option is always enabled when customizing
+                    games and
+                    <br />
+                    difficulty counts.
+                  </span>
+                }
+              >
+                <div>
+                  <Checkbox
+                    checked={showFilters || randomizeGroupings}
+                    label="Randomize goal groupings"
+                    onChange={(event) =>
+                      setRandomizeGroupings(event.currentTarget.checked)
+                    }
+                  />
+                </div>
+              </Tooltip>
+            )}
+            <Checkbox
+              checked={showFilters}
               label={
-                <span>
-                  Games will be divided into groups randomly while still
-                  respecting the
-                  <br />
-                  difficulty distribution, allowing for greater card variety
-                  than using the
-                  <br />
-                  default pasta. This option is always enabled when customizing
-                  games and
-                  <br />
-                  difficulty counts.
-                </span>
+                metadata.type === "WithDifficulty"
+                  ? "Customize games and difficulty counts"
+                  : "Customize games"
               }
-            >
-              <div>
-                <Checkbox
-                  checked={showFilters || randomizeGroupings}
-                  label="Randomize goal groupings"
-                  onChange={(event) =>
-                    setRandomizeGroupings(event.currentTarget.checked)
-                  }
-                />
-              </div>
-            </Tooltip>
-          )}
-          <Checkbox
-            checked={showFilters}
-            label={
-              metadata.type === "WithDifficulty"
-                ? "Customize games and difficulty counts"
-                : "Customize games"
-            }
-            onChange={(event) => setShowFilters(event.currentTarget.checked)}
-          />
-        </Group>
-      )}
+              onChange={(event) => setShowFilters(event.currentTarget.checked)}
+            />
+          </Group>
+        )}
       {(metadata.type === "WithoutDifficulty" || variant === "Game Names") &&
         showFilters && (
           <GameChecker checkState={checkState} setCheckState={setCheckState} />
@@ -351,25 +351,14 @@ export default function NonLeagueMatch() {
       {url !== "" && (
         <Alert
           variant="light"
-          title="New casting tools!"
-          icon={<IconBrandTwitch />}
-        >
-          We have new casting tools!{" "}
-          <Link href={`/room/${id}`}>Try them out here!</Link>
-        </Alert>
-      )}
-      {url !== "" && (
-        <Alert
-          variant="light"
           color="green"
           title="Success!"
           icon={<IconCheck />}
         >
-          Your bingo board is available at{" "}
           <a href={url} target="_blank">
-            {url}
+            Your new room is available at here.
           </a>
-          .<br />
+          <br />
           <Link href={`/match/${id}`} target="_blank">
             Your Match results can be viewed here.
           </Link>

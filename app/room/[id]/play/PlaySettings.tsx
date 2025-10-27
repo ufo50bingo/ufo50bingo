@@ -11,12 +11,12 @@ import { IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { Ding } from "./useDings";
-import RequestPauseButton from "./RequestPauseButton";
 import ColorSelector from "../common/ColorSelector";
 import DisconnectButton from "../common/DisconnectButton";
 import TimerEdit from "../common/TimerEdit";
 import { TimerState } from "../common/useMatchTimer";
 import EditDings from "../common/EditDings";
+import RequestPauseSection from "../common/RequestPauseSection";
 
 type Props = {
   id: string;
@@ -78,7 +78,7 @@ export default function PlaySettings({
                 color={color}
                 setColor={setColor}
               />
-              <RequestPauseButton id={id} />
+              <RequestPauseSection id={id} />
               <TimerEdit state={timerState} setState={setTimerState} />
               <Button
                 component="a"

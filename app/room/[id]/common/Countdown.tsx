@@ -1,7 +1,7 @@
 import { Alert, Button, NumberInput, Stack } from "@mantine/core";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import sendChat from "../common/sendChat";
+import sendChat from "./sendChat";
 
 type Props = {
   setIsHidden: (newSetIsHidden: boolean) => unknown;

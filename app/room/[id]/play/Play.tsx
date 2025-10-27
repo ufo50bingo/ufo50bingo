@@ -22,6 +22,7 @@ import { getResult } from "@/app/matches/computeResult";
 import ScoreSquare from "../common/ScoreSquare";
 import useMatchTimer from "../common/useMatchTimer";
 import { useMediaQuery } from "@mantine/hooks";
+import SimpleGeneralTracker from "./SimpleGeneralTracker";
 
 export type Props = {
   id: string;
@@ -187,6 +188,7 @@ export default function Play({
           </Group>
         </Stack>
         <Feed rawFeed={rawFeed} height="545px" />
+        <SimpleGeneralTracker />
         <PlaySettings
           id={id}
           color={color}

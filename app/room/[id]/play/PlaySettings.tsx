@@ -49,6 +49,7 @@ export default function PlaySettings({
       <Button
         leftSection={<IconSettings size={16} />}
         onClick={() => setIsShown(true)}
+        fullWidth={true}
       >
         Tools
       </Button>

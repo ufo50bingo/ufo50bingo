@@ -18,10 +18,6 @@ export default function SquareText({ text, hasOverlays }: Props) {
   const [fontSearch, setFontSearch] = useState(DEFAULT_SEARCH);
   const timeoutRef = useRef<null | NodeJS.Timeout>(null);
 
-  if (text === "VALBRACE: Level up at two thrones & defeat the Phantom Knight on Floor 2") {
-    console.log(fontSearch);
-  }
-
   useLayoutEffect(() => {
     const cur = divRef.current;
     if (cur == null || fontSearch.fontSize === fontSearch.lower) {

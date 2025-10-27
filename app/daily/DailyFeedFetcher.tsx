@@ -18,7 +18,8 @@ export default function DailyFeedFetcher({ date, board }: Props) {
     const feed = useLiveQuery(() =>
         db.dailyFeed
             .where({ date: isoDate, attempt })
-            .sortBy("time")
+            .sortBy("time"),
+        [attempt, isoDate],
     );
 
     if (feed == null) {

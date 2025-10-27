@@ -11,7 +11,7 @@ import {
 } from "@mantine/core";
 import { IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
-import Countdown from "../common/Countdown";
+import Countdown from "../common/CountdownSection";
 import ColorSelector from "../common/ColorSelector";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { IconType, SortType } from "./useLocalState";
@@ -21,6 +21,7 @@ import EditDings from "../common/EditDings";
 import DirPicker from "./DirPicker";
 import CreateBoardSection from "../common/CreateBoardSection";
 import RequestPauseSection from "../common/RequestPauseSection";
+import CountdownSection from "../common/CountdownSection";
 
 type Props = {
   id: string;
@@ -104,14 +105,7 @@ export default function CastSettings({
                   />
                 </Accordion.Panel>
               </Accordion.Item>
-              <Accordion.Item value="countdown">
-                <Accordion.Control>
-                  Start Countdown
-                </Accordion.Control>
-                <Accordion.Panel>
-                  <Countdown setIsHidden={setIsHidden} />
-                </Accordion.Panel>
-              </Accordion.Item>
+              <CountdownSection view="cast" />
               <RequestPauseSection id={id} />
               <Accordion.Item value="display">
                 <Accordion.Control>

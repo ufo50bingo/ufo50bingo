@@ -6,7 +6,7 @@ type Props = {
   id: string;
 };
 
-export default function RequestPauseButton({ id }: Props) {
+export default function RequestPauseSection({ id }: Props) {
   return (
     <Accordion.Item value="pause">
       <Accordion.Control>

@@ -1,4 +1,3 @@
-import { TBoard } from "../matches/parseBingosyncData";
 import { OtherPasta } from "../pastas/metadata";
 import srl_generator_v5 from "./srl_generator_v5";
 
@@ -9,12 +8,9 @@ type SrlV5Square = {
   types: string[];
 };
 
-export default function getSrlV5Board(pasta: OtherPasta): TBoard {
+export default function getSrlV5Board(pasta: OtherPasta): ReadonlyArray<string> {
   const srlV5Board = srl_generator_v5(pasta, {}) as unknown as SrlV5Square[];
   // remove the dummy entry
   srlV5Board.shift();
-  return srlV5Board.map((s) => ({
-    name: s.name,
-    color: "blank",
-  }));
+  return srlV5Board.map((s) => s.name);
 }

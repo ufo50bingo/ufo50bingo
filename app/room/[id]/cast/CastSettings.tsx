@@ -17,7 +17,7 @@ import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { IconType, SortType } from "./useLocalState";
 import DisconnectButton from "../common/DisconnectButton";
 import { Ding } from "../play/useDings";
-import EditDings from "../common/EditDings";
+import NotificationsSection from "../common/NotificationsSection";
 import DirPicker from "./DirPicker";
 import CreateBoardSection from "../common/CreateBoardSection";
 import RequestPauseSection from "../common/RequestPauseSection";
@@ -166,7 +166,7 @@ export default function CastSettings({
                   Notifications
                 </Accordion.Control>
                 <Accordion.Panel>
-                  <EditDings dings={dings} setDings={setDings} />
+                  <NotificationsSection dings={dings} setDings={setDings} />
                 </Accordion.Panel>
               </Accordion.Item>
               <Accordion.Item value="advanced">

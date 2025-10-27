@@ -3,9 +3,10 @@ import DisconnectButton from "./DisconnectButton";
 
 type Props = {
     id: string;
+    isMobile: boolean;
 };
 
-export default function BottomSection({ id }: Props) {
+export default function BottomSection({ id, isMobile }: Props) {
     return (
         <Stack p="md">
             <Button
@@ -14,7 +15,7 @@ export default function BottomSection({ id }: Props) {
             >
                 View Bingosync room
             </Button>
-            <DisconnectButton />
+            <DisconnectButton isMobile={isMobile} />
         </Stack>
     );
 }

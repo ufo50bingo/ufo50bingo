@@ -21,6 +21,7 @@ import useBingosyncSocket from "../common/useBingosyncSocket";
 import { getResult } from "@/app/matches/computeResult";
 import ScoreSquare from "../common/ScoreSquare";
 import useMatchTimer from "../common/useMatchTimer";
+import { useMediaQuery } from "@mantine/hooks";
 
 export type Props = {
   id: string;
@@ -47,6 +48,9 @@ export default function Play({
   const pauseRef = useRef<null | (() => unknown)>(null);
 
   const selectedColor = color ?? "red";
+
+  // 525px is the width of the board, which is also the default width of the modal
+  const isMobile = useMediaQuery("(max-width: 525px)");
 
   useWakeLock();
 
@@ -194,6 +198,7 @@ export default function Play({
           setDings={setDings}
           timerState={timerState}
           setTimerState={setTimerState}
+          isMobile={isMobile}
         />
       </Group>
       {reconnectModal}

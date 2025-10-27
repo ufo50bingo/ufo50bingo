@@ -6,6 +6,7 @@ import DurationInput from "./DurationInput";
 interface Props {
   state: TimerState;
   setState: (newState: TimerState) => unknown;
+  isMobile: boolean;
 }
 
 interface ModalProps extends Props {
@@ -34,7 +35,7 @@ export default function TimerSection(props: Props) {
   );
 }
 
-function TimerModal({ close, state, setState }: ModalProps) {
+function TimerModal({ close, state, setState, isMobile }: ModalProps) {
   const [scanMs, setScanMs] = useState(state.scanMs);
   const [matchMs, setMatchMs] = useState(state.matchMs);
   const [remainingMs, setRemainingMs] = useState(() =>
@@ -42,7 +43,7 @@ function TimerModal({ close, state, setState }: ModalProps) {
   );
   return (
     <Modal
-      fullScreen={false}
+      fullScreen={isMobile}
       centered={true}
       onClose={close}
       opened={true}

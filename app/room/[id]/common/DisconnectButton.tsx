@@ -3,7 +3,11 @@ import { IconPlugConnectedX } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-export default function DisconnectButton() {
+type Props = {
+  isMobile: boolean;
+};
+
+export default function DisconnectButton({ isMobile }: Props) {
   const pathname = usePathname();
   const [isDisconnecting, setIsDisconnecting] = useState(false);
   return (
@@ -13,7 +17,7 @@ export default function DisconnectButton() {
       </Button >
       {isDisconnecting && (
         <Modal
-          fullScreen={false}
+          fullScreen={isMobile}
           centered={true}
           onClose={() => setIsDisconnecting(false)}
           opened={true}

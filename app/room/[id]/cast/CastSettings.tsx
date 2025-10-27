@@ -12,15 +12,16 @@ import {
 import { IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
 import ColorSelector from "../common/ColorSelector";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
+import { BingosyncColor, Square } from "@/app/matches/parseBingosyncData";
 import { IconType, SortType } from "./useLocalState";
 import { Ding } from "../play/useDings";
 import NotificationsSection from "../common/NotificationsSection";
-import DirPicker from "./DirPicker";
 import CreateBoardSection from "../common/CreateBoardSection";
 import RequestPauseSection from "../common/RequestPauseSection";
 import CountdownSection from "../common/CountdownSection";
 import BottomSection from "../common/BottomSection";
+import FileSyncSection from "./FileSyncSection";
+import { GeneralCounts } from "./CastPage";
 
 type Props = {
   id: string;
@@ -37,9 +38,12 @@ type Props = {
   setIconType: (newIconType: IconType) => unknown;
   hideByDefault: boolean;
   setHideByDefault: (newHideByDefault: boolean) => unknown;
-  setIsHidden: (newIsHidden: boolean) => unknown;
   dings: ReadonlyArray<Ding>;
   setDings: (newDings: ReadonlyArray<Ding>) => unknown;
+  leftScore: number;
+  rightScore: number;
+  generalCounts: GeneralCounts;
+  generalGoals: ReadonlyArray<Square>;
 };
 
 export default function CastSettings({
@@ -57,9 +61,12 @@ export default function CastSettings({
   setIconType,
   hideByDefault,
   setHideByDefault,
-  setIsHidden,
   dings,
   setDings,
+  leftScore,
+  rightScore,
+  generalCounts,
+  generalGoals,
 }: Props) {
   const [isShown, setIsShown] = useState(leftColor === rightColor);
 
@@ -161,14 +168,7 @@ export default function CastSettings({
                 </Accordion.Panel>
               </Accordion.Item>
               <NotificationsSection dings={dings} setDings={setDings} />
-              <Accordion.Item value="advanced">
-                <Accordion.Control>
-                  Advanced Caster Tools
-                </Accordion.Control>
-                <Accordion.Panel>
-                  <DirPicker />
-                </Accordion.Panel>
-              </Accordion.Item>
+              <FileSyncSection id={id} leftScore={leftScore} rightScore={rightScore} generalCounts={generalCounts} generalGoals={generalGoals} />
               <CreateBoardSection id={id} />
             </Accordion>
             <BottomSection id={id} />

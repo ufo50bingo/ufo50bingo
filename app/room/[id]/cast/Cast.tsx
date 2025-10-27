@@ -269,9 +269,12 @@ export default function Cast({
         setIconType={setIconType}
         hideByDefault={hideByDefault}
         setHideByDefault={setHideByDefault}
-        setIsHidden={setIsHidden}
         dings={dings}
         setDings={setDings}
+        leftScore={leftScore}
+        rightScore={rightScore}
+        generalCounts={generals}
+        generalGoals={generalGoals}
       />
       {editingIndex != null && (
         <EditSquare

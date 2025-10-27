@@ -97,6 +97,10 @@ export default function Login({ id }: Props) {
                   reveal and match start in chat.
                 </ListItem>
                 <ListItem>
+                  Casters can request a pause, which will hide the board and play
+                  an alert for all players connected via ufo50.bingo.
+                </ListItem>
+                <ListItem>
                   Casters can clear or grant squares to players without needing
                   to log in on a separate window. Just click on a square!
                 </ListItem>
@@ -110,8 +114,8 @@ export default function Login({ id }: Props) {
                 </ListItem>
                 <ListItem>Disconnections are detected automatically.</ListItem>
                 <ListItem>
-                  Pauses can be requested, and players on the ufo50.bingo page
-                  will have their board hidden and hear a notification sound.
+                  Game stats can be synced to files on your computer for
+                  customized stream layouts.
                 </ListItem>
               </List>
             </Stack>
@@ -122,8 +126,12 @@ export default function Login({ id }: Props) {
             <Stack>
               <span>Use this view to play a match! Features include:</span>
               <List>
-                <ListItem>Built-in timer and score tracking.</ListItem>
+                <ListItem>
+                  There is a built-in timer, which automatically starts when
+                  you reveal the board.
+                </ListItem>
                 <ListItem>General goals are tagged automatically.</ListItem>
+                <ListItem>General goals have a simple tracker.</ListItem>
                 <ListItem>
                   Your device will not sleep while the page is open.
                 </ListItem>
@@ -133,7 +141,7 @@ export default function Login({ id }: Props) {
                   chat messages are received, or squares are marked.
                 </ListItem>
                 <ListItem>
-                  Pauses can be requested, and players on the ufo50.bingo page
+                  Pauses can be requested, and all users connected via ufo50.bingo
                   will have their board hidden and hear a notification sound.
                 </ListItem>
               </List>

@@ -24,7 +24,6 @@ import ScoreSquare from "../common/ScoreSquare";
 import useMatchTimer from "../common/useMatchTimer";
 import { useMediaQuery } from "@mantine/hooks";
 import SimpleGeneralTracker from "./SimpleGeneralTracker";
-import { GoalName } from "@/app/goals";
 import { GOAL_TO_TYPES } from "../cast/goalToTypes";
 import useShowGeneralTracker from "./useShowGeneralTracker";
 

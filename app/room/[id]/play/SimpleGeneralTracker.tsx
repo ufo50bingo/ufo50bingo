@@ -11,7 +11,6 @@ type Props = {
 };
 
 export default function SimpleGeneralTracker({ generalGoals, id, seed }: Props) {
-    const key = `${id}-${seed}`;
     const [state, setState] = useSimpleGeneralState(id, seed);
     return (
         <InfoCard width={525} height={140}>

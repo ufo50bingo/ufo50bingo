@@ -168,7 +168,12 @@ export default function CastSettings({
                 </Accordion.Panel>
               </Accordion.Item>
               <NotificationsSection dings={dings} setDings={setDings} />
-              <FileSyncSection id={id} leftScore={leftScore} rightScore={rightScore} generalCounts={generalCounts} generalGoals={generalGoals} />
+              <FileSyncSection
+                leftScore={leftScore}
+                rightScore={rightScore}
+                generalCounts={generalCounts}
+                generalGoals={generalGoals}
+              />
               <CreateBoardSection id={id} isMobile={false} />
             </Accordion>
             <BottomSection id={id} isMobile={false} />

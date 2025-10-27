@@ -5,14 +5,13 @@ import { Square } from "@/app/matches/parseBingosyncData";
 import { db } from "@/app/db";
 
 type Props = {
-    id: string;
     leftScore: number;
     rightScore: number;
     generalCounts: GeneralCounts;
     generalGoals: ReadonlyArray<Square>;
 };
 
-export default function FileSyncSection({ id, leftScore, rightScore, generalCounts, generalGoals }: Props) {
+export default function FileSyncSection({ leftScore, rightScore, generalCounts, generalGoals }: Props) {
     const [dirHandle, setDirHandle] = useState<FileSystemDirectoryHandle | null>();
     useEffect(() => {
         const fetchHandle = async () => {

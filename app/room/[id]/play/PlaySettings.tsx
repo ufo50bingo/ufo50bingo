@@ -4,6 +4,7 @@ import {
   Button,
   Checkbox,
   Drawer,
+  Stack,
 } from "@mantine/core";
 import { IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
@@ -29,6 +30,8 @@ type Props = {
   timerState: TimerState;
   setTimerState: (newState: TimerState) => unknown;
   isMobile: boolean;
+  showGeneralTracker: boolean;
+  setShowGeneralTracker: (newShown: boolean) => unknown;
 };
 
 export default function PlaySettings({
@@ -42,6 +45,8 @@ export default function PlaySettings({
   timerState,
   setTimerState,
   isMobile,
+  showGeneralTracker,
+  setShowGeneralTracker,
 }: Props) {
   const [isShown, setIsShown] = useState(color == null);
   return (
@@ -86,15 +91,24 @@ export default function PlaySettings({
               <Accordion.Item value="display">
                 <Accordion.Control>Display Settings</Accordion.Control>
                 <Accordion.Panel>
-                  <Checkbox
-                    checked={shownDifficulties.includes("general")}
-                    onChange={(event) =>
-                      setShownDifficulties(
-                        event.target.checked ? ["general"] : []
-                      )
-                    }
-                    label="Label general goals"
-                  />
+                  <Stack>
+                    <Checkbox
+                      checked={shownDifficulties.includes("general")}
+                      onChange={(event) =>
+                        setShownDifficulties(
+                          event.target.checked ? ["general"] : []
+                        )
+                      }
+                      label="Label general goals"
+                    />
+                    <Checkbox
+                      checked={showGeneralTracker}
+                      onChange={(event) =>
+                        setShowGeneralTracker(event.target.checked)
+                      }
+                      label="Show general goal tracker"
+                    />
+                  </Stack>
                 </Accordion.Panel>
               </Accordion.Item>
               <CreateBoardSection id={id} isMobile={isMobile} />

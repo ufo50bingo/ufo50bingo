@@ -11,17 +11,16 @@ import {
 } from "@mantine/core";
 import { IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
-import Countdown from "../common/CountdownSection";
 import ColorSelector from "../common/ColorSelector";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { IconType, SortType } from "./useLocalState";
-import DisconnectButton from "../common/DisconnectButton";
 import { Ding } from "../play/useDings";
 import NotificationsSection from "../common/NotificationsSection";
 import DirPicker from "./DirPicker";
 import CreateBoardSection from "../common/CreateBoardSection";
 import RequestPauseSection from "../common/RequestPauseSection";
 import CountdownSection from "../common/CountdownSection";
+import BottomSection from "../common/BottomSection";
 
 type Props = {
   id: string;
@@ -171,16 +170,8 @@ export default function CastSettings({
                 </Accordion.Panel>
               </Accordion.Item>
               <CreateBoardSection id={id} />
-              <Stack p="md">
-                <Button
-                  component="a"
-                  href={`https://www.bingosync.com/room/${id}`}
-                >
-                  View Bingosync room
-                </Button>
-                <DisconnectButton />
-              </Stack>
             </Accordion>
+            <BottomSection id={id} />
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>

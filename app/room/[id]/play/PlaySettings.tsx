@@ -97,7 +97,7 @@ export default function PlaySettings({
                   label="Label general goals"
                 />
               </Card>
-              <EditDings dings={dings} setDings={setDings} />
+              <NotificationsSection dings={dings} setDings={setDings} />
               <DisconnectButton />
             </Stack>
           </Drawer.Body>

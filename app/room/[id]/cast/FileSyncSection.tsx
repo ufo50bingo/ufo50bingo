@@ -1,7 +1,8 @@
 import { Accordion, Alert, Button, Stack, Text } from "@mantine/core";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { GeneralCounts } from "./CastPage";
 import { Square } from "@/app/matches/parseBingosyncData";
+import { db } from "@/app/db";
 
 type Props = {
     id: string;
@@ -12,14 +13,24 @@ type Props = {
 };
 
 export default function FileSyncSection({ id, leftScore, rightScore, generalCounts, generalGoals }: Props) {
-    const dirHandleRef = useRef<FileSystemDirectoryHandle | null>(null);
+    const [dirHandle, setDirHandle] = useState<FileSystemDirectoryHandle | null>();
+    useEffect(() => {
+        const fetchHandle = async () => {
+            try {
+                const dirs = await db.directory.toArray();
+                if (dirs.length > 0) {
+                    setDirHandle(dirs[0].handle);
+                }
+            } catch { }
+        };
+        fetchHandle();
+    }, []);
 
     useEffect(() => {
-        const dirHandle = dirHandleRef.current;
         if (dirHandle != null) {
             writeToFile(dirHandle, leftScore, rightScore, generalCounts, generalGoals);
         }
-    }, [leftScore, rightScore, generalCounts, generalGoals]);
+    }, [dirHandle, leftScore, rightScore, generalCounts, generalGoals]);
 
     return (
         <Accordion.Item value="advanced">
@@ -35,16 +46,34 @@ export default function FileSyncSection({ id, leftScore, rightScore, generalCoun
                     <Alert color="yellow" title="WARNING!">
                         This may only work in Google Chrome!
                     </Alert>
-                    <Button
-                        onClick={async () => {
-                            try {
-                                const dirHandle = await window.showDirectoryPicker();
-                                dirHandleRef.current = dirHandle;
-                                writeToFile(dirHandle, leftScore, rightScore, generalCounts, generalGoals);
-                            } catch { }
-                        }}>
-                        Select directory
-                    </Button>
+                    {dirHandle == null
+                        ? (
+                            <Button
+                                onClick={async () => {
+                                    try {
+                                        const dirHandle = await window.showDirectoryPicker();
+                                        setDirHandle(dirHandle);
+                                        writeToFile(dirHandle, leftScore, rightScore, generalCounts, generalGoals);
+                                        await db.directory.add({ handle: dirHandle });
+                                    } catch { }
+                                }}>
+                                Select sync folder
+                            </Button>
+                        )
+                        : (<>
+                            <Text size="sm">Currently syncing to <strong>{dirHandle.name}</strong></Text>
+                            <Button
+                                color="red"
+                                onClick={async () => {
+                                    try {
+                                        setDirHandle(null);
+                                        await db.directory.clear();
+                                    } catch { }
+                                }}>
+                                Stop syncing
+                            </Button>
+                        </>)
+                    }
                 </Stack>
             </Accordion.Panel>
         </Accordion.Item>

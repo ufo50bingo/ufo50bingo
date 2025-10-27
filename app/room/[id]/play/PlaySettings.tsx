@@ -87,7 +87,6 @@ export default function PlaySettings({
               <TimerSection state={timerState} setState={setTimerState} isMobile={isMobile} />
               <CountdownSection view="play" />
               <NotificationsSection dings={dings} setDings={setDings} />
-              {/* TODO Store directory handle in local state!!!*/}
               <Accordion.Item value="display">
                 <Accordion.Control>Display Settings</Accordion.Control>
                 <Accordion.Panel>

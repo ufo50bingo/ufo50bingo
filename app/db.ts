@@ -59,7 +59,7 @@ db.version(1).stores({
   createdMatches: "id",
   revealedMatches: "id",
   directory: "++id",
-  dailyFeed: "++id, date",
+  dailyFeed: "++id, [date+attempt]",
 });
 
 export type { Attempt, AttemptRow, PlaylistRow };

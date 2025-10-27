@@ -3,30 +3,30 @@
 import { useMemo, useState } from "react";
 import { TBoard } from "../matches/parseBingosyncData";
 import Board from "../Board";
-import { Container, Card, Text, Button, Stack, Title } from "@mantine/core";
+import { Container, Card, Text, Button, Stack, Title, List } from "@mantine/core";
 import { LocalDate, toISODate } from "./localDate";
 import useDailyColor from "./useDailyColor";
 import ColorSelector from "../room/[id]/common/ColorSelector";
-import { db } from "../db";
-import { useLiveQuery } from "dexie-react-hooks";
-import useAttemptNumber from "./useAttemptNumber";
+import { DailyFeedRow, db } from "../db";
 import useFeedTimer from "./useFeedTimer";
+import getDailyFeedWithoutMistakes from "./getDailyFeedWithoutMistakes";
+import getFeedWithDuration from "./getFeedWithDuration";
+import getFirstBingoMajorityBlackoutIndex from "./findFirstBingoMajorityBlackout";
 
 type Props = {
     date: LocalDate;
     board: ReadonlyArray<string>;
+    attempt: number;
+    setAttempt: (newAttempt: number) => unknown;
+    feed: ReadonlyArray<DailyFeedRow>;
 };
 
-export default function Daily({ date, board: plainBoard }: Props) {
+export default function Daily({ date, board: plainBoard, attempt, setAttempt, feed: feedWithMistakes }: Props) {
     const isoDate = toISODate(date);
     const [color, setColor] = useDailyColor();
-    const [attempt, setAttempt] = useAttemptNumber(isoDate);
 
-    const feed = useLiveQuery(() =>
-        db.dailyFeed
-            .where({ date: isoDate, attempt })
-            .sortBy("time")
-    ) ?? [];
+    const feed = useMemo(() => getDailyFeedWithoutMistakes(feedWithMistakes), [feedWithMistakes]);
+    const { bingo, majority, blackout } = getFirstBingoMajorityBlackoutIndex(feed);
 
     const completedIndexes = useMemo(() => {
         const newSet = new Set();
@@ -40,7 +40,7 @@ export default function Daily({ date, board: plainBoard }: Props) {
         return newSet;
     }, [feed]);
 
-    const isRevealed = useMemo(() =>
+    const isHidden = useMemo(() =>
         feed.every(item => item.type !== "reveal"),
         [feed],
     );
@@ -65,8 +65,8 @@ export default function Daily({ date, board: plainBoard }: Props) {
                         <Title order={1}>Daily Bingo — {date.month}/{date.day}</Title>
                         <Text>
                             Your goal is to claim a bingo as fast as possible.<br />
-                            After you've claimed a bingo, you can optionally continue to claim 13 squares,
-                            and then continue to a blackout!
+                            After you've claimed a bingo, you can optionally continue to claim majority (13 squares),
+                            and then a blackout (all 25 squares)!
                         </Text>
                         <ColorSelector label="Select your preferred color" color={color} setColor={setColor} />
                     </Stack>
@@ -88,7 +88,7 @@ export default function Daily({ date, board: plainBoard }: Props) {
                                     <div>Start playing when the timer hits 0:00.0!</div>
                                 </>
                             }
-                            isHidden={!isRevealed}
+                            isHidden={isHidden}
                             setIsHidden={async () => {
                                 await db.dailyFeed.add({ type: "reveal", time: Date.now(), date: isoDate, attempt, squareIndex: null });
                             }}
@@ -104,6 +104,13 @@ export default function Daily({ date, board: plainBoard }: Props) {
                             {isRunning ? "Pause" : "Resume"}
                         </Button>
                     </Stack>
+                </Card.Section>
+                <Card.Section withBorder={true} inheritPadding={true} py="xs">
+                    <List>
+                        <List.Item>Bingo: {bingo}</List.Item>
+                        <List.Item>Majority: {majority}</List.Item>
+                        <List.Item>Blackout: {blackout}</List.Item>
+                    </List>
                 </Card.Section>
             </Card>
         </Container>

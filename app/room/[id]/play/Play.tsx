@@ -189,7 +189,6 @@ export default function Play({
         <Feed rawFeed={rawFeed} height="545px" />
         <PlaySettings
           id={id}
-          seed={seed}
           color={color}
           setColor={setColor}
           shownDifficulties={shownDifficulties}

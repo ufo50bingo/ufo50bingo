@@ -38,7 +38,9 @@ export default function FileSyncSection({ id, leftScore, rightScore, generalCoun
                     <Button
                         onClick={async () => {
                             try {
-                                dirHandleRef.current = await window.showDirectoryPicker();
+                                const dirHandle = await window.showDirectoryPicker();
+                                dirHandleRef.current = dirHandle;
+                                writeToFile(dirHandle, leftScore, rightScore, generalCounts, generalGoals);
                             } catch { }
                         }}>
                         Select directory

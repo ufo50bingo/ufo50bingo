@@ -5,6 +5,7 @@ import { ReactNode, useState } from "react";
 import { AppShell, Burger, Group, Image, NavLink, Text } from "@mantine/core";
 import {
   IconCalendarWeek,
+  IconClock24,
   IconDeviceGamepad,
   IconExternalLink,
   IconFilter,
@@ -38,6 +39,11 @@ const LINKS = [
     href: "/schedule",
     text: "Schedule",
     icon: <IconCalendarWeek size={25} stroke={1.5} />,
+  },
+  {
+    href: "/daily",
+    text: "Daily",
+    icon: <IconClock24 size={25} stroke={1.5} />,
   },
   {
     href: "/resources",

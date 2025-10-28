@@ -87,11 +87,12 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                             <Title order={1}>Daily Bingo — {date.month}/{date.day}</Title>
                         </Group>
                         <Text>
-                            Claim a bingo as fast as possible.<br />
+                            Claim a bingo as fast as possible!<br />
                             After you've claimed a bingo, you can optionally continue to claim majority (13 squares),
-                            and then a blackout (all 25 squares)!
+                            and then a blackout (all 25 squares).<br />
+                            <br />
+                            New daily bingos are created daily at <strong>midnight ET</strong>.
                         </Text>
-                        <Text>New daily bingos are created daily at <strong>midnight ET</strong>.</Text>
                         <ColorSelector label="Select your color" color={color} setColor={setColor} />
                     </Stack>
                 </Card.Section>
@@ -162,6 +163,7 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                                     : <Anchor onClick={() => setModalFeedIndex(blackout)}><Duration duration={feedWithDuration[blackout][0]} showDecimal={false} /> (view board with times)</Anchor>}
                             </List.Item>
                         </List>
+                        <Text>When you're done, copy your summary and paste it in the <Anchor href="https://discord.com/channels/525973026429206530/1431014211676405770">Daily Bingo Thread</Anchor> on the official Discord!</Text>
                         <Button
                             leftSection={<IconClipboard size={16} />}
                             onClick={() => {

@@ -56,3 +56,8 @@ export function getPrevISODates(date: LocalDate, prevCount: number): ReadonlyArr
 export function toISODate({ year, month, day }: LocalDate): string {
   return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 }
+
+export function fromISODate(isoDate: string): LocalDate {
+  const [yearStr, monthStr, dayStr] = isoDate.split('-');
+  return { year: Number(yearStr), month: Number(monthStr), day: Number(dayStr) };
+}

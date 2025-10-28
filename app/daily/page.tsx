@@ -2,12 +2,16 @@
 import getSrlV5Board from "./getSrlV5Board";
 import { STANDARD } from "../pastas/standard";
 import getSql from "../getSql";
-import { getPrevISODates, LocalDate, toISODate } from "./localDate";
+import { fromISODate, getPrevISODates, LocalDate, toISODate } from "./localDate";
 import { isGift, isGoldCherry } from "./giftGoldCherry";
 import { GoalName } from "../goals";
 import DailyFeedFetcher from "./DailyFeedFetcher";
 
 export const dynamic = "force-dynamic";
+
+type FilterParams = {
+  date?: string;
+};
 
 function getEasternDate(): LocalDate {
   const formatter = new Intl.DateTimeFormat('en-US', {
@@ -102,8 +106,14 @@ async function getDailyBoard(date: LocalDate): Promise<ReadonlyArray<string>> {
   return newBoard;
 }
 
-export default async function DailyPage() {
-  const date = getEasternDate();
+export default async function DailyPage(props: {
+  searchParams?: Promise<FilterParams>;
+}) {
+  const params = await props.searchParams;
+  const dateParam = params?.date;
+  const date = dateParam == null
+    ? getEasternDate()
+    : fromISODate(dateParam);
   const board = await getDailyBoard(date);
   return <DailyFeedFetcher date={date} board={board} />
 }

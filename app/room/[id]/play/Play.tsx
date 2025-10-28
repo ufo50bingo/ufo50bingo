@@ -46,6 +46,7 @@ export default function Play({
   const [color, setColor] = useColor(id);
   const [isHidden, setIsHidden] = useState(true);
   const [pauseRequestName, setPauseRequestName] = useState<string | null>(null);
+  const pauseRef = useRef<null | (() => unknown)>(null);
 
   const dingRef = useRef<HTMLAudioElement | null>(null);
   const alarmRef = useRef<HTMLAudioElement | null>(null);
@@ -61,6 +62,9 @@ export default function Play({
       }
       if (newItem.type === "chat") {
         if (newItem.text === REQUEST_PAUSE_CHAT) {
+          if (pauseRef.current != null) {
+            pauseRef.current();
+          }
           setPauseRequestName(newItem.player.name);
           if (dings.includes("pause") && alarmRef.current != null) {
             alarmRef.current.play();
@@ -89,6 +93,14 @@ export default function Play({
     socketKey,
     onMessage,
   });
+
+  const { timer, start, pause } = useMatchTimer({
+    key: `${id}-${seed}`,
+    scanMs: 60000,
+    matchMs: 1000 * 105 * 60,
+  });
+
+  pauseRef.current = pause;
 
   const [myScore, opponent] = useMemo(() => {
     const scores: { [color: string]: number } = {};
@@ -141,12 +153,6 @@ export default function Play({
     }
   }, [opponent, myScore, selectedColor, rawFeed, board]);
 
-  const { timer, start, pause } = useMatchTimer({
-    key: `${id}-${seed}`,
-    scanMs: 60000,
-    matchMs: 1000 * 105 * 60,
-  });
-
   return (
     <>
       <Group>
@@ -163,7 +169,10 @@ export default function Play({
             setIsHidden={setIsHidden}
             shownDifficulties={shownDifficulties}
             hiddenText="Click to reveal"
-            onReveal={async () => await revealBoard(id)}
+            onReveal={async () => {
+              start();
+              await revealBoard(id);
+            }}
             pauseRequestName={pauseRequestName}
             clearPauseRequest={() => setPauseRequestName(null)}
           />

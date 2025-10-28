@@ -52,9 +52,8 @@ export default function useMatchTimer({ key, scanMs, matchMs }: Input): Return {
     return JSON.parse(fromStorage);
   });
 
-  const setState = useCallback(
+  const saveStateToLocalStorage = useCallback(
     (newState: TimerState) => {
-      setStateRaw(newState);
       if (global.window == undefined || localStorage == null) {
         return;
       }
@@ -63,27 +62,49 @@ export default function useMatchTimer({ key, scanMs, matchMs }: Input): Return {
     [timerKey]
   );
 
-  const start = () => {
-    if (state.type === "paused") {
-      setState({
-        type: "running",
-        scanMs,
-        matchMs,
-        endTime: Date.now() + state.remainingMs,
-      });
-    }
-  };
+  const setState = useCallback(
+    (newState: TimerState) => {
+      setStateRaw(newState);
+      saveStateToLocalStorage(newState);
+    },
+    [saveStateToLocalStorage]
+  );
 
-  const pause = () => {
-    if (state.type === "running") {
-      setState({
-        type: "paused",
-        scanMs,
-        matchMs,
-        remainingMs: state.endTime - Date.now(),
-      });
-    }
-  };
+  const start = useCallback(
+    () =>
+      setStateRaw((prevState: TimerState) => {
+        const newState: TimerState =
+          prevState.type === "paused"
+            ? {
+                type: "running",
+                scanMs: prevState.scanMs,
+                matchMs: prevState.matchMs,
+                endTime: Date.now() + prevState.remainingMs,
+              }
+            : prevState;
+        saveStateToLocalStorage(newState);
+        return newState;
+      }),
+    [saveStateToLocalStorage]
+  );
+
+  const pause = useCallback(
+    () =>
+      setStateRaw((prevState: TimerState) => {
+        const newState: TimerState =
+          prevState.type === "running"
+            ? {
+                type: "paused",
+                scanMs: prevState.scanMs,
+                matchMs: prevState.matchMs,
+                remainingMs: prevState.endTime - Date.now(),
+              }
+            : prevState;
+        saveStateToLocalStorage(newState);
+        return newState;
+      }),
+    [saveStateToLocalStorage]
+  );
 
   const timer =
     state.type === "running" ? (

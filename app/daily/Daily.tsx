@@ -165,6 +165,7 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                         </List>
                         <Text>When you're done, copy your summary and paste it in the <Anchor href="https://discord.com/channels/525973026429206530/1431014211676405770">Daily Bingo Thread</Anchor> on the official Discord!</Text>
                         <Button
+                            disabled={bingo == null && majority == null && blackout == null}
                             leftSection={<IconClipboard size={16} />}
                             onClick={() => {
                                 let summary = `Daily Bingo ${date.month}/${date.day}`;

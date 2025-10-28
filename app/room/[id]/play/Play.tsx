@@ -48,7 +48,7 @@ export default function Play({
   const [showGeneralTracker, setShowGeneralTracker] = useShowGeneralTracker();
   const [dings, setDings] = useDings("play");
   const [color, setColor] = useColor(id);
-  const [isHidden, setIsHidden] = useState(true);
+  const [isHidden, setIsHidden] = useState(() => initialBoard.every(square => square.color === "blank"));
   const [pauseRequestName, setPauseRequestName] = useState<string | null>(null);
   const pauseRef = useRef<null | (() => unknown)>(null);
 

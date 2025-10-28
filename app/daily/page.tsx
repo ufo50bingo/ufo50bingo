@@ -2,7 +2,6 @@
 import getSrlV5Board from "./getSrlV5Board";
 import { STANDARD } from "../pastas/standard";
 import getSql from "../getSql";
-import { revalidateTag } from "next/cache";
 import Daily from "./Daily";
 
 function getEasternISODate(): string {
@@ -29,7 +28,7 @@ function getEasternISODate(): string {
   return `${year}-${month}-${day}`;
 }
 
-async function constructBoard(date: string): Promise<ReadonlyArray<string>> {
+async function constructBoard(_date: string): Promise<ReadonlyArray<string>> {
   return getSrlV5Board(STANDARD);
 }
 

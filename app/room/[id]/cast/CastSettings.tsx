@@ -161,14 +161,7 @@ export default function CastSettings({
                   </Stack>
                 </Accordion.Panel>
               </Accordion.Item>
-              <Accordion.Item value="notifications">
-                <Accordion.Control>
-                  Notifications
-                </Accordion.Control>
-                <Accordion.Panel>
-                  <NotificationsSection dings={dings} setDings={setDings} />
-                </Accordion.Panel>
-              </Accordion.Item>
+              <NotificationsSection dings={dings} setDings={setDings} />
               <Accordion.Item value="advanced">
                 <Accordion.Control>
                   Advanced Caster Tools

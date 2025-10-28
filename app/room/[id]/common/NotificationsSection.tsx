@@ -1,4 +1,4 @@
-import { Card, Stack, Checkbox, Text } from "@mantine/core";
+import { Card, Stack, Checkbox, Text, Accordion } from "@mantine/core";
 import { Ding } from "../play/useDings";
 
 type Props = {
@@ -12,24 +12,31 @@ const ALL_DINGS: ReadonlyArray<{ value: Ding; name: string }> = [
     { value: "square", name: "Square is marked" },
 ];
 
-export default function EditDings({ dings, setDings }: Props) {
+export default function NotificationsSection({ dings, setDings }: Props) {
     return (
-        <Stack>
-            <Text size="sm">Play notification sound when:</Text>
-            {ALL_DINGS.map((ding) => (
-                <Checkbox
-                    key={ding.value}
-                    checked={dings.includes(ding.value)}
-                    onChange={(event) =>
-                        setDings(
-                            event.currentTarget.checked
-                                ? [...dings, ding.value]
-                                : dings.filter((d) => d !== ding.value)
-                        )
-                    }
-                    label={ding.name}
-                />
-            ))}
-        </Stack>
+        <Accordion.Item value="notifications">
+            <Accordion.Control>
+                Notifications
+            </Accordion.Control>
+            <Accordion.Panel>
+                <Stack>
+                    <Text size="sm">Play notification sound when:</Text>
+                    {ALL_DINGS.map((ding) => (
+                        <Checkbox
+                            key={ding.value}
+                            checked={dings.includes(ding.value)}
+                            onChange={(event) =>
+                                setDings(
+                                    event.currentTarget.checked
+                                        ? [...dings, ding.value]
+                                        : dings.filter((d) => d !== ding.value)
+                                )
+                            }
+                            label={ding.name}
+                        />
+                    ))}
+                </Stack>
+            </Accordion.Panel>
+        </Accordion.Item>
     );
 }

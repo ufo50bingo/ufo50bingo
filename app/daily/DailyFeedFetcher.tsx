@@ -5,13 +5,14 @@ import { LocalDate, toISODate } from "./localDate";
 import useAttemptNumber from "./useAttemptNumber";
 import { db } from "../db";
 import Daily from "./Daily";
+import { DailyData } from "./page";
 
 type Props = {
     date: LocalDate;
-    board: ReadonlyArray<string>;
+    dailyData: DailyData;
 };
 
-export default function DailyFeedFetcher({ date, board }: Props) {
+export default function DailyFeedFetcher({ date, dailyData }: Props) {
     const isoDate = toISODate(date);
     const [attempt, setAttempt] = useAttemptNumber(isoDate);
 
@@ -28,7 +29,7 @@ export default function DailyFeedFetcher({ date, board }: Props) {
     return (
         <Daily
             date={date}
-            board={board}
+            dailyData={dailyData}
             attempt={attempt}
             setAttempt={setAttempt}
             feed={feed}

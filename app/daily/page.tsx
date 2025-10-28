@@ -6,12 +6,26 @@ import { fromISODate, getPrevISODates, LocalDate, toISODate } from "./localDate"
 import { isGift, isGoldCherry } from "./giftGoldCherry";
 import { GoalName } from "../goals";
 import DailyFeedFetcher from "./DailyFeedFetcher";
+import { SPICY } from "../pastas/spicy";
 
 export const dynamic = "force-dynamic";
 
 type FilterParams = {
   date?: string;
 };
+
+export type DailyData = {
+  board: ReadonlyArray<string>,
+  title: string | null | undefined,
+  description: string | null | undefined,
+  creator: string | null | undefined,
+};
+
+function isDateSunday(localDate: LocalDate): boolean {
+  const date = new Date(`${toISODate(localDate)}T00:00:00`);
+  console.log(date.getDay());
+  return date.getDay() === 0;
+}
 
 function getEasternDate(): LocalDate {
   const formatter = new Intl.DateTimeFormat('en-US', {
@@ -37,7 +51,7 @@ function getEasternDate(): LocalDate {
   return { year, month, day };
 }
 
-async function constructBoard(date: LocalDate): Promise<ReadonlyArray<string>> {
+async function constructBoard(date: LocalDate, isSunday: boolean): Promise<ReadonlyArray<string>> {
   const prevIsoDates = getPrevISODates(date, 7);
   const sqlResult = await getSql(false)`
     SELECT board
@@ -48,7 +62,7 @@ async function constructBoard(date: LocalDate): Promise<ReadonlyArray<string>> {
     const parsed: ReadonlyArray<string> = JSON.parse(raw.board);
     return parsed;
   }) ?? [];
-  let bestBoard = getSrlV5Board(STANDARD);
+  let bestBoard = getSrlV5Board(isSunday ? SPICY : STANDARD);
   let bestScore = getSimilarityScore(bestBoard, recentBoards);
   for (let i = 0; i < 100; i++) {
     if (bestScore === 0) {
@@ -86,24 +100,44 @@ function getSimilarityScore(
   return score;
 }
 
-async function getDailyBoard(date: LocalDate): Promise<ReadonlyArray<string>> {
+async function getDailyBoard(date: LocalDate): Promise<DailyData> {
   const isoDate = toISODate(date);
   const sql = getSql(false);
   const sqlResult =
-    await sql`SELECT board FROM daily WHERE date = ${isoDate}`;
+    await sql`
+      SELECT
+        board,
+        title,
+        description,
+        creator
+      FROM daily
+      WHERE date = ${isoDate}`;
   const board: null | undefined | string = sqlResult?.[0]?.board;
+  const title: null | undefined | string = sqlResult?.[0]?.title;
+  const description: null | undefined | string = sqlResult?.[0]?.description;
+  const creator: null | undefined | string = sqlResult?.[0]?.creator;
   if (board != null) {
-    return JSON.parse(board);
+    const parsed = JSON.parse(board);
+    return { board: parsed, title, description, creator };
   }
-  const newBoard = await constructBoard(date);
+  const isSunday = isDateSunday(date);
+  const newBoard = await constructBoard(date, isSunday);
+  const newTitle = isSunday ? 'Spicy Sunday' : null;
   await sql`INSERT INTO daily (
     date,
-    board
+    board,
+    title
   ) VALUES (
     ${isoDate},
-    ${JSON.stringify(newBoard)}
+    ${JSON.stringify(newBoard)},
+    ${newTitle}
   );`;
-  return newBoard;
+  return {
+    board: newBoard,
+    title: newTitle,
+    description: null,
+    creator: null,
+  };
 }
 
 export default async function DailyPage(props: {
@@ -114,6 +148,6 @@ export default async function DailyPage(props: {
   const date = dateParam == null
     ? getEasternDate()
     : fromISODate(dateParam);
-  const board = await getDailyBoard(date);
-  return <DailyFeedFetcher date={date} board={board} />
+  const dailyData = await getDailyBoard(date);
+  return <DailyFeedFetcher date={date} dailyData={dailyData} />
 }

@@ -13,26 +13,30 @@ import getDailyFeedWithoutMistakes from "./getDailyFeedWithoutMistakes";
 import getFeedWithDuration from "./getFeedWithDuration";
 import getFirstBingoMajorityBlackoutIndex from "./findFirstBingoMajorityBlackout";
 import Duration from "../practice/Duration";
-import { IconArrowLeft, IconClipboard, IconPlayerPause, IconPlayerPlay, IconRefreshAlert } from "@tabler/icons-react";
+import { IconArrowLeft, IconClipboard, IconEdit, IconPlayerPause, IconPlayerPlay, IconRefreshAlert } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
 import getDurationText from "../practice/getDurationText";
 import getBoardAtIndex from "./getBoardAtIndex";
 import getEmojiBoard from "./getEmojiBoard";
 import DailyBoardModal from "./DailyBoardModal";
 import useWakeLock from "../room/[id]/play/useWakeLock";
+import { DailyData } from "./page";
+import EditDaily from "./EditDaily";
 
 type Props = {
     date: LocalDate;
-    board: ReadonlyArray<string>;
+    dailyData: DailyData;
     attempt: number;
     setAttempt: (newAttempt: number) => unknown;
     feed: ReadonlyArray<DailyFeedRow>;
 };
 
-export default function Daily({ date, board: plainBoard, attempt, setAttempt, feed: feedWithMistakes }: Props) {
+export default function Daily({ date, dailyData, attempt, setAttempt, feed: feedWithMistakes }: Props) {
+    const plainBoard = dailyData.board;
     const isoDate = toISODate(date);
     const [color, setColor] = useDailyColor();
     const [isStartingNewAttempt, setIsStartingNewAttempt] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
     const feed = useMemo(() => getDailyFeedWithoutMistakes(feedWithMistakes, attempt), [feedWithMistakes, attempt]);
     const feedWithDuration = useMemo(() => getFeedWithDuration(feed, attempt), [feed, attempt]);
@@ -91,20 +95,28 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
         <Container my="md">
             <Card shadow="sm" padding="sm" radius="md" withBorder>
                 <Card.Section withBorder={true} inheritPadding={true} py="xs">
-                    <Stack>
-                        <Group>
-                            <Tooltip label="View previous day">
-                                <ActionIcon component="a" variant="subtle" href={`/daily?${prevSearchParams.toString()}`}>
-                                    <IconArrowLeft size={32} />
-                                </ActionIcon>
-                            </Tooltip>
-                            <Title order={1}>Daily Bingo — {date.month}/{date.day}</Title>
+                    <Stack gap={4}>
+                        <Group justify="space-between">
+                            <Group>
+                                <Tooltip label="View previous day">
+                                    <ActionIcon component="a" variant="subtle" href={`/daily?${prevSearchParams.toString()}`}>
+                                        <IconArrowLeft size={32} />
+                                    </ActionIcon>
+                                </Tooltip>
+                                <Title order={1}>Daily Bingo {date.month}/{date.day}{dailyData.title != null && dailyData.title != "" ? ` — ${dailyData.title}` : null}</Title>
+                            </Group>
+                            <ActionIcon color="green" onClick={() => setIsEditing(true)}><IconEdit /></ActionIcon>
                         </Group>
+                        {dailyData.creator != null && dailyData.creator != "" && <Text size="sm"><em>Created by {dailyData.creator}</em></Text>}
+                        {dailyData.description != null && dailyData.description != "" && <Text style={{ whiteSpace: "pre-line" }}>{dailyData.description}</Text>}
+                    </Stack>
+                </Card.Section>
+                <Card.Section withBorder={true} inheritPadding={true} py="xs">
+                    <Stack>
                         <Text>
                             Claim a bingo as fast as possible!<br />
                             After you've claimed a bingo, you can optionally continue to claim majority (13 squares),
                             and then a blackout (all 25 squares).<br />
-                            <br />
                             New daily bingos are available at <strong>midnight ET</strong>.
                         </Text>
                         <ColorSelector label="Select your color" color={color} setColor={setColor} />
@@ -267,6 +279,13 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                     isMobile={isMobile}
                     feedWithDuration={feedWithDuration}
                     color={color}
+                />
+            )}
+            {isEditing && (
+                <EditDaily
+                    dailyData={dailyData}
+                    date={date}
+                    onClose={() => setIsEditing(false)}
                 />
             )}
         </Container >

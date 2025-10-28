@@ -91,7 +91,7 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                             After you've claimed a bingo, you can optionally continue to claim majority (13 squares),
                             and then a blackout (all 25 squares).<br />
                             <br />
-                            New daily bingos are created daily at <strong>midnight ET</strong>.
+                            New daily bingos are available at <strong>midnight ET</strong>.
                         </Text>
                         <ColorSelector label="Select your color" color={color} setColor={setColor} />
                     </Stack>

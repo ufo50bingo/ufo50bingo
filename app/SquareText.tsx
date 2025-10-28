@@ -15,7 +15,7 @@ const DEFAULT_SEARCH = { fontSize: 100, lower: 65, upper: 100 };
 
 export default function SquareText({ text, hasOverlays }: Props) {
   const divRef = useRef<HTMLDivElement>(null);
-  const [fontSearch, setFontSearch] = useState(DEFAULT_SEARCH);
+  const [fontSearch, setFontSearch] = useState<FontSearch>(DEFAULT_SEARCH);
   const timeoutRef = useRef<null | NodeJS.Timeout>(null);
 
   useLayoutEffect(() => {

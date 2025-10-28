@@ -1,7 +1,5 @@
 import { useCallback, useState } from "react";
 
-type SimpleGeneralState = { [goal: string]: number };
-
 export default function useShowGeneralTracker(
 ): [boolean, (newShown: boolean) => unknown] {
   const [shown, setShownRaw] = useState(() => {

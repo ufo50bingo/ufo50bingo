@@ -32,7 +32,7 @@ export default function useSimpleGeneralState(
             }
             localStorage.setItem(key, JSON.stringify(newState));
         },
-        [key, id],
+        [key],
     );
 
     return [state, setState];

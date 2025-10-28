@@ -83,7 +83,7 @@ export default function useBingosyncSocket({
         }
       }
     },
-    [playerName, pauseRef]
+    [playerName, pauseRef, setPauseRequestName]
   );
 
   useEffect(() => {

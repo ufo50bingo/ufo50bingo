@@ -7,6 +7,7 @@ type Props = {
   children: ReactNode;
   height?: null | undefined | number;
   width?: null | undefined | number;
+  maxWidth?: null | undefined | number;
 };
 
 export default function InfoCard({
@@ -15,6 +16,7 @@ export default function InfoCard({
   children,
   height,
   width = 268,
+  maxWidth,
 }: Props) {
   return (
     <Card
@@ -22,7 +24,7 @@ export default function InfoCard({
       padding="sm"
       radius="md"
       withBorder={true}
-      style={{ height: `${height ?? 300}px`, width: `${width}px`, resize: "both" }}
+      style={{ height: `${height ?? 300}px`, width: maxWidth == null ? `${width}px` : undefined, maxWidth: maxWidth == null ? undefined : `${maxWidth}px`, resize: "both" }}
     >
       {title != null && (
         <Card.Section inheritPadding={true} withBorder={true} py="sm">

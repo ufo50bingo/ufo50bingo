@@ -33,7 +33,7 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
     const [color, setColor] = useDailyColor();
     const [isStartingNewAttempt, setIsStartingNewAttempt] = useState(false);
 
-    const feed = useMemo(() => getDailyFeedWithoutMistakes(feedWithMistakes), [feedWithMistakes]);
+    const feed = useMemo(() => getDailyFeedWithoutMistakes(feedWithMistakes, attempt), [feedWithMistakes, attempt]);
     const feedWithDuration = useMemo(() => getFeedWithDuration(feed, attempt), [feed, attempt]);
     const { bingo, majority, blackout } = getFirstBingoMajorityBlackoutIndex(feed);
 

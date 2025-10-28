@@ -5,6 +5,7 @@ import {
   BingosyncColor,
   getChangelog,
   RawFeed,
+  Square,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
 import { Group, Stack, Text } from "@mantine/core";
@@ -23,6 +24,8 @@ import ScoreSquare from "../common/ScoreSquare";
 import useMatchTimer from "../common/useMatchTimer";
 import { useMediaQuery } from "@mantine/hooks";
 import SimpleGeneralTracker from "./SimpleGeneralTracker";
+import { GoalName } from "@/app/goals";
+import { GOAL_TO_TYPES } from "../cast/goalToTypes";
 
 export type Props = {
   id: string;
@@ -80,6 +83,11 @@ export default function Play({
   });
 
   pauseRef.current = pause;
+
+  const generalGoals = useMemo<ReadonlyArray<Square>>(() => board.filter((square) => {
+    const types = GOAL_TO_TYPES[square.name];
+    return types != null && types[1] === "general";
+  }), [board]);
 
   const [myScore, opponent] = useMemo(() => {
     const scores: { [color: string]: number } = {};
@@ -186,21 +194,21 @@ export default function Play({
               Seed: <strong>{seed}</strong>
             </div>
           </Group>
+          <SimpleGeneralTracker generalGoals={generalGoals} />
+          <PlaySettings
+            id={id}
+            color={color}
+            setColor={setColor}
+            shownDifficulties={shownDifficulties}
+            setShownDifficulties={setShownDifficulties}
+            dings={dings}
+            setDings={setDings}
+            timerState={timerState}
+            setTimerState={setTimerState}
+            isMobile={isMobile}
+          />
         </Stack>
-        <Feed rawFeed={rawFeed} height="545px" />
-        <SimpleGeneralTracker />
-        <PlaySettings
-          id={id}
-          color={color}
-          setColor={setColor}
-          shownDifficulties={shownDifficulties}
-          setShownDifficulties={setShownDifficulties}
-          dings={dings}
-          setDings={setDings}
-          timerState={timerState}
-          setTimerState={setTimerState}
-          isMobile={isMobile}
-        />
+        <Feed rawFeed={rawFeed} height="816px" />
       </Group>
       {reconnectModal}
       {dingAudio}

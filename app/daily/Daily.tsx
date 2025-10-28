@@ -170,31 +170,34 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                             disabled={bingo == null && majority == null && blackout == null}
                             leftSection={<IconClipboard size={16} />}
                             onClick={() => {
-                                let summary = `Daily Bingo ${date.month}/${date.day}`;
+                                let summary = `Daily Bingo ${date.month}/${date.day} — `;
                                 let isFirst = true;
                                 if (bingo != null) {
-                                    summary += "\n\n";
                                     if (isFirst) {
                                         summary += "||";
                                         isFirst = false;
+                                    } else {
+                                        summary += "\n\n";
                                     }
                                     summary += `Bingo in ${getDurationText(feedWithDuration[bingo][0], false)}\n`;
                                     summary += getEmojiBoard(getBoardAtIndex(feed, bingo), color);
                                 }
                                 if (majority != null) {
-                                    summary += "\n\n";
                                     if (isFirst) {
                                         summary += "||";
                                         isFirst = false;
+                                    } else {
+                                        summary += "\n\n";
                                     }
                                     summary += `Majority in ${getDurationText(feedWithDuration[majority][0], false)}\n`;
                                     summary += getEmojiBoard(getBoardAtIndex(feed, majority), color);
                                 }
                                 if (blackout != null) {
-                                    summary += "\n\n";
                                     if (isFirst) {
                                         summary += "||";
                                         isFirst = false;
+                                    } else {
+                                        summary += "\n\n";
                                     }
                                     summary += `Blackout in ${getDurationText(feedWithDuration[blackout][0], false)}`;
                                 }

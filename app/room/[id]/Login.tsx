@@ -130,6 +130,12 @@ export default function Login({ id }: Props) {
         {view === "play" && (
           <Card.Section inheritPadding={true} py="sm" withBorder={true}>
             <Stack>
+              <Alert color="yellow">
+                This page is brand new! Please try it out in an unofficial test
+                match before using it for an important league match.
+                If you're not sure you want to use the new UI,{' '}
+                <a href={`https://www.bingosync.com/room/${id}`} target="_blank">go to the old Bingosync room instead</a>.
+              </Alert>
               <span>Use this view to play a match! Features include:</span>
               <List>
                 <ListItem>

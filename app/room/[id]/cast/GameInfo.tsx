@@ -15,7 +15,9 @@ export default function GameInfo({ game, description, goals }: Props) {
         label={goals.map((g, index) => {
           const coordinates = `[${Math.floor(g[1] / 5) + 1},${(g[1] % 5) + 1}]`;
           return index === 0 ? (
-            <React.Fragment key={g[0]}>{g[0]} {coordinates}</React.Fragment>
+            <React.Fragment key={g[0]}>
+              {g[0]} {coordinates}
+            </React.Fragment>
           ) : (
             <React.Fragment key={g[0]}>
               <br />

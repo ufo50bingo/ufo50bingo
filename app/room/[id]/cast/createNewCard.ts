@@ -1,12 +1,12 @@
 "use server";
 
 import { STANDARD } from "@/app/pastas/standard";
-import getPersonalSessionCookie from "./getPersonalSessionCookie";
 import createPasta from "@/app/createboard/createPasta";
 import getDefaultDifficulties from "@/app/createboard/getDefaultDifficulties";
+import { readBingosyncCookie } from "../roomCookie";
 
 export default async function createNewCard(id: string): Promise<void> {
-  const cookie = await getPersonalSessionCookie();
+  const cookie = await readBingosyncCookie();
   if (cookie == null) {
     throw new Error(
       "Failed to find sessionid cookie! Please refresh the page."

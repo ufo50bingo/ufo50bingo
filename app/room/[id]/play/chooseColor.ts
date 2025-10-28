@@ -1,10 +1,10 @@
 "use server";
 
-import getPersonalSessionCookie from "@/app/cast/[id]/getPersonalSessionCookie";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
+import { readBingosyncCookie } from "../roomCookie";
 
 export default async function chooseColor(id: string, color: BingosyncColor) {
-  const cookie = await getPersonalSessionCookie();
+  const cookie = await readBingosyncCookie();
   if (cookie == null) {
     throw new Error(
       "Failed to find sessionid cookie! Please refresh the page."

@@ -2,7 +2,7 @@ import { Difficulty, GoalName } from "@/app/goals";
 import { useMemo, useState } from "react";
 
 export type SortType = "fast" | "alphabetical" | "chronological";
-export type IconType = 'winnerbit' | 'sprites';
+export type IconType = "winnerbit" | "sprites";
 
 interface BaseState {
   shownDifficulties: ReadonlyArray<Difficulty>;
@@ -72,7 +72,7 @@ export default function useLocalState(id: string, seed: number): CasterState {
       return false;
     }
     const fromStorage = localStorage.getItem("hide_by_default");
-    return fromStorage === 'true';
+    return fromStorage === "true";
   });
 
   return useMemo(() => {
@@ -109,7 +109,10 @@ export default function useLocalState(id: string, seed: number): CasterState {
       if (global.window == undefined || localStorage == null) {
         return;
       }
-      localStorage.setItem("hide_by_default", newHideByDefault ? 'true' : 'false');
+      localStorage.setItem(
+        "hide_by_default",
+        newHideByDefault ? "true" : "false"
+      );
     };
     return {
       showAll,

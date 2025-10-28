@@ -2,7 +2,7 @@ import { Game, GoalName } from "@/app/goals";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { useEffect, useMemo, useRef, useState } from "react";
 import getSupabaseClient from "./getSupabaseClient";
-import { GeneralCounts } from "./page";
+import { GeneralCounts } from "./CastPage";
 
 export interface CountState {
   leftCounts: { [game: string]: number };

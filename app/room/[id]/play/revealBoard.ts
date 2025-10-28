@@ -1,9 +1,9 @@
 "use server";
 
-import getPersonalSessionCookie from "@/app/cast/[id]/getPersonalSessionCookie";
+import { readBingosyncCookie } from "../roomCookie";
 
 export default async function revealBoard(id: string) {
-  const cookie = await getPersonalSessionCookie();
+  const cookie = await readBingosyncCookie();
   if (cookie == null) {
     throw new Error(
       "Failed to find sessionid cookie! Please refresh the page."

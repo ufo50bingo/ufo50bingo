@@ -1,8 +1,8 @@
 import { RawFeed } from "@/app/matches/parseBingosyncData";
 import { Card, Stack } from "@mantine/core";
-import FeedEntry from "./FeedEntry";
 import ChatInput from "./ChatInput";
 import { useLayoutEffect, useRef } from "react";
+import FeedEntry from "./FeedEntry";
 
 type Props = {
   rawFeed: RawFeed;

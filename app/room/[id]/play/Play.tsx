@@ -4,17 +4,17 @@ import Board from "@/app/Board";
 import { RawFeed, RawFeedItem, TBoard } from "@/app/matches/parseBingosyncData";
 import { Group } from "@mantine/core";
 import { useCallback, useRef, useState } from "react";
-import changeColor from "@/app/cast/[id]/changeColor";
-import Feed from "@/app/cast/[id]/Feed";
-import useBingosyncSocket from "@/app/cast/[id]/useBingosyncSocket";
 import revealBoard from "./revealBoard";
 import PlaySettings from "./PlaySettings";
 import useColor from "./useColor";
 import useShownDifficulties from "./useShownDifficulties";
 import useDings from "./useDings";
 import usePlayerName from "./usePlayerName";
-import { REQUEST_PAUSE_CHAT } from "./REQUEST_PAUSE_CHAT";
+import { REQUEST_PAUSE_CHAT } from "../common/REQUEST_PAUSE_CHAT";
 import useWakeLock from "./useWakeLock";
+import changeColor from "../cast/changeColor";
+import Feed from "../common/Feed";
+import useBingosyncSocket from "../common/useBingosyncSocket";
 
 export type Props = {
   id: string;

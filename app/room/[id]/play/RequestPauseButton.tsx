@@ -1,7 +1,7 @@
-import sendChat from "@/app/cast/[id]/sendChat";
 import { Button, Modal, Stack, Group } from "@mantine/core";
 import { useState } from "react";
-import { REQUEST_PAUSE_CHAT } from "./REQUEST_PAUSE_CHAT";
+import { REQUEST_PAUSE_CHAT } from "../common/REQUEST_PAUSE_CHAT";
+import sendChat from "../common/sendChat";
 
 type Props = {
   id: string;

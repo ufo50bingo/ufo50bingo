@@ -1,7 +1,7 @@
 "use server";
 
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
-import getPersonalSessionCookie from "./getPersonalSessionCookie";
+import { readBingosyncCookie } from "../roomCookie";
 
 export default async function changeColor(
   id: string,
@@ -9,7 +9,7 @@ export default async function changeColor(
   color: BingosyncColor,
   removeColor: boolean
 ): Promise<void> {
-  const cookie = await getPersonalSessionCookie();
+  const cookie = await readBingosyncCookie();
   if (cookie == null) {
     throw new Error(
       "Failed to find sessionid cookie! Please refresh the page."

@@ -14,6 +14,7 @@ import useShownDifficulties from "./useShownDifficulties";
 import useDings from "./useDings";
 import usePlayerName from "./usePlayerName";
 import { REQUEST_PAUSE_CHAT } from "./REQUEST_PAUSE_CHAT";
+import useWakeLock from "./useWakeLock";
 
 export type Props = {
   id: string;
@@ -39,6 +40,8 @@ export default function Play({
 
   const dingRef = useRef<HTMLAudioElement | null>(null);
   const alarmRef = useRef<HTMLAudioElement | null>(null);
+
+  useWakeLock();
 
   const onMessage = useCallback(
     (newItem: RawFeedItem) => {

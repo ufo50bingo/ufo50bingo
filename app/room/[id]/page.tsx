@@ -12,7 +12,7 @@ export default async function RoomPage({
 }) {
   const [{ id }, roomCookie] = await Promise.all([params, readRoomCookie()]);
   if (roomCookie == null) {
-    return <Login />;
+    return <Login id={id} />;
   }
 
   switch (roomCookie.view) {

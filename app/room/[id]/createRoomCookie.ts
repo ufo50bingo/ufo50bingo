@@ -1,8 +1,6 @@
 "use server";
 
-import { redirect, RedirectType } from "next/navigation";
-import { cookies } from "next/headers";
-import { RoomView } from "./roomCookie";
+import { RoomView, setRoomCookie } from "./roomCookie";
 
 const SESSIONID_REGEX = /sessionid=([^;]+);/;
 
@@ -36,22 +34,5 @@ export default async function createRoomCookie(
   if (result == null || result.length < 2) {
     throw new Error(`Failed to find sessionid in bingosync response`);
   }
-  const sessionId = result[1];
-
-  const cookieStore = await cookies();
-
-  const path = isCast ? `/cast/${id}` : `/play/${id}`;
-  cookieStore.set("sessionid", sessionId, {
-    expires: Date.now() + 2 * 7 * 24 * 60 * 60 * 1000,
-    maxAge: 2 * 7 * 24 * 60 * 60,
-    sameSite: "lax",
-    path,
-  });
-  cookieStore.set("playername", name, {
-    expires: Date.now() + 2 * 7 * 24 * 60 * 60 * 1000,
-    maxAge: 2 * 7 * 24 * 60 * 60,
-    sameSite: "lax",
-    path,
-  });
-  redirect(path, RedirectType.replace);
+  await setRoomCookie(id, { id: result[1], name, view });
 }

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { TBoard } from "../matches/parseBingosyncData";
 import Board from "../Board";
-import { Container, Card, Text, Button, Stack, Title, List, Modal, Group } from "@mantine/core";
+import { Container, Card, Text, Button, Stack, Title, List, Modal, Group, Anchor } from "@mantine/core";
 import { LocalDate, toISODate } from "./localDate";
 import useDailyColor from "./useDailyColor";
 import ColorSelector from "../room/[id]/common/ColorSelector";
@@ -13,12 +13,12 @@ import getDailyFeedWithoutMistakes from "./getDailyFeedWithoutMistakes";
 import getFeedWithDuration from "./getFeedWithDuration";
 import getFirstBingoMajorityBlackoutIndex from "./findFirstBingoMajorityBlackout";
 import Duration from "../practice/Duration";
-import { IconRefreshAlert } from "@tabler/icons-react";
+import { IconClipboard, IconPlayerPause, IconPlayerPlay, IconRefreshAlert } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
-import { duration } from "html2canvas/dist/types/css/property-descriptors/duration";
 import getDurationText from "../practice/getDurationText";
 import getBoardAtIndex from "./getBoardAtIndex";
 import getEmojiBoard from "./getEmojiBoard";
+import DailyBoardModal from "./DailyBoardModal";
 
 type Props = {
     date: LocalDate;
@@ -34,8 +34,10 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
     const [isStartingNewAttempt, setIsStartingNewAttempt] = useState(false);
 
     const feed = useMemo(() => getDailyFeedWithoutMistakes(feedWithMistakes), [feedWithMistakes]);
-    const feedWithDuration = useMemo(() => getFeedWithDuration(feed), [feed]);
+    const feedWithDuration = useMemo(() => getFeedWithDuration(feed, attempt), [feed, attempt]);
     const { bingo, majority, blackout } = getFirstBingoMajorityBlackoutIndex(feed);
+
+    const [modalFeedIndex, setModalFeedIndex] = useState<number | null>(null);
 
     const completedIndexes = useMemo(() => {
         const newSet = new Set();
@@ -75,7 +77,7 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                     <Stack>
                         <Title order={1}>Daily Bingo — {date.month}/{date.day}</Title>
                         <Text>
-                            Your goal is to claim a bingo as fast as possible.<br />
+                            Claim a bingo as fast as possible.<br />
                             After you've claimed a bingo, you can optionally continue to claim majority (13 squares),
                             and then a blackout (all 25 squares)!
                         </Text>
@@ -117,6 +119,7 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                                     </Text>
                                     <Button
                                         onClick={() => (isRunning ? pause() : unpause())}
+                                        leftSection={isRunning ? <IconPlayerPause /> : <IconPlayerPlay />}
                                     >
                                         {isRunning ? "Pause" : "Resume"}
                                     </Button>
@@ -129,42 +132,59 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                     <Stack align="start">
                         <Text size="lg"><strong>Your summary</strong></Text>
                         <List>
-                            <List.Item><strong>Bingo:</strong> {bingo == null ? "Incomplete" : <Duration duration={feedWithDuration[bingo][0]} />}</List.Item>
-                            <List.Item><strong>Majority:</strong> {majority == null ? "Incomplete" : <Duration duration={feedWithDuration[majority][0]} />}</List.Item>
-                            <List.Item><strong>Blackout:</strong> {blackout == null ? "Incomplete" : <Duration duration={feedWithDuration[blackout][0]} />}</List.Item>
+                            <List.Item>
+                                <strong>Bingo:</strong>{' '}
+                                {bingo == null
+                                    ? "Incomplete"
+                                    : <Anchor onClick={() => setModalFeedIndex(bingo)}><Duration duration={feedWithDuration[bingo][0]} showDecimal={false} /> (view board with times)</Anchor>}
+                            </List.Item>
+                            <List.Item>
+                                <strong>Majority:</strong>{' '}
+                                {majority == null
+                                    ? "Incomplete"
+                                    : <Anchor onClick={() => setModalFeedIndex(majority)}><Duration duration={feedWithDuration[majority][0]} showDecimal={false} /> (view board with times)</Anchor>}
+                            </List.Item>
+                            <List.Item>
+                                <strong>Blackout:</strong>{' '}
+                                {blackout == null
+                                    ? "Incomplete"
+                                    : <Anchor onClick={() => setModalFeedIndex(blackout)}><Duration duration={feedWithDuration[blackout][0]} showDecimal={false} /> (view board with times)</Anchor>}
+                            </List.Item>
                         </List>
-                        <Button onClick={() => {
-                            let summary = `Daily Bingo ${date.month}/${date.year}`;
-                            let isFirst = true;
-                            if (bingo != null) {
-                                summary += "\n\n";
-                                if (isFirst) {
-                                    summary += "||";
-                                    isFirst = false;
+                        <Button
+                            leftSection={<IconClipboard size={16} />}
+                            onClick={() => {
+                                let summary = `Daily Bingo ${date.month}/${date.year}`;
+                                let isFirst = true;
+                                if (bingo != null) {
+                                    summary += "\n\n";
+                                    if (isFirst) {
+                                        summary += "||";
+                                        isFirst = false;
+                                    }
+                                    summary += `Bingo in ${getDurationText(feedWithDuration[bingo][0], false)}\n`;
+                                    summary += getEmojiBoard(getBoardAtIndex(feed, bingo), color);
                                 }
-                                summary += `Bingo in ${getDurationText(feedWithDuration[bingo][0], false)}\n`;
-                                summary += getEmojiBoard(getBoardAtIndex(feed, bingo), color);
-                            }
-                            if (majority != null) {
-                                summary += "\n\n";
-                                if (isFirst) {
-                                    summary += "||";
-                                    isFirst = false;
+                                if (majority != null) {
+                                    summary += "\n\n";
+                                    if (isFirst) {
+                                        summary += "||";
+                                        isFirst = false;
+                                    }
+                                    summary += `Majority in ${getDurationText(feedWithDuration[majority][0], false)}\n`;
+                                    summary += getEmojiBoard(getBoardAtIndex(feed, majority), color);
                                 }
-                                summary += `Majority in ${getDurationText(feedWithDuration[majority][0], false)}\n`;
-                                summary += getEmojiBoard(getBoardAtIndex(feed, majority), color);
-                            }
-                            if (blackout != null) {
-                                summary += "\n\n";
-                                if (isFirst) {
-                                    summary += "||";
-                                    isFirst = false;
+                                if (blackout != null) {
+                                    summary += "\n\n";
+                                    if (isFirst) {
+                                        summary += "||";
+                                        isFirst = false;
+                                    }
+                                    summary += `Blackout in ${getDurationText(feedWithDuration[blackout][0], false)}`;
                                 }
-                                summary += `Blackout in ${getDurationText(feedWithDuration[blackout][0], false)}`;
-                            }
-                            summary += '||';
-                            navigator.clipboard.writeText(summary);
-                        }}>
+                                summary += '||';
+                                navigator.clipboard.writeText(summary);
+                            }}>
                             Copy summary to clipboard
                         </Button>
                     </Stack>
@@ -207,8 +227,17 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                         </Group>
                     </Stack>
                 </Modal>
-            )
-            }
+            )}
+            {modalFeedIndex != null && (
+                <DailyBoardModal
+                    board={plainBoard}
+                    feedIndex={modalFeedIndex}
+                    onClose={() => setModalFeedIndex(null)}
+                    isMobile={isMobile}
+                    feedWithDuration={feedWithDuration}
+                    color={color}
+                />
+            )}
         </Container >
     );
 }

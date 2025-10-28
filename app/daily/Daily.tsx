@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { TBoard } from "../matches/parseBingosyncData";
 import Board from "../Board";
 import { Container, Card, Text, Button, Stack, Title, List, Modal, Group, Anchor, ActionIcon, Tooltip } from "@mantine/core";
@@ -74,6 +74,13 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
 
     const prevSearchParams = new URLSearchParams();
     prevSearchParams.set('date', toISODate(getPrevDate(date)));
+
+    const pauseRef = useRef<() => void>(pause);
+    pauseRef.current = pause;
+    useEffect(() => {
+        // pause when navigating away from the page
+        return pauseRef.current;
+    }, []);
 
     return (
         <Container my="md">

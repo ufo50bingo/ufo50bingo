@@ -54,5 +54,5 @@ async function getDailyBoard(date: string): Promise<ReadonlyArray<string>> {
 export default async function DailyPage() {
   const today = getEasternISODate();
   const board = await getDailyBoard(today);
-  return <Daily date={today} board={board} />
+  return <Daily date={today} board={board} random={Math.random.toString()} />
 }

@@ -9,10 +9,11 @@ import clearDaily from "./clearDaily";
 
 type Props = {
     date: string;
+    random: string;
     board: ReadonlyArray<string>;
 };
 
-export default function Daily({ date, board: plainBoard }: Props) {
+export default function Daily({ date, board: plainBoard, random }: Props) {
     const [isHidden, setIsHidden] = useState(true);
     const [board, setBoard] = useState<TBoard>(() =>
         plainBoard
@@ -60,6 +61,7 @@ export default function Daily({ date, board: plainBoard }: Props) {
                         {isRunning ? "Pause" : "Resume"}
                     </Button>
                     <Button onClick={async () => await clearDaily(date)}>Clear daily</Button>
+                    {random}
                 </Stack>
             </Card>
         </Container>

@@ -38,7 +38,7 @@ export default function useMatchTimer(input: Input): Return {
       matchTime={input.matchTime}
     />
   ) : (
-    <Duration duration={remainingMs > input.matchTime ? remainingMs - input.matchTime : remainingMs} />
+    <Duration showDecimal={false} duration={remainingMs > input.matchTime ? remainingMs - input.matchTime : remainingMs} />
   );
 
   return {

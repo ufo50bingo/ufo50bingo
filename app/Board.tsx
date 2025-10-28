@@ -133,9 +133,7 @@ export default function Board({
           <SquareText
             key={square.name}
             text={square.name}
-            maxHeight={
-              overlays != null && overlays[squareIndex] != null ? 65 : 85
-            }
+            hasOverlays={overlays != null}
           />
           {overlays != null && overlays[squareIndex] != null && (
             <div className={classes.overlay}>{overlays[squareIndex]}</div>

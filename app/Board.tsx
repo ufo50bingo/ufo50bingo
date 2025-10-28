@@ -12,6 +12,8 @@ type Props = {
   onClickSquare: null | ((squareIndex: number) => void);
   isHidden: boolean;
   setIsHidden: (isHidden: boolean) => void;
+  pauseRequestName?: null | string;
+  clearPauseRequest?: () => void;
   hiddenText?: ReactNode;
   shownDifficulties: ReadonlyArray<Difficulty>;
   onReveal?: () => unknown;
@@ -103,6 +105,8 @@ export default function Board({
   hiddenText,
   shownDifficulties,
   onReveal,
+  pauseRequestName,
+  clearPauseRequest,
 }: Props) {
   const [starred, setStarred] = useState<ReadonlyArray<number>>([]);
   return (
@@ -138,9 +142,28 @@ export default function Board({
           )}
         </div>
       ))}
-      {isHidden && (
+      {pauseRequestName != null && (
         <div
-          className={`${classes.boardCover} ${classes.unselectable}`}
+          className={`${classes.boardCover} ${classes.pauseRequestShadow} ${classes.unselectable}`}
+          onClick={() => {
+            if (clearPauseRequest != null) {
+              clearPauseRequest();
+            }
+            setIsHidden(false);
+            if (onReveal != null) {
+              onReveal();
+            }
+          }}
+        >
+          Pause requested by {pauseRequestName}!<br />
+          Please pause your game and coordinate in chat.
+          <br />
+          Click to reveal the board again.
+        </div>
+      )}
+      {pauseRequestName == null && isHidden && (
+        <div
+          className={`${classes.boardCover} ${classes.boardCoverShadow} ${classes.unselectable}`}
           onClick={() => {
             setIsHidden(false);
             if (onReveal != null) {

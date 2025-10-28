@@ -24,12 +24,22 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
 
+.boardCoverShadow {
     /* slight gradient to not look weird */
     box-shadow: inset 0px 0px 30px rgba(0, 0, 0, 0.6);
     -moz-box-shadow: inset 0px 0px 30px rgba(0, 0, 0, 0.6);
     -webkit-box-shadow: inset 0px 0px 30px rgba(0, 0, 0, 0.6);
 }
+
+.pauseRequestShadow {
+    /* slight gradient to not look weird */
+    box-shadow: inset 0px 0px 60px rgba(255, 0, 0, 0.6);
+    -moz-box-shadow: inset 0px 0px 60px rgba(255, 0, 0, 0.6);
+    -webkit-box-shadow: inset 0px 0px 60px rgba(255, 0, 0, 0.6);
+}
+
 
 .boardCover:hover,
 .boardCover.hover {

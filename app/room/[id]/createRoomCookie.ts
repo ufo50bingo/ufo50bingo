@@ -10,6 +10,7 @@ export default async function createRoomCookie(
   password: string,
   view: RoomView
 ) {
+  const fullName = name + (view === "cast" ? " (admin)" : "");
   const joinResponse = await fetch(`https://www.bingosync.com/api/join-room`, {
     method: "POST",
     redirect: "manual",
@@ -18,7 +19,7 @@ export default async function createRoomCookie(
     },
     body: JSON.stringify({
       room: id,
-      nickname: name + (view === "cast" ? " (admin)" : ""),
+      nickname: fullName,
       password,
       // typo in bingosync code
       is_specator: view !== "play",
@@ -34,5 +35,5 @@ export default async function createRoomCookie(
   if (result == null || result.length < 2) {
     throw new Error(`Failed to find sessionid in bingosync response`);
   }
-  await setRoomCookie(id, { id: result[1], name, view });
+  await setRoomCookie(id, { id: result[1], name: fullName, view });
 }

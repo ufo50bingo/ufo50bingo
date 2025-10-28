@@ -8,7 +8,7 @@ import {
 } from "./parseBingosyncData";
 import { ALIASES } from "../createboard/leagueConstants";
 
-const BINGO_LINES = [
+export const BINGO_LINES = [
   // rows
   [0, 1, 2, 3, 4],
   [5, 6, 7, 8, 9],

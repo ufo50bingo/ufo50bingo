@@ -2,10 +2,10 @@
 import getSrlV5Board from "./getSrlV5Board";
 import { STANDARD } from "../pastas/standard";
 import getSql from "../getSql";
-import Daily from "./Daily";
 import { getPrevISODates, LocalDate, toISODate } from "./localDate";
 import { isGift, isGoldCherry } from "./giftGoldCherry";
 import { GoalName } from "../goals";
+import DailyFeedFetcher from "./DailyFeedFetcher";
 
 export const dynamic = "force-dynamic";
 
@@ -105,5 +105,5 @@ async function getDailyBoard(date: LocalDate): Promise<ReadonlyArray<string>> {
 export default async function DailyPage() {
   const date = getEasternDate();
   const board = await getDailyBoard(date);
-  return <Daily date={date} board={board} />
+  return <DailyFeedFetcher date={date} board={board} />
 }

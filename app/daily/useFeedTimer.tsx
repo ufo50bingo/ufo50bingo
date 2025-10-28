@@ -40,14 +40,15 @@ export default function useFeedTimer(
         case "reveal":
         case "unpause":
           if (curStartTime == null) {
-            curStartTime = Date.now();
+            curStartTime = item.time;
           }
           return;
         case "pause":
           if (curStartTime != null) {
-            accumulatedDuration += Date.now() - curStartTime;
+            accumulatedDuration += item.time - curStartTime;
             curStartTime = null;
           }
+          return;
       }
     });
     return curStartTime == null

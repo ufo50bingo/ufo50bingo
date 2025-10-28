@@ -1,5 +1,6 @@
 import { Difficulty } from "@/app/goals";
 import {
+  Accordion,
   Affix,
   Button,
   Card,
@@ -17,6 +18,9 @@ import TimerEdit from "../common/TimerEdit";
 import { TimerState } from "../common/useMatchTimer";
 import NotificationsSection from "../common/NotificationsSection";
 import RequestPauseSection from "../common/RequestPauseSection";
+import CountdownSection from "../common/CountdownSection";
+import CreateBoardSection from "../common/CreateBoardSection";
+import BottomSection from "../common/BottomSection";
 
 type Props = {
   id: string;
@@ -68,24 +72,25 @@ export default function PlaySettings({
             <Drawer.Title>Tools</Drawer.Title>
             <Drawer.CloseButton />
           </Drawer.Header>
-          <Drawer.Body>
-            <Stack>
-              <span>
-                <strong>Seed: {seed}</strong>
-              </span>
-              <ColorSelector
-                label="Choose color"
-                color={color}
-                setColor={setColor}
-              />
+          <Drawer.Body p={0}>
+            <Accordion multiple={true} defaultValue={color == null ? ["color"] : []}>
+              <Accordion.Item value="color">
+                <Accordion.Control>Select Color</Accordion.Control>
+                <Accordion.Panel>
+                  <ColorSelector
+                    label="Choose color"
+                    color={color}
+                    setColor={setColor}
+                  />
+                </Accordion.Panel>
+              </Accordion.Item>
+              <CountdownSection view="cast" />
               <RequestPauseSection id={id} />
+              <NotificationsSection dings={dings} setDings={setDings} />
+              <CreateBoardSection id={id} />
+
+              {/* TODO Store directory handle in local state!!!*/}
               <TimerEdit state={timerState} setState={setTimerState} />
-              <Button
-                component="a"
-                href={`https://www.bingosync.com/room/${id}`}
-              >
-                View Bingosync room
-              </Button>
               <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
                 <Checkbox
                   checked={shownDifficulties.includes("general")}
@@ -97,12 +102,11 @@ export default function PlaySettings({
                   label="Label general goals"
                 />
               </Card>
-              <NotificationsSection dings={dings} setDings={setDings} />
-              <DisconnectButton />
-            </Stack>
+            </Accordion>
+            <BottomSection id={id} />
           </Drawer.Body>
         </Drawer.Content>
-      </Drawer.Root>
+      </Drawer.Root >
     </>
   );
 }

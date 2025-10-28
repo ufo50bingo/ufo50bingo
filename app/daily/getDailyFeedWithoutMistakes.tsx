@@ -14,8 +14,8 @@ function getFeedWithoutDuplicates(
         }
         const prevItem = feed[idx - 1];
         return (
-            prevItem.type === item.type &&
-            prevItem.squareIndex === item.squareIndex
+            prevItem.type !== item.type ||
+            prevItem.squareIndex !== item.squareIndex
         );
     });
 }
@@ -24,8 +24,8 @@ export default function getDailyFeedWithoutMistakes(
     feed: ReadonlyArray<DailyFeedRow>,
     attempt: number,
 ): ReadonlyArray<DailyFeedRow> {
-    const withouDuplicates = getFeedWithoutDuplicates(feed);
-    const withDuration = getFeedWithDuration(withouDuplicates, attempt);
+    const withoutDuplicates = getFeedWithoutDuplicates(feed);
+    const withDuration = getFeedWithDuration(withoutDuplicates, attempt);
 
     const changesBySquare: [number, DailyFeedRow][][] = Array(25)
         .fill(null)

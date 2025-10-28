@@ -40,6 +40,7 @@ export default async function CastPage({ id, roomCookie }: Props) {
       initialCounts={structuredCounts}
       initialLeftColor={colors.left}
       initialRightColor={colors.right}
+      playerName={roomCookie.name}
     />
   );
 }

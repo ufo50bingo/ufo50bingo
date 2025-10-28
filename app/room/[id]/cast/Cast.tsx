@@ -34,6 +34,7 @@ export type CastProps = {
   initialCounts: { [goal: string]: CountState };
   initialLeftColor: BingosyncColor;
   initialRightColor: BingosyncColor;
+  playerName: string;
 };
 
 export default function Cast({

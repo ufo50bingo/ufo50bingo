@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
 import getSql from "../getSql";
 
 export default async function clearDaily(date: string): Promise<void> {

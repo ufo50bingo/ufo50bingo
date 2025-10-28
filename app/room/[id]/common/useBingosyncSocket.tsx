@@ -5,8 +5,10 @@ import {
   RawFeedItem,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
-import { useState, useEffect, useRef, ReactNode } from "react";
+import { useState, useEffect, useRef, ReactNode, useCallback, RefObject } from "react";
 import { Modal, Stack, Group, Button } from "@mantine/core";
+import { REQUEST_PAUSE_CHAT } from "./REQUEST_PAUSE_CHAT";
+import { Ding } from "../play/useDings";
 
 type Props = {
   id: string;
@@ -15,7 +17,10 @@ type Props = {
   socketKey: string;
   initialSeed: number;
   onNewCard?: (newBoard: TBoard) => unknown;
-  onMessage?: (newItem: RawFeedItem) => unknown;
+  dings: ReadonlyArray<Ding>;
+  playerName: string;
+  setPauseRequestName: (newName: string) => unknown;
+  pauseRef?: RefObject<(() => unknown) | null>;
 };
 
 type Response = {
@@ -23,6 +28,7 @@ type Response = {
   rawFeed: RawFeed;
   seed: number;
   reconnectModal: null | undefined | ReactNode;
+  dingAudio: null | undefined | ReactNode;
 };
 
 export default function useBingosyncSocket({
@@ -32,13 +38,51 @@ export default function useBingosyncSocket({
   initialSeed,
   socketKey,
   onNewCard,
-  onMessage,
+  dings,
+  playerName,
+  setPauseRequestName,
+  pauseRef,
 }: Props): Response {
   const [seed, setSeed] = useState(initialSeed);
   const [board, setBoard] = useState(initialBoard);
   const [rawFeed, setRawFeed] = useState(initialRawFeed);
   const [shouldReconnect, setShouldReconnect] = useState(false);
   const socketRef = useRef<null | WebSocket>(null);
+
+  const dingRef = useRef<HTMLAudioElement | null>(null);
+  const alarmRef = useRef<HTMLAudioElement | null>(null);
+
+
+  const onMessage = useCallback(
+    (newItem: RawFeedItem) => {
+      const isPause = newItem.type === "chat" && newItem.text === REQUEST_PAUSE_CHAT;
+      if (isPause) {
+        if (pauseRef?.current != null) {
+          pauseRef.current();
+        }
+        setPauseRequestName(newItem.player.name);
+      }
+      if (newItem.player.name === playerName) {
+        return;
+      }
+      if (newItem.type === "chat") {
+        if (isPause && dings.includes("pause") && alarmRef.current != null) {
+          alarmRef.current.play();
+        } else if (dings.includes("chat") && dingRef.current != null) {
+          dingRef.current.play();
+        } else {
+          if (dings.includes("chat") && dingRef.current != null) {
+            dingRef.current.play();
+          }
+        }
+      } else if (newItem.type === "goal") {
+        if (dings.includes("square") && dingRef.current != null) {
+          dingRef.current.play();
+        }
+      }
+    },
+    [dings, playerName]
+  );
 
   useEffect(() => {
     const socket = new WebSocket("wss://sockets.bingosync.com/broadcast");
@@ -88,9 +132,7 @@ export default function useBingosyncSocket({
         setBoard(newBoard);
       }
 
-      if (onMessage != null) {
-        onMessage(rawItem);
-      }
+      onMessage(rawItem);
     };
 
     socketRef.current = socket;
@@ -130,6 +172,12 @@ export default function useBingosyncSocket({
           </Group>
         </Stack>
       </Modal>
+    ),
+    dingAudio: dings.length > 0 && (
+      <>
+        <audio preload="none" src="/ding.mp3" ref={dingRef} />
+        <audio preload="none" src="/alarm.mp3" ref={alarmRef} />
+      </>
     ),
   };
 }

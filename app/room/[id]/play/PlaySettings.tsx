@@ -17,6 +17,7 @@ import ColorSelector from "../common/ColorSelector";
 import DisconnectButton from "../common/DisconnectButton";
 import TimerEdit from "../common/TimerEdit";
 import { TimerState } from "../common/useMatchTimer";
+import EditDings from "../common/EditDings";
 
 type Props = {
   id: string;
@@ -30,12 +31,6 @@ type Props = {
   timerState: TimerState;
   setTimerState: (newState: TimerState) => unknown;
 };
-
-const ALL_DINGS: ReadonlyArray<{ value: Ding; name: string }> = [
-  { value: "pause", name: "Pause is requested" },
-  { value: "chat", name: "Chat message is received" },
-  { value: "square", name: "Square is marked" },
-];
 
 export default function PlaySettings({
   id,
@@ -103,25 +98,7 @@ export default function PlaySettings({
                   label="Label general goals"
                 />
               </Card>
-              <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
-                <Stack>
-                  <Text size="sm">Play notification sound when:</Text>
-                  {ALL_DINGS.map((ding) => (
-                    <Checkbox
-                      key={ding.value}
-                      checked={dings.includes(ding.value)}
-                      onChange={(event) =>
-                        setDings(
-                          event.currentTarget.checked
-                            ? [...dings, ding.value]
-                            : dings.filter((d) => d !== ding.value)
-                        )
-                      }
-                      label={ding.name}
-                    />
-                  ))}
-                </Stack>
-              </Card>
+              <EditDings dings={dings} setDings={setDings} />
               <DisconnectButton />
             </Stack>
           </Drawer.Body>

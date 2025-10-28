@@ -21,6 +21,8 @@ import createNewCard from "./createNewCard";
 import Link from "next/link";
 import { IconType, SortType } from "./useLocalState";
 import DisconnectButton from "../common/DisconnectButton";
+import { Ding } from "../play/useDings";
+import EditDings from "../common/EditDings";
 
 type Props = {
   id: string;
@@ -38,6 +40,8 @@ type Props = {
   hideByDefault: boolean;
   setHideByDefault: (newHideByDefault: boolean) => unknown;
   setIsHidden: (newIsHidden: boolean) => unknown;
+  dings: ReadonlyArray<Ding>;
+  setDings: (newDings: ReadonlyArray<Ding>) => unknown;
 };
 
 export default function CastSettings({
@@ -56,6 +60,8 @@ export default function CastSettings({
   hideByDefault,
   setHideByDefault,
   setIsHidden,
+  dings,
+  setDings,
 }: Props) {
   const [isShown, setIsShown] = useState(leftColor === rightColor);
   const [isCreating, setIsCreating] = useState(false);
@@ -150,6 +156,7 @@ export default function CastSettings({
                 checked={hideByDefault}
                 onChange={(event) => setHideByDefault(event.target.checked)}
               />
+              <EditDings dings={dings} setDings={setDings} />
               <Button
                 component="a"
                 href={`https://www.bingosync.com/room/${id}`}

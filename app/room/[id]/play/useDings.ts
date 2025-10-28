@@ -1,27 +1,30 @@
 import { useCallback, useState } from "react";
+import { RoomView } from "../roomCookie";
 
 export type Ding = "chat" | "square" | "pause";
 
-export default function useDings(): [
+const DEFAULT_DINGS = ["chat", "pause"];
+
+export default function useDings(view: RoomView): [
   ReadonlyArray<Ding>,
   (newDings: ReadonlyArray<Ding>) => unknown
 ] {
   const [dings, setDingsRaw] = useState<ReadonlyArray<Ding>>(() => {
     if (global.window == undefined || localStorage == null) {
-      return [];
+      return DEFAULT_DINGS;
     }
-    const fromStorage = localStorage.getItem("dings");
+    const fromStorage = localStorage.getItem(`${view}-dings`);
     if (fromStorage == null || fromStorage === "") {
-      return [];
+      return DEFAULT_DINGS;
     }
     try {
       const parsed = JSON.parse(fromStorage);
       if (typeof parsed !== "object") {
-        return [];
+        return DEFAULT_DINGS;
       }
       return parsed;
     } catch {
-      return [];
+      return DEFAULT_DINGS;
     }
   });
 
@@ -30,8 +33,8 @@ export default function useDings(): [
     if (global.window == undefined || localStorage == null) {
       return;
     }
-    localStorage.setItem("dings", JSON.stringify(newDings));
-  }, []);
+    localStorage.setItem(`${view}-dings`, JSON.stringify(newDings));
+  }, [view]);
 
   return [dings, setDings];
 }

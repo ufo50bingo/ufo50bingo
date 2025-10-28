@@ -4,6 +4,8 @@ import { STANDARD } from "../pastas/standard";
 import getSql from "../getSql";
 import Daily from "./Daily";
 
+export const dynamic = "force-dynamic";
+
 function getEasternISODate(): string {
   const formatter = new Intl.DateTimeFormat('en-US', {
     timeZone: 'America/New_York',

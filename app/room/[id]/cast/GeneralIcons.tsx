@@ -1,12 +1,12 @@
 import { ReactNode } from "react";
 
 import classes from "./GeneralIcons.module.css";
-import boardClasses from "@/app/Board.module.css";
 import { IconCircleCheckFilled } from "@tabler/icons-react";
 import { BingosyncColor, Square } from "@/app/matches/parseBingosyncData";
 import { GoalName } from "@/app/goals";
 import { IconType } from "./useLocalState";
 import { GeneralCounts } from "./CastPage";
+import ScoreSquare from "../common/ScoreSquare";
 
 function Cell({ children }: { children: ReactNode }) {
   return <div className={classes.item}>{children}</div>;
@@ -70,9 +70,11 @@ export default function GeneralIcons({
   return (
     <div className={classes.container}>
       <Cell>
-        <div className={`${classes.score} ${getColorClass(color)}`}>
-          {hasTiebreaker ? <u>{score}</u> : score}
-        </div>
+        <ScoreSquare
+          color={color}
+          score={score}
+          hasTiebreaker={hasTiebreaker}
+        />
       </Cell>
       {generalGoals.map((square) => {
         const countState = isLeft
@@ -239,32 +241,5 @@ function getSpritesSrc(goal: GoalName, isHidden: boolean): string {
       return "/general/sprites/IconWarIsBad.png";
     default:
       return "/general/sprites/IconUnknown.png";
-  }
-}
-
-export function getColorClass(color: BingosyncColor): string {
-  switch (color) {
-    case "blank":
-      return "";
-    case "red":
-      return boardClasses.redsquare;
-    case "blue":
-      return boardClasses.bluesquare;
-    case "green":
-      return boardClasses.greensquare;
-    case "orange":
-      return boardClasses.orangesquare;
-    case "purple":
-      return boardClasses.purplesquare;
-    case "navy":
-      return boardClasses.navysquare;
-    case "teal":
-      return boardClasses.tealsquare;
-    case "pink":
-      return boardClasses.pinksquare;
-    case "brown":
-      return boardClasses.brownsquare;
-    case "yellow":
-      return boardClasses.yellowsquare;
   }
 }

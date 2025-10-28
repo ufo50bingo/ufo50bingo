@@ -164,7 +164,7 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                         <Button
                             leftSection={<IconClipboard size={16} />}
                             onClick={() => {
-                                let summary = `Daily Bingo ${date.month}/${date.year}`;
+                                let summary = `Daily Bingo ${date.month}/${date.day}`;
                                 let isFirst = true;
                                 if (bingo != null) {
                                     summary += "\n\n";

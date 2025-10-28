@@ -15,6 +15,8 @@ import { Ding } from "./useDings";
 import RequestPauseButton from "./RequestPauseButton";
 import ColorSelector from "../common/ColorSelector";
 import DisconnectButton from "../common/DisconnectButton";
+import TimerEdit from "../common/TimerEdit";
+import { TimerState } from "../common/useMatchTimer";
 
 type Props = {
   id: string;
@@ -25,6 +27,8 @@ type Props = {
   setShownDifficulties: (newShown: ReadonlyArray<Difficulty>) => unknown;
   dings: ReadonlyArray<Ding>;
   setDings: (newDings: ReadonlyArray<Ding>) => unknown;
+  timerState: TimerState;
+  setTimerState: (newState: TimerState) => unknown;
 };
 
 const ALL_DINGS: ReadonlyArray<{ value: Ding; name: string }> = [
@@ -42,6 +46,8 @@ export default function PlaySettings({
   setShownDifficulties,
   dings,
   setDings,
+  timerState,
+  setTimerState,
 }: Props) {
   const [isShown, setIsShown] = useState(color == null);
   return (
@@ -78,6 +84,7 @@ export default function PlaySettings({
                 color={color}
                 setColor={setColor}
               />
+              <TimerEdit state={timerState} setState={setTimerState} />
               <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
                 <Checkbox
                   checked={shownDifficulties.includes("general")}

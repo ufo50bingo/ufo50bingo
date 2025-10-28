@@ -65,7 +65,7 @@ export default function Cast({
   const [pauseRequestName, setPauseRequestName] = useState<string | null>(null);
   const [dings, setDings] = useDings('cast');
 
-  const { board, rawFeed, seed, reconnectModal } = useBingosyncSocket({
+  const { board, rawFeed, seed, reconnectModal, dingAudio } = useBingosyncSocket({
     id,
     initialBoard,
     initialRawFeed,
@@ -282,6 +282,7 @@ export default function Cast({
         />
       )}
       {reconnectModal}
+      {dingAudio}
     </>
   );
 }

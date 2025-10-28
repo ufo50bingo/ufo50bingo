@@ -48,10 +48,10 @@ export default function Login({ id }: Props) {
             <SegmentedControl
               data={[
                 {
-                  value: "playing",
+                  value: "play",
                   label: "Playing",
                 },
-                { value: "casting", label: "Casting" },
+                { value: "cast", label: "Casting" },
               ]}
               fullWidth={true}
               onChange={setView as unknown as (value: string) => void}

@@ -118,9 +118,9 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                 </Card.Section>
                 <Card.Section withBorder={true} inheritPadding={true} py="xs">
                     <List>
-                        <List.Item>Bingo: {bingo == null ? "Incomplete" : <Duration duration={feedWithDuration[bingo][0]} />}</List.Item>
-                        <List.Item>Majority: {majority == null ? "Incomplete" : <Duration duration={feedWithDuration[majority][0]} />}</List.Item>
-                        <List.Item>Blackout: {blackout == null ? "Incomplete" : <Duration duration={feedWithDuration[blackout][0]} />}</List.Item>
+                        <List.Item><strong>Bingo:</strong> {bingo == null ? "Incomplete" : <Duration duration={feedWithDuration[bingo][0]} />}</List.Item>
+                        <List.Item><strong>Majority:</strong> {majority == null ? "Incomplete" : <Duration duration={feedWithDuration[majority][0]} />}</List.Item>
+                        <List.Item><strong>Blackout:</strong> {blackout == null ? "Incomplete" : <Duration duration={feedWithDuration[blackout][0]} />}</List.Item>
                     </List>
                 </Card.Section>
                 <Card.Section withBorder={true} inheritPadding={true} py="xs">

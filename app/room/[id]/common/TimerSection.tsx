@@ -1,8 +1,7 @@
-import { Button, Group, Modal, Stack } from "@mantine/core";
+import { Accordion, Button, Checkbox, Group, Modal, Stack, Text } from "@mantine/core";
 import { TimerState } from "./useMatchTimer";
 import { useState } from "react";
 import DurationInput from "./DurationInput";
-import { IconStopwatch } from "@tabler/icons-react";
 
 interface Props {
   state: TimerState;
@@ -13,11 +12,23 @@ interface ModalProps extends Props {
   close: () => unknown;
 }
 
-export default function TimerEdit(props: Props) {
+export default function TimerSection(props: Props) {
   const [isEditing, setIsEditing] = useState(false);
   return (
     <>
-      <Button onClick={() => setIsEditing(true)} leftSection={<IconStopwatch />}>Edit Timer</Button>
+      <Accordion.Item value="timer">
+        <Accordion.Control>Edit Timer</Accordion.Control>
+        <Accordion.Panel>
+          <Stack>
+            <Text size="sm">
+              The timer will start counting down the scanning time as soon as you reveal the board,
+              and it will switch to a full match timer as soon as the scanning time has expired. If
+              any player or caster requests a pause, your timer will automatically pause.
+            </Text>
+            <Button onClick={() => setIsEditing(true)}>Edit Timer</Button>
+          </Stack>
+        </Accordion.Panel>
+      </Accordion.Item>
       {isEditing && <TimerModal {...props} close={() => setIsEditing(false)} />}
     </>
   );

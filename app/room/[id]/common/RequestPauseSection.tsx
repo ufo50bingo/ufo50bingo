@@ -1,14 +1,12 @@
-import { Button, Stack, Text, List, Accordion } from "@mantine/core";
-import { useState } from "react";
-import { REQUEST_PAUSE_CHAT } from "../common/REQUEST_PAUSE_CHAT";
-import sendChat from "../common/sendChat";
+import { Button, Stack, Text, Accordion } from "@mantine/core";
+import { REQUEST_PAUSE_CHAT } from "./REQUEST_PAUSE_CHAT";
+import sendChat from "./sendChat";
 
 type Props = {
   id: string;
 };
 
 export default function RequestPauseButton({ id }: Props) {
-  const [isRequesting, setIsRequesting] = useState(false);
   return (
     <Accordion.Item value="pause">
       <Accordion.Control>
@@ -25,7 +23,6 @@ export default function RequestPauseButton({ id }: Props) {
           <Button
             onClick={async () => {
               await sendChat(id, REQUEST_PAUSE_CHAT);
-              setIsRequesting(false);
             }}>
             Request Pause
           </Button>

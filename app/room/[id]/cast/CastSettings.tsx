@@ -2,13 +2,9 @@ import { ORDERED_DIFFICULTY, DIFFICULTY_NAMES, Difficulty } from "@/app/goals";
 import {
   Accordion,
   Affix,
-  Alert,
   Button,
-  Card,
   Checkbox,
   Drawer,
-  Group,
-  Modal,
   Select,
   Stack,
   Text,
@@ -18,15 +14,13 @@ import { useState } from "react";
 import Countdown from "./Countdown";
 import ColorSelector from "../common/ColorSelector";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
-import createNewCard from "./createNewCard";
-import Link from "next/link";
 import { IconType, SortType } from "./useLocalState";
 import DisconnectButton from "../common/DisconnectButton";
 import { Ding } from "../play/useDings";
 import EditDings from "../common/EditDings";
-import RequestPauseButton from "../play/RequestPauseButton";
 import DirPicker from "./DirPicker";
 import CreateBoardSection from "../common/CreateBoardSection";
+import RequestPauseSection from "../common/RequestPauseSection";
 
 type Props = {
   id: string;
@@ -118,7 +112,7 @@ export default function CastSettings({
                   <Countdown setIsHidden={setIsHidden} />
                 </Accordion.Panel>
               </Accordion.Item>
-              <RequestPauseButton id={id} />
+              <RequestPauseSection id={id} />
               <Accordion.Item value="display">
                 <Accordion.Control>
                   Display Settings

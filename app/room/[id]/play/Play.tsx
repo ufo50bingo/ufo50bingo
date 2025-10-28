@@ -22,6 +22,7 @@ import Feed from "../common/Feed";
 import useBingosyncSocket from "../common/useBingosyncSocket";
 import { getResult } from "@/app/matches/computeResult";
 import ScoreSquare from "../common/ScoreSquare";
+import useMatchTimer from "../common/useMatchTimer";
 
 export type Props = {
   id: string;
@@ -140,6 +141,12 @@ export default function Play({
     }
   }, [opponent, myScore, selectedColor, rawFeed, board]);
 
+  const { timer, start, pause } = useMatchTimer({
+    key: '',
+    scanTime: 60000,
+    matchTime: 1000 * 105 * 60,
+  });
+
   return (
     <>
       <Group>
@@ -150,7 +157,7 @@ export default function Play({
               const isClearing = board[squareIndex].color === selectedColor;
               try {
                 await changeColor(id, squareIndex, selectedColor, isClearing);
-              } catch {}
+              } catch { }
             }}
             isHidden={isHidden}
             setIsHidden={setIsHidden}
@@ -179,8 +186,8 @@ export default function Play({
                 />
               </div>
             </div>
-            <div>Time</div>
-            <div>Seed</div>
+            <div onClick={start}>{timer}</div>
+            <div onClick={pause}>Seed</div>
           </Group>
         </Stack>
         <Feed rawFeed={rawFeed} />

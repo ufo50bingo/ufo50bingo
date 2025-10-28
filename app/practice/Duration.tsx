@@ -18,7 +18,7 @@ export default function Duration({ duration }: DurationProps) {
     ":" +
     finalStr;
   if (hours > 0) {
-    finalStr = hours.toString() + finalStr;
+    finalStr = hours.toString() + ":" + finalStr;
   }
   return duration < 0 ? "-" + finalStr : finalStr;
 }

@@ -1,4 +1,4 @@
-import { ReactNode, useMemo, useState } from "react";
+import { ReactNode, useMemo } from "react";
 import { DailyFeedRow, db } from "../db";
 import RunningDuration from "../practice/RunningDuration";
 import Duration from "../practice/Duration";
@@ -54,7 +54,7 @@ export default function useFeedTimer(
     return curStartTime == null
       ? { type: "paused", accumulatedDuration }
       : { type: "running", startTime: curStartTime ?? 0, accumulatedDuration };
-  }, [feed]);
+  }, [feed, attempt]);
 
   const unpause = async () => {
     if (timerState.type === "paused") {

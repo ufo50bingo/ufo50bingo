@@ -22,7 +22,7 @@ export default function getDailyOverlays(
   completedOnly.sort((a, b) => a[1] - b[1]);
 
   const overlays: (null | ReactNode)[] = Array(25).fill(null);
-  completedOnly.forEach(([squareIndex, time, duration], index) => {
+  completedOnly.forEach(([squareIndex, _time, duration], index) => {
     const ms = index > 0
       ? duration - completedOnly[index - 1][2]
       : duration;

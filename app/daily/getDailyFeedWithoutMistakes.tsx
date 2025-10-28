@@ -21,15 +21,11 @@ function getFeedWithoutDuplicates(
 }
 
 export default function getDailyFeedWithoutMistakes(
-    feed: ReadonlyArray<DailyFeedRow>
+    feed: ReadonlyArray<DailyFeedRow>,
+    attempt: number,
 ): ReadonlyArray<DailyFeedRow> {
     const withouDuplicates = getFeedWithoutDuplicates(feed);
-    // pair each feed item with the elapsed time on the timer when it happened
-    let accumulatedDuration = -60000;
-    let curStartTime: null | number = null;
-    let thisDuration = 0;
-
-    const withDuration = getFeedWithDuration(feed);
+    const withDuration = getFeedWithDuration(withouDuplicates, attempt);
 
     const changesBySquare: [number, DailyFeedRow][][] = Array(25)
         .fill(null)

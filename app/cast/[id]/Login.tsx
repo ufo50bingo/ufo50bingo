@@ -14,7 +14,6 @@ import {
 import { useParams } from "next/navigation";
 import createSession from "./createSession";
 import { useState } from "react";
-import Link from "next/link";
 
 type ViewType = 'playing' | 'casting';
 

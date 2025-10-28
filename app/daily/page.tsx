@@ -33,7 +33,7 @@ async function constructBoard(_date: string): Promise<ReadonlyArray<string>> {
 }
 
 async function getDailyBoard(date: string): Promise<ReadonlyArray<string>> {
-  const sql = getSql();
+  const sql = getSql(false);
   const sqlResult =
     await sql`SELECT board FROM daily WHERE date = ${date}`;
   const board: null | undefined | string = sqlResult?.[0]?.board;

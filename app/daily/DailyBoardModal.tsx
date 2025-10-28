@@ -47,7 +47,7 @@ export default function DailyBoardModal({ board: rawBoard, feedIndex, feedWithDu
                         onClickSquare={() => { }}
                         isHidden={false}
                         setIsHidden={() => { }}
-                        shownDifficulties={[]}
+                        shownDifficulties={['general']}
                     />
                 </div>
                 <Button

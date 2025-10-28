@@ -125,7 +125,7 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                                     setIsHidden={async () => {
                                         await db.dailyFeed.add({ type: "reveal", time: Date.now(), date: isoDate, attempt, squareIndex: null });
                                     }}
-                                    shownDifficulties={[]}
+                                    shownDifficulties={['general']}
                                 />
                                 <Group justify="space-between">
                                     <Text style={{ alignSelf: "center", fontVariantNumeric: "tabular-nums" }} size="xl">

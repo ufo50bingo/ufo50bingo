@@ -1,9 +1,7 @@
 import { Difficulty } from "@/app/goals";
 import {
   Accordion,
-  Affix,
   Button,
-  Card,
   Checkbox,
   Drawer,
 } from "@mantine/core";
@@ -22,7 +20,6 @@ import BottomSection from "../common/BottomSection";
 
 type Props = {
   id: string;
-  seed: number;
   color: null | BingosyncColor;
   setColor: (newcolor: BingosyncColor) => unknown;
   shownDifficulties: ReadonlyArray<Difficulty>;
@@ -38,7 +35,6 @@ export default function PlaySettings({
   id,
   color,
   setColor,
-  seed,
   shownDifficulties,
   setShownDifficulties,
   dings,

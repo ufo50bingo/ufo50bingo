@@ -1,4 +1,4 @@
-import { Card, Stack, Checkbox, Text, Accordion } from "@mantine/core";
+import { Stack, Checkbox, Text, Accordion } from "@mantine/core";
 import { Ding } from "../play/useDings";
 
 type Props = {

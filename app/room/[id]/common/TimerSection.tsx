@@ -1,4 +1,4 @@
-import { Accordion, Button, Checkbox, Group, Modal, Stack, Text } from "@mantine/core";
+import { Accordion, Button, Group, Modal, Stack, Text } from "@mantine/core";
 import { TimerState } from "./useMatchTimer";
 import { useState } from "react";
 import DurationInput from "./DurationInput";

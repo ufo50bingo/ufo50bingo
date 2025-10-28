@@ -3,8 +3,8 @@
 import { useMemo, useState } from "react";
 import { TBoard } from "../matches/parseBingosyncData";
 import Board from "../Board";
-import { Container, Card, Text, Button, Stack, Title, List, Modal, Group, Anchor } from "@mantine/core";
-import { LocalDate, toISODate } from "./localDate";
+import { Container, Card, Text, Button, Stack, Title, List, Modal, Group, Anchor, ActionIcon, Tooltip } from "@mantine/core";
+import { getPrevDate, LocalDate, toISODate } from "./localDate";
 import useDailyColor from "./useDailyColor";
 import ColorSelector from "../room/[id]/common/ColorSelector";
 import { DailyFeedRow, db } from "../db";
@@ -13,7 +13,7 @@ import getDailyFeedWithoutMistakes from "./getDailyFeedWithoutMistakes";
 import getFeedWithDuration from "./getFeedWithDuration";
 import getFirstBingoMajorityBlackoutIndex from "./findFirstBingoMajorityBlackout";
 import Duration from "../practice/Duration";
-import { IconClipboard, IconPlayerPause, IconPlayerPlay, IconRefreshAlert } from "@tabler/icons-react";
+import { IconArrowLeft, IconClipboard, IconPlayerPause, IconPlayerPlay, IconRefreshAlert } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
 import getDurationText from "../practice/getDurationText";
 import getBoardAtIndex from "./getBoardAtIndex";
@@ -70,12 +70,22 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
 
     const isMobile = useMediaQuery("(max-width: 525px)");
 
+    const prevSearchParams = new URLSearchParams();
+    prevSearchParams.set('date', toISODate(getPrevDate(date)));
+
     return (
         <Container my="md">
             <Card shadow="sm" padding="sm" radius="md" withBorder>
                 <Card.Section withBorder={true} inheritPadding={true} py="xs">
                     <Stack>
-                        <Title order={1}>Daily Bingo — {date.month}/{date.day}</Title>
+                        <Group>
+                            <Tooltip label="View previous day">
+                                <ActionIcon component="a" variant="subtle" href={`/daily?${prevSearchParams.toString()}`}>
+                                    <IconArrowLeft size={32} />
+                                </ActionIcon>
+                            </Tooltip>
+                            <Title order={1}>Daily Bingo — {date.month}/{date.day}</Title>
+                        </Group>
                         <Text>
                             Claim a bingo as fast as possible.<br />
                             After you've claimed a bingo, you can optionally continue to claim majority (13 squares),

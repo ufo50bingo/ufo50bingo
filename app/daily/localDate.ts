@@ -33,7 +33,7 @@ function getDaysInMonth(month: number, year: number): number {
   }
 }
 
-function getPrevDate(date: LocalDate): LocalDate {
+export function getPrevDate(date: LocalDate): LocalDate {
   if (date.month === 1 && date.day === 1) {
     return { day: 1, month: 1, year: date.year - 1 };
   }

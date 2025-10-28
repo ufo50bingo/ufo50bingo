@@ -15,7 +15,7 @@ import ColorSelector from "../common/ColorSelector";
 import DisconnectButton from "../common/DisconnectButton";
 import TimerEdit from "../common/TimerEdit";
 import { TimerState } from "../common/useMatchTimer";
-import EditDings from "../common/EditDings";
+import NotificationsSection from "../common/NotificationsSection";
 import RequestPauseSection from "../common/RequestPauseSection";
 
 type Props = {

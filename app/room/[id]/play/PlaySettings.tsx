@@ -48,15 +48,12 @@ export default function PlaySettings({
   const [isShown, setIsShown] = useState(color == null);
   return (
     <>
-      <Affix position={{ top: 6, right: 6 }}>
-        <Button
-          leftSection={<IconSettings size={16} />}
-          onClick={() => setIsShown(true)}
-          size="xs"
-        >
-          Tools
-        </Button>
-      </Affix>
+      <Button
+        leftSection={<IconSettings size={16} />}
+        onClick={() => setIsShown(true)}
+      >
+        Tools
+      </Button>
       <Drawer.Root
         position="right"
         opened={isShown}

@@ -211,7 +211,7 @@ export default function Play({
             setShowGeneralTracker={setShowGeneralTracker}
           />
         </Stack>
-        <Feed rawFeed={rawFeed} height={showGeneralTracker ? "740px" : "592px"} />
+        <Feed rawFeed={rawFeed} height={showGeneralTracker ? "748px" : "592px"} />
       </Group>
       {reconnectModal}
       {dingAudio}

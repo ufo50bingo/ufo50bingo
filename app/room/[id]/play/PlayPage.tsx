@@ -1,27 +1,22 @@
 import { fetchBoard, fetchFeed, getSocketKey } from "@/app/fetchMatchInfo";
 import { getBoard } from "@/app/matches/parseBingosyncData";
 import PlayWrapper from "./PlayWrapper";
-import getCookie from "@/app/cast/[id]/getCookie";
-import getSeed from "@/app/cast/[id]/getSeed";
-import Login from "@/app/cast/[id]/Login";
+import { RoomCookie, toBingosyncCookie } from "../roomCookie";
+import getSeed from "../common/getSeed";
 // import { STANDARD } from "@/app/pastas/standard";
 // import getSrlV5Board from "@/app/practiceboard/getSrlV5Board";
 
-export default async function PlayPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
+type Props = {
+  id: string;
+  roomCookie: RoomCookie;
+};
 
-  const cookie = await getCookie(id, false);
-  if (cookie == null) {
-    return <Login />;
-  }
+export default async function PlayPage({ id, roomCookie }: Props) {
+  const bingosyncCookie = toBingosyncCookie(roomCookie);
   const [rawBoard, rawFeed, socketKey, seed] = await Promise.all([
     fetchBoard(id),
-    fetchFeed(id, cookie),
-    getSocketKey(id, cookie),
+    fetchFeed(id, bingosyncCookie),
+    getSocketKey(id, bingosyncCookie),
     getSeed(id),
   ]);
   const board = getBoard(rawBoard);

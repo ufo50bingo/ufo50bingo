@@ -23,6 +23,7 @@ import { IconType, SortType } from "./useLocalState";
 import DisconnectButton from "../common/DisconnectButton";
 import { Ding } from "../play/useDings";
 import EditDings from "../common/EditDings";
+import RequestPauseButton from "../play/RequestPauseButton";
 
 type Props = {
   id: string;
@@ -109,6 +110,7 @@ export default function CastSettings({
               <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
                 <Countdown setIsHidden={setIsHidden} />
               </Card>
+              <RequestPauseButton id={id} />
               <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
                 <Stack>
                   <Text size="sm">Display difficulty tags for:</Text>

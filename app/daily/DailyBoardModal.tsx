@@ -25,7 +25,7 @@ export default function DailyBoardModal({ board: rawBoard, feedIndex, feedWithDu
             name,
             color: boardMarked[index] ? color : "blank",
         }));
-    }, [feedWithDuration, feedIndex, color]);
+    }, [feedWithDuration, feedIndex, color, rawBoard]);
     const overlays = useMemo(
         () => getDailyOverlays(feedIndex, feedWithDuration),
         [feedIndex, feedWithDuration],

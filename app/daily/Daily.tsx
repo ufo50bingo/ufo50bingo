@@ -78,8 +78,13 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
     const pauseRef = useRef<() => void>(pause);
     pauseRef.current = pause;
     useEffect(() => {
-        // pause when navigating away from the page
-        return pauseRef.current;
+        const onBeforeUnload = () => {
+            pauseRef.current();
+        };
+        window.addEventListener('beforeunload', onBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', onBeforeUnload);
+        }
     }, []);
 
     return (

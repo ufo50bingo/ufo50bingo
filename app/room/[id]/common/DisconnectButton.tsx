@@ -1,4 +1,5 @@
 import { Button, Modal, Stack, Group } from "@mantine/core";
+import { IconPlugConnectedX } from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -7,9 +8,9 @@ export default function DisconnectButton() {
   const [isDisconnecting, setIsDisconnecting] = useState(false);
   return (
     <>
-      <Button color="red" onClick={() => setIsDisconnecting(true)}>
+      <Button color="red" onClick={() => setIsDisconnecting(true)} leftSection={<IconPlugConnectedX />}>
         Disconnect
-      </Button>
+      </Button >
       {isDisconnecting && (
         <Modal
           fullScreen={false}
@@ -34,7 +35,8 @@ export default function DisconnectButton() {
             </Group>
           </Stack>
         </Modal>
-      )}
+      )
+      }
     </>
   );
 }

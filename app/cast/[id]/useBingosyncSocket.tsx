@@ -15,6 +15,7 @@ type Props = {
   socketKey: string;
   initialSeed: number;
   onNewCard?: (newBoard: TBoard) => unknown;
+  onMessage?: (newItem: RawFeedItem) => unknown;
 };
 
 type Response = {
@@ -31,6 +32,7 @@ export default function useBingosyncSocket({
   initialSeed,
   socketKey,
   onNewCard,
+  onMessage,
 }: Props): Response {
   const [seed, setSeed] = useState(initialSeed);
   const [board, setBoard] = useState(initialBoard);
@@ -85,6 +87,10 @@ export default function useBingosyncSocket({
         }
         setBoard(newBoard);
       }
+
+      if (onMessage != null) {
+        onMessage(rawItem);
+      }
     };
 
     socketRef.current = socket;
@@ -93,7 +99,7 @@ export default function useBingosyncSocket({
       socket.close();
       socketRef.current = null;
     };
-  }, [socketKey, id, onNewCard]);
+  }, [socketKey, id, onNewCard, onMessage]);
 
   return {
     board,

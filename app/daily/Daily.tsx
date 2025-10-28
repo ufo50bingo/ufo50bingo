@@ -19,6 +19,7 @@ import getDurationText from "../practice/getDurationText";
 import getBoardAtIndex from "./getBoardAtIndex";
 import getEmojiBoard from "./getEmojiBoard";
 import DailyBoardModal from "./DailyBoardModal";
+import useWakeLock from "../room/[id]/play/useWakeLock";
 
 type Props = {
     date: LocalDate;
@@ -69,6 +70,7 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
     );
 
     const isMobile = useMediaQuery("(max-width: 525px)");
+    useWakeLock();
 
     const prevSearchParams = new URLSearchParams();
     prevSearchParams.set('date', toISODate(getPrevDate(date)));

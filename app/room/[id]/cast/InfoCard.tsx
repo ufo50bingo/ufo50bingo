@@ -2,7 +2,7 @@ import { Card, Title } from "@mantine/core";
 import { ReactNode } from "react";
 
 type Props = {
-  title: ReactNode;
+  title?: ReactNode;
   description?: ReactNode;
   children: ReactNode;
   height?: null | undefined | number;
@@ -24,10 +24,12 @@ export default function InfoCard({
       withBorder={true}
       style={{ height: `${height ?? 300}px`, width: `${width}px`, resize: "both" }}
     >
-      <Card.Section inheritPadding={true} withBorder={true} py="sm">
-        <Title order={5}>{title}</Title>
-        <span style={{ fontSize: "12px" }}>{description}</span>
-      </Card.Section>
+      {title != null && (
+        <Card.Section inheritPadding={true} withBorder={true} py="sm">
+          <Title order={5}>{title}</Title>
+          <span style={{ fontSize: "12px" }}>{description}</span>
+        </Card.Section>
+      )}
       <Card.Section
         inheritPadding={true}
         withBorder={true}

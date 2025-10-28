@@ -2,14 +2,20 @@ import { GoalName } from "@/app/goals";
 import InfoCard from "../cast/InfoCard";
 import { Square } from "@/app/matches/parseBingosyncData";
 import { Button, Group, Stack, Text, Tooltip } from "@mantine/core";
+import useSimpleGeneralState from "./useSimpleGeneralState";
 
 type Props = {
     generalGoals: ReadonlyArray<Square>;
+    id: string;
+    seed: number;
 };
 
-export default function SimpleGeneralTracker({ generalGoals }: Props) {
+export default function SimpleGeneralTracker({ generalGoals, id, seed }: Props) {
+    const key = `${id}-${seed}`;
+    const [state, setState] = useSimpleGeneralState(id, seed);
+    console.log(state);
     return (
-        <InfoCard width={525} height={216} title="General Goals">
+        <InfoCard width={525} height={140}>
             <Stack gap={4}>
                 {generalGoals.map(goal => (
                     <Group key={goal.name} gap={6} justify="space-between">
@@ -29,11 +35,15 @@ export default function SimpleGeneralTracker({ generalGoals }: Props) {
                                 p={0}
                                 size="compact-xs"
                                 onClick={() => {
+                                    setState({
+                                        ...state,
+                                        [goal.name]: Math.max((state[goal.name] ?? 0) - 1, 0),
+                                    });
                                 }}
                             >
                                 -
                             </Button>
-                            0
+                            <Text w={14} ta="center" size="sm">{state[goal.name] ?? 0}</Text>
                             <Button
                                 variant="subtle"
                                 h={18}
@@ -41,6 +51,10 @@ export default function SimpleGeneralTracker({ generalGoals }: Props) {
                                 p={0}
                                 size="compact-xs"
                                 onClick={() => {
+                                    setState({
+                                        ...state,
+                                        [goal.name]: (state[goal.name] ?? 0) + 1,
+                                    });
                                 }}
                             >
                                 +

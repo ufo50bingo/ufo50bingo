@@ -26,6 +26,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import SimpleGeneralTracker from "./SimpleGeneralTracker";
 import { GoalName } from "@/app/goals";
 import { GOAL_TO_TYPES } from "../cast/goalToTypes";
+import useShowGeneralTracker from "./useShowGeneralTracker";
 
 export type Props = {
   id: string;
@@ -45,6 +46,7 @@ export default function Play({
   playerName,
 }: Props) {
   const [shownDifficulties, setShownDifficulties] = useShownDifficulties();
+  const [showGeneralTracker, setShowGeneralTracker] = useShowGeneralTracker();
   const [dings, setDings] = useDings("play");
   const [color, setColor] = useColor(id);
   const [isHidden, setIsHidden] = useState(true);
@@ -194,7 +196,7 @@ export default function Play({
               Seed: <strong>{seed}</strong>
             </div>
           </Group>
-          <SimpleGeneralTracker generalGoals={generalGoals} />
+          {showGeneralTracker && <SimpleGeneralTracker id={id} seed={seed} generalGoals={generalGoals} />}
           <PlaySettings
             id={id}
             color={color}
@@ -206,9 +208,11 @@ export default function Play({
             timerState={timerState}
             setTimerState={setTimerState}
             isMobile={isMobile}
+            showGeneralTracker={showGeneralTracker}
+            setShowGeneralTracker={setShowGeneralTracker}
           />
         </Stack>
-        <Feed rawFeed={rawFeed} height="816px" />
+        <Feed rawFeed={rawFeed} height={showGeneralTracker ? "740px" : "592px"} />
       </Group>
       {reconnectModal}
       {dingAudio}

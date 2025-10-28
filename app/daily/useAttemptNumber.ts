@@ -6,11 +6,11 @@ export default function useAttemptNumber(
   const key = `daily-attempt-${date}`;
   const [attempt, setAttemptRaw] = useState<number>(() => {
     if (global.window == undefined || localStorage == null) {
-      return 1;
+      return 0;
     }
     const fromStorage = localStorage.getItem(key);
     if (fromStorage == null || fromStorage === "") {
-      return 1;
+      return 0;
     }
     return Number(fromStorage);
   });

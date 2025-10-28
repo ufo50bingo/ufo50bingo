@@ -26,6 +26,7 @@ import { Ding } from "../play/useDings";
 import EditDings from "../common/EditDings";
 import RequestPauseButton from "../play/RequestPauseButton";
 import DirPicker from "./DirPicker";
+import CreateBoardSection from "../common/CreateBoardSection";
 
 type Props = {
   id: string;
@@ -67,8 +68,6 @@ export default function CastSettings({
   setDings,
 }: Props) {
   const [isShown, setIsShown] = useState(leftColor === rightColor);
-  const [isCreating, setIsCreating] = useState(false);
-  const [isSavingNewCard, setIsSavingNewCard] = useState(false);
 
   return (
     <>
@@ -119,14 +118,7 @@ export default function CastSettings({
                   <Countdown setIsHidden={setIsHidden} />
                 </Accordion.Panel>
               </Accordion.Item>
-              <Accordion.Item value="pause">
-                <Accordion.Control>
-                  Request Pause
-                </Accordion.Control>
-                <Accordion.Panel>
-                  <RequestPauseButton id={id} />
-                </Accordion.Panel>
-              </Accordion.Item>
+              <RequestPauseButton id={id} />
               <Accordion.Item value="display">
                 <Accordion.Control>
                   Display Settings
@@ -197,16 +189,7 @@ export default function CastSettings({
                   <DirPicker />
                 </Accordion.Panel>
               </Accordion.Item>
-              <Accordion.Item value="createboard">
-                <Accordion.Control>
-                  Create New Board
-                </Accordion.Control>
-                <Accordion.Panel>
-                  <Button color="green" onClick={() => setIsCreating(true)}>
-                    Create new board
-                  </Button>
-                </Accordion.Panel>
-              </Accordion.Item>
+              <CreateBoardSection id={id} />
               <Stack p="md">
                 <Button
                   component="a"
@@ -220,62 +203,6 @@ export default function CastSettings({
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>
-      {isCreating && (
-        <Modal
-          fullScreen={false}
-          centered={true}
-          onClose={() => setIsCreating(false)}
-          opened={true}
-          title="Create new board"
-        >
-          <Stack>
-            <Alert title="Players may need to refresh">
-              After creating a new card, players may need to refresh their
-              pages, especially if they are connected on multiple devices or
-              multiple windows.
-              <br />
-              <br />
-              Bingosync rate-limits players, so connecting from multiple devices
-              or multiple windows may cause the board to fail to refresh when a
-              new card is generated, and players may see stale goals on one or
-              more devices/windows when they reveal the card.
-            </Alert>
-            <Alert color="yellow" title="Are you sure?">
-              This will create a new{" "}
-              <strong>Standard lockout board with no customization</strong>. For
-              other variants, create a new room or use the Bingosync page.
-              <br />
-              <br />
-              Creating a new board will overwrite the existing board, and is not
-              reversible. All data for the current board will be inaccessible on
-              ufo50.bingo. Please only use this to correct a mistake! If you've
-              already completed a game and want to start a new one, go to{" "}
-              <Link href="/">Create Board</Link> and create a new board instead!
-              <br />
-              <br />
-              Are you sure you want to continue?
-            </Alert>
-            <Group justify="end">
-              <Button onClick={() => setIsCreating(false)}>Cancel</Button>
-              <Button
-                disabled={isSavingNewCard}
-                color="red"
-                onClick={async () => {
-                  setIsSavingNewCard(true);
-                  try {
-                    await createNewCard(id);
-                    setIsCreating(false);
-                  } finally {
-                    setIsSavingNewCard(false);
-                  }
-                }}
-              >
-                Create new board
-              </Button>
-            </Group>
-          </Stack>
-        </Modal>
-      )}
     </>
   );
 }

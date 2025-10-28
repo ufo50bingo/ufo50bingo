@@ -1,64 +1,59 @@
-"use client";
 
-import { useEffect, useState } from "react";
-import { TBoard } from "../matches/parseBingosyncData";
-import Board from "../Board";
 import getSrlV5Board from "./getSrlV5Board";
 import { STANDARD } from "../pastas/standard";
-import { Container, Card, Text, Button, Stack } from "@mantine/core";
-import useTimer from "../useTimer";
+import getSql from "../getSql";
+import { revalidateTag } from "next/cache";
+import Daily from "./Daily";
 
-export default function PracticeBoard() {
-  const [isHidden, setIsHidden] = useState(true);
-  const [board, setBoard] = useState<TBoard>(() =>
-    Array(25)
-      .fill(null)
-      .map((_) => ({ name: "", color: "blank" }))
-  );
-  useEffect(() => setBoard(getSrlV5Board(STANDARD)), []);
-
-  const { isRunning, pause, start, timer } = useTimer({
-    isRunning: false,
-    durationMS: -60000,
+function getEasternISODate(): string {
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
   });
+  const parts = formatter.formatToParts(new Date());
+  let month = '01';
+  let day = '01';
+  let year = '1970';
+  parts.forEach(part => {
+    if (part.type === "month") {
+      month = part.value;
+    } else if (part.type === "day") {
+      day = part.value;
+    } else if (part.type === "year") {
+      year = part.value;
+    }
+  });
+  return `${year}-${month}-${day}`;
+}
 
-  return (
-    <Container>
-      <Card shadow="sm" padding="sm" radius="md" withBorder>
-        <Stack gap={4} style={{ alignSelf: "center" }}>
-          <Board
-            board={board}
-            onClickSquare={(squareIndex: number) => {
-              const newBoard = [...board];
-              const newSquare = { ...board[squareIndex] };
-              newSquare.color = newSquare.color === "blank" ? "red" : "blank";
-              newBoard[squareIndex] = newSquare;
-              setBoard(newBoard);
-            }}
-            hiddenText={
-              <>
-                <div>Click to Reveal</div>
-                <div>Start playing when the timer hits 0:00.0!</div>
-              </>
-            }
-            isHidden={isHidden}
-            setIsHidden={() => {
-              start();
-              setIsHidden(false);
-            }}
-            shownDifficulties={[]}
-          />
-          <Text style={{ alignSelf: "center" }} size="xl">
-            {timer}
-          </Text>
-          <Button
-            onClick={() => (isRunning ? pause() : start())}
-            fullWidth={true}
-          >
-            {isRunning ? "Pause" : "Resume"}
-          </Button>
-        </Stack>
-      </Card>
-    </Container>
-  );
+async function constructBoard(date: string): Promise<ReadonlyArray<string>> {
+  return getSrlV5Board(STANDARD);
+}
+
+async function getDailyBoard(date: string): Promise<ReadonlyArray<string>> {
+  const sql = getSql();
+  const sqlResult =
+    await sql`SELECT board FROM daily WHERE date = ${date}`;
+  const board: null | undefined | string = sqlResult?.[0]?.board;
+  if (board != null) {
+    return JSON.parse(board);
+  }
+  const newBoard = await constructBoard(date);
+  await sql`INSERT INTO daily (
+    date,
+    board
+  ) VALUES (
+    ${date},
+    ${JSON.stringify(newBoard)}
+  );`;
+  return newBoard;
+}
+
+export default async function DailyPage() {
+  const today = getEasternISODate();
+  const board = await getDailyBoard(today);
+  return <Daily date={today} board={board} />
 }

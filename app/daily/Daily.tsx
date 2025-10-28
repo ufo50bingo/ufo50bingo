@@ -12,6 +12,8 @@ import useFeedTimer from "./useFeedTimer";
 import getDailyFeedWithoutMistakes from "./getDailyFeedWithoutMistakes";
 import getFeedWithDuration from "./getFeedWithDuration";
 import getFirstBingoMajorityBlackoutIndex from "./findFirstBingoMajorityBlackout";
+import Duration from "../practice/Duration";
+import { IconRefreshAlert } from "@tabler/icons-react";
 
 type Props = {
     date: LocalDate;
@@ -26,6 +28,7 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
     const [color, setColor] = useDailyColor();
 
     const feed = useMemo(() => getDailyFeedWithoutMistakes(feedWithMistakes), [feedWithMistakes]);
+    const feedWithDuration = useMemo(() => getFeedWithDuration(feed), [feed]);
     const { bingo, majority, blackout } = getFirstBingoMajorityBlackoutIndex(feed);
 
     const completedIndexes = useMemo(() => {
@@ -85,7 +88,11 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                             hiddenText={
                                 <>
                                     <div>Click to reveal today's board.</div>
-                                    <div>Start playing when the timer hits 0:00.0!</div>
+                                    <div>Your timer will start as soon as you reveal.</div>
+                                    {attempt === 1
+                                        ? <div>Start playing when the timer hits 0:00.0!</div>
+                                        : <div>Start playing as soon as you reveal!</div>
+                                    }
                                 </>
                             }
                             isHidden={isHidden}
@@ -107,12 +114,25 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                 </Card.Section>
                 <Card.Section withBorder={true} inheritPadding={true} py="xs">
                     <List>
-                        <List.Item>Bingo: {bingo}</List.Item>
-                        <List.Item>Majority: {majority}</List.Item>
-                        <List.Item>Blackout: {blackout}</List.Item>
+                        <List.Item>Bingo: {bingo == null ? "Incomplete" : <Duration duration={feedWithDuration[bingo][0]} />}</List.Item>
+                        <List.Item>Majority: {majority == null ? "Incomplete" : <Duration duration={feedWithDuration[majority][0]} />}</List.Item>
+                        <List.Item>Blackout: {blackout == null ? "Incomplete" : <Duration duration={feedWithDuration[blackout][0]} />}</List.Item>
                     </List>
                 </Card.Section>
+                <Card.Section withBorder={true} inheritPadding={true} py="xs">
+                    <Stack justify="start">
+                        <Text>
+                            Want to start over? Use this button to clear your data.
+                            On your text attempt, you will not have the 60 second scanning period.
+                        </Text>
+                        <div>
+                            <Button color="red" onClick={() => setAttempt(attempt + 1)} leftSection={<IconRefreshAlert />}>
+                                Start Over
+                            </Button>
+                        </div>
+                    </Stack>
+                </Card.Section>
             </Card>
-        </Container>
+        </Container >
     );
 }

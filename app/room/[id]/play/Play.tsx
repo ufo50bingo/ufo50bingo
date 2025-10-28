@@ -5,17 +5,15 @@ import {
   BingosyncColor,
   getChangelog,
   RawFeed,
-  RawFeedItem,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
 import { Group, Stack, Text } from "@mantine/core";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import revealBoard from "./revealBoard";
 import PlaySettings from "./PlaySettings";
 import useColor from "./useColor";
 import useShownDifficulties from "./useShownDifficulties";
 import useDings from "./useDings";
-import { REQUEST_PAUSE_CHAT } from "../common/REQUEST_PAUSE_CHAT";
 import useWakeLock from "./useWakeLock";
 import changeColor from "../cast/changeColor";
 import Feed from "../common/Feed";

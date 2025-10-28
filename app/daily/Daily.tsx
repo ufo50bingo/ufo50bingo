@@ -4,10 +4,13 @@ import { useMemo, useState } from "react";
 import { TBoard } from "../matches/parseBingosyncData";
 import Board from "../Board";
 import { Container, Card, Text, Button, Stack, Title } from "@mantine/core";
-import useTimer from "../useTimer";
 import { LocalDate, toISODate } from "./localDate";
 import useDailyColor from "./useDailyColor";
 import ColorSelector from "../room/[id]/common/ColorSelector";
+import { db } from "../db";
+import { useLiveQuery } from "dexie-react-hooks";
+import useAttemptNumber from "./useAttemptNumber";
+import useFeedTimer from "./useFeedTimer";
 
 type Props = {
     date: LocalDate;
@@ -15,19 +18,44 @@ type Props = {
 };
 
 export default function Daily({ date, board: plainBoard }: Props) {
-    const [isHidden, setIsHidden] = useState(true);
+    const isoDate = toISODate(date);
     const [color, setColor] = useDailyColor();
-    const [completedIndexes, setCompletedIndexes] = useState<Set<number>>(new Set());
+    const [attempt, setAttempt] = useAttemptNumber(isoDate);
+
+    const feed = useLiveQuery(() =>
+        db.dailyFeed
+            .where({ date: isoDate, attempt })
+            .sortBy("time")
+    ) ?? [];
+
+    const completedIndexes = useMemo(() => {
+        const newSet = new Set();
+        feed.forEach(item => {
+            if (item.type === "mark") {
+                newSet.add(item.squareIndex ?? 25);
+            } else if (item.type === "clear") {
+                newSet.delete(item.squareIndex ?? 25);
+            }
+        });
+        return newSet;
+    }, [feed]);
+
+    const isRevealed = useMemo(() =>
+        feed.every(item => item.type !== "reveal"),
+        [feed],
+    );
+
     const board = useMemo<TBoard>(() =>
         plainBoard
             .map((name, index) => ({ name, color: completedIndexes.has(index) ? color : "blank" })),
         [plainBoard, completedIndexes, color],
     );
 
-    const { isRunning, pause, start, timer } = useTimer({
-        isRunning: false,
-        durationMS: -60000,
-    });
+    const { isRunning, pause, unpause, timer } = useFeedTimer(
+        feed,
+        isoDate,
+        attempt,
+    );
 
     return (
         <Container my="md">
@@ -47,14 +75,12 @@ export default function Daily({ date, board: plainBoard }: Props) {
                     <Stack gap={4} style={{ alignSelf: "center" }}>
                         <Board
                             board={board}
-                            onClickSquare={(squareIndex: number) => {
-                                const newSet = new Set(completedIndexes);
-                                if (newSet.has(squareIndex)) {
-                                    newSet.delete(squareIndex);
+                            onClickSquare={async (squareIndex: number) => {
+                                if (completedIndexes.has(squareIndex)) {
+                                    await db.dailyFeed.add({ type: "clear", time: Date.now(), squareIndex, date: isoDate, attempt });
                                 } else {
-                                    newSet.add(squareIndex);
+                                    await db.dailyFeed.add({ type: "mark", time: Date.now(), squareIndex, date: isoDate, attempt });
                                 }
-                                setCompletedIndexes(newSet);
                             }}
                             hiddenText={
                                 <>
@@ -62,10 +88,9 @@ export default function Daily({ date, board: plainBoard }: Props) {
                                     <div>Start playing when the timer hits 0:00.0!</div>
                                 </>
                             }
-                            isHidden={isHidden}
-                            setIsHidden={() => {
-                                start();
-                                setIsHidden(false);
+                            isHidden={!isRevealed}
+                            setIsHidden={async () => {
+                                await db.dailyFeed.add({ type: "reveal", time: Date.now(), date: isoDate, attempt, squareIndex: null });
                             }}
                             shownDifficulties={[]}
                         />
@@ -73,7 +98,7 @@ export default function Daily({ date, board: plainBoard }: Props) {
                             {timer}
                         </Text>
                         <Button
-                            onClick={() => (isRunning ? pause() : start())}
+                            onClick={() => (isRunning ? pause() : unpause())}
                             fullWidth={true}
                         >
                             {isRunning ? "Pause" : "Resume"}

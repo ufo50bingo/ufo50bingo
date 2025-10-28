@@ -33,6 +33,15 @@ interface DirectoryRow {
   handle: FileSystemDirectoryHandle;
 }
 
+export interface DailyFeedRow {
+  id: number;
+  time: number;
+  date: string;
+  attempt: number;
+  type: "mark" | "clear" | "reveal" | "pause" | "unpause";
+  squareIndex: number | null;
+}
+
 const db = new Dexie("UFO50BingoDatabase") as Dexie & {
   attempts: EntityTable<AttemptRow, "id">;
   unselectedGoals: EntityTable<GoalSelectionRow, "goal">;
@@ -40,6 +49,7 @@ const db = new Dexie("UFO50BingoDatabase") as Dexie & {
   createdMatches: EntityTable<CreatedMatchRow, "id">;
   revealedMatches: EntityTable<RevealedMatchRow, "id">;
   directory: EntityTable<DirectoryRow, "id">;
+  dailyFeed: EntityTable<DailyFeedRow, "id">;
 };
 
 db.version(1).stores({
@@ -49,6 +59,7 @@ db.version(1).stores({
   createdMatches: "id",
   revealedMatches: "id",
   directory: "++id",
+  dailyFeed: "++id, date",
 });
 
 export type { Attempt, AttemptRow, PlaylistRow };

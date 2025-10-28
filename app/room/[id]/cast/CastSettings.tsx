@@ -24,6 +24,7 @@ import DisconnectButton from "../common/DisconnectButton";
 import { Ding } from "../play/useDings";
 import EditDings from "../common/EditDings";
 import RequestPauseButton from "../play/RequestPauseButton";
+import DirPicker from "./DirPicker";
 
 type Props = {
   id: string;
@@ -169,6 +170,7 @@ export default function CastSettings({
                 Create new board
               </Button>
               <DisconnectButton />
+              <DirPicker />
             </Stack>
           </Drawer.Body>
         </Drawer.Content>

@@ -31,6 +31,7 @@ type Props = {
   setDings: (newDings: ReadonlyArray<Ding>) => unknown;
   timerState: TimerState;
   setTimerState: (newState: TimerState) => unknown;
+  isMobile: boolean;
 };
 
 export default function PlaySettings({
@@ -44,6 +45,7 @@ export default function PlaySettings({
   setDings,
   timerState,
   setTimerState,
+  isMobile,
 }: Props) {
   const [isShown, setIsShown] = useState(color == null);
   return (
@@ -80,7 +82,7 @@ export default function PlaySettings({
                 </Accordion.Panel>
               </Accordion.Item>
               <RequestPauseSection id={id} />
-              <TimerSection state={timerState} setState={setTimerState} />
+              <TimerSection state={timerState} setState={setTimerState} isMobile={isMobile} />
               <CountdownSection view="play" />
               <NotificationsSection dings={dings} setDings={setDings} />
               {/* TODO Store directory handle in local state!!!*/}
@@ -98,9 +100,9 @@ export default function PlaySettings({
                   />
                 </Accordion.Panel>
               </Accordion.Item>
-              <CreateBoardSection id={id} />
+              <CreateBoardSection id={id} isMobile={isMobile} />
             </Accordion>
-            <BottomSection id={id} />
+            <BottomSection id={id} isMobile={isMobile} />
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root >

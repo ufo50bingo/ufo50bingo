@@ -5,9 +5,10 @@ import createNewCard from "../cast/createNewCard";
 
 type Props = {
     id: string;
+    isMobile: boolean;
 };
 
-export default function CreateBoardSection({ id }: Props) {
+export default function CreateBoardSection({ id, isMobile }: Props) {
     const [isCreating, setIsCreating] = useState(false);
     const [isSavingNewCard, setIsSavingNewCard] = useState(false);
     return (
@@ -30,7 +31,7 @@ export default function CreateBoardSection({ id }: Props) {
             </Accordion.Item>
             {isCreating && (
                 <Modal
-                    fullScreen={false}
+                    fullScreen={isMobile}
                     centered={true}
                     onClose={() => setIsCreating(false)}
                     opened={true}

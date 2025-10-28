@@ -1,7 +1,7 @@
 import { DailyFeedRow } from "../db";
 
 export default function getFeedWithDuration(feed: ReadonlyArray<DailyFeedRow>, attempt: number): [number, DailyFeedRow][] {
-  let accumulatedDuration = attempt > 1 ? 0 : -60000;
+  let accumulatedDuration = attempt > 0 ? 0 : -60000;
   let curStartTime: null | number = null;
 
   const withDuration: [number, DailyFeedRow][] = feed.map((item: DailyFeedRow) => {

@@ -113,9 +113,9 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                                         <>
                                             <div>Click to reveal today's board.</div>
                                             <div>Your timer will start as soon as you reveal.</div>
-                                            {attempt === 1
-                                                ? <div>Start playing when the timer hits 0:00.0!</div>
-                                                : <div>Start playing as soon as you reveal!</div>
+                                            {attempt > 0
+                                                ? <div>Start playing as soon as you reveal!</div>
+                                                : <div>Start playing when the timer hits 0:00.0!</div>
                                             }
                                         </>
                                     }

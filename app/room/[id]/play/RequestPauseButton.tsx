@@ -1,4 +1,4 @@
-import { Button, Modal, Stack, Group } from "@mantine/core";
+import { Button, Modal, Stack, Group, List } from "@mantine/core";
 import { useState } from "react";
 import { REQUEST_PAUSE_CHAT } from "../common/REQUEST_PAUSE_CHAT";
 import sendChat from "../common/sendChat";
@@ -21,13 +21,25 @@ export default function RequestPauseButton({ id }: Props) {
           title="Request Pause"
         >
           <Stack>
-            <span>Are you sure you want to request a pause?</span>
+            <span>
+              <strong>Are you sure you want to request a pause?</strong><br />
+              <br />
+              For players and spectators on <strong>ufo50.bingo</strong>:
+              <List>
+                <List.Item>The board will be hidden</List.Item>
+                <List.Item>A notification alarm will play</List.Item>
+                <List.Item>The timer will be paused</List.Item>
+              </List>
+              <br />
+              Players and spectators on <strong>Bingosync</strong> will only see a chat message.
+            </span>
             <Group justify="end">
               <Button onClick={() => setIsRequesting(false)}>Cancel</Button>
               <Button
                 color="green"
                 onClick={async () => {
                   await sendChat(id, REQUEST_PAUSE_CHAT);
+                  setIsRequesting(false);
                 }}
               >
                 Request Pause

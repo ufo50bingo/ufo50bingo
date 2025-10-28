@@ -57,20 +57,21 @@ export default function Play({
 
   const onMessage = useCallback(
     (newItem: RawFeedItem) => {
+      const isPause = newItem.type === "chat" && newItem.text === REQUEST_PAUSE_CHAT;
+      if (isPause) {
+        if (pauseRef.current != null) {
+          pauseRef.current();
+        }
+        setPauseRequestName(newItem.player.name);
+      }
       if (newItem.player.name === playerName) {
         return;
       }
       if (newItem.type === "chat") {
-        if (newItem.text === REQUEST_PAUSE_CHAT) {
-          if (pauseRef.current != null) {
-            pauseRef.current();
-          }
-          setPauseRequestName(newItem.player.name);
-          if (dings.includes("pause") && alarmRef.current != null) {
-            alarmRef.current.play();
-          } else if (dings.includes("chat") && dingRef.current != null) {
-            dingRef.current.play();
-          }
+        if (isPause && dings.includes("pause") && alarmRef.current != null) {
+          alarmRef.current.play();
+        } else if (dings.includes("chat") && dingRef.current != null) {
+          dingRef.current.play();
         } else {
           if (dings.includes("chat") && dingRef.current != null) {
             dingRef.current.play();
@@ -169,7 +170,7 @@ export default function Play({
               const isClearing = board[squareIndex].color === selectedColor;
               try {
                 await changeColor(id, squareIndex, selectedColor, isClearing);
-              } catch {}
+              } catch { }
             }}
             isHidden={isHidden}
             setIsHidden={setIsHidden}

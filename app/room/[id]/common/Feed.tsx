@@ -6,9 +6,10 @@ import FeedEntry from "./FeedEntry";
 
 type Props = {
   rawFeed: RawFeed;
+  height?: string;
 };
 
-export default function Feed({ rawFeed }: Props) {
+export default function Feed({ rawFeed, height = '475px' }: Props) {
   const feedRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     if (feedRef.current != null) {
@@ -21,7 +22,7 @@ export default function Feed({ rawFeed }: Props) {
       padding="sm"
       radius="md"
       withBorder={true}
-      style={{ width: "356px", height: "475px" }}
+      style={{ width: "356px", height }}
     >
       <Card.Section
         ref={feedRef}

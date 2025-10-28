@@ -25,10 +25,11 @@ export default function DailyBoardModal({ board: rawBoard, feedIndex, feedWithDu
             name,
             color: boardMarked[index] ? color : "blank",
         }));
-    }, [feedWithDuration, color]);
-    const overlays = useMemo(() => {
-        return getDailyOverlays(feedIndex, feedWithDuration);
-    }, [board, feedIndex, feedWithDuration])
+    }, [feedWithDuration, feedIndex, color]);
+    const overlays = useMemo(
+        () => getDailyOverlays(feedIndex, feedWithDuration),
+        [feedIndex, feedWithDuration],
+    )
     return (
         <Modal
             fullScreen={isMobile}

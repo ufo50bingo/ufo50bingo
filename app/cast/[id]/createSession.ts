@@ -1,5 +1,6 @@
 "use server";
 
+import { redirect, RedirectType } from "next/navigation";
 import { cookies } from "next/headers";
 
 const SESSIONID_REGEX = /sessionid=([^;]+);/;
@@ -37,16 +38,19 @@ export default async function createSession(
   const sessionId = result[1];
 
   const cookieStore = await cookies();
+
+  const path = isCast ? `/cast/${id}` : `/play/${id}`;
   cookieStore.set("sessionid", sessionId, {
     expires: Date.now() + 2 * 7 * 24 * 60 * 60 * 1000,
     maxAge: 2 * 7 * 24 * 60 * 60,
     sameSite: "lax",
-    path: isCast ? `/cast/${id}` : `/play/${id}`,
+    path,
   });
   cookieStore.set("playername", name, {
     expires: Date.now() + 2 * 7 * 24 * 60 * 60 * 1000,
     maxAge: 2 * 7 * 24 * 60 * 60,
     sameSite: "lax",
-    path: isCast ? `/cast/${id}` : `/play/${id}`,
+    path,
   });
+  redirect(path, RedirectType.replace);
 }

@@ -13,7 +13,7 @@ type Props = {
 export default function SimpleGeneralTracker({ generalGoals, id, seed }: Props) {
     const [state, setState] = useSimpleGeneralState(id, seed);
     return (
-        <InfoCard width={525} height={140}>
+        <InfoCard maxWidth={525} height={148}>
             <Stack gap={4}>
                 {generalGoals.map(goal => (
                     <Group key={goal.name} gap={6} justify="space-between">

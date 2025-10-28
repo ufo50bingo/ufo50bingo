@@ -195,7 +195,14 @@ export default function Play({
               Seed: <strong>{seed}</strong>
             </div>
           </Group>
-          {showGeneralTracker && <SimpleGeneralTracker id={id} seed={seed} generalGoals={generalGoals} />}
+          {showGeneralTracker && (
+            <SimpleGeneralTracker
+              isHidden={isHidden}
+              id={id}
+              seed={seed}
+              generalGoals={generalGoals}
+            />
+          )}
           <PlaySettings
             id={id}
             color={color}

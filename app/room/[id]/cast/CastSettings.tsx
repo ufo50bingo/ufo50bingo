@@ -1,5 +1,6 @@
 import { ORDERED_DIFFICULTY, DIFFICULTY_NAMES, Difficulty } from "@/app/goals";
 import {
+  Accordion,
   Affix,
   Alert,
   Button,
@@ -90,88 +91,132 @@ export default function CastSettings({
         <Drawer.Overlay backgroundOpacity={0} />
         <Drawer.Content style={{ boxShadow: "-0.2em 0 0.4em black" }}>
           <Drawer.Header>
-            <Drawer.Title>Tools</Drawer.Title>
+            <Drawer.Title>Tools — Seed {seed}</Drawer.Title>
             <Drawer.CloseButton />
           </Drawer.Header>
-          <Drawer.Body>
-            <Stack>
-              <span>
-                <strong>Seed: {seed}</strong>
-              </span>
-              <ColorSelector
-                label="Left player color"
-                color={leftColor}
-                setColor={setLeftColor}
-              />
-              <ColorSelector
-                label="Right player color"
-                color={rightColor}
-                setColor={setRightColor}
-              />
-              <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
-                <Countdown setIsHidden={setIsHidden} />
-              </Card>
-              <RequestPauseButton id={id} />
-              <Card shadow="sm" padding="sm" radius="md" withBorder={true}>
-                <Stack>
-                  <Text size="sm">Display difficulty tags for:</Text>
-                  {ORDERED_DIFFICULTY.map((difficulty) => (
-                    <Checkbox
-                      key={difficulty}
-                      checked={shownDifficulties.includes(difficulty)}
-                      onChange={(event) =>
-                        setShownDifficulties(
-                          event.currentTarget.checked
-                            ? [...shownDifficulties, difficulty]
-                            : shownDifficulties.filter((d) => d !== difficulty)
-                        )
+          <Drawer.Body p={0}>
+            <Accordion multiple={true} defaultValue={leftColor === rightColor ? ["color"] : []}>
+              <Accordion.Item value="color">
+                <Accordion.Control>Select Colors</Accordion.Control>
+                <Accordion.Panel>
+                  <ColorSelector
+                    label="Left player color"
+                    color={leftColor}
+                    setColor={setLeftColor}
+                  />
+                  <ColorSelector
+                    label="Right player color"
+                    color={rightColor}
+                    setColor={setRightColor}
+                  />
+                </Accordion.Panel>
+              </Accordion.Item>
+              <Accordion.Item value="countdown">
+                <Accordion.Control>
+                  Start Countdown
+                </Accordion.Control>
+                <Accordion.Panel>
+                  <Countdown setIsHidden={setIsHidden} />
+                </Accordion.Panel>
+              </Accordion.Item>
+              <Accordion.Item value="pause">
+                <Accordion.Control>
+                  Request Pause
+                </Accordion.Control>
+                <Accordion.Panel>
+                  <RequestPauseButton id={id} />
+                </Accordion.Panel>
+              </Accordion.Item>
+              <Accordion.Item value="display">
+                <Accordion.Control>
+                  Display Settings
+                </Accordion.Control>
+                <Accordion.Panel>
+                  <Stack>
+                    <Stack>
+                      <Text size="sm">Display difficulty tags for:</Text>
+                      {ORDERED_DIFFICULTY.map((difficulty) => (
+                        <Checkbox
+                          key={difficulty}
+                          checked={shownDifficulties.includes(difficulty)}
+                          onChange={(event) =>
+                            setShownDifficulties(
+                              event.currentTarget.checked
+                                ? [...shownDifficulties, difficulty]
+                                : shownDifficulties.filter((d) => d !== difficulty)
+                            )
+                          }
+                          label={DIFFICULTY_NAMES[difficulty]}
+                        />
+                      ))}
+                    </Stack>
+                    <Select
+                      label="Sort type"
+                      data={[
+                        { value: "fast", label: "Fastest" },
+                        { value: "alphabetical", label: "Alphabetical" },
+                        { value: "chronological", label: "Chronological" },
+                      ]}
+                      value={sortType}
+                      onChange={(newSortType: string | null) =>
+                        setSortType((newSortType ?? "fast") as SortType)
                       }
-                      label={DIFFICULTY_NAMES[difficulty]}
                     />
-                  ))}
-                </Stack>
-              </Card>
-              <Select
-                label="Sort type"
-                data={[
-                  { value: "fast", label: "Fastest" },
-                  { value: "alphabetical", label: "Alphabetical" },
-                  { value: "chronological", label: "Chronological" },
-                ]}
-                value={sortType}
-                onChange={(newSortType: string | null) =>
-                  setSortType((newSortType ?? "fast") as SortType)
-                }
-              />
-              <Select
-                label="Icon type"
-                data={[
-                  { value: "winnerbit", label: "WinnerBit" },
-                  { value: "sprites", label: "Sprites" },
-                ]}
-                value={iconType}
-                onChange={(newIconType: string | null) =>
-                  setIconType((newIconType ?? "winnerbit") as IconType)
-                }
-              />
-              <Checkbox
-                label="Hide board by default"
-                checked={hideByDefault}
-                onChange={(event) => setHideByDefault(event.target.checked)}
-              />
-              <EditDings dings={dings} setDings={setDings} />
-              <Button
-                component="a"
-                href={`https://www.bingosync.com/room/${id}`}
-              >
-                View Bingosync room
-              </Button>
-              <Button color="green" onClick={() => setIsCreating(true)}>
-                Create new board
-              </Button>
-              <DisconnectButton />
-              <DirPicker />
-            </Stack>
+                    <Select
+                      label="Icon type"
+                      data={[
+                        { value: "winnerbit", label: "WinnerBit" },
+                        { value: "sprites", label: "Sprites" },
+                      ]}
+                      value={iconType}
+                      onChange={(newIconType: string | null) =>
+                        setIconType((newIconType ?? "winnerbit") as IconType)
+                      }
+                    />
+                    <Checkbox
+                      label="Hide board by default"
+                      checked={hideByDefault}
+                      onChange={(event) => setHideByDefault(event.target.checked)}
+                    />
+                  </Stack>
+                </Accordion.Panel>
+              </Accordion.Item>
+              <Accordion.Item value="notifications">
+                <Accordion.Control>
+                  Notifications
+                </Accordion.Control>
+                <Accordion.Panel>
+                  <EditDings dings={dings} setDings={setDings} />
+                </Accordion.Panel>
+              </Accordion.Item>
+              <Accordion.Item value="advanced">
+                <Accordion.Control>
+                  Advanced Caster Tools
+                </Accordion.Control>
+                <Accordion.Panel>
+                  <DirPicker />
+                </Accordion.Panel>
+              </Accordion.Item>
+              <Accordion.Item value="createboard">
+                <Accordion.Control>
+                  Create New Board
+                </Accordion.Control>
+                <Accordion.Panel>
+                  <Button color="green" onClick={() => setIsCreating(true)}>
+                    Create new board
+                  </Button>
+                </Accordion.Panel>
+              </Accordion.Item>
+              <Stack p="md">
+                <Button
+                  component="a"
+                  href={`https://www.bingosync.com/room/${id}`}
+                >
+                  View Bingosync room
+                </Button>
+                <DisconnectButton />
+              </Stack>
+            </Accordion>
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>

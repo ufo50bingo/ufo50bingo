@@ -11,7 +11,7 @@ import {
 } from "@mantine/core";
 import { IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
-import Countdown from "./Countdown";
+import Countdown from "../common/Countdown";
 import ColorSelector from "../common/ColorSelector";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { IconType, SortType } from "./useLocalState";

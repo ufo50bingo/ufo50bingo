@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Alert,
   Button,
   Card,
   Container,
@@ -50,6 +51,11 @@ export default function Login({ id }: Props) {
               </a>
               .
             </span>
+            <Alert>
+              Please note that the Playing and Casting pages currently support
+              only <strong>Lockout</strong> games.
+              For non-Lockout games, use Bingosync directly.
+            </Alert>
             <span>Are you playing or casting?</span>
             <SegmentedControl
               data={[

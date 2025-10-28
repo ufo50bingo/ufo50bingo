@@ -170,25 +170,13 @@ export default function LeagueMatch() {
       {url !== "" && (
         <Alert
           variant="light"
-          title="New casting tools!"
-          icon={<IconBrandTwitch />}
-        >
-          We have new casting tools!{" "}
-          <Link href={`/cast/${id}`}>Try them out here!</Link>
-        </Alert>
-      )}
-      {url !== "" && (
-        <Alert
-          variant="light"
           color="green"
           title="Success!"
           icon={<IconCheck />}
         >
-          Your bingo board is available at{" "}
           <a href={url} target="_blank">
-            {url}
+            Your new room is available at here.
           </a>
-          .
           <Link href={`/match/${id}`} target="_blank">
             Your Match results can be viewed here.
           </Link>

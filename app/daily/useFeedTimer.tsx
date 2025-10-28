@@ -29,7 +29,7 @@ export default function useFeedTimer(
   attempt: number,
 ): Return {
   const timerState = useMemo<TimerState>(() => {
-    let accumulatedDuration = attempt > 1 ? 0 : -60000;
+    let accumulatedDuration = attempt > 0 ? 0 : -60000;
     let curStartTime: null | number = null;
 
     feed.forEach((item: DailyFeedRow) => {

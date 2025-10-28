@@ -22,7 +22,7 @@ export default function InfoCard({
       padding="sm"
       radius="md"
       withBorder={true}
-      style={{ height: `${height ?? 300}px`, flexBasis: `${width}px`, resize: "both" }}
+      style={{ height: `${height ?? 300}px`, width: `${width}px`, resize: "both" }}
     >
       <Card.Section inheritPadding={true} withBorder={true} py="sm">
         <Title order={5}>{title}</Title>

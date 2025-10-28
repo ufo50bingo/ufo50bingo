@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { TBoard } from "../matches/parseBingosyncData";
 import Board from "../Board";
-import { Container, Card, Text, Button, Stack, Title, List } from "@mantine/core";
+import { Container, Card, Text, Button, Stack, Title, List, Modal, Group } from "@mantine/core";
 import { LocalDate, toISODate } from "./localDate";
 import useDailyColor from "./useDailyColor";
 import ColorSelector from "../room/[id]/common/ColorSelector";
@@ -14,6 +14,7 @@ import getFeedWithDuration from "./getFeedWithDuration";
 import getFirstBingoMajorityBlackoutIndex from "./findFirstBingoMajorityBlackout";
 import Duration from "../practice/Duration";
 import { IconRefreshAlert } from "@tabler/icons-react";
+import { useMediaQuery } from "@mantine/hooks";
 
 type Props = {
     date: LocalDate;
@@ -26,6 +27,7 @@ type Props = {
 export default function Daily({ date, board: plainBoard, attempt, setAttempt, feed: feedWithMistakes }: Props) {
     const isoDate = toISODate(date);
     const [color, setColor] = useDailyColor();
+    const [isStartingNewAttempt, setIsStartingNewAttempt] = useState(false);
 
     const feed = useMemo(() => getDailyFeedWithoutMistakes(feedWithMistakes), [feedWithMistakes]);
     const feedWithDuration = useMemo(() => getFeedWithDuration(feed), [feed]);
@@ -59,6 +61,8 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
         isoDate,
         attempt,
     );
+
+    const isMobile = useMediaQuery("(max-width: 525px)");
 
     return (
         <Container my="md">
@@ -126,13 +130,39 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                             On your text attempt, you will not have the 60 second scanning period.
                         </Text>
                         <div>
-                            <Button color="red" onClick={() => setAttempt(attempt + 1)} leftSection={<IconRefreshAlert />}>
+                            <Button color="red" onClick={() => setIsStartingNewAttempt(true)} leftSection={<IconRefreshAlert />}>
                                 Start Over
                             </Button>
                         </div>
                     </Stack>
                 </Card.Section>
             </Card>
+            {isStartingNewAttempt && (
+                <Modal
+                    fullScreen={isMobile}
+                    centered={true}
+                    onClose={() => setIsStartingNewAttempt(false)}
+                    opened={true}
+                    title="Start Over"
+                >
+                    <Stack>
+                        <span>Are you sure you want to start over?</span>
+                        <Group justify="end">
+                            <Button onClick={() => setIsStartingNewAttempt(false)}>Cancel</Button>
+                            <Button
+                                color="red"
+                                onClick={() => {
+                                    setAttempt(attempt + 1);
+                                    setIsStartingNewAttempt(false);
+                                }}
+                            >
+                                Start Over
+                            </Button>
+                        </Group>
+                    </Stack>
+                </Modal>
+            )
+            }
         </Container >
     );
 }

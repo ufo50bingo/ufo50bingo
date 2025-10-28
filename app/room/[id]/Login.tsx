@@ -53,8 +53,8 @@ export default function Login({ id }: Props) {
             </span>
             <Alert>
               Please note that the Playing and Casting pages currently support
-              only <strong>Lockout</strong> games.
-              For non-Lockout games, use Bingosync directly.
+              only <strong>Lockout</strong> games.{' '}
+              <a href={`https://www.bingosync.com/room/${id}`} target="_blank">For non-Lockout games, use the old Bingosync page.</a>
             </Alert>
             <span>Are you playing or casting?</span>
             <SegmentedControl
@@ -153,8 +153,8 @@ export default function Login({ id }: Props) {
                   chat messages are received, or squares are marked.
                 </ListItem>
                 <ListItem>
-                  Pauses can be requested, and all users connected via ufo50.bingo
-                  will have their board hidden and hear a notification sound.
+                  Pauses can be requested. All users connected via ufo50.bingo
+                  will have their board hidden and hear an alert.
                 </ListItem>
               </List>
             </Stack>

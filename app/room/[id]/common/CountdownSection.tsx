@@ -1,15 +1,16 @@
-import { Alert, Button, NumberInput, Stack } from "@mantine/core";
+import { Accordion, Alert, Button, NumberInput, Stack } from "@mantine/core";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import sendChat from "./sendChat";
+import { RoomView } from "../roomCookie";
 
 type Props = {
-  setIsHidden: (newSetIsHidden: boolean) => unknown;
+  view: RoomView;
 };
 
 const REVEAL_STEP = "REVEAL!";
 
-export default function Countdown({ setIsHidden }: Props) {
+export default function CountdownSection({ view }: Props) {
   const { id } = useParams<{ id: string }>();
   const useBot = useSearchParams().get("use_bot") === "true";
 
@@ -60,9 +61,6 @@ export default function Countdown({ setIsHidden }: Props) {
       if (cancelRef.current) {
         break;
       }
-      if (text === REVEAL_STEP) {
-        setIsHidden(false);
-      }
       sendChat(id, text);
     }
     setIsRunning(false);
@@ -77,31 +75,39 @@ export default function Countdown({ setIsHidden }: Props) {
     }
   };
   return (
-    <Stack>
-      <Alert color="yellow" title="WARNING!">
-        You should not minimize your browser after starting a countdown!
-      </Alert>
-      <NumberInput
-        label="Scanning time (min 10 seconds)"
-        value={analysisSeconds}
-        min={10}
-        onChange={setAnalysisSeconds}
-        disabled={useBot || isRunning}
-      />
-      {isRunning ? (
-        <Button onClick={cancelSequence}>Cancel Countdown</Button>
-      ) : (
-        <Button
-          disabled={
-            useBot ||
-            typeof analysisSeconds === "string" ||
-            analysisSeconds < 10
-          }
-          onClick={startSequence}
-        >
-          Start Countdown
-        </Button>
-      )}
-    </Stack>
+    <Accordion.Item value="countdown">
+      <Accordion.Control>
+        Start Countdown
+      </Accordion.Control>
+      <Accordion.Panel>
+        <Stack>
+          <Alert color="yellow" title="WARNING!">
+            You should not minimize your browser after starting a countdown!
+            {view === "play" && <><br /><br />If your game has a caster, please let the caster start the countdown instead!</>}
+          </Alert>
+          <NumberInput
+            label="Scanning time (min 10 seconds)"
+            value={analysisSeconds}
+            min={10}
+            onChange={setAnalysisSeconds}
+            disabled={useBot || isRunning}
+          />
+          {isRunning ? (
+            <Button onClick={cancelSequence}>Cancel Countdown</Button>
+          ) : (
+            <Button
+              disabled={
+                useBot ||
+                typeof analysisSeconds === "string" ||
+                analysisSeconds < 10
+              }
+              onClick={startSequence}
+            >
+              Start Countdown
+            </Button>
+          )}
+        </Stack>
+      </Accordion.Panel>
+    </Accordion.Item>
   );
 }

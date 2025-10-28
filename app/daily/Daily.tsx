@@ -15,6 +15,10 @@ import getFirstBingoMajorityBlackoutIndex from "./findFirstBingoMajorityBlackout
 import Duration from "../practice/Duration";
 import { IconRefreshAlert } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
+import { duration } from "html2canvas/dist/types/css/property-descriptors/duration";
+import getDurationText from "../practice/getDurationText";
+import getBoardAtIndex from "./getBoardAtIndex";
+import getEmojiBoard from "./getEmojiBoard";
 
 type Props = {
     date: LocalDate;
@@ -79,49 +83,91 @@ export default function Daily({ date, board: plainBoard, attempt, setAttempt, fe
                     </Stack>
                 </Card.Section>
                 <Card.Section withBorder={true} inheritPadding={true} py="xs">
-                    <Stack gap={4} style={{ alignSelf: "center" }}>
-                        <Board
-                            board={board}
-                            onClickSquare={async (squareIndex: number) => {
-                                if (completedIndexes.has(squareIndex)) {
-                                    await db.dailyFeed.add({ type: "clear", time: Date.now(), squareIndex, date: isoDate, attempt });
-                                } else {
-                                    await db.dailyFeed.add({ type: "mark", time: Date.now(), squareIndex, date: isoDate, attempt });
-                                }
-                            }}
-                            hiddenText={
-                                <>
-                                    <div>Click to reveal today's board.</div>
-                                    <div>Your timer will start as soon as you reveal.</div>
-                                    {attempt === 1
-                                        ? <div>Start playing when the timer hits 0:00.0!</div>
-                                        : <div>Start playing as soon as you reveal!</div>
+                    <Stack style={{ alignItems: "center" }}>
+                        <div>
+                            <Stack gap={8}>
+                                <Board
+                                    board={board}
+                                    onClickSquare={async (squareIndex: number) => {
+                                        if (completedIndexes.has(squareIndex)) {
+                                            await db.dailyFeed.add({ type: "clear", time: Date.now(), squareIndex, date: isoDate, attempt });
+                                        } else {
+                                            await db.dailyFeed.add({ type: "mark", time: Date.now(), squareIndex, date: isoDate, attempt });
+                                        }
+                                    }}
+                                    hiddenText={
+                                        <>
+                                            <div>Click to reveal today's board.</div>
+                                            <div>Your timer will start as soon as you reveal.</div>
+                                            {attempt === 1
+                                                ? <div>Start playing when the timer hits 0:00.0!</div>
+                                                : <div>Start playing as soon as you reveal!</div>
+                                            }
+                                        </>
                                     }
-                                </>
-                            }
-                            isHidden={isHidden}
-                            setIsHidden={async () => {
-                                await db.dailyFeed.add({ type: "reveal", time: Date.now(), date: isoDate, attempt, squareIndex: null });
-                            }}
-                            shownDifficulties={[]}
-                        />
-                        <Text style={{ alignSelf: "center", fontVariantNumeric: "tabular-nums" }} size="xl">
-                            {timer}
-                        </Text>
-                        <Button
-                            onClick={() => (isRunning ? pause() : unpause())}
-                            fullWidth={true}
-                        >
-                            {isRunning ? "Pause" : "Resume"}
-                        </Button>
+                                    isHidden={isHidden}
+                                    setIsHidden={async () => {
+                                        await db.dailyFeed.add({ type: "reveal", time: Date.now(), date: isoDate, attempt, squareIndex: null });
+                                    }}
+                                    shownDifficulties={[]}
+                                />
+                                <Group justify="space-between">
+                                    <Text style={{ alignSelf: "center", fontVariantNumeric: "tabular-nums" }} size="xl">
+                                        {timer}
+                                    </Text>
+                                    <Button
+                                        onClick={() => (isRunning ? pause() : unpause())}
+                                    >
+                                        {isRunning ? "Pause" : "Resume"}
+                                    </Button>
+                                </Group>
+                            </Stack>
+                        </div>
                     </Stack>
                 </Card.Section>
                 <Card.Section withBorder={true} inheritPadding={true} py="xs">
-                    <List>
-                        <List.Item><strong>Bingo:</strong> {bingo == null ? "Incomplete" : <Duration duration={feedWithDuration[bingo][0]} />}</List.Item>
-                        <List.Item><strong>Majority:</strong> {majority == null ? "Incomplete" : <Duration duration={feedWithDuration[majority][0]} />}</List.Item>
-                        <List.Item><strong>Blackout:</strong> {blackout == null ? "Incomplete" : <Duration duration={feedWithDuration[blackout][0]} />}</List.Item>
-                    </List>
+                    <Stack align="start">
+                        <Text size="lg"><strong>Your summary</strong></Text>
+                        <List>
+                            <List.Item><strong>Bingo:</strong> {bingo == null ? "Incomplete" : <Duration duration={feedWithDuration[bingo][0]} />}</List.Item>
+                            <List.Item><strong>Majority:</strong> {majority == null ? "Incomplete" : <Duration duration={feedWithDuration[majority][0]} />}</List.Item>
+                            <List.Item><strong>Blackout:</strong> {blackout == null ? "Incomplete" : <Duration duration={feedWithDuration[blackout][0]} />}</List.Item>
+                        </List>
+                        <Button onClick={() => {
+                            let summary = `Daily Bingo ${date.month}/${date.year}`;
+                            let isFirst = true;
+                            if (bingo != null) {
+                                summary += "\n\n";
+                                if (isFirst) {
+                                    summary += "||";
+                                    isFirst = false;
+                                }
+                                summary += `Bingo in ${getDurationText(feedWithDuration[bingo][0], false)}\n`;
+                                summary += getEmojiBoard(getBoardAtIndex(feed, bingo), color);
+                            }
+                            if (majority != null) {
+                                summary += "\n\n";
+                                if (isFirst) {
+                                    summary += "||";
+                                    isFirst = false;
+                                }
+                                summary += `Majority in ${getDurationText(feedWithDuration[majority][0], false)}\n`;
+                                summary += getEmojiBoard(getBoardAtIndex(feed, majority), color);
+                            }
+                            if (blackout != null) {
+                                summary += "\n\n";
+                                if (isFirst) {
+                                    summary += "||";
+                                    isFirst = false;
+                                }
+                                summary += `Blackout in ${getDurationText(feedWithDuration[blackout][0], false)}`;
+                            }
+                            summary += '||';
+                            navigator.clipboard.writeText(summary);
+                        }}>
+                            Copy summary to clipboard
+                        </Button>
+                    </Stack>
                 </Card.Section>
                 <Card.Section withBorder={true} inheritPadding={true} py="xs">
                     <Stack justify="start">

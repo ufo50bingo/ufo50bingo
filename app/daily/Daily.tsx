@@ -236,7 +236,7 @@ export default function Daily({ date, dailyData, attempt, setAttempt, feed: feed
                     <Stack justify="start">
                         <Text>
                             Want to start over? Use this button to clear your data.
-                            On your text attempt, you will not have the 60 second scanning period.
+                            On your next attempt, you will not have the 60 second scanning period.
                         </Text>
                         <div>
                             <Button color="red" onClick={() => setIsStartingNewAttempt(true)} leftSection={<IconRefreshAlert />}>

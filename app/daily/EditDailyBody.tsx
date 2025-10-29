@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { LocalDate } from "./localDate";
 import { DailyData } from "./page";
-import { Alert, Button, Group, Stack, Textarea, TextInput } from "@mantine/core";
+import { Alert, Button, Group, NumberInput, Stack, Textarea, TextInput } from "@mantine/core";
 import { fetchBoard } from "../fetchMatchInfo";
 import saveDailyBoard from "./saveDailyBoard";
 
@@ -16,6 +16,7 @@ export default function EditDailyBody({ date, dailyData, onClose }: Props) {
     const [description, setDescription] = useState(dailyData.description ?? "");
     const [creator, setCreator] = useState(dailyData.creator ?? "");
     const [textBoard, setTextBoard] = useState(() => dailyData.board.join("\n"));
+    const [seed, setSeed] = useState(dailyData.seed);
 
     const board = textBoard.trim().split("\n");
     const lines = board.length;
@@ -50,6 +51,12 @@ export default function EditDailyBody({ date, dailyData, onClose }: Props) {
                     Sync
                 </Button>
             </Group>
+            <NumberInput
+                label="Seed"
+                description="Not used in card generation. Only intended for terminal codes."
+                min={0}
+                max={999999}
+            />
             <Textarea
                 label="Board"
                 description="Each goal should be on a separate line"
@@ -72,7 +79,7 @@ export default function EditDailyBody({ date, dailyData, onClose }: Props) {
                     disabled={lines !== 25}
                     onClick={async () => {
                         try {
-                            await saveDailyBoard({ board, title, creator, description }, date);
+                            await saveDailyBoard({ board, title, creator, description, seed }, date);
                             window.location.reload();
                         } catch (err) {
                             console.error(err);

@@ -162,6 +162,7 @@ export default function Daily({ date, dailyData, attempt, setAttempt, feed: feed
                                     shownDifficulties={['general']}
                                 />
                                 <Group justify="space-between">
+                                    <Text>Seed: {dailyData.seed.toString().padStart(6, '0')}</Text>
                                     <Text style={{ alignSelf: "center", fontVariantNumeric: "tabular-nums" }} size="xl">
                                         {timer}
                                     </Text>

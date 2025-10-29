@@ -16,6 +16,7 @@ type FilterParams = {
 
 export type DailyData = {
   board: ReadonlyArray<string>,
+  seed: number,
   title: string | null | undefined,
   description: string | null | undefined,
   creator: string | null | undefined,
@@ -23,7 +24,6 @@ export type DailyData = {
 
 function isDateSunday(localDate: LocalDate): boolean {
   const date = new Date(`${toISODate(localDate)}T00:00:00`);
-  console.log(date.getDay());
   return date.getDay() === 0;
 }
 
@@ -109,34 +109,40 @@ async function getDailyBoard(date: LocalDate): Promise<DailyData> {
         board,
         title,
         description,
-        creator
+        creator,
+        seed
       FROM daily
       WHERE date = ${isoDate}`;
   const board: null | undefined | string = sqlResult?.[0]?.board;
   const title: null | undefined | string = sqlResult?.[0]?.title;
   const description: null | undefined | string = sqlResult?.[0]?.description;
   const creator: null | undefined | string = sqlResult?.[0]?.creator;
-  if (board != null) {
+  const seed: null | undefined | number = sqlResult?.[0]?.seed;
+  if (board != null && seed != null) {
     const parsed = JSON.parse(board);
-    return { board: parsed, title, description, creator };
+    return { board: parsed, title, description, creator, seed };
   }
   const isSunday = isDateSunday(date);
   const newBoard = await constructBoard(date, isSunday);
   const newTitle = isSunday ? 'Spicy Sunday' : null;
+  const newSeed = Math.ceil(999999 * Math.random());
   await sql`INSERT INTO daily (
     date,
     board,
-    title
+    title,
+    seed
   ) VALUES (
     ${isoDate},
     ${JSON.stringify(newBoard)},
-    ${newTitle}
+    ${newTitle},
+    ${newSeed}
   );`;
   return {
     board: newBoard,
     title: newTitle,
     description: null,
     creator: null,
+    seed: newSeed,
   };
 }
 

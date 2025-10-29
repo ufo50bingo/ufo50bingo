@@ -16,7 +16,7 @@ export default function EditDailyBody({ date, dailyData, onClose }: Props) {
     const [description, setDescription] = useState(dailyData.description ?? "");
     const [creator, setCreator] = useState(dailyData.creator ?? "");
     const [textBoard, setTextBoard] = useState(() => dailyData.board.join("\n"));
-    const [seed, setSeed] = useState(dailyData.seed);
+    const [seed, setSeed] = useState<number | string | undefined>(dailyData.seed);
 
     const board = textBoard.trim().split("\n");
     const lines = board.length;
@@ -56,6 +56,9 @@ export default function EditDailyBody({ date, dailyData, onClose }: Props) {
                 description="Not used in card generation. Only intended for terminal codes."
                 min={0}
                 max={999999}
+                value={seed}
+                onChange={setSeed}
+                allowDecimal={false}
             />
             <Textarea
                 label="Board"
@@ -79,7 +82,18 @@ export default function EditDailyBody({ date, dailyData, onClose }: Props) {
                     disabled={lines !== 25}
                     onClick={async () => {
                         try {
-                            await saveDailyBoard({ board, title, creator, description, seed }, date);
+                            let newSeed: number;
+                            if (seed == null) {
+                                newSeed = Math.ceil(999999 * Math.random());
+                            } else if (typeof seed === "string") {
+                                newSeed = Number(seed);
+                                if (Number.isNaN(newSeed) || newSeed < 0 || newSeed > 999999 || !Number.isInteger(newSeed)) {
+                                    newSeed = Math.ceil(999999 * Math.random());
+                                }
+                            } else {
+                                newSeed = seed;
+                            }
+                            await saveDailyBoard({ board, title, creator, description, seed: newSeed }, date);
                             window.location.reload();
                         } catch (err) {
                             console.error(err);

@@ -158,9 +158,13 @@ export default function Shell({ children }: Props) {
           <Group justify="center">
             <Text size="xs">
               Made by Frank — Suggestions? Tag me in{" "}
-              <a href="https://discord.gg/zj2HQGaN" target="_blank">
-                #bingo-chat on the discord
-              </a>
+              <a
+                href="https://discord.com/channels/525973026429206530/1332514343899627591"
+                target="_blank"
+              >
+                #bingo-chat
+              </a>{" "}
+              on the <a href="https://50games.fans">discord</a>
             </Text>
           </Group>
         </div>

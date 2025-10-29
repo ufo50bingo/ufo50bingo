@@ -119,13 +119,23 @@ export default function Daily({ date, dailyData, attempt, setAttempt, feed: feed
                             and then a blackout (all 25 squares).<br />
                             New daily bingos are available at <strong>midnight ET</strong>.
                         </Text>
-                        <ColorSelector label="Select your color" color={color} setColor={setColor} />
+                        <Text>
+                            If you prefer to play on Bingosync,{' '}
+                            <Anchor onClick={() => {
+                                const fixedBoardJson = JSON.stringify(plainBoard.map(name => ({ name })));
+                                navigator.clipboard.writeText(fixedBoardJson);
+                            }}>
+                                click here to copy the goal list
+                            </Anchor>{' '}
+                            and paste it into a <strong>Fixed Board</strong> custom game.
+                        </Text>
                     </Stack>
                 </Card.Section>
                 <Card.Section withBorder={true} inheritPadding={true} py="xs">
                     <Stack style={{ alignItems: "center" }}>
                         <div>
                             <Stack gap={8}>
+                                <ColorSelector label="Select your color" color={color} setColor={setColor} />
                                 <Board
                                     board={board}
                                     onClickSquare={async (squareIndex: number) => {

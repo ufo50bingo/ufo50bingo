@@ -7,6 +7,7 @@ import {
   PlayerToColors,
 } from "./parseBingosyncData";
 import { ALIASES } from "../createboard/leagueConstants";
+import { color } from "html2canvas/dist/types/css/types/color";
 
 export const BINGO_LINES = [
   // rows
@@ -320,6 +321,14 @@ export function getColorToVerifiedName(
     const newCount = change.color === "blank" ? curCount - 1 : curCount + 1;
     playerToAdditions[change.name] = newCount;
     colorToPlayerToNetAdditions[relevantColor] = playerToAdditions;
+  });
+
+  // if a color has no net additions, remove it from the object
+  Object.keys(colorToPlayerToNetAdditions).forEach((color) => {
+    const counts = colorToPlayerToNetAdditions[color];
+    if (Object.keys(counts).every((name) => counts[name] === 0)) {
+      delete colorToPlayerToNetAdditions[color];
+    }
   });
 
   if (Object.keys(colorToPlayerToNetAdditions).length === 2) {

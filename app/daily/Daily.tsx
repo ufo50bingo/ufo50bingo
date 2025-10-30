@@ -42,6 +42,7 @@ import DailyBoardModal from "./DailyBoardModal";
 import useWakeLock from "../room/[id]/play/useWakeLock";
 import { DailyData } from "./page";
 import EditDaily from "./EditDaily";
+import getDailyTimes from "./getDailyTimes";
 
 type Props = {
   date: LocalDate;
@@ -344,6 +345,21 @@ export default function Daily({
                     false
                   )}\n`;
                   summary += getEmojiBoard(getBoardAtIndex(feed, bingo), color);
+                  const completions = getDailyTimes(bingo, feedWithDuration);
+                  const goalsAndTimes = completions.map(
+                    ([squareIndex, _time, duration], index) => {
+                      const ms =
+                        index > 0
+                          ? duration - completions[index - 1][2]
+                          : duration;
+                      const formattedDur = getDurationText(ms, false);
+                      return `${index + 1}. ${formattedDur} — ${
+                        plainBoard[squareIndex]
+                      }`;
+                    }
+                  );
+                  summary += "\n";
+                  summary += goalsAndTimes.join("\n");
                 }
                 if (majority != null) {
                   if (isFirst) {

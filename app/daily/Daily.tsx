@@ -335,7 +335,6 @@ export default function Daily({
                 let isFirst = true;
                 if (bingo != null) {
                   if (isFirst) {
-                    summary += "||";
                     isFirst = false;
                   } else {
                     summary += "\n\n";
@@ -348,7 +347,6 @@ export default function Daily({
                 }
                 if (majority != null) {
                   if (isFirst) {
-                    summary += "||";
                     isFirst = false;
                   } else {
                     summary += "\n\n";
@@ -364,7 +362,6 @@ export default function Daily({
                 }
                 if (blackout != null) {
                   if (isFirst) {
-                    summary += "||";
                     isFirst = false;
                   } else {
                     summary += "\n\n";
@@ -374,7 +371,6 @@ export default function Daily({
                     false
                   )}`;
                 }
-                summary += "||";
                 navigator.clipboard.writeText(summary);
               }}
             >

@@ -1,32 +1,12 @@
 import { ReactNode } from "react";
 import { DailyFeedRow } from "../db";
+import getDailyTimes from "./getDailyTimes";
 
 export default function getDailyOverlays(
   feedIndex: number,
   feedWithDuration: [number, DailyFeedRow][]
 ): ReadonlyArray<null | ReactNode> {
-  const finalMarkTimesAndDurations: (null | [number, number, number])[] =
-    Array(25).fill(null);
-  for (let i = 0; i <= feedIndex; i++) {
-    const [duration, item] = feedWithDuration[i];
-    if (item.squareIndex == null) {
-      continue;
-    }
-    if (item.type === "mark") {
-      const time = item.time;
-      finalMarkTimesAndDurations[item.squareIndex] = [
-        item.squareIndex,
-        time,
-        duration,
-      ];
-    } else if (item.type === "clear") {
-      finalMarkTimesAndDurations[item.squareIndex] = null;
-    }
-  }
-  const completedOnly = finalMarkTimesAndDurations.filter(
-    (tuple) => tuple != null
-  );
-  completedOnly.sort((a, b) => a[1] - b[1]);
+  const completedOnly = getDailyTimes(feedIndex, feedWithDuration);
 
   const overlays: (null | ReactNode)[] = Array(25).fill(null);
   completedOnly.forEach(([squareIndex, _time, duration], index) => {

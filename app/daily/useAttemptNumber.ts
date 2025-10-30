@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 
 export default function useAttemptNumber(
-  date: string,
+  date: string
 ): [number, (newAttempt: number) => unknown] {
   const key = `daily-attempt-${date}`;
   const [attempt, setAttemptRaw] = useState<number>(() => {

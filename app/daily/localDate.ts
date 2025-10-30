@@ -5,10 +5,7 @@ export type LocalDate = {
 };
 
 function isLeapYear(year: number): boolean {
-  return (
-    ((year % 4) === 0) &&
-    ((year % 100) !== 0)
-  ) || ((year % 400) === 0);
+  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 }
 
 function getDaysInMonth(month: number, year: number): number {
@@ -38,12 +35,19 @@ export function getPrevDate(date: LocalDate): LocalDate {
     return { day: 1, month: 1, year: date.year - 1 };
   }
   if (date.day === 1) {
-    return { day: getDaysInMonth(date.month, date.year), month: date.month - 1, year: date.year };
+    return {
+      day: getDaysInMonth(date.month, date.year),
+      month: date.month - 1,
+      year: date.year,
+    };
   }
   return { day: date.day - 1, month: date.month, year: date.year };
 }
 
-export function getPrevISODates(date: LocalDate, prevCount: number): ReadonlyArray<string> {
+export function getPrevISODates(
+  date: LocalDate,
+  prevCount: number
+): ReadonlyArray<string> {
   const prevWeek = [];
   let curDate = date;
   for (let i = 1; i <= prevCount; i++) {
@@ -54,10 +58,16 @@ export function getPrevISODates(date: LocalDate, prevCount: number): ReadonlyArr
 }
 
 export function toISODate({ year, month, day }: LocalDate): string {
-  return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+  return `${year}-${month.toString().padStart(2, "0")}-${day
+    .toString()
+    .padStart(2, "0")}`;
 }
 
 export function fromISODate(isoDate: string): LocalDate {
-  const [yearStr, monthStr, dayStr] = isoDate.split('-');
-  return { year: Number(yearStr), month: Number(monthStr), day: Number(dayStr) };
+  const [yearStr, monthStr, dayStr] = isoDate.split("-");
+  return {
+    year: Number(yearStr),
+    month: Number(monthStr),
+    day: Number(dayStr),
+  };
 }

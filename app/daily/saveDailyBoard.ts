@@ -4,7 +4,10 @@ import getSql from "../getSql";
 import { LocalDate, toISODate } from "./localDate";
 import { DailyData } from "./page";
 
-export default async function saveDailyBoard({ board, title, creator, description, seed }: DailyData, date: LocalDate): Promise<void> {
+export default async function saveDailyBoard(
+  { board, title, creator, description, seed }: DailyData,
+  date: LocalDate
+): Promise<void> {
   const sql = getSql(false);
   await sql`
       UPDATE daily

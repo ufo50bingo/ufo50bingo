@@ -17,7 +17,7 @@ function getEmoji(color: BingosyncColor): string {
     case "navy":
       return "🟦";
     case "teal":
-      return "🟩"
+      return "🟩";
     case "pink":
       return "🟪";
     case "brown":
@@ -27,15 +27,18 @@ function getEmoji(color: BingosyncColor): string {
   }
 }
 
-export default function getEmojiBoard(board: ReadonlyArray<boolean>, color: BingosyncColor): string {
+export default function getEmojiBoard(
+  board: ReadonlyArray<boolean>,
+  color: BingosyncColor
+): string {
   const blankEmoji = getEmoji("blank");
   const markedEmoji = getEmoji(color);
   let final = "";
   board.forEach((isMarked, index) => {
-    if (index > 0 && (index % 5) == 0) {
+    if (index > 0 && index % 5 == 0) {
       final += "\n";
     }
     final += isMarked ? markedEmoji : blankEmoji;
-  })
+  });
   return final;
 }

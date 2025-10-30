@@ -8,7 +8,9 @@ type SrlV5Square = {
   types: string[];
 };
 
-export default function getSrlV5Board(pasta: OtherPasta): ReadonlyArray<string> {
+export default function getSrlV5Board(
+  pasta: OtherPasta
+): ReadonlyArray<string> {
   const srlV5Board = srl_generator_v5(pasta, {}) as unknown as SrlV5Square[];
   // remove the dummy entry
   srlV5Board.shift();

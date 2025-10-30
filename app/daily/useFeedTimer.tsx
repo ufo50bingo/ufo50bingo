@@ -11,22 +11,22 @@ type Return = {
 };
 
 type Running = {
-  type: 'running',
-  startTime: number,
-  accumulatedDuration: number,
+  type: "running";
+  startTime: number;
+  accumulatedDuration: number;
 };
 
 type Paused = {
-  type: 'paused',
-  accumulatedDuration: number,
-}
+  type: "paused";
+  accumulatedDuration: number;
+};
 
 type TimerState = Running | Paused;
 
 export default function useFeedTimer(
   feed: ReadonlyArray<DailyFeedRow>,
   date: string,
-  attempt: number,
+  attempt: number
 ): Return {
   const timerState = useMemo<TimerState>(() => {
     let accumulatedDuration = attempt > 0 ? 0 : -60000;
@@ -58,13 +58,25 @@ export default function useFeedTimer(
 
   const unpause = async () => {
     if (timerState.type === "paused") {
-      await db.dailyFeed.add({ type: "unpause", time: Date.now(), date, attempt, squareIndex: null });
+      await db.dailyFeed.add({
+        type: "unpause",
+        time: Date.now(),
+        date,
+        attempt,
+        squareIndex: null,
+      });
     }
   };
 
   const pause = async () => {
     if (timerState.type === "running") {
-      await db.dailyFeed.add({ type: "pause", time: Date.now(), date, attempt, squareIndex: null });
+      await db.dailyFeed.add({
+        type: "pause",
+        time: Date.now(),
+        date,
+        attempt,
+        squareIndex: null,
+      });
     }
   };
 
@@ -72,13 +84,14 @@ export default function useFeedTimer(
     isRunning: timerState.type === "running",
     unpause,
     pause,
-    timer: timerState.type === "running" ? (
-      <RunningDuration
-        curStartTime={timerState.startTime}
-        accumulatedDuration={timerState.accumulatedDuration}
-      />
-    ) : (
-      <Duration duration={timerState.accumulatedDuration} />
-    ),
+    timer:
+      timerState.type === "running" ? (
+        <RunningDuration
+          curStartTime={timerState.startTime}
+          accumulatedDuration={timerState.accumulatedDuration}
+        />
+      ) : (
+        <Duration duration={timerState.accumulatedDuration} />
+      ),
   };
 }

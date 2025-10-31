@@ -7,7 +7,6 @@ import {
   PlayerToColors,
 } from "./parseBingosyncData";
 import { ALIASES } from "../createboard/leagueConstants";
-import { color } from "html2canvas/dist/types/css/types/color";
 
 export const BINGO_LINES = [
   // rows

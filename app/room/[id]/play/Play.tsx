@@ -9,7 +9,7 @@ import {
   TBoard,
 } from "@/app/matches/parseBingosyncData";
 import { Group, Stack, Text } from "@mantine/core";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import revealBoard from "./revealBoard";
 import PlaySettings from "./PlaySettings";
 import useColor from "./useColor";
@@ -59,6 +59,10 @@ export default function Play({
 
   useWakeLock();
 
+  const onNewCard = useCallback(() => {
+    setIsHidden(true);
+  }, []);
+
   const { board, rawFeed, seed, reconnectModal, dingAudio } = useBingosyncSocket({
     id,
     initialBoard,
@@ -69,6 +73,7 @@ export default function Play({
     playerName,
     setPauseRequestName,
     dings,
+    onNewCard,
   });
 
   const {

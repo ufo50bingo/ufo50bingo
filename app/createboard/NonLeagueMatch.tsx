@@ -1,11 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  IconCheck,
-  IconDots,
-  IconExclamationMark,
-} from "@tabler/icons-react";
+import { IconCheck, IconDots, IconExclamationMark } from "@tabler/icons-react";
 import {
   ActionIcon,
   Alert,
@@ -38,8 +34,6 @@ import createMatch from "./createMatch";
 import { db } from "../db";
 import Link from "next/link";
 
-const ROOM_PREFIX = "https://www.bingosync.com/room/";
-
 const options: ReadonlyArray<VariantMetadata> = METADATA.filter(
   (d) => !d.isMenu
 );
@@ -65,9 +59,8 @@ export default function NonLeagueMatch() {
   const [isPublicRaw, setIsPublicRaw] = useState(true);
   const [isCreationInProgress, setIsCreationInProgress] = useState(false);
   const [url, setUrl] = useState("");
+  const [id, setId] = useState<null | string>(null);
   const [error, setError] = useState<Error | null>(null);
-
-  const id = url.slice(ROOM_PREFIX.length);
 
   const isPublic = isPublicRaw && isLockout;
   const metadata = METADATA.find((d) => d.name === variant)!;
@@ -93,21 +86,21 @@ export default function NonLeagueMatch() {
         return stringify(
           showFilters
             ? Array.from(
-              checkState
-                .entries()
-                .filter(([_gameKey, checkState]) => checkState)
-            ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
+                checkState
+                  .entries()
+                  .filter(([_gameKey, checkState]) => checkState)
+              ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
             : ORDERED_PROPER_GAMES.map((gameKey) => ({
-              name: GAME_NAMES[gameKey],
-            }))
+                name: GAME_NAMES[gameKey],
+              }))
         );
       case "WithoutDifficulty":
         return stringify(
           showFilters || randomizeGroupings
             ? createPastaWithoutDifficulty(
-              metadata.pasta,
-              showFilters ? checkState : null
-            )
+                metadata.pasta,
+                showFilters ? checkState : null
+              )
             : metadata.pasta
         );
       case "WithDifficulty":
@@ -121,9 +114,9 @@ export default function NonLeagueMatch() {
         return stringify(
           randomizeGroupings
             ? createPasta(
-              metadata.pasta,
-              getDefaultDifficulties(metadata.pasta)
-            )
+                metadata.pasta,
+                getDefaultDifficulties(metadata.pasta)
+              )
             : metadata.pasta
         );
       case "Other":
@@ -149,7 +142,7 @@ export default function NonLeagueMatch() {
         />
         <Menu shadow="md" width={200}>
           <Menu.Target>
-            <ActionIcon onClick={() => { }} variant="default">
+            <ActionIcon onClick={() => {}} variant="default">
               <IconDots size={16} />
             </ActionIcon>
           </Menu.Target>
@@ -168,46 +161,46 @@ export default function NonLeagueMatch() {
       {(metadata.type === "WithDifficulty" ||
         metadata.type === "WithoutDifficulty" ||
         variant === "Game Names") && (
-          <Group>
-            {variant !== "Game Names" && (
-              <Tooltip
-                label={
-                  <span>
-                    Games will be divided into groups randomly while still
-                    respecting the
-                    <br />
-                    difficulty distribution, allowing for greater card variety
-                    than using the
-                    <br />
-                    default pasta. This option is always enabled when customizing
-                    games and
-                    <br />
-                    difficulty counts.
-                  </span>
-                }
-              >
-                <div>
-                  <Checkbox
-                    checked={showFilters || randomizeGroupings}
-                    label="Randomize goal groupings"
-                    onChange={(event) =>
-                      setRandomizeGroupings(event.currentTarget.checked)
-                    }
-                  />
-                </div>
-              </Tooltip>
-            )}
-            <Checkbox
-              checked={showFilters}
+        <Group>
+          {variant !== "Game Names" && (
+            <Tooltip
               label={
-                metadata.type === "WithDifficulty"
-                  ? "Customize games and difficulty counts"
-                  : "Customize games"
+                <span>
+                  Games will be divided into groups randomly while still
+                  respecting the
+                  <br />
+                  difficulty distribution, allowing for greater card variety
+                  than using the
+                  <br />
+                  default pasta. This option is always enabled when customizing
+                  games and
+                  <br />
+                  difficulty counts.
+                </span>
               }
-              onChange={(event) => setShowFilters(event.currentTarget.checked)}
-            />
-          </Group>
-        )}
+            >
+              <div>
+                <Checkbox
+                  checked={showFilters || randomizeGroupings}
+                  label="Randomize goal groupings"
+                  onChange={(event) =>
+                    setRandomizeGroupings(event.currentTarget.checked)
+                  }
+                />
+              </div>
+            </Tooltip>
+          )}
+          <Checkbox
+            checked={showFilters}
+            label={
+              metadata.type === "WithDifficulty"
+                ? "Customize games and difficulty counts"
+                : "Customize games"
+            }
+            onChange={(event) => setShowFilters(event.currentTarget.checked)}
+          />
+        </Group>
+      )}
       {(metadata.type === "WithoutDifficulty" || variant === "Game Names") &&
         showFilters && (
           <GameChecker checkState={checkState} setCheckState={setCheckState} />
@@ -319,11 +312,13 @@ export default function NonLeagueMatch() {
             db.createdMatches.add({ id });
             setError(null);
             setUrl(url);
+            setId(id);
             setIsCreationInProgress(false);
             window.open(url, "_blank");
           } catch (err: unknown) {
             setIsCreationInProgress(false);
             setUrl("");
+            setId(null);
             if (err instanceof Error) {
               setError(err);
             } else {

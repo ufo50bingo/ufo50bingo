@@ -1,10 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  IconCheck,
-  IconExclamationMark,
-} from "@tabler/icons-react";
+import { IconCheck, IconExclamationMark } from "@tabler/icons-react";
 import {
   Alert,
   Button,
@@ -26,7 +23,6 @@ import {
 } from "./leagueConstants";
 import Link from "next/link";
 
-const ROOM_PREFIX = "https://www.bingosync.com/room/";
 const LEAGUE_SEASON = 2;
 
 export default function LeagueMatch() {
@@ -36,13 +32,13 @@ export default function LeagueMatch() {
   const [password, setPassword] = useState("");
   const [isCreationInProgress, setIsCreationInProgress] = useState(false);
   const [url, setUrl] = useState("");
+  const [id, setId] = useState<null | string>(null);
   const [error, setError] = useState<Error | null>(null);
 
   const p1Tier = p1 != null ? PLAYER_TO_TIER[p1] : null;
   const p2Tier = p2 != null ? PLAYER_TO_TIER[p2] : null;
 
   const tierMismatch = p1 != null && p2 != null && p1Tier != p2Tier;
-  const id = url.slice(ROOM_PREFIX.length);
 
   return (
     <Stack gap={8}>
@@ -126,11 +122,13 @@ export default function LeagueMatch() {
             db.createdMatches.add({ id });
             setError(null);
             setUrl(url);
+            setId(id);
             setIsCreationInProgress(false);
             window.open(url, "_blank");
           } catch (err: unknown) {
             setIsCreationInProgress(false);
             setUrl("");
+            setId(null);
             if (err instanceof Error) {
               setError(err);
             } else {
@@ -176,6 +174,7 @@ export default function LeagueMatch() {
           <a href={url} target="_blank">
             Your new room is available at here.
           </a>
+          <br />
           <Link href={`/match/${id}`} target="_blank">
             Your Match results can be viewed here.
           </Link>

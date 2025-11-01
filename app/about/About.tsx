@@ -101,7 +101,7 @@ export default function About({ initialBoard }: Props) {
         </List>
         <p>
           For more information, see the{" "}
-          <Link href="https://docs.google.com/document/d/1VRHljWeJ3lHuN3ou-9R0kMgwoZeCcaEPBsRCI1nWEig/edit?tab=t.0#heading=h.us0d6jom1jp">
+          <Link href="https://docs.google.com/document/d/11kIVxD6NOsoXXXdv22owLPM_nj5oKiCpY53K418muW8/edit?usp=sharing">
             official UFO 50 Bingo Rules
           </Link>
           .
@@ -116,8 +116,8 @@ export default function About({ initialBoard }: Props) {
           <List.Item>Enter a Room Name and Password.</List.Item>
           <List.Item>Click "Create Bingosync Board"</List.Item>
           <List.Item>
-            Your browser will open a new tab on bingosync.com. Copy the URL and
-            send it to your opponent, along with the password you chose.
+            Your browser will open a new tab. Copy the URL and send it to your
+            opponent.
           </List.Item>
           <List.Item>
             Enter your desired name and the password you chose earlier to join
@@ -145,11 +145,12 @@ export default function About({ initialBoard }: Props) {
         </p>
         <Title order={2}>Practice Tools</Title>
         <p>
-          If you want to practice goals on your own, you can either use the
-          Non-League section of the <Link href="/">Create Match</Link> tab to
-          create a board for yourself, or use the{" "}
-          <Link href="/practice">Practice</Link> tab, which automatically
-          selects goals for you to attempt with built-in stat tracking.
+          If you want to practice goals on your own, you can use the Non-League
+          section of the <Link href="/">Create Match</Link> tab to create a
+          board for yourself, try the <Link href="/daily">Daily Bingo</Link>, or
+          use the <Link href="/practice">Practice</Link> tab, which
+          automatically selects goals for you to attempt with built-in stat
+          tracking.
         </p>
         <p>
           The <Link href="goals">All Goals</Link> tab contains the full list of

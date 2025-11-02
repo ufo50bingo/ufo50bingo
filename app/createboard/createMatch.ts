@@ -10,6 +10,7 @@ export interface LeagueInfo {
   season: number;
   tier: string;
   week: string;
+  game: number | null;
   p1: string;
   p2: string;
 }

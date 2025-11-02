@@ -5,6 +5,8 @@ import { IconCheck, IconExclamationMark } from "@tabler/icons-react";
 import {
   Alert,
   Button,
+  Checkbox,
+  NumberInput,
   Select,
   Stack,
   TextInput,
@@ -34,6 +36,7 @@ export default function LeagueMatch() {
   const [url, setUrl] = useState("");
   const [id, setId] = useState<null | string>(null);
   const [error, setError] = useState<Error | null>(null);
+  const [gameNumber, setGameNumber] = useState<null | number>(null);
 
   const p1Tier = p1 != null ? PLAYER_TO_TIER[p1] : null;
   const p2Tier = p2 != null ? PLAYER_TO_TIER[p2] : null;
@@ -69,6 +72,26 @@ export default function LeagueMatch() {
           tier.
         </Alert>
       )}
+      <Checkbox
+        checked={gameNumber != null}
+        onChange={(event) =>
+          event.currentTarget.checked
+            ? setGameNumber(1)
+            : setGameNumber(null)
+        }
+        label="Is part of multi-game series"
+      />
+      {gameNumber != null && (
+        <NumberInput
+          label="Game number"
+          value={gameNumber}
+          onChange={(newValue) => setGameNumber(newValue as number)}
+          min={1}
+          max={99}
+          allowNegative={false}
+          allowDecimal={false}
+        />
+      )}
       <TextInput
         spellCheck={false}
         label="Choose password"
@@ -97,8 +120,11 @@ export default function LeagueMatch() {
             ) {
               throw new Error("Unexpected null when creating match");
             }
+            const gameSuffix = gameNumber == null
+              ? ''
+              : `, Game ${gameNumber}`
             const id = await createMatch({
-              roomName: `${p1} vs ${p2}`,
+              roomName: `${p1} vs ${p2}${gameSuffix}`,
               password,
               isPublic: true,
               variant: "Standard",
@@ -113,6 +139,7 @@ export default function LeagueMatch() {
                 p2,
                 week,
                 tier: p1Tier,
+                game: gameNumber,
               },
             });
             const passwordParams = new URLSearchParams({

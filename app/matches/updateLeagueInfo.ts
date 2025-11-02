@@ -28,6 +28,9 @@ export default async function updateLeagueInfo(
 ): Promise<void> {
   const match = await fetchMatch(id);
   const matchResultSql = getMatchResultSql(match, update);
+  const gameSuffix = update.type === "league" && update.game != null
+    ? `, Game ${update.game}`
+    : "";
 
   const sql = getSql(false);
   const result =
@@ -36,12 +39,13 @@ export default async function updateLeagueInfo(
         UPDATE match
         SET
           ${matchResultSql}
-          name = ${update.p1 + " vs " + update.p2},
+          name = ${update.p1 + " vs " + update.p2 + gameSuffix},
           league_season = ${update.season},
           league_week = ${update.week},
           league_tier = ${update.tier},
           league_p1 = ${update.p1},
-          league_p2 = ${update.p2}
+          league_p2 = ${update.p2},
+          league_game = ${update.game}
         WHERE id = ${id}
         RETURNING ${MATCH_FIELDS}`
       : await sql`
@@ -53,7 +57,8 @@ export default async function updateLeagueInfo(
           league_week = NULL,
           league_tier = NULL,
           league_p1 = NULL,
-          league_p2 = NULL
+          league_p2 = NULL,
+          league_game = NULL
         WHERE id = ${id}
         RETURNING ${MATCH_FIELDS}`;
   revalidatePath("/matches");

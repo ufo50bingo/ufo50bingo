@@ -1,8 +1,10 @@
 import {
   Alert,
   Button,
+  Checkbox,
   Group,
   Modal,
+  NumberInput,
   Select,
   Stack,
   TextInput,
@@ -51,6 +53,7 @@ export default function EditLeagueModal({ isMobile, match, onClose }: Props) {
   const [p1, setP1] = useState<null | string>(leagueInfo?.p1 ?? null);
   const [p2, setP2] = useState<null | string>(leagueInfo?.p2 ?? null);
   const [name, setName] = useState<string>(match.name);
+  const [gameNumber, setGameNumber] = useState<number | null>(leagueInfo?.game ?? null);
 
   const p1Tier = p1 != null ? PLAYER_TO_TIER[p1] : null;
   const p2Tier = p2 != null ? PLAYER_TO_TIER[p2] : null;
@@ -130,6 +133,26 @@ export default function EditLeagueModal({ isMobile, match, onClose }: Props) {
                   League matches must be between players in the same tier.
                 </Alert>
               )}
+              <Checkbox
+                checked={gameNumber != null}
+                onChange={(event) =>
+                  event.currentTarget.checked
+                    ? setGameNumber(1)
+                    : setGameNumber(null)
+                }
+                label="Is part of multi-game series"
+              />
+              {gameNumber != null && (
+                <NumberInput
+                  label="Game number"
+                  value={gameNumber}
+                  onChange={(newValue) => setGameNumber(newValue as number)}
+                  min={1}
+                  max={99}
+                  allowNegative={false}
+                  allowDecimal={false}
+                />
+              )}
             </>
           )}
           <Group mt="lg" justify="flex-end">
@@ -166,6 +189,7 @@ export default function EditLeagueModal({ isMobile, match, onClose }: Props) {
                       week,
                       p1,
                       p2,
+                      game: gameNumber,
                     };
                   };
                   await updateLeagueInfo(match.id, getUpdateInfo());

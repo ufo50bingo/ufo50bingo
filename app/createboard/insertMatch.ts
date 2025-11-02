@@ -53,6 +53,7 @@ export async function insertMatch({
     league_tier,
     league_p1,
     league_p2,
+    league_game,
     sessionid_cookie,
     analysis_seconds
   ) VALUES (
@@ -68,6 +69,7 @@ export async function insertMatch({
     ${leagueInfo?.tier},
     ${leagueInfo?.p1},
     ${leagueInfo?.p2},
+    ${leagueInfo?.game},
     ${cookie},
     ${getDefaultAnalysisSeconds(variant)}
   );`;

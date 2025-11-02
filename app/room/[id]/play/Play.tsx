@@ -84,8 +84,7 @@ export default function Play({
     setState: setTimerState,
   } = useMatchTimer({
     key: `${id}-${seed}`,
-    scanMs: 60000,
-    matchMs: 1000 * 105 * 60,
+    initialAccumulatedDuration: -60000,
   });
 
   pauseRef.current = pause;

@@ -1,29 +1,17 @@
 import { ReactNode, useCallback, useState } from "react";
 import RunningMatchTime from "./RunningMatchTime";
 import Duration from "@/app/practice/Duration";
+import RunningDuration from "@/app/practice/RunningDuration";
 
 // uses MILLISECONDS
 type Input = {
   key: string;
-  scanMs: number;
-  matchMs: number;
+  initialAccumulatedDuration: number;
 };
 
-export type TimerState = RunningState | PausedState;
-
-interface BaseState {
-  scanMs: number;
-  matchMs: number;
-}
-
-interface RunningState extends BaseState {
-  type: "running";
-  endTime: number;
-}
-
-interface PausedState extends BaseState {
-  type: "paused";
-  remainingMs: number;
+export type TimerState = {
+  accumulatedDuration: number;
+  curStartTime: null | number;
 }
 
 type Return = {
@@ -34,14 +22,12 @@ type Return = {
   state: TimerState;
 };
 
-export default function useMatchTimer({ key, scanMs, matchMs }: Input): Return {
-  const timerKey = "timer-" + key;
+export default function useMatchTimer({ key, initialAccumulatedDuration }: Input): Return {
+  const timerKey = "timer_" + key;
   const [state, setStateRaw] = useState<TimerState>(() => {
-    const defaultState: PausedState = {
-      type: "paused",
-      remainingMs: scanMs + matchMs,
-      scanMs,
-      matchMs,
+    const defaultState: TimerState = {
+      curStartTime: null,
+      accumulatedDuration: initialAccumulatedDuration,
     };
     if (global.window == undefined || localStorage == null) {
       return defaultState;
@@ -75,13 +61,11 @@ export default function useMatchTimer({ key, scanMs, matchMs }: Input): Return {
     () =>
       setStateRaw((prevState: TimerState) => {
         const newState: TimerState =
-          prevState.type === "paused"
+          prevState.curStartTime == null
             ? {
-                type: "running",
-                scanMs: prevState.scanMs,
-                matchMs: prevState.matchMs,
-                endTime: Date.now() + prevState.remainingMs,
-              }
+              accumulatedDuration: prevState.accumulatedDuration,
+              curStartTime: Date.now(),
+            }
             : prevState;
         saveStateToLocalStorage(newState);
         return newState;
@@ -93,13 +77,11 @@ export default function useMatchTimer({ key, scanMs, matchMs }: Input): Return {
     () =>
       setStateRaw((prevState: TimerState) => {
         const newState: TimerState =
-          prevState.type === "running"
+          prevState.curStartTime != null
             ? {
-                type: "paused",
-                scanMs: prevState.scanMs,
-                matchMs: prevState.matchMs,
-                remainingMs: prevState.endTime - Date.now(),
-              }
+              curStartTime: null,
+              accumulatedDuration: prevState.accumulatedDuration + Date.now() - prevState.curStartTime,
+            }
             : prevState;
         saveStateToLocalStorage(newState);
         return newState;
@@ -108,16 +90,15 @@ export default function useMatchTimer({ key, scanMs, matchMs }: Input): Return {
   );
 
   const timer =
-    state.type === "running" ? (
-      <RunningMatchTime curEndTime={state.endTime} matchTime={state.matchMs} />
+    state.curStartTime != null ? (
+      <RunningDuration
+        curStartTime={state.curStartTime}
+        accumulatedDuration={state.accumulatedDuration}
+      />
     ) : (
       <Duration
         showDecimal={false}
-        duration={
-          state.remainingMs > state.matchMs
-            ? state.remainingMs - state.matchMs
-            : state.remainingMs
-        }
+        duration={state.accumulatedDuration}
       />
     );
 

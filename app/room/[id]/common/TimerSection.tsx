@@ -36,10 +36,10 @@ export default function TimerSection(props: Props) {
 }
 
 function TimerModal({ close, state, setState, isMobile }: ModalProps) {
-  const [scanMs, setScanMs] = useState(state.scanMs);
-  const [matchMs, setMatchMs] = useState(state.matchMs);
-  const [remainingMs, setRemainingMs] = useState(() =>
-    state.type === 'paused' ? state.remainingMs : Math.max(state.endTime - Date.now(), 0)
+  const [accumulatedDuration, setAccumulatedDuration] = useState(
+    state.curStartTime == null
+      ? state.accumulatedDuration
+      : state.accumulatedDuration + Date.now() - state.curStartTime
   );
   return (
     <Modal
@@ -50,19 +50,17 @@ function TimerModal({ close, state, setState, isMobile }: ModalProps) {
       title="Edit Timer"
     >
       <Stack>
-        <DurationInput label="Scanning time (between reveal and match start)" onChange={setScanMs} initialDurationMs={scanMs} showHrs={false} />
-        <DurationInput label="Match time" onChange={setMatchMs} initialDurationMs={matchMs} showHrs={true} />
-        <DurationInput label="Total remaining time (remaining scan time + match time)" onChange={setRemainingMs} initialDurationMs={remainingMs} showHrs={true} />
+        <DurationInput label="Current time" onChange={setAccumulatedDuration} initialDurationMs={accumulatedDuration} showHrs={true} />
         <Group justify="end">
           <Button onClick={close}>Cancel</Button>
           <Button color="green" onClick={() => {
-            setState({ type: "paused", matchMs, scanMs, remainingMs });
+            setState({ accumulatedDuration, curStartTime: null });
             close();
           }}>
             Pause
           </Button>
           <Button color="green" onClick={() => {
-            setState({ type: "running", matchMs, scanMs, endTime: Date.now() + remainingMs });
+            setState({ accumulatedDuration, curStartTime: Date.now() });
             close();
           }}>
             Resume

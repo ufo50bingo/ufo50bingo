@@ -4,11 +4,13 @@ import Duration from "./Duration";
 type Props = {
   curStartTime: number;
   accumulatedDuration: number;
+  showDecimal?: boolean;
 };
 
 export default function RunningDuration({
   curStartTime,
   accumulatedDuration,
+  showDecimal,
 }: Props) {
   const [_dummyState, setDummyState] = useState(0);
   useEffect(() => {
@@ -19,6 +21,6 @@ export default function RunningDuration({
     return () => clearInterval(interval);
   }, []);
   return (
-    <Duration duration={accumulatedDuration + Date.now() - curStartTime} />
+    <Duration duration={accumulatedDuration + Date.now() - curStartTime} showDecimal={showDecimal} />
   );
 }

@@ -183,6 +183,20 @@ const RAW_METADATA = [
     ),
   },
   {
+    type: "DraftWithDifficulty",
+    name: "Standard Draft",
+    pasta: STANDARD,
+    isMenu: true,
+    hovercard: (
+      <Stack>
+        <span>
+          A new way to play the Standard variant.<br />
+          Players draft/ban games, and then a custom board is created where each player's picks are represented equally.
+        </span>
+      </Stack>
+    ),
+  },
+  {
     type: "Other",
     name: "Choco",
     pasta: CHOCO,
@@ -293,11 +307,17 @@ interface Custom extends MetadataBase {
   type: "Custom";
 }
 
+interface DraftWithDifficulty extends MetadataBase {
+  type: "DraftWithDifficulty";
+  pasta: Pasta;
+}
+
 export type VariantMetadata =
   | WithDifficulty
   | WithoutDifficulty
   | GameNames
   | Custom
-  | Other;
+  | Other
+  | DraftWithDifficulty;
 
 export const METADATA: ReadonlyArray<VariantMetadata> = RAW_METADATA;

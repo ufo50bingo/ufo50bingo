@@ -1,5 +1,9 @@
 import { Checkbox, Group, SimpleGrid, Text } from "@mantine/core";
 import { Game, GAME_NAMES } from "../goals";
+import { BingosyncColor } from "../matches/parseBingosyncData";
+import getColorHex from "../room/[id]/cast/getColorHex";
+
+const COLORS: ReadonlyArray<BingosyncColor> = ["red", "blue", "green", "yellow", "pink"];
 
 type Props = {
     numPlayers: number;
@@ -20,6 +24,7 @@ export default function DraftChecker({ draftCheckState, setDraftCheckState, numP
                             {Array(numPlayers).fill(null).map((_, playerIndex) => (
                                 <Checkbox
                                     key={playerIndex}
+                                    color={getColorHex(COLORS[playerIndex])}
                                     checked={checkedPlayer === playerIndex}
                                     onChange={(event) => {
                                         const newState = new Map(draftCheckState);

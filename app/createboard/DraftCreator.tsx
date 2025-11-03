@@ -1,8 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { Alert, Group, NumberInput, Stack, Text } from "@mantine/core";
-import createPasta from "./createPasta";
-import GameChecker from "./GameChecker";
-import getDefaultDifficulties from "./getDefaultDifficulties";
 import { Difficulty, DIFFICULTY_NAMES, Game } from "../goals";
 import { GoalWithDifficulty, Pasta } from "../pastas/metadata";
 import DraftChecker from "./DraftChecker";

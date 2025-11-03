@@ -1,4 +1,4 @@
-import { Difficulty, Game } from "../goals";
+import { Difficulty } from "../goals";
 import { GoalWithDifficulty, Pasta } from "../pastas/metadata";
 import { PlayerToDifficultyToGameToGoal } from "./DraftCreator";
 import shuffle from "./shuffle";

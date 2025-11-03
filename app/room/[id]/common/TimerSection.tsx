@@ -22,8 +22,7 @@ export default function TimerSection(props: Props) {
         <Accordion.Panel>
           <Stack>
             <Text size="sm">
-              The timer will start counting down the scanning time as soon as you reveal the board,
-              and it will switch to a full match timer as soon as the scanning time has expired. If
+              The timer will start running as soon as you reveal the board. If
               any player or caster requests a pause, your timer will automatically pause.
             </Text>
             <Button onClick={() => setIsEditing(true)}>Edit Timer</Button>
@@ -36,7 +35,7 @@ export default function TimerSection(props: Props) {
 }
 
 function TimerModal({ close, state, setState, isMobile }: ModalProps) {
-  const [accumulatedDuration, setAccumulatedDuration] = useState(
+  const [accumulatedDuration, setAccumulatedDuration] = useState<null | number>(
     state.curStartTime == null
       ? state.accumulatedDuration
       : state.accumulatedDuration + Date.now() - state.curStartTime
@@ -50,19 +49,31 @@ function TimerModal({ close, state, setState, isMobile }: ModalProps) {
       title="Edit Timer"
     >
       <Stack>
-        <DurationInput label="Current time" onChange={setAccumulatedDuration} initialDurationMs={accumulatedDuration} showHrs={true} />
+        <DurationInput label="Current value (hh:mm:ss)" onChange={setAccumulatedDuration} initialDurationMs={accumulatedDuration ?? 0} />
         <Group justify="end">
           <Button onClick={close}>Cancel</Button>
-          <Button color="green" onClick={() => {
-            setState({ accumulatedDuration, curStartTime: null });
-            close();
-          }}>
+          <Button
+            color="green"
+            disabled={accumulatedDuration == null}
+            onClick={() => {
+              if (accumulatedDuration == null) {
+                return;
+              }
+              setState({ accumulatedDuration, curStartTime: null });
+              close();
+            }}>
             Pause
           </Button>
-          <Button color="green" onClick={() => {
-            setState({ accumulatedDuration, curStartTime: Date.now() });
-            close();
-          }}>
+          <Button
+            color="green"
+            disabled={accumulatedDuration == null}
+            onClick={() => {
+              if (accumulatedDuration == null) {
+                return;
+              }
+              setState({ accumulatedDuration, curStartTime: Date.now() });
+              close();
+            }}>
             Resume
           </Button>
         </Group>

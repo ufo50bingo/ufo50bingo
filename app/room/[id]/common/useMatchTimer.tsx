@@ -94,6 +94,7 @@ export default function useMatchTimer({ key, initialAccumulatedDuration }: Input
       <RunningDuration
         curStartTime={state.curStartTime}
         accumulatedDuration={state.accumulatedDuration}
+        showDecimal={false}
       />
     ) : (
       <Duration

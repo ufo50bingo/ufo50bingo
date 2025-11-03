@@ -1,4 +1,4 @@
-export default function getDurationText(duration: number, showDecimal: boolean = true): string {
+export default function getDurationText(duration: number, showDecimal: boolean = true, forceShowHours: boolean = false): string {
   // round to nearest 10th of a second before computing hours/mins
   // this prevents issues like an actual value of 13:59.99 displaying
   // as 13:60.0
@@ -13,11 +13,11 @@ export default function getDurationText(duration: number, showDecimal: boolean =
     ? seconds.toFixed(1).padStart(4, "0")
     : seconds.toString().padStart(2, "0");
   finalStr =
-    (hours > 0 ? minutes.toString().padStart(2, "0") : minutes.toString()) +
+    (forceShowHours || hours > 0 ? minutes.toString().padStart(2, "0") : minutes.toString()) +
     ":" +
     finalStr;
-  if (hours > 0) {
-    finalStr = hours.toString() + ":" + finalStr;
+  if (forceShowHours || hours > 0) {
+    finalStr = hours.toString().padStart(2, "0") + ":" + finalStr;
   }
   return duration < 0 ? "-" + finalStr : finalStr;
 }

@@ -1,5 +1,5 @@
 import { Checkbox, Group, SimpleGrid, Text } from "@mantine/core";
-import { Game, GAME_NAMES, ORDERED_PROPER_GAMES } from "../goals";
+import { Game, GAME_NAMES } from "../goals";
 
 type Props = {
     numPlayers: number;

@@ -1,5 +1,4 @@
 import { ReactNode, useCallback, useState } from "react";
-import RunningMatchTime from "./RunningMatchTime";
 import Duration from "@/app/practice/Duration";
 import RunningDuration from "@/app/practice/RunningDuration";
 
@@ -12,7 +11,7 @@ type Input = {
 export type TimerState = {
   accumulatedDuration: number;
   curStartTime: null | number;
-}
+};
 
 type Return = {
   timer: ReactNode;
@@ -22,7 +21,10 @@ type Return = {
   state: TimerState;
 };
 
-export default function useMatchTimer({ key, initialAccumulatedDuration }: Input): Return {
+export default function useMatchTimer({
+  key,
+  initialAccumulatedDuration,
+}: Input): Return {
   const timerKey = "timer_" + key;
   const [state, setStateRaw] = useState<TimerState>(() => {
     const defaultState: TimerState = {
@@ -63,9 +65,9 @@ export default function useMatchTimer({ key, initialAccumulatedDuration }: Input
         const newState: TimerState =
           prevState.curStartTime == null
             ? {
-              accumulatedDuration: prevState.accumulatedDuration,
-              curStartTime: Date.now(),
-            }
+                accumulatedDuration: prevState.accumulatedDuration,
+                curStartTime: Date.now(),
+              }
             : prevState;
         saveStateToLocalStorage(newState);
         return newState;
@@ -79,9 +81,12 @@ export default function useMatchTimer({ key, initialAccumulatedDuration }: Input
         const newState: TimerState =
           prevState.curStartTime != null
             ? {
-              curStartTime: null,
-              accumulatedDuration: prevState.accumulatedDuration + Date.now() - prevState.curStartTime,
-            }
+                curStartTime: null,
+                accumulatedDuration:
+                  prevState.accumulatedDuration +
+                  Date.now() -
+                  prevState.curStartTime,
+              }
             : prevState;
         saveStateToLocalStorage(newState);
         return newState;
@@ -97,10 +102,7 @@ export default function useMatchTimer({ key, initialAccumulatedDuration }: Input
         showDecimal={false}
       />
     ) : (
-      <Duration
-        showDecimal={false}
-        duration={state.accumulatedDuration}
-      />
+      <Duration showDecimal={false} duration={state.accumulatedDuration} />
     );
 
   return {

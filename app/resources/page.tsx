@@ -65,12 +65,11 @@ export default function Resources() {
           </List.Item>
           <List.Item>
             <a
-              href="https://docs.google.com/document/d/11kIVxD6NOsoXXXdv22owLPM_nj5oKiCpY53K418muW8/edit?usp=sharing"
+              href="https://docs.google.com/document/d/1XyEh20vdf7jtfYW94iIRHmf5YOQ0B-lZ2yh9lJjMMbM/edit?usp=sharing"
               target="_blank"
             >
               Official goal list
             </a>{" "}
-            (including new goal suggestions)
           </List.Item>
           <List.Item>
             For details about Variants, hover over the variant names on the
@@ -98,6 +97,7 @@ export default function Resources() {
     </Container>
   );
 }
+
 
 
 

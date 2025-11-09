@@ -53,7 +53,9 @@ export default function EditLeagueModal({ isMobile, match, onClose }: Props) {
   const [p1, setP1] = useState<null | string>(leagueInfo?.p1 ?? null);
   const [p2, setP2] = useState<null | string>(leagueInfo?.p2 ?? null);
   const [name, setName] = useState<string>(match.name);
-  const [gameNumber, setGameNumber] = useState<number | null>(leagueInfo?.game ?? null);
+  const [gameNumber, setGameNumber] = useState<number | null>(
+    leagueInfo?.game ?? null
+  );
 
   const p1Tier = p1 != null ? PLAYER_TO_TIER[p1] : null;
   const p2Tier = p2 != null ? PLAYER_TO_TIER[p2] : null;

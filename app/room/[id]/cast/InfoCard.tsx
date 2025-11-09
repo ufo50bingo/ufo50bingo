@@ -24,7 +24,12 @@ export default function InfoCard({
       padding="sm"
       radius="md"
       withBorder={true}
-      style={{ height: `${height ?? 300}px`, width: maxWidth == null ? `${width}px` : undefined, maxWidth: maxWidth == null ? undefined : `${maxWidth}px`, resize: "both" }}
+      style={{
+        height: `${height ?? 300}px`,
+        width: maxWidth == null ? `${width}px` : undefined,
+        maxWidth: maxWidth == null ? undefined : `${maxWidth}px`,
+        resize: "both",
+      }}
     >
       {title != null && (
         <Card.Section inheritPadding={true} withBorder={true} py="sm">

@@ -23,7 +23,8 @@ export default function TimerSection(props: Props) {
           <Stack>
             <Text size="sm">
               The timer will start running as soon as you reveal the board. If
-              any player or caster requests a pause, your timer will automatically pause.
+              any player or caster requests a pause, your timer will
+              automatically pause.
             </Text>
             <Button onClick={() => setIsEditing(true)}>Edit Timer</Button>
           </Stack>
@@ -49,7 +50,11 @@ function TimerModal({ close, state, setState, isMobile }: ModalProps) {
       title="Edit Timer"
     >
       <Stack>
-        <DurationInput label="Current value (hh:mm:ss)" onChange={setAccumulatedDuration} initialDurationMs={accumulatedDuration ?? 0} />
+        <DurationInput
+          label="Current value (hh:mm:ss)"
+          onChange={setAccumulatedDuration}
+          initialDurationMs={accumulatedDuration ?? 0}
+        />
         <Group justify="end">
           <Button onClick={close}>Cancel</Button>
           <Button
@@ -61,7 +66,8 @@ function TimerModal({ close, state, setState, isMobile }: ModalProps) {
               }
               setState({ accumulatedDuration, curStartTime: null });
               close();
-            }}>
+            }}
+          >
             Pause
           </Button>
           <Button
@@ -73,7 +79,8 @@ function TimerModal({ close, state, setState, isMobile }: ModalProps) {
               }
               setState({ accumulatedDuration, curStartTime: Date.now() });
               close();
-            }}>
+            }}
+          >
             Resume
           </Button>
         </Group>

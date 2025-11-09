@@ -2,7 +2,7 @@ import { neon, NeonQueryFunction } from "@neondatabase/serverless";
 
 export default function getSql(
   forceCache: boolean = true,
-  tags: ReadonlyArray<string> = [],
+  tags: ReadonlyArray<string> = []
 ): NeonQueryFunction<false, false> {
   const dbUrl = process.env.DATABASE_URL;
   if (dbUrl == null) {

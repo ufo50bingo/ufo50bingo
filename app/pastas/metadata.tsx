@@ -190,8 +190,10 @@ const RAW_METADATA = [
     hovercard: (
       <Stack>
         <span>
-          A new way to play the Standard variant.<br />
-          Players draft/ban games, and then a custom board is created where each player's picks are represented equally.
+          A new way to play the Standard variant.
+          <br />
+          Players draft/ban games, and then a custom board is created where each
+          player's picks are represented equally.
         </span>
       </Stack>
     ),

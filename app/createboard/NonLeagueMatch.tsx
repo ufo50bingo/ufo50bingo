@@ -49,9 +49,9 @@ export default function NonLeagueMatch() {
     new Map(ORDERED_PROPER_GAMES.map((key) => [key, true]))
   );
   const [numPlayers, setNumPlayers] = useState(2);
-  const [draftCheckState, setDraftCheckState] = useState<Map<Game, null | number>>(
-    new Map(ORDERED_PROPER_GAMES.map((key) => [key, null]))
-  );
+  const [draftCheckState, setDraftCheckState] = useState<
+    Map<Game, null | number>
+  >(new Map(ORDERED_PROPER_GAMES.map((key) => [key, null])));
 
   const [customizedPasta, setCustomizedPasta] = useState<null | Pasta>(null);
 
@@ -91,21 +91,21 @@ export default function NonLeagueMatch() {
         return stringify(
           showFilters
             ? Array.from(
-              checkState
-                .entries()
-                .filter(([_gameKey, checkState]) => checkState)
-            ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
+                checkState
+                  .entries()
+                  .filter(([_gameKey, checkState]) => checkState)
+              ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
             : ORDERED_PROPER_GAMES.map((gameKey) => ({
-              name: GAME_NAMES[gameKey],
-            }))
+                name: GAME_NAMES[gameKey],
+              }))
         );
       case "WithoutDifficulty":
         return stringify(
           showFilters || randomizeGroupings
             ? createPastaWithoutDifficulty(
-              metadata.pasta,
-              showFilters ? checkState : null
-            )
+                metadata.pasta,
+                showFilters ? checkState : null
+              )
             : metadata.pasta
         );
       case "WithDifficulty":
@@ -119,9 +119,9 @@ export default function NonLeagueMatch() {
         return stringify(
           randomizeGroupings
             ? createPasta(
-              metadata.pasta,
-              getDefaultDifficulties(metadata.pasta)
-            )
+                metadata.pasta,
+                getDefaultDifficulties(metadata.pasta)
+              )
             : metadata.pasta
         );
       case "DraftWithDifficulty":
@@ -153,7 +153,7 @@ export default function NonLeagueMatch() {
         />
         <Menu shadow="md" width={200}>
           <Menu.Target>
-            <ActionIcon onClick={() => { }} variant="default">
+            <ActionIcon onClick={() => {}} variant="default">
               <IconDots size={16} />
             </ActionIcon>
           </Menu.Target>
@@ -172,46 +172,46 @@ export default function NonLeagueMatch() {
       {(metadata.type === "WithDifficulty" ||
         metadata.type === "WithoutDifficulty" ||
         variant === "Game Names") && (
-          <Group>
-            {variant !== "Game Names" && (
-              <Tooltip
-                label={
-                  <span>
-                    Games will be divided into groups randomly while still
-                    respecting the
-                    <br />
-                    difficulty distribution, allowing for greater card variety
-                    than using the
-                    <br />
-                    default pasta. This option is always enabled when customizing
-                    games and
-                    <br />
-                    difficulty counts.
-                  </span>
-                }
-              >
-                <div>
-                  <Checkbox
-                    checked={showFilters || randomizeGroupings}
-                    label="Randomize goal groupings"
-                    onChange={(event) =>
-                      setRandomizeGroupings(event.currentTarget.checked)
-                    }
-                  />
-                </div>
-              </Tooltip>
-            )}
-            <Checkbox
-              checked={showFilters}
+        <Group>
+          {variant !== "Game Names" && (
+            <Tooltip
               label={
-                metadata.type === "WithDifficulty"
-                  ? "Customize games and difficulty counts"
-                  : "Customize games"
+                <span>
+                  Games will be divided into groups randomly while still
+                  respecting the
+                  <br />
+                  difficulty distribution, allowing for greater card variety
+                  than using the
+                  <br />
+                  default pasta. This option is always enabled when customizing
+                  games and
+                  <br />
+                  difficulty counts.
+                </span>
               }
-              onChange={(event) => setShowFilters(event.currentTarget.checked)}
-            />
-          </Group>
-        )}
+            >
+              <div>
+                <Checkbox
+                  checked={showFilters || randomizeGroupings}
+                  label="Randomize goal groupings"
+                  onChange={(event) =>
+                    setRandomizeGroupings(event.currentTarget.checked)
+                  }
+                />
+              </div>
+            </Tooltip>
+          )}
+          <Checkbox
+            checked={showFilters}
+            label={
+              metadata.type === "WithDifficulty"
+                ? "Customize games and difficulty counts"
+                : "Customize games"
+            }
+            onChange={(event) => setShowFilters(event.currentTarget.checked)}
+          />
+        </Group>
+      )}
       {(metadata.type === "WithoutDifficulty" || variant === "Game Names") &&
         showFilters && (
           <GameChecker checkState={checkState} setCheckState={setCheckState} />

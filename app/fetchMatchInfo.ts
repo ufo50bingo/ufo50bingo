@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 import getSql from "./getSql";
 import { RawBoard, RawFeed } from "./matches/parseBingosyncData";

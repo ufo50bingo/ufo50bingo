@@ -9,7 +9,7 @@ type Props = {
   height?: string;
 };
 
-export default function Feed({ rawFeed, height = '475px' }: Props) {
+export default function Feed({ rawFeed, height = "475px" }: Props) {
   const feedRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     if (feedRef.current != null) {

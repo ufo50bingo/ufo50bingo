@@ -48,7 +48,9 @@ export default function Play({
   const [showGeneralTracker, setShowGeneralTracker] = useShowGeneralTracker();
   const [dings, setDings] = useDings("play");
   const [color, setColor] = useColor(id);
-  const [isHidden, setIsHidden] = useState(() => initialBoard.every(square => square.color === "blank"));
+  const [isHidden, setIsHidden] = useState(() =>
+    initialBoard.every((square) => square.color === "blank")
+  );
   const [pauseRequestName, setPauseRequestName] = useState<string | null>(null);
   const pauseRef = useRef<null | (() => unknown)>(null);
 
@@ -63,18 +65,19 @@ export default function Play({
     setIsHidden(true);
   }, []);
 
-  const { board, rawFeed, seed, reconnectModal, dingAudio } = useBingosyncSocket({
-    id,
-    initialBoard,
-    initialRawFeed,
-    initialSeed,
-    socketKey,
-    pauseRef,
-    playerName,
-    setPauseRequestName,
-    dings,
-    onNewCard,
-  });
+  const { board, rawFeed, seed, reconnectModal, dingAudio } =
+    useBingosyncSocket({
+      id,
+      initialBoard,
+      initialRawFeed,
+      initialSeed,
+      socketKey,
+      pauseRef,
+      playerName,
+      setPauseRequestName,
+      dings,
+      onNewCard,
+    });
 
   const {
     timer,
@@ -89,10 +92,14 @@ export default function Play({
 
   pauseRef.current = pause;
 
-  const generalGoals = useMemo<ReadonlyArray<Square>>(() => board.filter((square) => {
-    const types = GOAL_TO_TYPES[square.name];
-    return types != null && types[1] === "general";
-  }), [board]);
+  const generalGoals = useMemo<ReadonlyArray<Square>>(
+    () =>
+      board.filter((square) => {
+        const types = GOAL_TO_TYPES[square.name];
+        return types != null && types[1] === "general";
+      }),
+    [board]
+  );
 
   const [myScore, opponent] = useMemo(() => {
     const scores: { [color: string]: number } = {};
@@ -155,7 +162,7 @@ export default function Play({
               const isClearing = board[squareIndex].color === selectedColor;
               try {
                 await changeColor(id, squareIndex, selectedColor, isClearing);
-              } catch { }
+              } catch {}
             }}
             isHidden={isHidden}
             setIsHidden={setIsHidden}
@@ -222,7 +229,10 @@ export default function Play({
             setShowGeneralTracker={setShowGeneralTracker}
           />
         </Stack>
-        <Feed rawFeed={rawFeed} height={showGeneralTracker ? "748px" : "592px"} />
+        <Feed
+          rawFeed={rawFeed}
+          height={showGeneralTracker ? "748px" : "592px"}
+        />
       </Group>
       {reconnectModal}
       {dingAudio}

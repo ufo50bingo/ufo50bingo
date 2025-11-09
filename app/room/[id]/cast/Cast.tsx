@@ -64,19 +64,20 @@ export default function Cast({
   }, []);
 
   const [pauseRequestName, setPauseRequestName] = useState<string | null>(null);
-  const [dings, setDings] = useDings('cast');
+  const [dings, setDings] = useDings("cast");
 
-  const { board, rawFeed, seed, reconnectModal, dingAudio } = useBingosyncSocket({
-    id,
-    initialBoard,
-    initialRawFeed,
-    initialSeed,
-    socketKey,
-    onNewCard,
-    playerName,
-    setPauseRequestName,
-    dings,
-  });
+  const { board, rawFeed, seed, reconnectModal, dingAudio } =
+    useBingosyncSocket({
+      id,
+      initialBoard,
+      initialRawFeed,
+      initialSeed,
+      socketKey,
+      onNewCard,
+      playerName,
+      setPauseRequestName,
+      dings,
+    });
 
   const {
     leftColor,

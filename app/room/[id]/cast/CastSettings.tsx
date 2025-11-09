@@ -95,7 +95,10 @@ export default function CastSettings({
             <Drawer.CloseButton />
           </Drawer.Header>
           <Drawer.Body p={0}>
-            <Accordion multiple={true} defaultValue={leftColor === rightColor ? ["color"] : []}>
+            <Accordion
+              multiple={true}
+              defaultValue={leftColor === rightColor ? ["color"] : []}
+            >
               <Accordion.Item value="color">
                 <Accordion.Control>Select Colors</Accordion.Control>
                 <Accordion.Panel>
@@ -114,9 +117,7 @@ export default function CastSettings({
               <CountdownSection view="cast" />
               <RequestPauseSection id={id} />
               <Accordion.Item value="display">
-                <Accordion.Control>
-                  Display Settings
-                </Accordion.Control>
+                <Accordion.Control>Display Settings</Accordion.Control>
                 <Accordion.Panel>
                   <Stack>
                     <Stack>
@@ -129,7 +130,9 @@ export default function CastSettings({
                             setShownDifficulties(
                               event.currentTarget.checked
                                 ? [...shownDifficulties, difficulty]
-                                : shownDifficulties.filter((d) => d !== difficulty)
+                                : shownDifficulties.filter(
+                                    (d) => d !== difficulty
+                                  )
                             )
                           }
                           label={DIFFICULTY_NAMES[difficulty]}
@@ -162,7 +165,9 @@ export default function CastSettings({
                     <Checkbox
                       label="Hide board by default"
                       checked={hideByDefault}
-                      onChange={(event) => setHideByDefault(event.target.checked)}
+                      onChange={(event) =>
+                        setHideByDefault(event.target.checked)
+                      }
                     />
                   </Stack>
                 </Accordion.Panel>

@@ -5,61 +5,76 @@ import shuffle from "./shuffle";
 
 export type MutablePasta = GoalWithDifficulty[][];
 
-const ORDERED_PROPER_DIFFICULTIES: ReadonlyArray<Difficulty> = ["easy", "medium", "hard", "veryhard"];
+const ORDERED_PROPER_DIFFICULTIES: ReadonlyArray<Difficulty> = [
+  "easy",
+  "medium",
+  "hard",
+  "veryhard",
+];
 
 export default function createDraftPasta(
   pasta: Pasta,
   generalCount: number,
   playerToDifficultyToGameToGoal: PlayerToDifficultyToGameToGoal,
-  difficultyCountsByPlayer: ReadonlyArray<Map<"easy" | "medium" | "hard" | "veryhard" | "general", number>>
+  difficultyCountsByPlayer: ReadonlyArray<
+    Map<"easy" | "medium" | "hard" | "veryhard" | "general", number>
+  >
 ): Pasta {
-  const playerToDifficultyToGroups = playerToDifficultyToGameToGoal.map((difficultyToGameToGoal, playerIndex) => {
-    const difficultyToGroups: Map<Difficulty, GoalWithDifficulty[][]> = new Map([
-      ["easy", []], ["medium", []], ["hard", []], ["veryhard", []]
-    ]);
-    const difficultyCount = difficultyCountsByPlayer[playerIndex];
-    difficultyToGameToGoal.forEach((gameToGoals, difficulty) => {
-      const groupCount = difficultyCount.get(difficulty) ?? 0;
-      const allGames = Array.from(gameToGoals.values());
-      shuffle(allGames);
-      if (gameToGoals.size >= groupCount) {
-        // if we at least as many games as groups to create, make sure each game is only in one group
-        const minGroupSize = Math.floor(allGames.length / groupCount);
-        const remainder = allGames.length % groupCount;
+  const playerToDifficultyToGroups = playerToDifficultyToGameToGoal.map(
+    (difficultyToGameToGoal, playerIndex) => {
+      const difficultyToGroups: Map<Difficulty, GoalWithDifficulty[][]> =
+        new Map([
+          ["easy", []],
+          ["medium", []],
+          ["hard", []],
+          ["veryhard", []],
+        ]);
+      const difficultyCount = difficultyCountsByPlayer[playerIndex];
+      difficultyToGameToGoal.forEach((gameToGoals, difficulty) => {
+        const groupCount = difficultyCount.get(difficulty) ?? 0;
+        const allGames = Array.from(gameToGoals.values());
+        shuffle(allGames);
+        if (gameToGoals.size >= groupCount) {
+          // if we at least as many games as groups to create, make sure each game is only in one group
+          const minGroupSize = Math.floor(allGames.length / groupCount);
+          const remainder = allGames.length % groupCount;
 
-        for (let i = 0; i < groupCount; i++) {
-          const gamesToAdd = i < remainder ? minGroupSize + 1 : minGroupSize;
-          const newGroup = allGames.splice(0, gamesToAdd).flat();
-          const existing = difficultyToGroups.get(difficulty) ?? [];
-          existing.push(newGroup);
-          difficultyToGroups.set(difficulty, existing);
+          for (let i = 0; i < groupCount; i++) {
+            const gamesToAdd = i < remainder ? minGroupSize + 1 : minGroupSize;
+            const newGroup = allGames.splice(0, gamesToAdd).flat();
+            const existing = difficultyToGroups.get(difficulty) ?? [];
+            existing.push(newGroup);
+            difficultyToGroups.set(difficulty, existing);
+          }
+        } else {
+          // if there aren't enough games to fill out the groups, just make a flat list of games
+          const allGoals = allGames.flat();
+          const minGroupSize = Math.floor(allGoals.length / groupCount);
+          const remainder = allGoals.length % groupCount;
+
+          for (let i = 0; i < groupCount; i++) {
+            const goalsToAdd = i < remainder ? minGroupSize + 1 : minGroupSize;
+            const newGroup = allGoals.splice(0, goalsToAdd);
+            const existing = difficultyToGroups.get(difficulty) ?? [];
+            existing.push(newGroup);
+            difficultyToGroups.set(difficulty, existing);
+          }
         }
-      } else {
-        // if there aren't enough games to fill out the groups, just make a flat list of games
-        const allGoals = allGames.flat();
-        const minGroupSize = Math.floor(allGoals.length / groupCount);
-        const remainder = allGoals.length % groupCount;
+      });
+      return difficultyToGroups;
+    }
+  );
 
-        for (let i = 0; i < groupCount; i++) {
-          const goalsToAdd = i < remainder ? minGroupSize + 1 : minGroupSize;
-          const newGroup = allGoals.splice(0, goalsToAdd);
-          const existing = difficultyToGroups.get(difficulty) ?? [];
-          existing.push(newGroup);
-          difficultyToGroups.set(difficulty, existing);;
-        }
-      }
-    });
-    return difficultyToGroups;
-  });
-
-  const finalPasta: MutablePasta = ORDERED_PROPER_DIFFICULTIES
-    .map(difficulty => {
-      const playerGroups = playerToDifficultyToGroups.map(difficultyToGroups => difficultyToGroups.get(difficulty) ?? []);
+  const finalPasta: MutablePasta = ORDERED_PROPER_DIFFICULTIES.map(
+    (difficulty) => {
+      const playerGroups = playerToDifficultyToGroups.map(
+        (difficultyToGroups) => difficultyToGroups.get(difficulty) ?? []
+      );
       const allGroups = playerGroups.flat();
       shuffle(allGroups);
       return allGroups;
-    })
-    .flat();
+    }
+  ).flat();
 
   // general goals are special, because they're already sorted into meaningful categories
   const generalGroups = pasta

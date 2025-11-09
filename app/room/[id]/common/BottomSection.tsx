@@ -2,20 +2,17 @@ import { Stack, Button } from "@mantine/core";
 import DisconnectButton from "./DisconnectButton";
 
 type Props = {
-    id: string;
-    isMobile: boolean;
+  id: string;
+  isMobile: boolean;
 };
 
 export default function BottomSection({ id, isMobile }: Props) {
-    return (
-        <Stack p="md">
-            <Button
-                component="a"
-                href={`https://www.bingosync.com/room/${id}`}
-            >
-                View Bingosync room
-            </Button>
-            <DisconnectButton isMobile={isMobile} />
-        </Stack>
-    );
+  return (
+    <Stack p="md">
+      <Button component="a" href={`https://www.bingosync.com/room/${id}`}>
+        View Bingosync room
+      </Button>
+      <DisconnectButton isMobile={isMobile} />
+    </Stack>
+  );
 }

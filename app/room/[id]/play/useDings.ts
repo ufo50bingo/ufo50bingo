@@ -5,10 +5,9 @@ export type Ding = "chat" | "square" | "pause";
 
 const DEFAULT_DINGS = ["chat", "pause"];
 
-export default function useDings(view: RoomView): [
-  ReadonlyArray<Ding>,
-  (newDings: ReadonlyArray<Ding>) => unknown
-] {
+export default function useDings(
+  view: RoomView
+): [ReadonlyArray<Ding>, (newDings: ReadonlyArray<Ding>) => unknown] {
   const [dings, setDingsRaw] = useState<ReadonlyArray<Ding>>(() => {
     if (global.window == undefined || localStorage == null) {
       return DEFAULT_DINGS;
@@ -28,13 +27,16 @@ export default function useDings(view: RoomView): [
     }
   });
 
-  const setDings = useCallback((newDings: ReadonlyArray<Ding>) => {
-    setDingsRaw(newDings);
-    if (global.window == undefined || localStorage == null) {
-      return;
-    }
-    localStorage.setItem(`${view}-dings`, JSON.stringify(newDings));
-  }, [view]);
+  const setDings = useCallback(
+    (newDings: ReadonlyArray<Ding>) => {
+      setDingsRaw(newDings);
+      if (global.window == undefined || localStorage == null) {
+        return;
+      }
+      localStorage.setItem(`${view}-dings`, JSON.stringify(newDings));
+    },
+    [view]
+  );
 
   return [dings, setDings];
 }

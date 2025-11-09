@@ -75,9 +75,7 @@ export default function LeagueMatch() {
       <Checkbox
         checked={gameNumber != null}
         onChange={(event) =>
-          event.currentTarget.checked
-            ? setGameNumber(1)
-            : setGameNumber(null)
+          event.currentTarget.checked ? setGameNumber(1) : setGameNumber(null)
         }
         label="Is part of multi-game series"
       />
@@ -120,9 +118,7 @@ export default function LeagueMatch() {
             ) {
               throw new Error("Unexpected null when creating match");
             }
-            const gameSuffix = gameNumber == null
-              ? ''
-              : `, Game ${gameNumber}`
+            const gameSuffix = gameNumber == null ? "" : `, Game ${gameNumber}`;
             const id = await createMatch({
               roomName: `${p1} vs ${p2}${gameSuffix}`,
               password,

@@ -1,11 +1,5 @@
 import { Difficulty } from "@/app/goals";
-import {
-  Accordion,
-  Button,
-  Checkbox,
-  Drawer,
-  Stack,
-} from "@mantine/core";
+import { Accordion, Button, Checkbox, Drawer, Stack } from "@mantine/core";
 import { IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
@@ -72,7 +66,10 @@ export default function PlaySettings({
             <Drawer.CloseButton />
           </Drawer.Header>
           <Drawer.Body p={0}>
-            <Accordion multiple={true} defaultValue={color == null ? ["color"] : []}>
+            <Accordion
+              multiple={true}
+              defaultValue={color == null ? ["color"] : []}
+            >
               <Accordion.Item value="color">
                 <Accordion.Control>Select Color</Accordion.Control>
                 <Accordion.Panel>
@@ -84,7 +81,11 @@ export default function PlaySettings({
                 </Accordion.Panel>
               </Accordion.Item>
               <RequestPauseSection id={id} />
-              <TimerSection state={timerState} setState={setTimerState} isMobile={isMobile} />
+              <TimerSection
+                state={timerState}
+                setState={setTimerState}
+                isMobile={isMobile}
+              />
               <CountdownSection view="play" />
               <NotificationsSection dings={dings} setDings={setDings} />
               <Accordion.Item value="display">
@@ -115,7 +116,7 @@ export default function PlaySettings({
             <BottomSection id={id} isMobile={isMobile} />
           </Drawer.Body>
         </Drawer.Content>
-      </Drawer.Root >
+      </Drawer.Root>
     </>
   );
 }

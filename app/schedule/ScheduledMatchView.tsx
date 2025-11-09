@@ -12,25 +12,27 @@ export default function ScheduledMatchView({ match, includeDate }: Props) {
     undefined,
     includeDate
       ? {
-        month: "numeric",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-      }
+          month: "numeric",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+        }
       : {
-        hour: "numeric",
-        minute: "numeric",
-      }
+          hour: "numeric",
+          minute: "numeric",
+        }
   );
   const streamer =
-    match.streamer == null || match.streamer === '' ? (
+    match.streamer == null || match.streamer === "" ? (
       "No streamer yet"
     ) : match.streamLink == null ? (
-      <Tooltip label="No stream link found"><span>{match.streamer}</span></Tooltip>
+      <Tooltip label="No stream link found">
+        <span>{match.streamer}</span>
+      </Tooltip>
     ) : (
       <Anchor href={match.streamLink} target="_blank">
         {match.streamLink.includes("youtube") ||
-          match.streamLink.includes("youtu.be") ? (
+        match.streamLink.includes("youtu.be") ? (
           <ActionIcon size="sm" color="red">
             <IconBrandYoutube size={16} />
           </ActionIcon>

@@ -28,9 +28,10 @@ export default async function updateLeagueInfo(
 ): Promise<void> {
   const match = await fetchMatch(id);
   const matchResultSql = getMatchResultSql(match, update);
-  const gameSuffix = update.type === "league" && update.game != null
-    ? `, Game ${update.game}`
-    : "";
+  const gameSuffix =
+    update.type === "league" && update.game != null
+      ? `, Game ${update.game}`
+      : "";
 
   const sql = getSql(false);
   const result =

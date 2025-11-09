@@ -21,6 +21,9 @@ export default function RunningDuration({
     return () => clearInterval(interval);
   }, []);
   return (
-    <Duration duration={accumulatedDuration + Date.now() - curStartTime} showDecimal={showDecimal} />
+    <Duration
+      duration={accumulatedDuration + Date.now() - curStartTime}
+      showDecimal={showDecimal}
+    />
   );
 }

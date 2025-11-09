@@ -5,7 +5,14 @@ import {
   RawFeedItem,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
-import { useState, useEffect, useRef, ReactNode, useCallback, RefObject } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  ReactNode,
+  useCallback,
+  RefObject,
+} from "react";
 import { Modal, Stack, Group, Button } from "@mantine/core";
 import { REQUEST_PAUSE_CHAT } from "./REQUEST_PAUSE_CHAT";
 import { Ding } from "../play/useDings";
@@ -54,10 +61,10 @@ export default function useBingosyncSocket({
   const selectedDingsRef = useRef<ReadonlyArray<Ding>>(dings);
   selectedDingsRef.current = dings;
 
-
   const onMessage = useCallback(
     (newItem: RawFeedItem) => {
-      const isPause = newItem.type === "chat" && newItem.text === REQUEST_PAUSE_CHAT;
+      const isPause =
+        newItem.type === "chat" && newItem.text === REQUEST_PAUSE_CHAT;
       if (isPause) {
         if (pauseRef?.current != null) {
           pauseRef.current();
@@ -68,17 +75,30 @@ export default function useBingosyncSocket({
         return;
       }
       if (newItem.type === "chat") {
-        if (isPause && selectedDingsRef.current.includes("pause") && alarmRef.current != null) {
+        if (
+          isPause &&
+          selectedDingsRef.current.includes("pause") &&
+          alarmRef.current != null
+        ) {
           alarmRef.current.play();
-        } else if (selectedDingsRef.current.includes("chat") && dingRef.current != null) {
+        } else if (
+          selectedDingsRef.current.includes("chat") &&
+          dingRef.current != null
+        ) {
           dingRef.current.play();
         } else {
-          if (selectedDingsRef.current.includes("chat") && dingRef.current != null) {
+          if (
+            selectedDingsRef.current.includes("chat") &&
+            dingRef.current != null
+          ) {
             dingRef.current.play();
           }
         }
       } else if (newItem.type === "goal") {
-        if (selectedDingsRef.current.includes("square") && dingRef.current != null) {
+        if (
+          selectedDingsRef.current.includes("square") &&
+          dingRef.current != null
+        ) {
           dingRef.current.play();
         }
       }

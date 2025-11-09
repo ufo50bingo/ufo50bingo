@@ -12,9 +12,13 @@ export default function DisconnectButton({ isMobile }: Props) {
   const [isDisconnecting, setIsDisconnecting] = useState(false);
   return (
     <>
-      <Button color="red" onClick={() => setIsDisconnecting(true)} leftSection={<IconPlugConnectedX />}>
+      <Button
+        color="red"
+        onClick={() => setIsDisconnecting(true)}
+        leftSection={<IconPlugConnectedX />}
+      >
         Disconnect
-      </Button >
+      </Button>
       {isDisconnecting && (
         <Modal
           fullScreen={isMobile}
@@ -39,8 +43,7 @@ export default function DisconnectButton({ isMobile }: Props) {
             </Group>
           </Stack>
         </Modal>
-      )
-      }
+      )}
     </>
   );
 }

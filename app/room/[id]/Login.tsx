@@ -53,8 +53,10 @@ export default function Login({ id }: Props) {
             </span>
             <Alert>
               Please note that the Playing and Casting pages currently support
-              only <strong>Lockout</strong> games.{' '}
-              <a href={`https://www.bingosync.com/room/${id}`} target="_blank">For non-Lockout games, use the old Bingosync page.</a>
+              only <strong>Lockout</strong> games.{" "}
+              <a href={`https://www.bingosync.com/room/${id}`} target="_blank">
+                For non-Lockout games, use the old Bingosync page.
+              </a>
             </Alert>
             <span>Are you playing or casting?</span>
             <SegmentedControl
@@ -103,8 +105,8 @@ export default function Login({ id }: Props) {
                   reveal and match start in chat.
                 </ListItem>
                 <ListItem>
-                  Casters can request a pause, which will hide the board and play
-                  an alert for all players connected via ufo50.bingo.
+                  Casters can request a pause, which will hide the board and
+                  play an alert for all players connected via ufo50.bingo.
                 </ListItem>
                 <ListItem>
                   Casters can clear or grant squares to players without needing
@@ -132,15 +134,21 @@ export default function Login({ id }: Props) {
             <Stack>
               <Alert color="yellow">
                 This page is brand new! Please try it out in an unofficial test
-                match before using it for an important league match.
-                If you're not sure you want to use the new UI,{' '}
-                <a href={`https://www.bingosync.com/room/${id}`} target="_blank">go to the old Bingosync room instead</a>.
+                match before using it for an important league match. If you're
+                not sure you want to use the new UI,{" "}
+                <a
+                  href={`https://www.bingosync.com/room/${id}`}
+                  target="_blank"
+                >
+                  go to the old Bingosync room instead
+                </a>
+                .
               </Alert>
               <span>Use this view to play a match! Features include:</span>
               <List>
                 <ListItem>
-                  There is a built-in timer, which automatically starts when
-                  you reveal the board.
+                  There is a built-in timer, which automatically starts when you
+                  reveal the board.
                 </ListItem>
                 <ListItem>General goals are tagged automatically.</ListItem>
                 <ListItem>General goals have a simple tracker.</ListItem>

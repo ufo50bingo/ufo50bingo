@@ -9,20 +9,20 @@ export default function useShownDifficulties(): [
     ReadonlyArray<Difficulty>
   >(() => {
     if (global.window == undefined || localStorage == null) {
-      return ['general'];
+      return ["general"];
     }
     const fromStorage = localStorage.getItem("shown_difficulties");
     if (fromStorage == null || fromStorage === "") {
-      return ['general'];
+      return ["general"];
     }
     try {
       const parsed = JSON.parse(fromStorage);
       if (typeof parsed !== "object") {
-        return ['general'];
+        return ["general"];
       }
       return parsed;
     } catch {
-      return ['general'];
+      return ["general"];
     }
   });
 

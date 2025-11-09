@@ -76,14 +76,19 @@ export default function CountdownSection({ view }: Props) {
   };
   return (
     <Accordion.Item value="countdown">
-      <Accordion.Control>
-        Start Countdown
-      </Accordion.Control>
+      <Accordion.Control>Start Countdown</Accordion.Control>
       <Accordion.Panel>
         <Stack>
           <Alert color="yellow" title="WARNING!">
             You should not minimize your browser after starting a countdown!
-            {view === "play" && <><br /><br />If your game has a caster, please let the caster start the countdown instead!</>}
+            {view === "play" && (
+              <>
+                <br />
+                <br />
+                If your game has a caster, please let the caster start the
+                countdown instead!
+              </>
+            )}
           </Alert>
           <NumberInput
             label="Scanning time (min 10 seconds)"

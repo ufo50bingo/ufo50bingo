@@ -27,6 +27,7 @@ const OLD_GOAL_TO_NEW_GOAL: { [key: string]: string } = {
     "BLOCK KOALA: WORM-1234 allowed; beat level 14",
   "BLOCK KOALA: WORM-1234 allowed; Clear 9 story levels":
     "BLOCK KOALA: WORM-1234 allowed; beat any 9 story levels",
+  "BUG HUNTER: Complete your first job": "BUG HUNTER: Complete a job",
   "BUSHIDO BALL: Gold disk with Default Options":
     "BUSHIDO BALL: Gold disk w/ Default Options",
   "BUSHIDO BALL: Win a 16-point match on Hyper speed with all other options default":
@@ -65,7 +66,13 @@ const OLD_GOAL_TO_NEW_GOAL: { [key: string]: string } = {
   "CYBER OWLS: HAWK-BASE allowed; Beat Antarctica":
     "CYBER OWLS: HAWK-BASE allowed; beat Antarctica",
   "DEVILITION: Beat three levels while placing the maximum number of pieces each round":
-    "DEVILITION: Beat 3 rounds while placing the maximum number of pieces each round",
+    "DEVILITION: Beat 3 rounds in a run while placing the maximum number of pieces each round",
+  "DEVILITION: Beat 3 rounds while placing the maximum number of pieces each round":
+    "DEVILITION: Beat 3 rounds in a run while placing the maximum number of pieces each round",
+  "DEVILITION: Beat 5 rounds, destroying all demons and humans every round":
+    "DEVILITION: Beat 5 rounds in a run, destroying all demons and humans each round",
+  "DEVILITION: Beat 5 rounds, placing only the middle piece of the available 3":
+    "DEVILITION: Beat 5 rounds in a run, placing only the middle piece of the available 3",
   "Find an egg in 10 different games": "Find an egg in 10 games",
   "FIST HELL: Beat the 4th scare (Boardwalk Bash)":
     "FIST HELL: Clear the 4th scare",
@@ -79,12 +86,14 @@ const OLD_GOAL_TO_NEW_GOAL: { [key: string]: string } = {
     "GRIMSTONE: Have 3 Skills learned at once",
   "HOT FOOT: Win 4 games in a row in one tournament":
     "HOT FOOT: Win 4 games in one tournament",
+  "HOT FOOT: Win the first match three times with 6 unique characters":
+    "HOT FOOT: Win the first match using 6 unique characters",
   "HYPER CONTENDER: Use PAST-RULE; Beat Draft Mode twice":
     "HYPER CONTENDER: Use PAST-RULE; beat Draft Mode twice",
   "HYPER CONTENDER: Use PAST-RULE; Beat Tournament Mode (Default settings)":
-    "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode (Default settings)",
-  "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode":
-    "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode (Default settings)",
+    "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode",
+  "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode (Default settings)":
+    "HYPER CONTENDER: Use PAST-RULE; beat Tournament Mode",
   "HYPER CONTENDER: Win 4 fights in a row without rematches on default ring settings":
     "HYPER CONTENDER: Win 4 fights in one tournament on default ring settings",
   "Increase your max HP in 6 games": "Increase your base HP in 6 games",
@@ -104,6 +113,9 @@ const OLD_GOAL_TO_NEW_GOAL: { [key: string]: string } = {
     "MINI & MAX: Collect the full reward for saving the brainwashed mouse near the portrait",
   "MINI & MAX: Collect the reward for saving the brainwashed mouse near the portrait":
     "MINI & MAX: Collect the full reward for saving the brainwashed mouse near the portrait",
+  "MINI & MAX: Collect 150 shinies without obtaining the Shrink Potion":
+    "MINI & MAX: Have 150+ shinies at once without obtaining the Shrink Potion",
+  "MINI & MAX: Collect 350 shinies": "MINI & MAX: Have 350+ shinies at once",
   "MORTOL: Beat a level with a total of 30 or more additional lives than you began the run with":
     "MORTOL: Have 50+ Lives (No BENS-MODE)",
   "MORTOL: OPEN-TOMB allowed; Clear all world 2 levels":

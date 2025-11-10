@@ -2,7 +2,7 @@ import { google } from "googleapis";
 import { DateTime } from "luxon";
 
 const LEAGUE_SHEET_ID = "1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA";
-// const UNDERGROUND_SHEET_ID = "1cVRjGO-EQEd8trdvakEWF2Cc-5BnRb5l";
+const UNDERGROUND_SHEET_ID = "1OocDHEbrJC3BqO8qrPFCYxyy2nzqAaTT6Hmix076Ea0";
 // Copy of the official sheet to help with debugging
 // const LEAGUE_SHEET_ID = "1NdF25XWmISftQzATmOjSTLz-nE0dhwLIjbllgxDDTMk";
 
@@ -112,13 +112,11 @@ async function fetchScheduleForSheet(
 }
 
 export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMatch>> {
-  // const [league, underground] = await Promise.all([
-  //   fetchScheduleForSheet(LEAGUE_SHEET_ID, ""),
-  //   fetchScheduleForSheet(UNDERGROUND_SHEET_ID, "Underground "),
-  // ]);
-  // const final = (league ?? []).concat(underground ?? []).concat(MANUAL_MATCHES);
-  const league = await fetchScheduleForSheet(LEAGUE_SHEET_ID, "");
-  const final = (league ?? []).concat(MANUAL_MATCHES);
+  const [league, underground] = await Promise.all([
+    fetchScheduleForSheet(LEAGUE_SHEET_ID, ""),
+    fetchScheduleForSheet(UNDERGROUND_SHEET_ID, "Underground "),
+  ]);
+  const final = (league ?? []).concat(underground ?? []).concat(MANUAL_MATCHES);
   final.sort((a, b) => a.time - b.time);
   return final;
 }

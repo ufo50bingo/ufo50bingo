@@ -418,10 +418,11 @@ export const BEVERAGE: Recommendations = {
     "campanella",
     "magicgarden",
     "lordsofdiskonia",
+    "miniandmax",
     "hotfoot",
     "valbrace",
   ],
-  synergy: ["miniandmax", "warptank", "ninpek"],
+  synergy: ["warptank", "ninpek"],
   never: ["grimstone"],
 };
 
@@ -523,8 +524,8 @@ export const LIVES: Recommendations = {
     "kickclub",
     "rakshasa",
     "caramelcaramel",
-    "starwaspir",
     "ninpek",
+    "starwaspir",
   ],
   synergy: [
     "vainger",

@@ -92,6 +92,22 @@ const RAW_METADATA = [
     ),
   },
   {
+    type: "DraftWithDifficulty",
+    name: "Standard Draft",
+    pasta: STANDARD,
+    isMenu: false,
+    hovercard: (
+      <Stack>
+        <span>
+          A new way to play the Standard variant, and the default format for the Underground league.
+          <br />
+          Players draft/ban games, and then a custom board is created where each
+          player's picks are represented equally.
+        </span>
+      </Stack>
+    ),
+  },
+  {
     type: "WithoutDifficulty",
     name: "Blitz",
     pasta: BLITZ,
@@ -170,7 +186,7 @@ const RAW_METADATA = [
   {
     type: "Custom",
     name: "Custom",
-    isMenu: false,
+    isMenu: true,
     hovercard: (
       <Stack>
         <span>
@@ -179,22 +195,6 @@ const RAW_METADATA = [
         <Text size="xs">
           <em>Created by you!</em>
         </Text>
-      </Stack>
-    ),
-  },
-  {
-    type: "DraftWithDifficulty",
-    name: "Standard Draft",
-    pasta: STANDARD,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>
-          A new way to play the Standard variant.
-          <br />
-          Players draft/ban games, and then a custom board is created where each
-          player's picks are represented equally.
-        </span>
       </Stack>
     ),
   },

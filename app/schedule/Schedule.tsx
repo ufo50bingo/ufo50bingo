@@ -86,7 +86,7 @@ export default function Schedule({ schedule }: Props) {
             target="_blank"
           >
             Underground Season 2 schedule
-          </Anchor>
+          </Anchor>{' '}
           once per hour. To force an immediate sync,{" "}
           <Anchor size="sm" onClick={async () => await revalidateSchedule()}>
             click here.

@@ -37,12 +37,12 @@ function ScheduledMatchList({
       )}
       {matches.length > 0
         ? matches.map((m) => (
-            <ScheduledMatchView
-              key={m.name + m.time.toString()}
-              match={m}
-              includeDate={includeDate}
-            />
-          ))
+          <ScheduledMatchView
+            key={m.name + m.time.toString()}
+            match={m}
+            includeDate={includeDate}
+          />
+        ))
         : "No matches found!"}
     </>
   );
@@ -80,7 +80,13 @@ export default function Schedule({ schedule }: Props) {
             target="_blank"
           >
             official Season 2 schedule
-          </Anchor>{" "}
+          </Anchor> and the <Anchor
+            size="sm"
+            href="https://docs.google.com/spreadsheets/d/1oeK9jmpnEDk0LOeWk4biX-6SQRK5fmB9kthmeTUBSDs/edit?gid=1358148235#gid=1358148235"
+            target="_blank"
+          >
+            Underground Season 2 schedule
+          </Anchor>
           once per hour. To force an immediate sync,{" "}
           <Anchor size="sm" onClick={async () => await revalidateSchedule()}>
             click here.

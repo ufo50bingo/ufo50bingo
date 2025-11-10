@@ -2,6 +2,7 @@ import { google } from "googleapis";
 import { DateTime } from "luxon";
 
 const LEAGUE_SHEET_ID = "1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA";
+const UNDERGROUND_SHEET_ID = "1oeK9jmpnEDk0LOeWk4biX-6SQRK5fmB9kthmeTUBSDs";
 // Copy of the official sheet to help with debugging
 // const LEAGUE_SHEET_ID = "1NdF25XWmISftQzATmOjSTLz-nE0dhwLIjbllgxDDTMk";
 
@@ -30,7 +31,7 @@ const MANUAL_MATCHES: ReadonlyArray<ScheduledMatch> = [
   },
 ];
 
-export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMatch>> {
+async function fetchScheduleForSheet(sheetID: string): Promise<null | ReadonlyArray<ScheduledMatch>> {
   const auth = new google.auth.JWT({
     email: process.env.GSHEETS_ACCOUNT_EMAIL,
     key: process.env.GSHEETS_ACCOUNT_PRIVATE_KEY,
@@ -41,7 +42,7 @@ export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMat
   const [matchesResult, streamersResult] = await Promise.all([
     sheet.spreadsheets.values.get(
       {
-        spreadsheetId: LEAGUE_SHEET_ID,
+        spreadsheetId: sheetID,
         range: `Matches!A1:G400`,
         auth,
         fields: "values",
@@ -52,7 +53,7 @@ export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMat
     ),
     sheet.spreadsheets.values.get(
       {
-        spreadsheetId: LEAGUE_SHEET_ID,
+        spreadsheetId: sheetID,
         range: `Casters!B5:D50`,
         auth,
         fields: "values",
@@ -104,10 +105,15 @@ export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMat
         };
       })
       .filter((match) => match != null);
-  if (scheduled == null) {
-    return null;
-  }
-  const final = scheduled.concat(MANUAL_MATCHES);
+  return scheduled ?? null;
+}
+
+export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMatch>> {
+  const [league, underground] = await Promise.all([
+    fetchScheduleForSheet(LEAGUE_SHEET_ID),
+    fetchScheduleForSheet(UNDERGROUND_SHEET_ID),
+  ]);
+  const final = (league ?? []).concat(underground ?? []).concat(MANUAL_MATCHES);
   final.sort((a, b) => a.time - b.time);
   return final;
 }

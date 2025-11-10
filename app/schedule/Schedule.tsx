@@ -82,7 +82,7 @@ export default function Schedule({ schedule }: Props) {
             official Season 2 schedule
           </Anchor> and the <Anchor
             size="sm"
-            href="https://docs.google.com/spreadsheets/d/1oeK9jmpnEDk0LOeWk4biX-6SQRK5fmB9kthmeTUBSDs/edit?gid=1358148235#gid=1358148235"
+            href="https://docs.google.com/spreadsheets/d/1cVRjGO-EQEd8trdvakEWF2Cc-5BnRb5l/edit?gid=1881722267#gid=1881722267"
             target="_blank"
           >
             Underground Season 2 schedule

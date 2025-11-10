@@ -2,7 +2,7 @@ import { google } from "googleapis";
 import { DateTime } from "luxon";
 
 const LEAGUE_SHEET_ID = "1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA";
-const UNDERGROUND_SHEET_ID = "1oeK9jmpnEDk0LOeWk4biX-6SQRK5fmB9kthmeTUBSDs";
+const UNDERGROUND_SHEET_ID = "1cVRjGO-EQEd8trdvakEWF2Cc-5BnRb5l";
 // Copy of the official sheet to help with debugging
 // const LEAGUE_SHEET_ID = "1NdF25XWmISftQzATmOjSTLz-nE0dhwLIjbllgxDDTMk";
 

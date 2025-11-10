@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
       {
         source: "/underground",
         destination:
-          "https://docs.google.com/spreadsheets/d/1oeK9jmpnEDk0LOeWk4biX-6SQRK5fmB9kthmeTUBSDs/edit?gid=650064227#gid=650064227",
+          "https://docs.google.com/spreadsheets/d/1cVRjGO-EQEd8trdvakEWF2Cc-5BnRb5l/edit?gid=467172056#gid=467172056",
         permanent: true,
       },
       {

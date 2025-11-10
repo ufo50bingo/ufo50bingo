@@ -98,7 +98,7 @@ async function fetchScheduleForSheet(sheetID: string, tierPrefix: string): Promi
         }
         return {
           name: `${p1} vs ${p2}`,
-          tier: tier,
+          tier: tierPrefix + tier,
           time: dt.toSeconds(),
           streamer: streamer,
           streamLink: streamerToLink[streamer],

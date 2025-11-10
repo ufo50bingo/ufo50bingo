@@ -4,10 +4,10 @@ import Link from "next/link";
 import { ReactNode, useState } from "react";
 import { AppShell, Burger, Group, Image, NavLink, Text } from "@mantine/core";
 import {
+  IconBuildingTunnel,
   IconCalendarWeek,
   IconClock24,
   IconDeviceGamepad,
-  IconExternalLink,
   IconFilter,
   IconHelp,
   IconPlaylistAdd,
@@ -76,11 +76,17 @@ const LINKS = [
     icon: <IconSettings size={25} stroke={1.5} />,
   },
   {
-    href: "https://docs.google.com/spreadsheets/d/1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA/edit?gid=521253915#gid=521253915",
+    href: "/league",
     text: "League",
     icon: <IconTournament size={25} stroke={1.5} />,
     isNewTab: true,
   },
+  {
+    href: "/underground",
+    text: "Underground",
+    icon: <IconBuildingTunnel size={25} stroke={1.5} />,
+    isNewTab: true,
+  }
   // {
   //   href: '/boardanalyzer',
   //   text: 'Board Analyzer',
@@ -141,11 +147,6 @@ export default function Shell({ children }: Props) {
             component={Link}
             href={data.href}
             leftSection={data.icon}
-            rightSection={
-              data.isNewTab ? (
-                <IconExternalLink size={25} stroke={1.5} />
-              ) : undefined
-            }
             label={data.text}
             onClick={() => setIsCollapsedMobile(true)}
             target={data.isNewTab ? "_blank" : undefined}

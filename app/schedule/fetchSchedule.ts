@@ -31,7 +31,7 @@ const MANUAL_MATCHES: ReadonlyArray<ScheduledMatch> = [
   },
 ];
 
-async function fetchScheduleForSheet(sheetID: string): Promise<null | ReadonlyArray<ScheduledMatch>> {
+async function fetchScheduleForSheet(sheetID: string, tierPrefix: string): Promise<null | ReadonlyArray<ScheduledMatch>> {
   const auth = new google.auth.JWT({
     email: process.env.GSHEETS_ACCOUNT_EMAIL,
     key: process.env.GSHEETS_ACCOUNT_PRIVATE_KEY,
@@ -110,8 +110,8 @@ async function fetchScheduleForSheet(sheetID: string): Promise<null | ReadonlyAr
 
 export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMatch>> {
   const [league, underground] = await Promise.all([
-    fetchScheduleForSheet(LEAGUE_SHEET_ID),
-    fetchScheduleForSheet(UNDERGROUND_SHEET_ID),
+    fetchScheduleForSheet(LEAGUE_SHEET_ID, ''),
+    fetchScheduleForSheet(UNDERGROUND_SHEET_ID, 'Underground '),
   ]);
   const final = (league ?? []).concat(underground ?? []).concat(MANUAL_MATCHES);
   final.sort((a, b) => a.time - b.time);

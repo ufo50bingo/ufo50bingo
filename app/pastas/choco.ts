@@ -1,4 +1,4 @@
-[
+export const CHOCO = [
   [
     {
       "name": "Barbuta: Kill a mushroom and a bat.",
@@ -1729,4 +1729,4 @@
       ]
     }
   ]
-];
+] as const;

@@ -350,6 +350,24 @@ export function getColorToVerifiedName(
       result[c2] = verifiedP1;
     }
     return result;
+  } else if (Object.keys(colorToPlayerToNetAdditions).length === 1) {
+    const c1 = Object.keys(colorToPlayerToNetAdditions)[0];
+    const c1Player = getTopPlayer(colorToPlayerToNetAdditions[c1]);
+
+    const sumP1EqC1 = getSimilarity(verifiedP1, c1Player);
+    const sumP1EqC2 = getSimilarity(verifiedP2, c1Player);
+
+    const c2: BingosyncColor = c1 === "red" ? "blue" : "red";
+
+    const result: { [color: string]: string } = {};
+    if (sumP1EqC1 >= sumP1EqC2) {
+      result[c1] = verifiedP1;
+      result[c2] = verifiedP2;
+    } else {
+      result[c1] = verifiedP2;
+      result[c2] = verifiedP1;
+    }
+    return result;
   }
   return null;
 }

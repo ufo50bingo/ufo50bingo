@@ -201,7 +201,6 @@ export function getResult(
     }
   }
 
-  // TODO: Add 0 scores for league matches
   if (bingoPlayer != null) {
     const bestOpponent =
       playerEntries.find(([name, _]) => name !== bingoPlayer)?.[0] ?? null;

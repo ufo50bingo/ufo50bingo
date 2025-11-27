@@ -7,6 +7,7 @@ import { GoalName } from "@/app/goals";
 import { IconType } from "./useLocalState";
 import { GeneralCounts } from "./CastPage";
 import ScoreSquare from "../common/ScoreSquare";
+import SideColumn from "./SideColumn";
 
 function Cell({ children }: { children: ReactNode }) {
   return <div className={classes.item}>{children}</div>;
@@ -68,7 +69,7 @@ export default function GeneralIcons({
   isHidden,
 }: Props) {
   return (
-    <div className={classes.container}>
+    <SideColumn>
       <Cell>
         <ScoreSquare
           color={color}
@@ -90,9 +91,9 @@ export default function GeneralIcons({
               countState == null
                 ? 0
                 : Object.keys(countState).reduce(
-                    (acc, game) => acc + countState[game],
-                    0
-                  )
+                  (acc, game) => acc + countState[game],
+                  0
+                )
             }
             iconType={iconType}
             src={
@@ -103,7 +104,7 @@ export default function GeneralIcons({
           />
         );
       })}
-    </div>
+    </SideColumn>
   );
 }
 

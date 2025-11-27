@@ -27,6 +27,8 @@ import useBingosyncSocket from "../common/useBingosyncSocket";
 import useDings from "../play/useDings";
 import { isGift, isGoldCherry } from "@/app/daily/giftGoldCherry";
 import GameSelector from "./GameSelector";
+import SideColumn from "./SideColumn";
+import RecentGames from "./RecentGames";
 
 export type CastProps = {
   id: string;
@@ -248,6 +250,9 @@ export default function Cast({
     <>
       <Group>
         <Group gap={0}>
+          <SideColumn>
+            <RecentGames limit={5} recentGames={leftGames} />
+          </SideColumn>
           <GeneralIcons
             isLeft={true}
             color={leftColor}
@@ -279,6 +284,9 @@ export default function Cast({
             iconType={iconType}
             isHidden={isHidden}
           />
+          <SideColumn>
+            <RecentGames limit={5} recentGames={rightGames} />
+          </SideColumn>
         </Group>
         <Feed rawFeed={rawFeed} />
         <Stack gap={8}>

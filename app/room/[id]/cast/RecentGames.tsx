@@ -23,6 +23,8 @@ export default function RecentGames({ recentGames, limit }: Props) {
                 endTime={endTime}
             />
         );
-    }).slice(0, limit);
+    })
+        .filter(entry => entry != null)
+        .slice(0, limit);
     return <>{entries}</>;
 }

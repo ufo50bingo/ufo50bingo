@@ -8,7 +8,7 @@ import {
   Square,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
-import { Group, Stack } from "@mantine/core";
+import { Group, Stack, Text } from "@mantine/core";
 import { useCallback, useMemo, useState } from "react";
 import Feed from "../common/Feed";
 import { Game, GoalName, ORDERED_GAMES } from "@/app/goals";
@@ -29,6 +29,8 @@ import { isGift, isGoldCherry } from "@/app/daily/giftGoldCherry";
 import GameSelector from "./GameSelector";
 import SideColumn from "./SideColumn";
 import RecentGames from "./RecentGames";
+import ScoreSquare from "../common/ScoreSquare";
+import SideCell from "./SideCell";
 
 export type CastProps = {
   id: string;
@@ -259,21 +261,31 @@ export default function Cast({
     <>
       <Group>
         <Group gap={0}>
-          {showRecentGames && (
+          {showRecentGames && generalGoals.length > 0 && (
             <SideColumn>
-              <RecentGames limit={5} recentGames={leftGames} />
+              <RecentGames limit={6} recentGames={leftGames} />
             </SideColumn>
           )}
-          <GeneralIcons
-            isLeft={true}
-            color={leftColor}
-            score={leftScore}
-            generalGoals={generalGoals}
-            generalState={generals}
-            hasTiebreaker={tiebreakWinner === leftColor}
-            iconType={iconType}
-            isHidden={isHidden}
-          />
+          <SideColumn>
+            <SideCell>
+              <ScoreSquare
+                color={leftColor}
+                score={leftScore}
+                hasTiebreaker={tiebreakWinner === leftColor}
+              />
+            </SideCell>
+            <GeneralIcons
+              isLeft={true}
+              color={leftColor}
+              generalGoals={generalGoals}
+              generalState={generals}
+              iconType={iconType}
+              isHidden={isHidden}
+            />
+            {showRecentGames && generalGoals.length === 0 && (
+              <RecentGames limit={5} recentGames={leftGames} />
+            )}
+          </SideColumn>
           <Board
             board={board}
             highlights={highlights}
@@ -285,19 +297,29 @@ export default function Cast({
             pauseRequestName={pauseRequestName}
             clearPauseRequest={() => setPauseRequestName(null)}
           />
-          <GeneralIcons
-            isLeft={false}
-            color={rightColor}
-            score={rightScore}
-            generalGoals={generalGoals}
-            generalState={generals}
-            hasTiebreaker={tiebreakWinner === rightColor}
-            iconType={iconType}
-            isHidden={isHidden}
-          />
-          {showRecentGames && (
-            <SideColumn>
+          <SideColumn>
+            <SideCell>
+              <ScoreSquare
+                color={rightColor}
+                score={rightScore}
+                hasTiebreaker={tiebreakWinner === rightColor}
+              />
+            </SideCell>
+            <GeneralIcons
+              isLeft={false}
+              color={rightColor}
+              generalGoals={generalGoals}
+              generalState={generals}
+              iconType={iconType}
+              isHidden={isHidden}
+            />
+            {showRecentGames && generalGoals.length === 0 && (
               <RecentGames limit={5} recentGames={rightGames} />
+            )}
+          </SideColumn>
+          {showRecentGames && generalGoals.length > 0 && (
+            <SideColumn>
+              <RecentGames limit={6} recentGames={rightGames} />
             </SideColumn>
           )}
         </Group>
@@ -316,22 +338,41 @@ export default function Cast({
                 onChange={addRightGame}
               />
             </Group>
-            {generalGoals.length > 0 && getCard(generalGoals[0], 431)}
+            {generalGoals.length > 0
+              ? getCard(generalGoals[0], 431)
+              : <InfoCard title="Multi-goal games" height={431}>
+                <Stack gap={4}>
+                  {multiGoalGameElements.length > 0
+                    ? multiGoalGameElements
+                    : "No multi-goal games on this card!"}
+                </Stack>
+              </InfoCard>
+            }
           </Stack>
         )
           : (
-            generalGoals.length > 0 && getCard(generalGoals[0], 475)
+            generalGoals.length > 0
+              ? getCard(generalGoals[0], 475)
+              : <InfoCard title="Multi-goal games" height={475}>
+                <Stack gap={4}>
+                  {multiGoalGameElements.length > 0
+                    ? multiGoalGameElements
+                    : "No multi-goal games on this card!"}
+                </Stack>
+              </InfoCard>
           )}
-        <Group w="100%">
-          {generalGoals.slice(1).map((g) => getCard(g, null))}
-          <InfoCard title="Multi-goal games" height={null} width={205}>
-            <Stack gap={4}>
-              {multiGoalGameElements.length > 0
-                ? multiGoalGameElements
-                : "No multi-goal games on this card!"}
-            </Stack>
-          </InfoCard>
-        </Group>
+        {generalGoals.length > 0 && (
+          <Group w="100%">
+            {generalGoals.slice(1).map((g) => getCard(g, null))}
+            <InfoCard title="Multi-goal games" height={null} width={205}>
+              <Stack gap={4}>
+                {multiGoalGameElements.length > 0
+                  ? multiGoalGameElements
+                  : "No multi-goal games on this card!"}
+              </Stack>
+            </InfoCard>
+          </Group>
+        )}
       </Group>
       <CastSettings
         id={id}

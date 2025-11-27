@@ -1,17 +1,10 @@
-import { ReactNode } from "react";
-
 import classes from "./GeneralIcons.module.css";
 import { IconCircleCheckFilled } from "@tabler/icons-react";
 import { BingosyncColor, Square } from "@/app/matches/parseBingosyncData";
 import { GoalName } from "@/app/goals";
 import { IconType } from "./useLocalState";
 import { GeneralCounts } from "./CastPage";
-import ScoreSquare from "../common/ScoreSquare";
-import SideColumn from "./SideColumn";
-
-function Cell({ children }: { children: ReactNode }) {
-  return <div className={classes.item}>{children}</div>;
-}
+import SideCell from "./SideCell";
 
 type IconProps = {
   goal: string;
@@ -40,71 +33,58 @@ function Icon({ goal, src, count, color, squareColor, iconType }: IconProps) {
       <div className={classes.tag}>{count}</div>
     );
   return (
-    <Cell>
+    <SideCell>
       <img className={imgClass} src={src} alt={goal} />
       {tag}
-    </Cell>
+    </SideCell>
   );
 }
 
 type Props = {
   color: BingosyncColor;
-  score: number;
   generalGoals: ReadonlyArray<Square>;
   generalState: GeneralCounts;
   isLeft: boolean;
-  hasTiebreaker: boolean;
   iconType: IconType;
   isHidden: boolean;
 };
 
 export default function GeneralIcons({
   color,
-  score,
   generalGoals,
   generalState,
   isLeft,
-  hasTiebreaker,
   iconType,
   isHidden,
 }: Props) {
   return (
-    <SideColumn>
-      <Cell>
-        <ScoreSquare
+    generalGoals.map((square) => {
+      const countState = isLeft
+        ? generalState[square.name]?.leftCounts
+        : generalState[square.name]?.rightCounts;
+      return (
+        <Icon
+          key={square.name}
+          goal={square.name}
           color={color}
-          score={score}
-          hasTiebreaker={hasTiebreaker}
+          squareColor={square.color}
+          count={
+            countState == null
+              ? 0
+              : Object.keys(countState).reduce(
+                (acc, game) => acc + countState[game],
+                0
+              )
+          }
+          iconType={iconType}
+          src={
+            iconType === "sprites"
+              ? getSpritesSrc(square.name as GoalName, isHidden)
+              : getWinnerBitSrc(square.name as GoalName, isHidden)
+          }
         />
-      </Cell>
-      {generalGoals.map((square) => {
-        const countState = isLeft
-          ? generalState[square.name]?.leftCounts
-          : generalState[square.name]?.rightCounts;
-        return (
-          <Icon
-            key={square.name}
-            goal={square.name}
-            color={color}
-            squareColor={square.color}
-            count={
-              countState == null
-                ? 0
-                : Object.keys(countState).reduce(
-                  (acc, game) => acc + countState[game],
-                  0
-                )
-            }
-            iconType={iconType}
-            src={
-              iconType === "sprites"
-                ? getSpritesSrc(square.name as GoalName, isHidden)
-                : getWinnerBitSrc(square.name as GoalName, isHidden)
-            }
-          />
-        );
-      })}
-    </SideColumn>
+      );
+    })
   );
 }
 

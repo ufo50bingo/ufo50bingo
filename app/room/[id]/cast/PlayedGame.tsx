@@ -12,7 +12,7 @@ type Props = {
 export default function PlayedGame({ game, startTime, endTime }: Props) {
   return (
     <div className={classes.container}>
-      <img src={`/games/attactics.png`} className={classes.gameIcon} />
+      <img src={`/games/${game}.png`} className={classes.gameIcon} />
       <div className={classes.tag}>
         {endTime == null ? (
           <RunningDuration

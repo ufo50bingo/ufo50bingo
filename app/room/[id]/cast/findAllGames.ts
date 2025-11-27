@@ -1,14 +1,31 @@
-import { Game, GoalName, ORDERED_PROPER_GAMES } from "@/app/goals";
+import { Game, GAME_NAMES, GoalName, ORDERED_PROPER_GAMES, ProperGame } from "@/app/goals";
 import { TBoard } from "@/app/matches/parseBingosyncData";
 import { GOAL_TO_TYPES } from "./goalToTypes";
+
+function stripText(text: string): string {
+  return text.toLowerCase().replace(/[^a-z0-9]/g, "")
+}
+
+const NAME_TO_GAME: { [gameName: string]: ProperGame } = {};
+Object.entries(GAME_NAMES).forEach(([game, name]) => {
+  NAME_TO_GAME[stripText(name)] = game as ProperGame;
+});
 
 export type GameToGoals = { [game: string]: ReadonlyArray<[GoalName, number]> };
 
 export function findGamesForGoal(goal: GoalName): Game[] {
   const types = GOAL_TO_TYPES[goal];
-  // this is an old goal!
+  // this is an old goal, or from a non-standard variant
   if (types == null) {
-    return [];
+    const split = goal.split(":");
+    if (split.length < 2) {
+      return [];
+    }
+    const prefix = stripText(split[0]);
+    const game: null | undefined | ProperGame = NAME_TO_GAME[prefix];
+    return game != null
+      ? [game]
+      : [];
   }
   const game = types[0];
   if (game == null) {
@@ -22,7 +39,7 @@ export function findGamesForGoal(goal: GoalName): Game[] {
     games.push("campanella2");
     games.push("campanella3");
   }
-  const strippedGoal = goal.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const strippedGoal = stripText(goal);
   ORDERED_PROPER_GAMES.forEach((name) => {
     const testName = name === "miniandmax" ? "minimax" : name;
     if (strippedGoal.includes(testName)) {

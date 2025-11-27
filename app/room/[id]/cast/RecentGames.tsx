@@ -40,8 +40,7 @@ export default function RecentGames({ recentGames, limit }: Props) {
         entries.push(
             <SideCell key={entries.length}>
                 <div className={classes.container}>
-                    {/* TODO: cobwebs */}
-                    <img src={`/games/attactics.png`} className={classes.gameIcon} />
+                    <img src={`/cobwebs/cobwebs${entries.length}.png`} className={classes.gameIcon} />
                 </div>
             </SideCell>
         );

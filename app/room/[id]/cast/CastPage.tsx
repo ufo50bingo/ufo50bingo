@@ -2,7 +2,7 @@ import { fetchBoard, fetchFeed, getSocketKey } from "@/app/fetchMatchInfo";
 import { BingosyncColor, getBoard } from "@/app/matches/parseBingosyncData";
 import CastWrapper from "./CastWrapper";
 import getSupabaseClient from "./getSupabaseClient";
-import { CountChangeRow, CountState } from "./useSyncedState";
+import { CountChangeRow, CountState, CurrentGameRow } from "./useSyncedState";
 import { RoomCookie, toBingosyncCookie } from "../roomCookie";
 import getSeed from "../common/getSeed";
 // import { STANDARD } from "@/app/pastas/standard";
@@ -17,7 +17,7 @@ export type GeneralCounts = { [goal: string]: CountState };
 
 export default async function CastPage({ id, roomCookie }: Props) {
   const bingosyncCookie = toBingosyncCookie(roomCookie);
-  const [rawBoard, rawFeed, socketKey, seed, rawGeneralCounts, colors] =
+  const [rawBoard, rawFeed, socketKey, seed, rawGeneralCounts, colors, rawCurrentGames] =
     await Promise.all([
       fetchBoard(id),
       fetchFeed(id, bingosyncCookie),
@@ -25,8 +25,12 @@ export default async function CastPage({ id, roomCookie }: Props) {
       getSeed(id),
       getGeneralCounts(id),
       getColors(id),
+      getCurrentGames(id),
     ]);
   const countsForSeed = rawGeneralCounts.filter((entry) => entry.seed === seed);
+  const currentGamesForSeed = rawCurrentGames.filter((entry) => entry.seed === seed);
+  const leftGames = currentGamesForSeed.filter(entry => entry.is_left === true).map(entry => ({ game: entry.game, start_time: entry.start_time }));
+  const rightGames = currentGamesForSeed.filter(entry => entry.is_left === false).map(entry => ({ game: entry.game, start_time: entry.start_time }));
   const structuredCounts = structureCounts(countsForSeed);
   const board = getBoard(rawBoard);
   // const board = getSrlV5Board(STANDARD);
@@ -40,6 +44,8 @@ export default async function CastPage({ id, roomCookie }: Props) {
       initialCounts={structuredCounts}
       initialLeftColor={colors.left}
       initialRightColor={colors.right}
+      initialLeftGames={leftGames}
+      initialRightGames={rightGames}
       playerName={roomCookie.name}
     />
   );
@@ -65,6 +71,16 @@ async function getColors(
   const left = data.find((entry) => entry.is_left === true)?.color ?? "red";
   const right = data.find((entry) => entry.is_left === false)?.color ?? "red";
   return { left, right };
+}
+
+async function getCurrentGames(id: string): Promise<CurrentGameRow[]> {
+  const supabase = getSupabaseClient();
+  const { data } = await supabase
+    .from("current_game")
+    .select()
+    .eq("room_id", id)
+    .order('start_time', { ascending: false })
+  return data ?? [];
 }
 
 function structureCounts(

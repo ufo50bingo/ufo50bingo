@@ -21,11 +21,13 @@ import CastSettings from "./CastSettings";
 import GeneralIcons from "./GeneralIcons";
 import EditSquare from "./EditSquare";
 import { getResult } from "@/app/matches/computeResult";
-import useSyncedState, { CountState } from "./useSyncedState";
+import useSyncedState, { CountState, CurrentGame, CurrentGameRow } from "./useSyncedState";
 import useLocalState from "./useLocalState";
 import useBingosyncSocket from "../common/useBingosyncSocket";
 import useDings from "../play/useDings";
 import { isGift, isGoldCherry } from "@/app/daily/giftGoldCherry";
+import GameSelector from "./GameSelector";
+import BingosyncColored from "@/app/matches/BingosyncColored";
 
 export type CastProps = {
   id: string;
@@ -36,6 +38,8 @@ export type CastProps = {
   initialCounts: { [goal: string]: CountState };
   initialLeftColor: BingosyncColor;
   initialRightColor: BingosyncColor;
+  initialLeftGames: ReadonlyArray<CurrentGame>;
+  initialRightGames: ReadonlyArray<CurrentGame>;
   playerName: string;
 };
 
@@ -48,6 +52,8 @@ export default function Cast({
   initialCounts,
   initialLeftColor,
   initialRightColor,
+  initialLeftGames,
+  initialRightGames,
   playerName,
 }: CastProps) {
   const [gameToGoals, setGameToGoals] = useState(() =>
@@ -86,12 +92,18 @@ export default function Cast({
     setRightColor,
     generals,
     setGeneralGameCount,
+    leftGames,
+    rightGames,
+    addLeftGame,
+    addRightGame,
   } = useSyncedState({
     id,
     seed,
     initialCounts,
     initialLeftColor,
     initialRightColor,
+    initialLeftGames,
+    initialRightGames,
   });
   const {
     shownDifficulties,
@@ -244,6 +256,18 @@ export default function Cast({
           />
         </Group>
         <Feed rawFeed={rawFeed} />
+        <Stack>
+          <GameSelector
+            label={<BingosyncColored color={leftColor}>Left game</BingosyncColored>}
+            game={leftGames.length > 0 ? leftGames[0].game : null}
+            onChange={addLeftGame}
+          />
+          <GameSelector
+            label={<BingosyncColored color={rightColor}>Right game</BingosyncColored>}
+            game={rightGames.length > 0 ? rightGames[0].game : null}
+            onChange={addRightGame}
+          />
+        </Stack>
         {generalGoals.length > 0 && getCard(generalGoals[0], 475)}
         <Group w="100%">
           {generalGoals.slice(1).map((g) => getCard(g, null))}

@@ -93,8 +93,6 @@ export default function useSyncedState({
   const setGeneralGameCountRef = useRef<
     null | ((change: CountChange, shouldBroadcast: boolean) => unknown)
   >(null);
-  const addLeftGameRef = useRef<(null | ((entry: CurrentGame) => unknown))>(null);
-  const addRightGameRef = useRef<(null | ((entry: CurrentGame) => unknown))>(null);
   const seedRef = useRef<number>(seed);
   if (seedRef.current !== seed) {
     setGeneralsRaw({});

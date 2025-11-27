@@ -21,7 +21,7 @@ import CastSettings from "./CastSettings";
 import GeneralIcons from "./GeneralIcons";
 import EditSquare from "./EditSquare";
 import { getResult } from "@/app/matches/computeResult";
-import useSyncedState, { CountState, CurrentGame, CurrentGameRow } from "./useSyncedState";
+import useSyncedState, { CountState, CurrentGame } from "./useSyncedState";
 import useLocalState from "./useLocalState";
 import useBingosyncSocket from "../common/useBingosyncSocket";
 import useDings from "../play/useDings";

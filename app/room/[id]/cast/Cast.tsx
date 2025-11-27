@@ -258,12 +258,16 @@ export default function Cast({
         <Feed rawFeed={rawFeed} />
         <Stack>
           <GameSelector
-            label={<BingosyncColored color={leftColor}>Left game</BingosyncColored>}
+            label={
+              <BingosyncColored color={leftColor}>Left game</BingosyncColored>
+            }
             game={leftGames.length > 0 ? leftGames[0].game : null}
             onChange={addLeftGame}
           />
           <GameSelector
-            label={<BingosyncColored color={rightColor}>Right game</BingosyncColored>}
+            label={
+              <BingosyncColored color={rightColor}>Right game</BingosyncColored>
+            }
             game={rightGames.length > 0 ? rightGames[0].game : null}
             onChange={addRightGame}
           />

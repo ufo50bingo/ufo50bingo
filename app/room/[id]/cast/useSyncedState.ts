@@ -86,8 +86,10 @@ export default function useSyncedState({
   const [rightColor, setRightColorRaw] =
     useState<BingosyncColor>(initialRightColor);
   const [generals, setGeneralsRaw] = useState<GeneralCounts>(initialCounts);
-  const [leftGames, setLeftGamesRaw] = useState<ReadonlyArray<CurrentGame>>(initialLeftGames);
-  const [rightGames, setRightGamesRaw] = useState<ReadonlyArray<CurrentGame>>(initialRightGames);
+  const [leftGames, setLeftGamesRaw] =
+    useState<ReadonlyArray<CurrentGame>>(initialLeftGames);
+  const [rightGames, setRightGamesRaw] =
+    useState<ReadonlyArray<CurrentGame>>(initialRightGames);
 
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const setGeneralGameCountRef = useRef<
@@ -138,9 +140,15 @@ export default function useSyncedState({
         (payload: { payload: CurrentGameSync }) => {
           const change = payload.payload;
           if (change.is_left) {
-            setLeftGamesRaw(prevGames => [{ game: change.game, start_time: change.start_time }, ...prevGames]);
+            setLeftGamesRaw((prevGames) => [
+              { game: change.game, start_time: change.start_time },
+              ...prevGames,
+            ]);
           } else {
-            setRightGamesRaw(prevGames => [{ game: change.game, start_time: change.start_time }, ...prevGames]);
+            setRightGamesRaw((prevGames) => [
+              { game: change.game, start_time: change.start_time },
+              ...prevGames,
+            ]);
           }
         }
       )
@@ -192,7 +200,7 @@ export default function useSyncedState({
         game: newGame,
         start_time: Date.now(),
       };
-      setLeftGamesRaw(prevGames => [newEntry, ...prevGames]);
+      setLeftGamesRaw((prevGames) => [newEntry, ...prevGames]);
       await syncCurrentGame(newEntry, true);
     };
     const addRightGame = async (newGame: null | ProperGame) => {
@@ -200,7 +208,7 @@ export default function useSyncedState({
         game: newGame,
         start_time: Date.now(),
       };
-      setRightGamesRaw(prevGames => [newEntry, ...prevGames]);
+      setRightGamesRaw((prevGames) => [newEntry, ...prevGames]);
       await syncCurrentGame(newEntry, false);
     };
     const setGeneralGameCount = async (
@@ -216,13 +224,13 @@ export default function useSyncedState({
       newCounts[change.game] = change.count;
       const newGeneralState = change.is_left
         ? {
-          leftCounts: newCounts,
-          rightCounts,
-        }
+            leftCounts: newCounts,
+            rightCounts,
+          }
         : {
-          leftCounts,
-          rightCounts: newCounts,
-        };
+            leftCounts,
+            rightCounts: newCounts,
+          };
       const newGenerals = {
         ...generals,
         [change.goal]: newGeneralState,
@@ -256,5 +264,14 @@ export default function useSyncedState({
       setRightColor,
       setGeneralGameCount,
     };
-  }, [leftColor, rightColor, leftGames, rightGames, generals, id, seed, supabase]);
+  }, [
+    leftColor,
+    rightColor,
+    leftGames,
+    rightGames,
+    generals,
+    id,
+    seed,
+    supabase,
+  ]);
 }

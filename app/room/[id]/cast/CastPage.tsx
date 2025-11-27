@@ -17,20 +17,33 @@ export type GeneralCounts = { [goal: string]: CountState };
 
 export default async function CastPage({ id, roomCookie }: Props) {
   const bingosyncCookie = toBingosyncCookie(roomCookie);
-  const [rawBoard, rawFeed, socketKey, seed, rawGeneralCounts, colors, rawCurrentGames] =
-    await Promise.all([
-      fetchBoard(id),
-      fetchFeed(id, bingosyncCookie),
-      getSocketKey(id, bingosyncCookie),
-      getSeed(id),
-      getGeneralCounts(id),
-      getColors(id),
-      getCurrentGames(id),
-    ]);
+  const [
+    rawBoard,
+    rawFeed,
+    socketKey,
+    seed,
+    rawGeneralCounts,
+    colors,
+    rawCurrentGames,
+  ] = await Promise.all([
+    fetchBoard(id),
+    fetchFeed(id, bingosyncCookie),
+    getSocketKey(id, bingosyncCookie),
+    getSeed(id),
+    getGeneralCounts(id),
+    getColors(id),
+    getCurrentGames(id),
+  ]);
   const countsForSeed = rawGeneralCounts.filter((entry) => entry.seed === seed);
-  const currentGamesForSeed = rawCurrentGames.filter((entry) => entry.seed === seed);
-  const leftGames = currentGamesForSeed.filter(entry => entry.is_left === true).map(entry => ({ game: entry.game, start_time: entry.start_time }));
-  const rightGames = currentGamesForSeed.filter(entry => entry.is_left === false).map(entry => ({ game: entry.game, start_time: entry.start_time }));
+  const currentGamesForSeed = rawCurrentGames.filter(
+    (entry) => entry.seed === seed
+  );
+  const leftGames = currentGamesForSeed
+    .filter((entry) => entry.is_left === true)
+    .map((entry) => ({ game: entry.game, start_time: entry.start_time }));
+  const rightGames = currentGamesForSeed
+    .filter((entry) => entry.is_left === false)
+    .map((entry) => ({ game: entry.game, start_time: entry.start_time }));
   const structuredCounts = structureCounts(countsForSeed);
   const board = getBoard(rawBoard);
   // const board = getSrlV5Board(STANDARD);
@@ -79,7 +92,7 @@ async function getCurrentGames(id: string): Promise<CurrentGameRow[]> {
     .from("current_game")
     .select()
     .eq("room_id", id)
-    .order('start_time', { ascending: false })
+    .order("start_time", { ascending: false });
   return data ?? [];
 }
 

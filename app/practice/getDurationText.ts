@@ -24,7 +24,7 @@ export default function getDurationText(
     ":" +
     finalStr;
   if (forceShowHours || hours > 0) {
-    finalStr = hours.toString().padStart(2, "0") + ":" + finalStr;
+    finalStr = hours.toString() + ":" + finalStr;
   }
   return duration < 0 ? "-" + finalStr : finalStr;
 }

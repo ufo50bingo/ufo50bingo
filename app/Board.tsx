@@ -108,7 +108,10 @@ function getBorderStyles(
   const bottomAndRight =
     colors.length > 1 ? getColorHex(colors[1]) : getColorHex(colors[0]);
 
+  const boxShadow = `inset 10px 0 10px -10px ${topAndLeft}, inset 0 10px 10px -10px ${topAndLeft}, inset -10px 0 10px -10px ${bottomAndRight}, inset 0 -10px 10px -10px ${bottomAndRight}`;
+
   return {
+    boxShadow,
     borderTopColor: topAndLeft,
     borderLeftColor: topAndLeft,
     borderRightColor: bottomAndRight,

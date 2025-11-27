@@ -8,7 +8,7 @@ import {
   Square,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
-import { Group, Stack, Text } from "@mantine/core";
+import { Group, Stack } from "@mantine/core";
 import { useCallback, useMemo, useState } from "react";
 import Feed from "../common/Feed";
 import { Game, GoalName, ORDERED_GAMES } from "@/app/goals";

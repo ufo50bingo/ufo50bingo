@@ -44,6 +44,12 @@ type Props = {
   rightScore: number;
   generalCounts: GeneralCounts;
   generalGoals: ReadonlyArray<Square>;
+  showGameSelector: boolean;
+  setShowGameSelector: (newShowGameSelector: boolean) => unknown;
+  highlightCurrentGame: boolean;
+  setHighlightCurrentGame: (newHighlightCurrentGame: boolean) => unknown;
+  showRecentGames: boolean;
+  setShowRecentGames: (newShowRecentGames: boolean) => unknown;
 };
 
 export default function CastSettings({
@@ -67,6 +73,12 @@ export default function CastSettings({
   rightScore,
   generalCounts,
   generalGoals,
+  showGameSelector,
+  setShowGameSelector,
+  highlightCurrentGame,
+  setHighlightCurrentGame,
+  showRecentGames,
+  setShowRecentGames,
 }: Props) {
   const [isShown, setIsShown] = useState(leftColor === rightColor);
 
@@ -131,8 +143,8 @@ export default function CastSettings({
                               event.currentTarget.checked
                                 ? [...shownDifficulties, difficulty]
                                 : shownDifficulties.filter(
-                                    (d) => d !== difficulty
-                                  )
+                                  (d) => d !== difficulty
+                                )
                             )
                           }
                           label={DIFFICULTY_NAMES[difficulty]}
@@ -167,6 +179,27 @@ export default function CastSettings({
                       checked={hideByDefault}
                       onChange={(event) =>
                         setHideByDefault(event.target.checked)
+                      }
+                    />
+                    <Checkbox
+                      label="Show current game selectors"
+                      checked={showGameSelector}
+                      onChange={(event) =>
+                        setShowGameSelector(event.target.checked)
+                      }
+                    />
+                    <Checkbox
+                      label="Highlight current game goals"
+                      checked={highlightCurrentGame}
+                      onChange={(event) =>
+                        setHighlightCurrentGame(event.target.checked)
+                      }
+                    />
+                    <Checkbox
+                      label="Show recent games"
+                      checked={showRecentGames}
+                      onChange={(event) =>
+                        setShowRecentGames(event.target.checked)
                       }
                     />
                   </Stack>

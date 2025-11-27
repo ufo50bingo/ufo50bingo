@@ -117,6 +117,12 @@ export default function Cast({
     setIconType,
     hideByDefault,
     setHideByDefault,
+    showGameSelector,
+    setShowGameSelector,
+    highlightCurrentGame,
+    setHighlightCurrentGame,
+    showRecentGames,
+    setShowRecentGames,
   } = useLocalState(id, seed);
 
   const [isHiddenRaw, setIsHidden] = useState(hideByDefault);
@@ -225,6 +231,9 @@ export default function Cast({
   const rightGame = rightGames.length > 0 ? rightGames[0].game : null;
 
   const highlights = useMemo(() => {
+    if (!highlightCurrentGame) {
+      return undefined;
+    }
     const leftIndices = (
       (leftGame == null ? null : gameToGoals[leftGame]) ?? []
     ).map((item) => item[1]);
@@ -244,15 +253,17 @@ export default function Cast({
         return colors;
       });
     return highlights;
-  }, [leftColor, rightColor, leftGame, rightGame, gameToGoals]);
+  }, [leftColor, rightColor, leftGame, rightGame, gameToGoals, highlightCurrentGame]);
 
   return (
     <>
       <Group>
         <Group gap={0}>
-          <SideColumn>
-            <RecentGames limit={5} recentGames={leftGames} />
-          </SideColumn>
+          {showRecentGames && (
+            <SideColumn>
+              <RecentGames limit={5} recentGames={leftGames} />
+            </SideColumn>
+          )}
           <GeneralIcons
             isLeft={true}
             color={leftColor}
@@ -284,26 +295,33 @@ export default function Cast({
             iconType={iconType}
             isHidden={isHidden}
           />
-          <SideColumn>
-            <RecentGames limit={5} recentGames={rightGames} />
-          </SideColumn>
+          {showRecentGames && (
+            <SideColumn>
+              <RecentGames limit={5} recentGames={rightGames} />
+            </SideColumn>
+          )}
         </Group>
         <Feed rawFeed={rawFeed} />
-        <Stack gap={8}>
-          <Group>
-            <GameSelector
-              color={leftColor}
-              game={leftGame}
-              onChange={addLeftGame}
-            />
-            <GameSelector
-              color={rightColor}
-              game={rightGame}
-              onChange={addRightGame}
-            />
-          </Group>
-          {generalGoals.length > 0 && getCard(generalGoals[0], 431)}
-        </Stack>
+        {showGameSelector ? (
+          <Stack gap={8}>
+            <Group>
+              <GameSelector
+                color={leftColor}
+                game={leftGame}
+                onChange={addLeftGame}
+              />
+              <GameSelector
+                color={rightColor}
+                game={rightGame}
+                onChange={addRightGame}
+              />
+            </Group>
+            {generalGoals.length > 0 && getCard(generalGoals[0], 431)}
+          </Stack>
+        )
+          : (
+            generalGoals.length > 0 && getCard(generalGoals[0], 475)
+          )}
         <Group w="100%">
           {generalGoals.slice(1).map((g) => getCard(g, null))}
           <InfoCard title="Multi-goal games" height={null} width={205}>
@@ -336,6 +354,12 @@ export default function Cast({
         rightScore={rightScore}
         generalCounts={generals}
         generalGoals={generalGoals}
+        showGameSelector={showGameSelector}
+        setShowGameSelector={setShowGameSelector}
+        highlightCurrentGame={highlightCurrentGame}
+        setHighlightCurrentGame={setHighlightCurrentGame}
+        showRecentGames={showRecentGames}
+        setShowRecentGames={setShowRecentGames}
       />
       {editingIndex != null && (
         <EditSquare

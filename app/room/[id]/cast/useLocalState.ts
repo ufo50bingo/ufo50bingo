@@ -18,6 +18,12 @@ export interface CasterState extends BaseState {
   setIconType: (newIconType: IconType) => unknown;
   hideByDefault: boolean;
   setHideByDefault: (newHideByDefault: boolean) => unknown;
+  showGameSelector: boolean;
+  setShowGameSelector: (newShowGameSelector: boolean) => unknown;
+  highlightCurrentGame: boolean;
+  setHighlightCurrentGame: (newHighlightCurrentGame: boolean) => unknown;
+  showRecentGames: boolean;
+  setShowRecentGames: (newShowRecentGames: boolean) => unknown;
 }
 
 export default function useLocalState(id: string, seed: number): CasterState {
@@ -75,6 +81,30 @@ export default function useLocalState(id: string, seed: number): CasterState {
     return fromStorage === "true";
   });
 
+  const [showGameSelector, setShowGameSelectorRaw] = useState<boolean>(() => {
+    if (global.window == undefined || localStorage == null) {
+      return true;
+    }
+    const fromStorage = localStorage.getItem("show_game_selector");
+    return fromStorage !== "false";
+  });
+
+  const [highlightCurrentGame, setHighlightCurrentGameRaw] = useState<boolean>(() => {
+    if (global.window == undefined || localStorage == null) {
+      return true;
+    }
+    const fromStorage = localStorage.getItem("highlight_current_game");
+    return fromStorage !== "false";
+  });
+
+  const [showRecentGames, setShowRecentGamesRaw] = useState<boolean>(() => {
+    if (global.window == undefined || localStorage == null) {
+      return true;
+    }
+    const fromStorage = localStorage.getItem("show_recent_games");
+    return fromStorage !== "false";
+  });
+
   return useMemo(() => {
     const addShowAll = (goal: GoalName) => {
       const newShowAll = [...showAll, goal];
@@ -114,6 +144,36 @@ export default function useLocalState(id: string, seed: number): CasterState {
         newHideByDefault ? "true" : "false"
       );
     };
+    const setShowGameSelector = (newShowGameSelector: boolean) => {
+      setShowGameSelectorRaw(newShowGameSelector);
+      if (global.window == undefined || localStorage == null) {
+        return;
+      }
+      localStorage.setItem(
+        "show_game_selector",
+        newShowGameSelector ? "true" : "false"
+      );
+    };
+    const setShowRecentGames = (newShowRecentGames: boolean) => {
+      setShowRecentGamesRaw(newShowRecentGames);
+      if (global.window == undefined || localStorage == null) {
+        return;
+      }
+      localStorage.setItem(
+        "show_recent_games",
+        newShowRecentGames ? "true" : "false"
+      );
+    };
+    const setHighlightCurrentGame = (newHighlightCurrentGame: boolean) => {
+      setHighlightCurrentGameRaw(newHighlightCurrentGame);
+      if (global.window == undefined || localStorage == null) {
+        return;
+      }
+      localStorage.setItem(
+        "highlight_current_game",
+        newHighlightCurrentGame ? "true" : "false"
+      );
+    };
     return {
       showAll,
       shownDifficulties,
@@ -125,8 +185,24 @@ export default function useLocalState(id: string, seed: number): CasterState {
       setIconType,
       hideByDefault,
       setHideByDefault,
+      showGameSelector,
+      setShowGameSelector,
+      highlightCurrentGame,
+      setHighlightCurrentGame,
+      showRecentGames,
+      setShowRecentGames,
     };
-  }, [showAll, shownDifficulties, sortType, key, iconType, hideByDefault]);
+  }, [
+    showAll,
+    shownDifficulties,
+    sortType,
+    key,
+    iconType,
+    hideByDefault,
+    showGameSelector,
+    highlightCurrentGame,
+    showRecentGames,
+  ]);
 }
 
 const DEFAULT_STATE: BaseState = {

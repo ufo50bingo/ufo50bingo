@@ -27,7 +27,6 @@ import useBingosyncSocket from "../common/useBingosyncSocket";
 import useDings from "../play/useDings";
 import { isGift, isGoldCherry } from "@/app/daily/giftGoldCherry";
 import GameSelector from "./GameSelector";
-import BingosyncColored from "@/app/matches/BingosyncColored";
 
 export type CastProps = {
   id: string;

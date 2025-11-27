@@ -1,9 +1,10 @@
 import { GAME_NAMES, ORDERED_PROPER_GAMES, ProperGame } from "@/app/goals";
+import BingosyncColored from "@/app/matches/BingosyncColored";
+import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { Select } from "@mantine/core";
-import { ReactNode } from "react";
 
 type Props = {
-  label: ReactNode;
+  color: BingosyncColor;
   game: ProperGame | null;
   onChange: (newGame: ProperGame | null) => void;
 };
@@ -13,10 +14,10 @@ const DATA = ORDERED_PROPER_GAMES.map((game) => ({
   label: GAME_NAMES[game],
 }));
 
-export default function GameSelector({ label, game, onChange }: Props) {
+export default function GameSelector({ color, game, onChange }: Props) {
   return (
     <Select
-      label={label}
+      w="124px"
       value={game}
       onChange={(newValue) =>
         onChange(newValue == null ? null : (newValue as ProperGame))
@@ -26,6 +27,9 @@ export default function GameSelector({ label, game, onChange }: Props) {
       allowDeselect={false}
       searchable={true}
       clearable={true}
+      renderOption={(option) => (
+        <BingosyncColored color={color}>{option.option.label}</BingosyncColored>
+      )}
     />
   );
 }

@@ -1,14 +1,16 @@
 import SquareText from "./SquareText";
 import classes from "./Board.module.css";
-import { ReactNode, useState } from "react";
+import { CSSProperties, ReactNode, useState } from "react";
 import { BingosyncColor, TBoard } from "./matches/parseBingosyncData";
 import { Difficulty } from "./goals";
 import { GOAL_TO_TYPES } from "./room/[id]/cast/goalToTypes";
 import { SPICY_GOAL_TO_TYPES } from "./room/[id]/cast/spicyGoalToTypes";
+import getColorHex from "./room/[id]/cast/getColorHex";
 
 type Props = {
   board: TBoard;
   overlays?: ReadonlyArray<null | ReactNode>;
+  highlights?: ReadonlyArray<null | ReadonlyArray<BingosyncColor>>;
   onClickSquare: null | ((squareIndex: number) => void);
   isHidden: boolean;
   setIsHidden: (isHidden: boolean) => void;
@@ -96,9 +98,28 @@ function getDifficulty(
   );
 }
 
+function getBorderStyles(
+  colors: null | undefined | ReadonlyArray<BingosyncColor>
+): undefined | CSSProperties {
+  if (colors == null || colors.length < 1) {
+    return undefined;
+  }
+  const topAndLeft = getColorHex(colors[0]);
+  const bottomAndRight =
+    colors.length > 1 ? getColorHex(colors[1]) : getColorHex(colors[0]);
+
+  return {
+    borderTopColor: topAndLeft,
+    borderLeftColor: topAndLeft,
+    borderRightColor: bottomAndRight,
+    borderBottomColor: bottomAndRight,
+  };
+}
+
 export default function Board({
   board,
   overlays,
+  highlights,
   onClickSquare,
   isHidden,
   setIsHidden,
@@ -126,6 +147,11 @@ export default function Board({
               setStarred([...starred, squareIndex]);
             }
           }}
+          style={
+            highlights == null || board[squareIndex].color !== "blank"
+              ? undefined
+              : getBorderStyles(highlights[squareIndex])
+          }
         >
           {starred.includes(squareIndex) && <div className={classes.starred} />}
           {shownDifficulties.length > 0 &&

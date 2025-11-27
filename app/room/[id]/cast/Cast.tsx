@@ -220,6 +220,31 @@ export default function Cast({
     />
   );
 
+  const leftGame = leftGames.length > 0 ? leftGames[0].game : null;
+  const rightGame = rightGames.length > 0 ? rightGames[0].game : null;
+
+  const highlights = useMemo(() => {
+    const leftIndices = (
+      (leftGame == null ? null : gameToGoals[leftGame]) ?? []
+    ).map((item) => item[1]);
+    const rightIndices = (
+      (rightGame == null ? null : gameToGoals[rightGame]) ?? []
+    ).map((item) => item[1]);
+    const highlights = Array(25)
+      .fill(null)
+      .map((_, index) => {
+        const colors: Array<BingosyncColor> = [];
+        if (leftIndices.includes(index)) {
+          colors.push(leftColor);
+        }
+        if (rightIndices.includes(index)) {
+          colors.push(rightColor);
+        }
+        return colors;
+      });
+    return highlights;
+  }, [leftColor, rightColor, leftGame, rightGame, gameToGoals]);
+
   return (
     <>
       <Group>
@@ -236,6 +261,7 @@ export default function Cast({
           />
           <Board
             board={board}
+            highlights={highlights}
             onClickSquare={setEditingIndex}
             isHidden={isHidden}
             setIsHidden={setIsHidden}
@@ -256,23 +282,21 @@ export default function Cast({
           />
         </Group>
         <Feed rawFeed={rawFeed} />
-        <Stack>
-          <GameSelector
-            label={
-              <BingosyncColored color={leftColor}>Left game</BingosyncColored>
-            }
-            game={leftGames.length > 0 ? leftGames[0].game : null}
-            onChange={addLeftGame}
-          />
-          <GameSelector
-            label={
-              <BingosyncColored color={rightColor}>Right game</BingosyncColored>
-            }
-            game={rightGames.length > 0 ? rightGames[0].game : null}
-            onChange={addRightGame}
-          />
+        <Stack gap={8}>
+          <Group>
+            <GameSelector
+              color={leftColor}
+              game={leftGame}
+              onChange={addLeftGame}
+            />
+            <GameSelector
+              color={rightColor}
+              game={rightGame}
+              onChange={addRightGame}
+            />
+          </Group>
+          {generalGoals.length > 0 && getCard(generalGoals[0], 431)}
         </Stack>
-        {generalGoals.length > 0 && getCard(generalGoals[0], 475)}
         <Group w="100%">
           {generalGoals.slice(1).map((g) => getCard(g, null))}
           <InfoCard title="Multi-goal games" height={null} width={205}>

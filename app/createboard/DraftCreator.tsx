@@ -65,6 +65,7 @@ export default function DraftCreator({
     () => rawDifficultyCountsByPlayer.slice(0, numPlayers),
     [rawDifficultyCountsByPlayer, numPlayers]
   );
+
   const difficultySum = difficultyCountsByPlayer.reduce(
     (acc, difficultyCount) =>
       acc +
@@ -229,7 +230,7 @@ export default function DraftCreator({
                       const newDifficultyCount = new Map(difficultyCount);
                       newDifficultyCount.set(difficulty, newCount);
                       const newDifficultyCountsByPlayer = [
-                        ...difficultyCountsByPlayer,
+                        ...rawDifficultyCountsByPlayer,
                       ];
                       newDifficultyCountsByPlayer[playerIndex] =
                         newDifficultyCount;

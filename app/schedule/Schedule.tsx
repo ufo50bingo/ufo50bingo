@@ -1,4 +1,12 @@
-import { Container, Card, Stack, Title, Alert, Anchor } from "@mantine/core";
+import {
+  Container,
+  Card,
+  Stack,
+  Title,
+  Alert,
+  Anchor,
+  List,
+} from "@mantine/core";
 import { ScheduledMatch } from "./fetchSchedule";
 import ScheduledMatchView from "./ScheduledMatchView";
 import { revalidateSchedule } from "./revalidateSchedule";
@@ -37,12 +45,12 @@ function ScheduledMatchList({
       )}
       {matches.length > 0
         ? matches.map((m) => (
-          <ScheduledMatchView
-            key={m.name + m.time.toString()}
-            match={m}
-            includeDate={includeDate}
-          />
-        ))
+            <ScheduledMatchView
+              key={m.name + m.time.toString()}
+              match={m}
+              includeDate={includeDate}
+            />
+          ))
         : "No matches found!"}
     </>
   );
@@ -73,21 +81,37 @@ export default function Schedule({ schedule }: Props) {
     <Container>
       <Stack>
         <Alert title="All times and dates are in your local timezone.">
-          Data is synced from the{" "}
-          <Anchor
-            size="sm"
-            href="https://docs.google.com/spreadsheets/d/1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA/edit?gid=0#gid=0"
-            target="_blank"
-          >
-            official Season 2 schedule
-          </Anchor> and the <Anchor
-            size="sm"
-            href="https://docs.google.com/spreadsheets/d/1OocDHEbrJC3BqO8qrPFCYxyy2nzqAaTT6Hmix076Ea0/edit?gid=1881722267#gid=1881722267"
-            target="_blank"
-          >
-            Underground Season 2 schedule
-          </Anchor>{' '}
-          once per hour. To force an immediate sync,{" "}
+          Data is synced from the following sheets once per hour
+          <List>
+            <List.Item>
+              <Anchor
+                size="sm"
+                href="https://docs.google.com/spreadsheets/d/1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA/edit?gid=0#gid=0"
+                target="_blank"
+              >
+                Official Season 2 schedule
+              </Anchor>
+            </List.Item>
+            <List.Item>
+              <Anchor
+                size="sm"
+                href="https://docs.google.com/spreadsheets/d/1OocDHEbrJC3BqO8qrPFCYxyy2nzqAaTT6Hmix076Ea0/edit?gid=1881722267#gid=1881722267"
+                target="_blank"
+              >
+                Underground Season 2 schedule
+              </Anchor>
+            </List.Item>
+            <List.Item>
+              <Anchor
+                size="sm"
+                href="https://docs.google.com/spreadsheets/d/1FuvQLFIM38sZKXF4hnMtLWjWBo1jOokM659N-BRu2uk/edit?gid=0#gid=0"
+                target="_blank"
+              >
+                Offseason schedule
+              </Anchor>
+            </List.Item>
+          </List>
+          To force an immediate sync,{" "}
           <Anchor size="sm" onClick={async () => await revalidateSchedule()}>
             click here.
           </Anchor>

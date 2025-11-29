@@ -3,12 +3,24 @@ import { DateTime } from "luxon";
 
 const LEAGUE_SHEET_ID = "1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA";
 const UNDERGROUND_SHEET_ID = "1OocDHEbrJC3BqO8qrPFCYxyy2nzqAaTT6Hmix076Ea0";
+const OFFSEASON_SHEET_ID = "1FuvQLFIM38sZKXF4hnMtLWjWBo1jOokM659N-BRu2uk";
 // Copy of the official sheet to help with debugging
 // const LEAGUE_SHEET_ID = "1NdF25XWmISftQzATmOjSTLz-nE0dhwLIjbllgxDDTMk";
 
+type Sheet = {
+  sheetID: string;
+  leaguePrefix: null | string;
+};
+
+const SHEETS: ReadonlyArray<Sheet> = [
+  { sheetID: LEAGUE_SHEET_ID, leaguePrefix: "" },
+  { sheetID: UNDERGROUND_SHEET_ID, leaguePrefix: "Underground " },
+  { sheetID: OFFSEASON_SHEET_ID, leaguePrefix: null },
+];
+
 export type ScheduledMatch = {
   name: string;
-  tier: string;
+  tier: null | string;
   time: number;
   streamer: null | string;
   streamLink: null | string;
@@ -31,10 +43,10 @@ const MANUAL_MATCHES: ReadonlyArray<ScheduledMatch> = [
   },
 ];
 
-async function fetchScheduleForSheet(
-  sheetID: string,
-  tierPrefix: string
-): Promise<null | ReadonlyArray<ScheduledMatch>> {
+async function fetchScheduleForSheet({
+  sheetID,
+  leaguePrefix,
+}: Sheet): Promise<null | ReadonlyArray<ScheduledMatch>> {
   const auth = new google.auth.JWT({
     email: process.env.GSHEETS_ACCOUNT_EMAIL,
     key: process.env.GSHEETS_ACCOUNT_PRIVATE_KEY,
@@ -46,7 +58,7 @@ async function fetchScheduleForSheet(
     sheet.spreadsheets.values.get(
       {
         spreadsheetId: sheetID,
-        range: `Matches!A1:G400`,
+        range: leaguePrefix == null ? `Matches!A1:D400` : `Matches!A1:G400`,
         auth,
         fields: "values",
       },
@@ -57,7 +69,7 @@ async function fetchScheduleForSheet(
     sheet.spreadsheets.values.get(
       {
         spreadsheetId: sheetID,
-        range: `Casters!B5:D50`,
+        range: `Casters!B5:D100`,
         auth,
         fields: "values",
       },
@@ -86,10 +98,15 @@ async function fetchScheduleForSheet(
   const scheduled: null | undefined | ReadonlyArray<ScheduledMatch> =
     matchesResult.data.values
       ?.map((row) => {
-        const [_week, tier, p1, p2, time, date, streamer] = row;
+        const time = leaguePrefix == null ? row[1] : row[4];
+        const date = leaguePrefix == null ? row[2] : row[5];
         if (date == null || time == null) {
           return null;
         }
+
+        const streamer = leaguePrefix == null ? row[3] : row[6];
+        const name = leaguePrefix == null ? row[0] : `${row[2]} vs ${row[3]}`;
+        const tier = leaguePrefix == null ? null : leaguePrefix + row[1];
         const dt = DateTime.fromFormat(date + " " + time, "M/d/yyyy h:mm a", {
           zone: "America/New_York",
         });
@@ -100,8 +117,8 @@ async function fetchScheduleForSheet(
           return null;
         }
         return {
-          name: `${p1} vs ${p2}`,
-          tier: tierPrefix + tier,
+          name,
+          tier,
           time: dt.toSeconds(),
           streamer: streamer,
           streamLink: streamerToLink[streamer],
@@ -112,11 +129,13 @@ async function fetchScheduleForSheet(
 }
 
 export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMatch>> {
-  const [league, underground] = await Promise.all([
-    fetchScheduleForSheet(LEAGUE_SHEET_ID, ""),
-    fetchScheduleForSheet(UNDERGROUND_SHEET_ID, "Underground "),
-  ]);
-  const final = (league ?? []).concat(underground ?? []).concat(MANUAL_MATCHES);
+  const allSchedules = await Promise.all(
+    SHEETS.map((sheet) => fetchScheduleForSheet(sheet))
+  );
+  const final = allSchedules
+    .map((schedule) => schedule ?? [])
+    .flat()
+    .concat(MANUAL_MATCHES);
   final.sort((a, b) => a.time - b.time);
   return final;
 }

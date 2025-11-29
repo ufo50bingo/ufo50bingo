@@ -44,9 +44,11 @@ export default function ScheduledMatchView({ match, includeDate }: Props) {
         {match.streamer}
       </Anchor>
     );
+  const tier = match.tier == null ? "" : ` — ${match.tier}`;
   return (
     <Text>
-      {date} — {match.tier} — {match.name} — {streamer}
+      {date}
+      {tier} — {match.name} — {streamer}
     </Text>
   );
 }

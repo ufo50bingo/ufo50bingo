@@ -32,9 +32,10 @@ export function CopyToDiscord({ children, matches, includeDate }: Props) {
                       : match.streamer != null && match.streamer != ""
                       ? match.streamer
                       : "No streamer yet";
-                  return `<t:${match.time}:${includeDate ? "f" : "t"}> — ${
-                    match.tier
-                  } — ${match.name} — ${stream}`;
+                  const tier = match.tier == null ? "" : ` — ${match.tier}`;
+                  return `<t:${match.time}:${
+                    includeDate ? "f" : "t"
+                  }>${tier} — ${match.name} — ${stream}`;
                 })
                 .join("\n")
             )

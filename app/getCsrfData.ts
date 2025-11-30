@@ -1,5 +1,5 @@
 const CSRF_REGEX = /name="csrfmiddlewaretoken" value="([a-zA-Z0-9]+)"/;
-const BINGOSYNC_BASE_URL = "https://www.bingosync.com/";
+const BINGOSYNC_BASE_URL = "https://celestebingo.rhelmot.io/";
 
 export default async function getCsrfData(): Promise<{
   cookie: string;

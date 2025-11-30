@@ -4,7 +4,7 @@ import getCsrfData from "../getCsrfData";
 import { insertMatch } from "./insertMatch";
 import { Variant } from "../pastas/metadata";
 
-const BINGOSYNC_BASE_URL = "https://www.bingosync.com/";
+const BINGOSYNC_BASE_URL = "https://celestebingo.rhelmot.io/";
 
 export interface LeagueInfo {
   season: number;

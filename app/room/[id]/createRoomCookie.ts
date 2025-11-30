@@ -11,7 +11,7 @@ export default async function createRoomCookie(
   view: RoomView
 ) {
   const fullName = name + (view === "cast" ? " (admin)" : "");
-  const joinResponse = await fetch(`https://www.bingosync.com/api/join-room`, {
+  const joinResponse = await fetch(`https://celestebingo.rhelmot.io/api/join-room`, {
     method: "POST",
     redirect: "manual",
     headers: {

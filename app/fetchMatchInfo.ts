@@ -17,7 +17,7 @@ export async function getSessionCookie(id: string): Promise<string> {
 
 export async function fetchBoard(id: string): Promise<RawBoard> {
   const boardResult = await fetch(
-    `https://www.bingosync.com/room/${id}/board`,
+    `https://celestebingo.rhelmot.io/room/${id}/board`,
     {
       method: "GET",
       credentials: "include",
@@ -30,7 +30,7 @@ export async function fetchBoard(id: string): Promise<RawBoard> {
 }
 
 export async function fetchFeed(id: string, cookie: string): Promise<RawFeed> {
-  const url = new URL(`https://www.bingosync.com/room/${id}/feed`);
+  const url = new URL(`https://celestebingo.rhelmot.io/room/${id}/feed`);
   url.search = new URLSearchParams({
     full: "true",
   }).toString();
@@ -50,7 +50,7 @@ export async function getSocketKey(
   id: string,
   cookie: string
 ): Promise<string> {
-  const socketKeyUrl = `https://www.bingosync.com/api/get-socket-key/${id}`;
+  const socketKeyUrl = `https://celestebingo.rhelmot.io/api/get-socket-key/${id}`;
   const socketKeyResponse = await fetch(socketKeyUrl, {
     method: "GET",
     headers: {

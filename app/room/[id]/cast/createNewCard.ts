@@ -13,7 +13,7 @@ export default async function createNewCard(id: string): Promise<void> {
     );
   }
 
-  await fetch("https://www.bingosync.com/api/new-card", {
+  await fetch("https://celestebingo.rhelmot.io/api/new-card", {
     method: "PUT",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",

@@ -107,7 +107,7 @@ export default function useBingosyncSocket({
   );
 
   useEffect(() => {
-    const socket = new WebSocket("wss://sockets.bingosync.com/broadcast");
+    const socket = new WebSocket("wss://sockets-celestebingo.rhelmot.io/broadcast");
 
     socket.onopen = () => {
       socket.send(JSON.stringify({ socket_key: socketKey }));

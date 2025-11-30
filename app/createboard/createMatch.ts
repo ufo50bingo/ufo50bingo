@@ -76,7 +76,9 @@ export default async function createMatch({
     throw new Error(`Bingosync redirected to ${location}. Expected /room/<id>`);
   }
   // strip off /room/ prefix
-  const id = location.slice(6);
+  const withoutRoom = location.slice(6);
+  const split = withoutRoom.split('?');
+  const id = split[0];
 
   const sessionCookie = createResponse.headers.get("Set-Cookie");
   if (sessionCookie == null) {

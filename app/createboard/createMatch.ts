@@ -47,6 +47,7 @@ export default async function createMatch({
     credentials: "include",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
+      Referer: "https://celestebingo.rhelmot.io/",
       Cookie: cookie,
     },
     body: new URLSearchParams({

@@ -44,6 +44,7 @@ export default function srl_generator_v5(bingoList, opts) {
     }
 
     function difficulty(i) {
+      // Num3 is final 3 digits of seed
       var Num3 = SEED % 1000;
       var Rem8 = Num3 % 8;
       var Rem4 = Math.floor(Rem8 / 2);
@@ -56,6 +57,7 @@ export default function srl_generator_v5(bingoList, opts) {
       Table5.splice(Rem3, 0, 2);
       Table5.splice(Rem4, 0, 3);
       Table5.splice(Rem5, 0, 4);
+      // Num3 is first 3 digits of seed
       Num3 = Math.floor(SEED / 1000);
       Num3 = Num3 % 1000;
       Rem8 = Num3 % 8;

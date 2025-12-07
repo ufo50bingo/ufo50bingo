@@ -20,12 +20,11 @@ import { STANDARD } from "../pastas/standard";
 import {
   ALL_PLAYERS,
   getCurrentWeek,
+  LEAGUE_SEASON,
   PLAYER_TO_TIER,
   WEEKS,
 } from "./leagueConstants";
 import Link from "next/link";
-
-const LEAGUE_SEASON = 2;
 
 export default function LeagueMatch() {
   const [week, setWeek] = useState<null | string>(getCurrentWeek());
@@ -114,7 +113,7 @@ export default function LeagueMatch() {
               p2 == null ||
               week == null ||
               p1Tier == null ||
-              p1Tier !== p2Tier
+              p1Tier !== p2Tier || LEAGUE_SEASON == null
             ) {
               throw new Error("Unexpected null when creating match");
             }

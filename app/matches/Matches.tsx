@@ -47,7 +47,7 @@ import { LeagueInfo } from "../createboard/createMatch";
 import Link from "next/link";
 import {
   ALL_TIERS,
-  IS_LEAGUE_DISABLED,
+  LEAGUE_SEASON,
   PLAYERS_FOR_FILTER,
   WEEKS,
 } from "../createboard/leagueConstants";
@@ -265,13 +265,13 @@ export default function Matches({ matches, totalPages }: Props) {
   const isDirty =
     (getSeasonStr(season) ?? null) !== (searchParams.get("season") ?? null) ||
     (tier == null || tier === "" ? null : tier) !==
-      (searchParams.get("tier") ?? null) ||
+    (searchParams.get("tier") ?? null) ||
     (week == null || week === "" ? null : week) !==
-      (searchParams.get("week") ?? null) ||
+    (searchParams.get("week") ?? null) ||
     (player == null || player === "" ? null : player) !==
-      (searchParams.get("player") ?? null) ||
+    (searchParams.get("player") ?? null) ||
     (admin == null || admin === "" ? null : admin) !==
-      (searchParams.get("admin") ?? null);
+    (searchParams.get("admin") ?? null);
 
   const viewingMatch =
     viewingId == null ? null : matches.find((match) => match.id === viewingId);
@@ -300,7 +300,7 @@ export default function Matches({ matches, totalPages }: Props) {
         <Alert variant="light">
           <Text size="sm">
             When you finish your match, please use the{" "}
-            <ActionIcon color="green" onClick={() => {}}>
+            <ActionIcon color="green" onClick={() => { }}>
               <IconEdit size={16} />
             </ActionIcon>{" "}
             icon to Refresh data from Bingosync and add a VOD Link, if
@@ -344,7 +344,7 @@ export default function Matches({ matches, totalPages }: Props) {
             />
             <Autocomplete
               clearable={true}
-              data={IS_LEAGUE_DISABLED ? undefined : PLAYERS_FOR_FILTER}
+              data={PLAYERS_FOR_FILTER}
               value={player}
               onChange={setPlayer}
               placeholder="Filter by player"
@@ -439,7 +439,8 @@ export default function Matches({ matches, totalPages }: Props) {
                   const canEditLeague =
                     isCreatorOrAdmin &&
                     match.variant == "Standard" &&
-                    match.isCustom === false;
+                    match.isCustom === false &&
+                    LEAGUE_SEASON != null;
 
                   const deleteItem = (
                     <Menu.Item

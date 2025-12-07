@@ -40,6 +40,7 @@ import { useAppContext } from "../AppContextProvider";
 import { db } from "../db";
 import EditLeagueModal from "./EditLeagueModal";
 import { useMediaQuery } from "@mantine/hooks";
+import { LEAGUE_SEASON } from "../createboard/leagueConstants";
 
 type Props = {
   match: Match;
@@ -108,7 +109,8 @@ export default function MatchView({ match }: Props) {
   const canEdit =
     (isAdmin || createdMatchIDs.has(match.id)) &&
     match.variant === "Standard" &&
-    match.isCustom === false;
+    match.isCustom === false &&
+    LEAGUE_SEASON != null;
 
   const boardJson = match.boardJson;
   const board = useMemo<TBoard>(() => {
@@ -440,9 +442,9 @@ export default function MatchView({ match }: Props) {
                 vod={
                   match.vod != null && match.vod.startSeconds != null
                     ? {
-                        url: match.vod.url,
-                        startSeconds: match.vod.startSeconds,
-                      }
+                      url: match.vod.url,
+                      startSeconds: match.vod.startSeconds,
+                    }
                     : null
                 }
                 analysisSeconds={match.analysisSeconds}

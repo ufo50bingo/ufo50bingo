@@ -13,11 +13,11 @@ import Link from "next/link";
 import { useState } from "react";
 import NonLeagueMatch from "./createboard/NonLeagueMatch";
 import LeagueMatch from "./createboard/LeagueMatch";
-import { IS_LEAGUE_DISABLED } from "./createboard/leagueConstants";
+import { LEAGUE_SEASON } from "./createboard/leagueConstants";
 
 export default function CreateBoard() {
   const [matchType, setMatchType] = useState<"league" | "non-league" | null>(
-    null
+    LEAGUE_SEASON == null ? "non-league" : null
   );
 
   return (
@@ -44,14 +44,14 @@ export default function CreateBoard() {
                 data={[
                   {
                     value: "league",
-                    label: IS_LEAGUE_DISABLED ? (
+                    label: LEAGUE_SEASON == null ? (
                       <Tooltip label="League play is not open yet!">
                         <span>League</span>
                       </Tooltip>
                     ) : (
                       "League"
                     ),
-                    disabled: IS_LEAGUE_DISABLED,
+                    disabled: LEAGUE_SEASON == null,
                   },
                   { value: "non-league", label: "Non-League" },
                 ]}

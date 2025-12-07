@@ -229,4 +229,4 @@ export const PLAYERS_FOR_FILTER: ReadonlyArray<string> =
 // manually defining because tiers are different in S1 and S2
 export const ALL_TIERS = ["A", "B", "B1", "B2", "C", "C1", "C2"];
 
-export const IS_LEAGUE_DISABLED = false;
+export const LEAGUE_SEASON: null | number = null;

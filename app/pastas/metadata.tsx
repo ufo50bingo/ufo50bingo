@@ -8,6 +8,8 @@ import { SPICY } from "./spicy";
 import { STANDARD } from "./standard";
 import { ReactNode } from "react";
 import { Difficulty, Game } from "../goals";
+import { UFOPasta } from "./ufoGenerator";
+import { STANDARD_UFO } from "./standardUfo";
 
 const RAW_METADATA = [
   {
@@ -55,7 +57,8 @@ const RAW_METADATA = [
     hovercard: (
       <Stack>
         <span>
-          A new way to play the Standard variant, and the default format for the Underground league.
+          A new way to play the Standard variant, and the default format for the
+          Underground league.
           <br />
           Players draft/ban games, and then a custom board is created where each
           player's picks are represented equally.
@@ -255,6 +258,20 @@ const RAW_METADATA = [
       </Stack>
     ),
   },
+  {
+    type: "UFO",
+    name: "Standard (Beta)",
+    pasta: STANDARD_UFO,
+    isMenu: true,
+    hovercard: (
+      <Stack>
+        <span>
+          This variant uses the standard goal list with new card generation
+          logic. We are testing the new logic in preparation for Season 3!
+        </span>
+      </Stack>
+    ),
+  },
 ] as const;
 
 export type Variant = (typeof RAW_METADATA)[number]["name"];
@@ -314,12 +331,18 @@ interface DraftWithDifficulty extends MetadataBase {
   pasta: Pasta;
 }
 
+interface UFO extends MetadataBase {
+  type: "UFO";
+  pasta: UFOPasta;
+}
+
 export type VariantMetadata =
   | WithDifficulty
   | WithoutDifficulty
   | GameNames
   | Custom
   | Other
-  | DraftWithDifficulty;
+  | DraftWithDifficulty
+  | UFO;
 
 export const METADATA: ReadonlyArray<VariantMetadata> = RAW_METADATA;

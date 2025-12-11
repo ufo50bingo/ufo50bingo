@@ -34,6 +34,10 @@ import createMatch from "./createMatch";
 import { db } from "../db";
 import Link from "next/link";
 import DraftCreator from "./DraftCreator";
+import ufoGenerator, {
+  UFODifficulties,
+  UFOGameGoals,
+} from "../pastas/ufoGenerator";
 
 const options: ReadonlyArray<VariantMetadata> = METADATA.filter(
   (d) => !d.isMenu
@@ -132,6 +136,34 @@ export default function NonLeagueMatch() {
         }
       case "Other":
         return stringify(metadata.pasta);
+      case "UFO":
+        if (!showFilters) {
+          return stringify(
+            ufoGenerator(metadata.pasta).map((goal) => ({ name: goal }))
+          );
+        }
+        // we check for excluded games instead of included
+        // so we don't accidentally remove generals
+        const difficultyToGameToGoals = metadata.pasta.goals;
+        const filtered: UFODifficulties = {};
+        Object.keys(difficultyToGameToGoals).forEach((difficulty) => {
+          const gameToGoals = difficultyToGameToGoals[difficulty];
+          const newGameToGoals: UFOGameGoals = {};
+          Object.keys(gameToGoals).forEach((game) => {
+            // game isn't actually guaranteed to be type Game,
+            // but that's ok
+            if (checkState.get(game as Game) !== false) {
+              newGameToGoals[game] = gameToGoals[game];
+            }
+          });
+          filtered[difficulty] = newGameToGoals;
+        });
+        return stringify(
+          ufoGenerator({
+            ...metadata.pasta,
+            goals: filtered,
+          }).map((goal) => ({ name: goal }))
+        );
     }
   };
 
@@ -171,9 +203,11 @@ export default function NonLeagueMatch() {
       </Group>
       {(metadata.type === "WithDifficulty" ||
         metadata.type === "WithoutDifficulty" ||
+        metadata.type === "UFO" ||
         variant === "Game Names") && (
         <Group>
-          {variant !== "Game Names" && (
+          {(metadata.type === "WithDifficulty" ||
+            metadata.type === "WithoutDifficulty") && (
             <Tooltip
               label={
                 <span>
@@ -212,7 +246,9 @@ export default function NonLeagueMatch() {
           />
         </Group>
       )}
-      {(metadata.type === "WithoutDifficulty" || variant === "Game Names") &&
+      {(metadata.type === "WithoutDifficulty" ||
+        variant === "Game Names" ||
+        metadata.type === "UFO") &&
         showFilters && (
           <GameChecker checkState={checkState} setCheckState={setCheckState} />
         )}

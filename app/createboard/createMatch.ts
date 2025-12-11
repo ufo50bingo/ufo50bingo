@@ -55,7 +55,13 @@ export default async function createMatch({
       passphrase: password,
       nickname: "ufo50bingobot",
       game_type: "18",
-      variant_type: variant === "Game Names" ? "172" : "187",
+      // TODO: Pass variant_type in from the front end
+      variant_type:
+        variant === "Game Names"
+          ? "172"
+          : variant === "Standard (Beta)"
+          ? "18"
+          : "187",
       custom_json: pasta,
       lockout_mode: isLockout ? "2" : "1",
       seed: "",

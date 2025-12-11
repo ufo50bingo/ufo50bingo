@@ -64,7 +64,7 @@ export default async function createMatch({
           : "187",
       custom_json: pasta,
       lockout_mode: isLockout ? "2" : "1",
-      seed: "",
+      seed: Math.ceil(999999 * Math.random()).toString(),
       is_spectator: "on",
       hide_card: "on",
     }).toString(),

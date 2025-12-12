@@ -75,6 +75,10 @@ export default function Daily({
   );
   const { bingo, majority, blackout } =
     getFirstBingoMajorityBlackoutIndex(feed);
+  const finalMark = feed.findLastIndex(item => item.type === "mark");
+  const finalBoard = finalMark >= 0 && finalMark !== bingo && finalMark !== majority && finalMark !== blackout
+    ? finalMark
+    : null;
 
   const [modalFeedIndex, setModalFeedIndex] = useState<number | null>(null);
 
@@ -320,6 +324,18 @@ export default function Daily({
                   </Anchor>
                 )}
               </List.Item>
+              {finalBoard != null && (
+                <List.Item>
+                  <strong>Final Board:</strong>{" "}
+                  <Anchor onClick={() => setModalFeedIndex(finalBoard)}>
+                    <Duration
+                      duration={feedWithDuration[finalBoard][0]}
+                      showDecimal={false}
+                    />{" "}
+                    (view board with times)
+                  </Anchor>
+                </List.Item>
+              )}
             </List>
             <Text>
               When you're done, copy your summary and paste it in the{" "}
@@ -345,21 +361,6 @@ export default function Daily({
                     false
                   )}\n`;
                   summary += getEmojiBoard(getBoardAtIndex(feed, bingo), color);
-                  const completions = getDailyTimes(bingo, feedWithDuration);
-                  const goalsAndTimes = completions.map(
-                    ([squareIndex, _time, duration], index) => {
-                      const ms =
-                        index > 0
-                          ? duration - completions[index - 1][2]
-                          : duration;
-                      const formattedDur = getDurationText(ms, false);
-                      return `${index + 1}. ${formattedDur} — ${
-                        plainBoard[squareIndex]
-                      }`;
-                    }
-                  );
-                  summary += "\n";
-                  summary += goalsAndTimes.join("\n");
                 }
                 if (majority != null) {
                   if (isFirst) {
@@ -385,8 +386,38 @@ export default function Daily({
                   summary += `Blackout in ${getDurationText(
                     feedWithDuration[blackout][0],
                     false
-                  )}`;
+                  )}\n`;
+                  summary += getEmojiBoard(
+                    getBoardAtIndex(feed, blackout),
+                    color
+                  );
                 }
+                if (finalBoard != null) {
+                  if (isFirst) {
+                    isFirst = false;
+                  } else {
+                    summary += "\n\n";
+                  }
+                  summary += `Final Board in ${getDurationText(
+                    feedWithDuration[finalBoard][0],
+                    false
+                  )}\n`;
+                  summary += getEmojiBoard(getBoardAtIndex(feed, finalBoard), color);
+                }
+                const completions = getDailyTimes(finalMark, feedWithDuration);
+                const goalsAndTimes = completions.map(
+                  ([squareIndex, _time, duration], index) => {
+                    const ms =
+                      index > 0
+                        ? duration - completions[index - 1][2]
+                        : duration;
+                    const formattedDur = getDurationText(ms, false);
+                    return `${index + 1}. ${formattedDur} — ${plainBoard[squareIndex]
+                      }`;
+                  }
+                );
+                summary += "\n";
+                summary += goalsAndTimes.join("\n");
                 navigator.clipboard.writeText(summary);
               }}
             >

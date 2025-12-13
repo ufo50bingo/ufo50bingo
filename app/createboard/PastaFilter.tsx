@@ -82,9 +82,8 @@ export default function PastaFilter({
             <NumberInput
               key={key}
               label={DIFFICULTY_NAMES[key]}
-              description={`${
-                availableGoalDifficultyCounts.get(key) ?? 0
-              } available`}
+              description={`${availableGoalDifficultyCounts.get(key) ?? 0
+                } available`}
               clampBehavior="strict"
               min={0}
               value={count}

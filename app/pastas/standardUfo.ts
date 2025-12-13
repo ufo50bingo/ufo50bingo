@@ -648,9 +648,7 @@ export const STANDARD_UFO = {
       cyberowls: ["CYBER OWLS: HAWK-BASE allowed; beat Antarctica"],
     },
     general: {
-      gift: [
-        "Collect {{gift_count}} gifts from games on this card",
-      ],
+      gift: ["Collect {{gift_count}} gifts from games on this card"],
       goldcherry: [
         "Collect {{cherry_count}} cherry disks from games on this card",
         "Collect {{gold_count}} gold disks from games on this card",

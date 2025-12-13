@@ -103,5 +103,5 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     gameByIndex[index] = bestGame;
   });
 
-  return finalBoard.map(goal => replaceTokens(goal!, pasta.tokens));
+  return finalBoard.map((goal) => replaceTokens(goal!, pasta.tokens));
 }

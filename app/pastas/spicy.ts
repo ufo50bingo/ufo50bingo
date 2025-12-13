@@ -1,520 +1,1807 @@
 export const SPICY = [
   [
-	{"name": "BUG HUNTER: WORK-LESS allowed; beat Job 5 without shooting any energy cubes", "types": ["bughunter", "easy"]},
-	{"name": "BUG HUNTER: WORK-LESS allowed; beat Job 8; bugs can only be killed by using Attack modules", "types": ["bughunter", "easy"]},
-{"name": "BUG HUNTER: WORK-LESS allowed; beat Job 7 & Job 8; You must leave 1+ module in your inventory unused & unreplaced each turn", "types": ["bughunter", "easy"]},
-	{"name": "COMBATANTS: Beat any 6 levels", "types": ["combatants", "easy"]},
-{"name": "COMBATANTS: ANTS-ANTS allowed; Beat Deathsdoor & Open Field", "types": ["combatants", "easy"]},
-	{"name": "WALDORF’S JOURNEY: Have 40 shells at once before reaching the castle, without opening any chests", "types": ["waldorfsjourney", "easy"]},
-	{"name": "WALDORF’S JOURNEY: Reach the castle with your stamina maxed out", "types": ["waldorfsjourney", "easy"]},
-	{"name": "PINGOLF: Cherry Disk + Have a total score below 0 after every hole", "types": ["pingolf", "easy"]},
-	{"name": "PINGOLF: Have a score of -11 at any point in the tournament and win", "types": ["pingolf", "easy"]},
-	{"name": "PARTY HOUSE: Have 8 trouble guests in a party at once without using any fetch or peek abilities", "types": ["partyhouse", "easy"]},
-	{"name": "PARTY HOUSE: Get 4 climbers to 9 popularity & win the scenario", "types": ["partyhouse", "easy"]},
-	{"name": "VAINGER: Defeat 5 bosses with all obtained modules placed in BODY", "types": ["vainger", "easy"]},
-	{"name": "VAINGER: Obtain an item from three different sectors", "types": ["vainger", "easy"]},
-	{"name": "CAMPANELLA 3: Win the bonus game with only one star wave", "types": ["campanella3", "easy"]},
-	{"name": "CAMPANELLA 3: Have 5 continues at once", "types": ["campanella3", "easy"]},
-{"name": "NIGHT MANOR: Gold disk with an in-game time of 2:05 or less", "types": ["nightmanor", "easy"]},
-{"name": "ROCK ON! ISLAND: Beat Initial Encounter with an upgraded caveman (rock, spear, or fire) on every available tile", "types": ["rockonisland", "easy"]},
-{"name": "ROCK ON! ISLAND: CLUB-PASS allowed; Perfect Underbrush with 4 or fewer cavemen, and no chickens", "types": ["rockonisland", "easy"]},
-{"name": "ROCK ON! ISLAND: CLUB-PASS allowed; Perfect The Spiral; Every caveman type purchased must cycle between Spear, Rock, and Fire. Retiring cavemen not allowed", "types": ["rockonisland", "easy"]},
-	{"name": "CAMPANELLA 2: Have 1,000+ coins", "types": ["campanella2", "easy"]},
-	{"name": "CAMPANELLA 2: Collect a combined total of 6 max HP and/or max fuel upgrades in a run", "types": ["campanella2", "easy"]}
-],
-[
-	{"name": "PORGY: Destroy 5 different rock blockades using the Missile System or Depth Charges", "types": ["porgy", "easy"]},
-	{"name": "PORGY: Return to base with 3 different collectible types in one dive without any upgrades equipped", "types": ["porgy", "easy"]},
-	{"name": "VELGRESS: Hold 101 coins and all three keys at once", "types": ["velgress", "easy"]},
-	{"name": "VELGRESS: Beat lv 1 defeating all enemies with the blaster AND lv 2 stepping on all bomb blocks in one run", "types": ["velgress", "easy"]},
-	{"name": "VELGRESS: Hold 111 coins at once", "types": ["velgress", "easy"]},
-	{"name": "GRIMSTONE: Defeat 15 enemies without healing at a hotel or the entire party dying (must New Game & retry if either occurs)", "types": ["grimstone", "easy"]},
-{"name": "GRIMSTONE: With a party of 4, level up all members to level 3", "types": ["grimstone", "easy"]},
-	{"name": "RAKSHASA: Clear Stage 2 defeating enemies ONLY with the spread or default weapon during the run", "types": ["rakshasa", "easy"]},
-	{"name": "RAKSHASA: Clear Stage 2 defeating enemies ONLY with the purple homing or default weapon during the run", "types": ["rakshasa", "easy"]},
-	{"name": "GOLFARIA: Collect a Holy Tee piece", "types": ["golfaria", "easy"]},
-{"name": "GOLFARIA: Have 44+ total strokes (collect 8 clubs)", "types": ["golfaria", "easy"]},
-	{"name": "GOLFARIA: Collect the Block Buster without obtaining any clubs or upgrades beforehand", "types": ["golfaria", "easy"]},
-{"name": "DIVERS: Win a fight against piranhas without using the Bomb", "types": ["divers", "easy"]},
-{"name": "DIVERS: Reach level 5", "types": ["divers", "easy"]},
-	{"name": "DEVILITION: Use WEAK-TOWN; Clear 5 rounds & always kill the townie that spawns each level", "types": ["devilition", "easy"]},
-{"name": "DEVILITION: Clear 5 rounds; tier 1 pieces (bomb, rocket, cannon) are not allowed to kill any demons", "types": ["devilition", "easy"]},
-	{"name": "KICK CLUB: Beat Track world; must always defeat all of one type of enemy in a level before defeating the next", "types": ["kickclub", "easy"]},
-{"name": "KICK CLUB: Score 101,000+ points", "types": ["kickclub", "easy"]},
-	{"name": "KICK CLUB: Beat Track world; Enemies can only be defeated with full-charge kicks", "types": ["kickclub", "easy"]}
-],
-[
-	{"name": "LORDS OF DISKONIA: Win a Quick Battle on Commander difficulty with at least 2 of your units remaining", "types": ["lordsofdiskonia", "easy"]},
-	{"name": "LORDS OF DISKONIA: Beat the second story mission", "types": ["lordsofdiskonia", "easy"]},
-	{"name": "CAMOUFLAGE: Beat 5 levels with 3/3 collectibles without using UNDO (must start over level if caught)", "types": ["camouflage", "easy"]},
-{"name": "CAMOUFLAGE: Beat 6 levels with 2/3 collectibles without using UNDO (must start over level if caught)", "types": ["camouflage", "easy"]},
-	{"name": "MINI & MAX: Free the brainwashed mouse by defeating the Plasmage, using only blocks in combat", "types": ["miniandmax", "easy"]},
-	{"name": "MINI & MAX: Collect a big shiny, then escape the cave", "types": ["miniandmax", "easy"]},
-{"name": "NIGHT MANOR: Starting from 3 different rooms, escape the killer 3 times by running far enough away that he gives up", "types": ["nightmanor", "easy"]},
-{"name": "NIGHT MANOR: Starting from 3 different rooms, escape the killer 3 times by running far enough away that he gives up", "types": ["nightmanor", "easy"]},
-	{"name": "ELFAZAR’S HAT: Clear Stage 1 deathless, no dashing, and defeating only mandatory enemies", "types": ["elfazarshat", "easy"]},
-	{"name": "ELFAZAR’S HAT: Clear any stage with all 5 upgrades active (A or B)", "types": ["elfazarshat", "easy"]},
-{"name": "STAR WASPIR: Have a 40x multiplier", "types": ["starwaspir", "easy"]},
-	{"name": "CAMPANELLA: Use BEAN-DRIP; score 8,800+ points", "types": ["campanella", "easy"]},
-	{"name": "HOT FOOT: Reach round 4; in each round, the teammate that gets the first point must score all points for the rest of that round", "types": ["hotfoot", "easy"]},
-{"name": "RAIL HEIST: GOOD-SPUR allowed; Obtain both the Devil Star & Time Star on 9 levels", "types": ["railheist", "easy"]},
-{"name": "RAIL HEIST: Beat levels 1, 2, and 3 while knocking every lawman off the train", "types": ["railheist", "easy"]},
-	{"name": "PAINT CHASE: Beat 12 levels in a row without failing any courses", "types": ["paintchase", "easy"]},
-{"name": "PAINT CHASE: EVEN-COAT allowed; Defeat the Pink Racer 3 times in a row", "types": ["paintchase", "easy"]}
-],
-[
-{"name": "BARBUTA: Obtain the blood sword, leave the room with all your eggs broken, then gold disk", "types": ["barbuta", "easy"]},
-{"name": "BARBUTA: Open 8 different chests", "types": ["barbuta", "easy"]},
-{"name": "OVERBOLD: Gold Disk & Purchase 4 price hiked items in one run", "types": ["overbold", "easy"]},
-{"name": "OVERBOLD: Gold Disk without purchasing any SALE or HIKE items", "types": ["overbold", "easy"]},
-	{"name": "MORTOL II: Defeat all three minibosses in one run, damaging them only as scout and engineer", "types": ["mortolii", "easy"]},
-	{"name": "MORTOL II: Gold Disk with 10 doors opened", "types": ["mortolii", "easy"]},
-	{"name": "MAGIC GARDEN: Use OVER-GROW; Save 45+ oppies in a run", "types": ["magicgarden", "easy"]},
-	{"name": "MAGIC GARDEN: Gold Disk & defeat 6+ mushrooms in one combo", "types": ["magicgarden", "easy"]},
-	{"name": "MAGIC GARDEN: Defeat an enemy at least 5000 points", "types": ["magicgarden", "easy"]},
-	{"name": "FIST HELL: Beat the second scare as Amy without dying or eating any food", "types": ["fisthell", "easy"]},
-	{"name": "FIST HELL: Beat the second scare as Cat without dying or eating any food", "types": ["fisthell", "easy"]},
-	{"name": "FIST HELL: Reach wave 10 in the gym without jumping", "types": ["fisthell", "easy"]},
-	{"name": "AVIANOS: Win a custom Adult game; Must own 11 fountains or more when the war ends (change castles/flags to 6/0)", "types": ["avianos", "easy"]},
-	{"name": "AVIANOS: Win a custom Adult game; You may only pray to 3 ancestors", "types": ["avianos", "easy"]},
-	{"name": "AVIANOS: Win a custom Fledgling game; Must spend each applicable resource every turn until you can no longer buy anything (change castles/flags to 6/0)", "types": ["avianos", "easy"]},
-	{"name": "BLOCK KOALA: WORM-1234 allowed; Beat 5 story levels (#21 through #30) as Koalarana (Pink Koala)", "types": ["blockkoala", "easy"]},
-	{"name": "BLOCK KOALA: WORM-1234 allowed; Beat 5 story levels (#31 through #40) as Koalarana (Pink Koala)", "types": ["blockkoala", "easy"]},
-	{"name": "ONION DELIVERY: Complete 3 days in a run with 8+ onions and at least 25 seconds left on the timer each day", "types": ["oniondelivery", "easy"]},
-	{"name": "ONION DELIVERY: Finish with 10+ onions 3 days in a row", "types": ["oniondelivery", "easy"]}
-],
-[
-	{"name": "HYPER CONTENDER: Beat draft mode; only attacks allowed are melee attacks", "types": ["hypercontender", "easy"]},
-	{"name": "HYPER CONTENDER: Win 3 fights in a row in Draft Mode on Hyper difficulty", "types": ["hypercontender", "easy"]},
-	{"name": "PILOT QUEST: Have at least two workers making science at the crash site", "types": ["pilotquest", "easy"]},
-	{"name": "PILOT QUEST: Obtain the Blaster & defeat both Unktomi and Big Borlg at least once", "types": ["pilotquest", "easy"]},
-{"name": "NINPEK: Have 8 extra lives at once", "types": ["ninpek", "easy"]},
-{"name": "NINPEK: Eat 10 sandwiches", "types": ["ninpek", "easy"]},
-{"name": "WARPTANK: Beat Sectors while destroying all possible enemies & blocks: Piston, Bomb, Tower, Healing, Stare", "types": ["warptank", "easy"]},
-{"name": "WARPTANK: Beat sectors with maximum shots allowed: PISTON: 9; JR: 6; MEAL: 3; MAZURKA: 8; NEST: 15", "types": ["warptank", "easy"]},
-	{"name": "BUSHIDO BALL: Win three games in a row in one tournament by 4+ points", "types": ["bushidoball", "easy"]},
-	{"name": "BUSHIDO BALL: Win the first match 8-0 with two different characters", "types": ["bushidoball", "easy"]},
-{"name": "MOONCAT: Kill a gray spider and a spear thrower, and find the egg at the end of the run", "types": ["mooncat", "easy"]},
-	{"name": "MOONCAT: Visit the first 12 rooms with no warps and without killing any enemies (must die & retry screen if enemy is killed)", "types": ["mooncat", "easy"]},
-	{"name": "MORTOL: Clear all world 1 levels using no more than 2 stone rituals total", "types": ["mortol", "easy"]},
-{"name": "MORTOL: Clear the first two levels without dying to any enemies", "types": ["mortol", "easy"]},
-{"name": "MORTOL: Clear the first two levels without using the Ritual of Arrow or collecting any +3 or +5 life pickups", "types": ["mortol", "easy"]},
-	{"name": "CYBER OWLS: Beat a story mission having 5 extra lives at once", "types": ["cyberowls", "easy"]},
-	{"name": "CYBER OWLS: Beat Moscow with all 3 keycards obtained", "types": ["cyberowls", "easy"]},
-	{"name": "CYBER OWLS: Beat Moscow; you must enter the Hackoon fight with 0 bullets", "types": ["cyberowls", "easy"]},
-{"name": "CARAMEL CARAMEL: Score 50,000+ points by the end of Orb Shower A", "types": ["caramelcaramel", "easy"]},	
-{"name": "THE BIG BELL RACE: Win 1st place 4 courses in a row without picking up any power-up items", "types": ["thebigbellrace", "easy"]},
-	{"name": "THE BIG BELL RACE: Win 1st place on two courses in which you KO 1+ enemy on every lap", "types": ["thebigbellrace", "easy"]}
+    {
+      name: "BUG HUNTER: WORK-LESS allowed; beat Job 5 without shooting any energy cubes",
+      types: ["bughunter", "easy"],
+    },
+    {
+      name: "BUG HUNTER: WORK-LESS allowed; beat Job 8; bugs can only be killed by using Attack modules",
+      types: ["bughunter", "easy"],
+    },
+    {
+      name: "BUG HUNTER: WORK-LESS allowed; beat Job 7 & Job 8; You must leave 1+ module in your inventory unused & unreplaced each turn",
+      types: ["bughunter", "easy"],
+    },
+    { name: "COMBATANTS: Beat any 6 levels", types: ["combatants", "easy"] },
+    {
+      name: "COMBATANTS: ANTS-ANTS allowed; Beat Deathsdoor & Open Field",
+      types: ["combatants", "easy"],
+    },
+    {
+      name: "WALDORF’S JOURNEY: Have 40 shells at once before reaching the castle, without opening any chests",
+      types: ["waldorfsjourney", "easy"],
+    },
+    {
+      name: "WALDORF’S JOURNEY: Reach the castle with your stamina maxed out",
+      types: ["waldorfsjourney", "easy"],
+    },
+    {
+      name: "PINGOLF: Cherry Disk + Have a total score below 0 after every hole",
+      types: ["pingolf", "easy"],
+    },
+    {
+      name: "PINGOLF: Have a score of -11 at any point in the tournament and win",
+      types: ["pingolf", "easy"],
+    },
+    {
+      name: "PARTY HOUSE: Have 8 trouble guests in a party at once without using any fetch or peek abilities",
+      types: ["partyhouse", "easy"],
+    },
+    {
+      name: "PARTY HOUSE: Get 4 climbers to 9 popularity & win the scenario",
+      types: ["partyhouse", "easy"],
+    },
+    {
+      name: "VAINGER: Defeat 5 bosses with all obtained modules placed in BODY",
+      types: ["vainger", "easy"],
+    },
+    {
+      name: "VAINGER: Obtain an item from three different sectors",
+      types: ["vainger", "easy"],
+    },
+    {
+      name: "CAMPANELLA 3: Win the bonus game with only one star wave",
+      types: ["campanella3", "easy"],
+    },
+    {
+      name: "CAMPANELLA 3: Have 5 continues at once",
+      types: ["campanella3", "easy"],
+    },
+    {
+      name: "NIGHT MANOR: Gold disk with an in-game time of 2:05 or less",
+      types: ["nightmanor", "easy"],
+    },
+    {
+      name: "ROCK ON! ISLAND: Beat Initial Encounter with an upgraded caveman (rock, spear, or fire) on every available tile",
+      types: ["rockonisland", "easy"],
+    },
+    {
+      name: "ROCK ON! ISLAND: CLUB-PASS allowed; Perfect Underbrush with 4 or fewer cavemen, and no chickens",
+      types: ["rockonisland", "easy"],
+    },
+    {
+      name: "ROCK ON! ISLAND: CLUB-PASS allowed; Perfect The Spiral; Every caveman type purchased must cycle between Spear, Rock, and Fire. Retiring cavemen not allowed",
+      types: ["rockonisland", "easy"],
+    },
+    { name: "CAMPANELLA 2: Have 1,000+ coins", types: ["campanella2", "easy"] },
+    {
+      name: "CAMPANELLA 2: Collect a combined total of 6 max HP and/or max fuel upgrades in a run",
+      types: ["campanella2", "easy"],
+    },
   ],
   [
-	{"name": "PILOT QUEST: Have two friends working at benches at the crash site", "types": ["pilotquest", "medium"]},
-	{"name": "PORGY: Equip an upgrade item from the Abyss (armor, radar, efficient fuel)", "types": ["porgy", "medium"]},
-	{"name": "PORGY: Obtain 4 equippable upgrades; killing enemies is not allowed (reset + continue if enemy is killed)", "types": ["porgy", "medium"]},
-	{"name": "RAKSHASA: Defeat the first two mid-bosses & first 2 bosses with 4+ skulls during each fight", "types": ["rakshasa", "medium"]},
-{"name": "RAKSHASA: Collect both halves of four bell pickups in one run, with no revive minigames after the first one", "types": ["rakshasa", "medium"]},
-	{"name": "THE BIG BELL RACE: Complete a lap in reverse & win on 5 different tracks", "types": ["thebigbellrace", "medium"]},
-	{"name": "BUSHIDO BALL: Gold disk", "types": ["bushidoball", "medium"]},
-	{"name": "BUSHIDO BALL: Beat 3 rounds on Hyper Speed with three different characters", "types": ["bushidoball", "medium"]},
-	{"name": "CAMPANELLA: Clear stage B; must crash the ship at least once every level, including bosses", "types": ["campanella", "medium"]},
-{"name": "CAMPANELLA: Defeat every enemy on every level (no warps) in worlds A & B with max of 3 deaths", "types": ["campanella", "medium"]},
-	{"name": "CYBER OWLS: Use GETM-EOUT; Complete the rescue mini-game six times in a row", "types": ["cyberowls", "medium"]},
-	{"name": "CYBER OWLS: Beat Chicago without using the charged fist & Beat Congo without blowing up any barrels or vehicles", "types": ["cyberowls", "medium"]},
-	{"name": "CAMPANELLA: Clear stages A & B in a run without losing any lives", "types": ["campanella", "medium"]},
-{"name": "CAMPANELLA: Finish stage A with all 8 coffees and an on-screen clear time of 2:05 or less", "types": ["campanella", "medium"]},
-	{"name": "WARPTANK: Collect 9 coffees", "types": ["warptank", "medium"]},
-{"name": "WARPTANK: SLIM-TANK allowed; Finish the level with the coffee on all Bellows sectors (Guide, Shock, Riot, Soft, Port)", "types": ["warptank", "medium"]}
-],
-[
-	{"name": "SEASIDE DRIVE: Use WEAK-SHOT; Clear Stage 1 without dying and at least 17,700 points", "types": ["seasidedrive", "medium"]},
-{"name": "SEASIDE DRIVE: Beat Stages 1 & 2 using only the side-shot (except boss fights)", "types": ["seasidedrive", "medium"]},
-	{"name": "MOONCAT: Find the Green Egg without dying before the boss", "types": ["mooncat", "medium"]},
-	{"name": "MOONCAT: Find the Yellow Egg without dying before the boss", "types": ["mooncat", "medium"]},
-	{"name": "ROCK ON! ISLAND: CLUB-PASS allowed; Beat Underbrush with no damage and without upgrading at the cave or using any chickens", "types": ["rockonisland", "medium"]},
-	{"name": "ROCK ON! ISLAND: CLUB-PASS allowed; Beat Crossroads; must have at least 10 wheel cavemen through all of wave 10", "types": ["rockonisland", "medium"]},
-	{"name": "ROCK ON! ISLAND: CLUB-PASS allowed; Beat Terror Overhead without any Bow, Fire, or Tar cavemen", "types": ["rockonisland", "medium"]},
-	{"name": "MAGIC GARDEN: Cherry disk in under 5:00 in-game time", "types": ["magicgarden", "medium"]},
-	{"name": "MAGIC GARDEN: Gold disk; Ignore the first 5 star pads and never kill the 5 mushrooms that spawn", "types": ["magicgarden", "medium"]},
-	{"name": "HOT FOOT: Win 4 games in one tournament without jumping", "types": ["hotfoot", "medium"]},
-{"name": "HOT FOOT: Win 5 games in one tournament without using any star abilities", "types": ["hotfoot", "medium"]},
-	{"name": "QUIBBLE RACE: Use TUFF-RACE; win a 4-round game", "types": ["quibblerace", "medium"]},
-	{"name": "QUIBBLE RACE: WILD-BETS allowed; Have $64,000", "types": ["quibblerace", "medium"]},
-	{"name": "GRIMSTONE: Defeat Big Alp", "types": ["grimstone", "medium"]},
-	{"name": "GRIMSTONE: Win three encounters in the western mine in one visit", "types": ["grimstone", "medium"]},
-	{"name": "MINI & MAX: From New Game, obtain the Sacred Wings, Dog Armor, and Whistle", "types": ["miniandmax", "medium"]},
-	{"name": "MINI & MAX: Collect 3 Big Shinies", "types": ["miniandmax", "medium"]},
-	{"name": "ATTACTICS: Win 5 ranked battles in a row; max of 2 consecutive units per row across the center at once", "types": ["attactics", "medium"]},
-	{"name": "ATTACTICS: SLOW-DOWN allowed; Win a rank 160+ battle after having at least 2 Heroes spawn", "types": ["attactics", "medium"]},
-	{"name": "ATTACTICS: Earn the gift; beat each of those levels at least once without losing any flags", "types": ["attactics", "medium"]}
-],
-[
-	{"name": "CAMOUFLAGE: Gold disk with at least 5 levels with 3/3 collectibles", "types": ["camouflage", "medium"]},
-	{"name": "CAMOUFLAGE: Gold disk with all levels beaten", "types": ["camouflage", "medium"]},
-{"name": "CAMOUFLAGE: Gold disk with all babies saved", "types": ["camouflage", "medium"]},
-{"name": "CAMOUFLAGE: Gold disk with all oranges collected", "types": ["camouflage", "medium"]},
-	{"name": "NINPEK: Use HARD-LOOP; Defeat the boss without picking up any Ninja Stars (counts as GOLD DISK)", "types": ["ninpek", "medium"]},
-	{"name": "NINPEK: Defeat every enemy before the first bonus area", "types": ["ninpek", "medium"]},
-	{"name": "PINGOLF: Score -2 or better on six holes & win the tournament", "types": ["pingolf", "medium"]},
-	{"name": "PINGOLF: Score par or better on eight holes in a row without dunking", "types": ["pingolf", "medium"]},
-	{"name": "LORDS OF DISKONIA: In a full war, hold 64+ gold at once at any point, and win the war", "types": ["lordsofdiskonia", "medium"]},
-	{"name": "LORDS OF DISKONIA: Win a full war on Knight difficulty without having more than 4 units in your squad at any time", "types": ["lordsofdiskonia", "medium"]},
-{"name": "DIVERS: Win a fight against at least one Mech", "types": ["divers", "medium"]},
-{"name": "DIVERS: Win 3 fight against piranhas in one dive", "types": ["divers", "medium"]},
-	{"name": "NIGHT MANOR: Cherry disk with 100% of items obtained and 17 journal entries", "types": ["nightmanor", "medium"]},
-{"name": "NIGHT MANOR: Use OPEN-CAGE: Escape the nightmare without being caught by the killer; hitting the killer is not allowed (Counts as Cherry Disk)", "types": ["nightmanor", "medium"]},
-{"name": "PARTY HOUSE: Use VIPS-ONLY; complete the scenario with your bingosync seed with exactly 2 of each star guest in the rolodex", "types": ["partyhouse", "medium"]},
-{"name": "PARTY HOUSE: Beat Best Wishes; You may ONLY purchase: Rock Star, Counselor, Athlete, Dinosaur, Celebrity", "types": ["partyhouse", "medium"]},
-	{"name": "PARTY HOUSE: Beat A Magical Night with four maxed out Climbers AND four Werewolves", "types": ["partyhouse", "medium"]},
-{"name": "PARTY HOUSE: Beat Alien Invitation with at least 5 Aliens in the party; Drivers may not fetch Aliens", "types": ["partyhouse", "medium"]},
-{"name": "PARTY HOUSE: Beat Money Management; You must have 4 Gangsters in the rolodex before purchasing any star guests", "types": ["partyhouse", "medium"]},
-{"name": "KICK CLUB: Beat Racket World & Track World without taking any damage or using any charge kicks", "types": ["kickclub", "medium"]},
-{"name": "KICK CLUB: Reach Ice World with 38,000 points or less", "types": ["kickclub", "medium"]},
-{"name": "KICK CLUB: Beat Racket World & Track World without picking up any food items", "types": ["kickclub", "medium"]},
-	{"name": "WALDORF’S JOURNEY: Cherry disk, but must make 3 purchases at 4 different shops (12 items total)", "types": ["waldorfsjourney", "medium"]},
-	{"name": "WALDORF’S JOURNEY: Cherry disk with all three chests opened", "types": ["waldorfsjourney", "medium"]}
-],
-[
-	{"name": "HYPER CONTENDER: Win tournament mode with two different characters; no rematches allowed", "types": ["hypercontender", "medium"]},
-{"name": "HYPER CONTENDER: Win tournament mode on Hard challenge; Change ring settings to the following values in order: 6, 1, 1, 5 ,5", "types": ["hypercontender", "medium"]},
-	{"name": "STAR WASPIR: Clear waves 1, 2, and 3 without using options (GGG) and having reached at least a 30x multiplier by the end of wave 3", "types": ["starwaspir", "medium"]},
-	{"name": "STAR WASPIR: Using the yellow ship, beat waves 1, 2, and 3 using only tap-shot firing", "types": ["starwaspir", "medium"]},
-	{"name": "ELFAZAR’S HAT: Clear stages 1, 2, and 3 without dying, and without any upgrades or healing", "types": ["elfazarshat", "medium"]},
-{"name": "ELFAZAR’S HAT: Defeat every possible enemy and boss in stages 1 & 3 in a run", "types": ["elfazarshat", "medium"]},
-{"name": "VALBRACE: Use 4RCH-M4GE; Level up at two thrones, then defeat the Phantom Knight. Only WIS upgrades allowed", "types": ["valbrace", "medium"]},
-{"name": "VALBRACE: Drink from 8 different fountains in one run", "types": ["valbrace", "medium"]},
-	{"name": "RAIL HEIST: LAZY-COPS allowed; Beat levels 9-16 while bringing back a money crate intact", "types": ["railheist", "medium"]},
-	{"name": "RAIL HEIST: Beat 6 levels & punch every lawman on each level at least once", "types": ["railheist", "medium"]},
-{"name": "VELGRESS: Cherry disk with in-game time of 3:09 or less (no star blocks)", "types": ["velgress", "medium"]},
-{"name": "VELGRESS: Gold disk with in-game time of 2:11 or less (no star blocks)", "types": ["velgress", "medium"]},
-	{"name": "CAMPANELLA 3: Clear 9 waves 100%", "types": ["campanella3", "medium"]},
-	{"name": "CAMPANELLA 3: Clear all waves 100% on two different worlds without being hit in each", "types": ["campanella3", "medium"]},
-	{"name": "PAINT CHASE: Beat 10 levels without using power ups (boost pads allowed)", "types": ["paintchase", "medium"]},
-	{"name": "PAINT CHASE: Beat 10 levels without using any boost pads", "types": ["paintchase", "medium"]}
-],
-[
-	{"name": "DEVILITION: Have 8 villagers at once", "types": ["devilition", "medium"]},
-	{"name": "DEVILITION: Beat six levels while placing the maximum number of pieces each round", "types": ["devilition", "medium"]},
-	{"name": "PILOT QUEST: Purchase a yo-yo upgrade", "types": ["pilotquest", "medium"]},
-	{"name": "PILOT QUEST: Activate all 4 teleporters", "types": ["pilotquest", "medium"]},
-	{"name": "PLANET ZOLDATH: Have 5 of each resource at once", "types": ["planetzoldath", "medium"]},
-{"name": "PLANET ZOLDATH: Collect the dungeon map piece in under 7 minutes of Zoldath time", "types": ["planetzoldath", "medium"]},
-{"name": "BUSHIDO BALL: Win the first match as 4 different characters; enemies may not score more than 2 points in your victories", "types": ["bushidoball", "medium"]},
-	{"name": "BUSHIDO BALL: Gold disk as Chiyome", "types": ["bushidoball", "medium"]},
-	{"name": "ONION DELIVERY: Complete 3 consecutive days of deliveries with 9+ onions each day", "types": ["oniondelivery", "medium"]},
-	{"name": "ONION DELIVERY: Complete day 1 with 13+ deliveries", "types": ["oniondelivery", "medium"]},
-{"name": "ONION DELIVERY: Complete 2 days in a run driving only in reverse", "types": ["oniondelivery", "medium"]},
-{"name": "FIST HELL: Get money from eating six different food pickups while at full health in one run", "types": ["fisthell", "medium"]},
-{"name": "FIST HELL: Max out the POWER, TOUGH, and RECOV of either Amy or Cat", "types": ["fisthell", "medium"]},
-{"name": "FIST HELL: Have $75 at once", "types": ["fisthell", "medium"]},
-	{"name": "AVIANOS: Win a custom Fledgling game; The first ancestor you pray to must be maxed out when the war is over (change castles/flags: 6/0)", "types": ["avianos", "medium"]},
-	{"name": "AVIANOS: Win a custom Fledgling game; You must have 40+ dodo soldiers when the war ends (change castles/flags: 6/0)", "types": ["avianos", "medium"]},
-	{"name": "AVIANOS: Win a custom Adult game; You may only obtain units from 2 ancestors (change castles/flags: 6/0)", "types": ["avianos", "medium"]},
-	{"name": "VAINGER: Obtain two Clone materials", "types": ["vainger", "medium"]},
-	{"name": "VAINGER: Collect 6 shield upgrades", "types": ["vainger", "medium"]},
-	{"name": "COMBATANTS: Beat “The Push”", "types": ["combatants", "medium"]}
-],
-[
-	{"name": "BUG HUNTER: Use ACES-SHOP; complete Jobs 1 & 2 in a row", "types": ["bughunter", "medium"]},
-	{"name": "BUG HUNTER: Use GOOD-JOBS; Enter your Bingosync seed and win with your energy maxed out", "types": ["bughunter", "medium"]},
-	{"name": "BUG HUNTER: Complete a job with at least 13 holes on the board", "types": ["bughunter", "medium"]},
-{"name": "CAMPANELLA 2: Purchase something from five unique green door shops", "types": ["campanella2", "medium"]},
-{"name": "CAMPANELLA 2: Turn off the magnets in Crepelia", "types": ["campanella2", "medium"]},
-{"name": "CAMPANELLA 2: Collect at least 5 purple coins in five different levels (I & II are separate levels)", "types": ["campanella2", "medium"]},
-	{"name": "CARAMEL CARAMEL: Defeat Bella (cookie miniboss) and Toadead (toad miniboss) in one run", "types": ["caramelcaramel", "medium"]},
-	{"name": "CARAMEL CARAMEL: Score 75,000+ points", "types": ["caramelcaramel", "medium"]},
-{"name": "MORTOL II: Press all three switches using ONLY the scout", "types": ["mortolii", "medium"]},
-{"name": "MORTOL II: Cherry disk with all 3 switches pressed", "types": ["mortolii", "medium"]},
-{"name": "MORTOL: OPEN-TOMB Allowed: Beat 2 levels without killing any enemies (1-A & 1-B excluded)", "types": ["mortol", "hard"]},
-{"name": "MORTOL: Beat 3 story levels; your rituals must always cycle between Arrow, Bomb, Stone in that order (chaining allowed)", "types": ["mortol", "hard"]},
-{"name": "BARBUTA: Gold disk with only two total items (including starting sword)", "types": ["barbuta", "medium"]},
-{"name": "BARBUTA: Cherry disk while holding the Rod", "types": ["barbuta", "medium"]},
-	{"name": "OVERBOLD: Complete a wave with maximum stakes without using bombs", "types": ["overbold", "medium"]},
-	{"name": "OVERBOLD: Max out 11 upgrades", "types": ["overbold", "medium"]},
-	{"name": "GOLFARIA: Rescue 3 NPCs and hit 3 Parbots", "types": ["golfaria", "medium"]},
-	{"name": "GOLFARIA: Obtain the Block Buster, Brakes, and 5 clubs", "types": ["golfaria", "medium"]}
+    {
+      name: "PORGY: Destroy 5 different rock blockades using the Missile System or Depth Charges",
+      types: ["porgy", "easy"],
+    },
+    {
+      name: "PORGY: Return to base with 3 different collectible types in one dive without any upgrades equipped",
+      types: ["porgy", "easy"],
+    },
+    {
+      name: "VELGRESS: Hold 101 coins and all three keys at once",
+      types: ["velgress", "easy"],
+    },
+    {
+      name: "VELGRESS: Beat lv 1 defeating all enemies with the blaster AND lv 2 stepping on all bomb blocks in one run",
+      types: ["velgress", "easy"],
+    },
+    { name: "VELGRESS: Hold 111 coins at once", types: ["velgress", "easy"] },
+    {
+      name: "GRIMSTONE: Defeat 15 enemies without healing at a hotel or the entire party dying (must New Game & retry if either occurs)",
+      types: ["grimstone", "easy"],
+    },
+    {
+      name: "GRIMSTONE: With a party of 4, level up all members to level 3",
+      types: ["grimstone", "easy"],
+    },
+    {
+      name: "RAKSHASA: Clear Stage 2 defeating enemies ONLY with the spread or default weapon during the run",
+      types: ["rakshasa", "easy"],
+    },
+    {
+      name: "RAKSHASA: Clear Stage 2 defeating enemies ONLY with the purple homing or default weapon during the run",
+      types: ["rakshasa", "easy"],
+    },
+    { name: "GOLFARIA: Collect a Holy Tee piece", types: ["golfaria", "easy"] },
+    {
+      name: "GOLFARIA: Have 44+ total strokes (collect 8 clubs)",
+      types: ["golfaria", "easy"],
+    },
+    {
+      name: "GOLFARIA: Collect the Block Buster without obtaining any clubs or upgrades beforehand",
+      types: ["golfaria", "easy"],
+    },
+    {
+      name: "DIVERS: Win a fight against piranhas without using the Bomb",
+      types: ["divers", "easy"],
+    },
+    { name: "DIVERS: Reach level 5", types: ["divers", "easy"] },
+    {
+      name: "DEVILITION: Use WEAK-TOWN; Clear 5 rounds & always kill the townie that spawns each level",
+      types: ["devilition", "easy"],
+    },
+    {
+      name: "DEVILITION: Clear 5 rounds; tier 1 pieces (bomb, rocket, cannon) are not allowed to kill any demons",
+      types: ["devilition", "easy"],
+    },
+    {
+      name: "KICK CLUB: Beat Track world; must always defeat all of one type of enemy in a level before defeating the next",
+      types: ["kickclub", "easy"],
+    },
+    { name: "KICK CLUB: Score 101,000+ points", types: ["kickclub", "easy"] },
+    {
+      name: "KICK CLUB: Beat Track world; Enemies can only be defeated with full-charge kicks",
+      types: ["kickclub", "easy"],
+    },
   ],
   [
-	{"name": "PINGOLF: Cherry disk with a score of -12 or better", "types": ["pingolf", "hard"]},
-	{"name": "PINGOLF: Cherry disk with 3+ holes-in-one in the run", "types": ["pingolf", "hard"]},
-	{"name": "KICK CLUB: Have 7 extra lives at once", "types": ["kickclub", "hard"]},
-	{"name": "KICK CLUB: Beat Track World; Must finish each level in the run (except bosses) with 13+ seconds left on the timer", "types": ["kickclub", "hard"]},
-	{"name": "FIST HELL: Survive 9 waves in the gym without hitting any civilians", "types": ["fisthell", "hard"]},
-	{"name": "FIST HELL: Beat the 3rd scare without dying in the run", "types": ["fisthell", "hard"]},
-	{"name": "HOT FOOT: Get 4 blowouts in one tournament using only girl characters", "types": ["hotfoot", "hard"]},
-	{"name": "HOT FOOT: Get 4 blowouts in one tournament using only boy characters (Mascot allowed)", "types": ["hotfoot", "hard"]},
-	{"name": "NIGHT MANOR: Cherry disk", "types": ["nightmanor", "hard"]},
-{"name": "NIGHT MANOR: Successfully complete the hiding minigame in five different rooms in a row without failing", "types": ["nightmanor", "hard"]},
-	{"name": "ROCK ON! ISLAND: CLUB-PASS allowed; beat Maze of Death with max of 2 cave upgrade purchases and without using any chickens", "types": ["rockonisland", "hard"]},
-	{"name": "ROCK ON! ISLAND: CLUB-PASS allowed; beat Terror Overhead without using any Fire cavemen or chickens", "types": ["rockonisland", "hard"]},
-	{"name": "ROCK ON! ISLAND: CLUB-PASS allowed; beat Jungle Rush; The only purple cavemen allowed are Rock 2 and Tar", "types": ["rockonisland", "hard"]},
-	{"name": "RAIL HEIST: Beat the first 5 levels & have at least three lawmen get shot each level", "types": ["railheist", "hard"]},
-	{"name": "RAIL HEIST: LAZY-COPS allowed; Beat any 7 levels (1, 2, 3 & 18 excluded) without allowing the lawmen to have more than two turns", "types": ["railheist", "hard"]},
-	{"name": "RAIL HEIST: LAZY-COPS allowed; Beat levels 12-16 and have at least three lawmen get shot each level", "types": ["railheist", "hard"]},
-	{"name": "GRIMSTONE: Reach Level 6 with any character with a party of at least 3", "types": ["grimstone", "hard"]},
-{"name": "GRIMSTONE: Get Rufus to level 4 in a party of four", "types": ["grimstone", "hard"]}
-],
-[
-	{"name": "PAINT CHASE: EVEN-COAT allowed; Beat stages 14 through 26", "types": ["paintchase", "hard"]},
-{"name": "PAINT CHASE: Have 6 extra lives at once", "types": ["paintchase", "hard"]},
-	{"name": "ELFAZAR’S HAT: Clear Stage 3 (Frostin Town) with 6+ extra lives remaining", "types": ["elfazarshat", "hard"]},
-{"name": "ELFAZAR’S HAT: Max out the bonus game meter twice in one run", "types": ["elfazarshat", "hard"]},
-	{"name": "CAMPANELLA 3: GOLD disk ONLY (Cherry does not complete this goal)", "types": ["campanella3", "hard"]},
-	{"name": "CAMPANELLA 3: Beat Stages A, B, and C shooting only during boss fights", "types": ["campanella3", "hard"]},
-	{"name": "MOONCAT: Visit 25 different rooms", "types": ["mooncat", "hard"]},
-{"name": "MOONCAT: Obtain the Yellow and Green eggs", "types": ["mooncat", "hard"]},
-	{"name": "WARPTANK: Change your tank to each available color in the hub world (there are 4 new color platforms)", "types": ["warptank", "hard"]},
-	{"name": "WARPTANK: Obtain 17 coffees", "types": ["warptank", "hard"]},
-{"name": "BUG HUNTER: Complete a job; Killing bugs is only permitted when you hold 2+ S (blue) modules", "types": ["bughunter", "hard"]},
-{"name": "BUG HUNTER: Use WORK-HARD; Beat two jobs in a row", "types": ["bughunter", "hard"]},
-{"name": "BUG HUNTER: WORK-LESS allowed; Beat Job 10", "types": ["bughunter", "hard"]},
-{"name": "BUG HUNTER: WORK-LESS allowed; Beat Job 11 without pushing any bugs into pits", "types": ["bughunter", "hard"]},
-	{"name": "SEASIDE DRIVE: Reach 200,000+ points and have 7 lives at once", "types": ["seasidedrive", "hard"]},
-	{"name": "SEASIDE DRIVE: Win all 3 bonus games in one run without shooting any blocks", "types": ["seasidedrive", "hard"]},
-	{"name": "DEVILITION: Use FULL-RAND; Beat 8 levels", "types": ["devilition", "hard"]},
-{"name": "DEVILITION: Beat 5 levels fully clearing the board of all villagers, demons, and pieces each round", "types": ["devilition", "hard"]}
-],
-[
-	{"name": "HYPER CONTENDER: Gold disk on Hard Difficulty", "types": ["hypercontender", "hard"]},
-	{"name": "HYPER CONTENDER: Beat Draft Mode on Hard Difficulty using at least 4 different characters total", "types": ["hypercontender", "hard"]},
-	{"name": "VAINGER: Equip all 4 modules,, then defeat Y-Vainger (exploit not allowed)", "types": ["vainger", "hard"]},
-{"name": "VAINGER: Equip 3+ modules, then defeat the keycode boss in Theta Sector", "types": ["vainger", "hard"]},
-	{"name": "CAMPANELLA: Have 35 lives", "types": ["campanella", "hard"]},
-{"name": "CAMPANELLA: Gold disk without dying to any bosses", "types": ["campanella", "hard"]},
-	{"name": "WALDORF’S JOURNEY: Reach the palace without collecting any shells, and holding both non-squid keys", "types": ["waldorfsjourney", "hard"]},
-	{"name": "WALDORF’S JOURNEY: Gold disk using only maximum strength jumps (flying & items allowed)", "types": ["waldorfsjourney", "hard"]},
-{"name": "AVIANOS: BLUE-BEAK allowed; Beat Trial 1 without using any Miracles", "types": ["avianos", "hard"]},
-{"name": "AVIANOS: BLUE-BEAK allowed; Beat Trial 4", "types": ["avianos", "hard"]},
-	{"name": "CAMPANELLA 2: Turn on the lights in Temple Grounds; picking up the free fuel at the end of caves is banned", "types": ["campanella2", "hard"]},
-	{"name": "CAMPANELLA 2: Gold disk with the legendary armor obtained AND no other upgrades", "types": ["campanella2", "hard"]},
-	{"name": "VELGRESS: Gold disk without being stunned by any enemies or traps", "types": ["velgress", "hard"]},
-	{"name": "VELGRESS: Cherry Disk; must make at least 7 purchases", "types": ["velgress", "hard"]}
+    {
+      name: "LORDS OF DISKONIA: Win a Quick Battle on Commander difficulty with at least 2 of your units remaining",
+      types: ["lordsofdiskonia", "easy"],
+    },
+    {
+      name: "LORDS OF DISKONIA: Beat the second story mission",
+      types: ["lordsofdiskonia", "easy"],
+    },
+    {
+      name: "CAMOUFLAGE: Beat 5 levels with 3/3 collectibles without using UNDO (must start over level if caught)",
+      types: ["camouflage", "easy"],
+    },
+    {
+      name: "CAMOUFLAGE: Beat 6 levels with 2/3 collectibles without using UNDO (must start over level if caught)",
+      types: ["camouflage", "easy"],
+    },
+    {
+      name: "MINI & MAX: Free the brainwashed mouse by defeating the Plasmage, using only blocks in combat",
+      types: ["miniandmax", "easy"],
+    },
+    {
+      name: "MINI & MAX: Collect a big shiny, then escape the cave",
+      types: ["miniandmax", "easy"],
+    },
+    {
+      name: "NIGHT MANOR: Starting from 3 different rooms, escape the killer 3 times by running far enough away that he gives up",
+      types: ["nightmanor", "easy"],
+    },
+    {
+      name: "NIGHT MANOR: Starting from 3 different rooms, escape the killer 3 times by running far enough away that he gives up",
+      types: ["nightmanor", "easy"],
+    },
+    {
+      name: "ELFAZAR’S HAT: Clear Stage 1 deathless, no dashing, and defeating only mandatory enemies",
+      types: ["elfazarshat", "easy"],
+    },
+    {
+      name: "ELFAZAR’S HAT: Clear any stage with all 5 upgrades active (A or B)",
+      types: ["elfazarshat", "easy"],
+    },
+    {
+      name: "STAR WASPIR: Have a 40x multiplier",
+      types: ["starwaspir", "easy"],
+    },
+    {
+      name: "CAMPANELLA: Use BEAN-DRIP; score 8,800+ points",
+      types: ["campanella", "easy"],
+    },
+    {
+      name: "HOT FOOT: Reach round 4; in each round, the teammate that gets the first point must score all points for the rest of that round",
+      types: ["hotfoot", "easy"],
+    },
+    {
+      name: "RAIL HEIST: GOOD-SPUR allowed; Obtain both the Devil Star & Time Star on 9 levels",
+      types: ["railheist", "easy"],
+    },
+    {
+      name: "RAIL HEIST: Beat levels 1, 2, and 3 while knocking every lawman off the train",
+      types: ["railheist", "easy"],
+    },
+    {
+      name: "PAINT CHASE: Beat 12 levels in a row without failing any courses",
+      types: ["paintchase", "easy"],
+    },
+    {
+      name: "PAINT CHASE: EVEN-COAT allowed; Defeat the Pink Racer 3 times in a row",
+      types: ["paintchase", "easy"],
+    },
   ],
   [
-	{"name": "PLANET ZOLDATH: Collect 2 map pieces; You must kill all enemies/NPCs (except Snails) whenever possible before changing screens", "types": ["planetzoldath", "hard"]},
-	{"name": "PLANET ZOLDATH: Collect the dungeon Map Piece or trade Map Piece without picking up any energy cubes", "types": ["planetzoldath", "hard"]},
-	{"name": "PORGY: Recover 6 different items hidden behind scenery (walls, ceiling, floor, coral, etc.)", "types": ["porgy", "hard"]},
-{"name": "PORGY: Defeat a boss in the second depth level (Bakunawa or Neptune) without using Depth Charges", "types": ["porgy", "hard"]},
-	{"name": "PILOT QUEST: Activate three teleporters", "types": ["pilotquest", "hard"]},
-	{"name": "PILOT QUEST: Craft 10 ingots at the table", "types": ["pilotquest", "hard"]},
-	{"name": "BARBUTA: Have 500 cash", "types": ["barbuta", "hard"]},
-{"name": "BARBUTA: Explore 50 different rooms", "types": ["barbuta", "hard"]}, 
-	{"name": "STAR WASPIR: Using the gray ship, beat waves 1, 2, and 3 without ever summoning an option (GGG)", "types": ["starwaspir", "medium"]},
-	{"name": "STAR WASPIR: Using the red ship, beat waves 1, 2, and 3 without making any valid letter sequences (EGG, etc.)", "types": ["starwaspir", "medium"]},
-	{"name": "BARBUTA: Enter six unique doors in one run without losing any lives (exits do not count as new doors)", "types": ["barbuta", "hard"]},
-	{"name": "BARBUTA: In one run, collect the reward from both green skulls and defeat each of the 4 green shielded enemies at least once", "types": ["barbuta", "hard"]},
-	{"name": "RAKSHASA: Defeat three lightning cloud enemies that spawn from coins in one run", "types": ["rakshasa", "hard"]},
-	{"name": "RAKSHASA: Reach the summit of the waterfall using only the default weapon during the run", "types": ["rakshasa", "hard"]},
-	{"name": "MAGIC GARDEN: Gold Disk with 6,400 points or less", "types": ["magicgarden", "hard"]},
-	{"name": "MAGIC GARDEN: Gold disk without collecting any gold potions", "types": ["magicgarden", "hard"]},
-	{"name": "MAGIC GARDEN: Have 12 gold potions on screen at once", "types": ["magicgarden", "hard"]},
-	{"name": "MAGIC GARDEN: Beat the game ending with 10+ gold potions on screen at once", "types": ["magicgarden", "hard"]},
-{"name": "ATTACTICS: Increment the counter to at least +55 in Survival mode", "types": ["attactics", "hard"]},
-{"name": "ATTACTICS: Gold disk", "types": ["attactics", "hard"]},
-	{"name": "DIVERS: Reach level 5 and collect an emblem", "types": ["divers", "hard"]},
-{"name": "DIVERS: Open 5 chests", "types": ["divers", "hard"]},
-	{"name": "CARAMEL CARAMEL: Score 100,000+ points", "types": ["caramelcaramel", "hard"]},
-{"name": "BUSHIDO BALL: Cherry Disk twice, with one male and one female character", "types": ["bushidoball", "hard"]},
-{"name": "ONION DELIVERY: Gold Disk without landing in any slime pits", "types": ["oniondelivery", "hard"]},
-{"name": "ONION DELIVERY: Deliver 10 onions and complete the day on 4 separate days in a run", "types": ["oniondelivery", "hard"]}
+    {
+      name: "BARBUTA: Obtain the blood sword, leave the room with all your eggs broken, then gold disk",
+      types: ["barbuta", "easy"],
+    },
+    { name: "BARBUTA: Open 8 different chests", types: ["barbuta", "easy"] },
+    {
+      name: "OVERBOLD: Gold Disk & Purchase 4 price hiked items in one run",
+      types: ["overbold", "easy"],
+    },
+    {
+      name: "OVERBOLD: Gold Disk without purchasing any SALE or HIKE items",
+      types: ["overbold", "easy"],
+    },
+    {
+      name: "MORTOL II: Defeat all three minibosses in one run, damaging them only as scout and engineer",
+      types: ["mortolii", "easy"],
+    },
+    {
+      name: "MORTOL II: Gold Disk with 10 doors opened",
+      types: ["mortolii", "easy"],
+    },
+    {
+      name: "MAGIC GARDEN: Use OVER-GROW; Save 45+ oppies in a run",
+      types: ["magicgarden", "easy"],
+    },
+    {
+      name: "MAGIC GARDEN: Gold Disk & defeat 6+ mushrooms in one combo",
+      types: ["magicgarden", "easy"],
+    },
+    {
+      name: "MAGIC GARDEN: Defeat an enemy at least 5000 points",
+      types: ["magicgarden", "easy"],
+    },
+    {
+      name: "FIST HELL: Beat the second scare as Amy without dying or eating any food",
+      types: ["fisthell", "easy"],
+    },
+    {
+      name: "FIST HELL: Beat the second scare as Cat without dying or eating any food",
+      types: ["fisthell", "easy"],
+    },
+    {
+      name: "FIST HELL: Reach wave 10 in the gym without jumping",
+      types: ["fisthell", "easy"],
+    },
+    {
+      name: "AVIANOS: Win a custom Adult game; Must own 11 fountains or more when the war ends (change castles/flags to 6/0)",
+      types: ["avianos", "easy"],
+    },
+    {
+      name: "AVIANOS: Win a custom Adult game; You may only pray to 3 ancestors",
+      types: ["avianos", "easy"],
+    },
+    {
+      name: "AVIANOS: Win a custom Fledgling game; Must spend each applicable resource every turn until you can no longer buy anything (change castles/flags to 6/0)",
+      types: ["avianos", "easy"],
+    },
+    {
+      name: "BLOCK KOALA: WORM-1234 allowed; Beat 5 story levels (#21 through #30) as Koalarana (Pink Koala)",
+      types: ["blockkoala", "easy"],
+    },
+    {
+      name: "BLOCK KOALA: WORM-1234 allowed; Beat 5 story levels (#31 through #40) as Koalarana (Pink Koala)",
+      types: ["blockkoala", "easy"],
+    },
+    {
+      name: "ONION DELIVERY: Complete 3 days in a run with 8+ onions and at least 25 seconds left on the timer each day",
+      types: ["oniondelivery", "easy"],
+    },
+    {
+      name: "ONION DELIVERY: Finish with 10+ onions 3 days in a row",
+      types: ["oniondelivery", "easy"],
+    },
   ],
   [
-	{"name": "VALBRACE: Use BUGG-BODY; Defeat the Phantom Knight without dying; Thrones and spells not allowed during the run", "types": ["valbrace", "hard"]},
-	{"name": "VALBRACE: Use BUGG-BODY; Defeat the Phantom Knight on floor 2 and the Hive Queen on floor 4", "types": ["valbrace", "hard"]},
-	{"name": "VALBRACE: Obtain the Zweihander without using any items (except Keys), spells, thrones, or equipping any new weapons or armor", "types": ["valbrace", "hard"]},
-	{"name": "CYBER OWLS: HAWK-BASE allowed; Beat Antarctica with no deaths", "types": ["cyberowls", "hard"]},
-	{"name": "CYBER OWLS: Gold Disk with 3 or fewer deaths", "types": ["cyberowls", "hard"]},
-	{"name": "CAMOUFLAGE: Escape with 3/3 collectibles on 8 levels", "types": ["camouflage", "hard"]},
-	{"name": "CAMOUFLAGE: Beat 10 levels with at least one collectible on each without using UNDO", "types": ["camouflage", "hard"]},
-	{"name": "OVERBOLD: Use CASH-BUMP; Purchases only allowed before Round 2; Clear rounds 2, 3, and 4 with at least $900 stakes on each", "types": ["overbold", "hard"]},
-	{"name": "OVERBOLD: Gold disk; You may only purchase upgrades in one specific row", "types": ["overbold", "hard"]},
-	{"name": "OVERBOLD: Gold Disk with all upgrades maxed out except Dash Attack", "types": ["overbold", "hard"]},
-	{"name": "OVERBOLD: Gold disk; you may ONLY purchase SALE or HIKE items", "types": ["overbold", "hard"]},
-	{"name": "MINI & MAX: Collect a shiny quest reward from 5 different NPCs", "types": ["miniandmax", "hard"]},
-	{"name": "MINI & MAX: Have 350 shinies at once without collecting any Big Shinies", "types": ["miniandmax", "hard"]},
-	{"name": "PARTY HOUSE: Win with 6 star guests on screen at once in a random scenario (fetch and Magician ability not allowed)", "types": ["partyhouse", "hard"]},
-	{"name": "PARTY HOUSE: Beat any two story scenarios without purchasing any guests that provide cash except Rich Pals", "types": ["partyhouse", "hard"]},
-	{"name": "MORTOL II: Gold disk; Each of the 5 player classes must defeat either a miniboss or Blobus (pellet-spewing wall enemy) on its own", "types": ["mortolii", "hard"]},
-	{"name": "MORTOL II: Gold disk with a maximum of one key collected", "types": ["mortolii", "hard"]},
-	{"name": "COMBATANTS: Slay a spider on three different levels", "types": ["combatants", "hard"]},
-{"name": "COMBATANTS: Beat 5 levels without making any Soldier ants", "types": ["combatants", "hard"]},
-{"name": "GOLFARIA: Show 25% completion in the library without obtaining the Brakes", "types": ["golfaria", "hard"]},
-{"name": "GOLFARIA: Rescue 7 green ball NPCs", "types": ["golfaria", "hard"]},
-	{"name": "MORTOL: OPEN-TOMB Allowed: Clear any 4 levels in worlds 2, 3, or 4 ending with +12 lives or more in each", "types": ["mortol", "hard"]},
-	{"name": "MORTOL: OPEN-TOMB Allowed: Clear any 3 levels ending with +18 lives or more in each", "types": ["mortol", "hard"]}
-],
-[
-	{"name": "BARBUTA: Fill all 8 item slots & defeat the final boss with at least 4 eggs remaining", "types": ["barbuta", "veryhard"]}, 
-	{"name": "BARBUTA: Pay the hammer man to enter the castle, then defeat the boss", "types": ["barbuta", "veryhard"]},
-	{"name": "BUG HUNTER: Cherry Disk", "types": ["bughunter", "veryhard"]},     
-	{"name": "BUG HUNTER: WORK-LESS allowed; beat jobs 7, 8, and 9 in a row (counts as GOLD DISK)", "types": ["bughunter", "veryhard"]},  
-{"name": "BUG HUNTER: Gold Disk; Only 2-cost modules may be purchased from the shop", "types": ["bughunter", "veryhard"]},  
-	{"name": "MAGIC GARDEN: Win with a score of 100,000+; only gold potions may be used", "types": ["magicgarden", "veryhard"]},
-	{"name": "MAGIC GARDEN: Cherry disk with a MAXIMUM SCORE of 21,000 points", "types": ["magicgarden", "veryhard"]},
-	{"name": "VELGRESS: Cherry disk without Upgrades or Star Blocks & finish with at least 75 coins held", "types": ["velgress", "veryhard"]},
-	{"name": "VELGRESS: Gold disk 3 runs in a row", "types": ["velgress", "veryhard"]},
-	{"name": "THE BIG BELL RACE: Cherry disk with no deaths", "types": ["thebigbellrace", "veryhard"]},
-	{"name": "KICK CLUB: Cherry disk with at least 175,000 points", "types": ["kickclub", "veryhard"]},
-	{"name": "KICK CLUB: Gold disk with at least 3 extra lives remaining", "types": ["kickclub", "veryhard"]},
-	{"name": "BLOCK KOALA: WORM-1234 allowed; clear any 12 odd-numbered story levels (levels 1-10 excluded)", "types": ["blockkoala", "veryhard"]},
-	{"name": "BLOCK KOALA: WORM-1234 allowed; clear any 12 story levels ending with digits present in your Bingosync seed", "types": ["blockkoala", "veryhard"]},
-	{"name": "CAMOUFLAGE: Cherry disk", "types": ["camouflage", "veryhard"]},
-	{"name": "CAMOUFLAGE: Gold disk without ever being caught (New Game required if caught)", "types": ["camouflage", "veryhard"]},
-	{"name": "PINGOLF: Complete any 6 holes w/ every shot aimed in the opposite direction of the hole relative to you", "types": ["pingolf", "veryhard"]},
-	{"name": "PINGOLF: Win two consecutive runs with a TOTAL RESULT of -18 or better across both runs", "types": ["pingolf", "veryhard"]},
-	{"name": "SEASIDE DRIVE: Cherry disk with 333,333 points or more", "types": ["seasidedrive", "veryhard" ]},
-	{"name": "SEASIDE DRIVE: Cherry disk without collecting any coins", "types": ["seasidedrive", "veryhard" ]}
+    {
+      name: "HYPER CONTENDER: Beat draft mode; only attacks allowed are melee attacks",
+      types: ["hypercontender", "easy"],
+    },
+    {
+      name: "HYPER CONTENDER: Win 3 fights in a row in Draft Mode on Hyper difficulty",
+      types: ["hypercontender", "easy"],
+    },
+    {
+      name: "PILOT QUEST: Have at least two workers making science at the crash site",
+      types: ["pilotquest", "easy"],
+    },
+    {
+      name: "PILOT QUEST: Obtain the Blaster & defeat both Unktomi and Big Borlg at least once",
+      types: ["pilotquest", "easy"],
+    },
+    { name: "NINPEK: Have 8 extra lives at once", types: ["ninpek", "easy"] },
+    { name: "NINPEK: Eat 10 sandwiches", types: ["ninpek", "easy"] },
+    {
+      name: "WARPTANK: Beat Sectors while destroying all possible enemies & blocks: Piston, Bomb, Tower, Healing, Stare",
+      types: ["warptank", "easy"],
+    },
+    {
+      name: "WARPTANK: Beat sectors with maximum shots allowed: PISTON: 9; JR: 6; MEAL: 3; MAZURKA: 8; NEST: 15",
+      types: ["warptank", "easy"],
+    },
+    {
+      name: "BUSHIDO BALL: Win three games in a row in one tournament by 4+ points",
+      types: ["bushidoball", "easy"],
+    },
+    {
+      name: "BUSHIDO BALL: Win the first match 8-0 with two different characters",
+      types: ["bushidoball", "easy"],
+    },
+    {
+      name: "MOONCAT: Kill a gray spider and a spear thrower, and find the egg at the end of the run",
+      types: ["mooncat", "easy"],
+    },
+    {
+      name: "MOONCAT: Visit the first 12 rooms with no warps and without killing any enemies (must die & retry screen if enemy is killed)",
+      types: ["mooncat", "easy"],
+    },
+    {
+      name: "MORTOL: Clear all world 1 levels using no more than 2 stone rituals total",
+      types: ["mortol", "easy"],
+    },
+    {
+      name: "MORTOL: Clear the first two levels without dying to any enemies",
+      types: ["mortol", "easy"],
+    },
+    {
+      name: "MORTOL: Clear the first two levels without using the Ritual of Arrow or collecting any +3 or +5 life pickups",
+      types: ["mortol", "easy"],
+    },
+    {
+      name: "CYBER OWLS: Beat a story mission having 5 extra lives at once",
+      types: ["cyberowls", "easy"],
+    },
+    {
+      name: "CYBER OWLS: Beat Moscow with all 3 keycards obtained",
+      types: ["cyberowls", "easy"],
+    },
+    {
+      name: "CYBER OWLS: Beat Moscow; you must enter the Hackoon fight with 0 bullets",
+      types: ["cyberowls", "easy"],
+    },
+    {
+      name: "CARAMEL CARAMEL: Score 50,000+ points by the end of Orb Shower A",
+      types: ["caramelcaramel", "easy"],
+    },
+    {
+      name: "THE BIG BELL RACE: Win 1st place 4 courses in a row without picking up any power-up items",
+      types: ["thebigbellrace", "easy"],
+    },
+    {
+      name: "THE BIG BELL RACE: Win 1st place on two courses in which you KO 1+ enemy on every lap",
+      types: ["thebigbellrace", "easy"],
+    },
   ],
   [
-{"name": "RAIL HEIST: LAZY-COPS allowed; Collect all Devil Stars on levels 11 through 20", "types": ["railheist", "veryhard"]},
-{"name": "RAIL HEIST: Collect 30 total stars", "types": ["railheist", "veryhard"]},
-	{"name": "DEVILITION: Cherry Disk", "types": ["devilition", "veryhard"]},
-	{"name": "DEVILITION: Use WEAK-TOWN; Beat the game (counts as GOLD or CHERRY disk)", "types": ["devilition", "veryhard"]},
-	{"name": "CAMPANELLA: Cherry disk", "types": ["campanella", "veryhard"]},
-	{"name": "CAMPANELLA: Gold disk with no warps; must kill every enemy on every screen", "types": ["campanella", "hard"]},
-	{"name": "CAMPANELLA: Gold disk with max of 3 deaths", "types": ["campanella", "veryhard"]},
-	{"name": "WARPTANK: Enter the cafe with at least 11 coffees", "types": ["warptank", "veryhard"]},
-	{"name": "WARPTANK: Defeat Renegade", "types": ["warptank", "veryhard"]},
-{"name": "CARAMEL CARAMEL: Gold disk; Camera is only allowed during boss fights at the end of each planet", "types": ["caramelcaramel", "veryhard"]},
-{"name": "CARAMEL CARAMEL: Cherry disk with max of 1 death", "types": ["caramelcaramel", "veryhard"]},
-	{"name": "VAINGER: Obtain both stabilizers and any two keycodes", "types": ["vainger", "veryhard"]},
-	{"name": "VAINGER: Obtain and equip all four modules, and collect two keycodes", "types": ["vainger", "veryhard"]},
-	{"name": "PARTY HOUSE: Beat 3 random scenarios in a row; Only 1 type of star guest allowed in each scenario", "types": ["partyhouse", "veryhard"]},
-	{"name": "PARTY HOUSE: Gold disk without purchasing Bartenders or Auctioneers", "types": ["partyhouse", "veryhard"]},
-	{"name": "PLANET ZOLDATH: Use TROT-TERS; Escape Zoldath with your Bingosync seed (counts as GOLD or CHERRY disk)", "types": ["planetzoldath", "veryhard"]},
-	{"name": "PLANET ZOLDATH: Gold Disk with at least 6 different items dropped off at your ship when you leave", "types": ["planetzoldath", "veryhard"]},
-	{"name": "STAR WASPIR: Cherry Disk with at least 500,000 points", "types": ["starwaspir", "veryhard"]},
-	{"name": "STAR WASPIR: Gold Disk with 2 different ships", "types": ["starwaspir", "veryhard"]}
+    {
+      name: "PILOT QUEST: Have two friends working at benches at the crash site",
+      types: ["pilotquest", "medium"],
+    },
+    {
+      name: "PORGY: Equip an upgrade item from the Abyss (armor, radar, efficient fuel)",
+      types: ["porgy", "medium"],
+    },
+    {
+      name: "PORGY: Obtain 4 equippable upgrades; killing enemies is not allowed (reset + continue if enemy is killed)",
+      types: ["porgy", "medium"],
+    },
+    {
+      name: "RAKSHASA: Defeat the first two mid-bosses & first 2 bosses with 4+ skulls during each fight",
+      types: ["rakshasa", "medium"],
+    },
+    {
+      name: "RAKSHASA: Collect both halves of four bell pickups in one run, with no revive minigames after the first one",
+      types: ["rakshasa", "medium"],
+    },
+    {
+      name: "THE BIG BELL RACE: Complete a lap in reverse & win on 5 different tracks",
+      types: ["thebigbellrace", "medium"],
+    },
+    { name: "BUSHIDO BALL: Gold disk", types: ["bushidoball", "medium"] },
+    {
+      name: "BUSHIDO BALL: Beat 3 rounds on Hyper Speed with three different characters",
+      types: ["bushidoball", "medium"],
+    },
+    {
+      name: "CAMPANELLA: Clear stage B; must crash the ship at least once every level, including bosses",
+      types: ["campanella", "medium"],
+    },
+    {
+      name: "CAMPANELLA: Defeat every enemy on every level (no warps) in worlds A & B with max of 3 deaths",
+      types: ["campanella", "medium"],
+    },
+    {
+      name: "CYBER OWLS: Use GETM-EOUT; Complete the rescue mini-game six times in a row",
+      types: ["cyberowls", "medium"],
+    },
+    {
+      name: "CYBER OWLS: Beat Chicago without using the charged fist & Beat Congo without blowing up any barrels or vehicles",
+      types: ["cyberowls", "medium"],
+    },
+    {
+      name: "CAMPANELLA: Clear stages A & B in a run without losing any lives",
+      types: ["campanella", "medium"],
+    },
+    {
+      name: "CAMPANELLA: Finish stage A with all 8 coffees and an on-screen clear time of 2:05 or less",
+      types: ["campanella", "medium"],
+    },
+    { name: "WARPTANK: Collect 9 coffees", types: ["warptank", "medium"] },
+    {
+      name: "WARPTANK: SLIM-TANK allowed; Finish the level with the coffee on all Bellows sectors (Guide, Shock, Riot, Soft, Port)",
+      types: ["warptank", "medium"],
+    },
   ],
   [
-	{"name": "NINPEK: Use HARD-LOOP; Defeat the final boss with 5,000 points or less (counts as GOLD DISK)", "types": ["ninpek", "veryhard"]},
-	{"name": "NINPEK: Use HARD-LOOP; Win with 2 or fewer deaths", "types": ["ninpek", "veryhard"]},
-	{"name": "MORTOL: Have 100 lives at the end of a level", "types": ["mortol", "veryhard"]},  
-	{"name": "MORTOL: Cherry disk", "types": ["mortol", "veryhard"]},  
-{"name": "GOLFARIA: Achieve 35% Completion with at least 3 of the 4 power-ups collected", "types": ["golfaria", "veryhard"]},
-{"name": "GOLFARIA: Obtain all four major upgrades and at least two tee pieces", "types": ["golfaria", "veryhard"]},
-{"name": "PORGY: Achieve 35% Completion with at least two bosses defeated", "types": ["porgy", "veryhard"]},
-{"name": "PORGY: Defeat 3 bosses", "types": ["porgy", "veryhard"]},
-	{"name": "MOONCAT: Collect 2 of 3 eggs with 7 or fewer deaths (sum of best per successful run)", "types": ["mooncat", "veryhard"]},
-	{"name": "MOONCAT: Cherry disk", "types": ["mooncat", "veryhard"]},
-	{"name": "MOONCAT: Find 2 of 3 eggs and visit at least 28 different rooms", "types": ["mooncat", "veryhard"]},
-	{"name": "WALDORF’S JOURNEY: Cherry disk; No puffins collected & at least 4 weather vanes must be activated during the run", "types": ["waldorfsjourney", "veryhard"]},
-	{"name": "WALDORF’S JOURNEY: Cherry disk with at least 91 shells", "types": ["waldorfsjourney", "veryhard"]},
-{"name": "LORDS OF DISKONIA: Win 2 consecutive Full Wars on Commander difficulty", "types": ["lordsofdiskonia", "veryhard"]},
-{"name": "LORDS OF DISKONIA: Win a Full War on Commander difficulty; Leadership & Navigation skills are banned", "types": ["lordsofdiskonia", "veryhard"]},
-{"name": "LORDS OF DISKONIA: Win a Full War on Commander difficulty; You must buy units at each Tavern until you can no longer do so", "types": ["lordsofdiskonia", "veryhard"]},
-	{"name": "HOT FOOT: Cherry disk with one boy & one girl character", "types": ["hotfoot", "veryhard"]},
-	{"name": "HOT FOOT: Gold disk twice with 4 unique characters", "types": ["hotfoot", "veryhard"]},
-	{"name": "ROCK ON! ISLAND: CLUB-PASS allowed; Beat Crossroads, Wasteland, and The Oasis all perfect with no chickens", "types": ["rockonisland", "veryhard"]},
-{"name": "ROCK ON! ISLAND: CLUB-PASS allowed; Beat the Four Emperors with 15 HP or more remaining", "types": ["rockonisland", "veryhard"]}
+    {
+      name: "SEASIDE DRIVE: Use WEAK-SHOT; Clear Stage 1 without dying and at least 17,700 points",
+      types: ["seasidedrive", "medium"],
+    },
+    {
+      name: "SEASIDE DRIVE: Beat Stages 1 & 2 using only the side-shot (except boss fights)",
+      types: ["seasidedrive", "medium"],
+    },
+    {
+      name: "MOONCAT: Find the Green Egg without dying before the boss",
+      types: ["mooncat", "medium"],
+    },
+    {
+      name: "MOONCAT: Find the Yellow Egg without dying before the boss",
+      types: ["mooncat", "medium"],
+    },
+    {
+      name: "ROCK ON! ISLAND: CLUB-PASS allowed; Beat Underbrush with no damage and without upgrading at the cave or using any chickens",
+      types: ["rockonisland", "medium"],
+    },
+    {
+      name: "ROCK ON! ISLAND: CLUB-PASS allowed; Beat Crossroads; must have at least 10 wheel cavemen through all of wave 10",
+      types: ["rockonisland", "medium"],
+    },
+    {
+      name: "ROCK ON! ISLAND: CLUB-PASS allowed; Beat Terror Overhead without any Bow, Fire, or Tar cavemen",
+      types: ["rockonisland", "medium"],
+    },
+    {
+      name: "MAGIC GARDEN: Cherry disk in under 5:00 in-game time",
+      types: ["magicgarden", "medium"],
+    },
+    {
+      name: "MAGIC GARDEN: Gold disk; Ignore the first 5 star pads and never kill the 5 mushrooms that spawn",
+      types: ["magicgarden", "medium"],
+    },
+    {
+      name: "HOT FOOT: Win 4 games in one tournament without jumping",
+      types: ["hotfoot", "medium"],
+    },
+    {
+      name: "HOT FOOT: Win 5 games in one tournament without using any star abilities",
+      types: ["hotfoot", "medium"],
+    },
+    {
+      name: "QUIBBLE RACE: Use TUFF-RACE; win a 4-round game",
+      types: ["quibblerace", "medium"],
+    },
+    {
+      name: "QUIBBLE RACE: WILD-BETS allowed; Have $64,000",
+      types: ["quibblerace", "medium"],
+    },
+    { name: "GRIMSTONE: Defeat Big Alp", types: ["grimstone", "medium"] },
+    {
+      name: "GRIMSTONE: Win three encounters in the western mine in one visit",
+      types: ["grimstone", "medium"],
+    },
+    {
+      name: "MINI & MAX: From New Game, obtain the Sacred Wings, Dog Armor, and Whistle",
+      types: ["miniandmax", "medium"],
+    },
+    {
+      name: "MINI & MAX: Collect 3 Big Shinies",
+      types: ["miniandmax", "medium"],
+    },
+    {
+      name: "ATTACTICS: Win 5 ranked battles in a row; max of 2 consecutive units per row across the center at once",
+      types: ["attactics", "medium"],
+    },
+    {
+      name: "ATTACTICS: SLOW-DOWN allowed; Win a rank 160+ battle after having at least 2 Heroes spawn",
+      types: ["attactics", "medium"],
+    },
+    {
+      name: "ATTACTICS: Earn the gift; beat each of those levels at least once without losing any flags",
+      types: ["attactics", "medium"],
+    },
   ],
   [
-	{"name": "RAKSHASA: Cherry disk with at least 60,000 points", "types": ["rakshasa", "veryhard"]},
-	{"name": "RAKSHASA: Gold disk without ever having more than 1 skull", "types": ["rakshasa", "veryhard"]},
-	{"name": "FIST HELL: Gold disk as Cat or Amy; Limit of 2 upgrade purchases", "types": ["fisthell", "veryhard"]},
-{"name": "FIST HELL: Cherry disk: Maximum of ANY 2 shop purchases", "types": ["fisthell", "medium"]},
-	{"name": "PAINT CHASE: Cherry disk with no failed courses", "types": ["paintchase", "veryhard"]},
-	{"name": "ATTACTICS: Reach Rank 150+ in Ranked mode", "types": ["attactics", "veryhard"]},
-{"name": "ATTACTICS: Score 7000+ in Survival mode", "types": ["attactics", "veryhard"]},
-	{"name": "CAMPANELLA 2: Gold disk with at least 8 upgrades (square icons on left of screen)", "types": ["campanella2", "veryhard"]},
-	{"name": "CAMPANELLA 2: Cherry disk with at least 6 upgrades (square icons on left of screen)", "types": ["campanella2", "veryhard"]},
-{"name": "ONION DELIVERY: Cherry Disk with exactly 5 onions delivered on days 1 & 2", "types": ["oniondelivery", "veryhard"]},
-{"name": "ONION DELIVERY: Cherry Disk with at least 7 onions delivered each day", "types": ["oniondelivery", "veryhard"]},
-{"name": "ONION DELIVERY: Gold Disk with no failed days", "types": ["oniondelivery", "veryhard"]},
-{"name": "ONION DELIVERY: Gold Disk without hitting any time boxes in the run", "types": ["oniondelivery", "veryhard"]},
-	{"name": "AVIANOS: BLUE-BEAK allowed; Beat Trials 4 & 5", "types": ["avianos", "veryhard"]},
-	{"name": "AVIANOS: BLUE-BEAK allowed; Beat Trials 1, 2, and 3", "types": ["avianos", "veryhard"]},
-	{"name": "ELFAZAR’S HAT: Cherry Disk with 9 tickets collected", "types": ["elfazarshat", "veryhard"]},
-	{"name": "ELFAZAR’S HAT: Cherry Disk without any deaths", "types": ["elfazarshat", "veryhard"]},
-{"name": "DIVERS: Defeat Guelap", "types": ["divers", "veryhard"]},
-{"name": "DIVERS: Show 5000+ gold in the bank", "types": ["divers", "veryhard"]},
-{"name": "OVERBOLD: Cherry disk with 4 or fewer upgrades invested in", "types": ["overbold", "veryhard"]},
-{"name": "OVERBOLD: Cherry disk; Gun and bomb upgrades are only allowed in the final shop", "types": ["overbold", "veryhard"]},
-{"name": "OVERBOLD: Cherry disk with final total of $6500+", "types": ["overbold", "veryhard"]},
-	{"name": "VALBRACE: Gold Disk", "types": ["valbrace", "veryhard"]},
-{"name": "VALBRACE: Level up at four thrones in one run", "types": ["valbrace", "veryhard"]},
-	{"name": "MORTOL II: Gold disk w/ all 3 switches pressed and all 3 minibosses defeated. Engineer pipes not allowed during the run", "types": ["mortolii", "veryhard"]},
-	{"name": "PILOT QUEST: Return all 3 ship parts to the crash site", "types": ["pilotquest", "veryhard"]},
-{"name": "PILOT QUEST: Win one fight against Nozzlo and cause him to flee", "types": ["pilotquest", "veryhard"]}
+    {
+      name: "CAMOUFLAGE: Gold disk with at least 5 levels with 3/3 collectibles",
+      types: ["camouflage", "medium"],
+    },
+    {
+      name: "CAMOUFLAGE: Gold disk with all levels beaten",
+      types: ["camouflage", "medium"],
+    },
+    {
+      name: "CAMOUFLAGE: Gold disk with all babies saved",
+      types: ["camouflage", "medium"],
+    },
+    {
+      name: "CAMOUFLAGE: Gold disk with all oranges collected",
+      types: ["camouflage", "medium"],
+    },
+    {
+      name: "NINPEK: Use HARD-LOOP; Defeat the boss without picking up any Ninja Stars (counts as GOLD DISK)",
+      types: ["ninpek", "medium"],
+    },
+    {
+      name: "NINPEK: Defeat every enemy before the first bonus area",
+      types: ["ninpek", "medium"],
+    },
+    {
+      name: "PINGOLF: Score -2 or better on six holes & win the tournament",
+      types: ["pingolf", "medium"],
+    },
+    {
+      name: "PINGOLF: Score par or better on eight holes in a row without dunking",
+      types: ["pingolf", "medium"],
+    },
+    {
+      name: "LORDS OF DISKONIA: In a full war, hold 64+ gold at once at any point, and win the war",
+      types: ["lordsofdiskonia", "medium"],
+    },
+    {
+      name: "LORDS OF DISKONIA: Win a full war on Knight difficulty without having more than 4 units in your squad at any time",
+      types: ["lordsofdiskonia", "medium"],
+    },
+    {
+      name: "DIVERS: Win a fight against at least one Mech",
+      types: ["divers", "medium"],
+    },
+    {
+      name: "DIVERS: Win 3 fight against piranhas in one dive",
+      types: ["divers", "medium"],
+    },
+    {
+      name: "NIGHT MANOR: Cherry disk with 100% of items obtained and 17 journal entries",
+      types: ["nightmanor", "medium"],
+    },
+    {
+      name: "NIGHT MANOR: Use OPEN-CAGE: Escape the nightmare without being caught by the killer; hitting the killer is not allowed (Counts as Cherry Disk)",
+      types: ["nightmanor", "medium"],
+    },
+    {
+      name: "PARTY HOUSE: Use VIPS-ONLY; complete the scenario with your bingosync seed with exactly 2 of each star guest in the rolodex",
+      types: ["partyhouse", "medium"],
+    },
+    {
+      name: "PARTY HOUSE: Beat Best Wishes; You may ONLY purchase: Rock Star, Counselor, Athlete, Dinosaur, Celebrity",
+      types: ["partyhouse", "medium"],
+    },
+    {
+      name: "PARTY HOUSE: Beat A Magical Night with four maxed out Climbers AND four Werewolves",
+      types: ["partyhouse", "medium"],
+    },
+    {
+      name: "PARTY HOUSE: Beat Alien Invitation with at least 5 Aliens in the party; Drivers may not fetch Aliens",
+      types: ["partyhouse", "medium"],
+    },
+    {
+      name: "PARTY HOUSE: Beat Money Management; You must have 4 Gangsters in the rolodex before purchasing any star guests",
+      types: ["partyhouse", "medium"],
+    },
+    {
+      name: "KICK CLUB: Beat Racket World & Track World without taking any damage or using any charge kicks",
+      types: ["kickclub", "medium"],
+    },
+    {
+      name: "KICK CLUB: Reach Ice World with 38,000 points or less",
+      types: ["kickclub", "medium"],
+    },
+    {
+      name: "KICK CLUB: Beat Racket World & Track World without picking up any food items",
+      types: ["kickclub", "medium"],
+    },
+    {
+      name: "WALDORF’S JOURNEY: Cherry disk, but must make 3 purchases at 4 different shops (12 items total)",
+      types: ["waldorfsjourney", "medium"],
+    },
+    {
+      name: "WALDORF’S JOURNEY: Cherry disk with all three chests opened",
+      types: ["waldorfsjourney", "medium"],
+    },
   ],
   [
-	{"name": "Cherry Disk any 3 games in a single column of the library (ALPHABETICAL)", "types": ["general", "general"]},
-	{"name": "Cherry Disk any 4 games from 4 different columns of the library (ALPHABETICAL)", "types": ["general", "general"]},
-	{"name": "Cherry Disk any 4 games from 4 different columns of the library (Chronology)", "types": ["general", "general"]},
-{"name": "Cherry Disk any 5 games from 5 different rows of the library (Chronology)", "types": ["general", "general"]},
-{"name": "Cherry Disk any 5 games from 5 different rows of the library (ALPHABETICAL)", "types": ["general", "general"]},
-	{"name": "Gold Disk any 4 games in one row of the library (ALPHABETICAL)", "types": ["general", "general"]},
-{"name": "Gold Disk any 4 games in a single genre (platform, arcade, puzzle, etc.)", "types": ["general", "general"]},
-{"name": "Collect 7 gold disks, with at least one from each row of the library (chronology)", "types": ["general", "general"]},
-{"name": "Gold disk 6 consecutive games under THINKY PLAY library sort", "types": ["general", "general"]},
-{"name": "Gold disk 6 consecutive games under QUICK PLAY library sort", "types": ["general", "general"]},
-{"name": "Gold Disk any 2x2 square of games in the library (THINKY PLAY sort)", "types": ["general", "general"]},
-	{"name": "Collect 8 gold disks from 8 different columns of the library (chronology)", "types": ["general", "general"]},
-	{"name": "Gold Disk any 2x2 square of games in the library (chronology)", "types": ["general", "general"]},
-	{"name": "Gold Disk any 2x2 square of games in the library (ALPHABETICAL)", "types": ["general", "general"]}
+    {
+      name: "HYPER CONTENDER: Win tournament mode with two different characters; no rematches allowed",
+      types: ["hypercontender", "medium"],
+    },
+    {
+      name: "HYPER CONTENDER: Win tournament mode on Hard challenge; Change ring settings to the following values in order: 6, 1, 1, 5 ,5",
+      types: ["hypercontender", "medium"],
+    },
+    {
+      name: "STAR WASPIR: Clear waves 1, 2, and 3 without using options (GGG) and having reached at least a 30x multiplier by the end of wave 3",
+      types: ["starwaspir", "medium"],
+    },
+    {
+      name: "STAR WASPIR: Using the yellow ship, beat waves 1, 2, and 3 using only tap-shot firing",
+      types: ["starwaspir", "medium"],
+    },
+    {
+      name: "ELFAZAR’S HAT: Clear stages 1, 2, and 3 without dying, and without any upgrades or healing",
+      types: ["elfazarshat", "medium"],
+    },
+    {
+      name: "ELFAZAR’S HAT: Defeat every possible enemy and boss in stages 1 & 3 in a run",
+      types: ["elfazarshat", "medium"],
+    },
+    {
+      name: "VALBRACE: Use 4RCH-M4GE; Level up at two thrones, then defeat the Phantom Knight. Only WIS upgrades allowed",
+      types: ["valbrace", "medium"],
+    },
+    {
+      name: "VALBRACE: Drink from 8 different fountains in one run",
+      types: ["valbrace", "medium"],
+    },
+    {
+      name: "RAIL HEIST: LAZY-COPS allowed; Beat levels 9-16 while bringing back a money crate intact",
+      types: ["railheist", "medium"],
+    },
+    {
+      name: "RAIL HEIST: Beat 6 levels & punch every lawman on each level at least once",
+      types: ["railheist", "medium"],
+    },
+    {
+      name: "VELGRESS: Cherry disk with in-game time of 3:09 or less (no star blocks)",
+      types: ["velgress", "medium"],
+    },
+    {
+      name: "VELGRESS: Gold disk with in-game time of 2:11 or less (no star blocks)",
+      types: ["velgress", "medium"],
+    },
+    {
+      name: "CAMPANELLA 3: Clear 9 waves 100%",
+      types: ["campanella3", "medium"],
+    },
+    {
+      name: "CAMPANELLA 3: Clear all waves 100% on two different worlds without being hit in each",
+      types: ["campanella3", "medium"],
+    },
+    {
+      name: "PAINT CHASE: Beat 10 levels without using power ups (boost pads allowed)",
+      types: ["paintchase", "medium"],
+    },
+    {
+      name: "PAINT CHASE: Beat 10 levels without using any boost pads",
+      types: ["paintchase", "medium"],
+    },
   ],
   [
-	{"name": "Collect 10 gifts for the garden (2 from each row of the library, ALPHABETICAL)", "types": ["general", "general"]},
-	{"name": "Collect 10 gifts for the garden (2 from each row of the library, Chronology)", "types": ["general", "general"]},
-	{"name": "Collect 10 gifts for the garden (1 from each column of the library - ALPHABETICAL)", "types": ["general", "general"]},
-	{"name": "Collect 10 gifts for the garden (1 from each column of the library - Chronology)", "types": ["general", "general"]},
-	{"name": "Collect 12 gifts for the garden (6 from the first 25, 6 from the second 25 in ALPHABETICAL)", "types": ["general", "general"]},
-{"name": "Collect 12 gifts for the garden (6 from the first 25, 6 from the second 25 in Chronology)", "types": ["general", "general"]},
-	{"name": "Collect 9 gifts from games on this card", "types": ["general", "general"]},
-	{"name": "Beat a number 1 top score on 2 arcade leaderboards; must gold disk the games to count", "types": ["general", "general"]},
-{"name": "Defeat 3 final bosses", "types": ["general", "general"]},
-	{"name": "Defeat a boss in 8 different games", "types": ["general", "general"]},
-	{"name": "Defeat 15 bosses", "types": ["general", "general"]},
-{"name": "Defeat 2 bosses in 5 different games", "types": ["general", "general"]},
-	{"name": "Beat a top 2 score on 3 arcade leaderboards", "types": ["general", "general"]}
-  ],
-  [	{"name": "Beat 3 levels in 5 games from 5 different library rows (chronology)", "types": ["general", "general"]},
-{"name": "Beat 5 levels in 5 Epic Play games", "types": ["general", "general"]},
-{"name": "Beat 4 levels in 6 different Thinky Play games", "types": ["general", "general"]},
-	{"name": "Gold Disk Mortol or Waprtank", "types": ["general", "general"]},
-{"name": "Gold Disk Combatants or Cyber Owls", "types": ["general", "general"]},
-{"name": "Cherry Disk Cyber Owls or Fist Hell", "types": ["general", "general"]},
-{"name": "Gold Disk Vainger or Golfaria", "types": ["general", "general"]},
-{"name": "Gold Disk Valbrace or Porgy", "types": ["general", "general"]},
-{"name": "Gold Disk four games in row one (Chronology)", "types": ["general", "general"]},
-{"name": "Gold Disk four games in row two (Chronology)", "types": ["general", "general"]},
-{"name": "Gold Disk four games in row three (Chronology)", "types": ["general", "general"]},
-{"name": "Gold Disk five games in row four (Chronology)", "types": ["general", "general"]},
-{"name": "Gold Disk four games in row five (Chronology)", "types": ["general", "general"]},
-{"name": "Gold Disk four games in row one (ALPHABETICAL)", "types": ["general", "general"]},
-{"name": "Gold Disk four games in row two (ALPHABETICAL)", "types": ["general", "general"]},
-{"name": "Gold Disk four games in row three (ALPHABETICAL)", "types": ["general", "general"]},
-{"name": "Gold Disk five games in row four (ALPHABETICAL)", "types": ["general", "general"]},
-{"name": "Gold Disk four games in row five (ALPHABETICAL)", "types": ["general", "general"]},
-{"name": "Beat 6 story scenarios in Avianos or Cherry Disk Hyper Contender", "types": ["general", "general"]},
-{"name": "Cherry Disk Rail Heist or Party House", "types": ["general", "general"]},
-{"name": "Cherry Disk Campanella 2 or Planet Zoldath", "types": ["general", "general"]},
-{"name": "Cherry Disk Paint Chase (w/ 555+ points) or Campanella 3 (w/ 2200+ points)", "types": ["general", "general"]},
-{"name": "Beat 4 story missions in Lords of Diskonia or beat 25 levels in Block Koala", "types": ["general", "general"]}
+    {
+      name: "DEVILITION: Have 8 villagers at once",
+      types: ["devilition", "medium"],
+    },
+    {
+      name: "DEVILITION: Beat six levels while placing the maximum number of pieces each round",
+      types: ["devilition", "medium"],
+    },
+    {
+      name: "PILOT QUEST: Purchase a yo-yo upgrade",
+      types: ["pilotquest", "medium"],
+    },
+    {
+      name: "PILOT QUEST: Activate all 4 teleporters",
+      types: ["pilotquest", "medium"],
+    },
+    {
+      name: "PLANET ZOLDATH: Have 5 of each resource at once",
+      types: ["planetzoldath", "medium"],
+    },
+    {
+      name: "PLANET ZOLDATH: Collect the dungeon map piece in under 7 minutes of Zoldath time",
+      types: ["planetzoldath", "medium"],
+    },
+    {
+      name: "BUSHIDO BALL: Win the first match as 4 different characters; enemies may not score more than 2 points in your victories",
+      types: ["bushidoball", "medium"],
+    },
+    {
+      name: "BUSHIDO BALL: Gold disk as Chiyome",
+      types: ["bushidoball", "medium"],
+    },
+    {
+      name: "ONION DELIVERY: Complete 3 consecutive days of deliveries with 9+ onions each day",
+      types: ["oniondelivery", "medium"],
+    },
+    {
+      name: "ONION DELIVERY: Complete day 1 with 13+ deliveries",
+      types: ["oniondelivery", "medium"],
+    },
+    {
+      name: "ONION DELIVERY: Complete 2 days in a run driving only in reverse",
+      types: ["oniondelivery", "medium"],
+    },
+    {
+      name: "FIST HELL: Get money from eating six different food pickups while at full health in one run",
+      types: ["fisthell", "medium"],
+    },
+    {
+      name: "FIST HELL: Max out the POWER, TOUGH, and RECOV of either Amy or Cat",
+      types: ["fisthell", "medium"],
+    },
+    { name: "FIST HELL: Have $75 at once", types: ["fisthell", "medium"] },
+    {
+      name: "AVIANOS: Win a custom Fledgling game; The first ancestor you pray to must be maxed out when the war is over (change castles/flags: 6/0)",
+      types: ["avianos", "medium"],
+    },
+    {
+      name: "AVIANOS: Win a custom Fledgling game; You must have 40+ dodo soldiers when the war ends (change castles/flags: 6/0)",
+      types: ["avianos", "medium"],
+    },
+    {
+      name: "AVIANOS: Win a custom Adult game; You may only obtain units from 2 ancestors (change castles/flags: 6/0)",
+      types: ["avianos", "medium"],
+    },
+    {
+      name: "VAINGER: Obtain two Clone materials",
+      types: ["vainger", "medium"],
+    },
+    {
+      name: "VAINGER: Collect 6 shield upgrades",
+      types: ["vainger", "medium"],
+    },
+    { name: "COMBATANTS: Beat “The Push”", types: ["combatants", "medium"] },
   ],
   [
-	{"name": "Collect 5 gold disks from games on this card", "types": ["general", "general"]},
-	{"name": "Collect 6 gold disks from games on this card", "types": ["general", "general"]},
-	{"name": "Collect 3 gold disks from games in bingo lines with this goal", "types": ["general", "general"]},
-	{"name": "Collect 2 cherry disks from games in bingo lines with this goal", "types": ["general", "general"]},
-	{"name": "Collect 4 cherry disks from games on this card", "types": ["general", "general"]},
-	{"name": "Collect 5 cherry disks from games on this card", "types": ["general", "general"]},
-	{"name": "Satisfy the Dark Cherry condition for 2 games on this card", "types": ["general", "general"]},
-{"name": "Satisfy the Dark Cherry condition for 3 games on this card", "types": ["general", "general"]}
+    {
+      name: "BUG HUNTER: Use ACES-SHOP; complete Jobs 1 & 2 in a row",
+      types: ["bughunter", "medium"],
+    },
+    {
+      name: "BUG HUNTER: Use GOOD-JOBS; Enter your Bingosync seed and win with your energy maxed out",
+      types: ["bughunter", "medium"],
+    },
+    {
+      name: "BUG HUNTER: Complete a job with at least 13 holes on the board",
+      types: ["bughunter", "medium"],
+    },
+    {
+      name: "CAMPANELLA 2: Purchase something from five unique green door shops",
+      types: ["campanella2", "medium"],
+    },
+    {
+      name: "CAMPANELLA 2: Turn off the magnets in Crepelia",
+      types: ["campanella2", "medium"],
+    },
+    {
+      name: "CAMPANELLA 2: Collect at least 5 purple coins in five different levels (I & II are separate levels)",
+      types: ["campanella2", "medium"],
+    },
+    {
+      name: "CARAMEL CARAMEL: Defeat Bella (cookie miniboss) and Toadead (toad miniboss) in one run",
+      types: ["caramelcaramel", "medium"],
+    },
+    {
+      name: "CARAMEL CARAMEL: Score 75,000+ points",
+      types: ["caramelcaramel", "medium"],
+    },
+    {
+      name: "MORTOL II: Press all three switches using ONLY the scout",
+      types: ["mortolii", "medium"],
+    },
+    {
+      name: "MORTOL II: Cherry disk with all 3 switches pressed",
+      types: ["mortolii", "medium"],
+    },
+    {
+      name: "MORTOL: OPEN-TOMB Allowed: Beat 2 levels without killing any enemies (1-A & 1-B excluded)",
+      types: ["mortol", "hard"],
+    },
+    {
+      name: "MORTOL: Beat 3 story levels; your rituals must always cycle between Arrow, Bomb, Stone in that order (chaining allowed)",
+      types: ["mortol", "hard"],
+    },
+    {
+      name: "BARBUTA: Gold disk with only two total items (including starting sword)",
+      types: ["barbuta", "medium"],
+    },
+    {
+      name: "BARBUTA: Cherry disk while holding the Rod",
+      types: ["barbuta", "medium"],
+    },
+    {
+      name: "OVERBOLD: Complete a wave with maximum stakes without using bombs",
+      types: ["overbold", "medium"],
+    },
+    { name: "OVERBOLD: Max out 11 upgrades", types: ["overbold", "medium"] },
+    {
+      name: "GOLFARIA: Rescue 3 NPCs and hit 3 Parbots",
+      types: ["golfaria", "medium"],
+    },
+    {
+      name: "GOLFARIA: Obtain the Block Buster, Brakes, and 5 clubs",
+      types: ["golfaria", "medium"],
+    },
   ],
   [
-	{"name": "TRIATHLON II: Cherry Disk any 3 of the 5 “SPORT” games", "types": ["general", "general"]},
-	{"name": "EPIC GAMER: Gold disk 3 different “Epic Play” games", "types": ["general", "general"]},
-{"name": "PUZZLER II: Gold disk 3 different ‘PUZZLE’ games", "types": ["general", "general"]},
-{"name": "CAMPANELLA TRILOGY II: Cherry disk 2 of the 3 Campanella Trilogy games & collect the gift in the other", "types": ["general", "general"]},
-	{"name": "ALPHA TRILOGY II: Cherry Disk Velgress, Overbold, and Quibble Race", "types": ["general", "general"]},
-{"name": "ARCADE ACE II: Cherry Disk any 4 of the 16 “ARCADE” games", "types": ["general", "general"]},
-{"name": "RACER II: Cherry Disk Paint Chase, The Big Bell Race, and Quibble Race", "types": ["general", "general"]},
-{"name": "DAY JOB II: Earn the gift in any 2 and gold disk in the third: Rail Heist, Bug Hunter, Onion Delivery", "types": ["general", "general"]},
-{"name": "EXPLORER: Visit 30 rooms in Barbuta, 20 in Mooncat, and reach 40% exploration in Vainger", "types": ["general", "general"]},
-	{"name": "AMY II: Gold disk 2 of 3 games playing as Amy: Fist Hell, Party House, Hot Foot", "types": ["general", "general"]},
-{"name": "PILOT PARTY II: Collect the Gift in ALL 6 games: Campanella 1/2/3, Planet Zoldath, Pilot Quest, The Big Bell Race", "types": ["general", "general"]},
-{"name": "WAR IS GOOD: Beat story missions: 2 in Avianos, 5 in Combatants, 12 in Attactics", "types": ["general", "general"]},
-{"name": "SHOOTER: Gold disk any 3 of the 8 “SHOOTER” games", "types": ["general", "general"]},
-{"name": "ADVENTUREVANIA: Defeat 8 total bosses across Vainger, Porgy, Mini & Max, and Warptank, with at least one in three of the games", "types": ["general", "general"]}
-  ]
+    {
+      name: "PINGOLF: Cherry disk with a score of -12 or better",
+      types: ["pingolf", "hard"],
+    },
+    {
+      name: "PINGOLF: Cherry disk with 3+ holes-in-one in the run",
+      types: ["pingolf", "hard"],
+    },
+    {
+      name: "KICK CLUB: Have 7 extra lives at once",
+      types: ["kickclub", "hard"],
+    },
+    {
+      name: "KICK CLUB: Beat Track World; Must finish each level in the run (except bosses) with 13+ seconds left on the timer",
+      types: ["kickclub", "hard"],
+    },
+    {
+      name: "FIST HELL: Survive 9 waves in the gym without hitting any civilians",
+      types: ["fisthell", "hard"],
+    },
+    {
+      name: "FIST HELL: Beat the 3rd scare without dying in the run",
+      types: ["fisthell", "hard"],
+    },
+    {
+      name: "HOT FOOT: Get 4 blowouts in one tournament using only girl characters",
+      types: ["hotfoot", "hard"],
+    },
+    {
+      name: "HOT FOOT: Get 4 blowouts in one tournament using only boy characters (Mascot allowed)",
+      types: ["hotfoot", "hard"],
+    },
+    { name: "NIGHT MANOR: Cherry disk", types: ["nightmanor", "hard"] },
+    {
+      name: "NIGHT MANOR: Successfully complete the hiding minigame in five different rooms in a row without failing",
+      types: ["nightmanor", "hard"],
+    },
+    {
+      name: "ROCK ON! ISLAND: CLUB-PASS allowed; beat Maze of Death with max of 2 cave upgrade purchases and without using any chickens",
+      types: ["rockonisland", "hard"],
+    },
+    {
+      name: "ROCK ON! ISLAND: CLUB-PASS allowed; beat Terror Overhead without using any Fire cavemen or chickens",
+      types: ["rockonisland", "hard"],
+    },
+    {
+      name: "ROCK ON! ISLAND: CLUB-PASS allowed; beat Jungle Rush; The only purple cavemen allowed are Rock 2 and Tar",
+      types: ["rockonisland", "hard"],
+    },
+    {
+      name: "RAIL HEIST: Beat the first 5 levels & have at least three lawmen get shot each level",
+      types: ["railheist", "hard"],
+    },
+    {
+      name: "RAIL HEIST: LAZY-COPS allowed; Beat any 7 levels (1, 2, 3 & 18 excluded) without allowing the lawmen to have more than two turns",
+      types: ["railheist", "hard"],
+    },
+    {
+      name: "RAIL HEIST: LAZY-COPS allowed; Beat levels 12-16 and have at least three lawmen get shot each level",
+      types: ["railheist", "hard"],
+    },
+    {
+      name: "GRIMSTONE: Reach Level 6 with any character with a party of at least 3",
+      types: ["grimstone", "hard"],
+    },
+    {
+      name: "GRIMSTONE: Get Rufus to level 4 in a party of four",
+      types: ["grimstone", "hard"],
+    },
+  ],
+  [
+    {
+      name: "PAINT CHASE: EVEN-COAT allowed; Beat stages 14 through 26",
+      types: ["paintchase", "hard"],
+    },
+    {
+      name: "PAINT CHASE: Have 6 extra lives at once",
+      types: ["paintchase", "hard"],
+    },
+    {
+      name: "ELFAZAR’S HAT: Clear Stage 3 (Frostin Town) with 6+ extra lives remaining",
+      types: ["elfazarshat", "hard"],
+    },
+    {
+      name: "ELFAZAR’S HAT: Max out the bonus game meter twice in one run",
+      types: ["elfazarshat", "hard"],
+    },
+    {
+      name: "CAMPANELLA 3: GOLD disk ONLY (Cherry does not complete this goal)",
+      types: ["campanella3", "hard"],
+    },
+    {
+      name: "CAMPANELLA 3: Beat Stages A, B, and C shooting only during boss fights",
+      types: ["campanella3", "hard"],
+    },
+    { name: "MOONCAT: Visit 25 different rooms", types: ["mooncat", "hard"] },
+    {
+      name: "MOONCAT: Obtain the Yellow and Green eggs",
+      types: ["mooncat", "hard"],
+    },
+    {
+      name: "WARPTANK: Change your tank to each available color in the hub world (there are 4 new color platforms)",
+      types: ["warptank", "hard"],
+    },
+    { name: "WARPTANK: Obtain 17 coffees", types: ["warptank", "hard"] },
+    {
+      name: "BUG HUNTER: Complete a job; Killing bugs is only permitted when you hold 2+ S (blue) modules",
+      types: ["bughunter", "hard"],
+    },
+    {
+      name: "BUG HUNTER: Use WORK-HARD; Beat two jobs in a row",
+      types: ["bughunter", "hard"],
+    },
+    {
+      name: "BUG HUNTER: WORK-LESS allowed; Beat Job 10",
+      types: ["bughunter", "hard"],
+    },
+    {
+      name: "BUG HUNTER: WORK-LESS allowed; Beat Job 11 without pushing any bugs into pits",
+      types: ["bughunter", "hard"],
+    },
+    {
+      name: "SEASIDE DRIVE: Reach 200,000+ points and have 7 lives at once",
+      types: ["seasidedrive", "hard"],
+    },
+    {
+      name: "SEASIDE DRIVE: Win all 3 bonus games in one run without shooting any blocks",
+      types: ["seasidedrive", "hard"],
+    },
+    {
+      name: "DEVILITION: Use FULL-RAND; Beat 8 levels",
+      types: ["devilition", "hard"],
+    },
+    {
+      name: "DEVILITION: Beat 5 levels fully clearing the board of all villagers, demons, and pieces each round",
+      types: ["devilition", "hard"],
+    },
+  ],
+  [
+    {
+      name: "HYPER CONTENDER: Gold disk on Hard Difficulty",
+      types: ["hypercontender", "hard"],
+    },
+    {
+      name: "HYPER CONTENDER: Beat Draft Mode on Hard Difficulty using at least 4 different characters total",
+      types: ["hypercontender", "hard"],
+    },
+    {
+      name: "VAINGER: Equip all 4 modules,, then defeat Y-Vainger (exploit not allowed)",
+      types: ["vainger", "hard"],
+    },
+    {
+      name: "VAINGER: Equip 3+ modules, then defeat the keycode boss in Theta Sector",
+      types: ["vainger", "hard"],
+    },
+    { name: "CAMPANELLA: Have 35 lives", types: ["campanella", "hard"] },
+    {
+      name: "CAMPANELLA: Gold disk without dying to any bosses",
+      types: ["campanella", "hard"],
+    },
+    {
+      name: "WALDORF’S JOURNEY: Reach the palace without collecting any shells, and holding both non-squid keys",
+      types: ["waldorfsjourney", "hard"],
+    },
+    {
+      name: "WALDORF’S JOURNEY: Gold disk using only maximum strength jumps (flying & items allowed)",
+      types: ["waldorfsjourney", "hard"],
+    },
+    {
+      name: "AVIANOS: BLUE-BEAK allowed; Beat Trial 1 without using any Miracles",
+      types: ["avianos", "hard"],
+    },
+    {
+      name: "AVIANOS: BLUE-BEAK allowed; Beat Trial 4",
+      types: ["avianos", "hard"],
+    },
+    {
+      name: "CAMPANELLA 2: Turn on the lights in Temple Grounds; picking up the free fuel at the end of caves is banned",
+      types: ["campanella2", "hard"],
+    },
+    {
+      name: "CAMPANELLA 2: Gold disk with the legendary armor obtained AND no other upgrades",
+      types: ["campanella2", "hard"],
+    },
+    {
+      name: "VELGRESS: Gold disk without being stunned by any enemies or traps",
+      types: ["velgress", "hard"],
+    },
+    {
+      name: "VELGRESS: Cherry Disk; must make at least 7 purchases",
+      types: ["velgress", "hard"],
+    },
+  ],
+  [
+    {
+      name: "PLANET ZOLDATH: Collect 2 map pieces; You must kill all enemies/NPCs (except Snails) whenever possible before changing screens",
+      types: ["planetzoldath", "hard"],
+    },
+    {
+      name: "PLANET ZOLDATH: Collect the dungeon Map Piece or trade Map Piece without picking up any energy cubes",
+      types: ["planetzoldath", "hard"],
+    },
+    {
+      name: "PORGY: Recover 6 different items hidden behind scenery (walls, ceiling, floor, coral, etc.)",
+      types: ["porgy", "hard"],
+    },
+    {
+      name: "PORGY: Defeat a boss in the second depth level (Bakunawa or Neptune) without using Depth Charges",
+      types: ["porgy", "hard"],
+    },
+    {
+      name: "PILOT QUEST: Activate three teleporters",
+      types: ["pilotquest", "hard"],
+    },
+    {
+      name: "PILOT QUEST: Craft 10 ingots at the table",
+      types: ["pilotquest", "hard"],
+    },
+    { name: "BARBUTA: Have 500 cash", types: ["barbuta", "hard"] },
+    { name: "BARBUTA: Explore 50 different rooms", types: ["barbuta", "hard"] },
+    {
+      name: "STAR WASPIR: Using the gray ship, beat waves 1, 2, and 3 without ever summoning an option (GGG)",
+      types: ["starwaspir", "medium"],
+    },
+    {
+      name: "STAR WASPIR: Using the red ship, beat waves 1, 2, and 3 without making any valid letter sequences (EGG, etc.)",
+      types: ["starwaspir", "medium"],
+    },
+    {
+      name: "BARBUTA: Enter six unique doors in one run without losing any lives (exits do not count as new doors)",
+      types: ["barbuta", "hard"],
+    },
+    {
+      name: "BARBUTA: In one run, collect the reward from both green skulls and defeat each of the 4 green shielded enemies at least once",
+      types: ["barbuta", "hard"],
+    },
+    {
+      name: "RAKSHASA: Defeat three lightning cloud enemies that spawn from coins in one run",
+      types: ["rakshasa", "hard"],
+    },
+    {
+      name: "RAKSHASA: Reach the summit of the waterfall using only the default weapon during the run",
+      types: ["rakshasa", "hard"],
+    },
+    {
+      name: "MAGIC GARDEN: Gold Disk with 6,400 points or less",
+      types: ["magicgarden", "hard"],
+    },
+    {
+      name: "MAGIC GARDEN: Gold disk without collecting any gold potions",
+      types: ["magicgarden", "hard"],
+    },
+    {
+      name: "MAGIC GARDEN: Have 12 gold potions on screen at once",
+      types: ["magicgarden", "hard"],
+    },
+    {
+      name: "MAGIC GARDEN: Beat the game ending with 10+ gold potions on screen at once",
+      types: ["magicgarden", "hard"],
+    },
+    {
+      name: "ATTACTICS: Increment the counter to at least +55 in Survival mode",
+      types: ["attactics", "hard"],
+    },
+    { name: "ATTACTICS: Gold disk", types: ["attactics", "hard"] },
+    {
+      name: "DIVERS: Reach level 5 and collect an emblem",
+      types: ["divers", "hard"],
+    },
+    { name: "DIVERS: Open 5 chests", types: ["divers", "hard"] },
+    {
+      name: "CARAMEL CARAMEL: Score 100,000+ points",
+      types: ["caramelcaramel", "hard"],
+    },
+    {
+      name: "BUSHIDO BALL: Cherry Disk twice, with one male and one female character",
+      types: ["bushidoball", "hard"],
+    },
+    {
+      name: "ONION DELIVERY: Gold Disk without landing in any slime pits",
+      types: ["oniondelivery", "hard"],
+    },
+    {
+      name: "ONION DELIVERY: Deliver 10 onions and complete the day on 4 separate days in a run",
+      types: ["oniondelivery", "hard"],
+    },
+  ],
+  [
+    {
+      name: "VALBRACE: Use BUGG-BODY; Defeat the Phantom Knight without dying; Thrones and spells not allowed during the run",
+      types: ["valbrace", "hard"],
+    },
+    {
+      name: "VALBRACE: Use BUGG-BODY; Defeat the Phantom Knight on floor 2 and the Hive Queen on floor 4",
+      types: ["valbrace", "hard"],
+    },
+    {
+      name: "VALBRACE: Obtain the Zweihander without using any items (except Keys), spells, thrones, or equipping any new weapons or armor",
+      types: ["valbrace", "hard"],
+    },
+    {
+      name: "CYBER OWLS: HAWK-BASE allowed; Beat Antarctica with no deaths",
+      types: ["cyberowls", "hard"],
+    },
+    {
+      name: "CYBER OWLS: Gold Disk with 3 or fewer deaths",
+      types: ["cyberowls", "hard"],
+    },
+    {
+      name: "CAMOUFLAGE: Escape with 3/3 collectibles on 8 levels",
+      types: ["camouflage", "hard"],
+    },
+    {
+      name: "CAMOUFLAGE: Beat 10 levels with at least one collectible on each without using UNDO",
+      types: ["camouflage", "hard"],
+    },
+    {
+      name: "OVERBOLD: Use CASH-BUMP; Purchases only allowed before Round 2; Clear rounds 2, 3, and 4 with at least $900 stakes on each",
+      types: ["overbold", "hard"],
+    },
+    {
+      name: "OVERBOLD: Gold disk; You may only purchase upgrades in one specific row",
+      types: ["overbold", "hard"],
+    },
+    {
+      name: "OVERBOLD: Gold Disk with all upgrades maxed out except Dash Attack",
+      types: ["overbold", "hard"],
+    },
+    {
+      name: "OVERBOLD: Gold disk; you may ONLY purchase SALE or HIKE items",
+      types: ["overbold", "hard"],
+    },
+    {
+      name: "MINI & MAX: Collect a shiny quest reward from 5 different NPCs",
+      types: ["miniandmax", "hard"],
+    },
+    {
+      name: "MINI & MAX: Have 350 shinies at once without collecting any Big Shinies",
+      types: ["miniandmax", "hard"],
+    },
+    {
+      name: "PARTY HOUSE: Win with 6 star guests on screen at once in a random scenario (fetch and Magician ability not allowed)",
+      types: ["partyhouse", "hard"],
+    },
+    {
+      name: "PARTY HOUSE: Beat any two story scenarios without purchasing any guests that provide cash except Rich Pals",
+      types: ["partyhouse", "hard"],
+    },
+    {
+      name: "MORTOL II: Gold disk; Each of the 5 player classes must defeat either a miniboss or Blobus (pellet-spewing wall enemy) on its own",
+      types: ["mortolii", "hard"],
+    },
+    {
+      name: "MORTOL II: Gold disk with a maximum of one key collected",
+      types: ["mortolii", "hard"],
+    },
+    {
+      name: "COMBATANTS: Slay a spider on three different levels",
+      types: ["combatants", "hard"],
+    },
+    {
+      name: "COMBATANTS: Beat 5 levels without making any Soldier ants",
+      types: ["combatants", "hard"],
+    },
+    {
+      name: "GOLFARIA: Show 25% completion in the library without obtaining the Brakes",
+      types: ["golfaria", "hard"],
+    },
+    { name: "GOLFARIA: Rescue 7 green ball NPCs", types: ["golfaria", "hard"] },
+    {
+      name: "MORTOL: OPEN-TOMB Allowed: Clear any 4 levels in worlds 2, 3, or 4 ending with +12 lives or more in each",
+      types: ["mortol", "hard"],
+    },
+    {
+      name: "MORTOL: OPEN-TOMB Allowed: Clear any 3 levels ending with +18 lives or more in each",
+      types: ["mortol", "hard"],
+    },
+  ],
+  [
+    {
+      name: "BARBUTA: Fill all 8 item slots & defeat the final boss with at least 4 eggs remaining",
+      types: ["barbuta", "veryhard"],
+    },
+    {
+      name: "BARBUTA: Pay the hammer man to enter the castle, then defeat the boss",
+      types: ["barbuta", "veryhard"],
+    },
+    { name: "BUG HUNTER: Cherry Disk", types: ["bughunter", "veryhard"] },
+    {
+      name: "BUG HUNTER: WORK-LESS allowed; beat jobs 7, 8, and 9 in a row (counts as GOLD DISK)",
+      types: ["bughunter", "veryhard"],
+    },
+    {
+      name: "BUG HUNTER: Gold Disk; Only 2-cost modules may be purchased from the shop",
+      types: ["bughunter", "veryhard"],
+    },
+    {
+      name: "MAGIC GARDEN: Win with a score of 100,000+; only gold potions may be used",
+      types: ["magicgarden", "veryhard"],
+    },
+    {
+      name: "MAGIC GARDEN: Cherry disk with a MAXIMUM SCORE of 21,000 points",
+      types: ["magicgarden", "veryhard"],
+    },
+    {
+      name: "VELGRESS: Cherry disk without Upgrades or Star Blocks & finish with at least 75 coins held",
+      types: ["velgress", "veryhard"],
+    },
+    {
+      name: "VELGRESS: Gold disk 3 runs in a row",
+      types: ["velgress", "veryhard"],
+    },
+    {
+      name: "THE BIG BELL RACE: Cherry disk with no deaths",
+      types: ["thebigbellrace", "veryhard"],
+    },
+    {
+      name: "KICK CLUB: Cherry disk with at least 175,000 points",
+      types: ["kickclub", "veryhard"],
+    },
+    {
+      name: "KICK CLUB: Gold disk with at least 3 extra lives remaining",
+      types: ["kickclub", "veryhard"],
+    },
+    {
+      name: "BLOCK KOALA: WORM-1234 allowed; clear any 12 odd-numbered story levels (levels 1-10 excluded)",
+      types: ["blockkoala", "veryhard"],
+    },
+    {
+      name: "BLOCK KOALA: WORM-1234 allowed; clear any 12 story levels ending with digits present in your Bingosync seed",
+      types: ["blockkoala", "veryhard"],
+    },
+    { name: "CAMOUFLAGE: Cherry disk", types: ["camouflage", "veryhard"] },
+    {
+      name: "CAMOUFLAGE: Gold disk without ever being caught (New Game required if caught)",
+      types: ["camouflage", "veryhard"],
+    },
+    {
+      name: "PINGOLF: Complete any 6 holes w/ every shot aimed in the opposite direction of the hole relative to you",
+      types: ["pingolf", "veryhard"],
+    },
+    {
+      name: "PINGOLF: Win two consecutive runs with a TOTAL RESULT of -18 or better across both runs",
+      types: ["pingolf", "veryhard"],
+    },
+    {
+      name: "SEASIDE DRIVE: Cherry disk with 333,333 points or more",
+      types: ["seasidedrive", "veryhard"],
+    },
+    {
+      name: "SEASIDE DRIVE: Cherry disk without collecting any coins",
+      types: ["seasidedrive", "veryhard"],
+    },
+  ],
+  [
+    {
+      name: "RAIL HEIST: LAZY-COPS allowed; Collect all Devil Stars on levels 11 through 20",
+      types: ["railheist", "veryhard"],
+    },
+    {
+      name: "RAIL HEIST: Collect 30 total stars",
+      types: ["railheist", "veryhard"],
+    },
+    { name: "DEVILITION: Cherry Disk", types: ["devilition", "veryhard"] },
+    {
+      name: "DEVILITION: Use WEAK-TOWN; Beat the game (counts as GOLD or CHERRY disk)",
+      types: ["devilition", "veryhard"],
+    },
+    { name: "CAMPANELLA: Cherry disk", types: ["campanella", "veryhard"] },
+    {
+      name: "CAMPANELLA: Gold disk with no warps; must kill every enemy on every screen",
+      types: ["campanella", "hard"],
+    },
+    {
+      name: "CAMPANELLA: Gold disk with max of 3 deaths",
+      types: ["campanella", "veryhard"],
+    },
+    {
+      name: "WARPTANK: Enter the cafe with at least 11 coffees",
+      types: ["warptank", "veryhard"],
+    },
+    { name: "WARPTANK: Defeat Renegade", types: ["warptank", "veryhard"] },
+    {
+      name: "CARAMEL CARAMEL: Gold disk; Camera is only allowed during boss fights at the end of each planet",
+      types: ["caramelcaramel", "veryhard"],
+    },
+    {
+      name: "CARAMEL CARAMEL: Cherry disk with max of 1 death",
+      types: ["caramelcaramel", "veryhard"],
+    },
+    {
+      name: "VAINGER: Obtain both stabilizers and any two keycodes",
+      types: ["vainger", "veryhard"],
+    },
+    {
+      name: "VAINGER: Obtain and equip all four modules, and collect two keycodes",
+      types: ["vainger", "veryhard"],
+    },
+    {
+      name: "PARTY HOUSE: Beat 3 random scenarios in a row; Only 1 type of star guest allowed in each scenario",
+      types: ["partyhouse", "veryhard"],
+    },
+    {
+      name: "PARTY HOUSE: Gold disk without purchasing Bartenders or Auctioneers",
+      types: ["partyhouse", "veryhard"],
+    },
+    {
+      name: "PLANET ZOLDATH: Use TROT-TERS; Escape Zoldath with your Bingosync seed (counts as GOLD or CHERRY disk)",
+      types: ["planetzoldath", "veryhard"],
+    },
+    {
+      name: "PLANET ZOLDATH: Gold Disk with at least 6 different items dropped off at your ship when you leave",
+      types: ["planetzoldath", "veryhard"],
+    },
+    {
+      name: "STAR WASPIR: Cherry Disk with at least 500,000 points",
+      types: ["starwaspir", "veryhard"],
+    },
+    {
+      name: "STAR WASPIR: Gold Disk with 2 different ships",
+      types: ["starwaspir", "veryhard"],
+    },
+  ],
+  [
+    {
+      name: "NINPEK: Use HARD-LOOP; Defeat the final boss with 5,000 points or less (counts as GOLD DISK)",
+      types: ["ninpek", "veryhard"],
+    },
+    {
+      name: "NINPEK: Use HARD-LOOP; Win with 2 or fewer deaths",
+      types: ["ninpek", "veryhard"],
+    },
+    {
+      name: "MORTOL: Have 100 lives at the end of a level",
+      types: ["mortol", "veryhard"],
+    },
+    { name: "MORTOL: Cherry disk", types: ["mortol", "veryhard"] },
+    {
+      name: "GOLFARIA: Achieve 35% Completion with at least 3 of the 4 power-ups collected",
+      types: ["golfaria", "veryhard"],
+    },
+    {
+      name: "GOLFARIA: Obtain all four major upgrades and at least two tee pieces",
+      types: ["golfaria", "veryhard"],
+    },
+    {
+      name: "PORGY: Achieve 35% Completion with at least two bosses defeated",
+      types: ["porgy", "veryhard"],
+    },
+    { name: "PORGY: Defeat 3 bosses", types: ["porgy", "veryhard"] },
+    {
+      name: "MOONCAT: Collect 2 of 3 eggs with 7 or fewer deaths (sum of best per successful run)",
+      types: ["mooncat", "veryhard"],
+    },
+    { name: "MOONCAT: Cherry disk", types: ["mooncat", "veryhard"] },
+    {
+      name: "MOONCAT: Find 2 of 3 eggs and visit at least 28 different rooms",
+      types: ["mooncat", "veryhard"],
+    },
+    {
+      name: "WALDORF’S JOURNEY: Cherry disk; No puffins collected & at least 4 weather vanes must be activated during the run",
+      types: ["waldorfsjourney", "veryhard"],
+    },
+    {
+      name: "WALDORF’S JOURNEY: Cherry disk with at least 91 shells",
+      types: ["waldorfsjourney", "veryhard"],
+    },
+    {
+      name: "LORDS OF DISKONIA: Win 2 consecutive Full Wars on Commander difficulty",
+      types: ["lordsofdiskonia", "veryhard"],
+    },
+    {
+      name: "LORDS OF DISKONIA: Win a Full War on Commander difficulty; Leadership & Navigation skills are banned",
+      types: ["lordsofdiskonia", "veryhard"],
+    },
+    {
+      name: "LORDS OF DISKONIA: Win a Full War on Commander difficulty; You must buy units at each Tavern until you can no longer do so",
+      types: ["lordsofdiskonia", "veryhard"],
+    },
+    {
+      name: "HOT FOOT: Cherry disk with one boy & one girl character",
+      types: ["hotfoot", "veryhard"],
+    },
+    {
+      name: "HOT FOOT: Gold disk twice with 4 unique characters",
+      types: ["hotfoot", "veryhard"],
+    },
+    {
+      name: "ROCK ON! ISLAND: CLUB-PASS allowed; Beat Crossroads, Wasteland, and The Oasis all perfect with no chickens",
+      types: ["rockonisland", "veryhard"],
+    },
+    {
+      name: "ROCK ON! ISLAND: CLUB-PASS allowed; Beat the Four Emperors with 15 HP or more remaining",
+      types: ["rockonisland", "veryhard"],
+    },
+  ],
+  [
+    {
+      name: "RAKSHASA: Cherry disk with at least 60,000 points",
+      types: ["rakshasa", "veryhard"],
+    },
+    {
+      name: "RAKSHASA: Gold disk without ever having more than 1 skull",
+      types: ["rakshasa", "veryhard"],
+    },
+    {
+      name: "FIST HELL: Gold disk as Cat or Amy; Limit of 2 upgrade purchases",
+      types: ["fisthell", "veryhard"],
+    },
+    {
+      name: "FIST HELL: Cherry disk: Maximum of ANY 2 shop purchases",
+      types: ["fisthell", "medium"],
+    },
+    {
+      name: "PAINT CHASE: Cherry disk with no failed courses",
+      types: ["paintchase", "veryhard"],
+    },
+    {
+      name: "ATTACTICS: Reach Rank 150+ in Ranked mode",
+      types: ["attactics", "veryhard"],
+    },
+    {
+      name: "ATTACTICS: Score 7000+ in Survival mode",
+      types: ["attactics", "veryhard"],
+    },
+    {
+      name: "CAMPANELLA 2: Gold disk with at least 8 upgrades (square icons on left of screen)",
+      types: ["campanella2", "veryhard"],
+    },
+    {
+      name: "CAMPANELLA 2: Cherry disk with at least 6 upgrades (square icons on left of screen)",
+      types: ["campanella2", "veryhard"],
+    },
+    {
+      name: "ONION DELIVERY: Cherry Disk with exactly 5 onions delivered on days 1 & 2",
+      types: ["oniondelivery", "veryhard"],
+    },
+    {
+      name: "ONION DELIVERY: Cherry Disk with at least 7 onions delivered each day",
+      types: ["oniondelivery", "veryhard"],
+    },
+    {
+      name: "ONION DELIVERY: Gold Disk with no failed days",
+      types: ["oniondelivery", "veryhard"],
+    },
+    {
+      name: "ONION DELIVERY: Gold Disk without hitting any time boxes in the run",
+      types: ["oniondelivery", "veryhard"],
+    },
+    {
+      name: "AVIANOS: BLUE-BEAK allowed; Beat Trials 4 & 5",
+      types: ["avianos", "veryhard"],
+    },
+    {
+      name: "AVIANOS: BLUE-BEAK allowed; Beat Trials 1, 2, and 3",
+      types: ["avianos", "veryhard"],
+    },
+    {
+      name: "ELFAZAR’S HAT: Cherry Disk with 9 tickets collected",
+      types: ["elfazarshat", "veryhard"],
+    },
+    {
+      name: "ELFAZAR’S HAT: Cherry Disk without any deaths",
+      types: ["elfazarshat", "veryhard"],
+    },
+    { name: "DIVERS: Defeat Guelap", types: ["divers", "veryhard"] },
+    {
+      name: "DIVERS: Show 5000+ gold in the bank",
+      types: ["divers", "veryhard"],
+    },
+    {
+      name: "OVERBOLD: Cherry disk with 4 or fewer upgrades invested in",
+      types: ["overbold", "veryhard"],
+    },
+    {
+      name: "OVERBOLD: Cherry disk; Gun and bomb upgrades are only allowed in the final shop",
+      types: ["overbold", "veryhard"],
+    },
+    {
+      name: "OVERBOLD: Cherry disk with final total of $6500+",
+      types: ["overbold", "veryhard"],
+    },
+    { name: "VALBRACE: Gold Disk", types: ["valbrace", "veryhard"] },
+    {
+      name: "VALBRACE: Level up at four thrones in one run",
+      types: ["valbrace", "veryhard"],
+    },
+    {
+      name: "MORTOL II: Gold disk w/ all 3 switches pressed and all 3 minibosses defeated. Engineer pipes not allowed during the run",
+      types: ["mortolii", "veryhard"],
+    },
+    {
+      name: "PILOT QUEST: Return all 3 ship parts to the crash site",
+      types: ["pilotquest", "veryhard"],
+    },
+    {
+      name: "PILOT QUEST: Win one fight against Nozzlo and cause him to flee",
+      types: ["pilotquest", "veryhard"],
+    },
+  ],
+  [
+    {
+      name: "Cherry Disk any 3 games in a single column of the library (ALPHABETICAL)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Cherry Disk any 4 games from 4 different columns of the library (ALPHABETICAL)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Cherry Disk any 4 games from 4 different columns of the library (Chronology)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Cherry Disk any 5 games from 5 different rows of the library (Chronology)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Cherry Disk any 5 games from 5 different rows of the library (ALPHABETICAL)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Gold Disk any 4 games in one row of the library (ALPHABETICAL)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Gold Disk any 4 games in a single genre (platform, arcade, puzzle, etc.)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Collect 7 gold disks, with at least one from each row of the library (chronology)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Gold disk 6 consecutive games under THINKY PLAY library sort",
+      types: ["general", "general"],
+    },
+    {
+      name: "Gold disk 6 consecutive games under QUICK PLAY library sort",
+      types: ["general", "general"],
+    },
+    {
+      name: "Gold Disk any 2x2 square of games in the library (THINKY PLAY sort)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Collect 8 gold disks from 8 different columns of the library (chronology)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Gold Disk any 2x2 square of games in the library (chronology)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Gold Disk any 2x2 square of games in the library (ALPHABETICAL)",
+      types: ["general", "general"],
+    },
+  ],
+  [
+    {
+      name: "Collect 10 gifts for the garden (2 from each row of the library, ALPHABETICAL)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Collect 10 gifts for the garden (2 from each row of the library, Chronology)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Collect 10 gifts for the garden (1 from each column of the library - ALPHABETICAL)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Collect 10 gifts for the garden (1 from each column of the library - Chronology)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Collect 12 gifts for the garden (6 from the first 25, 6 from the second 25 in ALPHABETICAL)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Collect 12 gifts for the garden (6 from the first 25, 6 from the second 25 in Chronology)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Collect 9 gifts from games on this card",
+      types: ["general", "general"],
+    },
+    {
+      name: "Beat a number 1 top score on 2 arcade leaderboards; must gold disk the games to count",
+      types: ["general", "general"],
+    },
+    { name: "Defeat 3 final bosses", types: ["general", "general"] },
+    {
+      name: "Defeat a boss in 8 different games",
+      types: ["general", "general"],
+    },
+    { name: "Defeat 15 bosses", types: ["general", "general"] },
+    {
+      name: "Defeat 2 bosses in 5 different games",
+      types: ["general", "general"],
+    },
+    {
+      name: "Beat a top 2 score on 3 arcade leaderboards",
+      types: ["general", "general"],
+    },
+  ],
+  [
+    {
+      name: "Beat 3 levels in 5 games from 5 different library rows (chronology)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Beat 5 levels in 5 Epic Play games",
+      types: ["general", "general"],
+    },
+    {
+      name: "Beat 4 levels in 6 different Thinky Play games",
+      types: ["general", "general"],
+    },
+    { name: "Gold Disk Mortol or Waprtank", types: ["general", "general"] },
+    {
+      name: "Gold Disk Combatants or Cyber Owls",
+      types: ["general", "general"],
+    },
+    {
+      name: "Cherry Disk Cyber Owls or Fist Hell",
+      types: ["general", "general"],
+    },
+    { name: "Gold Disk Vainger or Golfaria", types: ["general", "general"] },
+    { name: "Gold Disk Valbrace or Porgy", types: ["general", "general"] },
+    {
+      name: "Gold Disk four games in row one (Chronology)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Gold Disk four games in row two (Chronology)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Gold Disk four games in row three (Chronology)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Gold Disk five games in row four (Chronology)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Gold Disk four games in row five (Chronology)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Gold Disk four games in row one (ALPHABETICAL)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Gold Disk four games in row two (ALPHABETICAL)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Gold Disk four games in row three (ALPHABETICAL)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Gold Disk five games in row four (ALPHABETICAL)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Gold Disk four games in row five (ALPHABETICAL)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Beat 6 story scenarios in Avianos or Cherry Disk Hyper Contender",
+      types: ["general", "general"],
+    },
+    {
+      name: "Cherry Disk Rail Heist or Party House",
+      types: ["general", "general"],
+    },
+    {
+      name: "Cherry Disk Campanella 2 or Planet Zoldath",
+      types: ["general", "general"],
+    },
+    {
+      name: "Cherry Disk Paint Chase (w/ 555+ points) or Campanella 3 (w/ 2200+ points)",
+      types: ["general", "general"],
+    },
+    {
+      name: "Beat 4 story missions in Lords of Diskonia or beat 25 levels in Block Koala",
+      types: ["general", "general"],
+    },
+  ],
+  [
+    {
+      name: "Collect 5 gold disks from games on this card",
+      types: ["general", "general"],
+    },
+    {
+      name: "Collect 6 gold disks from games on this card",
+      types: ["general", "general"],
+    },
+    {
+      name: "Collect 3 gold disks from games in bingo lines with this goal",
+      types: ["general", "general"],
+    },
+    {
+      name: "Collect 2 cherry disks from games in bingo lines with this goal",
+      types: ["general", "general"],
+    },
+    {
+      name: "Collect 4 cherry disks from games on this card",
+      types: ["general", "general"],
+    },
+    {
+      name: "Collect 5 cherry disks from games on this card",
+      types: ["general", "general"],
+    },
+    {
+      name: "Satisfy the Dark Cherry condition for 2 games on this card",
+      types: ["general", "general"],
+    },
+    {
+      name: "Satisfy the Dark Cherry condition for 3 games on this card",
+      types: ["general", "general"],
+    },
+  ],
+  [
+    {
+      name: "TRIATHLON II: Cherry Disk any 3 of the 5 “SPORT” games",
+      types: ["general", "general"],
+    },
+    {
+      name: "EPIC GAMER: Gold disk 3 different “Epic Play” games",
+      types: ["general", "general"],
+    },
+    {
+      name: "PUZZLER II: Gold disk 3 different ‘PUZZLE’ games",
+      types: ["general", "general"],
+    },
+    {
+      name: "CAMPANELLA TRILOGY II: Cherry disk 2 of the 3 Campanella Trilogy games & collect the gift in the other",
+      types: ["general", "general"],
+    },
+    {
+      name: "ALPHA TRILOGY II: Cherry Disk Velgress, Overbold, and Quibble Race",
+      types: ["general", "general"],
+    },
+    {
+      name: "ARCADE ACE II: Cherry Disk any 4 of the 16 “ARCADE” games",
+      types: ["general", "general"],
+    },
+    {
+      name: "RACER II: Cherry Disk Paint Chase, The Big Bell Race, and Quibble Race",
+      types: ["general", "general"],
+    },
+    {
+      name: "DAY JOB II: Earn the gift in any 2 and gold disk in the third: Rail Heist, Bug Hunter, Onion Delivery",
+      types: ["general", "general"],
+    },
+    {
+      name: "EXPLORER: Visit 30 rooms in Barbuta, 20 in Mooncat, and reach 40% exploration in Vainger",
+      types: ["general", "general"],
+    },
+    {
+      name: "AMY II: Gold disk 2 of 3 games playing as Amy: Fist Hell, Party House, Hot Foot",
+      types: ["general", "general"],
+    },
+    {
+      name: "PILOT PARTY II: Collect the Gift in ALL 6 games: Campanella 1/2/3, Planet Zoldath, Pilot Quest, The Big Bell Race",
+      types: ["general", "general"],
+    },
+    {
+      name: "WAR IS GOOD: Beat story missions: 2 in Avianos, 5 in Combatants, 12 in Attactics",
+      types: ["general", "general"],
+    },
+    {
+      name: "SHOOTER: Gold disk any 3 of the 8 “SHOOTER” games",
+      types: ["general", "general"],
+    },
+    {
+      name: "ADVENTUREVANIA: Defeat 8 total bosses across Vainger, Porgy, Mini & Max, and Warptank, with at least one in three of the games",
+      types: ["general", "general"],
+    },
+  ],
 ] as const;
-

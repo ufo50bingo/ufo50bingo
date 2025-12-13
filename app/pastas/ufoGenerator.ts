@@ -8,7 +8,7 @@ export type UFODifficulties = { [difficulty: string]: UFOGameGoals };
 
 export type Tokens = { [token: string]: ReadonlyArray<string> };
 
-type Counts = { [difficulty: string]: number };
+export type Counts = { [difficulty: string]: number };
 
 export type UFOPasta = {
   goals: UFODifficulties;

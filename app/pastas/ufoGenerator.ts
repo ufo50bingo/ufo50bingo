@@ -1,11 +1,12 @@
 import shuffle from "../createboard/shuffle";
 import getMagicSquare from "./getMagicSquare";
+import replaceTokens from "./replaceTokens";
 
 export type UFOGameGoals = { [game: string]: ReadonlyArray<string> };
 
 export type UFODifficulties = { [difficulty: string]: UFOGameGoals };
 
-type Tokens = { [token: string]: ReadonlyArray<string> };
+export type Tokens = { [token: string]: ReadonlyArray<string> };
 
 type Counts = { [difficulty: string]: number };
 
@@ -64,8 +65,8 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     (index) => orderedDifficulties[index]
   );
 
-  const gameByIndex = [...Array(25)];
-  const finalBoard = [...Array(25)];
+  const gameByIndex: Array<string | null> = Array(25).fill(null);
+  const finalBoard: Array<string | null> = Array(25).fill(null);
   fillOrder.forEach((index) => {
     const difficulty = difficultyByIndex[index];
     const synergyCheckIndices =
@@ -102,6 +103,5 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     gameByIndex[index] = bestGame;
   });
 
-  // TODO: Replace tokens
-  return finalBoard;
+  return finalBoard.map(goal => replaceTokens(goal!, pasta.tokens));
 }

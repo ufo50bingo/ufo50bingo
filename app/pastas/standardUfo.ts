@@ -649,15 +649,11 @@ export const STANDARD_UFO = {
     },
     general: {
       gift: [
-        "Collect 6 gifts from games on this card",
-        "Collect 7 gifts from games on this card",
-        "Collect 8 gifts from games on this card",
+        "Collect {gift_count} gifts from games on this card",
       ],
       goldcherry: [
-        "Collect 2 cherry disks from games on this card",
-        "Collect 3 cherry disks from games on this card",
-        "Collect 3 gold disks from games on this card",
-        "Collect 4 gold disks from games on this card",
+        "Collect {{cherry_count}} cherry disks from games on this card",
+        "Collect {{gold_count}} gold disks from games on this card",
       ],
       collectathon: [
         "Buy an item from a shop in 10 games",
@@ -695,7 +691,11 @@ export const STANDARD_UFO = {
       ],
     },
   },
-  tokens: {},
+  tokens: {
+    gift_count: ["6", "7", "8"],
+    cherry_count: ["2", "3"],
+    gold_count: ["3", "4"],
+  },
   default_counts: {
     easy: 5,
     medium: 7,

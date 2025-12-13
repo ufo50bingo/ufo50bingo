@@ -649,7 +649,7 @@ export const STANDARD_UFO = {
     },
     general: {
       gift: [
-        "Collect {gift_count} gifts from games on this card",
+        "Collect {{gift_count}} gifts from games on this card",
       ],
       goldcherry: [
         "Collect {{cherry_count}} cherry disks from games on this card",

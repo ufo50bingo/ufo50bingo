@@ -10,6 +10,7 @@ import { ReactNode } from "react";
 import { Difficulty, Game } from "../goals";
 import { UFOPasta } from "./ufoGenerator";
 import { STANDARD_UFO } from "./standardUfo";
+import { SPICY_UFO } from "./spicyUfo";
 
 const RAW_METADATA = [
   {
@@ -268,6 +269,19 @@ const RAW_METADATA = [
         <span>
           This variant uses the standard goal list with new card generation
           logic. We are testing the new logic in preparation for Season 3!
+        </span>
+      </Stack>
+    ),
+  },
+  {
+    type: "UFO",
+    name: "Spicy (Beta)",
+    pasta: SPICY_UFO,
+    isMenu: true,
+    hovercard: (
+      <Stack>
+        <span>
+          This variant uses the Spicy goal list with new card generation logic.
         </span>
       </Stack>
     ),

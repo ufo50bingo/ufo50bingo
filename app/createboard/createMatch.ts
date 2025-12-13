@@ -59,7 +59,7 @@ export default async function createMatch({
       variant_type:
         variant === "Game Names"
           ? "172"
-          : variant === "Standard (Beta)"
+          : variant === "Standard (Beta)" || variant === "Spicy (Beta)"
           ? "18"
           : "187",
       custom_json: pasta,

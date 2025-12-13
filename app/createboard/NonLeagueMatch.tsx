@@ -39,7 +39,6 @@ import ufoGenerator, {
   UFODifficulties,
   UFOGameGoals,
 } from "../pastas/ufoGenerator";
-import DifficultySelectors from "./DifficultySelectors";
 import UFODifficultySelectors from "./UFODifficultySelectors";
 
 const options: ReadonlyArray<VariantMetadata> = METADATA.filter(

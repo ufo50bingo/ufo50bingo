@@ -24,6 +24,5 @@ export default function UFODifficultySelectors({ goals, checkState, counts, setC
         });
         return available;
     }, [checkState, goals]);
-    console.log(availableCounts);
     return <DifficultySelectors availableCounts={availableCounts} counts={counts} setCounts={setCounts} />
 }

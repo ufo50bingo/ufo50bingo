@@ -123,6 +123,7 @@ export default function LeagueMatch() {
               password,
               isPublic: true,
               variant: "Standard",
+              bingosyncVariant: "187",
               isCustom: false,
               isLockout: true,
               pasta: JSON.stringify(

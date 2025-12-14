@@ -21,13 +21,13 @@ export interface CommonMatchProps {
   leagueInfo: LeagueInfo | null;
   isPublic: boolean;
   variant: Variant;
-  bingosyncVariant: string;
   isCustom: boolean;
   isLockout: boolean;
 }
 
 interface Props extends CommonMatchProps {
   pasta: string;
+  bingosyncVariant: string;
 }
 
 export default async function createMatch({

@@ -21,6 +21,7 @@ export interface CommonMatchProps {
   leagueInfo: LeagueInfo | null;
   isPublic: boolean;
   variant: Variant;
+  bingosyncVariant: string;
   isCustom: boolean;
   isLockout: boolean;
 }
@@ -34,6 +35,7 @@ export default async function createMatch({
   password,
   isPublic,
   variant,
+  bingosyncVariant,
   isCustom,
   isLockout,
   pasta,
@@ -56,12 +58,7 @@ export default async function createMatch({
       nickname: "ufo50bingobot",
       game_type: "18",
       // TODO: Pass variant_type in from the front end
-      variant_type:
-        variant === "Game Names"
-          ? "172"
-          : variant === "Standard (Beta)" || variant === "Spicy (Beta)"
-          ? "18"
-          : "187",
+      variant_type: bingosyncVariant,
       custom_json: pasta,
       lockout_mode: isLockout ? "2" : "1",
       seed: Math.ceil(999999 * Math.random()).toString(),

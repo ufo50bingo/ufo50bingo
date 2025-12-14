@@ -11,6 +11,7 @@ import {
   JsonInput,
   Menu,
   SegmentedControl,
+  Select,
   Stack,
   Text,
   TextInput,
@@ -48,6 +49,8 @@ const menuOptions: ReadonlyArray<VariantMetadata> = METADATA.filter(
   (d) => d.isMenu
 );
 
+type CustomType = 'srl_v5' | 'ufo' | 'fixed_board' | 'randomized';
+
 export default function NonLeagueMatch() {
   const [variant, setVariant] = useState<Variant>(options[0].name);
   const [custom, setCustom] = useState("");
@@ -72,6 +75,7 @@ export default function NonLeagueMatch() {
   const [url, setUrl] = useState("");
   const [id, setId] = useState<null | string>(null);
   const [error, setError] = useState<Error | null>(null);
+  const [customType, setCustomType] = useState<CustomType>("srl_v5");
 
   const [difficultyCounts, setDifficultyCounts] = useState(() => {
     const counts: { [name: string]: Counts } = {};
@@ -103,26 +107,30 @@ export default function NonLeagueMatch() {
       pretty ? JSON.stringify(structured, null, 4) : JSON.stringify(structured);
     switch (metadata.type) {
       case "Custom":
-        return custom;
+        return customType === "ufo"
+          ? stringify(
+            ufoGenerator(JSON.parse(custom)).map((goal) => ({ name: goal }))
+          )
+          : custom;
       case "GameNames":
         return stringify(
           showFilters
             ? Array.from(
-                checkState
-                  .entries()
-                  .filter(([_gameKey, checkState]) => checkState)
-              ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
+              checkState
+                .entries()
+                .filter(([_gameKey, checkState]) => checkState)
+            ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
             : ORDERED_PROPER_GAMES.map((gameKey) => ({
-                name: GAME_NAMES[gameKey],
-              }))
+              name: GAME_NAMES[gameKey],
+            }))
         );
       case "WithoutDifficulty":
         return stringify(
           showFilters || randomizeGroupings
             ? createPastaWithoutDifficulty(
-                metadata.pasta,
-                showFilters ? checkState : null
-              )
+              metadata.pasta,
+              showFilters ? checkState : null
+            )
             : metadata.pasta
         );
       case "WithDifficulty":
@@ -136,9 +144,9 @@ export default function NonLeagueMatch() {
         return stringify(
           randomizeGroupings
             ? createPasta(
-                metadata.pasta,
-                getDefaultDifficulties(metadata.pasta)
-              )
+              metadata.pasta,
+              getDefaultDifficulties(metadata.pasta)
+            )
             : metadata.pasta
         );
       case "DraftWithDifficulty":
@@ -199,7 +207,7 @@ export default function NonLeagueMatch() {
         />
         <Menu shadow="md" width={200}>
           <Menu.Target>
-            <ActionIcon onClick={() => {}} variant="default">
+            <ActionIcon onClick={() => { }} variant="default">
               <IconDots size={16} />
             </ActionIcon>
           </Menu.Target>
@@ -219,47 +227,47 @@ export default function NonLeagueMatch() {
         metadata.type === "WithoutDifficulty" ||
         metadata.type === "UFO" ||
         variant === "Game Names") && (
-        <Group>
-          {(metadata.type === "WithDifficulty" ||
-            metadata.type === "WithoutDifficulty") && (
-            <Tooltip
-              label={
-                <span>
-                  Games will be divided into groups randomly while still
-                  respecting the
-                  <br />
-                  difficulty distribution, allowing for greater card variety
-                  than using the
-                  <br />
-                  default pasta. This option is always enabled when customizing
-                  games and
-                  <br />
-                  difficulty counts.
-                </span>
-              }
-            >
-              <div>
-                <Checkbox
-                  checked={showFilters || randomizeGroupings}
-                  label="Randomize goal groupings"
-                  onChange={(event) =>
-                    setRandomizeGroupings(event.currentTarget.checked)
+          <Group>
+            {(metadata.type === "WithDifficulty" ||
+              metadata.type === "WithoutDifficulty") && (
+                <Tooltip
+                  label={
+                    <span>
+                      Games will be divided into groups randomly while still
+                      respecting the
+                      <br />
+                      difficulty distribution, allowing for greater card variety
+                      than using the
+                      <br />
+                      default pasta. This option is always enabled when customizing
+                      games and
+                      <br />
+                      difficulty counts.
+                    </span>
                   }
-                />
-              </div>
-            </Tooltip>
-          )}
-          <Checkbox
-            checked={showFilters}
-            label={
-              metadata.type === "WithDifficulty"
-                ? "Customize games and difficulty counts"
-                : "Customize games"
-            }
-            onChange={(event) => setShowFilters(event.currentTarget.checked)}
-          />
-        </Group>
-      )}
+                >
+                  <div>
+                    <Checkbox
+                      checked={showFilters || randomizeGroupings}
+                      label="Randomize goal groupings"
+                      onChange={(event) =>
+                        setRandomizeGroupings(event.currentTarget.checked)
+                      }
+                    />
+                  </div>
+                </Tooltip>
+              )}
+            <Checkbox
+              checked={showFilters}
+              label={
+                metadata.type === "WithDifficulty"
+                  ? "Customize games and difficulty counts"
+                  : "Customize games"
+              }
+              onChange={(event) => setShowFilters(event.currentTarget.checked)}
+            />
+          </Group>
+        )}
       {(metadata.type === "WithoutDifficulty" ||
         variant === "Game Names" ||
         metadata.type === "UFO") &&
@@ -306,16 +314,29 @@ export default function NonLeagueMatch() {
         />
       )}
       {variant === "Custom" && (
-        <JsonInput
-          autosize
-          label="Add your pasta here:"
-          maxRows={12}
-          minRows={2}
-          onChange={setCustom}
-          spellCheck={false}
-          validationError="Invalid JSON"
-          value={custom}
-        />
+        <Stack>
+          <Select
+            data={[
+              { value: "srl_v5", label: 'SRL v5' },
+              { value: "ufo", label: 'UFO' },
+              { value: "fixed_board", label: 'Fixed Board' },
+              { value: "randomized", label: 'Randomized' },
+            ]}
+            label="Custom Type"
+            value={customType}
+            onChange={(newValue) => setCustomType(newValue as CustomType)}
+          />
+          <JsonInput
+            autosize
+            label="Add your pasta here:"
+            maxRows={12}
+            minRows={2}
+            onChange={setCustom}
+            spellCheck={false}
+            validationError="Invalid JSON"
+            value={custom}
+          />
+        </Stack>
       )}
       <Text>
         <strong>Configure Room</strong>
@@ -380,11 +401,14 @@ export default function NonLeagueMatch() {
               password,
               isPublic,
               variant,
+              bingosyncVariant: metadata.type === "UFO" || (metadata.type === "Custom" && (customType === "fixed_board" || customType === "ufo"))
+                ? "18"
+                : metadata.type === "GameNames" || (metadata.type === "Custom" && customType === "randomized")
+                  ? "172"
+                  : "187",
               isCustom:
                 showFilters &&
-                ["Standard", "Spicy", "Nozzlo", "Blitz", "Game Names"].includes(
-                  variant
-                ),
+                metadata.type === "GameNames" || metadata.type === "UFO" || metadata.type === "WithDifficulty" || metadata.type === "WithoutDifficulty",
               isLockout,
               pasta: getSerializedPasta(false),
               leagueInfo: null,

@@ -5,9 +5,9 @@ import { UFOPasta } from "./ufoGenerator";
 
 export default function convertToUfo(pasta: Pasta): UFOPasta {
   const difficulties = getDefaultDifficulties(pasta);
-  const default_counts: { [difficulty: string]: number } = {};
+  const category_counts: { [difficulty: string]: number } = {};
   difficulties.forEach((count, difficulty) => {
-    default_counts[difficulty] = count;
+    category_counts[difficulty] = count;
   });
   // some goals in may be repeated, so we need to filter them out
   const seenGoals: Set<string> = new Set();
@@ -43,7 +43,7 @@ export default function convertToUfo(pasta: Pasta): UFOPasta {
   });
   diffToGameToGoals["general"] = {};
   pasta
-    .slice(pasta.length - default_counts["general"])
+    .slice(pasta.length - category_counts["general"])
     .forEach((group, index) => {
       diffToGameToGoals["general"][`temp-${index}`] = group.map(
         (goal) => goal.name
@@ -52,6 +52,6 @@ export default function convertToUfo(pasta: Pasta): UFOPasta {
   return {
     goals: diffToGameToGoals,
     tokens: {},
-    default_counts,
+    category_counts,
   };
 }

@@ -846,7 +846,7 @@ export const SPICY_UFO = {
 	gen_board: ["a number 1 top score on 2 arcade leaderboards; must gold disk the games to count", "a top 2 score on 3 arcade leaderboards"],
 	chrono_alpha: ["Chronology", "ALPHABETICAL"],
 	gifts_card: ["9", "10"],
-	2x2: ["Chronology", "ALPHABETICAL", "THINKY PLAY sort", "QUICK PLAY sort"],
+	"2x2": ["Chronology", "ALPHABETICAL", "THINKY PLAY sort", "QUICK PLAY sort"],
 	disk_scroll: ["Navigation", "Leadership", "Bargaining", "Ballistics"],
 	waspir_ship: ["Red", "Yellow", "Gray"],
 	roi_vh_level: ["Underbrush", "The Oasis", "The Spiral", "Wasteland", "Crossroads", "Initial Encounter"],
@@ -900,3 +900,4 @@ export const SPICY_UFO = {
     general: 5,
   },
 } as const;
+

@@ -1,37 +1,21 @@
-const REQUIRED_KEYS = ["goals", "tokens", "category_counts"];
-const OPTIONAL_KEYS = [
-  "categories_with_global_group_repeat_prevention",
-  "category_difficulty_tiers",
-];
+import zod from "zod";
+import { UFOPasta } from "./ufoGenerator";
 
-export default function validateUfo(json: string): Array<string> {
-  try {
-    const parsed = JSON.parse(json);
-    if (!isObject(parsed)) {
-      return ["Expected a top-level object"];
-    }
-    const validationErrors: Array<string> = [];
-    const keys = Object.keys(parsed);
-    const missingRequiredKeys = REQUIRED_KEYS.filter(
-      (key) => !keys.includes(key)
-    );
-    if (missingRequiredKeys.length > 0) {
-      validationErrors.push(
-        `Missing required top-level keys: ${missingRequiredKeys}`
-      );
-    }
-    const extraKeys = keys.filter(
-      (key) => !REQUIRED_KEYS.includes(key) && !OPTIONAL_KEYS.includes(key)
-    );
-    if (extraKeys.length > 0) {
-      validationErrors.push(`Unsupported top-level keys found: ${extraKeys}`);
-    }
-    return validationErrors;
-  } catch {
-    return ["Failed to parse JSON"];
-  }
-}
+const UfoPasta = zod.strictObject({
+  goals: zod.record(
+    zod.string(),
+    zod.record(zod.string(), zod.array(zod.string()))
+  ),
+  tokens: zod.record(zod.string(), zod.array(zod.string())),
+  category_counts: zod.record(zod.string(), zod.int()),
+  categories_with_global_group_repeat_prevention: zod
+    .array(zod.string())
+    .optional(),
+  category_difficulty_tiers: zod.array(zod.array(zod.string())).optional(),
+});
 
-function isObject(item: unknown): boolean {
-  return typeof item === "object" && !Array.isArray(item) && item != null;
+export default function validateUfo(json: string): UFOPasta {
+  const parsed = JSON.parse(json);
+  const validated = UfoPasta.parse(parsed);
+  return validated;
 }

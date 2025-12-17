@@ -64,7 +64,7 @@ export const SPICY_UFO = {
         "CAMOUFLAGE: Beat 6 levels with 2/3 collectibles without using UNDO (must start over level if caught)",
       ],
       campanella: [
-		"CAMPANELLA: Use BEAN-DRIP; score 8,800+ points"
+		"CAMPANELLA: Use BEAN-DRIP; score 8,800+ points",
 		"CAMPANELLA: Finish stage A with all 8 coffees and an on-screen clear time of 2:05 or less",
 	  ],
       golfaria: [
@@ -110,10 +110,11 @@ export const SPICY_UFO = {
       ],
       railheist: [
         "RAIL HEIST: Beat levels 1, 2, and 3 while knocking every lawman off the train",
-        "RAIL HEIST: Obtain both the Devil Star & Time Star on 9 levels",
+		"RAIL HEIST: Collect the Angel and Devil stars on {{rh_level}}, {{rh_level}}, and {{rh_level}}",
+        "RAIL HEIST: Obtain both the Devil Star & Time Star on 6 levels (Levels 1-3 excluded)",
       ],
       vainger: [
-        "VAINGER: Defeat {{vainger_boss}} with all obtained modules placed in {{vainger_slot}}",
+        "VAINGER: Defeat {{vainger_boss}} with at least two modules placed in {{vainger_slot}}",
         "VAINGER: Obtain {{vainger_item}} from three different sectors",
       ],
       rockonisland: [
@@ -142,14 +143,17 @@ export const SPICY_UFO = {
         "CAMPANELLA 2: Have 1,000+ coins",
       ],
       hypercontender: [
-        "HYPER CONTENDER: Beat draft mode; only attacks allowed are melee attacks",
-        "HYPER CONTENDER: Win 3 fights in a row in Draft Mode on Hyper difficulty",
+        "HYPER CONTENDER: Beat Draft mode; only attacks allowed are melee attacks",
+        "HYPER CONTENDER: Beat Draft Mode on at least hard difficulty",
       ],
       rakshasa: [
         "RAKSHASA: Clear Stage 2 defeating enemies ONLY with the purple homing or default weapon during the run",
         "RAKSHASA: Clear Stage 2 defeating enemies ONLY with the spread or default weapon during the run",
       ],
-      starwaspir: ["STAR WASPIR: Have a 40x multiplier"],
+      starwaspir: [
+		"STAR WASPIR: Have a 40x multiplier",
+		"STAR WASPIR: Score 25,000 Points before defeating the wave 1 boss"
+		],
       grimstone: [
         "GRIMSTONE: Defeat 15 enemies without healing at a hotel or the entire party dying (must New Game & retry if either occurs)",
         "GRIMSTONE: With a party of 4, level up all members to level 3",
@@ -204,7 +208,7 @@ export const SPICY_UFO = {
       ],
       paintchase: [
         "PAINT CHASE: Beat 10 levels without using any boost pads",
-        "PAINT CHASE: Beat 10 levels without using power ups (boost pads allowed)",
+        "PAINT CHASE: Score 280+ Points without failing any courses",
       ],
       magicgarden: [
         "MAGIC GARDEN: Cherry disk in under 5:00 in-game time",
@@ -220,7 +224,7 @@ export const SPICY_UFO = {
       ],
       attactics: [
         "ATTACTICS: Earn the gift; beat each of those levels at least once without losing any flags",
-        "ATTACTICS: SLOW-DOWN allowed; Win a rank 160+ battle after having at least 2 Heroes spawn",
+		"ATTACTICS: Starting with at least 30 rank points, win 4 ranked battles in a row",
         "ATTACTICS: Win 5 ranked battles in a row; max of 2 consecutive units per row across the center at once",
       ],
       devilition: [
@@ -233,7 +237,8 @@ export const SPICY_UFO = {
         "KICK CLUB: Reach Ice World with 38,000 points or less",
       ],
       avianos: [
-        "AVIANOS: Win an Adult game; You may only obtain units from 2 ancestors",
+        "AVIANOS: Win an Adult game; You may only obtain units from {{ancestor_units}},
+	    "AVIANOS: Win an Adult game; You may never select {{ancestor}} or {{ancestor}},
         "AVIANOS: Win an Adult game; The first ancestor you pray to must be maxed out when the war is over",
         "AVIANOS: Win a Fledgling game; You must have {{avianos_unit}} when the war ends",
       ],
@@ -380,8 +385,8 @@ export const SPICY_UFO = {
         "MINI & MAX: From New Game, obtain the Sacred Wings, Dog Armor, and Whistle",
       ],
       combatants: [
-		"COMBATANTS: Beat “The Push”",
-		"COMBATANTS: Beat 'Commando', 'Commando2', and 'Open Field'",
+		"COMBATANTS: Beat The Push",
+		"COMBATANTS: Beat Commando, Commando2, and Open Field",
 	  ],
       quibblerace: [
         "QUIBBLE RACE: Use TUFF-RACE; win a 4-round game",
@@ -427,7 +432,7 @@ export const SPICY_UFO = {
         "MORTOL: Beat 3 story levels; your rituals must always cycle between Arrow, Bomb, Stone in that order (chaining allowed)",
         "MORTOL: OPEN-TOMB Allowed: Beat 2 levels without killing any enemies (1-A & 1-B excluded)",
         "MORTOL: OPEN-TOMB Allowed: Clear any 3 levels ending with +18 lives or more in each",
-        "MORTOL: OPEN-TOMB Allowed: Clear any 4 levels in worlds 2, 3, or 4 ending with +12 lives or more in each",
+        "MORTOL: OPEN-TOMB Allowed: Clear any 4 levels in worlds 2, 3, or 4 ending with +13 lives or more in each",
       ],
       velgress: [
         "VELGRESS: Cherry Disk; must make at least 7 purchases",
@@ -501,7 +506,7 @@ export const SPICY_UFO = {
 	  ],
       partyhouse: [
         "PARTY HOUSE: Beat {{ph_scen}} & {{ph_scen}} {{ph_rest_hard}}",
-		"PARTY HOUSE: Beat 2 random scenarios {{ph_rest_hard}}"
+		"PARTY HOUSE: Beat 2 random scenarios {{ph_rest_hard}}",
         "PARTY HOUSE: Win with 6 star guests on screen at once in a random scenario (fetch and Magician ability not allowed)",
       ],
       hotfoot: [
@@ -613,7 +618,7 @@ export const SPICY_UFO = {
         "NINPEK: Use HARD-LOOP; Win with 2 or fewer deaths",
       ],
       paintchase: [
-		"PAINT CHASE: Cherry disk with no failed courses"
+		"PAINT CHASE: Cherry disk with no failed courses",
 		"PAINT CHASE: Cherry disk with 600+ Score"
 	  ],
       magicgarden: [
@@ -723,7 +728,7 @@ export const SPICY_UFO = {
       ],
       mortolii: [
         "MORTOL II: Gold disk w/ all 3 switches pressed and all 3 minibosses defeated. Engineer pipes not allowed during the run",
-		"MORTOL II: Cherry disk w/ all 3 switches pressed and all 3 minibosses defeated
+		"MORTOL II: Cherry disk w/ all 3 switches pressed and all 3 minibosses defeated",
       ],
       fisthell: [
         "FIST HELL: Gold disk as {{fh_girl}}; Limit of 1 upgrade purchase",
@@ -842,7 +847,7 @@ export const SPICY_UFO = {
 	chrono_alpha: ["Chronology", "ALPHABETICAL"],
 	gifts_card: ["9", "10"],
 	2x2: ["Chronology", "ALPHABETICAL", "THINKY PLAY sort", "QUICK PLAY sort"],
-	disk_scroll: ["Navigation", "Leadership", "Bargaining", "Ballistics"],
+	disk_scroll: ["Navigation", "Leadership", "Bargaining", "Ballistics"]
 	waspir_ship: ["Red", "Yellow", "Gray"],
 	roi_vh_level: ["Underbrush", "The Oasis", "The Spiral", "Wasteland", "Crossroads", "Initial Encounter"],
 	roi_vh_rest: ["no chickens", "max of 2 cave upgrades per level"],
@@ -853,12 +858,12 @@ export const SPICY_UFO = {
 	bushido_m: ["Kotaro", "Yamada", "Raizo"],
 	bushido_f: ["Ayumi", "Tomoe", "Chiyome"],
 	hc_char: ["Elka", "Sephy", "Yogo", "Voltana", "Gilroy", "Donkus", "Reck", "Brazz"],
-	fh_char: ["Jay", "Victor", "Cat", "Amy"],
+	fh_char: ["Jay", "Victor", "Cat", "Amy"]
 	fh_gym_rest: ["eating any food", "hitting any civilians", "spin attacking"],
 	hf_char: ["Jerry", "Amy", "Chandar", "Benjy", "Rizzik", "Bea", "Yoka", "Suze", "Marc", "Mascot"],
 	ph_scen: ["Alien Invitation", "High or Low", "Best Wishes", "Money Management", "A Magical Night"],
 	ph_rest_hard: ["without purchasing any guests that provide cash except Rich Pals", "with 5+ star guests in the winning party", "without purchasing any Counselors, Cute Dogs, or Hippies", "with $20+ at the end of the winning party", "with your popularity maxed out"],
-	roi_hard_lv: ["Terror Overhead", "The Oasis", "Jungle Rush", "Maze of Death"],
+	roi_hard_lv: ["Terror Overhead", "The Oasis", "Jungle Rush", "Maze of Death"]
 	roi_hard_rest: ["without any Fire cavemen or chickens", "without any Bow cavemen or chickens", "with a max of 2 cave upgrades"]
 	roi_purp: ["Tar", "Fire 2", "Spear 2", "Bow", "Rock 2", "Wheel"],
 	rh_hard_lv: ["6 (Guarded by Gat) to 10 (Daring Duo)", "7 (Shifting Gears) to 11 (Root Around)", "8 (Vault Robbery) to 12 (Cow Poke)", "9 (Winging It) to 13 (Rescue Mission)", "10 (Daring Duo) to 14 (Long Haul)", "11 (Root Around) to 15 (Resupply)", "12 (Cow Poke) to 16 (Armored Up)"],
@@ -880,12 +885,6 @@ export const SPICY_UFO = {
 	bk_koalarana: ["#11-20", "#21-30", "#31-40", "#41-50"],
 	avianos_resource: ["fountains", "temples", "seed factories"],
 	avianos_unit: ["40+ dodo soldiers", "30+ archers", "20+ owl priests"],
-	ancestor: ["Stegnar", "Rexadon", "Quetzal", "Trilock", "Brontor"],
-	ancestor_units: ["Stegnar", "Rexadon", "Quetzal", "Trilock"],
-	rh_easy_level: ["Shifting Gears", "Winging It", "Root Around", "Resupply", "Daring Duo", "Rescue Mission", "Guarded by Gat", "Armored Up"],
-	vainger_item: ["3 items", "a module", "2 shield upgrades"],
-	vainger_boss: ["Ramses", "Y-Vainger (no exploit)", "3 Crawler bosses"],
-	vainger_slot: ["GUN", "GRAV", "BODY"],
   },
   default_counts: {
     easy: 5,

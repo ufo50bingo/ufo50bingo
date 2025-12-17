@@ -1051,11 +1051,12 @@ export const SPICY_UFO = {
       "Root Around",
     ],
   },
-  default_counts: {
+  category_counts: {
     easy: 5,
     medium: 6,
     hard: 5,
     veryhard: 4,
     general: 5,
   },
+  categories_with_global_group_repeat_prevention: ["general"],
 } as const;

@@ -13,7 +13,9 @@ export type Counts = { [difficulty: string]: number };
 export type UFOPasta = {
   goals: UFODifficulties;
   tokens: Tokens;
-  default_counts: Counts;
+  category_counts: Counts;
+  categories_with_global_group_repeat_prevention?: ReadonlyArray<string>;
+  category_difficulty_tiers?: ReadonlyArray<ReadonlyArray<string>>;
 };
 
 const SAME_LINE_INDICES = [
@@ -58,11 +60,20 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
 
   // choose difficulty of each square by using a magic square
   const magicSquare = getMagicSquare();
-  const orderedDifficulties = Object.entries(pasta.default_counts).flatMap(
-    ([difficulty, count]) => Array(count).fill(difficulty)
-  );
+  const difficultyTiers =
+    pasta.category_difficulty_tiers ??
+    Object.keys(pasta.category_counts).map((category) => [category]);
+  const orderedCategories = difficultyTiers.flatMap((tier) => {
+    const categories = tier.flatMap((category) =>
+      Array(pasta.category_counts[category]).fill(category)
+    );
+    if (tier.length > 1) {
+      shuffle(categories);
+    }
+    return categories;
+  });
   const difficultyByIndex = magicSquare.map(
-    (index) => orderedDifficulties[index]
+    (index) => orderedCategories[index]
   );
 
   const gameByIndex: Array<string | null> = Array(25).fill(null);
@@ -70,7 +81,8 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
   fillOrder.forEach((index) => {
     const difficulty = difficultyByIndex[index];
     const synergyCheckIndices =
-      difficulty === "general"
+      pasta.categories_with_global_group_repeat_prevention != null &&
+      pasta.categories_with_global_group_repeat_prevention.includes(difficulty)
         ? [...Array(25)].map((_, x) => x)
         : SAME_LINE_INDICES[index];
 

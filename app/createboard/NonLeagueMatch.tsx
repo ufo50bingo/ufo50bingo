@@ -83,7 +83,7 @@ export default function NonLeagueMatch() {
       if (data.type !== "UFO") {
         return;
       }
-      counts[data.name] = data.pasta.default_counts;
+      counts[data.name] = data.pasta.category_counts;
     });
     return counts;
   });
@@ -183,7 +183,7 @@ export default function NonLeagueMatch() {
           ufoGenerator({
             ...metadata.pasta,
             goals: filtered,
-            default_counts: difficultyCounts[metadata.name],
+            category_counts: difficultyCounts[metadata.name],
           }).map((goal) => ({ name: goal }))
         );
     }

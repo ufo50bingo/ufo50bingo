@@ -694,11 +694,12 @@ export const STANDARD_UFO = {
     cherry_count: ["2", "3"],
     gold_count: ["3", "4"],
   },
-  default_counts: {
+  category_counts: {
     easy: 5,
     medium: 7,
     hard: 6,
     veryhard: 2,
     general: 5,
   },
+  categories_with_global_group_repeat_prevention: ["general"],
 } as const;

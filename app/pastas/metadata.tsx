@@ -8,7 +8,7 @@ import { SPICY } from "./spicy";
 import { STANDARD } from "./standard";
 import { ReactNode } from "react";
 import { Difficulty, Game } from "../goals";
-import { UFOPasta } from "./ufoGenerator";
+import { UFOPasta } from "../generator/ufoGenerator";
 import { STANDARD_UFO } from "./standardUfo";
 import { SPICY_UFO } from "./spicyUfo";
 

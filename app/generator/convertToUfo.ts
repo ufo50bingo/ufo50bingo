@@ -1,6 +1,6 @@
 import getDefaultDifficulties from "../createboard/getDefaultDifficulties";
 import { ORDERED_GAMES } from "../goals";
-import { GoalWithDifficulty, Pasta } from "./metadata";
+import { GoalWithDifficulty, Pasta } from "../pastas/metadata";
 import { UFOPasta } from "./ufoGenerator";
 
 export default function convertToUfo(pasta: Pasta): UFOPasta {

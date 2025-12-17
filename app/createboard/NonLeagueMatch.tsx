@@ -40,7 +40,7 @@ import ufoGenerator, {
   UFODifficulties,
   UFOGameGoals,
   UFOPasta,
-} from "../pastas/ufoGenerator";
+} from "../generator/ufoGenerator";
 import UFODifficultySelectors from "./UFODifficultySelectors";
 import UFODraftCreator from "./UFODraftCreator";
 

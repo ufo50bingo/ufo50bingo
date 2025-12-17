@@ -1,19 +1,23 @@
 import { Alert, Group, NumberInput, Stack, Text } from "@mantine/core";
-import { Counts } from "../pastas/ufoGenerator";
+import { Counts } from "../generator/ufoGenerator";
 import { DIFFICULTY_NAMES } from "../goals";
 
 const NAMES: { [difficulty: string]: string } = DIFFICULTY_NAMES;
 
 type Props = {
-  counts: Counts,
+  counts: Counts;
   setCounts: (newCounts: Counts) => unknown;
-  availableCounts: Counts,
+  availableCounts: Counts;
 };
 
-export default function DifficultySelectors({ counts, setCounts, availableCounts }: Props) {
+export default function DifficultySelectors({
+  counts,
+  setCounts,
+  availableCounts,
+}: Props) {
   const sum = Object.keys(counts).reduce((acc, key) => acc + counts[key], 0);
   const hasEnoughGoals = Object.keys(counts).every(
-    key => (availableCounts[key] ?? 0) >= counts[key],
+    (key) => (availableCounts[key] ?? 0) >= counts[key]
   );
 
   return (

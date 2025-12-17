@@ -3,7 +3,7 @@ import { Alert, Group, NumberInput, Stack, Text } from "@mantine/core";
 import { Difficulty, DIFFICULTY_NAMES, Game, ProperGame } from "../goals";
 import { GoalWithDifficulty } from "../pastas/metadata";
 import DraftChecker from "./DraftChecker";
-import { UFODifficulties, UFOPasta } from "../pastas/ufoGenerator";
+import { UFODifficulties, UFOPasta } from "../generator/ufoGenerator";
 
 export type PlayerToDifficultyToGameToGoal = Array<
   Map<Difficulty, Map<Game, GoalWithDifficulty[]>>

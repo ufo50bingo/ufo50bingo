@@ -94,9 +94,9 @@ export default function validateUfo(json: string): Return {
     if (err instanceof zod.ZodError) {
       return { pasta: null, errors: [zod.prettifyError(err)], warnings: [] };
     } else if (err instanceof Error) {
-      return { pasta: null, errors: [err.message], warnings: [] };
+      return { pasta: null, errors: ['✖ ' + err.message], warnings: [] };
     } else {
-      return { pasta: null, errors: ['Unknown error occurred'], warnings: [] };
+      return { pasta: null, errors: ['✖ Unknown error occurred'], warnings: [] };
     }
   }
 }

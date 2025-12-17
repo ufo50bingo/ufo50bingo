@@ -49,7 +49,7 @@ const menuOptions: ReadonlyArray<VariantMetadata> = METADATA.filter(
   (d) => d.isMenu
 );
 
-type CustomType = 'srl_v5' | 'ufo' | 'fixed_board' | 'randomized';
+type CustomType = "srl_v5" | "ufo" | "fixed_board" | "randomized";
 
 export default function NonLeagueMatch() {
   const [variant, setVariant] = useState<Variant>(options[0].name);
@@ -109,28 +109,28 @@ export default function NonLeagueMatch() {
       case "Custom":
         return customType === "ufo"
           ? stringify(
-            ufoGenerator(JSON.parse(custom)).map((goal) => ({ name: goal }))
-          )
+              ufoGenerator(JSON.parse(custom)).map((goal) => ({ name: goal }))
+            )
           : custom;
       case "GameNames":
         return stringify(
           showFilters
             ? Array.from(
-              checkState
-                .entries()
-                .filter(([_gameKey, checkState]) => checkState)
-            ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
+                checkState
+                  .entries()
+                  .filter(([_gameKey, checkState]) => checkState)
+              ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
             : ORDERED_PROPER_GAMES.map((gameKey) => ({
-              name: GAME_NAMES[gameKey],
-            }))
+                name: GAME_NAMES[gameKey],
+              }))
         );
       case "WithoutDifficulty":
         return stringify(
           showFilters || randomizeGroupings
             ? createPastaWithoutDifficulty(
-              metadata.pasta,
-              showFilters ? checkState : null
-            )
+                metadata.pasta,
+                showFilters ? checkState : null
+              )
             : metadata.pasta
         );
       case "WithDifficulty":
@@ -144,9 +144,9 @@ export default function NonLeagueMatch() {
         return stringify(
           randomizeGroupings
             ? createPasta(
-              metadata.pasta,
-              getDefaultDifficulties(metadata.pasta)
-            )
+                metadata.pasta,
+                getDefaultDifficulties(metadata.pasta)
+              )
             : metadata.pasta
         );
       case "DraftWithDifficulty":
@@ -207,7 +207,7 @@ export default function NonLeagueMatch() {
         />
         <Menu shadow="md" width={200}>
           <Menu.Target>
-            <ActionIcon onClick={() => { }} variant="default">
+            <ActionIcon onClick={() => {}} variant="default">
               <IconDots size={16} />
             </ActionIcon>
           </Menu.Target>
@@ -223,40 +223,41 @@ export default function NonLeagueMatch() {
           </Menu.Dropdown>
         </Menu>
       </Group>
-      {(metadata.type === "WithDifficulty" ||
-        metadata.type === "WithoutDifficulty" ||
-        metadata.type === "UFO" ||
-        variant === "Game Names") && (
+      <Group justify="space-between">
+        {(metadata.type === "WithDifficulty" ||
+          metadata.type === "WithoutDifficulty" ||
+          metadata.type === "UFO" ||
+          variant === "Game Names") && (
           <Group>
             {(metadata.type === "WithDifficulty" ||
               metadata.type === "WithoutDifficulty") && (
-                <Tooltip
-                  label={
-                    <span>
-                      Games will be divided into groups randomly while still
-                      respecting the
-                      <br />
-                      difficulty distribution, allowing for greater card variety
-                      than using the
-                      <br />
-                      default pasta. This option is always enabled when customizing
-                      games and
-                      <br />
-                      difficulty counts.
-                    </span>
-                  }
-                >
-                  <div>
-                    <Checkbox
-                      checked={showFilters || randomizeGroupings}
-                      label="Randomize goal groupings"
-                      onChange={(event) =>
-                        setRandomizeGroupings(event.currentTarget.checked)
-                      }
-                    />
-                  </div>
-                </Tooltip>
-              )}
+              <Tooltip
+                label={
+                  <span>
+                    Games will be divided into groups randomly while still
+                    respecting the
+                    <br />
+                    difficulty distribution, allowing for greater card variety
+                    than using the
+                    <br />
+                    default pasta. This option is always enabled when
+                    customizing games and
+                    <br />
+                    difficulty counts.
+                  </span>
+                }
+              >
+                <div>
+                  <Checkbox
+                    checked={showFilters || randomizeGroupings}
+                    label="Randomize goal groupings"
+                    onChange={(event) =>
+                      setRandomizeGroupings(event.currentTarget.checked)
+                    }
+                  />
+                </div>
+              </Tooltip>
+            )}
             <Checkbox
               checked={showFilters}
               label={
@@ -268,6 +269,22 @@ export default function NonLeagueMatch() {
             />
           </Group>
         )}
+        {metadata.type === "UFO" && (
+          <Tooltip label="Copy the source in the new “UFO” format.">
+            <Button
+              variant="light"
+              size="xs"
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  JSON.stringify(metadata.pasta, null, 4)
+                );
+              }}
+            >
+              Copy source
+            </Button>
+          </Tooltip>
+        )}
+      </Group>
       {(metadata.type === "WithoutDifficulty" ||
         variant === "Game Names" ||
         metadata.type === "UFO") &&
@@ -317,10 +334,10 @@ export default function NonLeagueMatch() {
         <Stack>
           <Select
             data={[
-              { value: "srl_v5", label: 'SRL v5' },
-              { value: "ufo", label: 'UFO' },
-              { value: "fixed_board", label: 'Fixed Board' },
-              { value: "randomized", label: 'Randomized' },
+              { value: "srl_v5", label: "SRL v5" },
+              { value: "ufo", label: "UFO" },
+              { value: "fixed_board", label: "Fixed Board" },
+              { value: "randomized", label: "Randomized" },
             ]}
             label="Custom Type"
             value={customType}
@@ -401,14 +418,20 @@ export default function NonLeagueMatch() {
               password,
               isPublic,
               variant,
-              bingosyncVariant: metadata.type === "UFO" || (metadata.type === "Custom" && (customType === "fixed_board" || customType === "ufo"))
-                ? "18"
-                : metadata.type === "GameNames" || (metadata.type === "Custom" && customType === "randomized")
+              bingosyncVariant:
+                metadata.type === "UFO" ||
+                (metadata.type === "Custom" &&
+                  (customType === "fixed_board" || customType === "ufo"))
+                  ? "18"
+                  : metadata.type === "GameNames" ||
+                    (metadata.type === "Custom" && customType === "randomized")
                   ? "172"
                   : "187",
               isCustom:
-                showFilters &&
-                metadata.type === "GameNames" || metadata.type === "UFO" || metadata.type === "WithDifficulty" || metadata.type === "WithoutDifficulty",
+                (showFilters && metadata.type === "GameNames") ||
+                metadata.type === "UFO" ||
+                metadata.type === "WithDifficulty" ||
+                metadata.type === "WithoutDifficulty",
               isLockout,
               pasta: getSerializedPasta(false),
               leagueInfo: null,

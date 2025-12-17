@@ -11,6 +11,11 @@ import { Difficulty, Game } from "../goals";
 import { UFOPasta } from "../generator/ufoGenerator";
 import { STANDARD_UFO } from "./standardUfo";
 import { SPICY_UFO } from "./spicyUfo";
+import { BLITZ_UFO } from "./blitzUfo";
+import { CHOCO_UFO } from "./chocoUfo";
+import { CAMPANELLA3_UFO } from "./campanella3Ufo";
+import { CLARITY_UFO } from "./clarityUfo";
+import { NOZZLO_UFO } from "./nozzloUfo";
 
 const RAW_METADATA = [
   {
@@ -305,6 +310,71 @@ const RAW_METADATA = [
     hovercard: (
       <Stack>
         <span>Spicy draft mode with the new card generation logic.</span>
+      </Stack>
+    ),
+  },
+  {
+    type: "UFO",
+    name: "Blitz (Beta)",
+    pasta: BLITZ_UFO,
+    isMenu: true,
+    hovercard: (
+      <Stack>
+        <span>
+          This variant uses the Blitz goal list with new card generation logic.
+        </span>
+      </Stack>
+    ),
+  },
+  {
+    type: "UFO",
+    name: "Nozzlo (Beta)",
+    pasta: NOZZLO_UFO,
+    isMenu: true,
+    hovercard: (
+      <Stack>
+        <span>
+          This variant uses the Nozzlo goal list with new card generation logic.
+        </span>
+      </Stack>
+    ),
+  },
+  {
+    type: "UFO",
+    name: "Choco (Beta)",
+    pasta: CHOCO_UFO,
+    isMenu: true,
+    hovercard: (
+      <Stack>
+        <span>
+          This variant uses the Choco goal list with new card generation logic.
+        </span>
+      </Stack>
+    ),
+  },
+  {
+    type: "UFO",
+    name: "Campanella 3 (Beta)",
+    pasta: CAMPANELLA3_UFO,
+    isMenu: true,
+    hovercard: (
+      <Stack>
+        <span>
+          This variant uses the Campanella 3 goal list with new card generation logic.
+        </span>
+      </Stack>
+    ),
+  },
+  {
+    type: "UFO",
+    name: "Clarity (Beta)",
+    pasta: CLARITY_UFO,
+    isMenu: true,
+    hovercard: (
+      <Stack>
+        <span>
+          This variant uses the Clarity goal list with new card generation logic.
+        </span>
       </Stack>
     ),
   },

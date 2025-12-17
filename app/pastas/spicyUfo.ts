@@ -886,7 +886,7 @@ export const SPICY_UFO = {
 	avianos_resource: ["fountains", "temples", "seed factories"],
 	avianos_unit: ["40+ dodo soldiers", "30+ archers", "20+ owl priests"],
 	ancestor_units: ["Stegnar", "Quetzal", "Rexadon", "Trilock"],
-	ancestor: ["Stegnar", "Quetzal", "Rexadon", "Trilock", Brontor"],
+	ancestor: ["Stegnar", "Quetzal", "Rexadon", "Trilock", "Brontor"],
 	vainger_slot: ["GRAV", "GUN", "BODY"],
 	vainger_item: ["3 items", "2 shield upgrades", "a module"],
 	vainger_boss: ["Ramses", "Y-Vainger (no exploit)", "3 crawler bosses"],

@@ -864,7 +864,7 @@ export const SPICY_UFO = {
 	ph_scen: ["Alien Invitation", "High or Low", "Best Wishes", "Money Management", "A Magical Night"],
 	ph_rest_hard: ["without purchasing any guests that provide cash except Rich Pals", "with 5+ star guests in the winning party", "without purchasing any Counselors, Cute Dogs, or Hippies", "with $20+ at the end of the winning party", "with your popularity maxed out"],
 	roi_hard_lv: ["Terror Overhead", "The Oasis", "Jungle Rush", "Maze of Death"],
-	roi_hard_rest: ["without any Fire cavemen or chickens", "without any Bow cavemen or chickens", "with a max of 2 cave upgrades"]
+	roi_hard_rest: ["without any Fire cavemen or chickens", "without any Bow cavemen or chickens", "with a max of 2 cave upgrades"],
 	roi_purp: ["Tar", "Fire 2", "Spear 2", "Bow", "Rock 2", "Wheel"],
 	rh_hard_lv: ["6 (Guarded by Gat) to 10 (Daring Duo)", "7 (Shifting Gears) to 11 (Root Around)", "8 (Vault Robbery) to 12 (Cow Poke)", "9 (Winging It) to 13 (Rescue Mission)", "10 (Daring Duo) to 14 (Long Haul)", "11 (Root Around) to 15 (Resupply)", "12 (Cow Poke) to 16 (Armored Up)"],
 	rh_hard_req1: ["without allowing the lawmen to have more than two turns", "with all 3 stars"],
@@ -900,4 +900,5 @@ export const SPICY_UFO = {
     general: 5,
   },
 } as const;
+
 

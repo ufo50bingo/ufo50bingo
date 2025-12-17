@@ -3,12 +3,13 @@ export const SPICY_UFO = {
     easy: {
       barbuta: [
         "BARBUTA: Obtain the blood sword, leave the room with all your eggs broken, then gold disk",
+		"BARBUTA: Pop bubbles in 3 different rooms using the Pin",
         "BARBUTA: Open 8 different chests",
       ],
       bughunter: [
-        "BUG HUNTER: WORK-LESS allowed; beat Job 5 without shooting any energy cubes",
-        "BUG HUNTER: WORK-LESS allowed; beat Job 7 & Job 8; You must leave 1+ module in your inventory unused & unreplaced each turn",
-        "BUG HUNTER: WORK-LESS allowed; beat Job 8; bugs can only be killed by using Attack modules",
+        "BUG HUNTER: WORK-LESS allowed; beat Job {{workless_4}} {{bh_easy_rest}}",
+        "BUG HUNTER: WORK-LESS allowed; beat {{workless_3}}; You must leave 1+ module in your inventory unused & unreplaced each turn",
+        "BUG HUNTER: WORK-LESS allowed; beat Job {{workless_1}}; bugs can only be killed by using Attack modules",
       ],
       ninpek: [
         "NINPEK: Eat 10 sandwiches",
@@ -43,9 +44,9 @@ export const SPICY_UFO = {
         "KICK CLUB: Score 101,000+ points",
       ],
       avianos: [
-        "AVIANOS: Win a custom Adult game; Must own 11 fountains or more when the war ends (change castles/flags to 6/0)",
-        "AVIANOS: Win a custom Adult game; You may only pray to 3 ancestors",
-        "AVIANOS: Win a custom Fledgling game; Must spend each applicable resource every turn until you can no longer buy anything (change castles/flags to 6/0)",
+        "AVIANOS: Win an Adult game; Must own 11+ {{avianos_resource}} when the war ends",
+        "AVIANOS: Win an Adult game; You may only pray to 3 ancestors",
+        "AVIANOS: Win a Fledgling game; Must spend each applicable resource every turn until you can no longer buy anything",
       ],
       mooncat: [
         "MOONCAT: Kill a gray spider and a spear thrower, and find the egg at the end of the run",
@@ -53,17 +54,19 @@ export const SPICY_UFO = {
       ],
       bushidoball: [
         "BUSHIDO BALL: Win the first match 8-0 with two different characters",
-        "BUSHIDO BALL: Win three games in a row in one tournament by 4+ points",
+        "BUSHIDO BALL: Win three games in a row in one tournament by 4+ points using {{bushido}}",
       ],
       blockkoala: [
-        "BLOCK KOALA: WORM-1234 allowed; Beat 5 story levels (#21 through #30) as Koalarana (Pink Koala)",
-        "BLOCK KOALA: WORM-1234 allowed; Beat 5 story levels (#31 through #40) as Koalarana (Pink Koala)",
+        "BLOCK KOALA: WORM-1234 allowed; Beat 5 story levels ({{bk_koalarana}}) as Koalarana (Pink Koala)",
       ],
       camouflage: [
         "CAMOUFLAGE: Beat 5 levels with 3/3 collectibles without using UNDO (must start over level if caught)",
         "CAMOUFLAGE: Beat 6 levels with 2/3 collectibles without using UNDO (must start over level if caught)",
       ],
-      campanella: ["CAMPANELLA: Use BEAN-DRIP; score 8,800+ points"],
+      campanella: [
+		"CAMPANELLA: Use BEAN-DRIP; score 8,800+ points"
+		"CAMPANELLA: Finish stage A with all 8 coffees and an on-screen clear time of 2:05 or less",
+	  ],
       golfaria: [
         "GOLFARIA: Collect a Holy Tee piece",
         "GOLFARIA: Collect the Block Buster without obtaining any clubs or upgrades beforehand",
@@ -91,13 +94,15 @@ export const SPICY_UFO = {
       ],
       caramelcaramel: [
         "CARAMEL CARAMEL: Score 50,000+ points by the end of Orb Shower A",
+		"CARAMEL CARAMEL: Snap 10 bonus background elements on two different planets (no prologue)",
       ],
       partyhouse: [
         "PARTY HOUSE: Get 4 climbers to 9 popularity & win the scenario",
         "PARTY HOUSE: Have 8 trouble guests in a party at once without using any fetch or peek abilities",
       ],
       hotfoot: [
-        "HOT FOOT: Reach round 4; in each round, the teammate that gets the first point must score all points for the rest of that round",
+        "HOT FOOT: Reach round 4; in each round, the teammate that gets the first point must score all points that round",
+		"HOT FOOT: Get 3 blowouts in a tournament where your opponents score 5 or fewer points",
       ],
       divers: [
         "DIVERS: Reach level 5",
@@ -105,19 +110,19 @@ export const SPICY_UFO = {
       ],
       railheist: [
         "RAIL HEIST: Beat levels 1, 2, and 3 while knocking every lawman off the train",
-        "RAIL HEIST: GOOD-SPUR allowed; Obtain both the Devil Star & Time Star on 9 levels",
+        "RAIL HEIST: Obtain both the Devil Star & Time Star on 9 levels",
       ],
       vainger: [
-        "VAINGER: Defeat 5 bosses with all obtained modules placed in BODY",
-        "VAINGER: Obtain an item from three different sectors",
+        "VAINGER: Defeat {{vainger_boss}} with all obtained modules placed in {{vainger_slot}}",
+        "VAINGER: Obtain {{vainger_item}} from three different sectors",
       ],
       rockonisland: [
         "ROCK ON! ISLAND: Beat Initial Encounter with an upgraded caveman (rock, spear, or fire) on every available tile",
-        "ROCK ON! ISLAND: CLUB-PASS allowed; Perfect The Spiral; Every caveman type purchased must cycle between Spear, Rock, and Fire. Retiring cavemen not allowed",
+        "ROCK ON! ISLAND: CLUB-PASS allowed; Perfect {{roi_med_lv3}}; Buying cavemen must cycle between Spear, Rock, and Fire in order. No retiring cavemen",
         "ROCK ON! ISLAND: CLUB-PASS allowed; Perfect Underbrush with 4 or fewer cavemen, and no chickens",
       ],
       pingolf: [
-        "PINGOLF: Cherry Disk + Have a total score below 0 after every hole",
+        "PINGOLF: Cherry Disk & Have a total score below 0 after every hole",
         "PINGOLF: Have a score of -11 at any point in the tournament and win",
       ],
       mortolii: [
@@ -125,9 +130,8 @@ export const SPICY_UFO = {
         "MORTOL II: Gold Disk with 10 doors opened",
       ],
       fisthell: [
-        "FIST HELL: Beat the second scare as Amy without dying or eating any food",
-        "FIST HELL: Beat the second scare as Cat without dying or eating any food",
-        "FIST HELL: Reach wave 10 in the gym without jumping",
+        "FIST HELL: Beat the second scare as {{fh_char}} without dying or eating any food",
+        "FIST HELL: Reach wave 10 in the gym without jumping using {{fh_char}}",
       ],
       overbold: [
         "OVERBOLD: Gold Disk & Purchase 4 price hiked items in one run",
@@ -229,9 +233,9 @@ export const SPICY_UFO = {
         "KICK CLUB: Reach Ice World with 38,000 points or less",
       ],
       avianos: [
-        "AVIANOS: Win a custom Adult game; You may only obtain units from 2 ancestors (change castles/flags: 6/0)",
-        "AVIANOS: Win a custom Fledgling game; The first ancestor you pray to must be maxed out when the war is over (change castles/flags: 6/0)",
-        "AVIANOS: Win a custom Fledgling game; You must have 40+ dodo soldiers when the war ends (change castles/flags: 6/0)",
+        "AVIANOS: Win an Adult game; You may only obtain units from 2 ancestors",
+        "AVIANOS: Win an Adult game; The first ancestor you pray to must be maxed out when the war is over",
+        "AVIANOS: Win a Fledgling game; You must have {{avianos_unit}} when the war ends",
       ],
       mooncat: [
         "MOONCAT: Find the Green Egg without dying before the boss",
@@ -239,22 +243,20 @@ export const SPICY_UFO = {
       ],
       bushidoball: [
         "BUSHIDO BALL: Beat 3 rounds on Hyper Speed with three different characters",
-        "BUSHIDO BALL: Gold disk",
-        "BUSHIDO BALL: Gold disk as Chiyome",
+        "BUSHIDO BALL: Gold disk as {{bushido}}",
         "BUSHIDO BALL: Win the first match as 4 different characters; enemies may not score more than 2 points in your victories",
       ],
       camouflage: [
         "CAMOUFLAGE: Gold disk with all babies saved",
         "CAMOUFLAGE: Gold disk with all levels beaten",
         "CAMOUFLAGE: Gold disk with all oranges collected",
-        "CAMOUFLAGE: Gold disk with at least 5 levels with 3/3 collectibles",
+        "CAMOUFLAGE: Gold disk with at least 5 levels with 3/3 collectibles (levels 1-5 excluded)",
       ],
       campanella: [
         "CAMPANELLA: Clear stage B; must crash the ship at least once every level, including bosses",
         "CAMPANELLA: Clear stages A & B in a run without losing any lives",
         "CAMPANELLA: Defeat every enemy on every level (no warps) in worlds A & B with max of 3 deaths",
-        "CAMPANELLA: Finish stage A with all 8 coffees and an on-screen clear time of 2:05 or less",
-      ],
+       ],
       golfaria: [
         "GOLFARIA: Obtain the Block Buster, Brakes, and 5 clubs",
         "GOLFARIA: Rescue 3 NPCs and hit 3 Parbots",
@@ -307,9 +309,9 @@ export const SPICY_UFO = {
         "VAINGER: Obtain two Clone materials",
       ],
       rockonisland: [
-        "ROCK ON! ISLAND: CLUB-PASS allowed; Beat Crossroads; must have at least 10 wheel cavemen through all of wave 10",
-        "ROCK ON! ISLAND: CLUB-PASS allowed; Beat Terror Overhead without any Bow, Fire, or Tar cavemen",
-        "ROCK ON! ISLAND: CLUB-PASS allowed; Beat Underbrush with no damage and without upgrading at the cave or using any chickens",
+        "ROCK ON! ISLAND: CLUB-PASS allowed; Beat {{roi_med_lv}}; must have at least 10 {{roi_med_cave}} cavemen through all of wave 10",
+        "ROCK ON! ISLAND: CLUB-PASS allowed; Beat {{roi_med_lv2}} without any Bow, Fire, or Tar cavemen",
+        "ROCK ON! ISLAND: CLUB-PASS allowed; Beat {{roi_med_lv3}} with no damage and without upgrading at the cave or using any chickens",
       ],
       pingolf: [
         "PINGOLF: Score -2 or better on six holes & win the tournament",
@@ -320,10 +322,9 @@ export const SPICY_UFO = {
         "MORTOL II: Press all three switches using ONLY the scout",
       ],
       fisthell: [
-        "FIST HELL: Cherry disk: Maximum of ANY 2 shop purchases",
         "FIST HELL: Get money from eating six different food pickups while at full health in one run",
-        "FIST HELL: Have $75 at once",
-        "FIST HELL: Max out the POWER, TOUGH, and RECOV of either Amy or Cat",
+        "FIST HELL: Have $75 at once using {{fh_char}}",
+        "FIST HELL: Max out the POWER, TOUGH, and RECOV of either {{fh_char}} or {{fh_char}}",
       ],
       overbold: [
         "OVERBOLD: Complete a wave with maximum stakes without using bombs",
@@ -337,6 +338,7 @@ export const SPICY_UFO = {
       hypercontender: [
         "HYPER CONTENDER: Win tournament mode on Hard challenge; Change ring settings to the following values in order: 6, 1, 1, 5 ,5",
         "HYPER CONTENDER: Win tournament mode with two different characters; no rematches allowed",
+		"HYPER CONTENDER: Win tournament mode with {{hc_char}}; no rematches allowed",
       ],
       valbrace: [
         "VALBRACE: Drink from 8 different fountains in one run",
@@ -358,7 +360,7 @@ export const SPICY_UFO = {
       ],
       lordsofdiskonia: [
         "LORDS OF DISKONIA: In a full war, hold 64+ gold at once at any point, and win the war",
-        "LORDS OF DISKONIA: Win a full war on Knight difficulty without having more than 4 units in your squad at any time",
+        "LORDS OF DISKONIA: Win a full war on Knight difficulty {{disk_rest}}",
       ],
       nightmanor: [
         "NIGHT MANOR: Cherry disk with 100% of items obtained and 17 journal entries",
@@ -377,7 +379,10 @@ export const SPICY_UFO = {
         "MINI & MAX: Collect 3 Big Shinies",
         "MINI & MAX: From New Game, obtain the Sacred Wings, Dog Armor, and Whistle",
       ],
-      combatants: ["COMBATANTS: Beat “The Push”"],
+      combatants: [
+		"COMBATANTS: Beat “The Push”",
+		"COMBATANTS: Beat 'Commando', 'Commando2', and 'Open Field'",
+	  ],
       quibblerace: [
         "QUIBBLE RACE: Use TUFF-RACE; win a 4-round game",
         "QUIBBLE RACE: WILD-BETS allowed; Have $64,000",
@@ -403,10 +408,10 @@ export const SPICY_UFO = {
         "BARBUTA: In one run, collect the reward from both green skulls and defeat each of the 4 green shielded enemies at least once",
       ],
       bughunter: [
-        "BUG HUNTER: Complete a job; Killing bugs is only permitted when you hold 2+ S (blue) modules",
+        "BUG HUNTER: WORK-LESS allowed; Beat Job {{workless_0}}; {{bh_hard_rest}}",
         "BUG HUNTER: Use WORK-HARD; Beat two jobs in a row",
-        "BUG HUNTER: WORK-LESS allowed; Beat Job 10",
-        "BUG HUNTER: WORK-LESS allowed; Beat Job 11 without pushing any bugs into pits",
+        "BUG HUNTER: WORK-LESS allowed; Beat Job {{workless_2}}",
+        "BUG HUNTER: WORK-LESS allowed; Beat Job {{workless_pits}} without pushing any bugs into pits",
       ],
       paintchase: [
         "PAINT CHASE: EVEN-COAT allowed; Beat stages 14 through 26",
@@ -443,34 +448,40 @@ export const SPICY_UFO = {
       kickclub: [
         "KICK CLUB: Beat Track World; Must finish each level in the run (except bosses) with 13+ seconds left on the timer",
         "KICK CLUB: Have 7 extra lives at once",
+		"KICK CLUB: Beat Track World with 90,000+ points",
       ],
       avianos: [
-        "AVIANOS: BLUE-BEAK allowed; Beat Trial 1 without using any Miracles",
-        "AVIANOS: BLUE-BEAK allowed; Beat Trial 4",
+        "AVIANOS: BLUE-BEAK allowed; Beat Trial {{avianos_hard_trial1}} without using any Miracles",
+        "AVIANOS: BLUE-BEAK allowed; Beat Trial {{avianos_hard_trial2}}",
       ],
       mooncat: [
         "MOONCAT: Obtain the Yellow and Green eggs",
         "MOONCAT: Visit 25 different rooms",
       ],
       bushidoball: [
-        "BUSHIDO BALL: Cherry Disk twice, with one male and one female character",
+        "BUSHIDO BALL: Cherry Disk with both {{bushido_m}} and {{bushido_f}}",
+		"BUSHIDO BALL: Win 3 consecutive rounds of 16-point Hyper, using both {{bushido_m}} and {{bushido_f}}",
       ],
       camouflage: [
         "CAMOUFLAGE: Beat 10 levels with at least one collectible on each without using UNDO",
         "CAMOUFLAGE: Escape with 3/3 collectibles on 8 levels",
+		"CAMOUFLAGE: Cherry Disk; must start over any levels if caught",
       ],
       campanella: [
         "CAMPANELLA: Gold disk with no warps; must kill every enemy on every screen",
         "CAMPANELLA: Gold disk without dying to any bosses",
         "CAMPANELLA: Have 35 lives",
+		"CAMPANELLA: Win with 50,000+ points",
       ],
       golfaria: [
         "GOLFARIA: Rescue 7 green ball NPCs",
+		"GOLFARIA: Obtain 15 clubs (have 50+ total strokes)",
+		"GOLFARIA: Hit 6 parbots",
         "GOLFARIA: Show 25% completion in the library without obtaining the Brakes",
       ],
       warptank: [
         "WARPTANK: Change your tank to each available color in the hub world (there are 4 new color platforms)",
-        "WARPTANK: Obtain 17 coffees",
+        "WARPTANK: Obtain 14 coffees",
       ],
       waldorfsjourney: [
         "WALDORF’S JOURNEY: Gold disk using only maximum strength jumps (flying & items allowed)",
@@ -484,32 +495,35 @@ export const SPICY_UFO = {
         "ONION DELIVERY: Deliver 10 onions and complete the day on 4 separate days in a run",
         "ONION DELIVERY: Gold Disk without landing in any slime pits",
       ],
-      caramelcaramel: ["CARAMEL CARAMEL: Score 100,000+ points"],
+      caramelcaramel: [
+		"CARAMEL CARAMEL: Score 100,000+ points",
+		"CARAMEL CARAMEL: Gold disk with no deaths",
+	  ],
       partyhouse: [
-        "PARTY HOUSE: Beat any two story scenarios without purchasing any guests that provide cash except Rich Pals",
+        "PARTY HOUSE: Beat {{ph_scen}} & {{ph_scen}} {{ph_rest_hard}}",
+		"PARTY HOUSE: Beat 2 random scenarios {{ph_rest_hard}}"
         "PARTY HOUSE: Win with 6 star guests on screen at once in a random scenario (fetch and Magician ability not allowed)",
       ],
       hotfoot: [
         "HOT FOOT: Get 4 blowouts in one tournament using only boy characters (Mascot allowed)",
         "HOT FOOT: Get 4 blowouts in one tournament using only girl characters",
+		"HOT FOOT: Gold disk using {{hf_char}} & {{hf_char}}",
       ],
       divers: [
         "DIVERS: Open 5 chests",
         "DIVERS: Reach level 5 and collect an emblem",
       ],
       railheist: [
-        "RAIL HEIST: Beat the first 5 levels & have at least three lawmen get shot each level",
-        "RAIL HEIST: LAZY-COPS allowed; Beat any 7 levels (1, 2, 3 & 18 excluded) without allowing the lawmen to have more than two turns",
-        "RAIL HEIST: LAZY-COPS allowed; Beat levels 12-16 and have at least three lawmen get shot each level",
+        "RAIL HEIST: LAZY-COPS allowed; Beat any 7 levels (1, 2, 3 & 18 excluded) {{rh_hard_req1}}",
+        "RAIL HEIST: LAZY-COPS allowed; Beat levels {{roi_hard_lv}} {{rh_hard_req2}}",
       ],
       vainger: [
         "VAINGER: Equip 3+ modules, then defeat the keycode boss in Theta Sector",
-        "VAINGER: Equip all 4 modules,, then defeat Y-Vainger (exploit not allowed)",
+        "VAINGER: Equip all 4 modules, then defeat Y-Vainger (exploit not allowed)",
       ],
       rockonisland: [
-        "ROCK ON! ISLAND: CLUB-PASS allowed; beat Jungle Rush; The only purple cavemen allowed are Rock 2 and Tar",
-        "ROCK ON! ISLAND: CLUB-PASS allowed; beat Maze of Death with max of 2 cave upgrade purchases and without using any chickens",
-        "ROCK ON! ISLAND: CLUB-PASS allowed; beat Terror Overhead without using any Fire cavemen or chickens",
+        "ROCK ON! ISLAND: CLUB-PASS allowed; beat {{roi_hard_lv}}; The only purple cavemen allowed are {{roi_purp}} & {{roi_purp}}",
+        "ROCK ON! ISLAND: CLUB-PASS allowed; beat {{roi_hard_lv}} {{roi_hard_rest}}",
       ],
       pingolf: [
         "PINGOLF: Cherry disk with 3+ holes-in-one in the run",
@@ -520,8 +534,8 @@ export const SPICY_UFO = {
         "MORTOL II: Gold disk; Each of the 5 player classes must defeat either a miniboss or Blobus (pellet-spewing wall enemy) on its own",
       ],
       fisthell: [
-        "FIST HELL: Beat the 3rd scare without dying in the run",
-        "FIST HELL: Survive 9 waves in the gym without hitting any civilians",
+        "FIST HELL: Beat the 3rd scare without dying in the run using {{fh_char}} (shop burgers banned)",
+        "FIST HELL: Survive 9 waves in the gym using {{fh_char}} without {{fh_gym_rest}}",
       ],
       overbold: [
         "OVERBOLD: Gold Disk with all upgrades maxed out except Dash Attack",
@@ -535,7 +549,8 @@ export const SPICY_UFO = {
       ],
       hypercontender: [
         "HYPER CONTENDER: Beat Draft Mode on Hard Difficulty using at least 4 different characters total",
-        "HYPER CONTENDER: Gold disk on Hard Difficulty",
+        "HYPER CONTENDER: Gold disk on Hard or Hyper Difficulty using {{hc_char}}",
+		"HYPER CONTENDER: Win the tournament on default ring settings with {{hc_char}} & {{hc_char}}",
       ],
       valbrace: [
         "VALBRACE: Obtain the Zweihander without using any items (except Keys), spells, thrones, or equipping any new weapons or armor",
@@ -576,7 +591,7 @@ export const SPICY_UFO = {
       ],
       campanella3: [
         "CAMPANELLA 3: Beat Stages A, B, and C shooting only during boss fights",
-        "CAMPANELLA 3: GOLD disk ONLY (Cherry does not complete this goal)",
+        "CAMPANELLA 3: Win with LESS than 1500 points",
       ],
       cyberowls: [
         "CYBER OWLS: Gold Disk with 3 or fewer deaths",
@@ -597,7 +612,10 @@ export const SPICY_UFO = {
         "NINPEK: Use HARD-LOOP; Defeat the final boss with 5,000 points or less (counts as GOLD DISK)",
         "NINPEK: Use HARD-LOOP; Win with 2 or fewer deaths",
       ],
-      paintchase: ["PAINT CHASE: Cherry disk with no failed courses"],
+      paintchase: [
+		"PAINT CHASE: Cherry disk with no failed courses"
+		"PAINT CHASE: Cherry disk with 600+ Score"
+	  ],
       magicgarden: [
         "MAGIC GARDEN: Cherry disk with a MAXIMUM SCORE of 21,000 points",
         "MAGIC GARDEN: Win with a score of 100,000+; only gold potions may be used",
@@ -682,18 +700,22 @@ export const SPICY_UFO = {
         "HOT FOOT: Cherry disk with one boy & one girl character",
         "HOT FOOT: Gold disk twice with 4 unique characters",
       ],
-      divers: ["DIVERS: Defeat Guelap", "DIVERS: Show 5000+ gold in the bank"],
+      divers: [
+		"DIVERS: Defeat Guelap", 
+		"DIVERS: Show 5000+ gold in the bank",
+	  ],
       railheist: [
         "RAIL HEIST: Collect 30 total stars",
         "RAIL HEIST: LAZY-COPS allowed; Collect all Devil Stars on levels 11 through 20",
+		 "RAIL HEIST: LAZY-COPS allowed; Collect all 3 Stars on levels {{rh_vh_lv}}",
       ],
       vainger: [
         "VAINGER: Obtain and equip all four modules, and collect two keycodes",
         "VAINGER: Obtain both stabilizers and any two keycodes",
       ],
       rockonisland: [
-        "ROCK ON! ISLAND: CLUB-PASS allowed; Beat Crossroads, Wasteland, and The Oasis all perfect with no chickens",
-        "ROCK ON! ISLAND: CLUB-PASS allowed; Beat the Four Emperors with 15 HP or more remaining",
+        "ROCK ON! ISLAND: CLUB-PASS allowed; Beat {{roi_vh_level}}, {{roi_vh_level}}, and {{roi_vh_level}} all perfect with {{roi_vh_rest}}",
+        "ROCK ON! ISLAND: CLUB-PASS allowed; Beat the Four Emperors with 20 HP or more remaining",
       ],
       pingolf: [
         "PINGOLF: Complete any 6 holes w/ every shot aimed in the opposite direction of the hole relative to you",
@@ -701,9 +723,13 @@ export const SPICY_UFO = {
       ],
       mortolii: [
         "MORTOL II: Gold disk w/ all 3 switches pressed and all 3 minibosses defeated. Engineer pipes not allowed during the run",
+		"MORTOL II: Cherry disk w/ all 3 switches pressed and all 3 minibosses defeated
       ],
       fisthell: [
-        "FIST HELL: Gold disk as Cat or Amy; Limit of 2 upgrade purchases",
+        "FIST HELL: Gold disk as {{fh_girl}}; Limit of 1 upgrade purchase",
+		"FIST HELL: Cherry disk as {{fh_girl}}; Limit of 2 upgrade purchases",
+		"FIST HELL: Cherry disk: Maximum of ANY 2 shop purchases",
+		"FIST HELL: Cherry disk with at least $60 remaining",
       ],
       overbold: [
         "OVERBOLD: Cherry disk with 4 or fewer upgrades invested in",
@@ -720,19 +746,21 @@ export const SPICY_UFO = {
       ],
       rakshasa: [
         "RAKSHASA: Cherry disk with at least 60,000 points",
+		"RAKSHASA: Cherry disk without obtaining the Fire weapon",
         "RAKSHASA: Gold disk without ever having more than 1 skull",
       ],
       starwaspir: [
-        "STAR WASPIR: Cherry Disk with at least 500,000 points",
-        "STAR WASPIR: Gold Disk with 2 different ships",
+        "STAR WASPIR: Cherry Disk with at least 500,000 points using the {{waspir_ship}} ship",
+        "STAR WASPIR: Gold Disk with both the {{waspir_ship}} and {{waspir_ship}} ships",
       ],
       lordsofdiskonia: [
         "LORDS OF DISKONIA: Win 2 consecutive Full Wars on Commander difficulty",
-        "LORDS OF DISKONIA: Win a Full War on Commander difficulty; Leadership & Navigation skills are banned",
+        "LORDS OF DISKONIA: Win a Full War on Commander difficulty; {{disk_scroll}} & {{disk_scroll}} skills are banned",
         "LORDS OF DISKONIA: Win a Full War on Commander difficulty; You must buy units at each Tavern until you can no longer do so",
       ],
       elfazarshat: [
         "ELFAZAR’S HAT: Cherry Disk with 9 tickets collected",
+		"ELFAZAR’S HAT: Cherry Disk without obtaining any upgrades from 3 matching cards",
         "ELFAZAR’S HAT: Cherry Disk without any deaths",
       ],
       pilotquest: [
@@ -746,70 +774,37 @@ export const SPICY_UFO = {
     },
     general: {
       goldcherry1: [
-        "Cherry Disk any 3 games in a single column of the library (ALPHABETICAL)",
-        "Cherry Disk any 4 games from 4 different columns of the library (ALPHABETICAL)",
-        "Cherry Disk any 4 games from 4 different columns of the library (Chronology)",
-        "Cherry Disk any 5 games from 5 different rows of the library (Chronology)",
-        "Cherry Disk any 5 games from 5 different rows of the library (ALPHABETICAL)",
-        "Gold Disk any 4 games in one row of the library (ALPHABETICAL)",
+        "Cherry Disk any 3 games in a single column of the library ({{chrono_alpha}})",
+        "Cherry Disk any 4 games from 4 different columns of the library ({{chrono_alpha}})",
+        "Cherry Disk any 5 games from 5 different rows of the library ({{chrono_alpha}})",
+        "Gold Disk any 5 games in a single row of the library ({{chrono_alpha}})",
         "Gold Disk any 4 games in a single genre (platform, arcade, puzzle, etc.)",
-        "Collect 7 gold disks, with at least one from each row of the library (chronology)",
-        "Gold disk 6 consecutive games under THINKY PLAY library sort",
-        "Gold disk 6 consecutive games under QUICK PLAY library sort",
-        "Gold Disk any 2x2 square of games in the library (THINKY PLAY sort)",
-        "Collect 8 gold disks from 8 different columns of the library (chronology)",
-        "Gold Disk any 2x2 square of games in the library (chronology)",
-        "Gold Disk any 2x2 square of games in the library (ALPHABETICAL)",
+        "Collect 7 gold disks, with at least one from each row of the library ({{chrono_alpha}})",
+        "Gold Disk 6 {{cons_games}}",
+        "Collect 8 gold disks from 8 different columns of the library ({chrono_alpha}})",
+        "Gold Disk any 2x2 square of games in the library ({{2x2}})",
       ],
       giftbossleaderboard: [
-        "Collect 10 gifts for the garden (2 from each row of the library, ALPHABETICAL)",
-        "Collect 10 gifts for the garden (2 from each row of the library, Chronology)",
-        "Collect 10 gifts for the garden (1 from each column of the library - ALPHABETICAL)",
-        "Collect 10 gifts for the garden (1 from each column of the library - Chronology)",
-        "Collect 12 gifts for the garden (6 from the first 25, 6 from the second 25 in ALPHABETICAL)",
-        "Collect 12 gifts for the garden (6 from the first 25, 6 from the second 25 in Chronology)",
-        "Collect 9 gifts from games on this card",
-        "Beat a number 1 top score on 2 arcade leaderboards; must gold disk the games to count",
-        "Defeat 3 final bosses",
-        "Defeat a boss in 8 different games",
-        "Defeat 15 bosses",
-        "Defeat 2 bosses in 5 different games",
-        "Beat a top 2 score on 3 arcade leaderboards",
+        "Collect 10 gifts for the garden (2 from each row of the library, {{chrono_alpha}})",
+        "Collect 10 gifts for the garden (1 from each column of the library - {{chrono_alpha}})",
+        "Collect 12 gifts for the garden (6 from the first 25, 6 from the second 25 in {{chrono_alpha}})",
+        "Collect {{gifts_card}} gifts from games on this card",
+        "Defeat {{gen_boss}}",
+        "Beat {{gen_board}}",
       ],
       misc: [
-        "Beat 3 levels in 5 games from 5 different library rows (chronology)",
-        "Beat 5 levels in 5 Epic Play games",
-        "Beat 4 levels in 6 different Thinky Play games",
-        "Gold Disk Mortol or Waprtank",
-        "Gold Disk Combatants or Cyber Owls",
-        "Cherry Disk Cyber Owls or Fist Hell",
-        "Gold Disk Vainger or Golfaria",
-        "Gold Disk Valbrace or Porgy",
-        "Gold Disk four games in row one (Chronology)",
-        "Gold Disk four games in row two (Chronology)",
-        "Gold Disk four games in row three (Chronology)",
-        "Gold Disk five games in row four (Chronology)",
-        "Gold Disk four games in row five (Chronology)",
-        "Gold Disk four games in row one (ALPHABETICAL)",
-        "Gold Disk four games in row two (ALPHABETICAL)",
-        "Gold Disk four games in row three (ALPHABETICAL)",
-        "Gold Disk five games in row four (ALPHABETICAL)",
-        "Gold Disk four games in row five (ALPHABETICAL)",
-        "Beat 6 story scenarios in Avianos or Cherry Disk Hyper Contender",
-        "Cherry Disk Rail Heist or Party House",
-        "Cherry Disk Campanella 2 or Planet Zoldath",
-        "Cherry Disk Paint Chase (w/ 555+ points) or Campanella 3 (w/ 2200+ points)",
-        "Beat 4 story missions in Lords of Diskonia or beat 25 levels in Block Koala",
+        "Beat {{levels_special}}",
+        "Gold Disk {{gold_option}} or {{gold_option}}",
+        "Cherry Disk {{cherry_option}} or {{cherry_option}}",
+        "Gold Disk {{gold_rows_chrono}}",
+        "Gold Disk {{gold_rows_alpha}}",
+		"{{levels_option}} or {{levels_option}}",
       ],
       goldcherrydarkcherry: [
-        "Collect 5 gold disks from games on this card",
-        "Collect 6 gold disks from games on this card",
-        "Collect 3 gold disks from games in bingo lines with this goal",
-        "Collect 2 cherry disks from games in bingo lines with this goal",
-        "Collect 4 cherry disks from games on this card",
-        "Collect 5 cherry disks from games on this card",
-        "Satisfy the Dark Cherry condition for 2 games on this card",
-        "Satisfy the Dark Cherry condition for 3 games on this card",
+        "Collect {{gold_card}} gold disks from games on this card",
+        "Collect {{bingo_line}} from games in bingo lines with this goal",
+        "Collect {{cherry_card}} cherry disks from games on this card",
+        "Satisfy the Dark Cherry condition for {{dark_cherry}} games on this card",
       ],
       theme: [
         "TRIATHLON II: Cherry Disk any 3 of the 5 “SPORT” games",
@@ -829,7 +824,69 @@ export const SPICY_UFO = {
       ],
     },
   },
-  tokens: {},
+  tokens: {
+    fh_girl: ["Amy", "Cat"],
+	bingo_line: ["3 gold disks", "2 cherry disks"],
+    cherry_card: ["3", "4", "5"],
+	gold_card: ["5", "6"],
+	dark_cherry: ["2", "3"],
+	cherry_option: ["Rail Heist", "Party House", "Paint Chase (w/ 555+ points)", "Campanella 3 (w/ 2200+ points)", "Campanella 2", "Planet Zoldath", "Cyber Owls", "Fist Hell", "Mortol", "Warptank"],
+	gold_option: ["Porgy", "Golfaria", "Valbrace", "Vainger", "Elfazar's Hat", "Mini & Max", "Cyber Owls", "Combatants"],
+	levels_special: ["3 levels in 5 games from 5 different library rows (chronology)", "5 levels in 5 Epic Play games", "4 levels in 6 different Thinky Play games"],
+	gold_rows_chrono: ["four games in row one (Chronology)", "four games in row two (Chronology)", "four games in row three (Chronology)", "five games in row four (Chronology)", "four games in row five (Chronology)"],
+	gold_rows_alpha: ["four games in row one (ALPHABETICAL)", "four games in row two (ALPHABETICAL)", "four games in row three (ALPHABETICAL)", "five games in row four (ALPHABETICAL)", "four games in row five (ALPHABETICAL)"],
+	levels_option: ["Beat 6 story scenarios in Avianos", "Cherry Disk Hyper Contender", "Beat 4 story missions in Lords of Diskonia", "Beat 25 levels in Block Koala", "Cherry Disk Ninpek", "Collect all clubs in Golfaria (have 80 total strokes)", "Beat 5 levels in Rock On! Island", "Obtain 50% completion in Porgy"],
+	cons_games: ["6 consecutive games under THINKY PLAY library sort", "6 consecutive games under QUICK PLAY library sort"],
+	gen_boss: ["3 final bosses", "a boss in 8 different games", "2 bosses in 5 different games", "15 bosses"],
+	gen_board: ["a number 1 top score on 2 arcade leaderboards; must gold disk the games to count", "a top 2 score on 3 arcade leaderboards"],
+	chrono_alpha: ["Chronology", "ALPHABETICAL"],
+	gifts_card: ["9", "10"],
+	2x2: ["Chronology", "ALPHABETICAL", "THINKY PLAY sort", "QUICK PLAY sort"],
+	disk_scroll: ["Navigation", "Leadership", "Bargaining", "Ballistics"],
+	waspir_ship: ["Red", "Yellow", "Gray"],
+	roi_vh_level: ["Underbrush", "The Oasis", "The Spiral", "Wasteland", "Crossroads", "Initial Encounter"],
+	roi_vh_rest: ["no chickens", "max of 2 cave upgrades per level"],
+	rh_vh_lv: ["8 (Vault Robbery) to 14 (Long Haul)", "9 (Winging It) to 15 (Resupply)", "10 (Daring Duo) to 16 (Armored Up)", "11 (Root Around) to 17 (Powder Keg)", "12 (Cow Poke) to 18 (Sitting Ducks)"],
+	avianos_hard_trial1: ["1", "2"],
+	avianos_hard_trial2: ["4", "5"],
+	bushido: ["Kotaro", "Yamada", "Raizo", "Ayumi", "Tomoe", "Chiyome"],
+	bushido_m: ["Kotaro", "Yamada", "Raizo"],
+	bushido_f: ["Ayumi", "Tomoe", "Chiyome"],
+	hc_char: ["Elka", "Sephy", "Yogo", "Voltana", "Gilroy", "Donkus", "Reck", "Brazz"],
+	fh_char: ["Jay", "Victor", "Cat", "Amy"],
+	fh_gym_rest: ["eating any food", "hitting any civilians", "spin attacking"],
+	hf_char: ["Jerry", "Amy", "Chandar", "Benjy", "Rizzik", "Bea", "Yoka", "Suze", "Marc", "Mascot"],
+	ph_scen: ["Alien Invitation", "High or Low", "Best Wishes", "Money Management", "A Magical Night"],
+	ph_rest_hard: ["without purchasing any guests that provide cash except Rich Pals", "with 5+ star guests in the winning party", "without purchasing any Counselors, Cute Dogs, or Hippies", "with $20+ at the end of the winning party", "with your popularity maxed out"],
+	roi_hard_lv: ["Terror Overhead", "The Oasis", "Jungle Rush", "Maze of Death"],
+	roi_hard_rest: ["without any Fire cavemen or chickens", "without any Bow cavemen or chickens", "with a max of 2 cave upgrades"]
+	roi_purp: ["Tar", "Fire 2", "Spear 2", "Bow", "Rock 2", "Wheel"],
+	rh_hard_lv: ["6 (Guarded by Gat) to 10 (Daring Duo)", "7 (Shifting Gears) to 11 (Root Around)", "8 (Vault Robbery) to 12 (Cow Poke)", "9 (Winging It) to 13 (Rescue Mission)", "10 (Daring Duo) to 14 (Long Haul)", "11 (Root Around) to 15 (Resupply)", "12 (Cow Poke) to 16 (Armored Up)"],
+	rh_hard_req1: ["without allowing the lawmen to have more than two turns", "with all 3 stars"],
+	rh_hard_req2: ["and have at least three lawmen get shot each level", "bringing back a money crate in tact", "with both the Angel and Devil star", "with 1+ lawmen knocked off the train"],
+	bh_hard_rest: ["Killing bugs is only permitted when you hold 2+ S (blue) modules", "Only 2-cost modules may be purchased", "Stomping on bugs is not allowed", "Shooting energy cubes is not allowed"],
+	bh_easy_rest: ["Without letting a second bug type evolve", "with a maximum of 6 module uses per turn", "without letting any eggs appear"],
+	workless_0: ["4", "5", "6"],
+	workless_1: ["7", "8", "9"],
+	workless_2: ["10", "11", "12"],
+	workless_3: ["Job 5 & Job 6", "Job 7 & Job 8", "Job 4 & Job 5"],
+	workless_4: ["2", "3"],
+	workless_pits: ["8", "11"],
+	disk_rest: ["without having more than 4 units in your squad at any time", "- only one scroll may be collected", "without ever using a crystal in battle", "without buying any Vampires, Spiders, or Dragons"], 
+	roi_med_lv: ["Underbrush", "The Spiral", "Initial Encounter", "Crossroads"],
+	roi_med_lv2: ["Jungle Rush", "Terror Overhead", "Wasteland"],
+	roi_med_cave: ["Wheel", "Tar", "Rock 2"],
+	roi_med_lv3: ["Underbrush", "Initial Encounter", "The Spiral"],	
+	bk_koalarana: ["#11-20", "#21-30", "#31-40", "#41-50"],
+	avianos_resource: ["fountains", "temples", "seed factories"],
+	avianos_unit: ["40+ dodo soldiers", "30+ archers", "20+ owl priests"],
+	ancestor: ["Stegnar", "Rexadon", "Quetzal", "Trilock", "Brontor"],
+	ancestor_units: ["Stegnar", "Rexadon", "Quetzal", "Trilock"],
+	rh_easy_level: ["Shifting Gears", "Winging It", "Root Around", "Resupply", "Daring Duo", "Rescue Mission", "Guarded by Gat", "Armored Up"],
+	vainger_item: ["3 items", "a module", "2 shield upgrades"],
+	vainger_boss: ["Ramses", "Y-Vainger (no exploit)", "3 Crawler bosses"],
+	vainger_slot: ["GUN", "GRAV", "BODY"],
+  },
   default_counts: {
     easy: 5,
     medium: 6,

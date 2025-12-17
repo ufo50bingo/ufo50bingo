@@ -520,7 +520,7 @@ export const SPICY_UFO = {
       ],
       railheist: [
         "RAIL HEIST: LAZY-COPS allowed; Beat any 7 levels (1, 2, 3 & 18 excluded) {{rh_hard_req1}}",
-        "RAIL HEIST: LAZY-COPS allowed; Beat levels {{roi_hard_lv}} {{rh_hard_req2}}",
+        "RAIL HEIST: LAZY-COPS allowed; Beat levels {{rh_hard_lv}} {{rh_hard_req2}}",
       ],
       vainger: [
         "VAINGER: Equip 3+ modules, then defeat the keycode boss in Theta Sector",
@@ -867,6 +867,7 @@ export const SPICY_UFO = {
 	roi_hard_rest: ["without any Fire cavemen or chickens", "without any Bow cavemen or chickens", "with a max of 2 cave upgrades"],
 	roi_purp: ["Tar", "Fire 2", "Spear 2", "Bow", "Rock 2", "Wheel"],
 	rh_hard_lv: ["6 (Guarded by Gat) to 10 (Daring Duo)", "7 (Shifting Gears) to 11 (Root Around)", "8 (Vault Robbery) to 12 (Cow Poke)", "9 (Winging It) to 13 (Rescue Mission)", "10 (Daring Duo) to 14 (Long Haul)", "11 (Root Around) to 15 (Resupply)", "12 (Cow Poke) to 16 (Armored Up)"],
+	rh_easy_lv: ["6 (Guarded by Gat) to 11 (Root Around)", "7 (Shifting Gears) to 12 (Cow Poke)", "8 (Vault Robbery) to 13 (Rescue Mission)", "9 (Winging It) to 14 (Long Haul)", "10 (Daring Duo) to 15 (Resupply)", "11 (Root Around) to 16 (Armored Up)"],
 	rh_hard_req1: ["without allowing the lawmen to have more than two turns", "with all 3 stars"],
 	rh_hard_req2: ["and have at least three lawmen get shot each level", "bringing back a money crate in tact", "with both the Angel and Devil star", "with 1+ lawmen knocked off the train"],
 	bh_hard_rest: ["Killing bugs is only permitted when you hold 2+ S (blue) modules", "Only 2-cost modules may be purchased", "Stomping on bugs is not allowed", "Shooting energy cubes is not allowed"],
@@ -900,5 +901,3 @@ export const SPICY_UFO = {
     general: 5,
   },
 } as const;
-
-

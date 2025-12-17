@@ -237,8 +237,8 @@ export const SPICY_UFO = {
         "KICK CLUB: Reach Ice World with 38,000 points or less",
       ],
       avianos: [
-        "AVIANOS: Win an Adult game; You may only obtain units from {{ancestor_units}},
-	    "AVIANOS: Win an Adult game; You may never select {{ancestor}} or {{ancestor}},
+        "AVIANOS: Win an Adult game; You may only obtain units from {{ancestor_units}}",
+	    "AVIANOS: Win an Adult game; You may never select {{ancestor}} or {{ancestor}}",
         "AVIANOS: Win an Adult game; The first ancestor you pray to must be maxed out when the war is over",
         "AVIANOS: Win a Fledgling game; You must have {{avianos_unit}} when the war ends",
       ],
@@ -786,7 +786,7 @@ export const SPICY_UFO = {
         "Gold Disk any 4 games in a single genre (platform, arcade, puzzle, etc.)",
         "Collect 7 gold disks, with at least one from each row of the library ({{chrono_alpha}})",
         "Gold Disk 6 {{cons_games}}",
-        "Collect 8 gold disks from 8 different columns of the library ({chrono_alpha}})",
+        "Collect 8 gold disks from 8 different columns of the library ({{chrono_alpha}})",
         "Gold Disk any 2x2 square of games in the library ({{2x2}})",
       ],
       giftbossleaderboard: [
@@ -847,7 +847,7 @@ export const SPICY_UFO = {
 	chrono_alpha: ["Chronology", "ALPHABETICAL"],
 	gifts_card: ["9", "10"],
 	2x2: ["Chronology", "ALPHABETICAL", "THINKY PLAY sort", "QUICK PLAY sort"],
-	disk_scroll: ["Navigation", "Leadership", "Bargaining", "Ballistics"]
+	disk_scroll: ["Navigation", "Leadership", "Bargaining", "Ballistics"],
 	waspir_ship: ["Red", "Yellow", "Gray"],
 	roi_vh_level: ["Underbrush", "The Oasis", "The Spiral", "Wasteland", "Crossroads", "Initial Encounter"],
 	roi_vh_rest: ["no chickens", "max of 2 cave upgrades per level"],
@@ -858,12 +858,12 @@ export const SPICY_UFO = {
 	bushido_m: ["Kotaro", "Yamada", "Raizo"],
 	bushido_f: ["Ayumi", "Tomoe", "Chiyome"],
 	hc_char: ["Elka", "Sephy", "Yogo", "Voltana", "Gilroy", "Donkus", "Reck", "Brazz"],
-	fh_char: ["Jay", "Victor", "Cat", "Amy"]
+	fh_char: ["Jay", "Victor", "Cat", "Amy"],
 	fh_gym_rest: ["eating any food", "hitting any civilians", "spin attacking"],
 	hf_char: ["Jerry", "Amy", "Chandar", "Benjy", "Rizzik", "Bea", "Yoka", "Suze", "Marc", "Mascot"],
 	ph_scen: ["Alien Invitation", "High or Low", "Best Wishes", "Money Management", "A Magical Night"],
 	ph_rest_hard: ["without purchasing any guests that provide cash except Rich Pals", "with 5+ star guests in the winning party", "without purchasing any Counselors, Cute Dogs, or Hippies", "with $20+ at the end of the winning party", "with your popularity maxed out"],
-	roi_hard_lv: ["Terror Overhead", "The Oasis", "Jungle Rush", "Maze of Death"]
+	roi_hard_lv: ["Terror Overhead", "The Oasis", "Jungle Rush", "Maze of Death"],
 	roi_hard_rest: ["without any Fire cavemen or chickens", "without any Bow cavemen or chickens", "with a max of 2 cave upgrades"]
 	roi_purp: ["Tar", "Fire 2", "Spear 2", "Bow", "Rock 2", "Wheel"],
 	rh_hard_lv: ["6 (Guarded by Gat) to 10 (Daring Duo)", "7 (Shifting Gears) to 11 (Root Around)", "8 (Vault Robbery) to 12 (Cow Poke)", "9 (Winging It) to 13 (Rescue Mission)", "10 (Daring Duo) to 14 (Long Haul)", "11 (Root Around) to 15 (Resupply)", "12 (Cow Poke) to 16 (Armored Up)"],
@@ -885,6 +885,12 @@ export const SPICY_UFO = {
 	bk_koalarana: ["#11-20", "#21-30", "#31-40", "#41-50"],
 	avianos_resource: ["fountains", "temples", "seed factories"],
 	avianos_unit: ["40+ dodo soldiers", "30+ archers", "20+ owl priests"],
+	ancestor_units: ["Stegnar", "Quetzal", "Rexadon", "Trilock"],
+	ancestor: ["Stegnar", "Quetzal", "Rexadon", "Trilock", Brontor"],
+	vainger_slot: ["GRAV", "GUN", "BODY"],
+	vainger_item: ["3 items", "2 shield upgrades", "a module"],
+	vainger_boss: ["Ramses", "Y-Vainger (no exploit)", "3 crawler bosses"],
+	rh_level: ["Guarded by Gat", "Shifting Gears", "Vault Robbery", "Winging It", "Daring Duo", "Rescue Mission", "Armored Up", "Root Around"],
   },
   default_counts: {
     easy: 5,

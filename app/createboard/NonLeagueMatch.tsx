@@ -104,7 +104,7 @@ export default function NonLeagueMatch() {
     const stringify = (
       structured: OtherPasta | ReadonlyArray<{ name: string }>
     ) =>
-      pretty ? JSON.stringify(structured, null, 4) : JSON.stringify(structured);
+      pretty ? JSON.stringify(structured, null, 2) : JSON.stringify(structured);
     switch (metadata.type) {
       case "Custom":
         return customType === "ufo"
@@ -276,7 +276,7 @@ export default function NonLeagueMatch() {
               size="xs"
               onClick={() => {
                 navigator.clipboard.writeText(
-                  JSON.stringify(metadata.pasta, null, 4)
+                  JSON.stringify(metadata.pasta, null, 2)
                 );
               }}
             >

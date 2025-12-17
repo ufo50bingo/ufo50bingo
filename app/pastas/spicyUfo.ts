@@ -785,7 +785,7 @@ export const SPICY_UFO = {
         "Gold Disk any 5 games in a single row of the library ({{chrono_alpha}})",
         "Gold Disk any 4 games in a single genre (platform, arcade, puzzle, etc.)",
         "Collect 7 gold disks, with at least one from each row of the library ({{chrono_alpha}})",
-        "Gold Disk 6 {{cons_games}}",
+        "Gold Disk {{cons_games}}",
         "Collect 8 gold disks from 8 different columns of the library ({{chrono_alpha}})",
         "Gold Disk any 2x2 square of games in the library ({{2x2}})",
       ],
@@ -901,3 +901,4 @@ export const SPICY_UFO = {
     general: 5,
   },
 } as const;
+

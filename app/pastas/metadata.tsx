@@ -274,6 +274,17 @@ const RAW_METADATA = [
     ),
   },
   {
+    type: "UFODraft",
+    name: "Standard Draft (Beta)",
+    pasta: STANDARD_UFO,
+    isMenu: true,
+    hovercard: (
+      <Stack>
+        <span>Draft mode with the new card generation logic.</span>
+      </Stack>
+    ),
+  },
+  {
     type: "UFO",
     name: "Spicy (Beta)",
     pasta: SPICY_UFO,
@@ -350,6 +361,11 @@ interface UFO extends MetadataBase {
   pasta: UFOPasta;
 }
 
+interface UFODraft extends MetadataBase {
+  type: "UFODraft";
+  pasta: UFOPasta;
+}
+
 export type VariantMetadata =
   | WithDifficulty
   | WithoutDifficulty
@@ -357,6 +373,7 @@ export type VariantMetadata =
   | Custom
   | Other
   | DraftWithDifficulty
-  | UFO;
+  | UFO
+  | UFODraft;
 
 export const METADATA: ReadonlyArray<VariantMetadata> = RAW_METADATA;

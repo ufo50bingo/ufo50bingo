@@ -39,8 +39,10 @@ import ufoGenerator, {
   Counts,
   UFODifficulties,
   UFOGameGoals,
+  UFOPasta,
 } from "../pastas/ufoGenerator";
 import UFODifficultySelectors from "./UFODifficultySelectors";
+import UFODraftCreator from "./UFODraftCreator";
 
 const options: ReadonlyArray<VariantMetadata> = METADATA.filter(
   (d) => !d.isMenu
@@ -63,6 +65,7 @@ export default function NonLeagueMatch() {
   >(new Map(ORDERED_PROPER_GAMES.map((key) => [key, null])));
 
   const [customizedPasta, setCustomizedPasta] = useState<null | Pasta>(null);
+  const [draftPasta, setDraftPasta] = useState<null | UFOPasta>(null);
 
   const [randomizeGroupings, setRandomizeGroupings] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
@@ -157,6 +160,14 @@ export default function NonLeagueMatch() {
         }
       case "Other":
         return stringify(metadata.pasta);
+      case "UFODraft":
+        if (draftPasta != null) {
+          return stringify(
+            ufoGenerator(draftPasta).map((goal) => ({ name: goal }))
+          );
+        } else {
+          throw new Error("draftPasta expected to be nonnull");
+        }
       case "UFO":
         if (!showFilters) {
           return stringify(
@@ -328,6 +339,16 @@ export default function NonLeagueMatch() {
           setNumPlayers={setNumPlayers}
           pasta={metadata.pasta}
           onChangePasta={setCustomizedPasta}
+        />
+      )}
+      {metadata.type === "UFODraft" && (
+        <UFODraftCreator
+          draftCheckState={draftCheckState}
+          setDraftCheckState={setDraftCheckState}
+          numPlayers={numPlayers}
+          setNumPlayers={setNumPlayers}
+          pasta={metadata.pasta}
+          onChangePasta={setDraftPasta}
         />
       )}
       {variant === "Custom" && (

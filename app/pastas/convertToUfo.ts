@@ -43,7 +43,7 @@ export default function convertToUfo(pasta: Pasta): UFOPasta {
   });
   diffToGameToGoals["general"] = {};
   pasta
-    .slice(pasta.length - category_counts["general"])
+    .slice(pasta.length - (category_counts["general"] ?? 0))
     .forEach((group, index) => {
       diffToGameToGoals["general"][`temp-${index}`] = group.map(
         (goal) => goal.name

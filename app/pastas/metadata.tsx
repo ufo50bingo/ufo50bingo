@@ -297,6 +297,17 @@ const RAW_METADATA = [
       </Stack>
     ),
   },
+  {
+    type: "UFODraft",
+    name: "Spicy Draft (Beta)",
+    pasta: SPICY_UFO,
+    isMenu: true,
+    hovercard: (
+      <Stack>
+        <span>Spicy draft mode with the new card generation logic.</span>
+      </Stack>
+    ),
+  },
 ] as const;
 
 export type Variant = (typeof RAW_METADATA)[number]["name"];

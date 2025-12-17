@@ -158,10 +158,10 @@ export default function UFODraftCreator({
   }, [customizedPasta, hasTooFewGoals, hasWrongSum, onChangePasta]);
   return (
     <Stack>
-      <Alert title="Standard Draft">
-        To construct a Standard Draft game, one player should share their view
-        of this page, and then players should alternate drafting games up to the
-        agreed upon limit. If desired, players can then protect/ban games.
+      <Alert>
+        To construct a Draft game, one player should share their view of this
+        page, and then players should alternate drafting games up to the agreed
+        upon limit. If desired, players can then protect/ban games.
         <br />
         <br />
         For each game, the first checkbox indicates whether the first player has

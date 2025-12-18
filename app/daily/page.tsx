@@ -10,9 +10,20 @@ import { GoalName } from "../goals";
 import DailyFeedFetcher from "./DailyFeedFetcher";
 import { SPICY_UFO } from "../pastas/spicyUfo";
 import { STANDARD_UFO } from "../pastas/standardUfo";
-import ufoGenerator from "../generator/ufoGenerator";
+import ufoGenerator, { UFOPasta } from "../generator/ufoGenerator";
 
 export const dynamic = "force-dynamic";
+
+const SPICY_WITHOUT_GENERAL: UFOPasta = {
+  ...SPICY_UFO,
+  category_counts: {
+    easy: 5,
+    medium: 7,
+    hard: 8,
+    veryhard: 5,
+    general: 0,
+  },
+};
 
 type FilterParams = {
   date?: string;
@@ -70,13 +81,15 @@ async function constructBoard(
       const parsed: ReadonlyArray<string> = JSON.parse(raw.board);
       return parsed;
     }) ?? [];
-  let bestBoard = ufoGenerator(isSunday ? SPICY_UFO : STANDARD_UFO);
+  let bestBoard = ufoGenerator(isSunday ? SPICY_WITHOUT_GENERAL : STANDARD_UFO);
   let bestScore = getSimilarityScore(bestBoard, recentBoards);
   for (let i = 0; i < 100; i++) {
     if (bestScore === 0) {
       return bestBoard;
     }
-    const candidate = ufoGenerator(isSunday ? SPICY_UFO : STANDARD_UFO);
+    const candidate = ufoGenerator(
+      isSunday ? SPICY_WITHOUT_GENERAL : STANDARD_UFO
+    );
     const score = getSimilarityScore(candidate, recentBoards);
     if (score < bestScore) {
       bestBoard = candidate;

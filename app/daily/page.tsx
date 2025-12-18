@@ -1,5 +1,3 @@
-import getSrlV5Board from "./getSrlV5Board";
-import { STANDARD } from "../pastas/standard";
 import getSql from "../getSql";
 import {
   fromISODate,
@@ -10,7 +8,9 @@ import {
 import { isGift, isGoldCherry } from "./giftGoldCherry";
 import { GoalName } from "../goals";
 import DailyFeedFetcher from "./DailyFeedFetcher";
-import { SPICY } from "../pastas/spicy";
+import { SPICY_UFO } from "../pastas/spicyUfo";
+import { STANDARD_UFO } from "../pastas/standardUfo";
+import ufoGenerator from "../generator/ufoGenerator";
 
 export const dynamic = "force-dynamic";
 
@@ -70,13 +70,13 @@ async function constructBoard(
       const parsed: ReadonlyArray<string> = JSON.parse(raw.board);
       return parsed;
     }) ?? [];
-  let bestBoard = getSrlV5Board(isSunday ? SPICY : STANDARD);
+  let bestBoard = ufoGenerator(isSunday ? SPICY_UFO : STANDARD_UFO);
   let bestScore = getSimilarityScore(bestBoard, recentBoards);
   for (let i = 0; i < 100; i++) {
     if (bestScore === 0) {
       return bestBoard;
     }
-    const candidate = getSrlV5Board(STANDARD);
+    const candidate = ufoGenerator(isSunday ? SPICY_UFO : STANDARD_UFO);
     const score = getSimilarityScore(candidate, recentBoards);
     if (score < bestScore) {
       bestBoard = candidate;
@@ -133,6 +133,9 @@ async function getDailyBoard(date: LocalDate): Promise<DailyData> {
   const isSunday = isDateSunday(date);
   const newBoard = await constructBoard(date, isSunday);
   const newTitle = isSunday ? "Spicy Sunday" : null;
+  const newDescription = isSunday
+    ? "Follow the spicy bingo rules!\nhttps://docs.google.com/document/d/1Snf0qAm68dRROjoh8hb3Rn0OV-THyD2PcLJeuN-209U/edit?tab=t.0"
+    : null;
   const newSeed = Math.ceil(999999 * Math.random());
   await sql`INSERT INTO daily (
     date,
@@ -148,7 +151,7 @@ async function getDailyBoard(date: LocalDate): Promise<DailyData> {
   return {
     board: newBoard,
     title: newTitle,
-    description: null,
+    description: newDescription,
     creator: null,
     seed: newSeed,
   };

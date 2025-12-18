@@ -113,29 +113,27 @@ export default function NonLeagueMatch() {
     switch (metadata.type) {
       case "Custom":
         return customType === "ufo" && customUfo != null
-          ? stringify(
-            ufoGenerator(customUfo).map((goal) => ({ name: goal }))
-          )
+          ? stringify(ufoGenerator(customUfo).map((goal) => ({ name: goal })))
           : custom;
       case "GameNames":
         return stringify(
           showFilters
             ? Array.from(
-              checkState
-                .entries()
-                .filter(([_gameKey, checkState]) => checkState)
-            ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
+                checkState
+                  .entries()
+                  .filter(([_gameKey, checkState]) => checkState)
+              ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
             : ORDERED_PROPER_GAMES.map((gameKey) => ({
-              name: GAME_NAMES[gameKey],
-            }))
+                name: GAME_NAMES[gameKey],
+              }))
         );
       case "WithoutDifficulty":
         return stringify(
           showFilters || randomizeGroupings
             ? createPastaWithoutDifficulty(
-              metadata.pasta,
-              showFilters ? checkState : null
-            )
+                metadata.pasta,
+                showFilters ? checkState : null
+              )
             : metadata.pasta
         );
       case "WithDifficulty":
@@ -149,9 +147,9 @@ export default function NonLeagueMatch() {
         return stringify(
           randomizeGroupings
             ? createPasta(
-              metadata.pasta,
-              getDefaultDifficulties(metadata.pasta)
-            )
+                metadata.pasta,
+                getDefaultDifficulties(metadata.pasta)
+              )
             : metadata.pasta
         );
       case "DraftWithDifficulty":
@@ -202,17 +200,16 @@ export default function NonLeagueMatch() {
     }
   };
 
-
   const { customUfo, customUfoErrors, customUfoWarnings } = useMemo(() => {
     if (customType !== "ufo" || custom === "") {
       return { customUfo: null, customUfoErrors: [], customUfoWarnings: [] };
     }
-    const result = validateUfo(custom)
+    const result = validateUfo(custom);
     return {
       customUfo: result.pasta,
       customUfoErrors: result.errors,
       customUfoWarnings: result.warnings,
-    }
+    };
   }, [customType, custom]);
 
   return (
@@ -233,7 +230,7 @@ export default function NonLeagueMatch() {
         />
         <Menu shadow="md" width={200}>
           <Menu.Target>
-            <ActionIcon onClick={() => { }} variant="default">
+            <ActionIcon onClick={() => {}} variant="default">
               <IconDots size={16} />
             </ActionIcon>
           </Menu.Target>
@@ -254,47 +251,47 @@ export default function NonLeagueMatch() {
           metadata.type === "WithoutDifficulty" ||
           metadata.type === "UFO" ||
           variant === "Game Names") && (
-            <Group>
-              {(metadata.type === "WithDifficulty" ||
-                metadata.type === "WithoutDifficulty") && (
-                  <Tooltip
-                    label={
-                      <span>
-                        Games will be divided into groups randomly while still
-                        respecting the
-                        <br />
-                        difficulty distribution, allowing for greater card variety
-                        than using the
-                        <br />
-                        default pasta. This option is always enabled when
-                        customizing games and
-                        <br />
-                        difficulty counts.
-                      </span>
-                    }
-                  >
-                    <div>
-                      <Checkbox
-                        checked={showFilters || randomizeGroupings}
-                        label="Randomize goal groupings"
-                        onChange={(event) =>
-                          setRandomizeGroupings(event.currentTarget.checked)
-                        }
-                      />
-                    </div>
-                  </Tooltip>
-                )}
-              <Checkbox
-                checked={showFilters}
+          <Group>
+            {(metadata.type === "WithDifficulty" ||
+              metadata.type === "WithoutDifficulty") && (
+              <Tooltip
                 label={
-                  metadata.type === "WithDifficulty"
-                    ? "Customize games and difficulty counts"
-                    : "Customize games"
+                  <span>
+                    Games will be divided into groups randomly while still
+                    respecting the
+                    <br />
+                    difficulty distribution, allowing for greater card variety
+                    than using the
+                    <br />
+                    default pasta. This option is always enabled when
+                    customizing games and
+                    <br />
+                    difficulty counts.
+                  </span>
                 }
-                onChange={(event) => setShowFilters(event.currentTarget.checked)}
-              />
-            </Group>
-          )}
+              >
+                <div>
+                  <Checkbox
+                    checked={showFilters || randomizeGroupings}
+                    label="Randomize goal groupings"
+                    onChange={(event) =>
+                      setRandomizeGroupings(event.currentTarget.checked)
+                    }
+                  />
+                </div>
+              </Tooltip>
+            )}
+            <Checkbox
+              checked={showFilters}
+              label={
+                metadata.type === "WithDifficulty"
+                  ? "Customize games and difficulty counts"
+                  : "Customize games"
+              }
+              onChange={(event) => setShowFilters(event.currentTarget.checked)}
+            />
+          </Group>
+        )}
         {metadata.type === "UFO" && (
           <Tooltip label="Copy the source in the new “UFO” format.">
             <Button
@@ -379,44 +376,49 @@ export default function NonLeagueMatch() {
             value={customType}
             onChange={(newValue) => setCustomType(newValue as CustomType)}
           />
-          {customType === "ufo"
-            ? (
-              <>
-                <Textarea
-                  autosize
-                  label="Add your pasta here:"
-                  maxRows={12}
-                  minRows={2}
-                  onChange={(event) => setCustom(event.currentTarget.value)}
-                  spellCheck={false}
-                  value={custom}
-                  data-monospace
-                />
-                {customUfoErrors.length > 0 && (
-                  <Alert color="red" style={{ whiteSpace: "pre-line" }} title="Error: Pasta format is incorrect">
-                    {customUfoErrors.join("\n")}
-                  </Alert>
-                )}
-                {customUfoWarnings.length > 0 && (
-                  <Alert color="yellow" style={{ whiteSpace: "pre-line" }} title="Warning: Pasta may have mistakes">
-                    {customUfoWarnings.join("\n")}
-                  </Alert>
-                )}
-              </>
-            )
-            : (
-              <JsonInput
+          {customType === "ufo" ? (
+            <>
+              <Textarea
                 autosize
                 label="Add your pasta here:"
                 maxRows={12}
                 minRows={2}
-                onChange={setCustom}
+                onChange={(event) => setCustom(event.currentTarget.value)}
                 spellCheck={false}
-                validationError="Invalid JSON"
                 value={custom}
+                data-monospace
               />
-            )
-          }
+              {customUfoErrors.length > 0 && (
+                <Alert
+                  color="red"
+                  style={{ whiteSpace: "pre-line" }}
+                  title="Error: Pasta format is incorrect"
+                >
+                  {customUfoErrors.join("\n")}
+                </Alert>
+              )}
+              {customUfoWarnings.length > 0 && (
+                <Alert
+                  color="yellow"
+                  style={{ whiteSpace: "pre-line" }}
+                  title="Warning: Pasta may have mistakes"
+                >
+                  {customUfoWarnings.join("\n")}
+                </Alert>
+              )}
+            </>
+          ) : (
+            <JsonInput
+              autosize
+              label="Add your pasta here:"
+              maxRows={12}
+              minRows={2}
+              onChange={setCustom}
+              spellCheck={false}
+              validationError="Invalid JSON"
+              value={custom}
+            />
+          )}
         </Stack>
       )}
       <Text>
@@ -472,11 +474,9 @@ export default function NonLeagueMatch() {
           (metadata.type === "WithDifficulty" &&
             showFilters &&
             customizedPasta == null) ||
-          (
-            metadata.type === "Custom" &&
+          (metadata.type === "Custom" &&
             customType === "ufo" &&
-            customUfo == null
-          )
+            customUfo == null)
         }
         onClick={async () => {
           setIsCreationInProgress(true);
@@ -489,18 +489,19 @@ export default function NonLeagueMatch() {
               variant,
               bingosyncVariant:
                 metadata.type === "UFO" ||
-                  (metadata.type === "Custom" &&
-                    (customType === "fixed_board" || customType === "ufo"))
+                (metadata.type === "Custom" &&
+                  (customType === "fixed_board" || customType === "ufo"))
                   ? "18"
                   : metadata.type === "GameNames" ||
                     (metadata.type === "Custom" && customType === "randomized")
-                    ? "172"
-                    : "187",
+                  ? "172"
+                  : "187",
               isCustom:
-                (showFilters && metadata.type === "GameNames") ||
-                metadata.type === "UFO" ||
-                metadata.type === "WithDifficulty" ||
-                metadata.type === "WithoutDifficulty",
+                showFilters &&
+                (metadata.type === "GameNames" ||
+                  metadata.type === "UFO" ||
+                  metadata.type === "WithDifficulty" ||
+                  metadata.type === "WithoutDifficulty"),
               isLockout,
               pasta: getSerializedPasta(false),
               leagueInfo: null,
@@ -532,15 +533,12 @@ export default function NonLeagueMatch() {
       </Button>
       <Button
         disabled={
-          (
-            metadata.type === "WithDifficulty" &&
+          (metadata.type === "WithDifficulty" &&
             showFilters &&
-            customizedPasta == null
-          ) || (
-            metadata.type === "Custom" &&
+            customizedPasta == null) ||
+          (metadata.type === "Custom" &&
             customType === "ufo" &&
-            customUfo == null
-          )
+            customUfo == null)
         }
         onClick={() => {
           navigator.clipboard.writeText(getSerializedPasta(true));

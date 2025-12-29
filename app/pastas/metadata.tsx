@@ -1,11 +1,4 @@
 import { List, Stack, Text } from "@mantine/core";
-import { BLITZ } from "./blitz";
-import { CAMPANELLA3 } from "./campanella3";
-import { CHOCO } from "./choco";
-import { CLARITY } from "./clarity";
-import { NOZZLO } from "./nozzlo";
-import { SPICY } from "./spicy";
-import { STANDARD } from "./standard";
 import { ReactNode } from "react";
 import { Difficulty, Game } from "../goals";
 import { UFOPasta } from "../generator/ufoGenerator";
@@ -19,12 +12,13 @@ import { NOZZLO_UFO } from "./nozzloUfo";
 
 const RAW_METADATA = [
   {
-    type: "WithDifficulty",
+    type: "UFO",
     name: "Standard",
-    pasta: STANDARD,
+    pasta: STANDARD_UFO,
     isMenu: false,
     hovercard: (
       <Stack>
+        .
         <span>
           This is the default goal set and format for bingo, and the one used in
           Bingo League play.
@@ -56,9 +50,9 @@ const RAW_METADATA = [
     ),
   },
   {
-    type: "DraftWithDifficulty",
+    type: "UFODraft",
     name: "Standard Draft",
-    pasta: STANDARD,
+    pasta: STANDARD_UFO,
     isMenu: false,
     hovercard: (
       <Stack>
@@ -73,9 +67,9 @@ const RAW_METADATA = [
     ),
   },
   {
-    type: "WithDifficulty",
+    type: "UFO",
     name: "Spicy",
-    pasta: SPICY,
+    pasta: SPICY_UFO,
     isMenu: false,
     hovercard: (
       <Stack>
@@ -117,9 +111,25 @@ const RAW_METADATA = [
     ),
   },
   {
-    type: "WithoutDifficulty",
+    type: "UFODraft",
+    name: "Spicy Draft",
+    pasta: SPICY_UFO,
+    isMenu: false,
+    hovercard: (
+      <Stack>
+        <span>
+          A new way to play the Spicy variant.
+          <br />
+          Players draft/ban games, and then a custom board is created where each
+          player's picks are represented equally.
+        </span>
+      </Stack>
+    ),
+  },
+  {
+    type: "UFO",
     name: "Blitz",
-    pasta: BLITZ,
+    pasta: BLITZ_UFO,
     isMenu: false,
     hovercard: (
       <Stack>
@@ -138,9 +148,9 @@ const RAW_METADATA = [
     ),
   },
   {
-    type: "WithoutDifficulty",
+    type: "UFO",
     name: "Nozzlo",
-    pasta: NOZZLO,
+    pasta: NOZZLO_UFO,
     isMenu: false,
     hovercard: (
       <Stack>
@@ -208,9 +218,9 @@ const RAW_METADATA = [
     ),
   },
   {
-    type: "Other",
+    type: "UFO",
     name: "Choco",
-    pasta: CHOCO,
+    pasta: CHOCO_UFO,
     isMenu: true,
     hovercard: (
       <Stack>
@@ -225,9 +235,9 @@ const RAW_METADATA = [
     ),
   },
   {
-    type: "Other",
+    type: "UFO",
     name: "Campanella 3",
-    pasta: CAMPANELLA3,
+    pasta: CAMPANELLA3_UFO,
     isMenu: true,
     hovercard: (
       <Stack>
@@ -248,9 +258,9 @@ const RAW_METADATA = [
     ),
   },
   {
-    type: "Other",
+    type: "UFO",
     name: "Clarity",
-    pasta: CLARITY,
+    pasta: CLARITY_UFO,
     isMenu: true,
     hovercard: (
       <Stack>
@@ -261,120 +271,6 @@ const RAW_METADATA = [
         <Text size="xs">
           <em>Created by Guri</em>
         </Text>
-      </Stack>
-    ),
-  },
-  {
-    type: "UFO",
-    name: "Standard (Beta)",
-    pasta: STANDARD_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>
-          This variant uses the standard goal list with new card generation
-          logic. We are testing the new logic in preparation for Season 3!
-        </span>
-      </Stack>
-    ),
-  },
-  {
-    type: "UFODraft",
-    name: "Standard Draft (Beta)",
-    pasta: STANDARD_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>Draft mode with the new card generation logic.</span>
-      </Stack>
-    ),
-  },
-  {
-    type: "UFO",
-    name: "Spicy (Beta)",
-    pasta: SPICY_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>
-          This variant uses the Spicy goal list with new card generation logic.
-        </span>
-      </Stack>
-    ),
-  },
-  {
-    type: "UFODraft",
-    name: "Spicy Draft (Beta)",
-    pasta: SPICY_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>Spicy draft mode with the new card generation logic.</span>
-      </Stack>
-    ),
-  },
-  {
-    type: "UFO",
-    name: "Blitz (Beta)",
-    pasta: BLITZ_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>
-          This variant uses the Blitz goal list with new card generation logic.
-        </span>
-      </Stack>
-    ),
-  },
-  {
-    type: "UFO",
-    name: "Nozzlo (Beta)",
-    pasta: NOZZLO_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>
-          This variant uses the Nozzlo goal list with new card generation logic.
-        </span>
-      </Stack>
-    ),
-  },
-  {
-    type: "UFO",
-    name: "Choco (Beta)",
-    pasta: CHOCO_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>
-          This variant uses the Choco goal list with new card generation logic.
-        </span>
-      </Stack>
-    ),
-  },
-  {
-    type: "UFO",
-    name: "Campanella 3 (Beta)",
-    pasta: CAMPANELLA3_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>
-          This variant uses the Campanella 3 goal list with new card generation logic.
-        </span>
-      </Stack>
-    ),
-  },
-  {
-    type: "UFO",
-    name: "Clarity (Beta)",
-    pasta: CLARITY_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>
-          This variant uses the Clarity goal list with new card generation logic.
-        </span>
       </Stack>
     ),
   },

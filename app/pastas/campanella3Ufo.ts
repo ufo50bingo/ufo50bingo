@@ -68,7 +68,7 @@ export const CAMPANELLA3_UFO = {
   },
   tokens: {},
   category_counts: {
-    medium: 23,
-    general: 2,
+    medium: 24,
+    general: 1,
   },
 };

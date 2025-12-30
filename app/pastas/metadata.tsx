@@ -151,7 +151,7 @@ const RAW_METADATA = [
     type: "UFO",
     name: "Nozzlo",
     pasta: NOZZLO_UFO,
-    isMenu: false,
+    isMenu: true,
     hovercard: (
       <Stack>
         <span>

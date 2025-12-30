@@ -249,7 +249,7 @@ export default function NonLeagueMatch() {
       <Group justify="space-between">
         {(metadata.type === "WithDifficulty" ||
           metadata.type === "WithoutDifficulty" ||
-          metadata.type === "UFO" ||
+          (metadata.type === "UFO" && metadata.isGeneric !== true) ||
           variant === "Game Names") && (
           <Group>
             {(metadata.type === "WithDifficulty" ||
@@ -283,11 +283,7 @@ export default function NonLeagueMatch() {
             )}
             <Checkbox
               checked={showFilters}
-              label={
-                metadata.type === "WithDifficulty"
-                  ? "Customize games and difficulty counts"
-                  : "Customize games"
-              }
+              label="Customize"
               onChange={(event) => setShowFilters(event.currentTarget.checked)}
             />
           </Group>
@@ -310,7 +306,7 @@ export default function NonLeagueMatch() {
       </Group>
       {(metadata.type === "WithoutDifficulty" ||
         variant === "Game Names" ||
-        metadata.type === "UFO") &&
+        (metadata.type === "UFO" && metadata.isGeneric !== true)) &&
         showFilters && (
           <GameChecker checkState={checkState} setCheckState={setCheckState} />
         )}
@@ -321,19 +317,21 @@ export default function NonLeagueMatch() {
           title="Error: You must select at least 25 games"
         />
       )}
-      {metadata.type === "UFO" && showFilters && (
-        <UFODifficultySelectors
-          goals={metadata.pasta.goals}
-          checkState={checkState}
-          counts={difficultyCounts[metadata.name]}
-          setCounts={(newCounts) => {
-            setDifficultyCounts({
-              ...difficultyCounts,
-              [metadata.name]: newCounts,
-            });
-          }}
-        />
-      )}
+      {metadata.type === "UFO" &&
+        metadata.isGeneric !== true &&
+        showFilters && (
+          <UFODifficultySelectors
+            goals={metadata.pasta.goals}
+            checkState={checkState}
+            counts={difficultyCounts[metadata.name]}
+            setCounts={(newCounts) => {
+              setDifficultyCounts({
+                ...difficultyCounts,
+                [metadata.name]: newCounts,
+              });
+            }}
+          />
+        )}
       {metadata.type === "WithDifficulty" && showFilters && (
         <PastaFilter
           key={variant}

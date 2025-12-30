@@ -239,6 +239,7 @@ const RAW_METADATA = [
     name: "Campanella 3",
     pasta: CAMPANELLA3_UFO,
     isMenu: true,
+    isGeneric: true,
     hovercard: (
       <Stack>
         <span>Mostly involves the “secret” minigames in Campanella 3.</span>
@@ -336,6 +337,7 @@ interface DraftWithDifficulty extends MetadataBase {
 interface UFO extends MetadataBase {
   type: "UFO";
   pasta: UFOPasta;
+  isGeneric?: boolean;
 }
 
 interface UFODraft extends MetadataBase {

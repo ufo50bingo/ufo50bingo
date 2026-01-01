@@ -5,7 +5,6 @@ import {
   Divider,
   List,
   ListItem,
-  Text,
   Title,
 } from "@mantine/core";
 

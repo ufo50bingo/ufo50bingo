@@ -55,6 +55,8 @@ function getOverlays(
   const matchStartTime = getMatchStartTime(changelog, analysisSeconds);
   const changes = getChangesWithoutMistakes(changelog.changes);
   const ranges = getSquareCompletionRanges(matchStartTime, changes);
+
+  console.log('ranges', ranges);
   changes.forEach((change) => {
     if (change.color == "blank") {
       const oldOrder = orders[change.index];
@@ -73,6 +75,8 @@ function getOverlays(
       count += 1;
     }
   });
+
+  console.log('orders', orders);
 
   const overlays = Array(25)
     .fill(null)

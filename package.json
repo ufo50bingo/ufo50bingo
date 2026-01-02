@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "next build --turbopack",
     "start": "next start",
     "lint": "next lint"
   },
@@ -13,7 +13,7 @@
     "@mantine/core": "^8.2.4",
     "@mantine/hooks": "^8.2.4",
     "@neondatabase/serverless": "^1.0.1",
-    "@next/third-parties": "^15.4.6",
+    "@next/third-parties": "16.1.1",
     "@supabase/supabase-js": "^2.75.0",
     "@tabler/icons-react": "^3.34.1",
     "@types/chroma-js": "^3.1.1",
@@ -26,10 +26,10 @@
     "googleapis": "^159.0.0",
     "html2canvas": "^1.4.1",
     "luxon": "^3.7.2",
-    "next": "^15.4.8",
+    "next": "16.1.1",
     "papaparse": "^5.5.3",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
     "ts-node": "^10.9.2",
     "zod": "^4.2.1"
   },
@@ -39,15 +39,19 @@
     "@tailwindcss/postcss": "^4",
     "@types/luxon": "^3.7.1",
     "@types/node": "^20.19.11",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
     "eslint": "9.34.0",
-    "eslint-config-next": "15.5.2",
+    "eslint-config-next": "16.1.1",
     "postcss": "^8.5.6",
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
     "tailwindcss": "^4",
     "typescript": "^5.9.2"
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
+  "overrides": {
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3"
+  }
 }

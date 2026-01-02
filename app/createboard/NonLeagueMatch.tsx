@@ -59,12 +59,12 @@ export default function NonLeagueMatch() {
   const [variant, setVariant] = useState<Variant>(options[0].name);
   const [custom, setCustom] = useState("");
   const [checkState, setCheckState] = useState<Map<Game, boolean>>(
-    new Map(ORDERED_PROPER_GAMES.map((key) => [key, true]))
+    new Map(ORDERED_PROPER_GAMES.toSorted().map((key) => [key, true]))
   );
   const [numPlayers, setNumPlayers] = useState(2);
   const [draftCheckState, setDraftCheckState] = useState<
     Map<Game, null | number>
-  >(new Map(ORDERED_PROPER_GAMES.map((key) => [key, null])));
+  >(new Map(ORDERED_PROPER_GAMES.toSorted().map((key) => [key, null])));
 
   const [customizedPasta, setCustomizedPasta] = useState<null | Pasta>(null);
   const [draftPasta, setDraftPasta] = useState<null | UFOPasta>(null);

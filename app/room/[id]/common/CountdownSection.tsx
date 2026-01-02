@@ -1,5 +1,5 @@
 import { Accordion, Alert, Button, NumberInput, Stack } from "@mantine/core";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import sendChat from "./sendChat";
 import { RoomView } from "../roomCookie";
@@ -12,7 +12,6 @@ const REVEAL_STEP = "REVEAL!";
 
 export default function CountdownSection({ view }: Props) {
   const { id } = useParams<{ id: string }>();
-  const useBot = useSearchParams().get("use_bot") === "true";
 
   const [analysisSeconds, setAnalysisSeconds] = useState<string | number>(60);
 
@@ -95,16 +94,14 @@ export default function CountdownSection({ view }: Props) {
             value={analysisSeconds}
             min={10}
             onChange={setAnalysisSeconds}
-            disabled={useBot || isRunning}
+            disabled={isRunning}
           />
           {isRunning ? (
             <Button onClick={cancelSequence}>Cancel Countdown</Button>
           ) : (
             <Button
               disabled={
-                useBot ||
-                typeof analysisSeconds === "string" ||
-                analysisSeconds < 10
+                typeof analysisSeconds === "string" || analysisSeconds < 10
               }
               onClick={startSequence}
             >

@@ -48,7 +48,13 @@ export function findGamesForGoal(goal: GoalName): Game[] {
   const strippedGoal = stripText(goal);
   ORDERED_PROPER_GAMES.forEach((name) => {
     const testName = name === "miniandmax" ? "minimax" : name;
-    if (strippedGoal.includes(testName)) {
+    const testGoal =
+      name === "mortol"
+        ? strippedGoal.replace("mortolii", "")
+        : name === "campanella"
+        ? strippedGoal.replace("campanella2", "").replace("campanella3", "")
+        : strippedGoal;
+    if (testGoal.includes(testName)) {
       games.push(name);
     }
   });

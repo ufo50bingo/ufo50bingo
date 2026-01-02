@@ -24,8 +24,9 @@ import ScoreSquare from "../common/ScoreSquare";
 import useMatchTimer from "../common/useMatchTimer";
 import { useMediaQuery } from "@mantine/hooks";
 import SimpleGeneralTracker from "./SimpleGeneralTracker";
-import { GOAL_TO_TYPES } from "../cast/goalToTypes";
 import useShowGeneralTracker from "./useShowGeneralTracker";
+import findGoal from "@/app/findGoal";
+import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 
 export type Props = {
   id: string;
@@ -95,8 +96,8 @@ export default function Play({
   const generalGoals = useMemo<ReadonlyArray<Square>>(
     () =>
       board.filter((square) => {
-        const types = GOAL_TO_TYPES[square.name];
-        return types != null && types[1] === "general";
+        const result = findGoal(square.name, STANDARD_UFO);
+        return result != null && result.category === "general";
       }),
     [board]
   );

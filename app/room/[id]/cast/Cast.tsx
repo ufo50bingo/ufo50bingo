@@ -13,7 +13,6 @@ import { useCallback, useMemo, useState } from "react";
 import Feed from "../common/Feed";
 import { Game, GoalName, ORDERED_GAMES } from "@/app/goals";
 import { getAllTerminalCodes, getGameToGoals } from "./findAllGames";
-import { GOAL_TO_TYPES } from "./goalToTypes";
 import GeneralGoal from "./GeneralGoal";
 import InfoCard from "./InfoCard";
 import GameInfo from "./GameInfo";
@@ -31,6 +30,8 @@ import SideColumn from "./SideColumn";
 import RecentGames from "./RecentGames";
 import ScoreSquare from "../common/ScoreSquare";
 import SideCell from "./SideCell";
+import { STANDARD_UFO } from "@/app/pastas/standardUfo";
+import findGoal from "@/app/findGoal";
 
 export type CastProps = {
   id: string;
@@ -168,8 +169,8 @@ export default function Cast({
 
   const generalGoals = useMemo<ReadonlyArray<Square>>(() => {
     const filtered = board.filter((square) => {
-      const types = GOAL_TO_TYPES[square.name];
-      return types != null && types[1] === "general";
+      const result = findGoal(square.name, STANDARD_UFO);
+      return result != null && result.category === "general";
     });
     let spliceIndex = filtered.findIndex((square) =>
       isGift(square.name as GoalName)
@@ -255,7 +256,14 @@ export default function Cast({
         return colors;
       });
     return highlights;
-  }, [leftColor, rightColor, leftGame, rightGame, gameToGoals, highlightCurrentGame]);
+  }, [
+    leftColor,
+    rightColor,
+    leftGame,
+    rightGame,
+    gameToGoals,
+    highlightCurrentGame,
+  ]);
 
   return (
     <>
@@ -338,29 +346,29 @@ export default function Cast({
                 onChange={addRightGame}
               />
             </Group>
-            {generalGoals.length > 0
-              ? getCard(generalGoals[0], 431)
-              : <InfoCard title="Multi-goal games" height={431}>
+            {generalGoals.length > 0 ? (
+              getCard(generalGoals[0], 431)
+            ) : (
+              <InfoCard title="Multi-goal games" height={431}>
                 <Stack gap={4}>
                   {multiGoalGameElements.length > 0
                     ? multiGoalGameElements
                     : "No multi-goal games on this card!"}
                 </Stack>
               </InfoCard>
-            }
+            )}
           </Stack>
-        )
-          : (
-            generalGoals.length > 0
-              ? getCard(generalGoals[0], 475)
-              : <InfoCard title="Multi-goal games" height={475}>
-                <Stack gap={4}>
-                  {multiGoalGameElements.length > 0
-                    ? multiGoalGameElements
-                    : "No multi-goal games on this card!"}
-                </Stack>
-              </InfoCard>
-          )}
+        ) : generalGoals.length > 0 ? (
+          getCard(generalGoals[0], 475)
+        ) : (
+          <InfoCard title="Multi-goal games" height={475}>
+            <Stack gap={4}>
+              {multiGoalGameElements.length > 0
+                ? multiGoalGameElements
+                : "No multi-goal games on this card!"}
+            </Stack>
+          </InfoCard>
+        )}
         {generalGoals.length > 0 && (
           <Group w="100%">
             {generalGoals.slice(1).map((g) => getCard(g, null))}

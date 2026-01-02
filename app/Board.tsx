@@ -3,9 +3,10 @@ import classes from "./Board.module.css";
 import { CSSProperties, ReactNode, useState } from "react";
 import { BingosyncColor, TBoard } from "./matches/parseBingosyncData";
 import { Difficulty } from "./goals";
-import { GOAL_TO_TYPES } from "./room/[id]/cast/goalToTypes";
-import { SPICY_GOAL_TO_TYPES } from "./room/[id]/cast/spicyGoalToTypes";
 import getColorHex from "./room/[id]/cast/getColorHex";
+import findGoal from "./findGoal";
+import { STANDARD_UFO } from "./pastas/standardUfo";
+import { SPICY_UFO } from "./pastas/spicyUfo";
 
 type Props = {
   board: TBoard;
@@ -54,15 +55,12 @@ function getDifficulty(
   name: string,
   shownDifficulties: ReadonlyArray<Difficulty>
 ): null | ReactNode {
-  let types = GOAL_TO_TYPES[name];
-  if (types == null) {
-    types = SPICY_GOAL_TO_TYPES[name];
-    if (types == null) {
-      return null;
-    }
+  const result = findGoal(name, STANDARD_UFO) ?? findGoal(name, SPICY_UFO);
+  if (result == null) {
+    return null;
   }
-  const difficulty = types[1];
-  if (difficulty == null || !shownDifficulties.includes(difficulty)) {
+  const difficulty = result.category;
+  if (!shownDifficulties.includes(difficulty as Difficulty)) {
     return null;
   }
   let difficultyClass;
@@ -88,6 +86,8 @@ function getDifficulty(
       difficultyClass = classes.general;
       letter = "G";
       break;
+    default:
+      return null;
   }
   return (
     <>

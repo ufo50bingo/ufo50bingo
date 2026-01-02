@@ -48,7 +48,7 @@ export default function findGoal(
     const match = goal.match(option.regex);
     if (match != null) {
       return {
-        goal,
+        goal: option.goal,
         category: option.tags.category,
         subcategory: option.tags.subcategory,
         tokens: match.slice(1),

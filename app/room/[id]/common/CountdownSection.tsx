@@ -114,7 +114,7 @@ export default function CountdownSection({ view }: Props) {
                 {START_STEPS.map((step) => step.text).join(", ")}"
                 <br />
                 Use this if you are unpausing, or if your variant does not
-                include an analysis period before playing.
+                include any scanning time before playing.
               </>
             }
           >

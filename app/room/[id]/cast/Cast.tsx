@@ -5,7 +5,6 @@ import {
   BingosyncColor,
   getChangelog,
   RawFeed,
-  Square,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
 import { Group, Stack } from "@mantine/core";

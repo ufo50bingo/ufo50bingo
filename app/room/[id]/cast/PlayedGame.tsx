@@ -12,7 +12,8 @@ type Props = {
 export default function PlayedGame({ game, startTime, endTime }: Props) {
   return (
     <div className={classes.container}>
-      <img src={`/games/${game}.png`} className={classes.gameIcon} />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img alt={game} src={`/games/${game}.png`} className={classes.gameIcon} />
       <div className={classes.tag}>
         {endTime == null ? (
           <RunningDuration

@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useMemo, useRef, useState } from "react";
 import { TBoard } from "../matches/parseBingosyncData";
 import Board from "../Board";
@@ -75,10 +73,14 @@ export default function Daily({
   );
   const { bingo, majority, blackout } =
     getFirstBingoMajorityBlackoutIndex(feed);
-  const finalMark = feed.findLastIndex(item => item.type === "mark");
-  const finalBoard = finalMark >= 0 && finalMark !== bingo && finalMark !== majority && finalMark !== blackout
-    ? finalMark
-    : null;
+  const finalMark = feed.findLastIndex((item) => item.type === "mark");
+  const finalBoard =
+    finalMark >= 0 &&
+    finalMark !== bingo &&
+    finalMark !== majority &&
+    finalMark !== blackout
+      ? finalMark
+      : null;
 
   const [modalFeedIndex, setModalFeedIndex] = useState<number | null>(null);
 
@@ -121,6 +123,7 @@ export default function Daily({
   prevSearchParams.set("date", toISODate(getPrevDate(date)));
 
   const pauseRef = useRef<() => void>(pause);
+  // eslint-disable-next-line react-hooks/refs
   pauseRef.current = pause;
   useEffect(() => {
     const onBeforeUnload = () => {
@@ -402,7 +405,10 @@ export default function Daily({
                     feedWithDuration[finalBoard][0],
                     false
                   )}\n`;
-                  summary += getEmojiBoard(getBoardAtIndex(feed, finalBoard), color);
+                  summary += getEmojiBoard(
+                    getBoardAtIndex(feed, finalBoard),
+                    color
+                  );
                 }
                 const completions = getDailyTimes(finalMark, feedWithDuration);
                 const goalsAndTimes = completions.map(
@@ -412,8 +418,9 @@ export default function Daily({
                         ? duration - completions[index - 1][2]
                         : duration;
                     const formattedDur = getDurationText(ms, false);
-                    return `${index + 1}. ${formattedDur} — ${plainBoard[squareIndex]
-                      }`;
+                    return `${index + 1}. ${formattedDur} — ${
+                      plainBoard[squareIndex]
+                    }`;
                   }
                 );
                 summary += "\n";

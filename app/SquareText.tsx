@@ -34,6 +34,7 @@ export default function SquareText({ text, hasOverlays }: Props) {
     }
     const lower = fits ? fontSearch.fontSize : fontSearch.lower;
     const upper = fits ? fontSearch.upper : fontSearch.fontSize;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setFontSearch({
       fontSize: upper - lower >= 1 ? (lower + upper) / 2 : lower,
       upper,

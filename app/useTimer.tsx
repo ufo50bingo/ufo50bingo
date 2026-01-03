@@ -18,6 +18,7 @@ type Return = {
 };
 
 export default function useTimer(input?: Input): Return {
+  // eslint-disable-next-line react-hooks/purity
   const [curStartTime, setCurStartTime] = useState(Date.now());
   const [accumulatedDuration, setAccumulatedDuration] = useState(
     input?.durationMS ?? 0

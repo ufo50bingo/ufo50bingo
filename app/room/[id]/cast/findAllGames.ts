@@ -1,7 +1,6 @@
 import {
   Game,
   GAME_NAMES,
-  GoalName,
   ORDERED_PROPER_GAMES,
   ProperGame,
 } from "@/app/goals";

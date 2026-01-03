@@ -1,4 +1,4 @@
-import { Difficulty, GoalName } from "@/app/goals";
+import { Difficulty } from "@/app/goals";
 import { useMemo, useState } from "react";
 
 export type SortType = "fast" | "alphabetical" | "chronological";
@@ -29,7 +29,7 @@ export interface CasterState extends BaseState {
 export default function useLocalState(id: string, seed: number): CasterState {
   const key = `${id}-${seed}`;
 
-  const initialState = useMemo(() => getInitialState(key), []);
+  const initialState = useMemo(() => getInitialState(key), [key]);
   const [shownDifficulties, setShownDifficultiesRaw] = useState<
     ReadonlyArray<Difficulty>
   >(initialState.shownDifficulties);

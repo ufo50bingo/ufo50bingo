@@ -22,6 +22,7 @@ export default function RunningDuration({
   }, []);
   return (
     <Duration
+      // eslint-disable-next-line react-hooks/purity
       duration={accumulatedDuration + Date.now() - curStartTime}
       showDecimal={showDecimal}
     />

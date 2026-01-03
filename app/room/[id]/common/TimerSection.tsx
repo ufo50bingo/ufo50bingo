@@ -39,7 +39,8 @@ function TimerModal({ close, state, setState, isMobile }: ModalProps) {
   const [accumulatedDuration, setAccumulatedDuration] = useState<null | number>(
     state.curStartTime == null
       ? state.accumulatedDuration
-      : state.accumulatedDuration + Date.now() - state.curStartTime
+      : // eslint-disable-next-line react-hooks/purity
+        state.accumulatedDuration + Date.now() - state.curStartTime
   );
   return (
     <Modal

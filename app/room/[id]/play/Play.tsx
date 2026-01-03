@@ -91,6 +91,7 @@ export default function Play({
     initialAccumulatedDuration: -60000,
   });
 
+  // eslint-disable-next-line react-hooks/refs
   pauseRef.current = pause;
 
   const generalGoals = useMemo<ReadonlyArray<Square>>(

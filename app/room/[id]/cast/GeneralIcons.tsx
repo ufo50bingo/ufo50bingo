@@ -1,7 +1,6 @@
 import classes from "./GeneralIcons.module.css";
 import { IconCircleCheckFilled } from "@tabler/icons-react";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
-import { GoalName } from "@/app/goals";
 import { IconType } from "./useLocalState";
 import { GeneralCounts } from "./CastPage";
 import SideCell from "./SideCell";
@@ -36,6 +35,7 @@ function Icon({ goal, src, count, color, squareColor, iconType }: IconProps) {
     );
   return (
     <SideCell>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img className={imgClass} src={src} alt={goal} />
       {tag}
     </SideCell>

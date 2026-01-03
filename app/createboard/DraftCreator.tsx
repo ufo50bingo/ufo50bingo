@@ -142,6 +142,7 @@ export default function DraftCreator({
             difficultyCountsByPlayer
           )
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     hasWrongSum,
     hasTooFewGoals,

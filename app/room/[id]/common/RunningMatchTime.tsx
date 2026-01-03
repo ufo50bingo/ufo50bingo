@@ -15,6 +15,7 @@ export default function RunningMatchTime({ curEndTime, matchTime }: Props) {
     );
     return () => clearInterval(interval);
   }, []);
+  // eslint-disable-next-line react-hooks/purity
   const totalRemaining = curEndTime - Date.now();
   const timeToDisplay =
     totalRemaining > matchTime ? totalRemaining - matchTime : totalRemaining;

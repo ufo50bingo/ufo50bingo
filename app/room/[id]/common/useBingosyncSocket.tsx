@@ -59,6 +59,7 @@ export default function useBingosyncSocket({
   const dingRef = useRef<HTMLAudioElement | null>(null);
   const alarmRef = useRef<HTMLAudioElement | null>(null);
   const selectedDingsRef = useRef<ReadonlyArray<Ding>>(dings);
+  // eslint-disable-next-line react-hooks/refs
   selectedDingsRef.current = dings;
 
   const onMessage = useCallback(

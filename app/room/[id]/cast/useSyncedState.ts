@@ -96,10 +96,12 @@ export default function useSyncedState({
     null | ((change: CountChange, shouldBroadcast: boolean) => unknown)
   >(null);
   const seedRef = useRef<number>(seed);
+  // eslint-disable-next-line react-hooks/refs
   if (seedRef.current !== seed) {
     setGeneralsRaw({});
     setLeftGamesRaw([]);
     setRightGamesRaw([]);
+    // eslint-disable-next-line react-hooks/refs
     seedRef.current = seed;
   }
 
@@ -217,10 +219,7 @@ export default function useSyncedState({
     ) => {
       const leftCounts = generals[change.goal]?.leftCounts ?? {};
       const rightCounts = generals[change.goal]?.rightCounts ?? {};
-      const newCounts =
-        (change.is_left
-          ? generals[change.goal]?.leftCounts
-          : generals[change.goal]?.rightCounts) ?? {};
+      const newCounts = change.is_left ? { ...leftCounts } : { ...rightCounts };
       newCounts[change.game] = change.count;
       const newGeneralState = change.is_left
         ? {
@@ -250,6 +249,7 @@ export default function useSyncedState({
         await supabase.from("general_count").upsert(rowChange);
       }
     };
+    // eslint-disable-next-line react-hooks/refs
     setGeneralGameCountRef.current = setGeneralGameCount;
 
     return {

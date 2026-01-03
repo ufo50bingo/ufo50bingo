@@ -1,4 +1,12 @@
-import { Accordion, Alert, Button, NumberInput, Stack } from "@mantine/core";
+import {
+  Accordion,
+  Alert,
+  Button,
+  Checkbox,
+  NumberInput,
+  Stack,
+  Tooltip,
+} from "@mantine/core";
 import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import sendChat from "./sendChat";
@@ -9,11 +17,20 @@ type Props = {
 };
 
 const REVEAL_STEP = "REVEAL!";
+const START_STEPS = [
+  { text: "Start in 5", delay: 1000 },
+  { text: "4", delay: 1000 },
+  { text: "3", delay: 1000 },
+  { text: "2", delay: 1000 },
+  { text: "1", delay: 1000 },
+  { text: "START!", delay: null },
+];
 
 export default function CountdownSection({ view }: Props) {
   const { id } = useParams<{ id: string }>();
 
   const [analysisSeconds, setAnalysisSeconds] = useState<string | number>(60);
+  const [skipReveal, setSkipReveal] = useState(false);
 
   const [isRunning, setIsRunning] = useState(false);
   const cancelRef = useRef(false);
@@ -35,32 +52,31 @@ export default function CountdownSection({ view }: Props) {
     setIsRunning(true);
     cancelRef.current = false;
 
-    const sequence = [
-      { text: "4", delay: 1000 },
-      { text: "3", delay: 1000 },
-      { text: "2", delay: 1000 },
-      { text: "1", delay: 1000 },
-      { text: REVEAL_STEP, delay: 1000 },
-      { text: "Start in 5", delay: (analysisSeconds - 5) * 1000 },
-      { text: "4", delay: 1000 },
-      { text: "3", delay: 1000 },
-      { text: "2", delay: 1000 },
-      { text: "1", delay: 1000 },
-      { text: "START!", delay: 1000 },
-    ];
+    const sequence = skipReveal
+      ? START_STEPS
+      : [
+          { text: "Reveal in 5", delay: 1000 },
+          { text: "4", delay: 1000 },
+          { text: "3", delay: 1000 },
+          { text: "2", delay: 1000 },
+          { text: "1", delay: 1000 },
+          { text: REVEAL_STEP, delay: (analysisSeconds - 5) * 1000 },
+          ...START_STEPS,
+        ];
 
-    sendChat(id, "Reveal in 5");
     for (const { text, delay } of sequence) {
       if (cancelRef.current) {
         break;
       }
-      await new Promise((resolve) => {
-        timeoutRef.current = setTimeout(resolve, delay);
-      });
+      sendChat(id, text);
+      if (delay != null) {
+        await new Promise((resolve) => {
+          timeoutRef.current = setTimeout(resolve, delay);
+        });
+      }
       if (cancelRef.current) {
         break;
       }
-      sendChat(id, text);
     }
     setIsRunning(false);
     timeoutRef.current = null;
@@ -89,12 +105,32 @@ export default function CountdownSection({ view }: Props) {
               </>
             )}
           </Alert>
+          <Tooltip
+            label={
+              <>
+                If checked, the Reveal step will be skipped.
+                <br />
+                Players will only see "
+                {START_STEPS.map((step) => step.text).join(", ")}"
+                <br />
+                Use this if you are unpausing, or if your variant does not
+                include an analysis period before playing.
+              </>
+            }
+          >
+            <Checkbox
+              checked={skipReveal}
+              onChange={(event) => setSkipReveal(event.currentTarget.checked)}
+              label="Skip reveal"
+              disabled={isRunning}
+            />
+          </Tooltip>
           <NumberInput
             label="Scanning time (min 10 seconds)"
             value={analysisSeconds}
             min={10}
             onChange={setAnalysisSeconds}
-            disabled={isRunning}
+            disabled={isRunning || skipReveal}
           />
           {isRunning ? (
             <Button onClick={cancelSequence}>Cancel Countdown</Button>

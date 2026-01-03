@@ -5,7 +5,6 @@ import {
   BingosyncColor,
   getChangelog,
   RawFeed,
-  Square,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
 import { Group, Stack, Text } from "@mantine/core";
@@ -27,6 +26,7 @@ import SimpleGeneralTracker from "./SimpleGeneralTracker";
 import useShowGeneralTracker from "./useShowGeneralTracker";
 import findGoal from "@/app/findGoal";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
+import { FoundStandardGeneral, GeneralItem } from "../cast/Cast";
 
 export type Props = {
   id: string;
@@ -94,12 +94,20 @@ export default function Play({
   // eslint-disable-next-line react-hooks/refs
   pauseRef.current = pause;
 
-  const generalGoals = useMemo<ReadonlyArray<Square>>(
+  const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(
     () =>
-      board.filter((square) => {
-        const result = findGoal(square.name, STANDARD_UFO);
-        return result != null && result.category === "general";
-      }),
+      board
+        .map((square) => {
+          const foundGoal = findGoal(square.name, STANDARD_UFO);
+          if (foundGoal == null || foundGoal.category !== "general") {
+            return null;
+          }
+          return {
+            color: square.color,
+            foundGoal: foundGoal as FoundStandardGeneral,
+          };
+        })
+        .filter((item) => item != null),
     [board]
   );
 

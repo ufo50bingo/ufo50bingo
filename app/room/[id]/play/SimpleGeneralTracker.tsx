@@ -1,11 +1,10 @@
-import { GoalName } from "@/app/goals";
 import InfoCard from "../cast/InfoCard";
-import { Square } from "@/app/matches/parseBingosyncData";
 import { Button, Group, Stack, Text, Tooltip } from "@mantine/core";
 import useSimpleGeneralState from "./useSimpleGeneralState";
+import { FoundStandardGeneral, GeneralItem } from "../cast/Cast";
 
 type Props = {
-  generalGoals: ReadonlyArray<Square>;
+  generalGoals: ReadonlyArray<GeneralItem>;
   id: string;
   seed: number;
   isHidden: boolean;
@@ -21,20 +20,26 @@ export default function SimpleGeneralTracker({
   return (
     <InfoCard maxWidth={525} height={148}>
       <Stack gap={4}>
-        {generalGoals.map((goal) => (
-          <Group key={goal.name} gap={6} justify="space-between">
-            <Tooltip label={isHidden ? "<Hidden>" : goal.name}>
+        {generalGoals.map((item) => (
+          <Group
+            key={item.foundGoal.resolvedGoal}
+            gap={6}
+            justify="space-between"
+          >
+            <Tooltip
+              label={isHidden ? "<Hidden>" : item.foundGoal.resolvedGoal}
+            >
               <Text size="sm">
-                {goal.color !== "blank" ? (
+                {item.color !== "blank" ? (
                   isHidden ? (
                     "<Hidden>"
                   ) : (
-                    <s>{getAbbreviatedName(goal.name as GoalName)}</s>
+                    <s>{getAbbreviatedName(item.foundGoal)}</s>
                   )
                 ) : isHidden ? (
                   "<Hidden>"
                 ) : (
-                  getAbbreviatedName(goal.name as GoalName)
+                  getAbbreviatedName(item.foundGoal)
                 )}
               </Text>
             </Tooltip>
@@ -48,14 +53,17 @@ export default function SimpleGeneralTracker({
                 onClick={() => {
                   setState({
                     ...state,
-                    [goal.name]: Math.max((state[goal.name] ?? 0) - 1, 0),
+                    [item.foundGoal.resolvedGoal]: Math.max(
+                      (state[item.foundGoal.resolvedGoal] ?? 0) - 1,
+                      0
+                    ),
                   });
                 }}
               >
                 -
               </Button>
               <Text w={14} ta="center" size="sm">
-                {state[goal.name] ?? 0}
+                {state[item.foundGoal.resolvedGoal] ?? 0}
               </Text>
               <Button
                 variant="subtle"
@@ -66,7 +74,8 @@ export default function SimpleGeneralTracker({
                 onClick={() => {
                   setState({
                     ...state,
-                    [goal.name]: (state[goal.name] ?? 0) + 1,
+                    [item.foundGoal.resolvedGoal]:
+                      (state[item.foundGoal.resolvedGoal] ?? 0) + 1,
                   });
                 }}
               >
@@ -80,22 +89,14 @@ export default function SimpleGeneralTracker({
   );
 }
 
-function getAbbreviatedName(goal: GoalName): string {
-  switch (goal) {
-    case "Collect 2 cherry disks from games on this card":
-      return "Cherry (2)";
-    case "Collect 3 cherry disks from games on this card":
-      return "Cherry (3)";
-    case "Collect 3 gold disks from games on this card":
-      return "Gold (3)";
-    case "Collect 4 gold disks from games on this card":
-      return "Gold (4)";
-    case "Collect 6 gifts from games on this card":
-      return "Gift (6)";
-    case "Collect 7 gifts from games on this card":
-      return "Gift (7)";
-    case "Collect 8 gifts from games on this card":
-      return "Gift (8)";
+function getAbbreviatedName(goal: FoundStandardGeneral): string {
+  switch (goal.goal) {
+    case "Collect {{cherry_count}} cherry disks from games on this card":
+      return `Cherry (${goal.tokens[0]})`;
+    case "Collect {{gold_count}} gold disks from games on this card":
+      return `Gold (${goal.tokens[0]})`;
+    case "Collect {{gift_count}} gifts from games on this card":
+      return `Gifts (${goal.tokens[0]})`;
     case "ARCADE ACE: Gold Disk any 3 of the 16 “ARCADE” games":
       return "Arcade (3)";
     case "TRIATHLON: Gold Disk any 3 of the 5 “SPORT” games":
@@ -155,6 +156,6 @@ function getAbbreviatedName(goal: GoalName): string {
     case "WAR IS BAD: Win 3 battles in Attactics, Avianos, Combatants":
       return "War is Bad (3)";
     default:
-      return goal;
+      return goal.resolvedGoal;
   }
 }

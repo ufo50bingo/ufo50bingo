@@ -33,7 +33,11 @@ import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import findGoal, { FoundGoal } from "@/app/findGoal";
 import { StandardGeneral } from "@/app/pastas/pastaTypes";
 
-type FoundStandardGeneral = FoundGoal<StandardGeneral, "general", string>;
+export type FoundStandardGeneral = FoundGoal<
+  StandardGeneral,
+  "general",
+  string
+>;
 export type GeneralItem = {
   color: BingosyncColor;
   foundGoal: FoundStandardGeneral;

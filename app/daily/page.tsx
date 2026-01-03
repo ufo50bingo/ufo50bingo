@@ -6,11 +6,11 @@ import {
   toISODate,
 } from "./localDate";
 import { isGift, isGoldCherry } from "./giftGoldCherry";
-import { GoalName } from "../goals";
 import DailyFeedFetcher from "./DailyFeedFetcher";
 import { SPICY_UFO } from "../pastas/spicyUfo";
 import { STANDARD_UFO } from "../pastas/standardUfo";
 import ufoGenerator, { UFOPasta } from "../generator/ufoGenerator";
+import { StandardGeneral } from "../pastas/pastaTypes";
 
 export const dynamic = "force-dynamic";
 
@@ -113,7 +113,7 @@ function getSimilarityScore(
         return;
       }
       const penalty =
-        isGift(goal as GoalName) || isGoldCherry(goal as GoalName)
+        isGift(goal as StandardGeneral) || isGoldCherry(goal as StandardGeneral)
           ? GIFT_GOLD_CHERRY_PENALTY[boardIndex]
           : SIMILARITY_PENALTY[boardIndex];
       score += penalty;

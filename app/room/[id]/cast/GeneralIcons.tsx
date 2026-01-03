@@ -1,10 +1,12 @@
 import classes from "./GeneralIcons.module.css";
 import { IconCircleCheckFilled } from "@tabler/icons-react";
-import { BingosyncColor, Square } from "@/app/matches/parseBingosyncData";
+import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { GoalName } from "@/app/goals";
 import { IconType } from "./useLocalState";
 import { GeneralCounts } from "./CastPage";
 import SideCell from "./SideCell";
+import { GeneralItem } from "./Cast";
+import { StandardGeneral } from "@/app/pastas/pastaTypes";
 
 type IconProps = {
   goal: string;
@@ -42,7 +44,7 @@ function Icon({ goal, src, count, color, squareColor, iconType }: IconProps) {
 
 type Props = {
   color: BingosyncColor;
-  generalGoals: ReadonlyArray<Square>;
+  generalGoals: ReadonlyArray<GeneralItem>;
   generalState: GeneralCounts;
   isLeft: boolean;
   iconType: IconType;
@@ -57,51 +59,46 @@ export default function GeneralIcons({
   iconType,
   isHidden,
 }: Props) {
-  return (
-    generalGoals.map((square) => {
-      const countState = isLeft
-        ? generalState[square.name]?.leftCounts
-        : generalState[square.name]?.rightCounts;
-      return (
-        <Icon
-          key={square.name}
-          goal={square.name}
-          color={color}
-          squareColor={square.color}
-          count={
-            countState == null
-              ? 0
-              : Object.keys(countState).reduce(
+  return generalGoals.map((item) => {
+    const { goal, resolvedGoal } = item.foundGoal;
+    const countState = isLeft
+      ? generalState[resolvedGoal]?.leftCounts
+      : generalState[resolvedGoal]?.rightCounts;
+    return (
+      <Icon
+        key={resolvedGoal}
+        goal={resolvedGoal}
+        color={color}
+        squareColor={item.color}
+        count={
+          countState == null
+            ? 0
+            : Object.keys(countState).reduce(
                 (acc, game) => acc + countState[game],
                 0
               )
-          }
-          iconType={iconType}
-          src={
-            iconType === "sprites"
-              ? getSpritesSrc(square.name as GoalName, isHidden)
-              : getWinnerBitSrc(square.name as GoalName, isHidden)
-          }
-        />
-      );
-    })
-  );
+        }
+        iconType={iconType}
+        src={
+          iconType === "sprites"
+            ? getSpritesSrc(goal, isHidden)
+            : getWinnerBitSrc(goal, isHidden)
+        }
+      />
+    );
+  });
 }
 
-function getWinnerBitSrc(goal: GoalName, isHidden: boolean): string {
+function getWinnerBitSrc(goal: StandardGeneral, isHidden: boolean): string {
   if (isHidden) {
     return "/general/winnerbit/Icon_Unrevealed_Goal.png";
   }
   switch (goal) {
-    case "Collect 2 cherry disks from games on this card":
-    case "Collect 3 cherry disks from games on this card":
+    case "Collect {{cherry_count}} cherry disks from games on this card":
       return "/general/winnerbit/Icon_Cherry.png";
-    case "Collect 3 gold disks from games on this card":
-    case "Collect 4 gold disks from games on this card":
+    case "Collect {{gold_count}} gold disks from games on this card":
       return "/general/winnerbit/Icon_Gold.png";
-    case "Collect 6 gifts from games on this card":
-    case "Collect 7 gifts from games on this card":
-    case "Collect 8 gifts from games on this card":
+    case "Collect {{gift_count}} gifts from games on this card":
       return "/general/winnerbit/Icon_Gift.png";
     case "Collect a beverage in 6 games":
       return "/general/winnerbit/Icon_Beverage.png";
@@ -151,20 +148,16 @@ function getWinnerBitSrc(goal: GoalName, isHidden: boolean): string {
   }
 }
 
-function getSpritesSrc(goal: GoalName, isHidden: boolean): string {
+function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
   if (isHidden) {
     return "/general/sprites/IconUnknown.png";
   }
   switch (goal) {
-    case "Collect 2 cherry disks from games on this card":
-    case "Collect 3 cherry disks from games on this card":
+    case "Collect {{cherry_count}} cherry disks from games on this card":
       return "/general/sprites/IconCherry.png";
-    case "Collect 3 gold disks from games on this card":
-    case "Collect 4 gold disks from games on this card":
+    case "Collect {{gold_count}} gold disks from games on this card":
       return "/general/sprites/IconGold.png";
-    case "Collect 6 gifts from games on this card":
-    case "Collect 7 gifts from games on this card":
-    case "Collect 8 gifts from games on this card":
+    case "Collect {{gift_count}} gifts from games on this card":
       return "/general/sprites/IconGarden.png";
     case "ARCADE ACE: Gold Disk any 3 of the 16 “ARCADE” games":
       return "/general/sprites/IconAce.png";

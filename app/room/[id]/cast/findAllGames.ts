@@ -19,9 +19,9 @@ Object.entries(GAME_NAMES).forEach(([game, name]) => {
   NAME_TO_GAME[stripText(name)] = game as ProperGame;
 });
 
-export type GameToGoals = { [game: string]: ReadonlyArray<[GoalName, number]> };
+export type GameToGoals = { [game: string]: ReadonlyArray<[string, number]> };
 
-export function findGamesForGoal(goal: GoalName): Game[] {
+export function findGamesForGoal(goal: string): Game[] {
   const result = findGoal(goal, STANDARD_UFO) ?? findGoal(goal, SPICY_UFO);
   // this is an old goal, or from a non-standard variant
   if (result == null) {
@@ -62,9 +62,9 @@ export function findGamesForGoal(goal: GoalName): Game[] {
 }
 
 export function getGameToGoals(board: TBoard): GameToGoals {
-  const gameToGoals: { [game: string]: [GoalName, number][] } = {};
+  const gameToGoals: { [game: string]: [string, number][] } = {};
   board.forEach((square, index) => {
-    const goal = square.name as GoalName;
+    const goal = square.name;
     const gamesForGoal = findGamesForGoal(goal);
     gamesForGoal.forEach((game) => {
       const existingGoals = gameToGoals[game] ?? [];

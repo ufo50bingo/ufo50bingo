@@ -12,7 +12,7 @@ import {
 import { IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
 import ColorSelector from "../common/ColorSelector";
-import { BingosyncColor, Square } from "@/app/matches/parseBingosyncData";
+import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { IconType, SortType } from "./useLocalState";
 import { Ding } from "../play/useDings";
 import NotificationsSection from "../common/NotificationsSection";
@@ -22,6 +22,7 @@ import CountdownSection from "../common/CountdownSection";
 import BottomSection from "../common/BottomSection";
 import FileSyncSection from "./FileSyncSection";
 import { GeneralCounts } from "./CastPage";
+import { GeneralItem } from "./Cast";
 
 type Props = {
   id: string;
@@ -43,7 +44,7 @@ type Props = {
   leftScore: number;
   rightScore: number;
   generalCounts: GeneralCounts;
-  generalGoals: ReadonlyArray<Square>;
+  generalGoals: ReadonlyArray<GeneralItem>;
   showGameSelector: boolean;
   setShowGameSelector: (newShowGameSelector: boolean) => unknown;
   highlightCurrentGame: boolean;
@@ -143,8 +144,8 @@ export default function CastSettings({
                               event.currentTarget.checked
                                 ? [...shownDifficulties, difficulty]
                                 : shownDifficulties.filter(
-                                  (d) => d !== difficulty
-                                )
+                                    (d) => d !== difficulty
+                                  )
                             )
                           }
                           label={DIFFICULTY_NAMES[difficulty]}

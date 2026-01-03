@@ -1,4 +1,4 @@
-import { Game, GoalName, ProperGame } from "@/app/goals";
+import { Game, ProperGame } from "@/app/goals";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { useEffect, useMemo, useRef, useState } from "react";
 import getSupabaseClient from "./getSupabaseClient";
@@ -29,7 +29,7 @@ interface ColorChangeRow extends ColorChangeSync {
 }
 
 export interface CountChange {
-  goal: GoalName;
+  goal: string;
   is_left: boolean;
   game: Game;
   count: number;

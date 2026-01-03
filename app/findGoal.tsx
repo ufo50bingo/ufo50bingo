@@ -4,10 +4,11 @@ import { UFOPasta } from "./generator/ufoGenerator";
 
 const CACHE: Array<[UFOPasta, ProcessedPasta]> = [];
 
-type FoundGoal = {
-  goal: string;
-  category: string;
-  subcategory: string;
+export type FoundGoal<G extends string, C extends string, S extends string> = {
+  goal: G;
+  resolvedGoal: string;
+  category: C;
+  subcategory: S;
   tokens: ReadonlyArray<string>;
 };
 type Tags = { category: string; subcategory: string };
@@ -29,7 +30,7 @@ type ProcessedPasta = {
 export default function findGoal(
   goal: string,
   pasta: UFOPasta
-): null | FoundGoal {
+): null | FoundGoal<string, string, string> {
   let processed = CACHE.find((item) => item[0] === pasta)?.[1];
   if (processed == null) {
     processed = preprocess(pasta);
@@ -39,6 +40,7 @@ export default function findGoal(
   if (plainResult != null) {
     return {
       goal,
+      resolvedGoal: goal,
       category: plainResult.category,
       subcategory: plainResult.subcategory,
       tokens: [],
@@ -49,6 +51,7 @@ export default function findGoal(
     if (match != null) {
       return {
         goal: option.goal,
+        resolvedGoal: goal,
         category: option.tags.category,
         subcategory: option.tags.subcategory,
         tokens: match.slice(1),

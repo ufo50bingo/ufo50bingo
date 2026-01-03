@@ -1,14 +1,14 @@
 import { Accordion, Alert, Button, Stack, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { GeneralCounts } from "./CastPage";
-import { Square } from "@/app/matches/parseBingosyncData";
 import { db } from "@/app/db";
+import { GeneralItem } from "./Cast";
 
 type Props = {
   leftScore: number;
   rightScore: number;
   generalCounts: GeneralCounts;
-  generalGoals: ReadonlyArray<Square>;
+  generalGoals: ReadonlyArray<GeneralItem>;
 };
 
 export default function FileSyncSection({
@@ -132,13 +132,13 @@ async function writeAllGenerals(
   dirHandle: FileSystemDirectoryHandle,
   isLeft: boolean,
   generalCounts: GeneralCounts,
-  generalGoals: ReadonlyArray<Square>
+  generalGoals: ReadonlyArray<GeneralItem>
 ): Promise<void> {
   await Promise.all(
-    generalGoals.map(async (square, index) => {
+    generalGoals.map(async (item, index) => {
       const countState = isLeft
-        ? generalCounts[square.name]?.leftCounts
-        : generalCounts[square.name]?.rightCounts;
+        ? generalCounts[item.foundGoal.resolvedGoal]?.leftCounts
+        : generalCounts[item.foundGoal.resolvedGoal]?.rightCounts;
       const count =
         countState == null
           ? 0
@@ -156,7 +156,7 @@ async function writeToFile(
   leftScore: number,
   rightScore: number,
   generalCounts: GeneralCounts,
-  generalGoals: ReadonlyArray<Square>
+  generalGoals: ReadonlyArray<GeneralItem>
 ): Promise<void> {
   await Promise.all([
     writeScore(dirHandle, true, leftScore),

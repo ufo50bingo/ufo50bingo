@@ -11,7 +11,7 @@ import {
 import { Group, Stack } from "@mantine/core";
 import { useCallback, useMemo, useState } from "react";
 import Feed from "../common/Feed";
-import { Game, GoalName, ORDERED_GAMES } from "@/app/goals";
+import { Game, ORDERED_GAMES } from "@/app/goals";
 import { getAllTerminalCodes, getGameToGoals } from "./findAllGames";
 import GeneralGoal from "./GeneralGoal";
 import InfoCard from "./InfoCard";
@@ -31,7 +31,14 @@ import RecentGames from "./RecentGames";
 import ScoreSquare from "../common/ScoreSquare";
 import SideCell from "./SideCell";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
-import findGoal from "@/app/findGoal";
+import findGoal, { FoundGoal } from "@/app/findGoal";
+import { StandardGeneral } from "@/app/pastas/pastaTypes";
+
+type FoundStandardGeneral = FoundGoal<StandardGeneral, "general", string>;
+export type GeneralItem = {
+  color: BingosyncColor;
+  foundGoal: FoundStandardGeneral;
+};
 
 export type CastProps = {
   id: string;
@@ -167,17 +174,23 @@ export default function Cast({
     }
   }, [leftScore, rightScore, leftColor, rightColor, rawFeed, board]);
 
-  const generalGoals = useMemo<ReadonlyArray<Square>>(() => {
-    const filtered = board.filter((square) => {
-      const result = findGoal(square.name, STANDARD_UFO);
-      return result != null && result.category === "general";
-    });
-    let spliceIndex = filtered.findIndex((square) =>
-      isGift(square.name as GoalName)
-    );
+  const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(() => {
+    const filtered = board
+      .map((square) => {
+        const foundGoal = findGoal(square.name, STANDARD_UFO);
+        if (foundGoal == null || foundGoal.category !== "general") {
+          return null;
+        }
+        return {
+          color: square.color,
+          foundGoal: foundGoal as FoundStandardGeneral,
+        };
+      })
+      .filter((item) => item != null);
+    let spliceIndex = filtered.findIndex((item) => isGift(item.foundGoal.goal));
     if (spliceIndex < 0) {
-      spliceIndex = filtered.findIndex((square) =>
-        isGoldCherry(square.name as GoalName)
+      spliceIndex = filtered.findIndex((item) =>
+        isGoldCherry(item.foundGoal.goal)
       );
     }
     if (spliceIndex < 0) {
@@ -212,15 +225,15 @@ export default function Cast({
     />
   ));
 
-  const getCard = (g: Square, h: null | undefined | number) => (
+  const getCard = (g: GeneralItem, h: null | undefined | number) => (
     <GeneralGoal
-      key={g.name}
+      key={g.foundGoal.resolvedGoal}
       gameToGoals={gameToGoals}
-      name={g.name as GoalName}
+      foundGoal={g.foundGoal}
       isFinished={g.color !== "blank"}
       terminalCodes={terminalCodes}
-      countState={generals[g.name]}
-      showAll={showAll.includes(g.name as GoalName)}
+      countState={generals[g.foundGoal.resolvedGoal]}
+      showAll={showAll.includes(g.foundGoal.resolvedGoal)}
       setGeneralGameCount={setGeneralGameCount}
       addShowAll={addShowAll}
       leftColor={leftColor}

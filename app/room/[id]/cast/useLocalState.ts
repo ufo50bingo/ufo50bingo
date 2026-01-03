@@ -6,11 +6,11 @@ export type IconType = "winnerbit" | "sprites";
 
 interface BaseState {
   shownDifficulties: ReadonlyArray<Difficulty>;
-  showAll: ReadonlyArray<GoalName>;
+  showAll: ReadonlyArray<string>;
 }
 
 export interface CasterState extends BaseState {
-  addShowAll: (goal: GoalName) => unknown;
+  addShowAll: (goal: string) => unknown;
   setShownDifficulties: (newDifficulties: ReadonlyArray<Difficulty>) => unknown;
   sortType: SortType;
   setSortType: (newSortType: SortType) => unknown;
@@ -33,7 +33,7 @@ export default function useLocalState(id: string, seed: number): CasterState {
   const [shownDifficulties, setShownDifficultiesRaw] = useState<
     ReadonlyArray<Difficulty>
   >(initialState.shownDifficulties);
-  const [showAll, setShowAllRaw] = useState<ReadonlyArray<GoalName>>(
+  const [showAll, setShowAllRaw] = useState<ReadonlyArray<string>>(
     initialState.showAll
   );
   const [sortType, setSortTypeRaw] = useState<SortType>(() => {
@@ -89,13 +89,15 @@ export default function useLocalState(id: string, seed: number): CasterState {
     return fromStorage !== "false";
   });
 
-  const [highlightCurrentGame, setHighlightCurrentGameRaw] = useState<boolean>(() => {
-    if (global.window == undefined || localStorage == null) {
-      return true;
+  const [highlightCurrentGame, setHighlightCurrentGameRaw] = useState<boolean>(
+    () => {
+      if (global.window == undefined || localStorage == null) {
+        return true;
+      }
+      const fromStorage = localStorage.getItem("highlight_current_game");
+      return fromStorage !== "false";
     }
-    const fromStorage = localStorage.getItem("highlight_current_game");
-    return fromStorage !== "false";
-  });
+  );
 
   const [showRecentGames, setShowRecentGamesRaw] = useState<boolean>(() => {
     if (global.window == undefined || localStorage == null) {
@@ -106,7 +108,7 @@ export default function useLocalState(id: string, seed: number): CasterState {
   });
 
   return useMemo(() => {
-    const addShowAll = (goal: GoalName) => {
+    const addShowAll = (goal: string) => {
       const newShowAll = [...showAll, goal];
       setShowAllRaw(newShowAll);
       setLocalStorage(key, { showAll: newShowAll, shownDifficulties });

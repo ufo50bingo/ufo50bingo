@@ -1,11 +1,11 @@
-import { Game, GAME_NAMES, GoalName } from "@/app/goals";
+import { Game, GAME_NAMES } from "@/app/goals";
 import { Text, Tooltip } from "@mantine/core";
 import React from "react";
 
 type Props = {
   game: Game;
   description: null | string;
-  goals: null | ReadonlyArray<[GoalName, number]>;
+  goals: null | ReadonlyArray<[string, number]>;
 };
 
 export default function GameInfo({ game, description, goals }: Props) {

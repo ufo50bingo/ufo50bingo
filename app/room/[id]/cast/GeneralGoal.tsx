@@ -1,4 +1,4 @@
-import { Game, GoalName, ORDERED_GAMES } from "@/app/goals";
+import { Game, ORDERED_GAMES } from "@/app/goals";
 import { Anchor, Button, Checkbox, Group, Stack } from "@mantine/core";
 import {
   // TOP_3,
@@ -37,16 +37,18 @@ import getColorHex from "./getColorHex";
 import BingosyncColored from "@/app/matches/BingosyncColored";
 import { CountChange, CountState } from "./useSyncedState";
 import { SortType } from "./useLocalState";
+import { StandardGeneral } from "@/app/pastas/pastaTypes";
+import { FoundGoal } from "@/app/findGoal";
 
 type Props = {
   showAll: boolean;
   isFinished: boolean;
   gameToGoals: GameToGoals;
-  name: GoalName;
+  foundGoal: FoundGoal<StandardGeneral, "general", string>;
   terminalCodes: Set<string>;
   countState: null | undefined | CountState;
   setGeneralGameCount: (change: CountChange) => unknown;
-  addShowAll: (goal: GoalName) => unknown;
+  addShowAll: (goal: string) => unknown;
   leftColor: BingosyncColor;
   rightColor: BingosyncColor;
   height: null | undefined | number;
@@ -56,21 +58,21 @@ type Props = {
 function getOtherGoals(
   entry: TerminalEntry,
   gameToGoals: GameToGoals,
-  goal: GoalName
-): null | ReadonlyArray<[GoalName, number]> {
+  resolvedGoal: string
+): null | ReadonlyArray<[string, number]> {
   const game = typeof entry === "string" ? entry : entry.game;
   const goals = gameToGoals[game];
   if (goals == null || goals.length === 0) {
     return null;
   }
-  const otherGoals = goals.filter((g) => g[0] !== goal);
+  const otherGoals = goals.filter((g) => g[0] !== resolvedGoal);
   return otherGoals.length === 0 ? null : otherGoals;
 }
 
 export default function GeneralGoal({
   showAll,
   gameToGoals,
-  name,
+  foundGoal,
   isFinished,
   terminalCodes,
   countState,
@@ -88,20 +90,16 @@ export default function GeneralGoal({
   let onCardOnly = false;
   let descriptions: null | Descriptions = null;
   let isChecks = true;
-  switch (name) {
-    case "Collect 2 cherry disks from games on this card":
-    case "Collect 3 cherry disks from games on this card":
+  switch (foundGoal.goal) {
+    case "Collect {{cherry_count}} cherry disks from games on this card":
       recommendations = CHERRIES;
       onCardOnly = true;
       break;
-    case "Collect 3 gold disks from games on this card":
-    case "Collect 4 gold disks from games on this card":
+    case "Collect {{gold_count}} gold disks from games on this card":
       recommendations = GOLDS;
       onCardOnly = true;
       break;
-    case "Collect 6 gifts from games on this card":
-    case "Collect 7 gifts from games on this card":
-    case "Collect 8 gifts from games on this card":
+    case "Collect {{gift_count}} gifts from games on this card":
       recommendations = GIFTS;
       onCardOnly = true;
       descriptions = GIFT_DESCRIPTIONS;
@@ -173,7 +171,7 @@ export default function GeneralGoal({
 
     case "PILOT PARTY: Collect 4 gifts: Campanella 1/2/3, Planet Zoldath, Pilot Quest, The Big Bell Race":
       descriptions = GIFT_DESCRIPTIONS;
-      const allGames = findGamesForGoal(name);
+      const allGames = findGamesForGoal(foundGoal.resolvedGoal);
       recommendations = {
         always: GIFTS.always
           .concat(GIFTS.synergy)
@@ -193,14 +191,22 @@ export default function GeneralGoal({
     case "ROLE-PLAYER: Level up all your characters twice in Divers, Valbrace, Grimstone":
     case "WAR IS BAD: Win 3 battles in Attactics, Avianos, Combatants":
       recommendations = {
-        always: findGamesForGoal(name),
+        always: findGamesForGoal(foundGoal.resolvedGoal),
         synergy: [],
         never: [],
       };
       break;
     default:
       return (
-        <InfoCard title={isFinished ? <s>{name}</s> : name}>
+        <InfoCard
+          title={
+            isFinished ? (
+              <s>{foundGoal.resolvedGoal}</s>
+            ) : (
+              foundGoal.resolvedGoal
+            )
+          }
+        >
           No info for this goal yet!
         </InfoCard>
       );
@@ -208,7 +214,7 @@ export default function GeneralGoal({
 
   const titleEl = (
     <>
-      {name} (
+      {foundGoal.resolvedGoal} (
       <BingosyncColored color={leftColor}>
         {Object.keys(leftCounts).reduce(
           (acc, game) => acc + leftCounts[game],
@@ -227,22 +233,22 @@ export default function GeneralGoal({
   const title = isFinished ? <s>{titleEl}</s> : titleEl;
 
   const alwaysWithOnCard: ReadonlyArray<
-    [TerminalEntry, null | ReadonlyArray<[GoalName, number]>]
+    [TerminalEntry, null | ReadonlyArray<[string, number]>]
   > = recommendations.always.map((e) => [
     e,
-    getOtherGoals(e, gameToGoals, name),
+    getOtherGoals(e, gameToGoals, foundGoal.resolvedGoal),
   ]);
   const synergyWithOnCard: ReadonlyArray<
-    [TerminalEntry, null | ReadonlyArray<[GoalName, number]>]
+    [TerminalEntry, null | ReadonlyArray<[string, number]>]
   > = recommendations.synergy.map((e) => [
     e,
-    getOtherGoals(e, gameToGoals, name),
+    getOtherGoals(e, gameToGoals, foundGoal.resolvedGoal),
   ]);
   const neverWithOnCard: ReadonlyArray<
-    [TerminalEntry, null | ReadonlyArray<[GoalName, number]>]
+    [TerminalEntry, null | ReadonlyArray<[string, number]>]
   > = recommendations.never.map((e) => [
     e,
-    getOtherGoals(e, gameToGoals, name),
+    getOtherGoals(e, gameToGoals, foundGoal.resolvedGoal),
   ]);
 
   const allEntries = [
@@ -257,7 +263,7 @@ export default function GeneralGoal({
   const hasMore = allEntries.length > entries.length;
 
   const nullableEntries: ReadonlyArray<
-    null | [Game, null | ReadonlyArray<[GoalName, number]>]
+    null | [Game, null | ReadonlyArray<[string, number]>]
   > = entries.map((pair) => {
     const e = pair[0];
     if (typeof e === "string") {
@@ -307,7 +313,7 @@ export default function GeneralGoal({
                     checked={(leftCounts[game] ?? 0) > 0}
                     onChange={(event) =>
                       setGeneralGameCount({
-                        goal: name,
+                        goal: foundGoal.resolvedGoal,
                         is_left: true,
                         game,
                         count: event.currentTarget.checked ? 1 : 0,
@@ -319,7 +325,7 @@ export default function GeneralGoal({
                     checked={(rightCounts[game] ?? 0) > 0}
                     onChange={(event) =>
                       setGeneralGameCount({
-                        goal: name,
+                        goal: foundGoal.resolvedGoal,
                         is_left: false,
                         game,
                         count: event.currentTarget.checked ? 1 : 0,
@@ -337,7 +343,7 @@ export default function GeneralGoal({
                     size="compact-xs"
                     onClick={() => {
                       setGeneralGameCount({
-                        goal: name,
+                        goal: foundGoal.resolvedGoal,
                         is_left: true,
                         game,
                         count: (leftCounts[game] ?? 0) + 1,
@@ -346,7 +352,7 @@ export default function GeneralGoal({
                     onContextMenu={(e) => {
                       e.preventDefault();
                       setGeneralGameCount({
-                        goal: name,
+                        goal: foundGoal.resolvedGoal,
                         is_left: true,
                         game,
                         count: Math.max(0, (leftCounts[game] ?? 0) - 1),
@@ -363,7 +369,7 @@ export default function GeneralGoal({
                     size="compact-xs"
                     onClick={() => {
                       setGeneralGameCount({
-                        goal: name,
+                        goal: foundGoal.resolvedGoal,
                         is_left: false,
                         game,
                         count: (rightCounts[game] ?? 0) + 1,
@@ -372,7 +378,7 @@ export default function GeneralGoal({
                     onContextMenu={(e) => {
                       e.preventDefault();
                       setGeneralGameCount({
-                        goal: name,
+                        goal: foundGoal.resolvedGoal,
                         is_left: false,
                         game,
                         count: Math.max(0, (rightCounts[game] ?? 0) - 1),
@@ -393,7 +399,7 @@ export default function GeneralGoal({
           );
         })}
         {hasMore ? (
-          <Anchor onClick={() => addShowAll(name)} size="sm">
+          <Anchor onClick={() => addShowAll(foundGoal.resolvedGoal)} size="sm">
             Show all options
           </Anchor>
         ) : null}

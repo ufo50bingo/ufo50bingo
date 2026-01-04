@@ -23,7 +23,7 @@ import ScoreSquare from "../common/ScoreSquare";
 import useMatchTimer from "../common/useMatchTimer";
 import { useMediaQuery } from "@mantine/hooks";
 import SimpleGeneralTracker from "./SimpleGeneralTracker";
-\import findGoal from "@/app/findGoal";
+import findGoal from "@/app/findGoal";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import { FoundStandardGeneral, GeneralItem } from "../cast/Cast";
 import useLocalBool from "@/app/localStorage/useLocalBool";

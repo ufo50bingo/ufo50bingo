@@ -1,4 +1,3 @@
-import getDefaultDifficulties from "../createboard/getDefaultDifficulties";
 import { ORDERED_GAMES } from "../goals";
 import { GoalWithDifficulty, Pasta } from "../pastas/metadata";
 import { UFOPasta } from "./ufoGenerator";
@@ -54,4 +53,13 @@ export default function convertToUfo(pasta: Pasta): UFOPasta {
     tokens: {},
     category_counts,
   };
+}
+
+function getDefaultDifficulties(pasta: Pasta): Map<string, number> {
+  // IMPORTANT: Assumption is that all goals in a grouping will share the same difficulty
+  const counts = new Map<string, number>();
+  pasta.forEach((group) =>
+    counts.set(group[0].types[1], (counts.get(group[0].types[1]) ?? 0) + 1)
+  );
+  return counts;
 }

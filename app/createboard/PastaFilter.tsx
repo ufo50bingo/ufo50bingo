@@ -5,12 +5,15 @@ import GameChecker from "./GameChecker";
 import getDefaultDifficulties from "./getDefaultDifficulties";
 import { Difficulty, DIFFICULTY_NAMES, Game } from "../goals";
 import { Pasta } from "../pastas/metadata";
+import { CheckerSort } from "./CheckerSortSelector";
 
 type Props = {
   checkState: Map<Game, boolean>;
   setCheckState: (newState: Map<Game, boolean>) => void;
   pasta: Pasta;
   onChangePasta: (newPasta: null | Pasta) => void;
+  sort: CheckerSort,
+  setSort: (newSort: CheckerSort) => unknown;
 };
 
 export default function PastaFilter({
@@ -18,6 +21,8 @@ export default function PastaFilter({
   checkState,
   setCheckState,
   onChangePasta,
+  sort,
+  setSort,
 }: Props) {
   const [difficultyCount, setDifficultyCount] = useState<
     Map<Difficulty, number>
@@ -72,7 +77,7 @@ export default function PastaFilter({
   ]);
   return (
     <Stack>
-      <GameChecker checkState={checkState} setCheckState={setCheckState} />
+      <GameChecker checkState={checkState} setCheckState={setCheckState} sort={sort} setSort={setSort} />
       <Text>
         <strong>Choose difficulty distribution</strong>
       </Text>

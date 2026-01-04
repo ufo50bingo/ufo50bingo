@@ -9,7 +9,6 @@ import {
   Checkbox,
   Group,
   JsonInput,
-  Menu,
   SegmentedControl,
   Select,
   Stack,
@@ -58,6 +57,7 @@ const menuOptions: ReadonlyArray<VariantMetadata> = METADATA.filter(
 type CustomType = "srl_v5" | "ufo" | "fixed_board" | "randomized";
 
 export default function NonLeagueMatch() {
+  const [showAll, setShowAll] = useState(false);
   const [checkerSort, setCheckerSortRaw] = useLocalEnum({
     key: "checker-sort",
     defaultValue: "chronological",
@@ -263,24 +263,24 @@ export default function NonLeagueMatch() {
           onChange={setVariant as unknown as (value: string) => void}
           value={variant}
         />
-        <Menu shadow="md" width={200}>
-          <Menu.Target>
-            <ActionIcon onClick={() => { }} variant="default">
-              <IconDots size={16} />
-            </ActionIcon>
-          </Menu.Target>
-          <Menu.Dropdown>
-            {menuOptions.map((option) => (
-              <Menu.Item
-                key={option.name}
-                onClick={() => setVariant(option.name)}
-              >
-                <VariantHoverCard metadata={option} />
-              </Menu.Item>
-            ))}
-          </Menu.Dropdown>
-        </Menu>
+        {!showAll && (
+          <ActionIcon onClick={() => setShowAll(true)} variant="default">
+            <IconDots size={16} />
+          </ActionIcon>
+        )}
       </Group>
+      {showAll && (
+        <SegmentedControl
+          style={{ flexGrow: 1 }}
+          data={menuOptions.map((option) => ({
+            value: option.name,
+            label: <VariantHoverCard metadata={option} />,
+          }))}
+          fullWidth={true}
+          onChange={setVariant as unknown as (value: string) => void}
+          value={variant}
+        />
+      )}
       <Group justify="space-between">
         {(metadata.type === "WithDifficulty" ||
           metadata.type === "WithoutDifficulty" ||

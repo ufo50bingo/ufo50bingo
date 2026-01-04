@@ -24,7 +24,7 @@ type Props = {
   setNumPlayers: (newNumPlayers: number) => void;
   pasta: UFOPasta;
   onChangePasta: (newPasta: null | UFOPasta) => void;
-  sort: CheckerSort,
+  sort: CheckerSort;
   setSort: (newSort: CheckerSort) => unknown;
 };
 

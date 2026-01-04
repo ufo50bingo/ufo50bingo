@@ -5,11 +5,16 @@ import CheckerSortSelector, { CheckerSort } from "./CheckerSortSelector";
 type Props = {
   checkState: Map<Game, boolean>;
   setCheckState: (newCheckState: Map<Game, boolean>) => void;
-  sort: CheckerSort,
+  sort: CheckerSort;
   setSort: (newSort: CheckerSort) => unknown;
 };
 
-export default function GameChecker({ checkState, setCheckState, sort, setSort }: Props) {
+export default function GameChecker({
+  checkState,
+  setCheckState,
+  sort,
+  setSort,
+}: Props) {
   const isAllChecked = checkState.values().every((isChecked) => isChecked);
   const isNoneChecked = checkState.values().every((isChecked) => !isChecked);
   return (

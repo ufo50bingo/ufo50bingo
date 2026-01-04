@@ -70,7 +70,8 @@ export default function NonLeagueMatch() {
       (checkerSort === "chronological"
         ? ORDERED_PROPER_GAMES
         : ORDERED_PROPER_GAMES.toSorted()
-      ).map((key) => [key, true]))
+      ).map((key) => [key, true])
+    )
   );
   const [numPlayers, setNumPlayers] = useState(2);
   const [draftCheckState, setDraftCheckState] = useState<
@@ -80,7 +81,8 @@ export default function NonLeagueMatch() {
       (checkerSort === "chronological"
         ? ORDERED_PROPER_GAMES
         : ORDERED_PROPER_GAMES.toSorted()
-      ).map((key) => [key, null]))
+      ).map((key) => [key, null])
+    )
   );
 
   const setCheckerSort = (newSort: CheckerSort) => {
@@ -90,15 +92,17 @@ export default function NonLeagueMatch() {
         (newSort === "chronological"
           ? ORDERED_PROPER_GAMES
           : ORDERED_PROPER_GAMES.toSorted()
-        ).map((key) => [key, checkState.get(key) ?? true]))
+        ).map((key) => [key, checkState.get(key) ?? true])
+      )
     );
     setDraftCheckState(
       new Map(
         (newSort === "chronological"
           ? ORDERED_PROPER_GAMES
           : ORDERED_PROPER_GAMES.toSorted()
-        ).map((key) => [key, draftCheckState.get(key) ?? null]))
-    )
+        ).map((key) => [key, draftCheckState.get(key) ?? null])
+      )
+    );
   };
 
   const [customizedPasta, setCustomizedPasta] = useState<null | Pasta>(null);
@@ -154,21 +158,21 @@ export default function NonLeagueMatch() {
         return stringify(
           showFilters
             ? Array.from(
-              checkState
-                .entries()
-                .filter(([_gameKey, checkState]) => checkState)
-            ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
+                checkState
+                  .entries()
+                  .filter(([_gameKey, checkState]) => checkState)
+              ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
             : ORDERED_PROPER_GAMES.map((gameKey) => ({
-              name: GAME_NAMES[gameKey],
-            }))
+                name: GAME_NAMES[gameKey],
+              }))
         );
       case "WithoutDifficulty":
         return stringify(
           showFilters || randomizeGroupings
             ? createPastaWithoutDifficulty(
-              metadata.pasta,
-              showFilters ? checkState : null
-            )
+                metadata.pasta,
+                showFilters ? checkState : null
+              )
             : metadata.pasta
         );
       case "WithDifficulty":
@@ -182,9 +186,9 @@ export default function NonLeagueMatch() {
         return stringify(
           randomizeGroupings
             ? createPasta(
-              metadata.pasta,
-              getDefaultDifficulties(metadata.pasta)
-            )
+                metadata.pasta,
+                getDefaultDifficulties(metadata.pasta)
+              )
             : metadata.pasta
         );
       case "DraftWithDifficulty":
@@ -286,43 +290,43 @@ export default function NonLeagueMatch() {
           metadata.type === "WithoutDifficulty" ||
           (metadata.type === "UFO" && metadata.isGeneric !== true) ||
           variant === "Game Names") && (
-            <Group>
-              {(metadata.type === "WithDifficulty" ||
-                metadata.type === "WithoutDifficulty") && (
-                  <Tooltip
-                    label={
-                      <span>
-                        Games will be divided into groups randomly while still
-                        respecting the
-                        <br />
-                        difficulty distribution, allowing for greater card variety
-                        than using the
-                        <br />
-                        default pasta. This option is always enabled when
-                        customizing games and
-                        <br />
-                        difficulty counts.
-                      </span>
+          <Group>
+            {(metadata.type === "WithDifficulty" ||
+              metadata.type === "WithoutDifficulty") && (
+              <Tooltip
+                label={
+                  <span>
+                    Games will be divided into groups randomly while still
+                    respecting the
+                    <br />
+                    difficulty distribution, allowing for greater card variety
+                    than using the
+                    <br />
+                    default pasta. This option is always enabled when
+                    customizing games and
+                    <br />
+                    difficulty counts.
+                  </span>
+                }
+              >
+                <div>
+                  <Checkbox
+                    checked={showFilters || randomizeGroupings}
+                    label="Randomize goal groupings"
+                    onChange={(event) =>
+                      setRandomizeGroupings(event.currentTarget.checked)
                     }
-                  >
-                    <div>
-                      <Checkbox
-                        checked={showFilters || randomizeGroupings}
-                        label="Randomize goal groupings"
-                        onChange={(event) =>
-                          setRandomizeGroupings(event.currentTarget.checked)
-                        }
-                      />
-                    </div>
-                  </Tooltip>
-                )}
-              <Checkbox
-                checked={showFilters}
-                label="Customize"
-                onChange={(event) => setShowFilters(event.currentTarget.checked)}
-              />
-            </Group>
-          )}
+                  />
+                </div>
+              </Tooltip>
+            )}
+            <Checkbox
+              checked={showFilters}
+              label="Customize"
+              onChange={(event) => setShowFilters(event.currentTarget.checked)}
+            />
+          </Group>
+        )}
         {metadata.type === "UFO" && (
           <Tooltip label="Copy the source in the new “UFO” format.">
             <Button
@@ -343,7 +347,12 @@ export default function NonLeagueMatch() {
         variant === "Game Names" ||
         (metadata.type === "UFO" && metadata.isGeneric !== true)) &&
         showFilters && (
-          <GameChecker checkState={checkState} setCheckState={setCheckState} sort={checkerSort} setSort={setCheckerSort} />
+          <GameChecker
+            checkState={checkState}
+            setCheckState={setCheckState}
+            sort={checkerSort}
+            setSort={setCheckerSort}
+          />
         )}
       {variant === "Game Names" && showFilters && hasLessThan25Games && (
         <Alert
@@ -528,13 +537,13 @@ export default function NonLeagueMatch() {
               variant,
               bingosyncVariant:
                 metadata.type === "UFO" ||
-                  (metadata.type === "Custom" &&
-                    (customType === "fixed_board" || customType === "ufo"))
+                (metadata.type === "Custom" &&
+                  (customType === "fixed_board" || customType === "ufo"))
                   ? "18"
                   : metadata.type === "GameNames" ||
                     (metadata.type === "Custom" && customType === "randomized")
-                    ? "172"
-                    : "187",
+                  ? "172"
+                  : "187",
               isCustom:
                 showFilters &&
                 (metadata.type === "GameNames" ||

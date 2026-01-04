@@ -113,7 +113,8 @@ export default function LeagueMatch() {
               p2 == null ||
               week == null ||
               p1Tier == null ||
-              p1Tier !== p2Tier || LEAGUE_SEASON == null
+              p1Tier !== p2Tier ||
+              LEAGUE_SEASON == null
             ) {
               throw new Error("Unexpected null when creating match");
             }

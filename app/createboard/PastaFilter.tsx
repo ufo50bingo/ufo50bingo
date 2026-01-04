@@ -12,7 +12,7 @@ type Props = {
   setCheckState: (newState: Map<Game, boolean>) => void;
   pasta: Pasta;
   onChangePasta: (newPasta: null | Pasta) => void;
-  sort: CheckerSort,
+  sort: CheckerSort;
   setSort: (newSort: CheckerSort) => unknown;
 };
 
@@ -77,7 +77,12 @@ export default function PastaFilter({
   ]);
   return (
     <Stack>
-      <GameChecker checkState={checkState} setCheckState={setCheckState} sort={sort} setSort={setSort} />
+      <GameChecker
+        checkState={checkState}
+        setCheckState={setCheckState}
+        sort={sort}
+        setSort={setSort}
+      />
       <Text>
         <strong>Choose difficulty distribution</strong>
       </Text>
@@ -87,8 +92,9 @@ export default function PastaFilter({
             <NumberInput
               key={key}
               label={DIFFICULTY_NAMES[key]}
-              description={`${availableGoalDifficultyCounts.get(key) ?? 0
-                } available`}
+              description={`${
+                availableGoalDifficultyCounts.get(key) ?? 0
+              } available`}
               clampBehavior="strict"
               min={0}
               value={count}

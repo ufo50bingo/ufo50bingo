@@ -17,7 +17,7 @@ type Props = {
   setNumPlayers: (newNumPlayers: number) => void;
   pasta: Pasta;
   onChangePasta: (newPasta: null | Pasta) => void;
-  sort: CheckerSort,
+  sort: CheckerSort;
   setSort: (newSort: CheckerSort) => unknown;
 };
 
@@ -141,11 +141,11 @@ export default function DraftCreator({
       hasWrongSum || hasTooFewGoals
         ? null
         : createDraftPasta(
-          pasta,
-          numGenerals,
-          playerToDifficultyToGameToGoal,
-          difficultyCountsByPlayer
-        )
+            pasta,
+            numGenerals,
+            playerToDifficultyToGameToGoal,
+            difficultyCountsByPlayer
+          )
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

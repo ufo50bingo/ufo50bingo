@@ -48,10 +48,22 @@ export default function useLocalState(id: string, seed: number): CasterState {
     defaultValue: "winnerbit",
     options: ["winnerbit", "sprites"],
   });
-  const [hideByDefault, setHideByDefault] = useLocalBool({ key: "hide_by_default", defaultValue: false });
-  const [showGameSelector, setShowGameSelector] = useLocalBool({ key: "show_game_selector", defaultValue: true });
-  const [highlightCurrentGame, setHighlightCurrentGame] = useLocalBool({ key: "highlight_current_game", defaultValue: true });
-  const [showRecentGames, setShowRecentGames] = useLocalBool({ key: "show_recent_games", defaultValue: true });
+  const [hideByDefault, setHideByDefault] = useLocalBool({
+    key: "hide_by_default",
+    defaultValue: false,
+  });
+  const [showGameSelector, setShowGameSelector] = useLocalBool({
+    key: "show_game_selector",
+    defaultValue: true,
+  });
+  const [highlightCurrentGame, setHighlightCurrentGame] = useLocalBool({
+    key: "highlight_current_game",
+    defaultValue: true,
+  });
+  const [showRecentGames, setShowRecentGames] = useLocalBool({
+    key: "show_recent_games",
+    defaultValue: true,
+  });
 
   return useMemo(() => {
     const addShowAll = (goal: string) => {
@@ -90,12 +102,18 @@ export default function useLocalState(id: string, seed: number): CasterState {
     showAll,
     shownDifficulties,
     sortType,
+    setSortType,
     key,
     iconType,
+    setIconType,
     hideByDefault,
+    setHideByDefault,
     showGameSelector,
+    setShowGameSelector,
     highlightCurrentGame,
+    setHighlightCurrentGame,
     showRecentGames,
+    setShowRecentGames,
   ]);
 }
 

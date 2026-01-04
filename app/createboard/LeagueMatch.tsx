@@ -14,7 +14,6 @@ import {
 } from "@mantine/core";
 import createMatch from "./createMatch";
 import { db } from "../db";
-import { STANDARD } from "../pastas/standard";
 import {
   ALL_PLAYERS,
   getCurrentWeek,

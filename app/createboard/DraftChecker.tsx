@@ -2,6 +2,7 @@ import { Checkbox, Group, SimpleGrid, Text } from "@mantine/core";
 import { Game, GAME_NAMES } from "../goals";
 import { BingosyncColor } from "../matches/parseBingosyncData";
 import getColorHex from "../room/[id]/cast/getColorHex";
+import CheckerSortSelector, { CheckerSort } from "./CheckerSortSelector";
 
 const COLORS: ReadonlyArray<BingosyncColor> = [
   "red",
@@ -15,18 +16,25 @@ type Props = {
   numPlayers: number;
   draftCheckState: Map<Game, null | number>;
   setDraftCheckState: (newCheckState: Map<Game, null | number>) => void;
+  sort: CheckerSort;
+  setSort: (newSort: CheckerSort) => unknown;
 };
 
 export default function DraftChecker({
   draftCheckState,
   setDraftCheckState,
   numPlayers,
+  sort,
+  setSort,
 }: Props) {
   return (
     <>
-      <Text>
-        <strong>Select drafted games for each player</strong>
-      </Text>
+      <Group>
+        <Text>
+          <strong>Select drafted games for each player</strong>
+        </Text>
+        <CheckerSortSelector sort={sort} setSort={setSort} />
+      </Group>
       <SimpleGrid cols={3}>
         {Array.from(
           draftCheckState.entries().map(([game, checkedPlayer]) => (

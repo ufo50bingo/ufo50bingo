@@ -1,48 +1,25 @@
-import { Checkbox, SimpleGrid, Text } from "@mantine/core";
+import { Checkbox, Group, SimpleGrid, Text } from "@mantine/core";
 import { Game, GAME_NAMES } from "../goals";
+import CheckerSortSelector, { CheckerSort } from "./CheckerSortSelector";
 
 type Props = {
   checkState: Map<Game, boolean>;
   setCheckState: (newCheckState: Map<Game, boolean>) => void;
+  sort: CheckerSort,
+  setSort: (newSort: CheckerSort) => unknown;
 };
 
-export default function GameChecker({ checkState, setCheckState }: Props) {
+export default function GameChecker({ checkState, setCheckState, sort, setSort }: Props) {
   const isAllChecked = checkState.values().every((isChecked) => isChecked);
   const isNoneChecked = checkState.values().every((isChecked) => !isChecked);
-  const [sortType, setSortTypeRaw] = useState<"chronological" | "alphabetical">(
-    () => {
-      if (global.window == undefined || localStorage == null) {
-        return "fast";
-      }
-      const fromStorage = localStorage.getItem("sort_type");
-      if (fromStorage == null || fromStorage === "") {
-        return "fast";
-      }
-      switch (fromStorage) {
-        case "fast":
-          return "fast";
-        case "alphabetical":
-          return "alphabetical";
-        case "chronological":
-          return "chronological";
-        default:
-          return "fast";
-      }
-    }
-  );
-
-  const setSortType = (newSortType: SortType) => {
-    setSortTypeRaw(newSortType);
-    if (global.window == undefined || localStorage == null) {
-      return;
-    }
-    localStorage.setItem("sort_type", newSortType);
-  };
   return (
     <>
-      <Text>
-        <strong>Select included games</strong>
-      </Text>
+      <Group>
+        <Text>
+          <strong>Select included games</strong>
+        </Text>
+        <CheckerSortSelector sort={sort} setSort={setSort} />
+      </Group>
       <SimpleGrid cols={3}>
         <Checkbox
           label={

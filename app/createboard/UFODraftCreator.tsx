@@ -4,6 +4,7 @@ import { Difficulty, DIFFICULTY_NAMES, Game, ProperGame } from "../goals";
 import { GoalWithDifficulty } from "../pastas/metadata";
 import DraftChecker from "./DraftChecker";
 import { UFODifficulties, UFOPasta } from "../generator/ufoGenerator";
+import { CheckerSort } from "./CheckerSortSelector";
 
 export type PlayerToDifficultyToGameToGoal = Array<
   Map<Difficulty, Map<Game, GoalWithDifficulty[]>>
@@ -23,6 +24,8 @@ type Props = {
   setNumPlayers: (newNumPlayers: number) => void;
   pasta: UFOPasta;
   onChangePasta: (newPasta: null | UFOPasta) => void;
+  sort: CheckerSort,
+  setSort: (newSort: CheckerSort) => unknown;
 };
 
 export default function UFODraftCreator({
@@ -32,6 +35,8 @@ export default function UFODraftCreator({
   onChangePasta,
   numPlayers,
   setNumPlayers,
+  sort,
+  setSort,
 }: Props) {
   const [numGenerals, setNumGenerals] = useState(0);
   const [rawDifficultyCountsByPlayer, setDifficultyCountsByPlayer] = useState<
@@ -197,6 +202,8 @@ export default function UFODraftCreator({
         draftCheckState={draftCheckState}
         setDraftCheckState={setDraftCheckState}
         numPlayers={numPlayers}
+        sort={sort}
+        setSort={setSort}
       />
       <Text>
         <strong>Choose difficulty distribution</strong>

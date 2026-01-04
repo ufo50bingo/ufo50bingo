@@ -4,6 +4,7 @@ import { Difficulty, DIFFICULTY_NAMES, Game } from "../goals";
 import { GoalWithDifficulty, Pasta } from "../pastas/metadata";
 import DraftChecker from "./DraftChecker";
 import createDraftPasta from "./createDraftPasta";
+import { CheckerSort } from "./CheckerSortSelector";
 
 export type PlayerToDifficultyToGameToGoal = Array<
   Map<Difficulty, Map<Game, GoalWithDifficulty[]>>
@@ -16,6 +17,8 @@ type Props = {
   setNumPlayers: (newNumPlayers: number) => void;
   pasta: Pasta;
   onChangePasta: (newPasta: null | Pasta) => void;
+  sort: CheckerSort,
+  setSort: (newSort: CheckerSort) => unknown;
 };
 
 export default function DraftCreator({
@@ -25,6 +28,8 @@ export default function DraftCreator({
   onChangePasta,
   numPlayers,
   setNumPlayers,
+  sort,
+  setSort,
 }: Props) {
   const [numGenerals, setNumGenerals] = useState(0);
   const [rawDifficultyCountsByPlayer, setDifficultyCountsByPlayer] = useState<
@@ -136,11 +141,11 @@ export default function DraftCreator({
       hasWrongSum || hasTooFewGoals
         ? null
         : createDraftPasta(
-            pasta,
-            numGenerals,
-            playerToDifficultyToGameToGoal,
-            difficultyCountsByPlayer
-          )
+          pasta,
+          numGenerals,
+          playerToDifficultyToGameToGoal,
+          difficultyCountsByPlayer
+        )
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -192,6 +197,8 @@ export default function DraftCreator({
         draftCheckState={draftCheckState}
         setDraftCheckState={setDraftCheckState}
         numPlayers={numPlayers}
+        sort={sort}
+        setSort={setSort}
       />
       <Text>
         <strong>Choose difficulty distribution</strong>

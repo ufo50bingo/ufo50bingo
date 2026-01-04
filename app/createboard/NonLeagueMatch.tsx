@@ -45,6 +45,8 @@ import ufoGenerator, {
 import UFODifficultySelectors from "./UFODifficultySelectors";
 import UFODraftCreator from "./UFODraftCreator";
 import validateUfo from "../generator/validateUfo";
+import useLocalEnum from "../localStorage/useLocalEnum";
+import { CheckerSort } from "./CheckerSortSelector";
 
 const options: ReadonlyArray<VariantMetadata> = METADATA.filter(
   (d) => !d.isMenu
@@ -56,15 +58,48 @@ const menuOptions: ReadonlyArray<VariantMetadata> = METADATA.filter(
 type CustomType = "srl_v5" | "ufo" | "fixed_board" | "randomized";
 
 export default function NonLeagueMatch() {
+  const [checkerSort, setCheckerSortRaw] = useLocalEnum({
+    key: "checker-sort",
+    defaultValue: "chronological",
+    options: ["chronological", "alphabetical"],
+  });
   const [variant, setVariant] = useState<Variant>(options[0].name);
   const [custom, setCustom] = useState("");
   const [checkState, setCheckState] = useState<Map<Game, boolean>>(
-    new Map(ORDERED_PROPER_GAMES.toSorted().map((key) => [key, true]))
+    new Map(
+      (checkerSort === "chronological"
+        ? ORDERED_PROPER_GAMES
+        : ORDERED_PROPER_GAMES.toSorted()
+      ).map((key) => [key, true]))
   );
   const [numPlayers, setNumPlayers] = useState(2);
   const [draftCheckState, setDraftCheckState] = useState<
     Map<Game, null | number>
-  >(new Map(ORDERED_PROPER_GAMES.toSorted().map((key) => [key, null])));
+  >(
+    new Map(
+      (checkerSort === "chronological"
+        ? ORDERED_PROPER_GAMES
+        : ORDERED_PROPER_GAMES.toSorted()
+      ).map((key) => [key, null]))
+  );
+
+  const setCheckerSort = (newSort: CheckerSort) => {
+    setCheckerSortRaw(newSort);
+    setCheckState(
+      new Map(
+        (newSort === "chronological"
+          ? ORDERED_PROPER_GAMES
+          : ORDERED_PROPER_GAMES.toSorted()
+        ).map((key) => [key, checkState.get(key) ?? true]))
+    );
+    setDraftCheckState(
+      new Map(
+        (newSort === "chronological"
+          ? ORDERED_PROPER_GAMES
+          : ORDERED_PROPER_GAMES.toSorted()
+        ).map((key) => [key, draftCheckState.get(key) ?? null]))
+    )
+  };
 
   const [customizedPasta, setCustomizedPasta] = useState<null | Pasta>(null);
   const [draftPasta, setDraftPasta] = useState<null | UFOPasta>(null);
@@ -119,21 +154,21 @@ export default function NonLeagueMatch() {
         return stringify(
           showFilters
             ? Array.from(
-                checkState
-                  .entries()
-                  .filter(([_gameKey, checkState]) => checkState)
-              ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
+              checkState
+                .entries()
+                .filter(([_gameKey, checkState]) => checkState)
+            ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
             : ORDERED_PROPER_GAMES.map((gameKey) => ({
-                name: GAME_NAMES[gameKey],
-              }))
+              name: GAME_NAMES[gameKey],
+            }))
         );
       case "WithoutDifficulty":
         return stringify(
           showFilters || randomizeGroupings
             ? createPastaWithoutDifficulty(
-                metadata.pasta,
-                showFilters ? checkState : null
-              )
+              metadata.pasta,
+              showFilters ? checkState : null
+            )
             : metadata.pasta
         );
       case "WithDifficulty":
@@ -147,9 +182,9 @@ export default function NonLeagueMatch() {
         return stringify(
           randomizeGroupings
             ? createPasta(
-                metadata.pasta,
-                getDefaultDifficulties(metadata.pasta)
-              )
+              metadata.pasta,
+              getDefaultDifficulties(metadata.pasta)
+            )
             : metadata.pasta
         );
       case "DraftWithDifficulty":
@@ -230,7 +265,7 @@ export default function NonLeagueMatch() {
         />
         <Menu shadow="md" width={200}>
           <Menu.Target>
-            <ActionIcon onClick={() => {}} variant="default">
+            <ActionIcon onClick={() => { }} variant="default">
               <IconDots size={16} />
             </ActionIcon>
           </Menu.Target>
@@ -251,43 +286,43 @@ export default function NonLeagueMatch() {
           metadata.type === "WithoutDifficulty" ||
           (metadata.type === "UFO" && metadata.isGeneric !== true) ||
           variant === "Game Names") && (
-          <Group>
-            {(metadata.type === "WithDifficulty" ||
-              metadata.type === "WithoutDifficulty") && (
-              <Tooltip
-                label={
-                  <span>
-                    Games will be divided into groups randomly while still
-                    respecting the
-                    <br />
-                    difficulty distribution, allowing for greater card variety
-                    than using the
-                    <br />
-                    default pasta. This option is always enabled when
-                    customizing games and
-                    <br />
-                    difficulty counts.
-                  </span>
-                }
-              >
-                <div>
-                  <Checkbox
-                    checked={showFilters || randomizeGroupings}
-                    label="Randomize goal groupings"
-                    onChange={(event) =>
-                      setRandomizeGroupings(event.currentTarget.checked)
+            <Group>
+              {(metadata.type === "WithDifficulty" ||
+                metadata.type === "WithoutDifficulty") && (
+                  <Tooltip
+                    label={
+                      <span>
+                        Games will be divided into groups randomly while still
+                        respecting the
+                        <br />
+                        difficulty distribution, allowing for greater card variety
+                        than using the
+                        <br />
+                        default pasta. This option is always enabled when
+                        customizing games and
+                        <br />
+                        difficulty counts.
+                      </span>
                     }
-                  />
-                </div>
-              </Tooltip>
-            )}
-            <Checkbox
-              checked={showFilters}
-              label="Customize"
-              onChange={(event) => setShowFilters(event.currentTarget.checked)}
-            />
-          </Group>
-        )}
+                  >
+                    <div>
+                      <Checkbox
+                        checked={showFilters || randomizeGroupings}
+                        label="Randomize goal groupings"
+                        onChange={(event) =>
+                          setRandomizeGroupings(event.currentTarget.checked)
+                        }
+                      />
+                    </div>
+                  </Tooltip>
+                )}
+              <Checkbox
+                checked={showFilters}
+                label="Customize"
+                onChange={(event) => setShowFilters(event.currentTarget.checked)}
+              />
+            </Group>
+          )}
         {metadata.type === "UFO" && (
           <Tooltip label="Copy the source in the new “UFO” format.">
             <Button
@@ -308,7 +343,7 @@ export default function NonLeagueMatch() {
         variant === "Game Names" ||
         (metadata.type === "UFO" && metadata.isGeneric !== true)) &&
         showFilters && (
-          <GameChecker checkState={checkState} setCheckState={setCheckState} />
+          <GameChecker checkState={checkState} setCheckState={setCheckState} sort={checkerSort} setSort={setCheckerSort} />
         )}
       {variant === "Game Names" && showFilters && hasLessThan25Games && (
         <Alert
@@ -349,6 +384,8 @@ export default function NonLeagueMatch() {
           setNumPlayers={setNumPlayers}
           pasta={metadata.pasta}
           onChangePasta={setCustomizedPasta}
+          sort={checkerSort}
+          setSort={setCheckerSort}
         />
       )}
       {metadata.type === "UFODraft" && (
@@ -359,6 +396,8 @@ export default function NonLeagueMatch() {
           setNumPlayers={setNumPlayers}
           pasta={metadata.pasta}
           onChangePasta={setDraftPasta}
+          sort={checkerSort}
+          setSort={setCheckerSort}
         />
       )}
       {variant === "Custom" && (
@@ -487,13 +526,13 @@ export default function NonLeagueMatch() {
               variant,
               bingosyncVariant:
                 metadata.type === "UFO" ||
-                (metadata.type === "Custom" &&
-                  (customType === "fixed_board" || customType === "ufo"))
+                  (metadata.type === "Custom" &&
+                    (customType === "fixed_board" || customType === "ufo"))
                   ? "18"
                   : metadata.type === "GameNames" ||
                     (metadata.type === "Custom" && customType === "randomized")
-                  ? "172"
-                  : "187",
+                    ? "172"
+                    : "187",
               isCustom:
                 showFilters &&
                 (metadata.type === "GameNames" ||

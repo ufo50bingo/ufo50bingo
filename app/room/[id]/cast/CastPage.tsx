@@ -5,8 +5,6 @@ import getSupabaseClient from "./getSupabaseClient";
 import { CountChangeRow, CountState, CurrentGameRow } from "./useSyncedState";
 import { RoomCookie, toBingosyncCookie } from "../roomCookie";
 import getSeed from "../common/getSeed";
-// import { STANDARD } from "@/app/pastas/standard";
-// import getSrlV5Board from "@/app/practiceboard/getSrlV5Board";
 
 type Props = {
   id: string;
@@ -46,7 +44,6 @@ export default async function CastPage({ id, roomCookie }: Props) {
     .map((entry) => ({ game: entry.game, start_time: entry.start_time }));
   const structuredCounts = structureCounts(countsForSeed);
   const board = getBoard(rawBoard);
-  // const board = getSrlV5Board(STANDARD);
   return (
     <CastWrapper
       id={id}

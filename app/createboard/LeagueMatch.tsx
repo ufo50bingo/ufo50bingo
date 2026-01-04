@@ -12,8 +12,6 @@ import {
   TextInput,
   Tooltip,
 } from "@mantine/core";
-import createPasta from "./createPasta";
-import getDefaultDifficulties from "./getDefaultDifficulties";
 import createMatch from "./createMatch";
 import { db } from "../db";
 import { STANDARD } from "../pastas/standard";
@@ -25,6 +23,8 @@ import {
   WEEKS,
 } from "./leagueConstants";
 import Link from "next/link";
+import { STANDARD_UFO } from "../pastas/standardUfo";
+import ufoGenerator from "../generator/ufoGenerator";
 
 export default function LeagueMatch() {
   const [week, setWeek] = useState<null | string>(getCurrentWeek());
@@ -124,11 +124,11 @@ export default function LeagueMatch() {
               password,
               isPublic: true,
               variant: "Standard",
-              bingosyncVariant: "187",
+              bingosyncVariant: "18",
               isCustom: false,
               isLockout: true,
               pasta: JSON.stringify(
-                createPasta(STANDARD, getDefaultDifficulties(STANDARD))
+                ufoGenerator(STANDARD_UFO).map((goal) => ({ name: goal }))
               ),
               leagueInfo: {
                 season: LEAGUE_SEASON,
@@ -178,9 +178,9 @@ export default function LeagueMatch() {
           onClick={() => {
             navigator.clipboard.writeText(
               JSON.stringify(
-                createPasta(STANDARD, getDefaultDifficulties(STANDARD)),
+                ufoGenerator(STANDARD_UFO).map((goal) => ({ name: goal })),
                 null,
-                4
+                2
               )
             );
           }}

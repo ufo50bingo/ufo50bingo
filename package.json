@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "tsc": "tsc"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",

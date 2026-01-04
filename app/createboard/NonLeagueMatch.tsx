@@ -17,16 +17,11 @@ import {
   TextInput,
   Tooltip,
 } from "@mantine/core";
-import createPasta from "./createPasta";
-import createPastaWithoutDifficulty from "./createPastaWithoutDifficulty";
 import GameChecker from "./GameChecker";
-import getDefaultDifficulties from "./getDefaultDifficulties";
 import { Game, GAME_NAMES, ORDERED_PROPER_GAMES } from "../goals";
-import PastaFilter from "./PastaFilter";
 import {
   METADATA,
   OtherPasta,
-  Pasta,
   Variant,
   VariantMetadata,
 } from "../pastas/metadata";
@@ -34,7 +29,6 @@ import VariantHoverCard from "./VariantHoverCard";
 import createMatch from "./createMatch";
 import { db } from "../db";
 import Link from "next/link";
-import DraftCreator from "./DraftCreator";
 import ufoGenerator, {
   Counts,
   UFODifficulties,
@@ -105,10 +99,7 @@ export default function NonLeagueMatch() {
     );
   };
 
-  const [customizedPasta, setCustomizedPasta] = useState<null | Pasta>(null);
   const [draftPasta, setDraftPasta] = useState<null | UFOPasta>(null);
-
-  const [randomizeGroupings, setRandomizeGroupings] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
 
   const [roomName, setRoomName] = useState("");
@@ -166,39 +157,6 @@ export default function NonLeagueMatch() {
                 name: GAME_NAMES[gameKey],
               }))
         );
-      case "WithoutDifficulty":
-        return stringify(
-          showFilters || randomizeGroupings
-            ? createPastaWithoutDifficulty(
-                metadata.pasta,
-                showFilters ? checkState : null
-              )
-            : metadata.pasta
-        );
-      case "WithDifficulty":
-        if (showFilters) {
-          if (customizedPasta != null) {
-            return stringify(customizedPasta);
-          } else {
-            throw new Error("customizedPasta expected to be nonnull");
-          }
-        }
-        return stringify(
-          randomizeGroupings
-            ? createPasta(
-                metadata.pasta,
-                getDefaultDifficulties(metadata.pasta)
-              )
-            : metadata.pasta
-        );
-      case "DraftWithDifficulty":
-        if (customizedPasta != null) {
-          return stringify(customizedPasta);
-        } else {
-          throw new Error("customizedPasta expected to be nonnull");
-        }
-      case "Other":
-        return stringify(metadata.pasta);
       case "UFODraft":
         if (draftPasta != null) {
           return stringify(
@@ -286,46 +244,13 @@ export default function NonLeagueMatch() {
         />
       )}
       <Group justify="space-between">
-        {(metadata.type === "WithDifficulty" ||
-          metadata.type === "WithoutDifficulty" ||
-          (metadata.type === "UFO" && metadata.isGeneric !== true) ||
+        {((metadata.type === "UFO" && metadata.isGeneric !== true) ||
           variant === "Game Names") && (
-          <Group>
-            {(metadata.type === "WithDifficulty" ||
-              metadata.type === "WithoutDifficulty") && (
-              <Tooltip
-                label={
-                  <span>
-                    Games will be divided into groups randomly while still
-                    respecting the
-                    <br />
-                    difficulty distribution, allowing for greater card variety
-                    than using the
-                    <br />
-                    default pasta. This option is always enabled when
-                    customizing games and
-                    <br />
-                    difficulty counts.
-                  </span>
-                }
-              >
-                <div>
-                  <Checkbox
-                    checked={showFilters || randomizeGroupings}
-                    label="Randomize goal groupings"
-                    onChange={(event) =>
-                      setRandomizeGroupings(event.currentTarget.checked)
-                    }
-                  />
-                </div>
-              </Tooltip>
-            )}
-            <Checkbox
-              checked={showFilters}
-              label="Customize"
-              onChange={(event) => setShowFilters(event.currentTarget.checked)}
-            />
-          </Group>
+          <Checkbox
+            checked={showFilters}
+            label="Customize"
+            onChange={(event) => setShowFilters(event.currentTarget.checked)}
+          />
         )}
         {metadata.type === "UFO" && (
           <Tooltip label="Copy the source in the new “UFO” format.">
@@ -343,8 +268,7 @@ export default function NonLeagueMatch() {
           </Tooltip>
         )}
       </Group>
-      {(metadata.type === "WithoutDifficulty" ||
-        variant === "Game Names" ||
+      {(metadata.type === "GameNames" ||
         (metadata.type === "UFO" && metadata.isGeneric !== true)) &&
         showFilters && (
           <GameChecker
@@ -354,7 +278,7 @@ export default function NonLeagueMatch() {
             setSort={setCheckerSort}
           />
         )}
-      {variant === "Game Names" && showFilters && hasLessThan25Games && (
+      {metadata.type === "GameNames" && showFilters && hasLessThan25Games && (
         <Alert
           variant="light"
           color="red"
@@ -376,29 +300,6 @@ export default function NonLeagueMatch() {
             }}
           />
         )}
-      {metadata.type === "WithDifficulty" && showFilters && (
-        <PastaFilter
-          key={variant}
-          checkState={checkState}
-          setCheckState={setCheckState}
-          pasta={metadata.pasta}
-          onChangePasta={setCustomizedPasta}
-          sort={checkerSort}
-          setSort={setCheckerSort}
-        />
-      )}
-      {metadata.type === "DraftWithDifficulty" && (
-        <DraftCreator
-          draftCheckState={draftCheckState}
-          setDraftCheckState={setDraftCheckState}
-          numPlayers={numPlayers}
-          setNumPlayers={setNumPlayers}
-          pasta={metadata.pasta}
-          onChangePasta={setCustomizedPasta}
-          sort={checkerSort}
-          setSort={setCheckerSort}
-        />
-      )}
       {metadata.type === "UFODraft" && (
         <UFODraftCreator
           draftCheckState={draftCheckState}
@@ -411,7 +312,7 @@ export default function NonLeagueMatch() {
           setSort={setCheckerSort}
         />
       )}
-      {variant === "Custom" && (
+      {metadata.type === "Custom" && (
         <Stack>
           <Select
             data={[
@@ -517,11 +418,10 @@ export default function NonLeagueMatch() {
           isCreationInProgress ||
           roomName === "" ||
           password === "" ||
-          (variant === "Game Names" && showFilters && hasLessThan25Games) ||
-          (variant === "Custom" && custom === "") ||
-          (metadata.type === "WithDifficulty" &&
+          (metadata.type === "GameNames" &&
             showFilters &&
-            customizedPasta == null) ||
+            hasLessThan25Games) ||
+          (metadata.type === "Custom" && custom === "") ||
           (metadata.type === "Custom" &&
             customType === "ufo" &&
             customUfo == null)
@@ -546,10 +446,7 @@ export default function NonLeagueMatch() {
                   : "187",
               isCustom:
                 showFilters &&
-                (metadata.type === "GameNames" ||
-                  metadata.type === "UFO" ||
-                  metadata.type === "WithDifficulty" ||
-                  metadata.type === "WithoutDifficulty"),
+                (metadata.type === "GameNames" || metadata.type === "UFO"),
               isLockout,
               pasta: getSerializedPasta(false),
               leagueInfo: null,
@@ -581,12 +478,9 @@ export default function NonLeagueMatch() {
       </Button>
       <Button
         disabled={
-          (metadata.type === "WithDifficulty" &&
-            showFilters &&
-            customizedPasta == null) ||
-          (metadata.type === "Custom" &&
-            customType === "ufo" &&
-            customUfo == null)
+          metadata.type === "Custom" &&
+          customType === "ufo" &&
+          customUfo == null
         }
         onClick={() => {
           navigator.clipboard.writeText(getSerializedPasta(true));

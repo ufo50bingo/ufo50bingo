@@ -1,9 +1,8 @@
 "use server";
 
-import { STANDARD } from "@/app/pastas/standard";
-import createPasta from "@/app/createboard/createPasta";
-import getDefaultDifficulties from "@/app/createboard/getDefaultDifficulties";
 import { readBingosyncCookie } from "../roomCookie";
+import ufoGenerator from "@/app/generator/ufoGenerator";
+import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 
 export default async function createNewCard(id: string): Promise<void> {
   const cookie = await readBingosyncCookie();
@@ -23,9 +22,9 @@ export default async function createNewCard(id: string): Promise<void> {
       room: id,
       hide_card: true,
       game_type: "18",
-      variant_type: "187",
+      variant_type: "18",
       custom_json: JSON.stringify(
-        createPasta(STANDARD, getDefaultDifficulties(STANDARD))
+        ufoGenerator(STANDARD_UFO).map((goal) => ({ name: goal }))
       ),
       lockout_mode: "2",
       seed: "",

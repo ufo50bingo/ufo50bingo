@@ -306,32 +306,12 @@ interface MetadataBase {
   isMenu: boolean;
 }
 
-interface WithDifficulty extends MetadataBase {
-  type: "WithDifficulty";
-  pasta: Pasta;
-}
-
-interface WithoutDifficulty extends MetadataBase {
-  type: "WithoutDifficulty";
-  pasta: PastaWithoutDifficulty;
-}
-
-interface Other extends MetadataBase {
-  type: "Other";
-  pasta: OtherPasta;
-}
-
 interface GameNames extends MetadataBase {
   type: "GameNames";
 }
 
 interface Custom extends MetadataBase {
   type: "Custom";
-}
-
-interface DraftWithDifficulty extends MetadataBase {
-  type: "DraftWithDifficulty";
-  pasta: Pasta;
 }
 
 interface UFO extends MetadataBase {
@@ -345,14 +325,6 @@ interface UFODraft extends MetadataBase {
   pasta: UFOPasta;
 }
 
-export type VariantMetadata =
-  | WithDifficulty
-  | WithoutDifficulty
-  | GameNames
-  | Custom
-  | Other
-  | DraftWithDifficulty
-  | UFO
-  | UFODraft;
+export type VariantMetadata = GameNames | Custom | UFO | UFODraft;
 
 export const METADATA: ReadonlyArray<VariantMetadata> = RAW_METADATA;

@@ -1,4 +1,5 @@
 import { STANDARD } from "./pastas/standard";
+import { STANDARD_UFO } from "./pastas/standardUfo";
 
 export const ORDERED_PROPER_GAMES = [
   "barbuta",
@@ -111,6 +112,15 @@ export const GAME_NAMES = {
   general: "General",
 } as const;
 
+const SUBCATEGORY_NAMES = {
+  ...GAME_NAMES,
+  gift: "Gift",
+  goldcherry: "Gold/Cherry",
+  collectathon: "Collectathon",
+  theme: "Theme",
+  bosslevel: "Boss/Level",
+} as const;
+
 export const ORDERED_DIFFICULTY = [
   "easy",
   "medium",
@@ -119,6 +129,17 @@ export const ORDERED_DIFFICULTY = [
   "general",
 ] as const;
 export type Difficulty = (typeof ORDERED_DIFFICULTY)[number];
+type StandardDifficulty = keyof typeof STANDARD_UFO.goals;
+
+// verify that StandardDifficulty and Difficulty match
+const difficulty: Difficulty = "easy";
+const standardDifficulty: StandardDifficulty = "easy";
+const _t1: StandardDifficulty = difficulty;
+const _t2: Difficulty = standardDifficulty;
+
+type StandardSubcategory =
+  | keyof typeof STANDARD_UFO.goals.easy
+  | keyof typeof STANDARD_UFO.goals.general;
 
 export const DIFFICULTY_NAMES = {
   easy: "Easy",
@@ -128,24 +149,37 @@ export const DIFFICULTY_NAMES = {
   general: "General",
 } as const;
 
-export type GoalName = (typeof STANDARD)[number][number]["name"];
+// verify that subcategories match
+const cat1: keyof typeof SUBCATEGORY_NAMES = "barbuta";
+const cat2: StandardSubcategory = "barbuta";
+const _t3: StandardSubcategory = cat1;
+const _t4: keyof typeof SUBCATEGORY_NAMES = cat2;
 
-export type TGoal = {
-  readonly name: GoalName;
-  readonly types: readonly [Game, Difficulty];
+const FLAT_GOALS = Object.values(STANDARD_UFO.goals).flatMap((subcategories) => Object.values(subcategories).flat());
+
+const FLAT_GOALS2 = Object.keys(STANDARD_UFO.goals).flatMap((difficulty) => {
+  const typedDifficulty = difficulty as StandardDifficulty;
+  const subcategories = STANDARD_UFO.goals[typedDifficulty];
+  return Object.keys(subcategories).flatMap((subcategory) => {
+    const typedSubcategory = subcategory as StandardSubcategory;
+    return subcategories[typedSubcategory].map((goal) => ({
+      goal,
+      subcategory: typedSubcategory,
+      difficulty: typedDifficulty,
+    }));
+  });
+);
+
+type StandardGoal = {
+  goal: string;
+  game: Game;
+  difficulty: Difficulty;
 };
 
-// some goals in STANDARD are repeated, so we need to filter them out
-const SEEN_GOALS: Set<GoalName> = new Set();
 // this also verifies that all Game and Difficulty options are consistent between the ordered
 // arrays in this file and the values in STANDARD
-export const SORTED_FLAT_GOALS: ReadonlyArray<TGoal> = STANDARD.flat()
-  .filter((goal) => {
-    const hasSeen = SEEN_GOALS.has(goal.name);
-    SEEN_GOALS.add(goal.name);
-    return !hasSeen;
-  })
-  .toSorted((a, b) => {
+export const SORTED_FLAT_GOALS: ReadonlyArray<StandardGoal> =
+  STANDARD.flat().toSorted((a, b) => {
     const gameDiff =
       ORDERED_GAMES.indexOf(a.types[0]) - ORDERED_GAMES.indexOf(b.types[0]);
     if (gameDiff !== 0) {

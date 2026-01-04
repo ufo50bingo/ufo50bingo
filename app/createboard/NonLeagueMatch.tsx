@@ -238,7 +238,7 @@ export default function NonLeagueMatch() {
       )}
       <Group justify="space-between">
         {((metadata.type === "UFO" && metadata.isGeneric !== true) ||
-          variant === "Game Names") && (
+          metadata.type === "GameNames") && (
           <Checkbox
             checked={showFilters}
             label="Customize"

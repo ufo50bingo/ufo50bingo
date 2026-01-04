@@ -1,5 +1,5 @@
 import { Checkbox, SimpleGrid, Text } from "@mantine/core";
-import { Game, GAME_NAMES, ORDERED_PROPER_GAMES } from "../goals";
+import { Game, GAME_NAMES } from "../goals";
 
 type Props = {
   checkState: Map<Game, boolean>;
@@ -9,6 +9,35 @@ type Props = {
 export default function GameChecker({ checkState, setCheckState }: Props) {
   const isAllChecked = checkState.values().every((isChecked) => isChecked);
   const isNoneChecked = checkState.values().every((isChecked) => !isChecked);
+  const [sortType, setSortTypeRaw] = useState<"chronological" | "alphabetical">(
+    () => {
+      if (global.window == undefined || localStorage == null) {
+        return "fast";
+      }
+      const fromStorage = localStorage.getItem("sort_type");
+      if (fromStorage == null || fromStorage === "") {
+        return "fast";
+      }
+      switch (fromStorage) {
+        case "fast":
+          return "fast";
+        case "alphabetical":
+          return "alphabetical";
+        case "chronological":
+          return "chronological";
+        default:
+          return "fast";
+      }
+    }
+  );
+
+  const setSortType = (newSortType: SortType) => {
+    setSortTypeRaw(newSortType);
+    if (global.window == undefined || localStorage == null) {
+      return;
+    }
+    localStorage.setItem("sort_type", newSortType);
+  };
   return (
     <>
       <Text>
@@ -25,7 +54,7 @@ export default function GameChecker({ checkState, setCheckState }: Props) {
           checked={isAllChecked}
           onChange={() => {
             const newState = new Map(
-              ORDERED_PROPER_GAMES.map((key) => [key, !isAllChecked])
+              checkState.keys().map((key) => [key, !isAllChecked])
             );
             setCheckState(newState);
           }}

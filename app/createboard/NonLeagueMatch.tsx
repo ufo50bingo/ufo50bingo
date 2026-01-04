@@ -110,7 +110,7 @@ export default function NonLeagueMatch() {
   const [url, setUrl] = useState("");
   const [id, setId] = useState<null | string>(null);
   const [error, setError] = useState<Error | null>(null);
-  const [customType, setCustomType] = useState<CustomType>("srl_v5");
+  const [customType, setCustomType] = useState<CustomType>("ufo");
 
   const [difficultyCounts, setDifficultyCounts] = useState(() => {
     const counts: { [name: string]: Counts } = {};

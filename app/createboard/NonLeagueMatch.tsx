@@ -374,6 +374,8 @@ export default function NonLeagueMatch() {
           setCheckState={setCheckState}
           pasta={metadata.pasta}
           onChangePasta={setCustomizedPasta}
+          sort={checkerSort}
+          setSort={setCheckerSort}
         />
       )}
       {metadata.type === "DraftWithDifficulty" && (

@@ -19,12 +19,7 @@ import {
 } from "@mantine/core";
 import GameChecker from "./GameChecker";
 import { Game, GAME_NAMES, ORDERED_PROPER_GAMES } from "../goals";
-import {
-  METADATA,
-  OtherPasta,
-  Variant,
-  VariantMetadata,
-} from "../pastas/metadata";
+import { METADATA, Variant, VariantMetadata } from "../pastas/metadata";
 import VariantHoverCard from "./VariantHoverCard";
 import createMatch from "./createMatch";
 import { db } from "../db";
@@ -136,9 +131,7 @@ export default function NonLeagueMatch() {
   const hasLessThan25Games = checkedGameCount < 25;
 
   const getSerializedPasta = (pretty: boolean): string => {
-    const stringify = (
-      structured: OtherPasta | ReadonlyArray<{ name: string }>
-    ) =>
+    const stringify = (structured: ReadonlyArray<{ name: string }>) =>
       pretty ? JSON.stringify(structured, null, 2) : JSON.stringify(structured);
     switch (metadata.type) {
       case "Custom":

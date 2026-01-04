@@ -1,14 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Alert, Group, NumberInput, Stack, Text } from "@mantine/core";
 import { Difficulty, DIFFICULTY_NAMES, Game, ProperGame } from "../goals";
-import { GoalWithDifficulty } from "../pastas/metadata";
 import DraftChecker from "./DraftChecker";
 import { UFODifficulties, UFOPasta } from "../generator/ufoGenerator";
 import { CheckerSort } from "./CheckerSortSelector";
-
-export type PlayerToDifficultyToGameToGoal = Array<
-  Map<Difficulty, Map<Game, GoalWithDifficulty[]>>
->;
 
 const DIFFICULTIES: ReadonlyArray<Difficulty> = [
   "easy",

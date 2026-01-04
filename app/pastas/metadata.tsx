@@ -1,6 +1,5 @@
 import { List, Stack, Text } from "@mantine/core";
 import { ReactNode } from "react";
-import { Difficulty, Game } from "../goals";
 import { UFOPasta } from "../generator/ufoGenerator";
 import { STANDARD_UFO } from "./standardUfo";
 import { SPICY_UFO } from "./spicyUfo";
@@ -278,27 +277,6 @@ const RAW_METADATA = [
 ] as const;
 
 export type Variant = (typeof RAW_METADATA)[number]["name"];
-
-export type GoalWithDifficulty = {
-  readonly name: string;
-  readonly types: readonly [Game, Difficulty];
-};
-
-export type GoalWithoutDifficulty = {
-  readonly name: string;
-  readonly types: readonly [Game];
-};
-
-type OtherGoal = {
-  readonly name: string;
-  readonly types: ReadonlyArray<string>;
-};
-
-export type Pasta = ReadonlyArray<ReadonlyArray<GoalWithDifficulty>>;
-export type PastaWithoutDifficulty = ReadonlyArray<
-  ReadonlyArray<GoalWithoutDifficulty>
->;
-export type OtherPasta = ReadonlyArray<ReadonlyArray<OtherGoal>>;
 
 interface MetadataBase {
   name: Variant;

@@ -1,6 +1,12 @@
-import { ORDERED_GAMES } from "../goals";
-import { GoalWithDifficulty, Pasta } from "../pastas/metadata";
+import { Difficulty, Game, ORDERED_GAMES } from "../goals";
 import { UFOPasta } from "./ufoGenerator";
+
+type GoalWithDifficulty = {
+  readonly name: string;
+  readonly types: readonly [Game, Difficulty];
+};
+
+type Pasta = ReadonlyArray<ReadonlyArray<GoalWithDifficulty>>;
 
 export default function convertToUfo(pasta: Pasta): UFOPasta {
   const difficulties = getDefaultDifficulties(pasta);

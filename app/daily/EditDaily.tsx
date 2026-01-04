@@ -1,9 +1,9 @@
 import { Button, Group, Modal, Stack, Text, TextInput } from "@mantine/core";
 import { LocalDate } from "./localDate";
 import { DailyData } from "./page";
-import useDailyPassword from "./useDailyPassword";
 import { useMediaQuery } from "@mantine/hooks";
 import EditDailyBody from "./EditDailyBody";
+import useLocalString from "../localStorage/useLocalString";
 
 type Props = {
   dailyData: DailyData;
@@ -14,7 +14,7 @@ type Props = {
 const SECRET_PASSWORD_NO_PEEKING = "pleaseletmeeditthedailybingoboard";
 
 export default function EditDaily({ dailyData, date, onClose }: Props) {
-  const [password, setPassword] = useDailyPassword();
+  const [password, setPassword] = useLocalString({ key: "daily-password", defaultValue: "" });
   const isMobile = useMediaQuery("(max-width: 525px)");
   const body =
     password === SECRET_PASSWORD_NO_PEEKING ? (

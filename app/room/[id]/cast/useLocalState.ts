@@ -1,4 +1,6 @@
 import { Difficulty } from "@/app/goals";
+import useLocalBool from "@/app/localStorage/useLocalBool";
+import useLocalEnum from "@/app/localStorage/useLocalEnum";
 import { useMemo, useState } from "react";
 
 export type SortType = "fast" | "alphabetical" | "chronological";
@@ -36,76 +38,20 @@ export default function useLocalState(id: string, seed: number): CasterState {
   const [showAll, setShowAllRaw] = useState<ReadonlyArray<string>>(
     initialState.showAll
   );
-  const [sortType, setSortTypeRaw] = useState<SortType>(() => {
-    if (global.window == undefined || localStorage == null) {
-      return "fast";
-    }
-    const fromStorage = localStorage.getItem("sort_type");
-    if (fromStorage == null || fromStorage === "") {
-      return "fast";
-    }
-    switch (fromStorage) {
-      case "fast":
-        return "fast";
-      case "alphabetical":
-        return "alphabetical";
-      case "chronological":
-        return "chronological";
-      default:
-        return "fast";
-    }
+  const [sortType, setSortType] = useLocalEnum<SortType>({
+    key: "sort_type",
+    defaultValue: "fast",
+    options: ["fast", "alphabetical", "chronological"],
   });
-  const [iconType, setIconTypeRaw] = useState<IconType>(() => {
-    if (global.window == undefined || localStorage == null) {
-      return "winnerbit";
-    }
-    const fromStorage = localStorage.getItem("icon_type");
-    if (fromStorage == null || fromStorage === "") {
-      return "winnerbit";
-    }
-    switch (fromStorage) {
-      case "sprites":
-        return "sprites";
-      case "winnerbit":
-        return "winnerbit";
-      default:
-        return "winnerbit";
-    }
+  const [iconType, setIconType] = useLocalEnum<IconType>({
+    key: "icon_type",
+    defaultValue: "winnerbit",
+    options: ["winnerbit", "sprites"],
   });
-
-  const [hideByDefault, setHideByDefaultRaw] = useState<boolean>(() => {
-    if (global.window == undefined || localStorage == null) {
-      return false;
-    }
-    const fromStorage = localStorage.getItem("hide_by_default");
-    return fromStorage === "true";
-  });
-
-  const [showGameSelector, setShowGameSelectorRaw] = useState<boolean>(() => {
-    if (global.window == undefined || localStorage == null) {
-      return true;
-    }
-    const fromStorage = localStorage.getItem("show_game_selector");
-    return fromStorage !== "false";
-  });
-
-  const [highlightCurrentGame, setHighlightCurrentGameRaw] = useState<boolean>(
-    () => {
-      if (global.window == undefined || localStorage == null) {
-        return true;
-      }
-      const fromStorage = localStorage.getItem("highlight_current_game");
-      return fromStorage !== "false";
-    }
-  );
-
-  const [showRecentGames, setShowRecentGamesRaw] = useState<boolean>(() => {
-    if (global.window == undefined || localStorage == null) {
-      return true;
-    }
-    const fromStorage = localStorage.getItem("show_recent_games");
-    return fromStorage !== "false";
-  });
+  const [hideByDefault, setHideByDefault] = useLocalBool({ key: "hide_by_default", defaultValue: false });
+  const [showGameSelector, setShowGameSelector] = useLocalBool({ key: "show_game_selector", defaultValue: true });
+  const [highlightCurrentGame, setHighlightCurrentGame] = useLocalBool({ key: "highlight_current_game", defaultValue: true });
+  const [showRecentGames, setShowRecentGames] = useLocalBool({ key: "show_recent_games", defaultValue: true });
 
   return useMemo(() => {
     const addShowAll = (goal: string) => {
@@ -121,60 +67,6 @@ export default function useLocalState(id: string, seed: number): CasterState {
         showAll,
         shownDifficulties: newShownDifficulties,
       });
-    };
-    const setSortType = (newSortType: SortType) => {
-      setSortTypeRaw(newSortType);
-      if (global.window == undefined || localStorage == null) {
-        return;
-      }
-      localStorage.setItem("sort_type", newSortType);
-    };
-    const setIconType = (newIconType: IconType) => {
-      setIconTypeRaw(newIconType);
-      if (global.window == undefined || localStorage == null) {
-        return;
-      }
-      localStorage.setItem("icon_type", newIconType);
-    };
-    const setHideByDefault = (newHideByDefault: boolean) => {
-      setHideByDefaultRaw(newHideByDefault);
-      if (global.window == undefined || localStorage == null) {
-        return;
-      }
-      localStorage.setItem(
-        "hide_by_default",
-        newHideByDefault ? "true" : "false"
-      );
-    };
-    const setShowGameSelector = (newShowGameSelector: boolean) => {
-      setShowGameSelectorRaw(newShowGameSelector);
-      if (global.window == undefined || localStorage == null) {
-        return;
-      }
-      localStorage.setItem(
-        "show_game_selector",
-        newShowGameSelector ? "true" : "false"
-      );
-    };
-    const setShowRecentGames = (newShowRecentGames: boolean) => {
-      setShowRecentGamesRaw(newShowRecentGames);
-      if (global.window == undefined || localStorage == null) {
-        return;
-      }
-      localStorage.setItem(
-        "show_recent_games",
-        newShowRecentGames ? "true" : "false"
-      );
-    };
-    const setHighlightCurrentGame = (newHighlightCurrentGame: boolean) => {
-      setHighlightCurrentGameRaw(newHighlightCurrentGame);
-      if (global.window == undefined || localStorage == null) {
-        return;
-      }
-      localStorage.setItem(
-        "highlight_current_game",
-        newHighlightCurrentGame ? "true" : "false"
-      );
     };
     return {
       showAll,

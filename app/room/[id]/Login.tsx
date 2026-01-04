@@ -15,8 +15,8 @@ import {
 import { useState } from "react";
 import { RoomView } from "./roomCookie";
 import createRoomCookie from "./createRoomCookie";
-import useDefaultName from "./useDefaultName";
 import { useSearchParams } from "next/navigation";
+import useLocalString from "@/app/localStorage/useLocalString";
 
 type Props = {
   id: string;
@@ -24,7 +24,7 @@ type Props = {
 
 export default function Login({ id }: Props) {
   const searchParams = useSearchParams();
-  const [defaultName, setDefaultName] = useDefaultName();
+  const [defaultName, setDefaultName] = useLocalString({ key: "default_name", defaultValue: "" });
 
   const [name, setName] = useState(defaultName);
   const [password, setPassword] = useState(searchParams.get("p") ?? "");

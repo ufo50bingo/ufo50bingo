@@ -23,10 +23,10 @@ import ScoreSquare from "../common/ScoreSquare";
 import useMatchTimer from "../common/useMatchTimer";
 import { useMediaQuery } from "@mantine/hooks";
 import SimpleGeneralTracker from "./SimpleGeneralTracker";
-import useShowGeneralTracker from "./useShowGeneralTracker";
-import findGoal from "@/app/findGoal";
+\import findGoal from "@/app/findGoal";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import { FoundStandardGeneral, GeneralItem } from "../cast/Cast";
+import useLocalBool from "@/app/localStorage/useLocalBool";
 
 export type Props = {
   id: string;
@@ -46,7 +46,7 @@ export default function Play({
   playerName,
 }: Props) {
   const [shownDifficulties, setShownDifficulties] = useShownDifficulties();
-  const [showGeneralTracker, setShowGeneralTracker] = useShowGeneralTracker();
+  const [showGeneralTracker, setShowGeneralTracker] = useLocalBool({ key: "show_general_tracker", defaultValue: true });
   const [dings, setDings] = useDings("play");
   const [color, setColor] = useColor(id);
   const [isHidden, setIsHidden] = useState(() =>
@@ -172,7 +172,7 @@ export default function Play({
               const isClearing = board[squareIndex].color === selectedColor;
               try {
                 await changeColor(id, squareIndex, selectedColor, isClearing);
-              } catch {}
+              } catch { }
             }}
             isHidden={isHidden}
             setIsHidden={setIsHidden}

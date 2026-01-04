@@ -3,7 +3,7 @@ import { InputBase, Combobox, useCombobox } from "@mantine/core";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import BingosyncColored from "@/app/matches/BingosyncColored";
 
-const COLORS: ReadonlyArray<BingosyncColor> = [
+export const COLORS: ReadonlyArray<BingosyncColor> = [
   "orange",
   "red",
   "blue",

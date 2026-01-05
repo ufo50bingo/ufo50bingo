@@ -1,0 +1,15 @@
+import { Plain, BaseToken, ResolvedToken } from "./splitAtTokens";
+
+export default function getGoalText(
+  parts: ReadonlyArray<Plain | BaseToken | ResolvedToken>
+): string {
+  return parts
+    .map((part) => {
+      if (part.type === "plain") {
+        return part.text;
+      } else {
+        return "{{" + part.token + "}}";
+      }
+    })
+    .join("");
+}

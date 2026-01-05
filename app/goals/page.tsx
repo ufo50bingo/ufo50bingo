@@ -23,15 +23,30 @@ import { useAppContext } from "../AppContextProvider";
 import { db } from "../db";
 import Duration from "../practice/Duration";
 import {
-  compareByDifficulty,
   DIFFICULTY_NAMES,
-  GAME_NAMES,
   SORTED_FLAT_GOALS,
+  StandardGoal,
   SUBCATEGORY_NAMES,
 } from "../goals";
 import PlaylistAddButton from "../PlaylistAddButton";
+import splitAtTokens, {
+  BaseToken,
+  Plain,
+  ResolvedToken,
+} from "../generator/splitAtTokens";
+
+interface Row extends StandardGoal {
+  parts: ReadonlyArray<Plain | BaseToken | ResolvedToken>;
+}
 
 export default function AllGoals() {
+  const [splitGoals, setSplitGoals] = useState<ReadonlyArray<Row>>(() =>
+    SORTED_FLAT_GOALS.map((goal) => ({
+      ...goal,
+      parts: splitAtTokens(goal.name),
+    }))
+  );
+
   const router = useRouter();
   const { goalStats, selectedGoals, setGoal } = useAppContext();
   const onTryGoal = (goal: string) => {
@@ -55,69 +70,70 @@ export default function AllGoals() {
     setSortBy(field);
   };
 
-  const sortedRows = useMemo(() => {
-    switch (sortBy) {
-      case "goal":
-        return reverseSortDirection
-          ? SORTED_FLAT_GOALS.toReversed()
-          : SORTED_FLAT_GOALS;
-      case "difficulty":
-        const sortedByDifficulty =
-          SORTED_FLAT_GOALS.toSorted(compareByDifficulty);
-        return reverseSortDirection
-          ? sortedByDifficulty.toReversed()
-          : sortedByDifficulty;
-      case "average":
-        const sortedByAverageDuration = SORTED_FLAT_GOALS.toSorted((a, b) => {
-          const aDur = goalStats.get(a.name)?.averageDuration;
-          const bDur = goalStats.get(b.name)?.averageDuration;
-          if (aDur == null || bDur == null) {
-            if (aDur == null && bDur != null) {
-              return 1;
-            } else if (aDur != null && bDur == null) {
-              return -1;
-            } else {
-              return 0;
-            }
-          } else {
-            return aDur - bDur;
-          }
-        });
-        return reverseSortDirection
-          ? sortedByAverageDuration.toReversed()
-          : sortedByAverageDuration;
-      case "best":
-        const sortedByBestDuration = SORTED_FLAT_GOALS.toSorted((a, b) => {
-          const aDur = goalStats.get(a.name)?.bestDuration;
-          const bDur = goalStats.get(b.name)?.bestDuration;
-          if (aDur == null || bDur == null) {
-            if (aDur == null && bDur != null) {
-              return 1;
-            } else if (aDur != null && bDur == null) {
-              return -1;
-            } else {
-              return 0;
-            }
-          } else {
-            return aDur - bDur;
-          }
-        });
-        return reverseSortDirection
-          ? sortedByBestDuration.toReversed()
-          : sortedByBestDuration;
-      case "count":
-        const sortedByCount = SORTED_FLAT_GOALS.toSorted((a, b) => {
-          const aCount = goalStats.get(a.name)?.count ?? 0;
-          const bCount = goalStats.get(b.name)?.count ?? 0;
-          return aCount - bCount;
-        });
-        return reverseSortDirection
-          ? sortedByCount.toReversed()
-          : sortedByCount;
-      default:
-        return SORTED_FLAT_GOALS;
-    }
-  }, [goalStats, sortBy, reverseSortDirection]);
+  // TODO: Fix sorting
+  // const sortedRows = useMemo(() => {
+  //   switch (sortBy) {
+  //     case "goal":
+  //       return reverseSortDirection
+  //         ? SORTED_FLAT_GOALS.toReversed()
+  //         : SORTED_FLAT_GOALS;
+  //     case "difficulty":
+  //       const sortedByDifficulty =
+  //         SORTED_FLAT_GOALS.toSorted(compareByDifficulty);
+  //       return reverseSortDirection
+  //         ? sortedByDifficulty.toReversed()
+  //         : sortedByDifficulty;
+  //     case "average":
+  //       const sortedByAverageDuration = SORTED_FLAT_GOALS.toSorted((a, b) => {
+  //         const aDur = goalStats.get(a.name)?.averageDuration;
+  //         const bDur = goalStats.get(b.name)?.averageDuration;
+  //         if (aDur == null || bDur == null) {
+  //           if (aDur == null && bDur != null) {
+  //             return 1;
+  //           } else if (aDur != null && bDur == null) {
+  //             return -1;
+  //           } else {
+  //             return 0;
+  //           }
+  //         } else {
+  //           return aDur - bDur;
+  //         }
+  //       });
+  //       return reverseSortDirection
+  //         ? sortedByAverageDuration.toReversed()
+  //         : sortedByAverageDuration;
+  //     case "best":
+  //       const sortedByBestDuration = SORTED_FLAT_GOALS.toSorted((a, b) => {
+  //         const aDur = goalStats.get(a.name)?.bestDuration;
+  //         const bDur = goalStats.get(b.name)?.bestDuration;
+  //         if (aDur == null || bDur == null) {
+  //           if (aDur == null && bDur != null) {
+  //             return 1;
+  //           } else if (aDur != null && bDur == null) {
+  //             return -1;
+  //           } else {
+  //             return 0;
+  //           }
+  //         } else {
+  //           return aDur - bDur;
+  //         }
+  //       });
+  //       return reverseSortDirection
+  //         ? sortedByBestDuration.toReversed()
+  //         : sortedByBestDuration;
+  //     case "count":
+  //       const sortedByCount = SORTED_FLAT_GOALS.toSorted((a, b) => {
+  //         const aCount = goalStats.get(a.name)?.count ?? 0;
+  //         const bCount = goalStats.get(b.name)?.count ?? 0;
+  //         return aCount - bCount;
+  //       });
+  //       return reverseSortDirection
+  //         ? sortedByCount.toReversed()
+  //         : sortedByCount;
+  //     default:
+  //       return SORTED_FLAT_GOALS;
+  //   }
+  // }, [goalStats, sortBy, reverseSortDirection]);
 
   return (
     <Container my="md">
@@ -181,8 +197,9 @@ export default function AllGoals() {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {sortedRows.map((goal) => {
-            const stats = goalStats.get(goal.name);
+          {splitGoals.map((goal) => {
+            // TODO: Fix
+            const stats = goalStats.get("");
             const averageDuration = stats?.averageDuration;
             const bestDuration = stats?.bestDuration;
             return (

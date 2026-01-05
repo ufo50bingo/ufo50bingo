@@ -54,7 +54,14 @@ export const ORDERED_PROPER_GAMES = [
 ] as const;
 
 export const ORDERED_GAMES = [...ORDERED_PROPER_GAMES, "general"] as const;
-export const ORDERED_SUBCATEGORIES = [...ORDERED_PROPER_GAMES, "gift", "goldcherry", "theme", "bosslevel", "collectathon"] as const;
+export const ORDERED_SUBCATEGORIES = [
+  ...ORDERED_PROPER_GAMES,
+  "gift",
+  "goldcherry",
+  "theme",
+  "bosslevel",
+  "collectathon",
+] as const;
 export type ProperGame = (typeof ORDERED_PROPER_GAMES)[number];
 export type Game = (typeof ORDERED_GAMES)[number];
 
@@ -137,7 +144,7 @@ const standardDifficulty: StandardDifficulty = "easy";
 const _t1: StandardDifficulty = difficulty;
 const _t2: Difficulty = standardDifficulty;
 
-type StandardSubcategory =
+export type StandardSubcategory =
   | keyof typeof STANDARD_UFO.goals.easy
   | keyof typeof STANDARD_UFO.goals.general;
 
@@ -162,29 +169,31 @@ type StandardGoal = {
 };
 
 const FLAT_GOALS: Array<StandardGoal> = [];
-Object.keys(STANDARD_UFO.goals).forEach(untypedDifficulty => {
+Object.keys(STANDARD_UFO.goals).forEach((untypedDifficulty) => {
   const difficulty = untypedDifficulty as Difficulty;
   const subcatToGoals = STANDARD_UFO.goals[difficulty];
-  Object.entries(subcatToGoals).forEach(([untypedSubcategory, untypedGoals]) => {
-    const subcategory = untypedSubcategory as StandardSubcategory;
-    const goals = untypedGoals as ReadonlyArray<string>;
-    goals.forEach(goal => {
-      FLAT_GOALS.push({
-        name: goal,
-        subcategory,
-        difficulty,
+  Object.entries(subcatToGoals).forEach(
+    ([untypedSubcategory, untypedGoals]) => {
+      const subcategory = untypedSubcategory as StandardSubcategory;
+      const goals = untypedGoals as ReadonlyArray<string>;
+      goals.forEach((goal) => {
+        FLAT_GOALS.push({
+          name: goal,
+          subcategory,
+          difficulty,
+        });
       });
-    });
-  })
+    }
+  );
 });
-
 
 // this also verifies that all Game and Difficulty options are consistent between the ordered
 // arrays in this file and the values in STANDARD
 export const SORTED_FLAT_GOALS: ReadonlyArray<StandardGoal> =
   FLAT_GOALS.toSorted((a, b) => {
     const subcatDiff =
-      ORDERED_SUBCATEGORIES.indexOf(a.subcategory) - ORDERED_SUBCATEGORIES.indexOf(b.subcategory);
+      ORDERED_SUBCATEGORIES.indexOf(a.subcategory) -
+      ORDERED_SUBCATEGORIES.indexOf(b.subcategory);
     if (subcatDiff !== 0) {
       return subcatDiff;
     }

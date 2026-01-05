@@ -1,3 +1,4 @@
+import getGoalText from "./getGoalText";
 import { Plain, BaseToken, ResolvedToken } from "./splitAtTokens";
 import { Tokens } from "./ufoGenerator";
 
@@ -35,18 +36,4 @@ export default function resolveTokens(
       };
     }
   });
-}
-
-function getGoalText(
-  parts: ReadonlyArray<Plain | BaseToken | ResolvedToken>
-): string {
-  return parts
-    .map((part) => {
-      if (part.type === "plain") {
-        return part.text;
-      } else {
-        return "{{" + part.token + "}}";
-      }
-    })
-    .join("");
 }

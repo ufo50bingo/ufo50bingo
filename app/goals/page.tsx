@@ -34,6 +34,7 @@ import splitAtTokens, {
   Plain,
   ResolvedToken,
 } from "../generator/splitAtTokens";
+import EditableParts from "./EditableParts";
 
 interface Row extends StandardGoal {
   parts: ReadonlyArray<Plain | BaseToken | ResolvedToken>;
@@ -197,7 +198,7 @@ export default function AllGoals() {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {splitGoals.map((goal) => {
+          {splitGoals.map((goal, index) => {
             // TODO: Fix
             const stats = goalStats.get("");
             const averageDuration = stats?.averageDuration;
@@ -220,7 +221,20 @@ export default function AllGoals() {
                     />
                   </Tooltip>
                 </Table.Td>
-                <Table.Td>{goal.name}</Table.Td>
+                <Table.Td>
+                  <EditableParts
+                    parts={goal.parts}
+                    setParts={(newParts) => {
+                      const newRow = { ...goal, parts: newParts };
+                      const newSplitGoals = splitGoals.toSpliced(
+                        index,
+                        1,
+                        newRow
+                      );
+                      setSplitGoals(newSplitGoals);
+                    }}
+                  />
+                </Table.Td>
                 <Table.Td>{SUBCATEGORY_NAMES[goal.subcategory]}</Table.Td>
                 <Table.Td>{DIFFICULTY_NAMES[goal.difficulty]}</Table.Td>
                 <Table.Td>

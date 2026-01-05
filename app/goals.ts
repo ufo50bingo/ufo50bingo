@@ -162,11 +162,11 @@ const cat2: StandardSubcategory = "barbuta";
 const _t3: StandardSubcategory = cat1;
 const _t4: keyof typeof SUBCATEGORY_NAMES = cat2;
 
-type StandardGoal = {
+export interface StandardGoal {
   name: string;
   subcategory: StandardSubcategory;
   difficulty: Difficulty;
-};
+}
 
 const FLAT_GOALS: Array<StandardGoal> = [];
 Object.keys(STANDARD_UFO.goals).forEach((untypedDifficulty) => {

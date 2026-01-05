@@ -233,7 +233,9 @@ export function getPlayerColors(
         colors.push(color as BingosyncColor);
       }
     });
-    playerToColors[name] = colors;
+    if (colors.length > 0) {
+      playerToColors[name] = colors;
+    }
   });
   return playerToColors;
 }

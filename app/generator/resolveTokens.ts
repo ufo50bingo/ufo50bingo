@@ -3,12 +3,19 @@ import { Plain, BaseToken, ResolvedToken } from "./splitAtTokens";
 import { Tokens } from "./ufoGenerator";
 
 export default function resolveTokens(
-  parts: ReadonlyArray<Plain | BaseToken>,
+  parts: ReadonlyArray<Plain | BaseToken | ResolvedToken>,
   tokens: Tokens
 ): Array<Plain | ResolvedToken> {
   const remainingTokens = { ...tokens };
+  parts
+    .filter((part) => part.type === "resolved")
+    .forEach((resolved) => {
+      const relevantTokens = remainingTokens[resolved.token];
+      relevantTokens.filter((value) => value !== resolved.text);
+      remainingTokens[resolved.token] = relevantTokens;
+    });
   return parts.map((part) => {
-    if (part.type === "plain") {
+    if (part.type === "plain" || part.type === "resolved") {
       return part;
     } else {
       const values = remainingTokens[part.token];

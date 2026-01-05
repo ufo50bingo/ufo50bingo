@@ -2,7 +2,6 @@ import { Menu } from "@mantine/core";
 import { BaseToken, Plain, ResolvedToken } from "../generator/splitAtTokens";
 import { STANDARD_UFO } from "../pastas/standardUfo";
 import { UFOPasta } from "../generator/ufoGenerator";
-import { set } from "zod";
 
 type Props = {
   parts: ReadonlyArray<Plain | BaseToken | ResolvedToken>;

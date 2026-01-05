@@ -35,6 +35,8 @@ import splitAtTokens, {
   ResolvedToken,
 } from "../generator/splitAtTokens";
 import EditableParts from "./EditableParts";
+import resolveTokens from "../generator/resolveTokens";
+import { STANDARD_UFO } from "../pastas/standardUfo";
 
 interface Row extends StandardGoal {
   parts: ReadonlyArray<Plain | BaseToken | ResolvedToken>;
@@ -255,7 +257,17 @@ export default function AllGoals() {
                 <Table.Td>
                   <Group gap={4} wrap="nowrap">
                     <Tooltip label="Attempt this goal">
-                      <ActionIcon onClick={() => onTryGoal(goal.name)}>
+                      <ActionIcon
+                        onClick={() => {
+                          const resolvedGoal = resolveTokens(
+                            goal.parts,
+                            STANDARD_UFO.tokens
+                          );
+                          onTryGoal(
+                            resolvedGoal.map((part) => part.text).join("")
+                          );
+                        }}
+                      >
                         <IconPlayerPlay size={16} />
                       </ActionIcon>
                     </Tooltip>

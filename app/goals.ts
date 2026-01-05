@@ -1,4 +1,3 @@
-import { STANDARD } from "./pastas/standard";
 import { STANDARD_UFO } from "./pastas/standardUfo";
 
 export const ORDERED_PROPER_GAMES = [

@@ -200,30 +200,40 @@ export type PlayerToColors = { [name: string]: ReadonlyArray<BingosyncColor> };
 export function getPlayerColors(
   changes: ReadonlyArray<Change>
 ): PlayerToColors {
-  const playerToNetAdditions: { [name: string]: number } = {};
-  const playerToColors: PlayerToColors = {};
+  const boardColors: Array<BingosyncColor> = Array(25).fill("blank");
+  const playerToColorToNetAdditions: { [name: string]: { [color: string]: number } } = {};
   changes.forEach((change) => {
     const { name, color } = change;
 
-    const netAdditions = playerToNetAdditions[name] ?? 0;
-    playerToNetAdditions[name] =
-      change.color === "blank" ? netAdditions - 1 : netAdditions + 1;
-    if (change.color === "blank") {
+    const colorToNetAdditions = playerToColorToNetAdditions[name] ?? {};
+
+    const actualColor = color === "blank" ? boardColors[change.index] : color;
+    if (actualColor === "blank") {
       return;
     }
-    const colors = playerToColors[name] ?? [];
-    if (!colors.includes(color)) {
-      playerToColors[name] = [...colors, color];
-    }
+    const netAdditions = colorToNetAdditions[actualColor] ?? 0;
+    const newNetAdditions = change.color === "blank" ? netAdditions - 1 : netAdditions + 1;
+    colorToNetAdditions[actualColor] = newNetAdditions;
+    playerToColorToNetAdditions[name] = colorToNetAdditions;
+
+    boardColors[change.index] = color;
   });
 
+  const playerToColors: PlayerToColors = {};
   // if removals >= marks, then the player is likely
   // a ref/streamer instead of a participant
-  Object.keys(playerToNetAdditions).forEach((name) => {
-    const netAdditions = playerToNetAdditions[name];
-    if (netAdditions <= 0) {
-      delete playerToColors[name];
+  Object.keys(playerToColorToNetAdditions).forEach((name) => {
+    if (name.endsWith("(admin)")) {
+      return;
     }
+    const colors: Array<BingosyncColor> = [];
+    const colorToNetAdditions = playerToColorToNetAdditions[name];
+    Object.keys(colorToNetAdditions).forEach(color => {
+      if (colorToNetAdditions[color] > 0) {
+        colors.push(color as BingosyncColor);
+      }
+    });
+    playerToColors[name] = colors;
   });
   return playerToColors;
 }

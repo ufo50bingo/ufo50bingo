@@ -147,5 +147,5 @@ export async function refreshMatch(id: string): Promise<void> {
     const rawMatch = sqlResult[0];
     const match = getMatchFromRaw(rawMatch);
     await syncToGSheet(match);
-  } catch {}
+  } catch { }
 }

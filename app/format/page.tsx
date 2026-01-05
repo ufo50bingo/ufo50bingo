@@ -64,7 +64,7 @@ export default function Format() {
         </p>
         <List>
           <ListItem>
-            <Code color="var(--mantine-color-blue-light)">goals</Code>
+            <Code color="var(--mantine-color-blue-light)" style={{ fontSize: '18px' }}>goals</Code>
             <List>
               <ListItem>Something</ListItem>
             </List>
@@ -73,7 +73,7 @@ export default function Format() {
             <Code color="var(--mantine-color-blue-light)">tokens</Code>
           </ListItem>
           <ListItem>
-            <Code color="var(--mantine-color-blue-light)">category_counts</Code>
+            <Code color="var(--mantine-color-blue-light)" style={{ fontSize: '18px' }}>category_counts</Code>
           </ListItem>
           <ListItem>
             <Code color="var(--mantine-color-blue-light)">

@@ -1,8 +1,7 @@
-"use client";
-
 import { useState } from "react";
 import {
   IconArrowForward,
+  IconArrowsShuffle,
   IconCircleCheck,
   IconPlayerPause,
   IconPlayerPlay,
@@ -12,6 +11,11 @@ import { Badge, Button, Card, Group, Stack, Text } from "@mantine/core";
 import { db } from "../db";
 import { DIFFICULTY_NAMES, SORTED_FLAT_GOALS } from "../goals";
 import useTimer from "../useTimer";
+import { Plain, ResolvedToken } from "../generator/splitAtTokens";
+import EditableParts from "../goals/EditableParts";
+import resolveTokens from "../generator/resolveTokens";
+import { STANDARD_UFO } from "../pastas/standardUfo";
+import getResolvedGoalText from "../generator/getResolvedGoalText";
 
 enum State {
   NOT_STARTED,
@@ -20,13 +24,19 @@ enum State {
   DONE,
 }
 
-type Props = { goal: string; onNext: () => void };
+type Props = {
+  goalParts: ReadonlyArray<Plain | ResolvedToken>;
+  setGoalParts: (goalParts: ReadonlyArray<Plain | ResolvedToken>) => void;
+  onNext: () => void;
+};
 
-export default function Goal({ goal, onNext }: Props) {
+export default function Goal({ goalParts, setGoalParts, onNext }: Props) {
   const { start, pause, reset, timer, getDurationMS } = useTimer();
   const [firstStartTime, setFirstStartTime] = useState(0);
 
   const [state, setState] = useState(State.NOT_STARTED);
+
+  const goal = getResolvedGoalText(goalParts);
 
   const startTimer = () => {
     start();
@@ -60,12 +70,37 @@ export default function Goal({ goal, onNext }: Props) {
     </Button>
   );
 
+  const randomizeTokensButton = goalParts.some(
+    (part) => part.type !== "plain"
+  ) ? (
+    <Button
+      leftSection={<IconArrowsShuffle />}
+      onClick={() => {
+        let newParts;
+        do {
+          newParts = resolveTokens(
+            goalParts.map((part) =>
+              part.type === "resolved"
+                ? { type: "token", token: part.token }
+                : part
+            ),
+            STANDARD_UFO.tokens
+          );
+        } while (getResolvedGoalText(newParts) === goal);
+        setGoalParts(newParts);
+      }}
+    >
+      Randomize Tokens
+    </Button>
+  ) : undefined;
+
   let content;
   switch (state) {
     case State.NOT_STARTED:
       content = (
         <>
           {newGoalButton}
+          {randomizeTokensButton}
           <Button
             leftSection={<IconPlayerPlay />}
             color="green"
@@ -122,6 +157,7 @@ export default function Goal({ goal, onNext }: Props) {
           >
             Try Again
           </Button>
+          {randomizeTokensButton}
           {newGoalButton}
         </>
       );
@@ -135,7 +171,14 @@ export default function Goal({ goal, onNext }: Props) {
       <Stack gap={8}>
         <Group justify="space-between">
           <Text>
-            <strong>{goal}</strong>
+            <strong>
+              <EditableParts
+                parts={goalParts}
+                setParts={(newParts) =>
+                  setGoalParts(newParts as ReadonlyArray<Plain | ResolvedToken>)
+                }
+              />
+            </strong>
           </Text>
           {difficulty != null && (
             <Badge color="cyan" size="sm">

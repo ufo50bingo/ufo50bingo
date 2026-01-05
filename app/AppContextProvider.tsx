@@ -12,6 +12,9 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { AttemptRow, db, PlaylistRow } from "./db";
 import useGoalStats, { GoalStats } from "./useGoalStats";
 import useSelectedGoals from "./useSelectedGoals";
+import splitAtTokens, { Plain, ResolvedToken } from "./generator/splitAtTokens";
+import resolveTokens from "./generator/resolveTokens";
+import { STANDARD_UFO } from "./pastas/standardUfo";
 
 export enum NextGoalChoice {
   RANDOM = "RANDOM",
@@ -23,11 +26,11 @@ type AppContextType = {
   playlist: PlaylistRow[];
   goalStats: Map<string, GoalStats>;
   selectedGoals: Set<string>;
-  setGoal: (goal: string) => void;
-  getRandomGoal: () => string;
+  setGoalParts: (goalParts: ReadonlyArray<Plain | ResolvedToken>) => void;
+  getRandomGoal: () => ReadonlyArray<Plain | ResolvedToken>;
   setNextGoalChoice: (newNextGoalChoice: NextGoalChoice) => void;
   nextGoalChoice: NextGoalChoice;
-  goal: string;
+  goalParts: ReadonlyArray<Plain | ResolvedToken>;
   createdMatchIDs: Set<string>;
   revealedMatchIDs: null | Set<string>;
   isAdmin: boolean;
@@ -87,21 +90,27 @@ export function AppContextProvider({
   const selectedGoals = useSelectedGoals();
 
   const getRandomGoal = useCallback(() => {
+    let goal;
     switch (nextGoalChoice) {
       case NextGoalChoice.PREFER_FEWER_ATTEMPTS:
-        return getGoalPreferFewerAttempts(selectedGoals, goalStats);
+        goal = getGoalPreferFewerAttempts(selectedGoals, goalStats);
+        break;
       case NextGoalChoice.RANDOM:
       default:
         const items = Array.from(selectedGoals);
-        return items[Math.floor(Math.random() * items.length)];
+        goal = items[Math.floor(Math.random() * items.length)];
+        break;
     }
+    return resolveTokens(splitAtTokens(goal), STANDARD_UFO.tokens);
   }, [nextGoalChoice, selectedGoals, goalStats]);
 
   // useEffect sets the initial state to avoid hydration errors
-  const [goal, setGoalRaw] = useState("");
+  const [goalParts, setGoalPartsRaw] = useState<
+    ReadonlyArray<Plain | ResolvedToken>
+  >([]);
   // This should intentionally run only once
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => setGoalRaw(getRandomGoal()), []);
+  useEffect(() => setGoalPartsRaw(getRandomGoal()), []);
 
   // super insecure, but good enough to stop most people
   const [isAdmin, setIsAdminRaw] = useState(false);
@@ -136,22 +145,22 @@ export function AppContextProvider({
     [setHideByDefaultRaw]
   );
 
-  const setGoal = useCallback(
-    (goal: string) => {
-      setGoalRaw(goal);
+  const setGoalParts = useCallback(
+    (goal: ReadonlyArray<Plain | ResolvedToken>) => {
+      setGoalPartsRaw(goal);
       window.scrollTo({ top: 0, behavior: "instant" });
     },
-    [setGoalRaw]
+    [setGoalPartsRaw]
   );
 
   const value = useMemo(
     () => ({
-      goal,
+      goalParts,
       attempts,
       playlist,
       goalStats,
       selectedGoals,
-      setGoal,
+      setGoalParts,
       getRandomGoal,
       setNextGoalChoice,
       nextGoalChoice,
@@ -164,12 +173,12 @@ export function AppContextProvider({
       isMounted,
     }),
     [
-      goal,
+      goalParts,
       attempts,
       playlist,
       goalStats,
       selectedGoals,
-      setGoal,
+      setGoalParts,
       getRandomGoal,
       setNextGoalChoice,
       nextGoalChoice,

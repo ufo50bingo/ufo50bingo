@@ -51,9 +51,11 @@ export default function AllGoals() {
   );
 
   const router = useRouter();
-  const { goalStats, selectedGoals, setGoal } = useAppContext();
-  const onTryGoal = (goal: string) => {
-    setGoal(goal);
+  const { goalStats, selectedGoals, setGoalParts } = useAppContext();
+  const onTryGoal = (
+    goalParts: ReadonlyArray<Plain | BaseToken | ResolvedToken>
+  ) => {
+    setGoalParts(resolveTokens(goalParts, STANDARD_UFO.tokens));
     router.push("/practice");
   };
 
@@ -257,17 +259,7 @@ export default function AllGoals() {
                 <Table.Td>
                   <Group gap={4} wrap="nowrap">
                     <Tooltip label="Attempt this goal">
-                      <ActionIcon
-                        onClick={() => {
-                          const resolvedGoal = resolveTokens(
-                            goal.parts,
-                            STANDARD_UFO.tokens
-                          );
-                          onTryGoal(
-                            resolvedGoal.map((part) => part.text).join("")
-                          );
-                        }}
-                      >
+                      <ActionIcon onClick={() => onTryGoal(goal.parts)}>
                         <IconPlayerPlay size={16} />
                       </ActionIcon>
                     </Tooltip>

@@ -1,5 +1,7 @@
 import { useMemo } from "react";
 import { AttemptRow } from "./db";
+import findGoal from "./findGoal";
+import { STANDARD_UFO } from "./pastas/standardUfo";
 
 export type GoalStats = {
   count: number;
@@ -18,6 +20,15 @@ export default function useGoalStats(
         goalToTimes.set(attempt.goal, [attempt.duration]);
       } else {
         existingTimes.push(attempt.duration);
+      }
+      const foundGoal = findGoal(attempt.goal, STANDARD_UFO);
+      if (foundGoal != null && foundGoal.goal !== attempt.goal) {
+        const tokenExistingTimes = goalToTimes.get(foundGoal.goal);
+        if (tokenExistingTimes == null) {
+          goalToTimes.set(foundGoal.goal, [attempt.duration]);
+        } else {
+          tokenExistingTimes.push(attempt.duration);
+        }
       }
     });
     const goalToStats = new Map();

@@ -37,9 +37,11 @@ import splitAtTokens, {
 import EditableParts from "./EditableParts";
 import resolveTokens from "../generator/resolveTokens";
 import { STANDARD_UFO } from "../pastas/standardUfo";
+import getResolvedGoalText from "../generator/getResolvedGoalText";
 
 interface Row extends StandardGoal {
   parts: ReadonlyArray<Plain | BaseToken | ResolvedToken>;
+  partiallyResolvedGoal: string;
 }
 
 export default function AllGoals() {
@@ -47,6 +49,7 @@ export default function AllGoals() {
     SORTED_FLAT_GOALS.map((goal) => ({
       ...goal,
       parts: splitAtTokens(goal.name),
+      partiallyResolvedGoal: goal.name,
     }))
   );
 
@@ -203,8 +206,7 @@ export default function AllGoals() {
         </Table.Thead>
         <Table.Tbody>
           {splitGoals.map((goal, index) => {
-            // TODO: Fix
-            const stats = goalStats.get("");
+            const stats = goalStats.get(goal.partiallyResolvedGoal);
             const averageDuration = stats?.averageDuration;
             const bestDuration = stats?.bestDuration;
             return (
@@ -229,7 +231,11 @@ export default function AllGoals() {
                   <EditableParts
                     parts={goal.parts}
                     setParts={(newParts) => {
-                      const newRow = { ...goal, parts: newParts };
+                      const newRow = {
+                        ...goal,
+                        parts: newParts,
+                        partiallyResolvedGoal: getResolvedGoalText(newParts),
+                      };
                       const newSplitGoals = splitGoals.toSpliced(
                         index,
                         1,

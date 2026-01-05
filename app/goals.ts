@@ -55,6 +55,7 @@ export const ORDERED_PROPER_GAMES = [
 ] as const;
 
 export const ORDERED_GAMES = [...ORDERED_PROPER_GAMES, "general"] as const;
+export const ORDERED_SUBCATEGORIES = [...ORDERED_PROPER_GAMES, "gift", "goldcherry", "theme", "bosslevel", "collectathon"] as const;
 export type ProperGame = (typeof ORDERED_PROPER_GAMES)[number];
 export type Game = (typeof ORDERED_GAMES)[number];
 
@@ -112,7 +113,7 @@ export const GAME_NAMES = {
   general: "General",
 } as const;
 
-const SUBCATEGORY_NAMES = {
+export const SUBCATEGORY_NAMES = {
   ...GAME_NAMES,
   gift: "Gift",
   goldcherry: "Gold/Cherry",
@@ -155,35 +156,38 @@ const cat2: StandardSubcategory = "barbuta";
 const _t3: StandardSubcategory = cat1;
 const _t4: keyof typeof SUBCATEGORY_NAMES = cat2;
 
-const FLAT_GOALS = Object.values(STANDARD_UFO.goals).flatMap((subcategories) => Object.values(subcategories).flat());
-
-const FLAT_GOALS2 = Object.keys(STANDARD_UFO.goals).flatMap((difficulty) => {
-  const typedDifficulty = difficulty as StandardDifficulty;
-  const subcategories = STANDARD_UFO.goals[typedDifficulty];
-  return Object.keys(subcategories).flatMap((subcategory) => {
-    const typedSubcategory = subcategory as StandardSubcategory;
-    return subcategories[typedSubcategory].map((goal) => ({
-      goal,
-      subcategory: typedSubcategory,
-      difficulty: typedDifficulty,
-    }));
-  });
-);
-
 type StandardGoal = {
-  goal: string;
-  game: Game;
+  name: string;
+  subcategory: StandardSubcategory;
   difficulty: Difficulty;
 };
+
+const FLAT_GOALS: Array<StandardGoal> = [];
+Object.keys(STANDARD_UFO.goals).forEach(untypedDifficulty => {
+  const difficulty = untypedDifficulty as Difficulty;
+  const subcatToGoals = STANDARD_UFO.goals[difficulty];
+  Object.entries(subcatToGoals).forEach(([untypedSubcategory, untypedGoals]) => {
+    const subcategory = untypedSubcategory as StandardSubcategory;
+    const goals = untypedGoals as ReadonlyArray<string>;
+    goals.forEach(goal => {
+      FLAT_GOALS.push({
+        name: goal,
+        subcategory,
+        difficulty,
+      });
+    });
+  })
+});
+
 
 // this also verifies that all Game and Difficulty options are consistent between the ordered
 // arrays in this file and the values in STANDARD
 export const SORTED_FLAT_GOALS: ReadonlyArray<StandardGoal> =
-  STANDARD.flat().toSorted((a, b) => {
-    const gameDiff =
-      ORDERED_GAMES.indexOf(a.types[0]) - ORDERED_GAMES.indexOf(b.types[0]);
-    if (gameDiff !== 0) {
-      return gameDiff;
+  FLAT_GOALS.toSorted((a, b) => {
+    const subcatDiff =
+      ORDERED_SUBCATEGORIES.indexOf(a.subcategory) - ORDERED_SUBCATEGORIES.indexOf(b.subcategory);
+    if (subcatDiff !== 0) {
+      return subcatDiff;
     }
     const difficultyDiff = compareByDifficulty(a, b);
     if (difficultyDiff != 0) {
@@ -192,9 +196,9 @@ export const SORTED_FLAT_GOALS: ReadonlyArray<StandardGoal> =
     return a.name.localeCompare(b.name);
   });
 
-export function compareByDifficulty(a: TGoal, b: TGoal): number {
+export function compareByDifficulty(a: StandardGoal, b: StandardGoal): number {
   return (
-    ORDERED_DIFFICULTY.indexOf(a.types[1]) -
-    ORDERED_DIFFICULTY.indexOf(b.types[1])
+    ORDERED_DIFFICULTY.indexOf(a.difficulty) -
+    ORDERED_DIFFICULTY.indexOf(b.difficulty)
   );
 }

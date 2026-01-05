@@ -27,6 +27,7 @@ import {
   DIFFICULTY_NAMES,
   GAME_NAMES,
   SORTED_FLAT_GOALS,
+  SUBCATEGORY_NAMES,
 } from "../goals";
 import PlaylistAddButton from "../PlaylistAddButton";
 
@@ -203,8 +204,8 @@ export default function AllGoals() {
                   </Tooltip>
                 </Table.Td>
                 <Table.Td>{goal.name}</Table.Td>
-                <Table.Td>{GAME_NAMES[goal.types[0]]}</Table.Td>
-                <Table.Td>{DIFFICULTY_NAMES[goal.types[1]]}</Table.Td>
+                <Table.Td>{SUBCATEGORY_NAMES[goal.subcategory]}</Table.Td>
+                <Table.Td>{DIFFICULTY_NAMES[goal.difficulty]}</Table.Td>
                 <Table.Td>
                   {averageDuration == null ? (
                     "-"

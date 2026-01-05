@@ -128,7 +128,7 @@ export default function Goal({ goal, onNext }: Props) {
       break;
   }
 
-  const difficulty = SORTED_FLAT_GOALS.find((g) => g.name === goal)?.types?.[1];
+  const difficulty = SORTED_FLAT_GOALS.find((g) => g.name === goal)?.difficulty;
 
   return (
     <Card shadow="sm" padding="sm" radius="md" withBorder>

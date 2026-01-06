@@ -22,16 +22,42 @@ export default function Practice() {
     getRandomGoal,
   } = useAppContext();
 
+  const onTryStringGoal = useCallback(
+    (goal: string) => {
+      const found = findGoal(goal, STANDARD_UFO);
+      if (found == null) {
+        setGoalParts(resolveTokens(splitAtTokens(goal), STANDARD_UFO.tokens));
+      } else {
+        const split = splitAtTokens(found.goal);
+        let tokenIndex = 0;
+        setGoalParts(
+          split.map((part) => {
+            if (part.type === "plain") {
+              return part;
+            } else {
+              const resolved: ResolvedToken = {
+                type: "resolved",
+                token: part.token,
+                text: found.tokens[tokenIndex],
+              };
+              tokenIndex += 1;
+              return resolved;
+            }
+          })
+        );
+      }
+    },
+    [setGoalParts]
+  );
+
   const goToNextGoal = useCallback(async () => {
     if (playlist.length > 0) {
-      setGoalParts(
-        resolveTokens(splitAtTokens(playlist[0].goal), STANDARD_UFO.tokens)
-      );
+      onTryStringGoal(playlist[0].goal);
       db.playlist.delete(playlist[0].id);
     } else {
       setGoalParts(getRandomGoal());
     }
-  }, [playlist, setGoalParts, getRandomGoal]);
+  }, [playlist, setGoalParts, getRandomGoal, onTryStringGoal]);
 
   const goal = getResolvedGoalText(goalParts);
 
@@ -47,32 +73,7 @@ export default function Practice() {
         <AllAttempts
           attempts={attempts}
           goalStats={goalStats}
-          onRetryGoal={(goal: string) => {
-            const found = findGoal(goal, STANDARD_UFO);
-            if (found == null) {
-              setGoalParts(
-                resolveTokens(splitAtTokens(goal), STANDARD_UFO.tokens)
-              );
-            } else {
-              const split = splitAtTokens(found.goal);
-              let tokenIndex = 0;
-              setGoalParts(
-                split.map((part) => {
-                  if (part.type === "plain") {
-                    return part;
-                  } else {
-                    const resolved: ResolvedToken = {
-                      type: "resolved",
-                      token: part.token,
-                      text: found.tokens[tokenIndex],
-                    };
-                    tokenIndex += 1;
-                    return resolved;
-                  }
-                })
-              );
-            }
-          }}
+          onRetryGoal={onTryStringGoal}
         />
       </Stack>
     </Container>

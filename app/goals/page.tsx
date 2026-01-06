@@ -270,7 +270,7 @@ export default function AllGoals() {
                         <IconPlayerPlay size={16} />
                       </ActionIcon>
                     </Tooltip>
-                    <PlaylistAddButton goal={goal.name} />
+                    <PlaylistAddButton goal={goal.partiallyResolvedGoal} />
                   </Group>
                 </Table.Td>
               </Table.Tr>

@@ -8,16 +8,18 @@ type Props = {
   setParts: (
     newParts: ReadonlyArray<Plain | BaseToken | ResolvedToken>
   ) => unknown;
+  canClear: boolean;
 };
 
-export default function EditableParts({ parts, setParts }: Props) {
+export default function EditableParts({ parts, setParts, canClear }: Props) {
   return (
     <>
       {parts.map((part, index) => {
         if (part.type === "plain") {
           return <span key={index}>{part.text}</span>;
         } else {
-          const content = part.type === "resolved" ? part.text : part.token;
+          const content =
+            part.type === "resolved" ? part.text : "{{" + part.token + "}}";
           return (
             <Menu shadow="md" width="auto" trigger="click-hover" key={index}>
               <Menu.Target>
@@ -33,6 +35,20 @@ export default function EditableParts({ parts, setParts }: Props) {
                 </a>
               </Menu.Target>
               <Menu.Dropdown>
+                {canClear && (
+                  <Menu.Item
+                    onClick={() => {
+                      const newPart: BaseToken = {
+                        type: "token",
+                        token: part.token,
+                      };
+                      const newParts = parts.toSpliced(index, 1, newPart);
+                      setParts(newParts);
+                    }}
+                  >
+                    {`{{${part.token}}}`}
+                  </Menu.Item>
+                )}
                 {(STANDARD_UFO as UFOPasta).tokens[part.token].map((value) => (
                   <Menu.Item
                     key={value}

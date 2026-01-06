@@ -243,6 +243,7 @@ export default function AllGoals() {
                       );
                       setSplitGoals(newSplitGoals);
                     }}
+                    canClear={true}
                   />
                 </Table.Td>
                 <Table.Td>{SUBCATEGORY_NAMES[goal.subcategory]}</Table.Td>

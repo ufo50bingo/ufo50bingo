@@ -177,6 +177,7 @@ export default function Goal({ goalParts, setGoalParts, onNext }: Props) {
                 setParts={(newParts) =>
                   setGoalParts(newParts as ReadonlyArray<Plain | ResolvedToken>)
                 }
+                canClear={false}
               />
             </strong>
           </Text>

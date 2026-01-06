@@ -38,7 +38,6 @@ export const PROTOTYPE_UFO = {
         "Read 5 signs in Waldorf’s Journey",
       ],
       porgy: ["Collect 3 fuel tanks in Porgy"],
-      caramelcaramel: ["Score 8,000 points in the prologue in Caramel Caramel"],
       partyhouse: [
         "Get a Climber to max popularity in Party House",
         "Get busted by the fire department in Party House",
@@ -141,6 +140,7 @@ export const PROTOTYPE_UFO = {
       caramelcaramel: [
         "Beat the Egg in Caramel Caramel",
         "Snap 10 bonus background elements in Caramel Caramel",
+        "Score 8,000 points in the prologue in Caramel Caramel",
       ],
       partyhouse: ["Beat 2 random Party House scenarios"],
       hotfoot: ["Win as Zobo and Blorg in Hot Foot (use code PLAY-FAIR)"],

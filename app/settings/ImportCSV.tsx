@@ -15,6 +15,9 @@ import {
 import { Attempt, db } from "../db";
 import downloadCsv from "./downloadCsv";
 import { SORTED_FLAT_GOALS } from "../goals";
+import { STANDARD_UFO } from "../pastas/standardUfo";
+import findGoal from "../findGoal";
+import replaceTokens from "../generator/replaceTokens";
 
 export default function ImportCSV() {
   const [isImporting, setIsImporting] = useState(false);
@@ -173,7 +176,8 @@ function processEstimatedCsv(estimates: Estimate[]): Attempt[] {
     if (count === 0 || averageMins == null) {
       return;
     }
-    if (SORTED_FLAT_GOALS.find((item) => item.name === goal) == null) {
+    const foundGoal = findGoal(goal, STANDARD_UFO);
+    if (foundGoal == null) {
       console.error("Unexpected goal name", goal);
       return;
     }
@@ -238,7 +242,7 @@ function createTemplate(): string {
   const csv = Papa.unparse(
     SORTED_FLAT_GOALS.map((row) => {
       const estimate: Estimate = {
-        Goal: row.name,
+        Goal: replaceTokens(row.name, STANDARD_UFO.tokens),
         "Number of attempts": null,
         "Average time in mins (example: 1.5)": null,
         "(optional) Best time in mins (example: 1.0)": null,

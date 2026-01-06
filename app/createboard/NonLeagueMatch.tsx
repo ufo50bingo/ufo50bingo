@@ -5,6 +5,7 @@ import { IconCheck, IconDots, IconExclamationMark } from "@tabler/icons-react";
 import {
   ActionIcon,
   Alert,
+  Anchor,
   Button,
   Checkbox,
   Group,
@@ -307,17 +308,29 @@ export default function NonLeagueMatch() {
       )}
       {metadata.type === "Custom" && (
         <Stack>
-          <Select
-            data={[
-              { value: "srl_v5", label: "SRL v5" },
-              { value: "ufo", label: "UFO" },
-              { value: "fixed_board", label: "Fixed Board" },
-              { value: "randomized", label: "Randomized" },
-            ]}
-            label="Custom Type"
-            value={customType}
-            onChange={(newValue) => setCustomType(newValue as CustomType)}
-          />
+          <Stack gap={4}>
+            <Select
+              data={[
+                { value: "srl_v5", label: "SRL v5" },
+                { value: "ufo", label: "UFO" },
+                { value: "fixed_board", label: "Fixed Board" },
+                { value: "randomized", label: "Randomized" },
+              ]}
+              label="Custom Type"
+              value={customType}
+              onChange={(newValue) => setCustomType(newValue as CustomType)}
+            />
+            {customType === "ufo" && (
+              <Anchor
+                size="xs"
+                target="_blank"
+                href="https://docs.google.com/document/d/1af04BI8p1-_FtcO8iRHiyrsNlsiqSormkYEJn-4DlLk/edit?tab=t.0"
+              >
+                View the specification for the UFO format here.
+              </Anchor>
+            )}
+          </Stack>
+
           {customType === "ufo" ? (
             <>
               <Textarea

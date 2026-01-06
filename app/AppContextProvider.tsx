@@ -68,8 +68,13 @@ export function AppContextProvider({
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const attempts =
-    useLiveQuery(() => db.attempts.orderBy("startTime").reverse().toArray()) ??
-    [];
+    useLiveQuery(() =>
+      db.attempts
+        .orderBy("startTime")
+        .filter((attempt) => attempt.goal != null && attempt.goal !== "")
+        .reverse()
+        .toArray()
+    ) ?? [];
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const playlist =
     useLiveQuery(() => db.playlist.orderBy("priority").toArray()) ?? [];

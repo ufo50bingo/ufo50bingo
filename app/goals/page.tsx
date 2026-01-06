@@ -206,7 +206,11 @@ export default function AllGoals() {
         </Table.Thead>
         <Table.Tbody>
           {sortedRows.map((goal) => {
-            const stats = goalStats.get(goal.partiallyResolvedGoal);
+            const stats = goalStats.get(
+              goal.parts.some((part) => part.type === "token")
+                ? goal.name
+                : goal.partiallyResolvedGoal
+            );
             const averageDuration = stats?.averageDuration;
             const bestDuration = stats?.bestDuration;
             return (

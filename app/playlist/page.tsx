@@ -90,13 +90,16 @@ export default function Playlist() {
             </Droppable>
           </Table>
         </DragDropContext>
-      ) : null}
-      Your playlist is empty! Add goals to your playlist by clicking{" "}
-      <ActionIcon onClick={() => {}} color="green">
-        <IconPlaylistAdd size={16} />
-      </ActionIcon>{" "}
-      on the <Link href="/goals">All Goals</Link> or{" "}
-      <Link href="/practice">Practice</Link> tabs.
+      ) : (
+        <>
+          Your playlist is empty! Add goals to your playlist by clicking{" "}
+          <ActionIcon onClick={() => {}} color="green">
+            <IconPlaylistAdd size={16} />
+          </ActionIcon>{" "}
+          on the <Link href="/goals">All Goals</Link> or{" "}
+          <Link href="/practice">Practice</Link> tabs.
+        </>
+      )}
     </Container>
   );
 }

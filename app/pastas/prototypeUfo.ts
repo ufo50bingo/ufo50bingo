@@ -1,0 +1,328 @@
+export const PROTOTYPE_UFO = {
+  goals: {
+    easy: {
+      barbuta: ["Barbuta gold disk", "Die to the Red Phantom in Barbuta"],
+      bughunter: [
+        "Complete your first job in Bug Hunter",
+        "Kill 4 bugs by stomping on them in Bug Hunter",
+        "Push 4 bugs into pits in Bug Hunter",
+      ],
+      ninpek: ["Collect 3 crowns in Ninpek"],
+      paintchase: ["Beat 5 levels in Paint Chase"],
+      magicgarden: ["Defeat an enemy worth 500 points in Magic Garden"],
+      velgress: [
+        "Clear out a shop’s stock in Velgress",
+        "Collect 50 coins in a Velgress run",
+      ],
+      planetzoldath: [
+        "Collect the dungeon Map Piece in Planet Zoldath",
+        "Eat 15 slabs of meat in Planet Zoldath",
+      ],
+      avianos: ["Win a Fledgling game in Avianos"],
+      bushidoball: ["Win the first match in Bushido Ball as every character"],
+      blockkoala: ["Beat 2 Block Koala levels as Koalarana"],
+      camouflage: [
+        "Collect 10 oranges in Camouflage",
+        "Get eaten by a Frog, Gator, & Bird in Camouflage",
+      ],
+      campanella: [
+        "Collect 5 coffees in Campanella",
+        "Defeat the Stage B Boss in Campanella",
+      ],
+      thebigbellrace: [
+        "KO 3 opponents in The Big Bell Race",
+        "The Big Bell Race gold disk",
+      ],
+      waldorfsjourney: [
+        "Have 35 shells at once in Waldorf’s Journey",
+        "Read 5 signs in Waldorf’s Journey",
+      ],
+      porgy: ["Collect 3 fuel tanks in Porgy"],
+      caramelcaramel: ["Score 8,000 points in the prologue in Caramel Caramel"],
+      partyhouse: [
+        "Get a Climber to max popularity in Party House",
+        "Get busted by the fire department in Party House",
+        "Have 6 trouble on screen at once in Party House",
+        "Have a party with 4 Dancers in Party House",
+      ],
+      divers: ["Obtain the Parasite Hammer in Divers"],
+      railheist: [
+        "Kill 5 chickens in Rail Heist",
+        "Kill a lawman via friendly fire in Rail Heist",
+      ],
+      rockonisland: ["Have 20 chickens in a Rock On! Island level"],
+      pingolf: ["Destroy 10 orange obstacles in Pingolf"],
+      overbold: ["Purchase 3 price hiked items in one run in Overbold"],
+      campanella2: ["Defeat Rotondo in Campanella 2"],
+      rakshasa: ["Revive yourself 6 times in Rakshasa"],
+      grimstone: [
+        "Collect the money from the burning house in Grimstone",
+        "Learn 3 Skills in Grimstone",
+      ],
+      lordsofdiskonia: [
+        "Drown 5 enemies in Lords of Diskonia",
+        "Win a Quick Match on Squire difficulty in Lords of Diskonia",
+      ],
+      nightmanor: [
+        "Hide from the killer twice in Night Manor",
+        "Night Manor gold disk",
+      ],
+      elfazarshat: [
+        "Clear the first stage in Elfazar’s Hat",
+        "Earn a continue in the bonus round in Elfazar’s Hat",
+      ],
+      miniandmax: ["100 shinies in Mini & Max"],
+      combatants: ["Slay a spider in Combatants"],
+      quibblerace: [
+        "Bet against your sponsored Quibble and win the round",
+        "Quibble Race gold disk",
+      ],
+      seasidedrive: [
+        "Beat Stage 2 in Seaside Drive",
+        "Win the bonus game in Seaside Drive",
+      ],
+      campanella3: [
+        "Beat Galbrain in Campanella 3",
+        "Win the bonus game in Campanella 3",
+      ],
+    },
+    medium: {
+      barbuta: [
+        "Fill 5 item slots in Barbuta (you start at 1)",
+        "Pick up both the Rod and the Blood Sword in Barbuta",
+        "Visit at least 25 rooms in Barbuta",
+      ],
+      bughunter: ["Kill 4 bugs with one module use in Bug Hunter"],
+      ninpek: ["Eat 5 sandwiches in Ninpek", "Ninpek gold disk"],
+      paintchase: [
+        "Beat 10 levels in Paint Chase",
+        "Reach a score of 150+ in Paint Chase",
+      ],
+      magicgarden: ["Magic Garden gold disk"],
+      mortol: ["Clear Level 2-B in Mortol"],
+      attactics: [
+        "Beat 5 levels in Attactics",
+        "Win 2 Attactics battles without taking damage",
+      ],
+      devilition: ["Have 6 villagers at once in Devilition"],
+      kickclub: [
+        "Beat Track World in Kick Club",
+        "Eat 10 hidden desserts in Kick Club",
+      ],
+      avianos: ["Control 15+ tiles in Avianos (you don’t have to win)"],
+      mooncat: ["Mooncat gold disk"],
+      bushidoball: [
+        "Beat Bushido Ball w/ Default Options",
+        "Win a 16-point match on Hyper speed in Bushido Ball",
+      ],
+      blockkoala: ["Beat 5 levels in Block Koala"],
+      camouflage: ["Camouflage gold disk", "Save 5 babies in Camouflage"],
+      campanella: ["Score 20,000 points in Campanella"],
+      golfaria: [
+        "Collect 3 clubs in Golfaria",
+        "Destroy 3 parbots in Golfaria",
+        "Obtain the Block Buster in Golfaria",
+        "Obtain the Brakes in Golfaria",
+      ],
+      warptank: [
+        "Beat 6 levels in Warptank",
+        "Beat Healing Sector in Warptank",
+        "Collect 3 coffees in Warptank",
+        "Talk to 3 NPCs in Warptank",
+      ],
+      waldorfsjourney: [
+        "Have four puffins at once in Waldorf’s Journey",
+        "Purchase four unique items in one run of Waldorf’s Journey",
+      ],
+      oniondelivery: [
+        "Complete 2 days of deliveries in Onion Delivery",
+        "Deliver 12 onions in a single day in Onion Delivery",
+      ],
+      caramelcaramel: [
+        "Beat the Egg in Caramel Caramel",
+        "Snap 10 bonus background elements in Caramel Caramel",
+      ],
+      partyhouse: ["Beat 2 random Party House scenarios"],
+      hotfoot: ["Win as Zobo and Blorg in Hot Foot (use code PLAY-FAIR)"],
+      railheist: [
+        "Beat 5 levels in Rail Heist",
+        "Beat 5 levels with the GOOD-SPUR code in Rail Heist",
+      ],
+      vainger: ["Beat 3 bosses in Vainger", "Collect 1 keycode in Vainger"],
+      rockonisland: [
+        "Beat Initial Encounter in Rock On! Island w/o cavemen",
+        "Beat Initial Encounter in Rock On! Island w/o upgrading Zola’s weapon",
+        "Clear 2 Rock On! Island levels",
+      ],
+      mortolii: [
+        "Activate all the switches in Mortol II",
+        "Collect 10 keys in Mortol II",
+        "Collect 5 keys in Mortol II while using code BENE-DIKT",
+      ],
+      fisthell: ["Clear 2nd Scare in Fist Hell", "Destroy 2 UFOs in Fist Hell"],
+      overbold: ["Max out four upgrades in Overbold"],
+      campanella2: [
+        "Clear Moire Woods II or Rink II in Campanella 2",
+        "Have 300 coins in Campanella 2",
+        "Obtain the Cross item in Campanella 2",
+        "Obtain the Friendship Bracelet in Campanella 2",
+      ],
+      hypercontender: [
+        "Beat Draft Mode in Hyper Contender",
+        "Hyper Contender gold disk",
+      ],
+      valbrace: [
+        "Give the Red Knight 5 items in Valbrace",
+        "Level up at a throne in Valbrace",
+      ],
+      rakshasa: [
+        "Beat the first Mid Boss in Rakshasa w/ 4+ skulls",
+        "Beat the first stage in Rakshasa",
+      ],
+      starwaspir: ["Score 50,000+ points in Star Waspir"],
+      grimstone: ["Defeat 15 enemies in Grimstone"],
+      nightmanor: [
+        "Collect the diamond in Night Manor",
+        "Find and read 10 journal entries in Night Manor",
+      ],
+      elfazarshat: [
+        "Clear the second stage in Elfazar’s Hat",
+        "Have three level 2 upgrades active at once in Elfazar’s Hat",
+      ],
+      pilotquest: [
+        "Collect 5 Zoldnaks in Pilot Quest",
+        "Make a friend in Pilot Quest",
+      ],
+      miniandmax: ["Turn off the lamp in Mini & Max"],
+      campanella3: ["Beat Joe Pulp in Campanella 3"],
+      cyberowls: [
+        "Complete 2 missions in Cyber Owls",
+        "Rescue each owl in the GETM-EOUT terminal code mini-game",
+      ],
+    },
+    hard: {
+      bughunter: ["Bug Hunter gold disk"],
+      magicgarden: ["Reach a score of 10,000+ in Magic Garden"],
+      mortol: ["Finish a level with 50+ lives in Mortol"],
+      velgress: [
+        "Velgress gold disk",
+        "Velgress gold disk without Upgrades or Jump Pads",
+      ],
+      planetzoldath: ["Planet Zoldath gold disk"],
+      attactics: [
+        "Reach Lieutenant or better in ranked Attactics",
+        "Score 1000+ points in Attactics Survival Mode",
+      ],
+      devilition: ["Devilition gold disk"],
+      avianos: ["Avianos gold disk"],
+      mooncat: [
+        "Find 2 of 3 eggs in Mooncat",
+        "Visit 25 different rooms in Mooncat",
+      ],
+      campanella: ["Have 20 lives in Campanella"],
+      golfaria: ["Obtain one piece of the Holy Tee in Golfaria"],
+      waldorfsjourney: ["Waldorf’s Journey gold disk"],
+      porgy: ["Defeat a boss in Porgy"],
+      hotfoot: ["Hot Foot gold disk"],
+      railheist: ["Collect 9 badges in Rail Heist"],
+      vainger: [
+        "Collect 2 upgrade modules in Vainger",
+        "Collect 5 items in Vainger",
+      ],
+      pingolf: ["Pingolf gold disk"],
+      mortolii: [
+        "Defeat all three mini bosses in Mortol II",
+        "Mortol II gold disk",
+      ],
+      fisthell: ["Survive 9 waves in the gym in Fist Hell"],
+      overbold: [
+        "Clear a round with maximum stakes in Overbold",
+        "Overbold gold disk",
+      ],
+      valbrace: [
+        "Clear Floor 1 in Valbrace",
+        "Collect the zweihander in Valbrace",
+        "Defeat the crone in Valbrace",
+      ],
+      starwaspir: [
+        "Clear Wave 2 in Star Waspir",
+        "Have a 10x multiplier in Star Waspir",
+        "Have a 20x multiplier in Star Waspir",
+      ],
+      pilotquest: [
+        "Defeat Big Borlg in Pilot Quest",
+        "Defeat Unktomi in Pilot Quest",
+      ],
+      miniandmax: [
+        "300 shinies in Mini & Max",
+        "Complete all 4 Algaean quests in Mini & Max",
+      ],
+      combatants: [
+        "Beat ‘Surprise!’ in Combatants",
+        "Beat 4 levels in Combatants",
+      ],
+      seasidedrive: [
+        "Beat Stage 1 in Seaside Drive while using the code WEAK-SHOT",
+        "Seaside Drive gold disk",
+      ],
+      campanella3: [
+        "Clear five waves 0% in Campanella 3",
+        "Clear five waves 100% in Campanella 3",
+      ],
+      cyberowls: [
+        "Clear Moscow with 1500+ score in Cyber Owls",
+        "Clear the HAWK-BASE terminal code stage",
+      ],
+    },
+    veryhard: {
+      kickclub: ["Kick Club gold disk"],
+      hypercontender: ["Clear Hyper difficulty in Hyper Contender"],
+      rakshasa: ["Rakshasa gold disk"],
+      starwaspir: ["Clear wave 3 in Star Waspir"],
+      pilotquest: ["Find a ship part in Pilot Quest"],
+    },
+    general: {
+      "temp-0": [
+        "Collect 5 gifts for the garden",
+        "Collect 10 gifts for the garden",
+        "Collect 20 gifts for the garden",
+        "Kill 20 unique enemies",
+        "Collect 5 HP upgrades",
+        "Collect 6 HP upgrades",
+      ],
+      "temp-1": [
+        "Collect 3 gold disks",
+        "Collect 5 gold disks",
+        "Collect 7 gold disks",
+        "Collect 10 gold disks",
+        "Buy 10 unique items from shops",
+        "Buy 15 unique items from shops",
+        "Alpha Trilogy: Gold Velgress, Overbold, and Quibble Race as Alpha",
+      ],
+      "temp-2": [
+        "Collect 2 cherry disks",
+        "Collect 3 cherry disks",
+        "Collect 4 cherry disks",
+        "Find an easter egg UFO in 3 games",
+        "Find an easter egg UFO in 4 games",
+        "Destroy a vehicle that isn’t yours in 3 games",
+      ],
+      "temp-3": [
+        "Defeat 5 bosses",
+        "Defeat 8 bosses",
+        "Defeat 12 bosses",
+        "Defeat a boss in 3 different games",
+        "Defeat a boss in 5 different games",
+      ],
+      "temp-4": [
+        "Collect a food item in 5 different games",
+        "Collect a beverage in 5 different games",
+        "Enter a name into 3 arcade leaderboards",
+        "Enter a name into 5 arcade leaderboards",
+        "Touch a squid in 3 games",
+      ],
+    },
+  },
+  tokens: {},
+  category_counts: { easy: 7, medium: 7, hard: 5, veryhard: 1, general: 5 },
+} as const;

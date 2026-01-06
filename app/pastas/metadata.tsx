@@ -8,6 +8,8 @@ import { CHOCO_UFO } from "./chocoUfo";
 import { CAMPANELLA3_UFO } from "./campanella3Ufo";
 import { CLARITY_UFO } from "./clarityUfo";
 import { NOZZLO_UFO } from "./nozzloUfo";
+import { PROTOTYPE_UFO } from "./prototypeUfo";
+import { SEASON_1_UFO } from "./season1Ufo";
 
 const RAW_METADATA = [
   {
@@ -229,6 +231,51 @@ const RAW_METADATA = [
         </span>
         <Text size="xs">
           <em>Created by chocolatecake5000</em>
+        </Text>
+      </Stack>
+    ),
+  },
+  {
+    type: "UFO",
+    name: "Prototype",
+    pasta: PROTOTYPE_UFO,
+    isMenu: true,
+    hovercard: (
+      <Stack>
+        <span>
+          The goals used for{" "}
+          <a
+            target="blank"
+            href="https://www.youtube.com/watch?v=AVvqYWGPX8U&list=PLknPYaq85B6TPX6Pkkm52EuG5OpRCZe8R"
+          >
+            the very first tournament!
+          </a>{" "}
+          See how it all started!
+        </span>
+        <Text size="xs">
+          <em>Created by the bingo admins</em>
+        </Text>
+      </Stack>
+    ),
+  },
+  {
+    type: "UFO",
+    name: "Season 1",
+    pasta: SEASON_1_UFO,
+    isMenu: true,
+    hovercard: (
+      <Stack>
+        <span>
+          The goals used for{" "}
+          <a
+            target="blank"
+            href="https://docs.google.com/spreadsheets/d/1aYcmIA1KoviLQvQHDNTfzkIyG_BwHrO1cTtgimZtWZw/edit?gid=521253915#gid=521253915"
+          >
+            Season 1 of Bingo League.
+          </a>
+        </span>
+        <Text size="xs">
+          <em>Created by the bingo admins</em>
         </Text>
       </Stack>
     ),

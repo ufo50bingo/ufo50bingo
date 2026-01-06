@@ -23,6 +23,7 @@ import { useAppContext } from "../AppContextProvider";
 import { db } from "../db";
 import Duration from "../practice/Duration";
 import {
+  compareByDifficulty,
   DIFFICULTY_NAMES,
   SORTED_FLAT_GOALS,
   StandardGoal,
@@ -38,6 +39,7 @@ import EditableParts from "./EditableParts";
 import resolveTokens from "../generator/resolveTokens";
 import { STANDARD_UFO } from "../pastas/standardUfo";
 import getResolvedGoalText from "../generator/getResolvedGoalText";
+import compareByDefault from "./compareByDefault";
 
 interface Row extends StandardGoal {
   parts: ReadonlyArray<Plain | BaseToken | ResolvedToken>;
@@ -78,70 +80,68 @@ export default function AllGoals() {
     setSortBy(field);
   };
 
-  // TODO: Fix sorting
-  // const sortedRows = useMemo(() => {
-  //   switch (sortBy) {
-  //     case "goal":
-  //       return reverseSortDirection
-  //         ? SORTED_FLAT_GOALS.toReversed()
-  //         : SORTED_FLAT_GOALS;
-  //     case "difficulty":
-  //       const sortedByDifficulty =
-  //         SORTED_FLAT_GOALS.toSorted(compareByDifficulty);
-  //       return reverseSortDirection
-  //         ? sortedByDifficulty.toReversed()
-  //         : sortedByDifficulty;
-  //     case "average":
-  //       const sortedByAverageDuration = SORTED_FLAT_GOALS.toSorted((a, b) => {
-  //         const aDur = goalStats.get(a.name)?.averageDuration;
-  //         const bDur = goalStats.get(b.name)?.averageDuration;
-  //         if (aDur == null || bDur == null) {
-  //           if (aDur == null && bDur != null) {
-  //             return 1;
-  //           } else if (aDur != null && bDur == null) {
-  //             return -1;
-  //           } else {
-  //             return 0;
-  //           }
-  //         } else {
-  //           return aDur - bDur;
-  //         }
-  //       });
-  //       return reverseSortDirection
-  //         ? sortedByAverageDuration.toReversed()
-  //         : sortedByAverageDuration;
-  //     case "best":
-  //       const sortedByBestDuration = SORTED_FLAT_GOALS.toSorted((a, b) => {
-  //         const aDur = goalStats.get(a.name)?.bestDuration;
-  //         const bDur = goalStats.get(b.name)?.bestDuration;
-  //         if (aDur == null || bDur == null) {
-  //           if (aDur == null && bDur != null) {
-  //             return 1;
-  //           } else if (aDur != null && bDur == null) {
-  //             return -1;
-  //           } else {
-  //             return 0;
-  //           }
-  //         } else {
-  //           return aDur - bDur;
-  //         }
-  //       });
-  //       return reverseSortDirection
-  //         ? sortedByBestDuration.toReversed()
-  //         : sortedByBestDuration;
-  //     case "count":
-  //       const sortedByCount = SORTED_FLAT_GOALS.toSorted((a, b) => {
-  //         const aCount = goalStats.get(a.name)?.count ?? 0;
-  //         const bCount = goalStats.get(b.name)?.count ?? 0;
-  //         return aCount - bCount;
-  //       });
-  //       return reverseSortDirection
-  //         ? sortedByCount.toReversed()
-  //         : sortedByCount;
-  //     default:
-  //       return SORTED_FLAT_GOALS;
-  //   }
-  // }, [goalStats, sortBy, reverseSortDirection]);
+  const sortedRows = useMemo(() => {
+    switch (sortBy) {
+      case "goal":
+        return reverseSortDirection
+          ? splitGoals.toSorted(compareByDefault).toReversed()
+          : splitGoals.toSorted(compareByDefault);
+      case "difficulty":
+        const sortedByDifficulty = splitGoals.toSorted(compareByDifficulty);
+        return reverseSortDirection
+          ? sortedByDifficulty.toReversed()
+          : sortedByDifficulty;
+      case "average":
+        const sortedByAverageDuration = splitGoals.toSorted((a, b) => {
+          const aDur = goalStats.get(a.partiallyResolvedGoal)?.averageDuration;
+          const bDur = goalStats.get(b.partiallyResolvedGoal)?.averageDuration;
+          if (aDur == null || bDur == null) {
+            if (aDur == null && bDur != null) {
+              return 1;
+            } else if (aDur != null && bDur == null) {
+              return -1;
+            } else {
+              return 0;
+            }
+          } else {
+            return aDur - bDur;
+          }
+        });
+        return reverseSortDirection
+          ? sortedByAverageDuration.toReversed()
+          : sortedByAverageDuration;
+      case "best":
+        const sortedByBestDuration = splitGoals.toSorted((a, b) => {
+          const aDur = goalStats.get(a.partiallyResolvedGoal)?.bestDuration;
+          const bDur = goalStats.get(b.partiallyResolvedGoal)?.bestDuration;
+          if (aDur == null || bDur == null) {
+            if (aDur == null && bDur != null) {
+              return 1;
+            } else if (aDur != null && bDur == null) {
+              return -1;
+            } else {
+              return 0;
+            }
+          } else {
+            return aDur - bDur;
+          }
+        });
+        return reverseSortDirection
+          ? sortedByBestDuration.toReversed()
+          : sortedByBestDuration;
+      case "count":
+        const sortedByCount = splitGoals.toSorted((a, b) => {
+          const aCount = goalStats.get(a.partiallyResolvedGoal)?.count ?? 0;
+          const bCount = goalStats.get(b.partiallyResolvedGoal)?.count ?? 0;
+          return aCount - bCount;
+        });
+        return reverseSortDirection
+          ? sortedByCount.toReversed()
+          : sortedByCount;
+      default:
+        return splitGoals;
+    }
+  }, [sortBy, reverseSortDirection, splitGoals, goalStats]);
 
   return (
     <Container my="md">
@@ -205,7 +205,7 @@ export default function AllGoals() {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {splitGoals.map((goal, index) => {
+          {sortedRows.map((goal) => {
             const stats = goalStats.get(goal.partiallyResolvedGoal);
             const averageDuration = stats?.averageDuration;
             const bestDuration = stats?.bestDuration;
@@ -236,6 +236,9 @@ export default function AllGoals() {
                         parts: newParts,
                         partiallyResolvedGoal: getResolvedGoalText(newParts),
                       };
+                      const index = splitGoals.findIndex(
+                        (g) => g.name === goal.name
+                      );
                       const newSplitGoals = splitGoals.toSpliced(
                         index,
                         1,

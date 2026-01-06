@@ -1,3 +1,4 @@
+import compareByDefault from "./goals/compareByDefault";
 import { STANDARD_UFO } from "./pastas/standardUfo";
 
 export const ORDERED_PROPER_GAMES = [
@@ -190,19 +191,7 @@ Object.keys(STANDARD_UFO.goals).forEach((untypedDifficulty) => {
 // this also verifies that all Game and Difficulty options are consistent between the ordered
 // arrays in this file and the values in STANDARD
 export const SORTED_FLAT_GOALS: ReadonlyArray<StandardGoal> =
-  FLAT_GOALS.toSorted((a, b) => {
-    const subcatDiff =
-      ORDERED_SUBCATEGORIES.indexOf(a.subcategory) -
-      ORDERED_SUBCATEGORIES.indexOf(b.subcategory);
-    if (subcatDiff !== 0) {
-      return subcatDiff;
-    }
-    const difficultyDiff = compareByDifficulty(a, b);
-    if (difficultyDiff != 0) {
-      return difficultyDiff;
-    }
-    return a.name.localeCompare(b.name);
-  });
+  FLAT_GOALS.toSorted(compareByDefault);
 
 export function compareByDifficulty(a: StandardGoal, b: StandardGoal): number {
   return (

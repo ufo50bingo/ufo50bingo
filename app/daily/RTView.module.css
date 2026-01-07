@@ -1,0 +1,114 @@
+.Typography {
+  padding: 0;
+  margin: 0;
+
+  & li > p {
+    margin: 0;
+  }
+
+  & ul li,
+  & ol li {
+    margin-top: 2px;
+  }
+
+  & p {
+    margin-bottom: 7px;
+    min-height: 16px;
+  }
+
+  & h1,
+  & h2,
+  & h3,
+  & h4,
+  & h5,
+  & h6,
+  & p {
+    margin-top: 0;
+  }
+}
+
+.content {
+  & :global(pre) {
+    font-family: var(--mantine-font-family-monospace);
+    border-radius: var(--mantine-radius-default);
+    padding: var(--mantine-spacing-sm) var(--mantine-spacing-md);
+
+    @mixin where-light {
+      background-color: var(--mantine-color-gray-0);
+      color: var(--mantine-color-gray-9);
+      --code-color-comment: var(--mantine-color-gray-5);
+      --code-color-var: var(--mantine-color-red-7);
+      --code-color-number: var(--mantine-color-blue-7);
+      --code-color-title: var(--mantine-color-pink-7);
+      --code-color-keyword: var(--mantine-color-violet-7);
+    }
+
+    @mixin where-dark {
+      background-color: var(--mantine-color-dark-8);
+      color: var(--mantine-color-dark-1);
+      --code-color-comment: var(--mantine-color-dark-2);
+      --code-color-var: var(--mantine-color-red-5);
+      --code-color-number: var(--mantine-color-cyan-5);
+      --code-color-title: var(--mantine-color-yellow-5);
+      --code-color-keyword: var(--mantine-color-violet-3);
+    }
+
+    & code {
+      background: none !important;
+      color: inherit;
+      font-size: var(--mantine-font-size-sm);
+      padding: 0;
+    }
+
+    & :global(.hljs-comment),
+    & :global(.hljs-quote) {
+      color: var(--code-color-comment);
+    }
+
+    & :global(.hljs-variable),
+    & :global(.hljs-template-variable),
+    & :global(.hljs-attribute),
+    & :global(.hljs-tag),
+    & :global(.hljs-regexp),
+    & :global(.hljs-link),
+    & :global(.hljs-name),
+    & :global(.hljs-selector-id),
+    & :global(.hljs-selector-class) {
+      color: var(--code-color-var);
+    }
+
+    & :global(.hljs-number),
+    & :global(.hljs-meta),
+    & :global(.hljs-built_in),
+    & :global(.hljs-builtin-name),
+    & :global(.hljs-literal),
+    & :global(.hljs-type),
+    & :global(.hljs-params) {
+      color: var(--code-color-number);
+    }
+
+    & :global(.hljs-string),
+    & :global(.hljs-symbol),
+    & :global(.hljs-bullet) {
+      color: var(--code-color-var);
+    }
+
+    & :global(.hljs-title),
+    & :global(.hljs-section) {
+      color: var(--code-color-title);
+    }
+
+    & :global(.hljs-keyword),
+    & :global(.hljs-selector-tag) {
+      color: var(--code-color-keyword);
+    }
+
+    & :global(.hljs-emphasis) {
+      font-style: italic;
+    }
+
+    & :global(.hljs-strong) {
+      font-weight: 700;
+    }
+  }
+}

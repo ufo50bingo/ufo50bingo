@@ -1,4 +1,5 @@
 import "@mantine/core/styles.css";
+import "@mantine/tiptap/styles.css";
 
 import React, { ReactNode } from "react";
 import { GoogleAnalytics } from "@next/third-parties/google";

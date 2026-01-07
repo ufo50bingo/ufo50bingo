@@ -12,16 +12,29 @@ import {
 } from "@mantine/core";
 import { fetchBoard } from "../fetchMatchInfo";
 import saveDailyBoard from "./saveDailyBoard";
+import { RTE } from "./RTE";
+import { JSONContent } from "@tiptap/react";
 
 type Props = {
   date: LocalDate;
   dailyData: DailyData;
+  description: null | JSONContent;
   onClose: () => unknown;
 };
 
-export default function EditDailyBody({ date, dailyData, onClose }: Props) {
+export default function EditDailyBody({
+  date,
+  dailyData,
+  description: initialDescription,
+  onClose,
+}: Props) {
   const [title, setTitle] = useState(dailyData.title ?? "");
-  const [description, setDescription] = useState(dailyData.description ?? "");
+  const [description, setDescription] = useState<JSONContent>(
+    initialDescription ?? {
+      type: "doc",
+      content: [],
+    }
+  );
   const [creator, setCreator] = useState(dailyData.creator ?? "");
   const [textBoard, setTextBoard] = useState(() => dailyData.board.join("\n"));
   const [seed, setSeed] = useState<number | string | undefined>(dailyData.seed);
@@ -42,14 +55,7 @@ export default function EditDailyBody({ date, dailyData, onClose }: Props) {
         value={creator}
         onChange={(event) => setCreator(event.currentTarget.value)}
       />
-      <Textarea
-        label="Description"
-        value={description}
-        onChange={(event) => setDescription(event.currentTarget.value)}
-        autosize={true}
-        minRows={2}
-        maxRows={5}
-      />
+      <RTE label="Description" value={description} onChange={setDescription} />
       <Group align="end">
         <TextInput
           label="Optional: Enter Bingosync ID to sync board"
@@ -117,7 +123,13 @@ export default function EditDailyBody({ date, dailyData, onClose }: Props) {
                 newSeed = seed;
               }
               await saveDailyBoard(
-                { board, title, creator, description, seed: newSeed },
+                {
+                  board,
+                  title,
+                  creator,
+                  description: JSON.stringify(description),
+                  seed: newSeed,
+                },
                 date
               );
               window.location.reload();

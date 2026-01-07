@@ -1,5 +1,6 @@
 import { google } from "googleapis";
 import { DateTime } from "luxon";
+import { cacheLife, cacheTag } from "next/cache";
 
 const LEAGUE_SHEET_ID = "1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA";
 const UNDERGROUND_SHEET_ID = "1OocDHEbrJC3BqO8qrPFCYxyy2nzqAaTT6Hmix076Ea0";
@@ -55,26 +56,18 @@ async function fetchScheduleForSheet({
   const sheet = google.sheets("v4");
 
   const [matchesResult, streamersResult] = await Promise.all([
-    sheet.spreadsheets.values.get(
-      {
-        spreadsheetId: sheetID,
-        range: leaguePrefix == null ? `Matches!A1:D400` : `Matches!A1:G400`,
-        auth,
-        fields: "values",
-      },
-      {
-        fetchImplementation,
-      }
-    ),
-    sheet.spreadsheets.values.get(
-      {
-        spreadsheetId: sheetID,
-        range: `Casters!B5:D100`,
-        auth,
-        fields: "values",
-      },
-      { fetchImplementation }
-    ),
+    sheet.spreadsheets.values.get({
+      spreadsheetId: sheetID,
+      range: leaguePrefix == null ? `Matches!A1:D400` : `Matches!A1:G400`,
+      auth,
+      fields: "values",
+    }),
+    sheet.spreadsheets.values.get({
+      spreadsheetId: sheetID,
+      range: `Casters!B5:D100`,
+      auth,
+      fields: "values",
+    }),
   ]);
 
   const streamerToLink: { [streamer: string]: string } = {};
@@ -129,6 +122,10 @@ async function fetchScheduleForSheet({
 }
 
 export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMatch>> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("schedule");
+
   const allSchedules = await Promise.all(
     SHEETS.map((sheet) => fetchScheduleForSheet(sheet))
   );
@@ -138,14 +135,4 @@ export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMat
     .concat(MANUAL_MATCHES);
   final.sort((a, b) => a.time - b.time);
   return final;
-}
-
-function fetchImplementation(
-  input: string | URL | globalThis.Request,
-  init?: RequestInit
-) {
-  return fetch(input, {
-    ...init,
-    next: { revalidate: 3600 },
-  });
 }

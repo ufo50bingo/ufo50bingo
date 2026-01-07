@@ -2,6 +2,8 @@ import Matches, { AdminFilter, Match } from "./Matches";
 import getSql from "../getSql";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 import { NeonQueryFunction, NeonQueryPromise } from "@neondatabase/serverless";
+import { cacheLife, cacheTag } from "next/cache";
+import fetchMatch from "./fetchMatch";
 
 const PAGE_SIZE = 20;
 
@@ -21,12 +23,10 @@ export default async function MatchesFetcher(props: {
   searchParams?: Promise<FilterParams>;
 }) {
   const searchParams = await props.searchParams;
-  const filterSql = getFilterSql(searchParams);
-
   const pageNumber = Number(searchParams?.page ?? "1");
   const [totalPages, matches] = await Promise.all([
-    fetchTotalPages(filterSql),
-    fetchMatches(pageNumber, filterSql),
+    fetchTotalPages(searchParams),
+    fetchMatches(pageNumber, searchParams),
   ]);
   return <Matches matches={matches} totalPages={totalPages} />;
 }
@@ -89,7 +89,14 @@ function getFilterSql(searchParams: FilterParams | undefined): SQL {
   return sql`${seasonSql} ${weekSql} ${tierSql} ${playerSql} ${adminSql}`;
 }
 
-async function fetchTotalPages(filterSql: SQL): Promise<number> {
+async function fetchTotalPages(
+  filterParams: FilterParams | undefined
+): Promise<number> {
+  "use cache";
+  cacheLife("max");
+  cacheTag("matches");
+
+  const filterSql = getFilterSql(filterParams);
   const sql = getSql();
   const result = await sql`
     SELECT COUNT(id) as total_matches
@@ -102,14 +109,19 @@ async function fetchTotalPages(filterSql: SQL): Promise<number> {
   return Math.ceil(totalMatches / PAGE_SIZE);
 }
 
-async function fetchMatches(
+async function fetchMatchIDs(
   pageNumber: number,
-  filterSql: SQL
-): Promise<ReadonlyArray<Match>> {
+  filterParams: FilterParams | undefined
+): Promise<ReadonlyArray<string>> {
+  "use cache";
+  cacheLife("max");
+  cacheTag("matches");
+
+  const filterSql = getFilterSql(filterParams);
   const sql = getSql();
   const result = await sql`
     SELECT
-      ${MATCH_FIELDS}
+      id
     FROM match
     WHERE
       is_public = TRUE
@@ -118,5 +130,20 @@ async function fetchMatches(
     ORDER BY date_created DESC
     OFFSET ${(pageNumber - 1) * PAGE_SIZE}
     LIMIT ${PAGE_SIZE}`;
-  return result.map(getMatchFromRaw);
+  return result.map((row) => row.id);
+}
+
+async function fetchMatchesFromIDs(
+  ids: ReadonlyArray<string>
+): Promise<ReadonlyArray<Match>> {
+  const matches = await Promise.all(ids.map(async (id) => fetchMatch(id)));
+  return matches.filter((match) => match != null);
+}
+
+async function fetchMatches(
+  pageNumber: number,
+  filterParams: FilterParams | undefined
+): Promise<ReadonlyArray<Match>> {
+  const ids = await fetchMatchIDs(pageNumber, filterParams);
+  return fetchMatchesFromIDs(ids);
 }

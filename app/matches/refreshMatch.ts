@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { updateTag } from "next/cache";
 import getSql from "../getSql";
 import {
   TBoard,
@@ -141,11 +141,10 @@ export async function refreshMatch(id: string): Promise<void> {
     WHERE id = ${id}
     RETURNING ${MATCH_FIELDS}`;
 
-  revalidatePath("/matches");
-  revalidatePath(`/match/${id}`);
+  updateTag(`match-${id}`);
   try {
     const rawMatch = sqlResult[0];
     const match = getMatchFromRaw(rawMatch);
     await syncToGSheet(match);
-  } catch { }
+  } catch {}
 }

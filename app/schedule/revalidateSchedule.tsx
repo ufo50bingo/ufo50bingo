@@ -1,7 +1,7 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export async function revalidateSchedule(): Promise<void> {
-  revalidatePath("/schedule");
+  revalidateTag("schedule", "max");
 }

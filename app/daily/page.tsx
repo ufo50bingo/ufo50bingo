@@ -11,8 +11,8 @@ import { SPICY_UFO } from "../pastas/spicyUfo";
 import { STANDARD_UFO } from "../pastas/standardUfo";
 import ufoGenerator, { UFOPasta } from "../generator/ufoGenerator";
 import { StandardGeneral } from "../pastas/pastaTypes";
-
-export const dynamic = "force-dynamic";
+import { cacheLife, cacheTag } from "next/cache";
+import { Suspense } from "react";
 
 const SPICY_WITHOUT_GENERAL: UFOPasta = {
   ...SPICY_UFO,
@@ -123,7 +123,11 @@ function getSimilarityScore(
 }
 
 async function getDailyBoard(date: LocalDate): Promise<DailyData> {
+  "use cache";
+  cacheLife("max");
   const isoDate = toISODate(date);
+  cacheTag(`daily-${isoDate}`);
+
   const sql = getSql(false);
   const sqlResult = await sql`
       SELECT
@@ -194,12 +198,20 @@ async function getDailyBoard(date: LocalDate): Promise<DailyData> {
   };
 }
 
-export default async function DailyPage(props: {
-  searchParams?: Promise<FilterParams>;
-}) {
+async function DailyPage(props: { searchParams?: Promise<FilterParams> }) {
   const params = await props.searchParams;
   const dateParam = params?.date;
   const date = dateParam == null ? getEasternDate() : fromISODate(dateParam);
   const dailyData = await getDailyBoard(date);
   return <DailyFeedFetcher date={date} dailyData={dailyData} />;
+}
+
+export default async function DailyPageWrapper(props: {
+  searchParams?: Promise<FilterParams>;
+}) {
+  return (
+    <Suspense>
+      <DailyPage searchParams={props.searchParams} />
+    </Suspense>
+  );
 }

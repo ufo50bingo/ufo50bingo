@@ -29,7 +29,6 @@ import {
 } from "@tabler/icons-react";
 import { refreshMatch } from "./refreshMatch";
 import { ReactNode, useState } from "react";
-import ResultModal from "./ResultModal";
 import deleteMatch from "./deleteMatch";
 import {
   ReadonlyURLSearchParams,
@@ -55,17 +54,17 @@ import { useMediaQuery } from "@mantine/hooks";
 import { db } from "../db";
 import EditLeagueModal from "./EditLeagueModal";
 
-const ADMIN_FILTERS = [
-  {
-    value: "leagueMissingVods",
-    label: "League Missing VODs",
-  },
-  {
-    value: "missingTimestamps",
-    label: "Missing Timestamps",
-  },
-] as const;
-export type AdminFilter = (typeof ADMIN_FILTERS)[number]["value"];
+// const ADMIN_FILTERS = [
+//   {
+//     value: "leagueMissingVods",
+//     label: "League Missing VODs",
+//   },
+//   {
+//     value: "missingTimestamps",
+//     label: "Missing Timestamps",
+//   },
+// ] as const;
+// export type AdminFilter = (typeof ADMIN_FILTERS)[number]["value"];
 
 interface Player {
   name: string;
@@ -239,7 +238,6 @@ export default function Matches({ matches, totalPages }: Props) {
 
   const page = Number(searchParams.get("page") ?? "1");
 
-  const [viewingId, setViewingId] = useState<null | string>(null);
   const [deletingId, setDeletingId] = useState<null | string>(null);
   const [editingVodId, setEditingVodId] = useState<null | string>(null);
   const [editingLeagueId, setEditingLeagueId] = useState<null | string>(null);
@@ -257,7 +255,7 @@ export default function Matches({ matches, totalPages }: Props) {
   const [player, setPlayer] = useState<undefined | string>(
     getPlayerFromParams(searchParams)
   );
-  const [admin, setAdmin] = useState<null | undefined | string>(
+  const [admin, _setAdmin] = useState<null | undefined | string>(
     getAdminFromParams(searchParams)
   );
 
@@ -272,8 +270,6 @@ export default function Matches({ matches, totalPages }: Props) {
     (admin == null || admin === "" ? null : admin) !==
       (searchParams.get("admin") ?? null);
 
-  const viewingMatch =
-    viewingId == null ? null : matches.find((match) => match.id === viewingId);
   const deletingMatch =
     deletingId == null
       ? null
@@ -349,7 +345,7 @@ export default function Matches({ matches, totalPages }: Props) {
               placeholder="Filter by player"
               spellCheck={false}
             />
-            {isAdmin && (
+            {/* {isAdmin && (
               <Select
                 style={{ width: "150px" }}
                 data={ADMIN_FILTERS}
@@ -358,7 +354,7 @@ export default function Matches({ matches, totalPages }: Props) {
                 onChange={setAdmin}
                 placeholder="Admin filters"
               />
-            )}
+            )} */}
             <Button
               leftSection={<IconFilter size={16} />}
               component={Link}
@@ -509,14 +505,9 @@ export default function Matches({ matches, totalPages }: Props) {
                           {isRefreshing ? (
                             <span>{match.name}</span>
                           ) : (
-                            <Anchor
-                              size="sm"
-                              onClick={() => {
-                                setViewingId(match.id);
-                              }}
-                            >
+                            <Link href={`/match/${match.id}`} scroll={false}>
                               {match.name}
-                            </Anchor>
+                            </Link>
                           )}
                         </Tooltip>
                       </Table.Td>
@@ -645,15 +636,6 @@ export default function Matches({ matches, totalPages }: Props) {
           />
         )}
       </Stack>
-      {viewingMatch != null && (
-        <ResultModal
-          isMobile={isMobile}
-          match={viewingMatch}
-          onClose={() => {
-            setViewingId(null);
-          }}
-        />
-      )}
       {editingVodMatch != null && (
         <EditVodModal
           isMobile={isMobile}

@@ -1,19 +1,22 @@
+"use client";
+
 import { Modal } from "@mantine/core";
 import { Match } from "./Matches";
 import MatchView from "./MatchView";
+import { useRouter } from "next/navigation";
 
 type Props = {
   isMobile: boolean;
   match: Match;
-  onClose: () => void;
 };
 
-export default function ResultModal({ isMobile, match, onClose }: Props) {
+export default function ResultModal({ isMobile, match }: Props) {
+  const router = useRouter();
   return (
     <Modal
       fullScreen={isMobile}
       centered={true}
-      onClose={onClose}
+      onClose={() => router.back()}
       opened={true}
       size="auto"
       withCloseButton={isMobile}

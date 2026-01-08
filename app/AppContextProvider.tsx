@@ -37,7 +37,6 @@ type AppContextType = {
   setIsAdmin: (newIsAdmin: boolean) => void;
   hideByDefault: boolean;
   setHideByDefault: (newHideByDefault: boolean) => void;
-  isMounted: boolean;
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -47,16 +46,13 @@ export function AppContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [isMounted, setIsMounted] = useState(false);
   const [nextGoalChoice, setNextGoalChoiceRaw] = useState(
     global.window != undefined &&
       localStorage?.getItem("nextGoalChoice") ===
-        NextGoalChoice.PREFER_FEWER_ATTEMPTS
+      NextGoalChoice.PREFER_FEWER_ATTEMPTS
       ? NextGoalChoice.PREFER_FEWER_ATTEMPTS
       : NextGoalChoice.RANDOM
   );
-
-  useEffect(() => setIsMounted(true), []);
 
   const setNextGoalChoice = useCallback(
     (newNextGoalChoice: NextGoalChoice) => {
@@ -136,7 +132,7 @@ export function AppContextProvider({
   useEffect(() => {
     setHideByDefaultRaw(
       global.window != undefined &&
-        localStorage?.getItem("hideByDefault") === "true"
+      localStorage?.getItem("hideByDefault") === "true"
     );
   }, []);
   const setHideByDefault = useCallback(
@@ -175,7 +171,6 @@ export function AppContextProvider({
       setIsAdmin,
       hideByDefault,
       setHideByDefault,
-      isMounted,
     }),
     [
       goalParts,
@@ -193,7 +188,6 @@ export function AppContextProvider({
       setIsAdmin,
       hideByDefault,
       setHideByDefault,
-      isMounted,
     ]
   );
 

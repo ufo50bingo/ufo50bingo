@@ -1,6 +1,6 @@
 "use server";
 
-import { updateTag } from "next/cache";
+import { revalidateTag, updateTag } from "next/cache";
 import syncToGSheet from "./syncToGSheet";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 import { LeagueInfo } from "../createboard/createMatch";
@@ -63,6 +63,7 @@ export default async function updateLeagueInfo(
         WHERE id = ${id}
         RETURNING ${MATCH_FIELDS}`;
   updateTag(`match-${id}`);
+  revalidateTag("matches", "max");
   const rawMatch = result[0];
   const finalMatch = getMatchFromRaw(rawMatch);
   await syncToGSheet(finalMatch);

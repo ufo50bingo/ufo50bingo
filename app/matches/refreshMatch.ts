@@ -1,6 +1,6 @@
 "use server";
 
-import { updateTag } from "next/cache";
+import { revalidateTag, updateTag } from "next/cache";
 import getSql from "../getSql";
 import {
   TBoard,
@@ -142,6 +142,7 @@ export async function refreshMatch(id: string): Promise<void> {
     RETURNING ${MATCH_FIELDS}`;
 
   updateTag(`match-${id}`);
+  revalidateTag("matches", "max");
   try {
     const rawMatch = sqlResult[0];
     const match = getMatchFromRaw(rawMatch);

@@ -1,6 +1,6 @@
 "use server";
 
-import { updateTag } from "next/cache";
+import { revalidateTag, updateTag } from "next/cache";
 import getSql from "../getSql";
 import syncToGSheet from "./syncToGSheet";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
@@ -21,6 +21,7 @@ export default async function updateVod(
     WHERE id = ${id}
     RETURNING ${MATCH_FIELDS}`;
   updateTag(`match-${id}`);
+  revalidateTag("matches", "max");
   try {
     const rawMatch = result[0];
     const match = getMatchFromRaw(rawMatch);

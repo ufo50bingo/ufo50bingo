@@ -86,7 +86,7 @@ const LINKS = [
     text: "Underground",
     icon: <IconBuildingTunnel size={25} stroke={1.5} />,
     isNewTab: true,
-  }
+  },
   // {
   //   href: '/boardanalyzer',
   //   text: 'Board Analyzer',

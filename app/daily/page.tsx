@@ -71,7 +71,7 @@ async function constructBoard(
   isSunday: boolean
 ): Promise<ReadonlyArray<string>> {
   const prevIsoDates = getPrevISODates(date, 7);
-  const sqlResult = await getSql(false)`
+  const sqlResult = await getSql()`
     SELECT board
     FROM daily
     WHERE date = ANY (${prevIsoDates})
@@ -128,7 +128,7 @@ async function getDailyBoard(date: LocalDate): Promise<DailyData> {
   const isoDate = toISODate(date);
   cacheTag(`daily-${isoDate}`);
 
-  const sql = getSql(false);
+  const sql = getSql();
   const sqlResult = await sql`
       SELECT
         board,

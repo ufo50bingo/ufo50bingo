@@ -128,7 +128,7 @@ export async function refreshMatch(id: string): Promise<void> {
       ? changes[changes.length - 1].time
       : null;
 
-  const sql = getSql(false);
+  const sql = getSql();
   const sqlResult = await sql`
     UPDATE match
     SET

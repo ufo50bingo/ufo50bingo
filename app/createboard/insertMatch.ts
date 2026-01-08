@@ -38,7 +38,7 @@ export async function insertMatch({
   leagueInfo,
   cookie,
 }: Props): Promise<void> {
-  const sql = getSql(false);
+  const sql = getSql();
 
   await sql`INSERT INTO match (
     id,

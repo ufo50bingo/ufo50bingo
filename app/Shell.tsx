@@ -150,6 +150,7 @@ export default function Shell({ children }: Props) {
             label={data.text}
             onClick={() => setIsCollapsedMobile(true)}
             target={data.isNewTab ? "_blank" : undefined}
+            prefetch={data.isNewTab ? false : undefined}
           />
         ))}
       </AppShell.Navbar>

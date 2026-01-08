@@ -24,12 +24,21 @@ export default function Wrapper(props: {
 }) {
   return (
     <Suspense>
-      <MatchesFetcher {...props} />
+      <ParamsFetcher {...props} />
     </Suspense>
   );
 }
 
-async function MatchesFetcher(props: { searchParams?: Promise<FilterParams> }) {
+async function ParamsFetcher(props: { searchParams?: Promise<FilterParams> }) {
+  const searchParams = await props.searchParams;
+  return <MatchesFetcher searchParams={searchParams} />
+}
+
+async function MatchesFetcher(props: { searchParams: FilterParams | undefined }) {
+  "use cache";
+  cacheLife("max");
+  cacheTag("matches");
+
   const searchParams = await props.searchParams;
   const pageNumber = Number(searchParams?.page ?? "1");
   const [totalPages, matches] = await Promise.all([
@@ -60,8 +69,8 @@ function getFilterSql(searchParams: FilterParams | undefined): SQL {
     season == null
       ? sql``
       : season == 0
-      ? sql`AND league_season IS NULL`
-      : sql`AND league_season = ${season}`;
+        ? sql`AND league_season IS NULL`
+        : sql`AND league_season = ${season}`;
 
   const weekStr = searchParams?.week;
   const weekSql =
@@ -100,10 +109,6 @@ function getFilterSql(searchParams: FilterParams | undefined): SQL {
 async function fetchTotalPages(
   filterParams: FilterParams | undefined
 ): Promise<number> {
-  "use cache";
-  cacheLife("max");
-  cacheTag("matches");
-
   const filterSql = getFilterSql(filterParams);
   const sql = getSql();
   const result = await sql`
@@ -121,10 +126,6 @@ async function fetchMatchIDs(
   pageNumber: number,
   filterParams: FilterParams | undefined
 ): Promise<ReadonlyArray<string>> {
-  "use cache";
-  cacheLife("max");
-  cacheTag("matches");
-
   const filterSql = getFilterSql(filterParams);
   const sql = getSql();
   const result = await sql`

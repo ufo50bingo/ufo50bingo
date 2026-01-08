@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { CommonMatchProps } from "./createMatch";
 import getSql from "../getSql";
 import { Variant } from "../pastas/metadata";

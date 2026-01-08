@@ -1,9 +1,9 @@
 import Matches, { AdminFilter, Match } from "./Matches";
 import getSql from "../getSql";
-import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 import { NeonQueryFunction, NeonQueryPromise } from "@neondatabase/serverless";
 import { cacheLife, cacheTag } from "next/cache";
 import fetchMatch from "./fetchMatch";
+import { Suspense } from "react";
 
 const PAGE_SIZE = 20;
 
@@ -19,9 +19,17 @@ type FilterParams = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type SQL = NeonQueryPromise<false, false, Record<string, any>[]>;
 
-export default async function MatchesFetcher(props: {
+export default function Wrapper(props: {
   searchParams?: Promise<FilterParams>;
 }) {
+  return (
+    <Suspense>
+      <MatchesFetcher {...props} />
+    </Suspense>
+  );
+}
+
+async function MatchesFetcher(props: { searchParams?: Promise<FilterParams> }) {
   const searchParams = await props.searchParams;
   const pageNumber = Number(searchParams?.page ?? "1");
   const [totalPages, matches] = await Promise.all([

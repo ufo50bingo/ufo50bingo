@@ -54,17 +54,17 @@ import { useMediaQuery } from "@mantine/hooks";
 import { db } from "../db";
 import EditLeagueModal from "./EditLeagueModal";
 
-// const ADMIN_FILTERS = [
-//   {
-//     value: "leagueMissingVods",
-//     label: "League Missing VODs",
-//   },
-//   {
-//     value: "missingTimestamps",
-//     label: "Missing Timestamps",
-//   },
-// ] as const;
-// export type AdminFilter = (typeof ADMIN_FILTERS)[number]["value"];
+const _ADMIN_FILTERS = [
+  {
+    value: "leagueMissingVods",
+    label: "League Missing VODs",
+  },
+  {
+    value: "missingTimestamps",
+    label: "Missing Timestamps",
+  },
+] as const;
+export type AdminFilter = (typeof _ADMIN_FILTERS)[number]["value"];
 
 interface Player {
   name: string;

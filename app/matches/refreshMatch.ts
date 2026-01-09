@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag, updateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import getSql from "../getSql";
 import {
   TBoard,
@@ -128,7 +128,7 @@ export async function refreshMatch(id: string): Promise<void> {
       ? changes[changes.length - 1].time
       : null;
 
-  const sql = getSql();
+  const sql = getSql(false);
   const sqlResult = await sql`
     UPDATE match
     SET
@@ -141,11 +141,11 @@ export async function refreshMatch(id: string): Promise<void> {
     WHERE id = ${id}
     RETURNING ${MATCH_FIELDS}`;
 
-  updateTag(`match-${id}`);
-  revalidateTag("matches", "max");
+  revalidatePath("/matches");
+  revalidatePath(`/match/${id}`);
   try {
     const rawMatch = sqlResult[0];
     const match = getMatchFromRaw(rawMatch);
     await syncToGSheet(match);
-  } catch {}
+  } catch { }
 }

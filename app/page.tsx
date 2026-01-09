@@ -10,20 +10,12 @@ import {
   Tooltip,
 } from "@mantine/core";
 import Link from "next/link";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import NonLeagueMatch from "./createboard/NonLeagueMatch";
 import LeagueMatch from "./createboard/LeagueMatch";
 import { LEAGUE_SEASON } from "./createboard/leagueConstants";
 
-export default function Wrapper() {
-  return (
-    <Suspense>
-      <CreateBoard />
-    </Suspense>
-  );
-}
-
-function CreateBoard() {
+export default function CreateBoard() {
   const [matchType, setMatchType] = useState<"league" | "non-league" | null>(
     LEAGUE_SEASON == null ? "non-league" : null
   );
@@ -52,14 +44,13 @@ function CreateBoard() {
                 data={[
                   {
                     value: "league",
-                    label:
-                      LEAGUE_SEASON == null ? (
-                        <Tooltip label="League play is not open yet!">
-                          <span>League</span>
-                        </Tooltip>
-                      ) : (
-                        "League"
-                      ),
+                    label: LEAGUE_SEASON == null ? (
+                      <Tooltip label="League play is not open yet!">
+                        <span>League</span>
+                      </Tooltip>
+                    ) : (
+                      "League"
+                    ),
                     disabled: LEAGUE_SEASON == null,
                   },
                   { value: "non-league", label: "Non-League" },

@@ -1,7 +1,6 @@
 import "@mantine/core/styles.css";
-import "@mantine/tiptap/styles.css";
 
-import React, { ReactNode, Suspense } from "react";
+import React, { ReactNode } from "react";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import {
   ColorSchemeScript,
@@ -31,9 +30,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <MantineProvider defaultColorScheme="dark" theme={theme}>
           <AppContextProvider>
-            <Suspense>
-              <Shell>{children}</Shell>
-            </Suspense>
+            <Shell>{children}</Shell>
           </AppContextProvider>
         </MantineProvider>
       </body>

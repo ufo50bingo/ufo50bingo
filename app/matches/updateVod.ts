@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag, updateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import getSql from "../getSql";
 import syncToGSheet from "./syncToGSheet";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
@@ -11,7 +11,7 @@ export default async function updateVod(
   startSeconds: number | null,
   analysisSeconds: number | null
 ): Promise<void> {
-  const sql = getSql();
+  const sql = getSql(false);
 
   const result = await sql`UPDATE match
     SET
@@ -20,8 +20,8 @@ export default async function updateVod(
       analysis_seconds = ${analysisSeconds}
     WHERE id = ${id}
     RETURNING ${MATCH_FIELDS}`;
-  updateTag(`match-${id}`);
-  revalidateTag("matches", "max");
+  revalidatePath("/matches");
+  revalidatePath(`/match/${id}`);
   try {
     const rawMatch = result[0];
     const match = getMatchFromRaw(rawMatch);

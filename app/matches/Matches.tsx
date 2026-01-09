@@ -217,6 +217,7 @@ function getAdminFromParams(
 
 export default function Matches({ matches, totalPages }: Props) {
   const {
+    isMounted,
     createdMatchIDs,
     hideByDefault,
     setHideByDefault,
@@ -290,7 +291,7 @@ export default function Matches({ matches, totalPages }: Props) {
   // 525px is the width of the board, which is also the default width of the modal
   const isMobile = useMediaQuery("(max-width: 525px)");
 
-  if (hideByDefault && revealedMatchIDs == null) {
+  if (!isMounted || (hideByDefault && revealedMatchIDs == null)) {
     return null;
   }
   return (

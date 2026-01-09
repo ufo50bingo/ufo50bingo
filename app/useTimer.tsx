@@ -2,20 +2,29 @@ import { ReactNode, useState } from "react";
 import RunningDuration from "./practice/RunningDuration";
 import Duration from "./practice/Duration";
 
+// uses MILLISECONDS
+type Input = {
+  durationMS: number;
+  isRunning: boolean;
+};
+
 type Return = {
   isRunning: boolean;
   getDurationMS: () => number;
   timer: ReactNode;
   start: () => void;
   pause: () => void;
-  reset: () => void;
+  reset: (input?: Input) => void;
 };
 
-export default function useTimer(): Return {
-  const [curStartTime, setCurStartTime] = useState(0);
-  const [accumulatedDuration, setAccumulatedDuration] = useState(0);
+export default function useTimer(input?: Input): Return {
+  // eslint-disable-next-line react-hooks/purity
+  const [curStartTime, setCurStartTime] = useState(Date.now());
+  const [accumulatedDuration, setAccumulatedDuration] = useState(
+    input?.durationMS ?? 0
+  );
 
-  const [isRunning, setIsRunning] = useState(false);
+  const [isRunning, setIsRunning] = useState(input?.isRunning ?? false);
 
   const getDurationMS = () =>
     isRunning
@@ -37,10 +46,10 @@ export default function useTimer(): Return {
     }
   };
 
-  const reset = () => {
-    setCurStartTime(0);
-    setAccumulatedDuration(0);
-    setIsRunning(false);
+  const reset = (input?: Input) => {
+    setCurStartTime(Date.now());
+    setAccumulatedDuration(input?.durationMS ?? 0);
+    setIsRunning(input?.isRunning ?? false);
   };
 
   return {

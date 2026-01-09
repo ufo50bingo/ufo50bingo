@@ -4,36 +4,21 @@ import { DailyData } from "./page";
 import { useMediaQuery } from "@mantine/hooks";
 import EditDailyBody from "./EditDailyBody";
 import useLocalString from "../localStorage/useLocalString";
-import { JSONContent } from "@tiptap/react";
 
 type Props = {
   dailyData: DailyData;
   date: LocalDate;
-  description: null | JSONContent;
   onClose: () => unknown;
 };
 
 const SECRET_PASSWORD_NO_PEEKING = "pleaseletmeeditthedailybingoboard";
 
-export default function EditDaily({
-  dailyData,
-  date,
-  description,
-  onClose,
-}: Props) {
-  const [password, setPassword] = useLocalString({
-    key: "daily-password",
-    defaultValue: "",
-  });
+export default function EditDaily({ dailyData, date, onClose }: Props) {
+  const [password, setPassword] = useLocalString({ key: "daily-password", defaultValue: "" });
   const isMobile = useMediaQuery("(max-width: 525px)");
   const body =
     password === SECRET_PASSWORD_NO_PEEKING ? (
-      <EditDailyBody
-        date={date}
-        dailyData={dailyData}
-        description={description}
-        onClose={onClose}
-      />
+      <EditDailyBody date={date} dailyData={dailyData} onClose={onClose} />
     ) : (
       <Stack>
         <Text>

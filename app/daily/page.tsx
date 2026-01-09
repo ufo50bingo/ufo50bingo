@@ -11,8 +11,8 @@ import { SPICY_UFO } from "../pastas/spicyUfo";
 import { STANDARD_UFO } from "../pastas/standardUfo";
 import ufoGenerator, { UFOPasta } from "../generator/ufoGenerator";
 import { StandardGeneral } from "../pastas/pastaTypes";
-import { cacheLife, cacheTag } from "next/cache";
-import { Suspense } from "react";
+
+export const dynamic = "force-dynamic";
 
 const SPICY_WITHOUT_GENERAL: UFOPasta = {
   ...SPICY_UFO,
@@ -71,7 +71,7 @@ async function constructBoard(
   isSunday: boolean
 ): Promise<ReadonlyArray<string>> {
   const prevIsoDates = getPrevISODates(date, 7);
-  const sqlResult = await getSql()`
+  const sqlResult = await getSql(false)`
     SELECT board
     FROM daily
     WHERE date = ANY (${prevIsoDates})
@@ -123,12 +123,8 @@ function getSimilarityScore(
 }
 
 async function getDailyBoard(date: LocalDate): Promise<DailyData> {
-  "use cache";
-  cacheLife("max");
   const isoDate = toISODate(date);
-  cacheTag(`daily-${isoDate}`);
-
-  const sql = getSql();
+  const sql = getSql(false);
   const sqlResult = await sql`
       SELECT
         board,
@@ -151,31 +147,7 @@ async function getDailyBoard(date: LocalDate): Promise<DailyData> {
   const newBoard = await constructBoard(date, isSunday);
   const newTitle = isSunday ? "Spicy Sunday" : null;
   const newDescription = isSunday
-    ? JSON.stringify({
-        type: "doc",
-        content: [
-          {
-            type: "paragraph",
-            content: [
-              {
-                type: "text",
-                marks: [
-                  {
-                    type: "link",
-                    attrs: {
-                      href: "https://docs.google.com/document/d/1Snf0qAm68dRROjoh8hb3Rn0OV-THyD2PcLJeuN-209U/edit?tab=t.0",
-                      target: null,
-                      rel: "noopener noreferrer nofollow",
-                      class: null,
-                    },
-                  },
-                ],
-                text: "Follow the spicy bingo rules!",
-              },
-            ],
-          },
-        ],
-      })
+    ? "Follow the spicy bingo rules!\nhttps://docs.google.com/document/d/1Snf0qAm68dRROjoh8hb3Rn0OV-THyD2PcLJeuN-209U/edit?tab=t.0"
     : null;
   const newSeed = Math.ceil(999999 * Math.random());
   await sql`INSERT INTO daily (
@@ -198,20 +170,12 @@ async function getDailyBoard(date: LocalDate): Promise<DailyData> {
   };
 }
 
-async function DailyPage(props: { searchParams?: Promise<FilterParams> }) {
+export default async function DailyPage(props: {
+  searchParams?: Promise<FilterParams>;
+}) {
   const params = await props.searchParams;
   const dateParam = params?.date;
   const date = dateParam == null ? getEasternDate() : fromISODate(dateParam);
   const dailyData = await getDailyBoard(date);
   return <DailyFeedFetcher date={date} dailyData={dailyData} />;
-}
-
-export default async function DailyPageWrapper(props: {
-  searchParams?: Promise<FilterParams>;
-}) {
-  return (
-    <Suspense>
-      <DailyPage searchParams={props.searchParams} />
-    </Suspense>
-  );
 }

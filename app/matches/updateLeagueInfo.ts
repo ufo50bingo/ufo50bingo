@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag, updateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import syncToGSheet from "./syncToGSheet";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 import { LeagueInfo } from "../createboard/createMatch";
@@ -33,7 +33,7 @@ export default async function updateLeagueInfo(
       ? `, Game ${update.game}`
       : "";
 
-  const sql = getSql();
+  const sql = getSql(false);
   const result =
     update.type === "league"
       ? await sql`
@@ -62,8 +62,8 @@ export default async function updateLeagueInfo(
           league_game = NULL
         WHERE id = ${id}
         RETURNING ${MATCH_FIELDS}`;
-  updateTag(`match-${id}`);
-  revalidateTag("matches", "max");
+  revalidatePath("/matches");
+  revalidatePath(`/match/${id}`);
   const rawMatch = result[0];
   const finalMatch = getMatchFromRaw(rawMatch);
   await syncToGSheet(finalMatch);

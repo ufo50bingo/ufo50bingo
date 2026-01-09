@@ -17,19 +17,11 @@ import { NextGoalChoice, useAppContext } from "../AppContextProvider";
 import ExportCSV from "./ExportCSV";
 import ImportCSV from "./ImportCSV";
 import MigrateHistory from "./MigrateHistory";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 
 const ADMIN_PASSWORD = "R54o7h1OEXbGCUBGYvAV";
 
-export default function Wrapper() {
-  return (
-    <Suspense>
-      <Settings />
-    </Suspense>
-  );
-}
-
-function Settings() {
+export default function Settings() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const { nextGoalChoice, setNextGoalChoice, setIsAdmin } = useAppContext();
   const [isAdminModalShown, setIsAdminModalShown] = useState(false);

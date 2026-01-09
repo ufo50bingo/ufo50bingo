@@ -1,9 +1,7 @@
 import Matches, { AdminFilter, Match } from "./Matches";
 import getSql from "../getSql";
+import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 import { NeonQueryFunction, NeonQueryPromise } from "@neondatabase/serverless";
-import { cacheLife, cacheTag } from "next/cache";
-import fetchMatch from "./fetchMatch";
-import { Suspense } from "react";
 
 const PAGE_SIZE = 20;
 
@@ -19,31 +17,16 @@ type FilterParams = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type SQL = NeonQueryPromise<false, false, Record<string, any>[]>;
 
-export default function Wrapper(props: {
+export default async function MatchesFetcher(props: {
   searchParams?: Promise<FilterParams>;
 }) {
-  return (
-    <Suspense>
-      <ParamsFetcher {...props} />
-    </Suspense>
-  );
-}
-
-async function ParamsFetcher(props: { searchParams?: Promise<FilterParams> }) {
   const searchParams = await props.searchParams;
-  return <MatchesFetcher searchParams={searchParams} />
-}
+  const filterSql = getFilterSql(searchParams);
 
-async function MatchesFetcher(props: { searchParams: FilterParams | undefined }) {
-  "use cache";
-  cacheLife("max");
-  cacheTag("matches");
-
-  const searchParams = await props.searchParams;
   const pageNumber = Number(searchParams?.page ?? "1");
   const [totalPages, matches] = await Promise.all([
-    fetchTotalPages(searchParams),
-    fetchMatches(pageNumber, searchParams),
+    fetchTotalPages(filterSql),
+    fetchMatches(pageNumber, filterSql),
   ]);
   return <Matches matches={matches} totalPages={totalPages} />;
 }
@@ -69,8 +52,8 @@ function getFilterSql(searchParams: FilterParams | undefined): SQL {
     season == null
       ? sql``
       : season == 0
-        ? sql`AND league_season IS NULL`
-        : sql`AND league_season = ${season}`;
+      ? sql`AND league_season IS NULL`
+      : sql`AND league_season = ${season}`;
 
   const weekStr = searchParams?.week;
   const weekSql =
@@ -106,10 +89,7 @@ function getFilterSql(searchParams: FilterParams | undefined): SQL {
   return sql`${seasonSql} ${weekSql} ${tierSql} ${playerSql} ${adminSql}`;
 }
 
-async function fetchTotalPages(
-  filterParams: FilterParams | undefined
-): Promise<number> {
-  const filterSql = getFilterSql(filterParams);
+async function fetchTotalPages(filterSql: SQL): Promise<number> {
   const sql = getSql();
   const result = await sql`
     SELECT COUNT(id) as total_matches
@@ -122,15 +102,14 @@ async function fetchTotalPages(
   return Math.ceil(totalMatches / PAGE_SIZE);
 }
 
-async function fetchMatchIDs(
+async function fetchMatches(
   pageNumber: number,
-  filterParams: FilterParams | undefined
-): Promise<ReadonlyArray<string>> {
-  const filterSql = getFilterSql(filterParams);
+  filterSql: SQL
+): Promise<ReadonlyArray<Match>> {
   const sql = getSql();
   const result = await sql`
     SELECT
-      id
+      ${MATCH_FIELDS}
     FROM match
     WHERE
       is_public = TRUE
@@ -139,20 +118,5 @@ async function fetchMatchIDs(
     ORDER BY date_created DESC
     OFFSET ${(pageNumber - 1) * PAGE_SIZE}
     LIMIT ${PAGE_SIZE}`;
-  return result.map((row) => row.id);
-}
-
-async function fetchMatchesFromIDs(
-  ids: ReadonlyArray<string>
-): Promise<ReadonlyArray<Match>> {
-  const matches = await Promise.all(ids.map(async (id) => fetchMatch(id)));
-  return matches.filter((match) => match != null);
-}
-
-async function fetchMatches(
-  pageNumber: number,
-  filterParams: FilterParams | undefined
-): Promise<ReadonlyArray<Match>> {
-  const ids = await fetchMatchIDs(pageNumber, filterParams);
-  return fetchMatchesFromIDs(ids);
+  return result.map(getMatchFromRaw);
 }

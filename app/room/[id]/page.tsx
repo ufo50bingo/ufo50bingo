@@ -1,22 +1,13 @@
-import { Suspense } from "react";
 import CastPage from "./cast/CastPage";
 import Login from "./Login";
 import PlayPage from "./play/PlayPage";
 import { readRoomCookie } from "./roomCookie";
 
-export default async function Wrapper({
+export default async function RoomPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  return (
-    <Suspense>
-      <RoomPage params={params} />
-    </Suspense>
-  );
-}
-
-async function RoomPage({ params }: { params: Promise<{ id: string }> }) {
   const [{ id }, roomCookie] = await Promise.all([params, readRoomCookie()]);
   if (roomCookie == null) {
     return <Login id={id} />;

@@ -106,6 +106,7 @@ export default function MatchView({ match }: Props) {
     createdMatchIDs,
     hideByDefault,
     isAdmin,
+    isMounted,
     revealedMatchIDs,
   } = useAppContext();
 
@@ -209,7 +210,7 @@ export default function MatchView({ match }: Props) {
     </Button>
   );
 
-  if (hideByDefault && revealedMatchIDs == null) {
+  if (!isMounted || (hideByDefault && revealedMatchIDs == null)) {
     return null;
   }
   return (

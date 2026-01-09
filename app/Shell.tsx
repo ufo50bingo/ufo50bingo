@@ -86,7 +86,7 @@ const LINKS = [
     text: "Underground",
     icon: <IconBuildingTunnel size={25} stroke={1.5} />,
     isNewTab: true,
-  },
+  }
   // {
   //   href: '/boardanalyzer',
   //   text: 'Board Analyzer',
@@ -150,7 +150,6 @@ export default function Shell({ children }: Props) {
             label={data.text}
             onClick={() => setIsCollapsedMobile(true)}
             target={data.isNewTab ? "_blank" : undefined}
-            prefetch={data.isNewTab ? false : undefined}
           />
         ))}
       </AppShell.Navbar>

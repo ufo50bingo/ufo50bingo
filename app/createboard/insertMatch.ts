@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { CommonMatchProps } from "./createMatch";
 import getSql from "../getSql";
 import { Variant } from "../pastas/metadata";
@@ -38,7 +38,7 @@ export async function insertMatch({
   leagueInfo,
   cookie,
 }: Props): Promise<void> {
-  const sql = getSql();
+  const sql = getSql(false);
 
   await sql`INSERT INTO match (
     id,
@@ -73,5 +73,5 @@ export async function insertMatch({
     ${cookie},
     ${getDefaultAnalysisSeconds(variant)}
   );`;
-  revalidateTag("matches", "max");
+  revalidatePath("/matches");
 }

@@ -39,13 +39,8 @@ import getEmojiBoard from "./getEmojiBoard";
 import DailyBoardModal from "./DailyBoardModal";
 import useWakeLock from "../room/[id]/play/useWakeLock";
 import { DailyData } from "./page";
+import EditDaily from "./EditDaily";
 import getDailyTimes from "./getDailyTimes";
-import { JSONContent } from "@tiptap/react";
-import dynamic from "next/dynamic";
-import getRTContent from "./getRTContent";
-import RTView from "./RTView";
-
-const EditDaily = dynamic(() => import("./EditDaily"), { ssr: false });
 
 type Props = {
   date: LocalDate;
@@ -67,11 +62,6 @@ export default function Daily({
   const [color, setColor] = useDailyColor();
   const [isStartingNewAttempt, setIsStartingNewAttempt] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
-  const description: null | JSONContent = useMemo(
-    () => getRTContent(dailyData.description),
-    [dailyData.description]
-  );
 
   const feed = useMemo(
     () => getDailyFeedWithoutMistakes(feedWithMistakes, attempt),
@@ -177,7 +167,11 @@ export default function Daily({
                 <em>Created by {dailyData.creator}</em>
               </Text>
             )}
-            {description != null && <RTView content={description} />}
+            {dailyData.description != null && dailyData.description != "" && (
+              <Text style={{ whiteSpace: "pre-line" }}>
+                {dailyData.description}
+              </Text>
+            )}
           </Stack>
         </Card.Section>
         <Card.Section withBorder={true} inheritPadding={true} py="xs">
@@ -496,7 +490,6 @@ export default function Daily({
       {isEditing && (
         <EditDaily
           dailyData={dailyData}
-          description={description}
           date={date}
           onClose={() => setIsEditing(false)}
         />

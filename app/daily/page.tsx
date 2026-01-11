@@ -147,7 +147,31 @@ async function getDailyBoard(date: LocalDate): Promise<DailyData> {
   const newBoard = await constructBoard(date, isSunday);
   const newTitle = isSunday ? "Spicy Sunday" : null;
   const newDescription = isSunday
-    ? "Follow the spicy bingo rules!\nhttps://docs.google.com/document/d/1Snf0qAm68dRROjoh8hb3Rn0OV-THyD2PcLJeuN-209U/edit?tab=t.0"
+    ? JSON.stringify({
+        type: "doc",
+        content: [
+          {
+            type: "paragraph",
+            content: [
+              {
+                type: "text",
+                marks: [
+                  {
+                    type: "link",
+                    attrs: {
+                      href: "https://docs.google.com/document/d/1Snf0qAm68dRROjoh8hb3Rn0OV-THyD2PcLJeuN-209U/edit?tab=t.0",
+                      target: null,
+                      rel: "noopener noreferrer nofollow",
+                      class: null,
+                    },
+                  },
+                ],
+                text: "Follow the spicy bingo rules!",
+              },
+            ],
+          },
+        ],
+      })
     : null;
   const newSeed = Math.ceil(999999 * Math.random());
   await sql`INSERT INTO daily (

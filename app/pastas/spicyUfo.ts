@@ -163,7 +163,7 @@ export const SPICY_UFO = {
         "LORDS OF DISKONIA: Win a Quick Battle on Commander difficulty with at least 2 of your units remaining",
       ],
       nightmanor: [
-        "NIGHT MANOR: Gold disk with an in-game time of 2:05 or less",
+        "NIGHT MANOR: Gold disk with an in-game time of 1:54 or less",
         "NIGHT MANOR: Starting from 3 different rooms, escape the killer 3 times by running far enough away that he gives up",
       ],
       elfazarshat: [
@@ -211,7 +211,7 @@ export const SPICY_UFO = {
         "PAINT CHASE: Score 280+ Points without failing any courses",
       ],
       magicgarden: [
-        "MAGIC GARDEN: Cherry disk in under 5:00 in-game time",
+        "MAGIC GARDEN: Cherry disk in under 4:35 in-game time",
         "MAGIC GARDEN: Gold disk; Ignore the first 5 star pads and never kill the 5 mushrooms that spawn",
       ],
       velgress: [
@@ -1060,3 +1060,4 @@ export const SPICY_UFO = {
   },
   categories_with_global_group_repeat_prevention: ["general"],
 } as const;
+

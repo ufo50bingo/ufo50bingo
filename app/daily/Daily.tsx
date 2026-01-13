@@ -354,7 +354,7 @@ export default function Daily({
               on the official Discord!
             </Text>
             <Button
-              disabled={bingo == null && majority == null && blackout == null}
+              disabled={bingo == null && majority == null && blackout == null && finalBoard == null}
               leftSection={<IconClipboard size={16} />}
               onClick={() => {
                 let summary = `[Daily Bingo ${date.month}/${date.day}](<https://ufo50.bingo/daily?date=${isoDate}>) — `;

@@ -86,9 +86,9 @@ export default function Daily({
   const finalMark = feed.findLastIndex((item) => item.type === "mark");
   const finalBoard =
     finalMark >= 0 &&
-    finalMark !== bingo &&
-    finalMark !== majority &&
-    finalMark !== blackout
+      finalMark !== bingo &&
+      finalMark !== majority &&
+      finalMark !== blackout
       ? finalMark
       : null;
 
@@ -357,7 +357,7 @@ export default function Daily({
               disabled={bingo == null && majority == null && blackout == null}
               leftSection={<IconClipboard size={16} />}
               onClick={() => {
-                let summary = `Daily Bingo ${date.month}/${date.day} — `;
+                let summary = `[Daily Bingo ${date.month}/${date.day}](<https://ufo50.bingo/daily?date=${isoDate}>) — `;
                 let isFirst = true;
                 if (bingo != null) {
                   if (isFirst) {
@@ -424,9 +424,8 @@ export default function Daily({
                         ? duration - completions[index - 1][2]
                         : duration;
                     const formattedDur = getDurationText(ms, false);
-                    return `${index + 1}. ${formattedDur} — ${
-                      plainBoard[squareIndex]
-                    }`;
+                    return `${index + 1}. ${formattedDur} — ${plainBoard[squareIndex]
+                      }`;
                   }
                 );
                 summary += "\n";

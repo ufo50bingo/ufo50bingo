@@ -82,6 +82,7 @@ export const SPICY_UFO = {
       ],
       waldorfsjourney: [
         "WALDORF’S JOURNEY: Have 40 shells at once before reaching the castle, without opening any chests",
+        "WALDORF’S JOURNEY: Cherry disk 2 runs in a row",
         "WALDORF’S JOURNEY: Reach the castle with your stamina maxed out",
       ],
       porgy: [
@@ -110,12 +111,14 @@ export const SPICY_UFO = {
       ],
       railheist: [
         "RAIL HEIST: Beat levels 1, 2, and 3 while knocking every lawman off the train",
+        "RAIL HEIST: Beat levels 1 through 5 with a speed record of 18 or less on each",
         "RAIL HEIST: Collect the Angel and Devil stars on {{rh_level}}, {{rh_level}}, and {{rh_level}}",
         "RAIL HEIST: Obtain both the Devil Star & Time Star on 6 levels (Levels 1-3 excluded)",
       ],
       vainger: [
         "VAINGER: Defeat {{vainger_boss}} with at least two modules placed in {{vainger_slot}}",
         "VAINGER: Obtain {{vainger_item}} from three different sectors",
+        "VAINGER: Collect a keycode with zero deaths in the run",
       ],
       rockonisland: [
         "ROCK ON! ISLAND: Beat Initial Encounter with an upgraded caveman (rock, spear, or fire) on every available tile",
@@ -600,6 +603,7 @@ export const SPICY_UFO = {
       ],
       cyberowls: [
         "CYBER OWLS: Gold Disk with 3 or fewer deaths",
+        "CYBER OWLS: Have 4,000+ Points in HQ without playing Congo",
         "CYBER OWLS: HAWK-BASE allowed; Beat Antarctica with no deaths",
       ],
     },
@@ -742,6 +746,9 @@ export const SPICY_UFO = {
         "CAMPANELLA 2: Cherry disk with at least 6 upgrades (square icons on left of screen)",
         "CAMPANELLA 2: Gold disk with at least 8 upgrades (square icons on left of screen)",
       ],
+      hypercontender: [
+        "HYPER CONTENDER: Gold disk on Hyper difficulty",
+      ],
       valbrace: [
         "VALBRACE: Gold Disk",
         "VALBRACE: Level up at four thrones in one run",
@@ -772,6 +779,10 @@ export const SPICY_UFO = {
       seasidedrive: [
         "SEASIDE DRIVE: Cherry disk with 333,333 points or more",
         "SEASIDE DRIVE: Cherry disk without collecting any coins",
+         ],
+      campanella3: [
+        "CAMPANELLA 3: 100% 2 waves in stage D",
+        "CAMPANELLA 3: Beat the game with at least 16/20 star waves (100% or 0%)",
       ],
     },
     general: {
@@ -1060,4 +1071,5 @@ export const SPICY_UFO = {
   },
   categories_with_global_group_repeat_prevention: ["general"],
 } as const;
+
 

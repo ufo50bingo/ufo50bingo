@@ -10,6 +10,7 @@ import {
   IconDeviceGamepad,
   IconFilter,
   IconHelp,
+  IconPepper,
   IconPlaylistAdd,
   IconScoreboard,
   IconScript,
@@ -85,6 +86,12 @@ const LINKS = [
     href: "/underground",
     text: "Underground",
     icon: <IconBuildingTunnel size={25} stroke={1.5} />,
+    isNewTab: true,
+  },
+  {
+    href: "/spicy",
+    text: "Spicy",
+    icon: <IconPepper size={25} stroke={1.5} />,
     isNewTab: true,
   }
   // {

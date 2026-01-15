@@ -17,7 +17,7 @@ const SHEETS: ReadonlyArray<Sheet> = [
   { sheetID: LEAGUE_SHEET_ID, leaguePrefix: "" },
   { sheetID: UNDERGROUND_SHEET_ID, leaguePrefix: "Underground " },
   { sheetID: OFFSEASON_SHEET_ID, leaguePrefix: null },
-  { sheetID: SPICY_SHEET_ID, leaguePrefix: "Spicy " },
+  { sheetID: SPICY_SHEET_ID, leaguePrefix: "" },
 ];
 
 export type ScheduledMatch = {

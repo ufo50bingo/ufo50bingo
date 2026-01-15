@@ -22,6 +22,12 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/spicy",
+        destination:
+          "https://docs.google.com/spreadsheets/d/1oQktL5q8eVWrI_Zbacjv-supFhuQI4h63tiVcMkan4E/edit?gid=1916787881#gid=1916787881",
+        permanent: true,
+      },
+      {
         source: "/cast/:id",
         destination: "/room/:id",
         permanent: true,

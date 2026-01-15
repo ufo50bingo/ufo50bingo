@@ -1,7 +1,7 @@
 import { google } from "googleapis";
 import { DateTime } from "luxon";
 
-const LEAGUE_SHEET_ID = "1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA";
+// const LEAGUE_SHEET_ID = "1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA";
 const UNDERGROUND_SHEET_ID = "1OocDHEbrJC3BqO8qrPFCYxyy2nzqAaTT6Hmix076Ea0";
 const OFFSEASON_SHEET_ID = "1FuvQLFIM38sZKXF4hnMtLWjWBo1jOokM659N-BRu2uk";
 const SPICY_SHEET_ID = "1oQktL5q8eVWrI_Zbacjv-supFhuQI4h63tiVcMkan4E";
@@ -14,7 +14,7 @@ type Sheet = {
 };
 
 const SHEETS: ReadonlyArray<Sheet> = [
-  { sheetID: LEAGUE_SHEET_ID, leaguePrefix: "" },
+  // { sheetID: LEAGUE_SHEET_ID, leaguePrefix: "" },
   { sheetID: UNDERGROUND_SHEET_ID, leaguePrefix: "Underground " },
   { sheetID: OFFSEASON_SHEET_ID, leaguePrefix: null },
   { sheetID: SPICY_SHEET_ID, leaguePrefix: "" },

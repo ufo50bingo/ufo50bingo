@@ -15,6 +15,10 @@ function sign(payload: string): string {
     .digest("hex");
 }
 
+export function createUserID(): string {
+  return crypto.randomUUID();
+}
+
 export async function readSession(): Promise<Session | null> {
   const cookieStore = await cookies();
   const data = cookieStore.get("session_data")?.value;

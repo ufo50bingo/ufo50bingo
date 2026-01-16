@@ -26,7 +26,8 @@ export const MATCH_FIELDS = getSql()`
   league_week,
   league_p1,
   league_p2,
-  league_game`;
+  league_game,
+  creator_id`;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getMatchFromRaw(rawMatch: Record<string, any>): Match {
@@ -95,5 +96,6 @@ export function getMatchFromRaw(rawMatch: Record<string, any>): Match {
     analysisSeconds: rawMatch.analysis_seconds ?? 60,
     vod,
     leagueInfo,
+    creatorID: rawMatch.creator_id ?? null,
   };
 }

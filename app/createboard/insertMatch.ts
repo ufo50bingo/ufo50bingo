@@ -8,6 +8,7 @@ import { Variant } from "../pastas/metadata";
 interface Props extends CommonMatchProps {
   id: string;
   cookie: string;
+  creatorID: string;
 }
 
 function getDefaultAnalysisSeconds(variant: Variant): number {
@@ -37,6 +38,7 @@ export async function insertMatch({
   isLockout,
   leagueInfo,
   cookie,
+  creatorID,
 }: Props): Promise<void> {
   const sql = getSql(false);
 
@@ -55,7 +57,8 @@ export async function insertMatch({
     league_p2,
     league_game,
     sessionid_cookie,
-    analysis_seconds
+    analysis_seconds,
+    creator_id
   ) VALUES (
     ${id},
     ${roomName},
@@ -71,7 +74,8 @@ export async function insertMatch({
     ${leagueInfo?.p2},
     ${leagueInfo?.game},
     ${cookie},
-    ${getDefaultAnalysisSeconds(variant)}
+    ${getDefaultAnalysisSeconds(variant)},
+    ${creatorID}
   );`;
   revalidatePath("/matches");
 }

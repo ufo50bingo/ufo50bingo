@@ -93,6 +93,7 @@ export interface Match {
   vod: null | Vod;
   analysisSeconds: number;
   leagueInfo: null | LeagueInfo;
+  creatorID: null | string;
 }
 
 type Props = {
@@ -265,13 +266,13 @@ export default function Matches({ matches, totalPages }: Props) {
   const isDirty =
     (getSeasonStr(season) ?? null) !== (searchParams.get("season") ?? null) ||
     (tier == null || tier === "" ? null : tier) !==
-    (searchParams.get("tier") ?? null) ||
+      (searchParams.get("tier") ?? null) ||
     (week == null || week === "" ? null : week) !==
-    (searchParams.get("week") ?? null) ||
+      (searchParams.get("week") ?? null) ||
     (player == null || player === "" ? null : player) !==
-    (searchParams.get("player") ?? null) ||
+      (searchParams.get("player") ?? null) ||
     (admin == null || admin === "" ? null : admin) !==
-    (searchParams.get("admin") ?? null);
+      (searchParams.get("admin") ?? null);
 
   const viewingMatch =
     viewingId == null ? null : matches.find((match) => match.id === viewingId);
@@ -300,7 +301,7 @@ export default function Matches({ matches, totalPages }: Props) {
         <Alert variant="light">
           <Text size="sm">
             When you finish your match, please use the{" "}
-            <ActionIcon color="green" onClick={() => { }}>
+            <ActionIcon color="green" onClick={() => {}}>
               <IconEdit size={16} />
             </ActionIcon>{" "}
             icon to Refresh data from Bingosync and add a VOD Link, if

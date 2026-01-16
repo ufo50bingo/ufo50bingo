@@ -3,6 +3,11 @@
 import getCsrfData from "../getCsrfData";
 import { insertMatch } from "./insertMatch";
 import { Variant } from "../pastas/metadata";
+import {
+  createUserID,
+  readSession,
+  writeSession,
+} from "../session/sessionUtil";
 
 const BINGOSYNC_BASE_URL = "https://www.bingosync.com/";
 
@@ -41,7 +46,12 @@ export default async function createMatch({
   pasta,
   leagueInfo,
 }: Props): Promise<string> {
-  const { cookie, token } = await getCsrfData();
+  const [{ cookie, token }, userSessionRead] = await Promise.all([
+    getCsrfData(),
+    readSession(),
+  ]);
+
+  const userSession = userSessionRead ?? { id: createUserID(), admin: false };
 
   const createResponse = await fetch(BINGOSYNC_BASE_URL, {
     method: "POST",
@@ -85,6 +95,8 @@ export default async function createMatch({
     throw new Error(`Failed to fetch session cookie for id ${id}`);
   }
 
+  await writeSession(userSession);
+
   // add room to table for tracking
   // shouldn't need the `await` here, but nextjs complains
   // if you revalidate while rendering
@@ -98,6 +110,7 @@ export default async function createMatch({
     isLockout,
     leagueInfo,
     cookie: sessionCookie,
+    creatorID: userSession.id,
   });
 
   return id;

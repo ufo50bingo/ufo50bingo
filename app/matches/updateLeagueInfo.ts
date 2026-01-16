@@ -10,6 +10,7 @@ import { Changelog, TBoard } from "./parseBingosyncData";
 import { getResult, getResultSql } from "./computeResult";
 import { Match } from "./Matches";
 import fetchMatch from "./fetchMatch";
+import { readSession, writeSession } from "../session/sessionUtil";
 
 interface LeagueUpdate extends LeagueInfo {
   type: "league";
@@ -26,7 +27,17 @@ export default async function updateLeagueInfo(
   id: string,
   update: LeagueInfoUpdate
 ): Promise<void> {
-  const match = await fetchMatch(id);
+  const [match, session] = await Promise.all([fetchMatch(id), readSession()]);
+  if (match == null) {
+    throw new Error(`Match ${id} not found!`);
+  }
+  if (session == null) {
+    throw new Error("No session found!");
+  }
+  if (session.admin === false && session.id !== match.creatorID) {
+    throw new Error("You do not have permission to update this match!");
+  }
+
   const matchResultSql = getMatchResultSql(match, update);
   const gameSuffix =
     update.type === "league" && update.game != null
@@ -67,6 +78,7 @@ export default async function updateLeagueInfo(
   const rawMatch = result[0];
   const finalMatch = getMatchFromRaw(rawMatch);
   await syncToGSheet(finalMatch);
+  await writeSession(session);
 }
 
 function getMatchResultSql(

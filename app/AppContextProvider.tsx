@@ -38,8 +38,6 @@ type AppContextType = {
   goalPartsAndPasta: GoalPartsAndPasta;
   createdMatchIDs: Set<string>;
   revealedMatchIDs: null | Set<string>;
-  isAdmin: boolean;
-  setIsAdmin: (newIsAdmin: boolean) => void;
   hideByDefault: boolean;
   setHideByDefault: (newHideByDefault: boolean) => void;
   isMounted: boolean;
@@ -140,21 +138,6 @@ export function AppContextProvider({
     [pasta]
   );
 
-  // super insecure, but good enough to stop most people
-  const [isAdmin, setIsAdminRaw] = useState(false);
-  useEffect(() => {
-    setIsAdminRaw(
-      global.window != undefined && localStorage?.getItem("isAdmin") === "true"
-    );
-  }, []);
-  const setIsAdmin = useCallback(
-    (newIsAdmin: boolean) => {
-      setIsAdminRaw(newIsAdmin);
-      window?.localStorage?.setItem("isAdmin", newIsAdmin ? "true" : "false");
-    },
-    [setIsAdminRaw]
-  );
-
   const [hideByDefault, setHideByDefaultRaw] = useState(false);
   useEffect(() => {
     setHideByDefaultRaw(
@@ -194,8 +177,6 @@ export function AppContextProvider({
       nextGoalChoice,
       createdMatchIDs,
       revealedMatchIDs,
-      isAdmin,
-      setIsAdmin,
       hideByDefault,
       setHideByDefault,
       isMounted,
@@ -212,8 +193,6 @@ export function AppContextProvider({
       nextGoalChoice,
       createdMatchIDs,
       revealedMatchIDs,
-      isAdmin,
-      setIsAdmin,
       hideByDefault,
       setHideByDefault,
       isMounted,

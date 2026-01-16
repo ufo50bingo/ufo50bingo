@@ -41,6 +41,7 @@ import { db } from "../db";
 import EditLeagueModal from "./EditLeagueModal";
 import { useMediaQuery } from "@mantine/hooks";
 import { LEAGUE_SEASON } from "../createboard/leagueConstants";
+import useSession from "../session/useSession";
 
 type Props = {
   match: Match;
@@ -56,7 +57,7 @@ function getOverlays(
   const changes = getChangesWithoutMistakes(changelog.changes);
   const ranges = getSquareCompletionRanges(matchStartTime, changes);
 
-  console.log('ranges', ranges);
+  console.log("ranges", ranges);
   changes.forEach((change) => {
     if (change.color == "blank") {
       const oldOrder = orders[change.index];
@@ -76,7 +77,7 @@ function getOverlays(
     }
   });
 
-  console.log('orders', orders);
+  console.log("orders", orders);
 
   const overlays = Array(25)
     .fill(null)
@@ -102,13 +103,10 @@ function getOverlays(
 }
 
 export default function MatchView({ match }: Props) {
-  const {
-    createdMatchIDs,
-    hideByDefault,
-    isAdmin,
-    isMounted,
-    revealedMatchIDs,
-  } = useAppContext();
+  const { createdMatchIDs, hideByDefault, isMounted, revealedMatchIDs } =
+    useAppContext();
+  const session = useSession();
+  const isAdmin = session?.admin ?? false;
 
   const canEdit =
     (isAdmin || createdMatchIDs.has(match.id)) &&
@@ -446,9 +444,9 @@ export default function MatchView({ match }: Props) {
                 vod={
                   match.vod != null && match.vod.startSeconds != null
                     ? {
-                      url: match.vod.url,
-                      startSeconds: match.vod.startSeconds,
-                    }
+                        url: match.vod.url,
+                        startSeconds: match.vod.startSeconds,
+                      }
                     : null
                 }
                 analysisSeconds={match.analysisSeconds}

@@ -54,6 +54,7 @@ import {
 import { useMediaQuery } from "@mantine/hooks";
 import { db } from "../db";
 import EditLeagueModal from "./EditLeagueModal";
+import useSession from "../session/useSession";
 
 const ADMIN_FILTERS = [
   {
@@ -222,9 +223,10 @@ export default function Matches({ matches, totalPages }: Props) {
     createdMatchIDs,
     hideByDefault,
     setHideByDefault,
-    isAdmin,
     revealedMatchIDs,
   } = useAppContext();
+  const session = useSession();
+  const isAdmin = session?.admin ?? false;
 
   const searchParams = useSearchParams();
   const pathname = usePathname();

@@ -348,16 +348,14 @@ export default function Matches({ matches, totalPages }: Props) {
               placeholder="Filter by player"
               spellCheck={false}
             />
-            {isAdmin && (
-              <Select
-                style={{ width: "150px" }}
-                data={ADMIN_FILTERS}
-                clearable={true}
-                value={admin}
-                onChange={setAdmin}
-                placeholder="Admin filters"
-              />
-            )}
+            <Select
+              style={{ width: "150px" }}
+              data={ADMIN_FILTERS}
+              clearable={true}
+              value={admin}
+              onChange={setAdmin}
+              placeholder="Other filters"
+            />
             <Button
               leftSection={<IconFilter size={16} />}
               component={Link}

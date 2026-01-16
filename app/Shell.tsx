@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { ReactNode, useState } from "react";
 import {
   AppShell,
@@ -27,8 +26,9 @@ import {
   IconTournament,
   IconVs,
 } from "@tabler/icons-react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import usePracticeVariant, { PRACTICE_VARIANTS } from "./usePracticeVariant";
+import LinkWithVariant from "./links/LinkWithVariant";
 
 const LINKS = [
   {
@@ -120,6 +120,7 @@ export default function Shell({ children }: Props) {
   const router = useRouter();
   const pv = usePracticeVariant();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const page = LINKS.find((data) => data.href === pathname);
   let title = page?.text;
   if (title == null && pathname.startsWith("/match/")) {
@@ -163,7 +164,7 @@ export default function Shell({ children }: Props) {
               data.href === pathname ||
               (data.href === "/matches" && pathname.startsWith("/match/"))
             }
-            component={Link}
+            component={LinkWithVariant}
             href={data.href}
             leftSection={data.icon}
             label={data.text}
@@ -175,7 +176,21 @@ export default function Shell({ children }: Props) {
           <div style={{ padding: "8px" }}>
             <Select
               value={pv}
-              onChange={(newValue) => router.push(`${pathname}?v=${newValue}`)}
+              onChange={(newValue) => {
+                const newSearchParams = new URLSearchParams(searchParams);
+                if (newValue !== "standard" && newValue) {
+                  newSearchParams.set("v", newValue);
+                  router.push(`${pathname}?v=${newValue}`);
+                } else {
+                  newSearchParams.delete("v");
+                  router.push(pathname);
+                }
+                const newHref =
+                  newSearchParams.size > 0
+                    ? `${pathname}?${newSearchParams.toString()}`
+                    : pathname;
+                router.push(newHref);
+              }}
               data={Object.keys(PRACTICE_VARIANTS).map((key) => ({
                 value: key,
                 label: PRACTICE_VARIANTS[key as keyof typeof PRACTICE_VARIANTS],

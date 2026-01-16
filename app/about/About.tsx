@@ -5,6 +5,7 @@ import { Card, Container, Divider, List, Title } from "@mantine/core";
 import Board from "../Board";
 import { useState } from "react";
 import { BingosyncColor, TBoard } from "../matches/parseBingosyncData";
+import LinkWithVariant from "../links/LinkWithVariant";
 
 const COLOR: BingosyncColor = "red";
 
@@ -110,7 +111,8 @@ export default function About({ initialBoard }: Props) {
         <p>Creating a standard match is simple!</p>
         <List type="ordered">
           <List.Item>
-            Go to the <Link href="/">Create Match</Link> tab
+            Go to the <LinkWithVariant href="/">Create Match</LinkWithVariant>{" "}
+            tab
           </List.Item>
           <List.Item>Click on "Non-League"</List.Item>
           <List.Item>Enter a Room Name and Password.</List.Item>
@@ -132,35 +134,39 @@ export default function About({ initialBoard }: Props) {
         <p>
           Most players use the Standard variant (goal list), but UFO 50 Bingo
           supports other variants as well. Hover over the names of variants on
-          the Non-League section of the <Link href="/">Create Match</Link> tab
-          to explore them!
+          the Non-League section of the{" "}
+          <LinkWithVariant href="/">Create Match</LinkWithVariant> tab to
+          explore them!
         </p>
         <p>
           In addition to selecting alternate goal lists, the "Customize game and
           difficulty counts" checkbox on the Non-League section of the{" "}
-          <Link href="/">Create Match</Link> tab allows you to change which
-          goals will appear in your match. You can choose games to
-          include/exclude from your match, or update the difficulty distribution
-          to have an easier or harder match than usual.
+          <LinkWithVariant href="/">Create Match</LinkWithVariant> tab allows
+          you to change which goals will appear in your match. You can choose
+          games to include/exclude from your match, or update the difficulty
+          distribution to have an easier or harder match than usual.
         </p>
         <Title order={2}>Practice Tools</Title>
         <p>
           If you want to practice goals on your own, you can use the Non-League
-          section of the <Link href="/">Create Match</Link> tab to create a
-          board for yourself, try the <Link href="/daily">Daily Bingo</Link>, or
-          use the <Link href="/practice">Practice</Link> tab, which
-          automatically selects goals for you to attempt with built-in stat
-          tracking.
+          section of the{" "}
+          <LinkWithVariant href="/">Create Match</LinkWithVariant> tab to create
+          a board for yourself, try the{" "}
+          <LinkWithVariant href="/daily">Daily Bingo</LinkWithVariant>, or use
+          the <LinkWithVariant href="/practice">Practice</LinkWithVariant> tab,
+          which automatically selects goals for you to attempt with built-in
+          stat tracking.
         </p>
         <p>
-          The <Link href="goals">All Goals</Link> tab contains the full list of
-          Standard Bingo goals. From this tab, you can
+          The <LinkWithVariant href="goals">All Goals</LinkWithVariant> tab
+          contains the full list of Standard Bingo goals. From this tab, you can
         </p>
         <List>
           <List.Item>View your stats for every goal</List.Item>
           <List.Item>
             Uncheck goals to remove them from the{" "}
-            <Link href="/practice">Practice</Link> tab goal selection
+            <LinkWithVariant href="/practice">Practice</LinkWithVariant> tab
+            goal selection
           </List.Item>
           <List.Item>
             Immediately attempt a goal by clicking the blue "Play" button
@@ -171,7 +177,8 @@ export default function About({ initialBoard }: Props) {
           </List.Item>
         </List>
         <p>
-          You can also use the <Link href="/settings">Settings</Link> tab to
+          You can also use the{" "}
+          <LinkWithVariant href="/settings">Settings</LinkWithVariant> tab to
           change how practice goals are selected, back up your stats, or change
           to dark mode.
         </p>

@@ -34,10 +34,12 @@ import getFlatGoals from "../generator/getFlatGoals";
 import usePracticePasta from "../usePracticePasta";
 import getSubcategoryName from "../generator/getSubcategoryName";
 import getCategoryName from "../generator/getCategoryName";
+import usePracticeVariant from "../usePracticeVariant";
 
 export default function AllGoals() {
   const { goalStats, selectedGoals, setGoalPartsAndPasta } = useAppContext();
 
+  const practiceVariant = usePracticeVariant();
   const pasta = usePracticePasta();
   const flatGoals = getFlatGoals(pasta);
 
@@ -54,7 +56,11 @@ export default function AllGoals() {
     goalParts: ReadonlyArray<Plain | BaseToken | ResolvedToken>
   ) => {
     setGoalPartsAndPasta(resolveTokens(goalParts, pasta.tokens), pasta);
-    router.push("/practice");
+    if (practiceVariant !== "standard") {
+      router.push(`/practice?v=${practiceVariant}`);
+    } else {
+      router.push(`/practice`);
+    }
   };
 
   const allChecked = flatGoals.every((goal) => selectedGoals.has(goal.name));

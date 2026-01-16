@@ -1,18 +1,18 @@
 "use client";
 
 import { Alert, Card, Container, List, Title } from "@mantine/core";
-import Link from "next/link";
+import LinkWithVariant from "../links/LinkWithVariant";
 
 export default function Resources() {
   return (
     <Container my="md">
       <Card shadow="sm" padding="sm" radius="md" withBorder>
         <Alert variant="light">
-          <Link href="/about">
+          <LinkWithVariant href="/about">
             <Title order={5}>
               If you are new to UFO 50 Bingo, click here first!
             </Title>
-          </Link>
+          </LinkWithVariant>
         </Alert>
         <p>Bingo League</p>
         <List>
@@ -74,7 +74,8 @@ export default function Resources() {
           </List.Item>
           <List.Item>
             For details about Variants, hover over the variant names on the
-            Non-League section of <Link href="/">Create Match</Link>
+            Non-League section of{" "}
+            <LinkWithVariant href="/">Create Match</LinkWithVariant>
           </List.Item>
           <p>Community Tools</p>
           <List.Item>

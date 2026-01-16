@@ -9,11 +9,11 @@ import {
   SegmentedControl,
   Tooltip,
 } from "@mantine/core";
-import Link from "next/link";
 import { useState } from "react";
 import NonLeagueMatch from "./createboard/NonLeagueMatch";
 import LeagueMatch from "./createboard/LeagueMatch";
 import { LEAGUE_SEASON } from "./createboard/leagueConstants";
+import LinkWithVariant from "./links/LinkWithVariant";
 
 export default function CreateBoard() {
   const [matchType, setMatchType] = useState<"league" | "non-league" | null>(
@@ -29,8 +29,9 @@ export default function CreateBoard() {
               <Title order={1}>Create a UFO 50 Bingo Match</Title>
               <Text>
                 Use this page to create a UFO 50 Bingo Match! If you're new to
-                Bingo, check out the <Link href="/about">How to Play</Link> page
-                first!
+                Bingo, check out the{" "}
+                <LinkWithVariant href="/about">How to Play</LinkWithVariant>{" "}
+                page first!
               </Text>
               <Text>
                 If you want to create an unofficial match with the same goals as
@@ -44,13 +45,14 @@ export default function CreateBoard() {
                 data={[
                   {
                     value: "league",
-                    label: LEAGUE_SEASON == null ? (
-                      <Tooltip label="League play is not open yet!">
-                        <span>League</span>
-                      </Tooltip>
-                    ) : (
-                      "League"
-                    ),
+                    label:
+                      LEAGUE_SEASON == null ? (
+                        <Tooltip label="League play is not open yet!">
+                          <span>League</span>
+                        </Tooltip>
+                      ) : (
+                        "League"
+                      ),
                     disabled: LEAGUE_SEASON == null,
                   },
                   { value: "non-league", label: "Non-League" },

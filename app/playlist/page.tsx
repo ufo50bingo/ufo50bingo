@@ -1,12 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { IconGripVertical, IconPlaylistAdd, IconX } from "@tabler/icons-react";
 import { ActionIcon, Container, Table } from "@mantine/core";
 import { useAppContext } from "../AppContextProvider";
 import { db } from "../db";
 import { PRIORITY_MULTIPLIER } from "../PlaylistAddButton";
+import LinkWithVariant from "../links/LinkWithVariant";
 
 export default function Playlist() {
   const { playlist } = useAppContext();
@@ -96,8 +96,8 @@ export default function Playlist() {
           <ActionIcon onClick={() => {}} color="green">
             <IconPlaylistAdd size={16} />
           </ActionIcon>{" "}
-          on the <Link href="/goals">All Goals</Link> or{" "}
-          <Link href="/practice">Practice</Link> tabs.
+          on the <LinkWithVariant href="/goals">All Goals</LinkWithVariant> or{" "}
+          <LinkWithVariant href="/practice">Practice</LinkWithVariant> tabs.
         </>
       )}
     </Container>

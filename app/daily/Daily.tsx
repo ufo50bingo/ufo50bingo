@@ -44,6 +44,7 @@ import { JSONContent } from "@tiptap/react";
 import dynamic from "next/dynamic";
 import getRTContent from "./getRTContent";
 import RTView from "./RTView";
+import LinkWithVariant from "../links/LinkWithVariant";
 
 const EditDaily = dynamic(() => import("./EditDaily"), { ssr: false });
 
@@ -86,9 +87,9 @@ export default function Daily({
   const finalMark = feed.findLastIndex((item) => item.type === "mark");
   const finalBoard =
     finalMark >= 0 &&
-      finalMark !== bingo &&
-      finalMark !== majority &&
-      finalMark !== blackout
+    finalMark !== bingo &&
+    finalMark !== majority &&
+    finalMark !== blackout
       ? finalMark
       : null;
 
@@ -154,7 +155,7 @@ export default function Daily({
               <Group>
                 <Tooltip label="View previous day">
                   <ActionIcon
-                    component="a"
+                    component={LinkWithVariant}
                     variant="subtle"
                     href={`/daily?${prevSearchParams.toString()}`}
                   >
@@ -354,7 +355,12 @@ export default function Daily({
               on the official Discord!
             </Text>
             <Button
-              disabled={bingo == null && majority == null && blackout == null && finalBoard == null}
+              disabled={
+                bingo == null &&
+                majority == null &&
+                blackout == null &&
+                finalBoard == null
+              }
               leftSection={<IconClipboard size={16} />}
               onClick={() => {
                 let summary = `[Daily Bingo ${date.month}/${date.day}](<https://ufo50.bingo/daily?date=${isoDate}>) — `;
@@ -424,8 +430,9 @@ export default function Daily({
                         ? duration - completions[index - 1][2]
                         : duration;
                     const formattedDur = getDurationText(ms, false);
-                    return `${index + 1}. ${formattedDur} — ${plainBoard[squareIndex]
-                      }`;
+                    return `${index + 1}. ${formattedDur} — ${
+                      plainBoard[squareIndex]
+                    }`;
                   }
                 );
                 summary += "\n";

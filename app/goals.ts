@@ -1,5 +1,4 @@
 import { UFOGoal } from "./generator/getFlatGoals";
-import compareByDefault from "./goals/compareByDefault";
 import { STANDARD_UFO } from "./pastas/standardUfo";
 
 export const ORDERED_PROPER_GAMES = [
@@ -121,14 +120,17 @@ export const GAME_NAMES = {
   general: "General",
 } as const;
 
-export const SUBCATEGORY_NAMES = {
+const TYPED_SUBCATEGORY_NAMES = {
   ...GAME_NAMES,
   gift: "Gift",
   goldcherry: "Gold/Cherry",
   collectathon: "Collectathon",
   theme: "Theme",
   bosslevel: "Boss/Level",
-} as const;
+};
+
+export const SUBCATEGORY_NAMES: { [subcategory: string]: string } =
+  TYPED_SUBCATEGORY_NAMES;
 
 export const ORDERED_DIFFICULTY = [
   "easy",
@@ -150,49 +152,19 @@ export type StandardSubcategory =
   | keyof typeof STANDARD_UFO.goals.easy
   | keyof typeof STANDARD_UFO.goals.general;
 
-export const DIFFICULTY_NAMES = {
+export const DIFFICULTY_NAMES: { [category: string]: string } = {
   easy: "Easy",
   medium: "Medium",
   hard: "Hard",
   veryhard: "Very Hard",
   general: "General",
-} as const;
+};
 
 // verify that subcategories match
-const cat1: keyof typeof SUBCATEGORY_NAMES = "barbuta";
+const cat1: keyof typeof TYPED_SUBCATEGORY_NAMES = "barbuta";
 const cat2: StandardSubcategory = "barbuta";
 const _t3: StandardSubcategory = cat1;
-const _t4: keyof typeof SUBCATEGORY_NAMES = cat2;
-
-export interface StandardGoal {
-  name: string;
-  subcategory: StandardSubcategory;
-  category: Difficulty;
-}
-
-// const FLAT_GOALS: Array<StandardGoal> = [];
-// Object.keys(STANDARD_UFO.goals).forEach((untypedDifficulty) => {
-//   const difficulty = untypedDifficulty as Difficulty;
-//   const subcatToGoals = STANDARD_UFO.goals[difficulty];
-//   Object.entries(subcatToGoals).forEach(
-//     ([untypedSubcategory, untypedGoals]) => {
-//       const subcategory = untypedSubcategory as StandardSubcategory;
-//       const goals = untypedGoals as ReadonlyArray<string>;
-//       goals.forEach((goal) => {
-//         FLAT_GOALS.push({
-//           name: goal,
-//           subcategory,
-//           difficulty,
-//         });
-//       });
-//     }
-//   );
-// });
-
-// this also verifies that all Game and Difficulty options are consistent between the ordered
-// arrays in this file and the values in STANDARD
-// export const SORTED_FLAT_GOALS: ReadonlyArray<StandardGoal> =
-//   FLAT_GOALS.toSorted(compareByDefault);
+const _t4: keyof typeof TYPED_SUBCATEGORY_NAMES = cat2;
 
 export function compareByDifficulty(a: UFOGoal, b: UFOGoal): number {
   return (

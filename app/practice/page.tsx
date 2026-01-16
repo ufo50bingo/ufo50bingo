@@ -7,30 +7,35 @@ import { useAppContext } from "../AppContextProvider";
 import { db } from "../db";
 import Goal from "./Goal";
 import splitAtTokens, { ResolvedToken } from "../generator/splitAtTokens";
-import { STANDARD_UFO } from "../pastas/standardUfo";
-import resolveTokens from "../generator/resolveTokens";
 import getResolvedGoalText from "../generator/getResolvedGoalText";
-import findGoal from "../findGoal";
+import findGoalFromAny from "../findGoalFromAny";
+import usePracticePasta, { ALL_PRACTICE_PASTAS } from "../usePracticePasta";
 
 export default function Practice() {
   const {
     attempts,
     goalStats,
-    goalParts,
-    setGoalParts,
+    goalPartsAndPasta,
+    setGoalPartsAndPasta,
     playlist,
     getRandomGoal,
   } = useAppContext();
 
+  const practicePasta = usePracticePasta();
+
   const onTryStringGoal = useCallback(
     (goal: string) => {
-      const found = findGoal(goal, STANDARD_UFO);
-      if (found == null) {
-        setGoalParts(resolveTokens(splitAtTokens(goal), STANDARD_UFO.tokens));
+      const foundPair = findGoalFromAny(goal, [
+        practicePasta,
+        ...ALL_PRACTICE_PASTAS,
+      ]);
+      if (foundPair == null) {
+        setGoalPartsAndPasta([{ type: "plain", text: goal }], practicePasta);
       } else {
+        const found = foundPair.foundGoal;
         const split = splitAtTokens(found.goal);
         let tokenIndex = 0;
-        setGoalParts(
+        setGoalPartsAndPasta(
           split.map((part) => {
             if (part.type === "plain") {
               return part;
@@ -43,11 +48,12 @@ export default function Practice() {
               tokenIndex += 1;
               return resolved;
             }
-          })
+          }),
+          foundPair.pasta
         );
       }
     },
-    [setGoalParts]
+    [practicePasta, setGoalPartsAndPasta]
   );
 
   const goToNextGoal = useCallback(async () => {
@@ -55,20 +61,21 @@ export default function Practice() {
       onTryStringGoal(playlist[0].goal);
       db.playlist.delete(playlist[0].id);
     } else {
-      setGoalParts(getRandomGoal());
+      const { goalParts: newGoalparts, pasta: newPasta } = getRandomGoal();
+      setGoalPartsAndPasta(newGoalparts, newPasta);
     }
-  }, [playlist, setGoalParts, getRandomGoal, onTryStringGoal]);
+  }, [playlist, setGoalPartsAndPasta, getRandomGoal, onTryStringGoal]);
 
-  const goal = getResolvedGoalText(goalParts);
+  const goal = getResolvedGoalText(goalPartsAndPasta.goalParts);
 
   return (
     <Container my="md">
       <Stack>
         <Goal
           key={goal}
-          goalParts={goalParts}
+          goalPartsAndPasta={goalPartsAndPasta}
           onNext={goToNextGoal}
-          setGoalParts={setGoalParts}
+          setGoalPartsAndPasta={setGoalPartsAndPasta}
         />
         <AllAttempts
           attempts={attempts}

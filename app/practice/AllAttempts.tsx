@@ -94,7 +94,7 @@ export default function AllAttempts({
                         />
                       </ActionIcon>
                     </Tooltip>
-                    <PlaylistAddButton goal={attempt.goal} />
+                    <PlaylistAddButton goal={attempt.goal} tokens={null} />
                     <Tooltip label="Delete this attempt">
                       <ActionIcon
                         onClick={() => setDeletingAttempt(attempt)}

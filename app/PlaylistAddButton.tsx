@@ -2,17 +2,23 @@ import { IconPlaylistAdd } from "@tabler/icons-react";
 import { ActionIcon, Tooltip } from "@mantine/core";
 import { db } from "./db";
 import replaceTokens from "./generator/replaceTokens";
-import { STANDARD_UFO } from "./pastas/standardUfo";
+import { Tokens } from "./generator/ufoGenerator";
 
 export const PRIORITY_MULTIPLIER = 1024;
 
-type Props = { goal: string };
+type Props = { goal: string; tokens: null | Tokens };
 
-export default function PlaylistAddButton({ goal }: Props) {
+export default function PlaylistAddButton({ goal, tokens }: Props) {
   return (
     <Tooltip label="Add to playlist">
       <ActionIcon
-        onClick={() => addToPlaylist(replaceTokens(goal, STANDARD_UFO.tokens))}
+        onClick={() => {
+          if (tokens != null) {
+            addToPlaylist(replaceTokens(goal, tokens));
+            return;
+          }
+          addToPlaylist(goal);
+        }}
         color="green"
       >
         <IconPlaylistAdd size={16} />

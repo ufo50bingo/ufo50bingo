@@ -14,8 +14,9 @@ import useGoalStats, { GoalStats } from "./useGoalStats";
 import useSelectedGoals from "./useSelectedGoals";
 import splitAtTokens, { Plain, ResolvedToken } from "./generator/splitAtTokens";
 import resolveTokens from "./generator/resolveTokens";
+import usePracticePasta from "./usePracticePasta";
+import { UFOPasta } from "./generator/ufoGenerator";
 import { STANDARD_UFO } from "./pastas/standardUfo";
-import useLocalEnum from "./localStorage/useLocalEnum";
 
 export enum NextGoalChoice {
   RANDOM = "RANDOM",
@@ -27,11 +28,14 @@ type AppContextType = {
   playlist: PlaylistRow[];
   goalStats: Map<string, GoalStats>;
   selectedGoals: Set<string>;
-  setGoalParts: (goalParts: ReadonlyArray<Plain | ResolvedToken>) => void;
-  getRandomGoal: () => ReadonlyArray<Plain | ResolvedToken>;
+  setGoalPartsAndPasta: (
+    goalParts: ReadonlyArray<Plain | ResolvedToken>,
+    pasta: UFOPasta
+  ) => void;
+  getRandomGoal: () => GoalPartsAndPasta;
   setNextGoalChoice: (newNextGoalChoice: NextGoalChoice) => void;
   nextGoalChoice: NextGoalChoice;
-  goalParts: ReadonlyArray<Plain | ResolvedToken>;
+  goalPartsAndPasta: GoalPartsAndPasta;
   createdMatchIDs: Set<string>;
   revealedMatchIDs: null | Set<string>;
   isAdmin: boolean;
@@ -39,11 +43,14 @@ type AppContextType = {
   hideByDefault: boolean;
   setHideByDefault: (newHideByDefault: boolean) => void;
   isMounted: boolean;
-  practiceVariant: string;
-  setPracticeVariant: (newPracticeVariant: string) => void;
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
+
+export type GoalPartsAndPasta = {
+  goalParts: ReadonlyArray<Plain | ResolvedToken>;
+  pasta: UFOPasta;
+};
 
 export function AppContextProvider({
   children,
@@ -52,16 +59,10 @@ export function AppContextProvider({
 }) {
   const [isMounted, setIsMounted] = useState(false);
 
-  const [practiceVariant, setPracticeVariant] = useLocalEnum({
-    key: "practice-variant",
-    defaultValue: "Standard",
-    options: ["Standard", "Spicy"]
-  });
-
   const [nextGoalChoice, setNextGoalChoiceRaw] = useState(
     global.window != undefined &&
       localStorage?.getItem("nextGoalChoice") ===
-      NextGoalChoice.PREFER_FEWER_ATTEMPTS
+        NextGoalChoice.PREFER_FEWER_ATTEMPTS
       ? NextGoalChoice.PREFER_FEWER_ATTEMPTS
       : NextGoalChoice.RANDOM
   );
@@ -75,7 +76,6 @@ export function AppContextProvider({
     },
     [setNextGoalChoiceRaw]
   );
-
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const attempts =
@@ -103,7 +103,8 @@ export function AppContextProvider({
     return new Set(revealedMatches.map((match) => match.id));
   }, [revealedMatches]);
   const goalStats = useGoalStats(attempts);
-  const selectedGoals = useSelectedGoals();
+  const pasta = usePracticePasta();
+  const selectedGoals = useSelectedGoals(pasta);
 
   const getRandomGoal = useCallback(() => {
     let goal;
@@ -117,16 +118,21 @@ export function AppContextProvider({
         goal = items[Math.floor(Math.random() * items.length)];
         break;
     }
-    return resolveTokens(splitAtTokens(goal), STANDARD_UFO.tokens);
-  }, [nextGoalChoice, selectedGoals, goalStats]);
+    return {
+      goalParts: resolveTokens(splitAtTokens(goal), pasta.tokens),
+      pasta,
+    };
+  }, [nextGoalChoice, selectedGoals, goalStats, pasta]);
 
   // useEffect sets the initial state to avoid hydration errors
-  const [goalParts, setGoalPartsRaw] = useState<
-    ReadonlyArray<Plain | ResolvedToken>
-  >([]);
-  // This should intentionally run only once
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => setGoalPartsRaw(getRandomGoal()), []);
+  const [goalPartsAndPasta, setGoalPartsAndPastaRaw] =
+    useState<GoalPartsAndPasta>({ goalParts: [], pasta: STANDARD_UFO });
+  useEffect(
+    () => setGoalPartsAndPastaRaw(getRandomGoal()),
+    // This should intentionally run only on initialization and when pasta changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [pasta]
+  );
 
   // super insecure, but good enough to stop most people
   const [isAdmin, setIsAdminRaw] = useState(false);
@@ -147,7 +153,7 @@ export function AppContextProvider({
   useEffect(() => {
     setHideByDefaultRaw(
       global.window != undefined &&
-      localStorage?.getItem("hideByDefault") === "true"
+        localStorage?.getItem("hideByDefault") === "true"
     );
   }, []);
   const setHideByDefault = useCallback(
@@ -161,22 +167,22 @@ export function AppContextProvider({
     [setHideByDefaultRaw]
   );
 
-  const setGoalParts = useCallback(
-    (goal: ReadonlyArray<Plain | ResolvedToken>) => {
-      setGoalPartsRaw(goal);
+  const setGoalPartsAndPasta = useCallback(
+    (goal: ReadonlyArray<Plain | ResolvedToken>, newPasta: UFOPasta) => {
+      setGoalPartsAndPastaRaw({ goalParts: goal, pasta: newPasta });
       window.scrollTo({ top: 0, behavior: "instant" });
     },
-    [setGoalPartsRaw]
+    [setGoalPartsAndPastaRaw]
   );
 
   const value = useMemo(
     () => ({
-      goalParts,
+      goalPartsAndPasta,
       attempts,
       playlist,
       goalStats,
       selectedGoals,
-      setGoalParts,
+      setGoalPartsAndPasta,
       getRandomGoal,
       setNextGoalChoice,
       nextGoalChoice,
@@ -187,16 +193,14 @@ export function AppContextProvider({
       hideByDefault,
       setHideByDefault,
       isMounted,
-      practiceVariant,
-      setPracticeVariant,
     }),
     [
-      goalParts,
+      goalPartsAndPasta,
       attempts,
       playlist,
       goalStats,
       selectedGoals,
-      setGoalParts,
+      setGoalPartsAndPasta,
       getRandomGoal,
       setNextGoalChoice,
       nextGoalChoice,
@@ -207,8 +211,6 @@ export function AppContextProvider({
       hideByDefault,
       setHideByDefault,
       isMounted,
-      practiceVariant,
-      setPracticeVariant,
     ]
   );
 

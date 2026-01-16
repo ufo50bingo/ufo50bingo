@@ -22,40 +22,27 @@ import {
 import { useAppContext } from "../AppContextProvider";
 import { db } from "../db";
 import Duration from "../practice/Duration";
-import {
-  compareByDifficulty,
-  DIFFICULTY_NAMES,
-  StandardGoal,
-  SUBCATEGORY_NAMES,
-} from "../goals";
+import { compareByDifficulty } from "../goals";
 import PlaylistAddButton from "../PlaylistAddButton";
-import splitAtTokens, {
-  BaseToken,
-  Plain,
-  ResolvedToken,
-} from "../generator/splitAtTokens";
+import { BaseToken, Plain, ResolvedToken } from "../generator/splitAtTokens";
 import EditableParts from "./EditableParts";
 import resolveTokens from "../generator/resolveTokens";
-import { STANDARD_UFO } from "../pastas/standardUfo";
 import getResolvedGoalText from "../generator/getResolvedGoalText";
 import compareByDefault from "./compareByDefault";
-import { SPICY_UFO } from "../pastas/spicyUfo";
 import getSplitGoals, { SplitGoal } from "../generator/getSplitGoals";
 import getFlatGoals from "../generator/getFlatGoals";
-
-interface Row extends StandardGoal {
-  parts: ReadonlyArray<Plain | BaseToken | ResolvedToken>;
-  partiallyResolvedGoal: string;
-}
+import usePracticePasta from "../usePracticePasta";
+import getSubcategoryName from "../generator/getSubcategoryName";
+import getCategoryName from "../generator/getCategoryName";
 
 export default function AllGoals() {
-  const { goalStats, selectedGoals, setGoalParts, practiceVariant } = useAppContext();
+  const { goalStats, selectedGoals, setGoalPartsAndPasta } = useAppContext();
 
-  const pasta = practiceVariant === "Standard" ? STANDARD_UFO : SPICY_UFO;
+  const pasta = usePracticePasta();
   const flatGoals = getFlatGoals(pasta);
 
   const [splitGoals, setSplitGoals] = useState<ReadonlyArray<SplitGoal>>(() =>
-    getSplitGoals(pasta),
+    getSplitGoals(pasta)
   );
 
   useEffect(() => {
@@ -66,16 +53,12 @@ export default function AllGoals() {
   const onTryGoal = (
     goalParts: ReadonlyArray<Plain | BaseToken | ResolvedToken>
   ) => {
-    setGoalParts(resolveTokens(goalParts, pasta.tokens));
+    setGoalPartsAndPasta(resolveTokens(goalParts, pasta.tokens), pasta);
     router.push("/practice");
   };
 
-  const allChecked = flatGoals.every((goal) =>
-    selectedGoals.has(goal.name)
-  );
-  const allUnchecked = flatGoals.every(
-    (goal) => !selectedGoals.has(goal.name)
-  );
+  const allChecked = flatGoals.every((goal) => selectedGoals.has(goal.name));
+  const allUnchecked = flatGoals.every((goal) => !selectedGoals.has(goal.name));
 
   const [sortBy, setSortBy] = useState<string>("goal");
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
@@ -163,9 +146,9 @@ export default function AllGoals() {
                     await db.unselectedGoals.clear();
                   } else {
                     await db.unselectedGoals.bulkAdd(
-                      flatGoals.filter((goal) =>
-                        selectedGoals.has(goal.name)
-                      ).map((goal) => ({ goal: goal.name }))
+                      flatGoals
+                        .filter((goal) => selectedGoals.has(goal.name))
+                        .map((goal) => ({ goal: goal.name }))
                     );
                   }
                 }}
@@ -257,10 +240,11 @@ export default function AllGoals() {
                       setSplitGoals(newSplitGoals);
                     }}
                     canClear={true}
+                    tokens={pasta.tokens}
                   />
                 </Table.Td>
-                <Table.Td>{SUBCATEGORY_NAMES[goal.subcategory]}</Table.Td>
-                <Table.Td>{DIFFICULTY_NAMES[goal.difficulty]}</Table.Td>
+                <Table.Td>{getSubcategoryName(goal.subcategory)}</Table.Td>
+                <Table.Td>{getCategoryName(goal.category)}</Table.Td>
                 <Table.Td>
                   {averageDuration == null ? (
                     "-"
@@ -283,7 +267,10 @@ export default function AllGoals() {
                         <IconPlayerPlay size={16} />
                       </ActionIcon>
                     </Tooltip>
-                    <PlaylistAddButton goal={goal.partiallyResolvedGoal} />
+                    <PlaylistAddButton
+                      goal={goal.partiallyResolvedGoal}
+                      tokens={pasta.tokens}
+                    />
                   </Group>
                 </Table.Td>
               </Table.Tr>

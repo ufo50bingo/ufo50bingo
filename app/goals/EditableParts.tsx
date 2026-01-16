@@ -1,9 +1,6 @@
 import { Menu } from "@mantine/core";
 import { BaseToken, Plain, ResolvedToken } from "../generator/splitAtTokens";
-import { STANDARD_UFO } from "../pastas/standardUfo";
-import { UFOPasta } from "../generator/ufoGenerator";
-import { useAppContext } from "../AppContextProvider";
-import { SPICY_UFO } from "../pastas/spicyUfo";
+import { Tokens } from "../generator/ufoGenerator";
 
 type Props = {
   parts: ReadonlyArray<Plain | BaseToken | ResolvedToken>;
@@ -11,11 +8,15 @@ type Props = {
     newParts: ReadonlyArray<Plain | BaseToken | ResolvedToken>
   ) => unknown;
   canClear: boolean;
+  tokens: Tokens;
 };
 
-export default function EditableParts({ parts, setParts, canClear }: Props) {
-  const { practiceVariant } = useAppContext();
-  const pastas: ReadonlyArray<UFOPasta> = practiceVariant === "Standard" ? [STANDARD_UFO, SPICY_UFO] : [SPICY_UFO, STANDARD_UFO];
+export default function EditableParts({
+  parts,
+  setParts,
+  canClear,
+  tokens,
+}: Props) {
   return (
     <>
       {parts.map((part, index) => {
@@ -24,14 +25,7 @@ export default function EditableParts({ parts, setParts, canClear }: Props) {
         } else {
           const content =
             part.type === "resolved" ? part.text : "{{" + part.token + "}}";
-          let options: ReadonlyArray<string> = [];
-          for (const pasta of pastas) {
-            let tempOptions = pasta.tokens[part.token];
-            if (tempOptions != null) {
-              options = tempOptions;
-              break;
-            }
-          }
+          const options = tokens[part.token] ?? [];
           return (
             <Menu shadow="md" width="auto" trigger="click-hover" key={index}>
               <Menu.Target>

@@ -9,13 +9,15 @@ import {
 } from "@tabler/icons-react";
 import { Badge, Button, Card, Group, Stack, Text } from "@mantine/core";
 import { db } from "../db";
-import { DIFFICULTY_NAMES, SORTED_FLAT_GOALS } from "../goals";
 import useTimer from "../useTimer";
 import { Plain, ResolvedToken } from "../generator/splitAtTokens";
 import EditableParts from "../goals/EditableParts";
 import resolveTokens from "../generator/resolveTokens";
-import { STANDARD_UFO } from "../pastas/standardUfo";
 import getResolvedGoalText from "../generator/getResolvedGoalText";
+import { GoalPartsAndPasta } from "../AppContextProvider";
+import { UFOPasta } from "../generator/ufoGenerator";
+import findGoal from "../findGoal";
+import getCategoryName from "../generator/getCategoryName";
 
 enum State {
   NOT_STARTED,
@@ -25,12 +27,20 @@ enum State {
 }
 
 type Props = {
-  goalParts: ReadonlyArray<Plain | ResolvedToken>;
-  setGoalParts: (goalParts: ReadonlyArray<Plain | ResolvedToken>) => void;
+  goalPartsAndPasta: GoalPartsAndPasta;
+  setGoalPartsAndPasta: (
+    goalParts: ReadonlyArray<Plain | ResolvedToken>,
+    pasta: UFOPasta
+  ) => void;
   onNext: () => void;
 };
 
-export default function Goal({ goalParts, setGoalParts, onNext }: Props) {
+export default function Goal({
+  goalPartsAndPasta,
+  setGoalPartsAndPasta,
+  onNext,
+}: Props) {
+  const { goalParts, pasta } = goalPartsAndPasta;
   const { start, pause, reset, timer, getDurationMS } = useTimer();
   const [firstStartTime, setFirstStartTime] = useState(0);
 
@@ -84,10 +94,10 @@ export default function Goal({ goalParts, setGoalParts, onNext }: Props) {
                 ? { type: "token", token: part.token }
                 : part
             ),
-            STANDARD_UFO.tokens
+            pasta.tokens
           );
         } while (getResolvedGoalText(newParts) === goal);
-        setGoalParts(newParts);
+        setGoalPartsAndPasta(newParts, pasta);
       }}
     >
       Randomize Tokens
@@ -164,7 +174,7 @@ export default function Goal({ goalParts, setGoalParts, onNext }: Props) {
       break;
   }
 
-  const difficulty = SORTED_FLAT_GOALS.find((g) => g.name === goal)?.difficulty;
+  const category = findGoal(goal, pasta)?.category;
 
   return (
     <Card shadow="sm" padding="sm" radius="md" withBorder>
@@ -175,15 +185,19 @@ export default function Goal({ goalParts, setGoalParts, onNext }: Props) {
               <EditableParts
                 parts={goalParts}
                 setParts={(newParts) =>
-                  setGoalParts(newParts as ReadonlyArray<Plain | ResolvedToken>)
+                  setGoalPartsAndPasta(
+                    newParts as ReadonlyArray<Plain | ResolvedToken>,
+                    pasta
+                  )
                 }
                 canClear={false}
+                tokens={pasta.tokens}
               />
             </strong>
           </Text>
-          {difficulty != null && (
+          {category != null && (
             <Badge color="cyan" size="sm">
-              {DIFFICULTY_NAMES[difficulty]}
+              {getCategoryName(category)}
             </Badge>
           )}
         </Group>

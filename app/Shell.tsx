@@ -2,7 +2,16 @@
 
 import Link from "next/link";
 import { ReactNode, useState } from "react";
-import { AppShell, Burger, Group, Image, NavLink, Select, Text, Tooltip } from "@mantine/core";
+import {
+  AppShell,
+  Burger,
+  Group,
+  Image,
+  NavLink,
+  Select,
+  Text,
+  Tooltip,
+} from "@mantine/core";
 import {
   IconBuildingTunnel,
   IconCalendarWeek,
@@ -18,8 +27,8 @@ import {
   IconTournament,
   IconVs,
 } from "@tabler/icons-react";
-import { usePathname } from "next/navigation";
-import { useAppContext } from "./AppContextProvider";
+import { usePathname, useRouter } from "next/navigation";
+import usePracticeVariant, { PRACTICE_VARIANTS } from "./usePracticeVariant";
 
 const LINKS = [
   {
@@ -94,7 +103,7 @@ const LINKS = [
     text: "Spicy",
     icon: <IconPepper size={25} stroke={1.5} />,
     isNewTab: true,
-  }
+  },
   // {
   //   href: '/boardanalyzer',
   //   text: 'Board Analyzer',
@@ -108,7 +117,8 @@ type Props = {
 
 export default function Shell({ children }: Props) {
   const [isCollapsedMobile, setIsCollapsedMobile] = useState(true);
-  const { practiceVariant, setPracticeVariant } = useAppContext();
+  const router = useRouter();
+  const pv = usePracticeVariant();
   const pathname = usePathname();
   const page = LINKS.find((data) => data.href === pathname);
   let title = page?.text;
@@ -164,9 +174,12 @@ export default function Shell({ children }: Props) {
         <Tooltip label="This is the variant used on the Practice and All Goals tabs">
           <div style={{ padding: "8px" }}>
             <Select
-              value={practiceVariant}
-              onChange={(newValue) => setPracticeVariant(newValue as "Standard" | "Spicy")}
-              data={["Standard", "Spicy"]}
+              value={pv}
+              onChange={(newValue) => router.push(`${pathname}?v=${newValue}`)}
+              data={Object.keys(PRACTICE_VARIANTS).map((key) => ({
+                value: key,
+                label: PRACTICE_VARIANTS[key as keyof typeof PRACTICE_VARIANTS],
+              }))}
               label="Practice Variant"
             />
           </div>

@@ -14,10 +14,10 @@ import {
 } from "@mantine/core";
 import { Attempt, db } from "../db";
 import downloadCsv from "./downloadCsv";
-import { SORTED_FLAT_GOALS } from "../goals";
 import { STANDARD_UFO } from "../pastas/standardUfo";
 import findGoal from "../findGoal";
 import replaceTokens from "../generator/replaceTokens";
+import getFlatGoals from "../generator/getFlatGoals";
 
 export default function ImportCSV() {
   const [isImporting, setIsImporting] = useState(false);
@@ -240,7 +240,7 @@ async function updateDB(
 
 function createTemplate(): string {
   const csv = Papa.unparse(
-    SORTED_FLAT_GOALS.map((row) => {
+    getFlatGoals(STANDARD_UFO).map((row) => {
       const estimate: Estimate = {
         Goal: replaceTokens(row.name, STANDARD_UFO.tokens),
         "Number of attempts": null,

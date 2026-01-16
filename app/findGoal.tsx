@@ -106,7 +106,7 @@ function preprocessGoalWithToken(
   regexStr += RegExp.escape(goal.slice(startIndex, goal.length));
 
   return {
-    regex: RegExp(regexStr),
+    regex: RegExp("^" + regexStr + "$"),
     goal,
     tokens,
   };

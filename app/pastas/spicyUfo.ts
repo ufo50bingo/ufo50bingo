@@ -148,6 +148,7 @@ export const SPICY_UFO = {
       hypercontender: [
         "HYPER CONTENDER: Beat Draft mode; only attacks allowed are melee attacks",
         "HYPER CONTENDER: Beat Draft Mode on at least hard difficulty",
+        "HYPER CONTENDER: Beat 3 Draft fights in a row on Hyper difficulty",
       ],
       rakshasa: [
         "RAKSHASA: Clear Stage 2 defeating enemies ONLY with the purple homing or default weapon during the run",
@@ -1071,5 +1072,6 @@ export const SPICY_UFO = {
   },
   categories_with_global_group_repeat_prevention: ["general"],
 } as const;
+
 
 

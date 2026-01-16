@@ -172,8 +172,15 @@ export default function Shell({ children }: Props) {
             target={data.isNewTab ? "_blank" : undefined}
           />
         ))}
-        <Tooltip label="This is the variant used on the Practice and All Goals tabs">
-          <div style={{ padding: "8px" }}>
+        <Tooltip label="Used on the Practice and All Goals tabs">
+          <div
+            style={{
+              paddingTop: "8px",
+              paddingBottom: "8px",
+              paddingLeft: "12px",
+              paddingRight: "12px",
+            }}
+          >
             <Select
               value={pv}
               onChange={(newValue) => {

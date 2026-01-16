@@ -1,16 +1,7 @@
 "use client";
 
 import { ReactNode, useState } from "react";
-import {
-  AppShell,
-  Burger,
-  Group,
-  Image,
-  NavLink,
-  Select,
-  Text,
-  Tooltip,
-} from "@mantine/core";
+import { AppShell, Burger, Group, Image, NavLink, Text } from "@mantine/core";
 import {
   IconBuildingTunnel,
   IconCalendarWeek,
@@ -26,12 +17,9 @@ import {
   IconTournament,
   IconVs,
 } from "@tabler/icons-react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import LinkWithVariant from "./links/LinkWithVariant";
-import {
-  usePracticeVariant,
-  PRACTICE_VARIANTS,
-} from "./PracticeVariantContext";
+import PVSelector from "./PVSelector";
 
 const LINKS = [
   {
@@ -69,11 +57,6 @@ const LINKS = [
     text: "Practice",
     icon: <IconDeviceGamepad size={25} stroke={1.5} />,
   },
-  // {
-  //   href: "/practiceboard",
-  //   text: "Practice Board",
-  //   icon: <IconDeviceGamepad size={25} stroke={1.5} />,
-  // },
   {
     href: "/playlist",
     text: "Playlist",
@@ -107,11 +90,6 @@ const LINKS = [
     icon: <IconPepper size={25} stroke={1.5} />,
     isNewTab: true,
   },
-  // {
-  //   href: '/boardanalyzer',
-  //   text: 'Board Analyzer',
-  //   icon: <IconBorderAll size={12} />,
-  // },
 ];
 
 type Props = {
@@ -120,8 +98,6 @@ type Props = {
 
 export default function Shell({ children }: Props) {
   const [isCollapsedMobile, setIsCollapsedMobile] = useState(true);
-  const router = useRouter();
-  const pv = usePracticeVariant();
   const pathname = usePathname();
   const page = LINKS.find((data) => data.href === pathname);
   let title = page?.text;
@@ -174,34 +150,7 @@ export default function Shell({ children }: Props) {
             target={data.isNewTab ? "_blank" : undefined}
           />
         ))}
-        <Tooltip label="Used on the Practice and All Goals tabs">
-          <div
-            style={{
-              paddingTop: "8px",
-              paddingBottom: "8px",
-              paddingLeft: "12px",
-              paddingRight: "12px",
-            }}
-          >
-            <Select
-              value={pv}
-              onChange={(newValue) => {
-                const url = new URL(window.location.href);
-                if (newValue !== "standard" && newValue) {
-                  url.searchParams.set("v", newValue);
-                } else {
-                  url.searchParams.delete("v");
-                }
-                router.push(url.toString());
-              }}
-              data={Object.keys(PRACTICE_VARIANTS).map((key) => ({
-                value: key,
-                label: PRACTICE_VARIANTS[key as keyof typeof PRACTICE_VARIANTS],
-              }))}
-              label="Practice Variant"
-            />
-          </div>
-        </Tooltip>
+        <PVSelector />
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>
       <AppShell.Footer>

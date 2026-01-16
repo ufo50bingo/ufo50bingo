@@ -1,6 +1,7 @@
 "use client";
 
 import { UFOPasta } from "./generator/ufoGenerator";
+import regexpEscape from "regexp.escape";
 
 const CACHE: Array<
   [
@@ -78,6 +79,16 @@ export default function findGoal(
   return null;
 }
 
+function escape(str: string): string {
+  // @ts-expect-error RegExp.escape exists on all modern browsers
+  if (typeof RegExp.escape === "function") {
+    // @ts-expect-error RegExp.escape exists on all modern browsers
+    return RegExp.escape(str);
+  } else {
+    return regexpEscape(str);
+  }
+}
+
 const TOKEN_REGEX = /\{\{([^{}]*)\}\}/g;
 function preprocessGoalWithToken(
   goal: string,
@@ -89,21 +100,14 @@ function preprocessGoalWithToken(
   let startIndex = 0;
   const tokens: Array<string> = [];
   for (const match of matches) {
-    // @ts-expect-error RegExp.escape exists on all modern browsers
-    regexStr += RegExp.escape(goal.slice(startIndex, match.index));
+    regexStr += escape(goal.slice(startIndex, match.index));
     startIndex = match.index + match[0].length;
     tokens.push(match[1]);
     const tokenOptions = pasta.tokens[match[1]];
-    const tokenRegex = tokenOptions
-      .map((option) =>
-        // @ts-expect-error RegExp.escape exists on all modern browsers
-        RegExp.escape(option)
-      )
-      .join("|");
+    const tokenRegex = tokenOptions.map((option) => escape(option)).join("|");
     regexStr += "(" + tokenRegex + ")";
   }
-  // @ts-expect-error RegExp.escape exists on all modern browsers
-  regexStr += RegExp.escape(goal.slice(startIndex, goal.length));
+  regexStr += escape(goal.slice(startIndex, goal.length));
 
   return {
     regex: RegExp("^" + regexStr + "$"),

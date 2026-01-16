@@ -37,6 +37,7 @@
     "papaparse": "^5.5.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "regexp.escape": "^2.0.1",
     "ts-node": "^10.9.2",
     "zod": "^4.2.1"
   },
@@ -47,6 +48,7 @@
     "@types/node": "^20.19.11",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
+    "@types/regexp.escape": "^2.0.0",
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "9.34.0",
     "eslint-config-next": "16.1.1",

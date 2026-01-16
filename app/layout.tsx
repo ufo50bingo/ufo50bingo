@@ -11,8 +11,9 @@ import {
 import { theme } from "../theme";
 import { AppContextProvider } from "./AppContextProvider";
 import Shell from "./Shell";
+import { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "UFO 50 Bingo",
   description: "Organize games or practice goals!",
 };

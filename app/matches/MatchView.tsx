@@ -103,13 +103,14 @@ function getOverlays(
 }
 
 export default function MatchView({ match }: Props) {
-  const { createdMatchIDs, hideByDefault, isMounted, revealedMatchIDs } =
-    useAppContext();
+  const { hideByDefault, isMounted, revealedMatchIDs } = useAppContext();
   const session = useSession();
   const isAdmin = session?.admin ?? false;
+  const isCreatorOrAdmin =
+    (match.creatorID != null && match.creatorID === session?.id) || isAdmin;
 
   const canEdit =
-    (isAdmin || createdMatchIDs.has(match.id)) &&
+    isCreatorOrAdmin &&
     match.variant === "Standard" &&
     match.isCustom === false &&
     LEAGUE_SEASON != null;

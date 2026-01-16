@@ -36,7 +36,6 @@ type AppContextType = {
   setNextGoalChoice: (newNextGoalChoice: NextGoalChoice) => void;
   nextGoalChoice: NextGoalChoice;
   goalPartsAndPasta: GoalPartsAndPasta;
-  createdMatchIDs: Set<string>;
   revealedMatchIDs: null | Set<string>;
   hideByDefault: boolean;
   setHideByDefault: (newHideByDefault: boolean) => void;
@@ -87,12 +86,6 @@ export function AppContextProvider({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const playlist =
     useLiveQuery(() => db.playlist.orderBy("priority").toArray()) ?? [];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const createdMatches = useLiveQuery(() => db.createdMatches.toArray()) ?? [];
-  const createdMatchIDs = useMemo(
-    () => new Set(createdMatches.map((match) => match.id)),
-    [createdMatches]
-  );
   const revealedMatches = useLiveQuery(() => db.revealedMatches.toArray());
   const revealedMatchIDs = useMemo(() => {
     if (revealedMatches == null) {
@@ -175,7 +168,6 @@ export function AppContextProvider({
       getRandomGoal,
       setNextGoalChoice,
       nextGoalChoice,
-      createdMatchIDs,
       revealedMatchIDs,
       hideByDefault,
       setHideByDefault,
@@ -191,7 +183,6 @@ export function AppContextProvider({
       getRandomGoal,
       setNextGoalChoice,
       nextGoalChoice,
-      createdMatchIDs,
       revealedMatchIDs,
       hideByDefault,
       setHideByDefault,

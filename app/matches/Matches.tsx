@@ -218,13 +218,8 @@ function getAdminFromParams(
 }
 
 export default function Matches({ matches, totalPages }: Props) {
-  const {
-    isMounted,
-    createdMatchIDs,
-    hideByDefault,
-    setHideByDefault,
-    revealedMatchIDs,
-  } = useAppContext();
+  const { isMounted, hideByDefault, setHideByDefault, revealedMatchIDs } =
+    useAppContext();
   const session = useSession();
   const isAdmin = session?.admin ?? false;
 
@@ -437,7 +432,9 @@ export default function Matches({ matches, totalPages }: Props) {
                   );
 
                   const isCreatorOrAdmin =
-                    createdMatchIDs.has(match.id) || isAdmin;
+                    (match.creatorID != null &&
+                      match.creatorID === session?.id) ||
+                    isAdmin;
 
                   const canEditLeague =
                     isCreatorOrAdmin &&

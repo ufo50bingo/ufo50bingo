@@ -13,7 +13,7 @@ const PracticeVariantContext = createContext<
 
 export function PracticeVariantProvider({ children }: { children: ReactNode }) {
   const [practiceVariant, setPracticeVariant] =
-    useState<PracticeVariant>("standard");
+    useState<null | PracticeVariant>(null);
 
   return (
     <PracticeVariantContext.Provider

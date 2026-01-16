@@ -5,10 +5,12 @@ import {
   Button,
   Center,
   Container,
+  Group,
   MantineColorScheme,
   Modal,
   NativeSelect,
   SegmentedControl,
+  Stack,
   Table,
   TextInput,
   useMantineColorScheme,
@@ -18,13 +20,16 @@ import ExportCSV from "./ExportCSV";
 import ImportCSV from "./ImportCSV";
 import MigrateHistory from "./MigrateHistory";
 import { useState } from "react";
-
-const ADMIN_PASSWORD = "R54o7h1OEXbGCUBGYvAV";
+import enableAdmin from "../session/enableAdmin";
+import useSession from "../session/useSession";
 
 export default function Settings() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
-  const { nextGoalChoice, setNextGoalChoice, setIsAdmin } = useAppContext();
+  const { nextGoalChoice, setNextGoalChoice } = useAppContext();
   const [isAdminModalShown, setIsAdminModalShown] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [password, setPassword] = useState("");
+  const isAdmin = useSession()?.admin;
   return (
     <Container my="md">
       <Table variant="vertical" withTableBorder>
@@ -103,22 +108,46 @@ export default function Settings() {
           <Table.Tr>
             <Table.Th>Admin</Table.Th>
             <Table.Td>
-              <Button onClick={() => setIsAdminModalShown(true)}>
-                Enable admin tools
-              </Button>
-              <Modal
-                centered={true}
-                onClose={() => setIsAdminModalShown(false)}
-                opened={isAdminModalShown}
-                title="Enable admin tools"
-              >
-                <TextInput
-                  label="Enter password"
-                  onChange={(event) =>
-                    setIsAdmin(event.target.value === ADMIN_PASSWORD)
-                  }
-                />
-              </Modal>
+              {isAdmin ? (
+                "Admin tools enabled"
+              ) : (
+                <>
+                  <Button onClick={() => setIsAdminModalShown(true)}>
+                    Enable admin tools
+                  </Button>
+                  <Modal
+                    centered={true}
+                    onClose={() => setIsAdminModalShown(false)}
+                    opened={isAdminModalShown}
+                    title="Enable admin tools"
+                  >
+                    <Stack>
+                      <TextInput
+                        label="Enter password"
+                        onChange={(event) => setPassword(event.target.value)}
+                      />
+                      <Group mt="lg" justify="flex-end">
+                        <Button onClick={() => setIsAdminModalShown(false)}>
+                          Cancel
+                        </Button>
+                        <Button
+                          disabled={password === "" || isSaving}
+                          onClick={async () => {
+                            try {
+                              await enableAdmin(password);
+                            } finally {
+                              setIsSaving(false);
+                            }
+                          }}
+                          color="green"
+                        >
+                          Save
+                        </Button>
+                      </Group>
+                    </Stack>
+                  </Modal>
+                </>
+              )}
             </Table.Td>
           </Table.Tr>
         </Table.Tbody>

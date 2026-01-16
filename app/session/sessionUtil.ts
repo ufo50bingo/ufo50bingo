@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import crypto from "crypto";
+import { parseSession } from "./parseSession";
 
 export interface Session {
   id: string;
@@ -31,15 +32,7 @@ export async function readSession(): Promise<Session | null> {
     return null;
   }
 
-  try {
-    const session = JSON.parse(data);
-    if (typeof session.id !== "string" || typeof session.admin !== "boolean") {
-      return null;
-    }
-    return session;
-  } catch {
-    return null;
-  }
+  return parseSession(data);
 }
 
 export async function writeSession(data: Session): Promise<void> {

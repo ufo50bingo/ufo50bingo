@@ -1,9 +1,9 @@
 export const CHOCO_UFO = {
   goals: {
     easy: {
-      carmelcarmel: ["Carmel Carmel: Take a picture of 2 donuts."],
-      mortol2: ["Mortol 2: Defeat a fly using the base turrets."],
-      waldorf: ["Waldorf: Talk to a penguin."],
+      caramelcaramel: ["Carmel Carmel: Take a picture of 2 donuts."],
+      mortolii: ["Mortol 2: Defeat a fly using the base turrets."],
+      waldorfsjourney: ["waldorfsjourney: Talk to a penguin."],
       barbuta: ["Barbuta: Kill a mushroom and a bat."],
       bughunter: ["Bug Hunter: Reach half the quota for a job."],
       ninpek: ["Ninpek: Get 2000 points."],
@@ -73,9 +73,11 @@ export const CHOCO_UFO = {
       cyberowls: ["Cyber Owls: Eat 2 Dim Sum"],
     },
     medium: {
-      carmelcarmel: ["Carmel Carmel: Take a picture of 4 background objects."],
-      mortol2: ["Mortol 2: Defeat a mini boss."],
-      waldorf: ["Waldorf: Have exactly 0 shells."],
+      caramelcaramel: [
+        "Carmel Carmel: Take a picture of 4 background objects.",
+      ],
+      mortolii: ["Mortol 2: Defeat a mini boss."],
+      waldorfsjourney: ["waldorfsjourney: Have exactly 0 shells."],
       barbuta: ["Barbuta: Get the Blood Sword."],
       bughunter: ["Bug Hunter: Land on 3 enemies."],
       ninpek: ["Ninpek: Kill 12 enemies as a ghost."],
@@ -131,9 +133,11 @@ export const CHOCO_UFO = {
       cyberowls: ["Cyber Owls: Collect the keys in Chicago."],
     },
     hard: {
-      carmelcarmel: ["Carmel Carmel: Take a picture of 6 background objects."],
-      mortol2: ["Mortol 2: Press a switch."],
-      waldorf: ["Waldorf: Have 20 or more shells."],
+      caramelcaramel: [
+        "Carmel Carmel: Take a picture of 6 background objects.",
+      ],
+      mortolii: ["Mortol 2: Press a switch."],
+      waldorfsjourney: ["waldorfsjourney: Have 20 or more shells."],
       barbuta: [
         "Barbuta: Get the Umbrella and get hit by 3 different acid sources.",
       ],
@@ -185,9 +189,9 @@ export const CHOCO_UFO = {
       cyberowls: ["Cyber Owls: See the dim sum truck in Hong Kong."],
     },
     veryhard: {
-      carmelcarmel: ["Carmel Carmel: Let a mini boss escape."],
-      mortol2: ["Mortol 2: Defeat 2 minibosses."],
-      waldorf: ["Waldorf: Have 30 or more shells."],
+      caramelcaramel: ["Carmel Carmel: Let a mini boss escape."],
+      mortolii: ["Mortol 2: Defeat 2 minibosses."],
+      waldorfsjourney: ["waldorfsjourney: Have 30 or more shells."],
       barbuta: ["Barbuta: Get the candy"],
       bughunter: ["Bug Hunter: Complete a job."],
       ninpek: ["Ninpek: Use HARD-LOOP and get 2000+ points without dying."],
@@ -268,7 +272,7 @@ export const CHOCO_UFO = {
         "Fighting Spirit: Ninpek: Defeat 3 enemies as a ghost. Rakshasa: revive 3 times in one run.",
         "Tiger Woods: Pingolf: Get a hole in 1. Golfaria: Get a Stroke upgrade.",
         "Futurama: Pilot the Campanella/Big Belle in 5 games.",
-        "Knucklehead: Waldorf: Knock a pig into the sea. Golfaria: Knock an enemy into a pit or water.",
+        "Knucklehead: waldorfsjourney: Knock a pig into the sea. Golfaria: Knock an enemy into a pit or water.",
         "Trolls Don’t Get Blocked: Block Koala: Beat a level. Rail Heist: Stop a lawman from climbing a ladder by placing a block on either end.",
         "Let Me In: Collect a key in 3 games.",
         "Trickshot: Night Manor: Use OPEN-CAGE hit the killer with a hook and yell NOSCOPE.",

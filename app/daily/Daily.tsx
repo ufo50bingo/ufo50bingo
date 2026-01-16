@@ -45,6 +45,7 @@ import dynamic from "next/dynamic";
 import getRTContent from "./getRTContent";
 import RTView from "./RTView";
 import LinkWithVariant from "../links/LinkWithVariant";
+import useSession from "../session/useSession";
 
 const EditDaily = dynamic(() => import("./EditDaily"), { ssr: false });
 
@@ -68,6 +69,8 @@ export default function Daily({
   const [color, setColor] = useDailyColor();
   const [isStartingNewAttempt, setIsStartingNewAttempt] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+
+  const isAdmin = useSession()?.admin ?? false;
 
   const description: null | JSONContent = useMemo(
     () => getRTContent(dailyData.description),
@@ -169,9 +172,11 @@ export default function Daily({
                     : null}
                 </Title>
               </Group>
-              <ActionIcon color="green" onClick={() => setIsEditing(true)}>
-                <IconEdit />
-              </ActionIcon>
+              {isAdmin && (
+                <ActionIcon color="green" onClick={() => setIsEditing(true)}>
+                  <IconEdit />
+                </ActionIcon>
+              )}
             </Group>
             {dailyData.creator != null && dailyData.creator != "" && (
               <Text size="sm">

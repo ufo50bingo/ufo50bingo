@@ -26,7 +26,7 @@ import {
   IconTournament,
   IconVs,
 } from "@tabler/icons-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import usePracticeVariant, { PRACTICE_VARIANTS } from "./usePracticeVariant";
 import LinkWithVariant from "./links/LinkWithVariant";
 
@@ -120,7 +120,6 @@ export default function Shell({ children }: Props) {
   const router = useRouter();
   const pv = usePracticeVariant();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const page = LINKS.find((data) => data.href === pathname);
   let title = page?.text;
   if (title == null && pathname.startsWith("/match/")) {
@@ -184,19 +183,13 @@ export default function Shell({ children }: Props) {
             <Select
               value={pv}
               onChange={(newValue) => {
-                const newSearchParams = new URLSearchParams(searchParams);
+                const url = new URL(window.location.href);
                 if (newValue !== "standard" && newValue) {
-                  newSearchParams.set("v", newValue);
-                  router.push(`${pathname}?v=${newValue}`);
+                  url.searchParams.set("v", newValue);
                 } else {
-                  newSearchParams.delete("v");
-                  router.push(pathname);
+                  url.searchParams.delete("v");
                 }
-                const newHref =
-                  newSearchParams.size > 0
-                    ? `${pathname}?${newSearchParams.toString()}`
-                    : pathname;
-                router.push(newHref);
+                router.push(url.toString());
               }}
               data={Object.keys(PRACTICE_VARIANTS).map((key) => ({
                 value: key,

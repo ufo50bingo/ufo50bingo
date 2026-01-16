@@ -35,13 +35,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <MantineProvider defaultColorScheme="dark" theme={theme}>
-          <Suspense>
-            <PracticeVariantInit />
-          </Suspense>
           <PracticeVariantProvider>
             <AppContextProvider>
               <Shell>{children}</Shell>
             </AppContextProvider>
+            <Suspense>
+              <PracticeVariantInit />
+            </Suspense>
           </PracticeVariantProvider>
         </MantineProvider>
       </body>

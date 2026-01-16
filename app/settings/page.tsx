@@ -135,6 +135,7 @@ export default function Settings() {
                           onClick={async () => {
                             try {
                               await enableAdmin(password);
+                              window.location.reload();
                             } finally {
                               setIsSaving(false);
                             }

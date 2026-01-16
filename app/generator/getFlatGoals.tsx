@@ -1,42 +1,35 @@
 import { UFOPasta } from "./ufoGenerator";
 
 export interface UFOGoal {
-    name: string;
-    subcategory: string;
-    category: string;
+  name: string;
+  subcategory: string;
+  category: string;
 }
 
-const CACHE: Array<
-    [
-        UFOPasta,
-        ReadonlyArray<UFOGoal>,
-    ]
-> = [];
+const CACHE: Array<[UFOPasta, ReadonlyArray<UFOGoal>]> = [];
 
 export default function getFlatGoals(pasta: UFOPasta): ReadonlyArray<UFOGoal> {
-    let cached = CACHE.find((item) => item[0] === pasta)?.[1];
-    if (cached != null) {
-        return cached;
-    }
+  const cached = CACHE.find((item) => item[0] === pasta)?.[1];
+  if (cached != null) {
+    return cached;
+  }
 
-    const flatGoals: Array<UFOGoal> = [];
-    Object.keys(pasta.goals).forEach((category) => {
-        const subcatToGoals = pasta.goals[category];
-        Object.entries(subcatToGoals).forEach(
-            ([subcategory, goals]) => {
-                goals.forEach((goal) => {
-                    flatGoals.push({
-                        name: goal,
-                        subcategory,
-                        category,
-                    });
-                });
-            }
-        );
+  const flatGoals: Array<UFOGoal> = [];
+  Object.keys(pasta.goals).forEach((category) => {
+    const subcatToGoals = pasta.goals[category];
+    Object.entries(subcatToGoals).forEach(([subcategory, goals]) => {
+      goals.forEach((goal) => {
+        flatGoals.push({
+          name: goal,
+          subcategory,
+          category,
+        });
+      });
     });
+  });
 
-    flatGoals.sort()
+  flatGoals.sort();
 
-    CACHE.push([pasta, flatGoals]);
-    return flatGoals;
+  CACHE.push([pasta, flatGoals]);
+  return flatGoals;
 }

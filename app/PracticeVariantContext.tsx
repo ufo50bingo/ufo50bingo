@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 
 type PracticeVariantContextValue = {
-  practiceVariant: PracticeVariant;
+  practiceVariant: null | PracticeVariant;
   setPracticeVariant: (newPracticeVariant: PracticeVariant) => void;
 };
 
@@ -43,7 +43,7 @@ export function usePracticeVariantFull(): PracticeVariantContextValue {
   return ctx;
 }
 
-export function usePracticeVariant(): PracticeVariant {
+export function usePracticeVariant(): null | PracticeVariant {
   const ctx = usePracticeVariantFull();
   return ctx.practiceVariant;
 }

@@ -1,12 +1,13 @@
 import { Tooltip, Select } from "@mantine/core";
 import {
   PRACTICE_VARIANTS,
+  PracticeVariant,
   usePracticeVariant,
 } from "./PracticeVariantContext";
 import { useRouter } from "next/navigation";
-import { Suspense } from "react";
 
 export default function PVSelector() {
+  const practiceVariant = usePracticeVariant();
   return (
     <Tooltip label="Used on the Practice and All Goals tabs">
       <div
@@ -17,19 +18,18 @@ export default function PVSelector() {
           paddingRight: "12px",
         }}
       >
-        <Suspense
-          fallback={<Select value="" data={[]} label="Practice Variant" />}
-        >
-          <Inner />
-        </Suspense>
+        {practiceVariant == null ? (
+          <Select value="" data={[]} label="Practice Variant" />
+        ) : (
+          <Inner practiceVariant={practiceVariant} />
+        )}
       </div>
     </Tooltip>
   );
 }
 
-function Inner() {
+function Inner({ practiceVariant: pv }: { practiceVariant: PracticeVariant }) {
   const router = useRouter();
-  const pv = usePracticeVariant();
   return (
     <Select
       value={pv}

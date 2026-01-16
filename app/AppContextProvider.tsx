@@ -11,12 +11,12 @@ import {
 import { useLiveQuery } from "dexie-react-hooks";
 import { AttemptRow, db, PlaylistRow } from "./db";
 import useGoalStats, { GoalStats } from "./useGoalStats";
-import useSelectedGoals from "./useSelectedGoals";
 import splitAtTokens, { Plain, ResolvedToken } from "./generator/splitAtTokens";
 import resolveTokens from "./generator/resolveTokens";
 import usePracticePasta from "./usePracticePasta";
 import { UFOPasta } from "./generator/ufoGenerator";
 import { STANDARD_UFO } from "./pastas/standardUfo";
+import getFlatGoals from "./generator/getFlatGoals";
 
 export enum NextGoalChoice {
   RANDOM = "RANDOM",
@@ -27,7 +27,7 @@ type AppContextType = {
   attempts: AttemptRow[];
   playlist: PlaylistRow[];
   goalStats: Map<string, GoalStats>;
-  selectedGoals: Set<string>;
+  unselectedGoals: Set<string>;
   setGoalPartsAndPasta: (
     goalParts: ReadonlyArray<Plain | ResolvedToken>,
     pasta: UFOPasta
@@ -104,9 +104,16 @@ export function AppContextProvider({
   }, [revealedMatches]);
   const goalStats = useGoalStats(attempts);
   const pasta = usePracticePasta();
-  const selectedGoals = useSelectedGoals(pasta);
+  const unselectedGoalsArray = useLiveQuery(() => db.unselectedGoals.toArray());
+  const unselectedGoals = useMemo(
+    () => new Set(unselectedGoalsArray?.map((row) => row.goal) ?? []),
+    [unselectedGoalsArray]
+  );
 
   const getRandomGoal = useCallback(() => {
+    const selectedGoals = getFlatGoals(pasta)
+      .filter((goal) => !unselectedGoals.has(goal.name))
+      .map((goal) => goal.name);
     let goal;
     switch (nextGoalChoice) {
       case NextGoalChoice.PREFER_FEWER_ATTEMPTS:
@@ -114,15 +121,14 @@ export function AppContextProvider({
         break;
       case NextGoalChoice.RANDOM:
       default:
-        const items = Array.from(selectedGoals);
-        goal = items[Math.floor(Math.random() * items.length)];
+        goal = selectedGoals[Math.floor(Math.random() * selectedGoals.length)];
         break;
     }
     return {
       goalParts: resolveTokens(splitAtTokens(goal), pasta.tokens),
       pasta,
     };
-  }, [nextGoalChoice, selectedGoals, goalStats, pasta]);
+  }, [nextGoalChoice, unselectedGoals, goalStats, pasta]);
 
   // useEffect sets the initial state to avoid hydration errors
   const [goalPartsAndPasta, setGoalPartsAndPastaRaw] =
@@ -181,7 +187,7 @@ export function AppContextProvider({
       attempts,
       playlist,
       goalStats,
-      selectedGoals,
+      unselectedGoals,
       setGoalPartsAndPasta,
       getRandomGoal,
       setNextGoalChoice,
@@ -199,7 +205,7 @@ export function AppContextProvider({
       attempts,
       playlist,
       goalStats,
-      selectedGoals,
+      unselectedGoals,
       setGoalPartsAndPasta,
       getRandomGoal,
       setNextGoalChoice,
@@ -226,14 +232,12 @@ export function useAppContext() {
 }
 
 function getGoalPreferFewerAttempts(
-  selectedGoals: Set<string>,
+  selectedGoals: ReadonlyArray<string>,
   goalStats: Map<string, GoalStats>
 ): string {
-  const goals = Array.from(selectedGoals);
-
   let cumulativeWeight = 0;
   const allCumulativeWeights: number[] = [];
-  goals.forEach((goal) => {
+  selectedGoals.forEach((goal) => {
     const count = goalStats.get(goal)?.count ?? 0;
     // if the goal hasn't been done before, it's weighted 4 times as heavily as a single completion
     const weight = count === 0 ? 4 : 1 / count;
@@ -246,5 +250,5 @@ function getGoalPreferFewerAttempts(
   const goalIndex = allCumulativeWeights.findIndex(
     (cutoff) => cutoff >= randomWeight
   );
-  return goals[goalIndex];
+  return selectedGoals[goalIndex];
 }

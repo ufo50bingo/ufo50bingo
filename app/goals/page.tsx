@@ -34,12 +34,18 @@ import getFlatGoals from "../generator/getFlatGoals";
 import usePracticePasta from "../usePracticePasta";
 import getSubcategoryName from "../generator/getSubcategoryName";
 import getCategoryName from "../generator/getCategoryName";
-import { usePracticeVariant } from "../PracticeVariantContext";
+import { PracticeVariant, usePracticeVariant } from "../PracticeVariantContext";
 
 export default function AllGoals() {
-  const { goalStats, selectedGoals, setGoalPartsAndPasta } = useAppContext();
-
   const practiceVariant = usePracticeVariant();
+  if (practiceVariant == null) {
+    return null;
+  }
+  return <Inner practiceVariant={practiceVariant} />;
+}
+
+function Inner({ practiceVariant }: { practiceVariant: PracticeVariant }) {
+  const { goalStats, unselectedGoals, setGoalPartsAndPasta } = useAppContext();
   const pasta = usePracticePasta();
   const flatGoals = getFlatGoals(pasta);
 
@@ -63,8 +69,10 @@ export default function AllGoals() {
     }
   };
 
-  const allChecked = flatGoals.every((goal) => selectedGoals.has(goal.name));
-  const allUnchecked = flatGoals.every((goal) => !selectedGoals.has(goal.name));
+  const allChecked = flatGoals.every((goal) => !unselectedGoals.has(goal.name));
+  const allUnchecked = flatGoals.every((goal) =>
+    unselectedGoals.has(goal.name)
+  );
 
   const [sortBy, setSortBy] = useState<string>("goal");
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
@@ -153,7 +161,7 @@ export default function AllGoals() {
                   } else {
                     await db.unselectedGoals.bulkAdd(
                       flatGoals
-                        .filter((goal) => selectedGoals.has(goal.name))
+                        .filter((goal) => !unselectedGoals.has(goal.name))
                         .map((goal) => ({ goal: goal.name }))
                     );
                   }
@@ -215,7 +223,7 @@ export default function AllGoals() {
                     label={<>The Practice tab will exclude unchecked goals</>}
                   >
                     <Checkbox
-                      checked={selectedGoals.has(goal.name)}
+                      checked={!unselectedGoals.has(goal.name)}
                       onChange={async (event) => {
                         if (event.currentTarget.checked) {
                           await db.unselectedGoals.delete(goal.name);

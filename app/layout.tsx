@@ -1,7 +1,7 @@
 import "@mantine/core/styles.css";
 import "@mantine/tiptap/styles.css";
 
-import React, { ReactNode } from "react";
+import React, { ReactNode, Suspense } from "react";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import {
   ColorSchemeScript,
@@ -12,6 +12,10 @@ import { theme } from "../theme";
 import { AppContextProvider } from "./AppContextProvider";
 import Shell from "./Shell";
 import { Metadata } from "next";
+import {
+  PracticeVariantInit,
+  PracticeVariantProvider,
+} from "./PracticeVariantContext";
 
 export const metadata: Metadata = {
   title: "UFO 50 Bingo",
@@ -31,9 +35,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <MantineProvider defaultColorScheme="dark" theme={theme}>
-          <AppContextProvider>
-            <Shell>{children}</Shell>
-          </AppContextProvider>
+          <Suspense>
+            <PracticeVariantInit />
+          </Suspense>
+          <PracticeVariantProvider>
+            <AppContextProvider>
+              <Shell>{children}</Shell>
+            </AppContextProvider>
+          </PracticeVariantProvider>
         </MantineProvider>
       </body>
       <GoogleAnalytics gaId="G-FP1JEFSLS3" />

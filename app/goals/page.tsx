@@ -34,7 +34,7 @@ import getFlatGoals from "../generator/getFlatGoals";
 import usePracticePasta from "../usePracticePasta";
 import getSubcategoryName from "../generator/getSubcategoryName";
 import getCategoryName from "../generator/getCategoryName";
-import usePracticeVariant from "../usePracticeVariant";
+import { usePracticeVariant } from "../PracticeVariantContext";
 
 export default function AllGoals() {
   const { goalStats, selectedGoals, setGoalPartsAndPasta } = useAppContext();

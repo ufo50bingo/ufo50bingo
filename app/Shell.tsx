@@ -27,8 +27,11 @@ import {
   IconVs,
 } from "@tabler/icons-react";
 import { usePathname, useRouter } from "next/navigation";
-import usePracticeVariant, { PRACTICE_VARIANTS } from "./usePracticeVariant";
 import LinkWithVariant from "./links/LinkWithVariant";
+import {
+  usePracticeVariant,
+  PRACTICE_VARIANTS,
+} from "./PracticeVariantContext";
 
 const LINKS = [
   {

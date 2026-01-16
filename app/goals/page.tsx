@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   IconChevronDown,
@@ -25,7 +25,6 @@ import Duration from "../practice/Duration";
 import {
   compareByDifficulty,
   DIFFICULTY_NAMES,
-  SORTED_FLAT_GOALS,
   StandardGoal,
   SUBCATEGORY_NAMES,
 } from "../goals";
@@ -40,6 +39,9 @@ import resolveTokens from "../generator/resolveTokens";
 import { STANDARD_UFO } from "../pastas/standardUfo";
 import getResolvedGoalText from "../generator/getResolvedGoalText";
 import compareByDefault from "./compareByDefault";
+import { SPICY_UFO } from "../pastas/spicyUfo";
+import getSplitGoals, { SplitGoal } from "../generator/getSplitGoals";
+import getFlatGoals from "../generator/getFlatGoals";
 
 interface Row extends StandardGoal {
   parts: ReadonlyArray<Plain | BaseToken | ResolvedToken>;
@@ -47,27 +49,31 @@ interface Row extends StandardGoal {
 }
 
 export default function AllGoals() {
-  const [splitGoals, setSplitGoals] = useState<ReadonlyArray<Row>>(() =>
-    SORTED_FLAT_GOALS.map((goal) => ({
-      ...goal,
-      parts: splitAtTokens(goal.name),
-      partiallyResolvedGoal: goal.name,
-    }))
+  const { goalStats, selectedGoals, setGoalParts, practiceVariant } = useAppContext();
+
+  const pasta = practiceVariant === "Standard" ? STANDARD_UFO : SPICY_UFO;
+  const flatGoals = getFlatGoals(pasta);
+
+  const [splitGoals, setSplitGoals] = useState<ReadonlyArray<SplitGoal>>(() =>
+    getSplitGoals(pasta),
   );
 
+  useEffect(() => {
+    setSplitGoals(getSplitGoals(pasta));
+  }, [pasta]);
+
   const router = useRouter();
-  const { goalStats, selectedGoals, setGoalParts } = useAppContext();
   const onTryGoal = (
     goalParts: ReadonlyArray<Plain | BaseToken | ResolvedToken>
   ) => {
-    setGoalParts(resolveTokens(goalParts, STANDARD_UFO.tokens));
+    setGoalParts(resolveTokens(goalParts, pasta.tokens));
     router.push("/practice");
   };
 
-  const allChecked = SORTED_FLAT_GOALS.every((goal) =>
+  const allChecked = flatGoals.every((goal) =>
     selectedGoals.has(goal.name)
   );
-  const allUnchecked = SORTED_FLAT_GOALS.every(
+  const allUnchecked = flatGoals.every(
     (goal) => !selectedGoals.has(goal.name)
   );
 
@@ -157,7 +163,7 @@ export default function AllGoals() {
                     await db.unselectedGoals.clear();
                   } else {
                     await db.unselectedGoals.bulkAdd(
-                      SORTED_FLAT_GOALS.filter((goal) =>
+                      flatGoals.filter((goal) =>
                         selectedGoals.has(goal.name)
                       ).map((goal) => ({ goal: goal.name }))
                     );

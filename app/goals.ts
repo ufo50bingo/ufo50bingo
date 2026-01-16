@@ -1,3 +1,4 @@
+import { UFOGoal } from "./generator/getFlatGoals";
 import compareByDefault from "./goals/compareByDefault";
 import { STANDARD_UFO } from "./pastas/standardUfo";
 
@@ -55,14 +56,14 @@ export const ORDERED_PROPER_GAMES = [
 ] as const;
 
 export const ORDERED_GAMES = [...ORDERED_PROPER_GAMES, "general"] as const;
-export const ORDERED_SUBCATEGORIES = [
+export const ORDERED_SUBCATEGORIES: ReadonlyArray<string> = [
   ...ORDERED_PROPER_GAMES,
   "gift",
   "goldcherry",
   "theme",
   "bosslevel",
   "collectathon",
-] as const;
+];
 export type ProperGame = (typeof ORDERED_PROPER_GAMES)[number];
 export type Game = (typeof ORDERED_GAMES)[number];
 
@@ -166,36 +167,36 @@ const _t4: keyof typeof SUBCATEGORY_NAMES = cat2;
 export interface StandardGoal {
   name: string;
   subcategory: StandardSubcategory;
-  difficulty: Difficulty;
+  category: Difficulty;
 }
 
-const FLAT_GOALS: Array<StandardGoal> = [];
-Object.keys(STANDARD_UFO.goals).forEach((untypedDifficulty) => {
-  const difficulty = untypedDifficulty as Difficulty;
-  const subcatToGoals = STANDARD_UFO.goals[difficulty];
-  Object.entries(subcatToGoals).forEach(
-    ([untypedSubcategory, untypedGoals]) => {
-      const subcategory = untypedSubcategory as StandardSubcategory;
-      const goals = untypedGoals as ReadonlyArray<string>;
-      goals.forEach((goal) => {
-        FLAT_GOALS.push({
-          name: goal,
-          subcategory,
-          difficulty,
-        });
-      });
-    }
-  );
-});
+// const FLAT_GOALS: Array<StandardGoal> = [];
+// Object.keys(STANDARD_UFO.goals).forEach((untypedDifficulty) => {
+//   const difficulty = untypedDifficulty as Difficulty;
+//   const subcatToGoals = STANDARD_UFO.goals[difficulty];
+//   Object.entries(subcatToGoals).forEach(
+//     ([untypedSubcategory, untypedGoals]) => {
+//       const subcategory = untypedSubcategory as StandardSubcategory;
+//       const goals = untypedGoals as ReadonlyArray<string>;
+//       goals.forEach((goal) => {
+//         FLAT_GOALS.push({
+//           name: goal,
+//           subcategory,
+//           difficulty,
+//         });
+//       });
+//     }
+//   );
+// });
 
 // this also verifies that all Game and Difficulty options are consistent between the ordered
 // arrays in this file and the values in STANDARD
-export const SORTED_FLAT_GOALS: ReadonlyArray<StandardGoal> =
-  FLAT_GOALS.toSorted(compareByDefault);
+// export const SORTED_FLAT_GOALS: ReadonlyArray<StandardGoal> =
+//   FLAT_GOALS.toSorted(compareByDefault);
 
-export function compareByDifficulty(a: StandardGoal, b: StandardGoal): number {
+export function compareByDifficulty(a: UFOGoal, b: UFOGoal): number {
   return (
-    ORDERED_DIFFICULTY.indexOf(a.difficulty) -
-    ORDERED_DIFFICULTY.indexOf(b.difficulty)
+    ORDERED_DIFFICULTY.indexOf(a.category as Difficulty) -
+    ORDERED_DIFFICULTY.indexOf(b.category as Difficulty)
   );
 }

@@ -15,6 +15,7 @@ import useSelectedGoals from "./useSelectedGoals";
 import splitAtTokens, { Plain, ResolvedToken } from "./generator/splitAtTokens";
 import resolveTokens from "./generator/resolveTokens";
 import { STANDARD_UFO } from "./pastas/standardUfo";
+import useLocalEnum from "./localStorage/useLocalEnum";
 
 export enum NextGoalChoice {
   RANDOM = "RANDOM",
@@ -38,6 +39,8 @@ type AppContextType = {
   hideByDefault: boolean;
   setHideByDefault: (newHideByDefault: boolean) => void;
   isMounted: boolean;
+  practiceVariant: string;
+  setPracticeVariant: (newPracticeVariant: string) => void;
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -48,10 +51,17 @@ export function AppContextProvider({
   children: React.ReactNode;
 }) {
   const [isMounted, setIsMounted] = useState(false);
+
+  const [practiceVariant, setPracticeVariant] = useLocalEnum({
+    key: "practice-variant",
+    defaultValue: "Standard",
+    options: ["Standard", "Spicy"]
+  });
+
   const [nextGoalChoice, setNextGoalChoiceRaw] = useState(
     global.window != undefined &&
       localStorage?.getItem("nextGoalChoice") ===
-        NextGoalChoice.PREFER_FEWER_ATTEMPTS
+      NextGoalChoice.PREFER_FEWER_ATTEMPTS
       ? NextGoalChoice.PREFER_FEWER_ATTEMPTS
       : NextGoalChoice.RANDOM
   );
@@ -65,6 +75,7 @@ export function AppContextProvider({
     },
     [setNextGoalChoiceRaw]
   );
+
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const attempts =
@@ -136,7 +147,7 @@ export function AppContextProvider({
   useEffect(() => {
     setHideByDefaultRaw(
       global.window != undefined &&
-        localStorage?.getItem("hideByDefault") === "true"
+      localStorage?.getItem("hideByDefault") === "true"
     );
   }, []);
   const setHideByDefault = useCallback(
@@ -176,6 +187,8 @@ export function AppContextProvider({
       hideByDefault,
       setHideByDefault,
       isMounted,
+      practiceVariant,
+      setPracticeVariant,
     }),
     [
       goalParts,
@@ -194,6 +207,8 @@ export function AppContextProvider({
       hideByDefault,
       setHideByDefault,
       isMounted,
+      practiceVariant,
+      setPracticeVariant,
     ]
   );
 

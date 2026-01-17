@@ -286,7 +286,7 @@ export default function Cast({
 
   return (
     <>
-      <Group>
+      <Group align="start">
         <Group gap={0}>
           {showRecentGames && generalGoals.length > 0 && (
             <SideColumn>

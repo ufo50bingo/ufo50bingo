@@ -780,7 +780,7 @@ export const SPICY_UFO = {
       seasidedrive: [
         "SEASIDE DRIVE: Cherry disk with 333,333 points or more",
         "SEASIDE DRIVE: Cherry disk without collecting any coins",
-         ],
+      ],
       campanella3: [
         "CAMPANELLA 3: 100% 2 waves in stage D",
         "CAMPANELLA 3: Beat the game with at least 16/20 star waves (100% or 0%)",

@@ -8,7 +8,8 @@
     "prerender": "next build --debug-prerender",
     "start": "next start",
     "lint": "eslint .",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "test": "jest"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
@@ -39,12 +40,15 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "regexp.escape": "^2.0.1",
-    "ts-node": "^10.9.2",
     "zod": "^4.2.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.1",
+    "@types/jest": "^30.0.0",
     "@types/luxon": "^3.7.1",
     "@types/node": "^20.19.11",
     "@types/react": "19.2.7",
@@ -53,10 +57,13 @@
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "9.34.0",
     "eslint-config-next": "16.1.1",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
     "postcss": "^8.5.6",
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",

@@ -21,10 +21,8 @@ const UfoPasta = zod.strictObject({
   category_difficulty_tiers: zod.array(zod.array(zod.string())).optional(),
 });
 
-export default function validateUfo(json: string): Return {
+export default function validateUfo(pasta: UFOPasta): Return {
   try {
-    const parsed = JSON.parse(json);
-    const pasta = UfoPasta.parse(parsed);
     const warnings: Array<string> = [];
     const errors: Array<string> = [];
 
@@ -91,9 +89,7 @@ export default function validateUfo(json: string): Return {
       ? { pasta: null, errors, warnings }
       : { pasta, errors, warnings };
   } catch (err) {
-    if (err instanceof zod.ZodError) {
-      return { pasta: null, errors: [zod.prettifyError(err)], warnings: [] };
-    } else if (err instanceof Error) {
+    if (err instanceof Error) {
       return { pasta: null, errors: [`✖ ${err.message}.\nTry pasting your pasta into a general-purpose JSON linter, such as https://jsonlint.com/`], warnings: [] };
     } else {
       return { pasta: null, errors: ['✖ Unknown error occurred'], warnings: [] };

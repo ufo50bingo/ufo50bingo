@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "jest && next build --turbopack",
     "prerender": "next build --debug-prerender",
     "start": "next start",
     "lint": "eslint .",

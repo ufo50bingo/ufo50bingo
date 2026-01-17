@@ -1,25 +1,6 @@
-import zod from "zod";
 import { UFOPasta } from "./ufoGenerator";
 import findAllTokens from "./findAllTokens";
-
-type Return = {
-  pasta: UFOPasta | null,
-  errors: ReadonlyArray<string>,
-  warnings: ReadonlyArray<string>,
-};
-
-const UfoPasta = zod.strictObject({
-  goals: zod.record(
-    zod.string(),
-    zod.record(zod.string(), zod.array(zod.string()))
-  ),
-  tokens: zod.record(zod.string(), zod.array(zod.string())),
-  category_counts: zod.record(zod.string(), zod.int()),
-  categories_with_global_group_repeat_prevention: zod
-    .array(zod.string())
-    .optional(),
-  category_difficulty_tiers: zod.array(zod.array(zod.string())).optional(),
-});
+import { Return } from "./validateStr";
 
 export default function validateUfo(pasta: UFOPasta): Return {
   try {

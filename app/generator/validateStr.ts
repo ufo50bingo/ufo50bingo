@@ -1,9 +1,8 @@
 import zod from "zod";
 import { UFOPasta } from "./ufoGenerator";
-import findAllTokens from "./findAllTokens";
 import validateUfo from "./validateUfo";
 
-type Return = {
+export type Return = {
   pasta: UFOPasta | null,
   errors: ReadonlyArray<string>,
   warnings: ReadonlyArray<string>,

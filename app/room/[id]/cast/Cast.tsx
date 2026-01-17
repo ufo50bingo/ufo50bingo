@@ -33,6 +33,7 @@ import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import findGoal, { FoundGoal } from "@/app/findGoal";
 import { StandardGeneral } from "@/app/pastas/pastaTypes";
 import getGamesForPlayer from "./getGamesForPlayer";
+import useLocalNumber from "@/app/localStorage/useLocalNumber";
 
 export type FoundStandardGeneral = FoundGoal<
   StandardGeneral,
@@ -56,9 +57,6 @@ export type CastProps = {
   initialAllPlayerGames: ReadonlyArray<ReadonlyArray<CurrentGame>>;
   playerName: string;
 };
-
-// TODO: Add selector
-const NUM_PLAYERS = 2;
 
 export default function Cast({
   id,
@@ -137,6 +135,7 @@ export default function Cast({
     setShowRecentGames,
   } = useLocalState(id, seed);
 
+  const [numPlayers, setNumPlayers] = useLocalNumber({ key: 'num-players', defaultValue: 2 });
   const [isHiddenRaw, setIsHidden] = useState(hideByDefault);
 
   const leftScore = board.filter((square) => square.color === leftColor).length;
@@ -352,7 +351,7 @@ export default function Cast({
         {showGameSelector ? (
           <Stack gap={8}>
             <Group>
-              {(new Array(NUM_PLAYERS)).fill(null).map((_, playerNum) => (
+              {(new Array(numPlayers)).fill(null).map((_, playerNum) => (
                 <GameSelector
                   key={playerNum}
                   color={leftColor}
@@ -424,6 +423,8 @@ export default function Cast({
         setHighlightCurrentGame={setHighlightCurrentGame}
         showRecentGames={showRecentGames}
         setShowRecentGames={setShowRecentGames}
+        numPlayers={numPlayers}
+        setNumPlayers={setNumPlayers}
       />
       {editingIndex != null && (
         <EditSquare

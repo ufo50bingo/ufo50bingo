@@ -5,6 +5,7 @@ import {
   Button,
   Checkbox,
   Drawer,
+  NumberInput,
   Select,
   Stack,
   Text,
@@ -51,6 +52,8 @@ type Props = {
   setHighlightCurrentGame: (newHighlightCurrentGame: boolean) => unknown;
   showRecentGames: boolean;
   setShowRecentGames: (newShowRecentGames: boolean) => unknown;
+  numPlayers: number;
+  setNumPlayers: (numPlayers: number) => unknown;
 };
 
 export default function CastSettings({
@@ -80,6 +83,8 @@ export default function CastSettings({
   setHighlightCurrentGame,
   showRecentGames,
   setShowRecentGames,
+  numPlayers,
+  setNumPlayers,
 }: Props) {
   const [isShown, setIsShown] = useState(leftColor === rightColor);
 
@@ -144,8 +149,8 @@ export default function CastSettings({
                               event.currentTarget.checked
                                 ? [...shownDifficulties, difficulty]
                                 : shownDifficulties.filter(
-                                    (d) => d !== difficulty
-                                  )
+                                  (d) => d !== difficulty
+                                )
                             )
                           }
                           label={DIFFICULTY_NAMES[difficulty]}
@@ -196,6 +201,22 @@ export default function CastSettings({
                         setHighlightCurrentGame(event.target.checked)
                       }
                     />
+                    {highlightCurrentGame && (
+                      <NumberInput
+                        label="Number of players"
+                        description="General goals and recent games are only tracked for the first two players"
+                        min={2}
+                        max={8}
+                        allowDecimal={false}
+                        value={numPlayers}
+                        onChange={(maybeStr) => {
+                          if (typeof maybeStr !== "number" || maybeStr < 2 || maybeStr > 8) {
+                            return;
+                          }
+                          setNumPlayers(numPlayers);
+                        }}
+                      />
+                    )}
                     <Checkbox
                       label="Show recent games"
                       checked={showRecentGames}

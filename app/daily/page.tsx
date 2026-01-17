@@ -11,6 +11,8 @@ import { SPICY_UFO } from "../pastas/spicyUfo";
 import { STANDARD_UFO } from "../pastas/standardUfo";
 import ufoGenerator, { UFOPasta } from "../generator/ufoGenerator";
 import { StandardGeneral } from "../pastas/pastaTypes";
+import { readSession } from "../session/sessionUtil";
+import { redirect, RedirectType } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -199,8 +201,14 @@ async function getDailyBoard(date: LocalDate): Promise<DailyData> {
 export default async function DailyPage(props: {
   searchParams?: Promise<FilterParams>;
 }) {
-  const params = await props.searchParams;
+  const [params, session] = await Promise.all([props.searchParams, readSession()]);
+
   const dateParam = params?.date;
+  // only allow admins to look into the future
+  if (dateParam != null && dateParam > toISODate(getEasternDate()) && session?.admin !== true) {
+    redirect("/daily", RedirectType.replace);
+  }
+
   const date = dateParam == null ? getEasternDate() : fromISODate(dateParam);
   const dailyData = await getDailyBoard(date);
   return <DailyFeedFetcher date={date} dailyData={dailyData} />;

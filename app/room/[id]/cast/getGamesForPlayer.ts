@@ -1,7 +1,7 @@
-import { CurrentGame } from "./useSyncedState";
+import { AllPlayerGames, CurrentGame } from "./useSyncedState";
 
 export default function getGamesForPlayer(
-  allPlayerGames: ReadonlyArray<ReadonlyArray<CurrentGame>>,
+  allPlayerGames: AllPlayerGames,
   playerNum: number
 ): ReadonlyArray<CurrentGame> {
   return allPlayerGames[playerNum] ?? [];

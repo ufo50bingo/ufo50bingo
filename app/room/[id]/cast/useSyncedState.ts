@@ -16,7 +16,7 @@ type Props = {
   initialCounts: GeneralCounts;
   initialLeftColor: BingosyncColor;
   initialRightColor: BingosyncColor;
-  initialAllPlayerGames: ReadonlyArray<ReadonlyArray<CurrentGame>>;
+  initialAllPlayerGames: AllPlayerGames;
 };
 
 interface ColorChangeSync {
@@ -57,11 +57,15 @@ export interface CurrentGameRow extends CurrentGameSync {
   room_id: string;
 }
 
+// null | undefined is here because we sometimes update later indices before we
+// define earlier indices
+export type AllPlayerGames = ReadonlyArray<null | undefined | ReadonlyArray<CurrentGame>>;
+
 export type SyncedState = {
   leftColor: BingosyncColor;
   rightColor: BingosyncColor;
   generals: GeneralCounts;
-  allPlayerGames: ReadonlyArray<ReadonlyArray<CurrentGame>>;
+  allPlayerGames: AllPlayerGames;
   addGame: (newGame: null | ProperGame, playerNum: number) => unknown;
   setLeftColor: (newColor: BingosyncColor) => unknown;
   setRightColor: (newColor: BingosyncColor) => unknown;
@@ -83,7 +87,7 @@ export default function useSyncedState({
   const [rightColor, setRightColorRaw] =
     useState<BingosyncColor>(initialRightColor);
   const [generals, setGeneralsRaw] = useState<GeneralCounts>(initialCounts);
-  const [allPlayerGames, setAllPlayerGames] = useState<ReadonlyArray<ReadonlyArray<CurrentGame>>>(initialAllPlayerGames);
+  const [allPlayerGames, setAllPlayerGames] = useState<AllPlayerGames>(initialAllPlayerGames);
 
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const setGeneralGameCountRef = useRef<
@@ -254,10 +258,10 @@ export default function useSyncedState({
 }
 
 function updateAllPlayerGames(
-  allPlayerGames: ReadonlyArray<ReadonlyArray<CurrentGame>>,
+  allPlayerGames: AllPlayerGames,
   newGame: CurrentGame,
   playerNum: number
-): ReadonlyArray<ReadonlyArray<CurrentGame>> {
+): AllPlayerGames {
   const oldGames = getGamesForPlayer(allPlayerGames, playerNum);
   const newGames = [newGame, ...oldGames];
   const newAllPlayerGames = [...allPlayerGames];

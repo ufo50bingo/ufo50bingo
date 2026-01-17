@@ -19,7 +19,7 @@ import CastSettings from "./CastSettings";
 import GeneralIcons from "./GeneralIcons";
 import EditSquare from "./EditSquare";
 import { getResult } from "@/app/matches/computeResult";
-import useSyncedState, { CountState, CurrentGame } from "./useSyncedState";
+import useSyncedState, { AllPlayerGames, CountState, CurrentGame } from "./useSyncedState";
 import useLocalState from "./useLocalState";
 import useBingosyncSocket from "../common/useBingosyncSocket";
 import useDings from "../play/useDings";
@@ -54,7 +54,7 @@ export type CastProps = {
   initialCounts: { [goal: string]: CountState };
   initialLeftColor: BingosyncColor;
   initialRightColor: BingosyncColor;
-  initialAllPlayerGames: ReadonlyArray<ReadonlyArray<CurrentGame>>;
+  initialAllPlayerGames: AllPlayerGames;
   playerName: string;
 };
 
@@ -248,14 +248,14 @@ export default function Cast({
     if (!highlightCurrentGame) {
       return undefined;
     }
-    const currentGames = allPlayerGames.map(playerGames => playerGames[0]);
+    const currentGames = allPlayerGames.map(playerGames => playerGames == null ? null : playerGames[0]);
     const currentLeftGames = currentGames.filter((g, index) => g != null && index % 2 === 0);
     const currentRightGames = currentGames.filter((g, index) => g != null && index % 2 === 1);
     const leftIndices = currentLeftGames.
-      flatMap(game => game.game != null ? (gameToGoals[game.game] ?? []) : [])
+      flatMap(game => game?.game != null ? (gameToGoals[game.game] ?? []) : [])
       .map(item => item[1]);
     const rightIndices = currentRightGames
-      .flatMap(game => game.game != null ? (gameToGoals[game.game] ?? []) : [])
+      .flatMap(game => game?.game != null ? (gameToGoals[game.game] ?? []) : [])
       .map(item => item[1]);
     const highlights = Array(25)
       .fill(null)

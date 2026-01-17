@@ -57,7 +57,6 @@ function getOverlays(
   const changes = getChangesWithoutMistakes(changelog.changes);
   const ranges = getSquareCompletionRanges(matchStartTime, changes);
 
-  console.log("ranges", ranges);
   changes.forEach((change) => {
     if (change.color == "blank") {
       const oldOrder = orders[change.index];
@@ -76,8 +75,6 @@ function getOverlays(
       count += 1;
     }
   });
-
-  console.log("orders", orders);
 
   const overlays = Array(25)
     .fill(null)
@@ -445,9 +442,9 @@ export default function MatchView({ match }: Props) {
                 vod={
                   match.vod != null && match.vod.startSeconds != null
                     ? {
-                        url: match.vod.url,
-                        startSeconds: match.vod.startSeconds,
-                      }
+                      url: match.vod.url,
+                      startSeconds: match.vod.startSeconds,
+                    }
                     : null
                 }
                 analysisSeconds={match.analysisSeconds}

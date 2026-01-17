@@ -83,7 +83,7 @@ export default function useSyncedState({
   const [rightColor, setRightColorRaw] =
     useState<BingosyncColor>(initialRightColor);
   const [generals, setGeneralsRaw] = useState<GeneralCounts>(initialCounts);
-  const [allPlayerGames, setAllPlayerGames] = useState<ReadonlyArray<ReadonlyArray<CurrentGame>>>([]);
+  const [allPlayerGames, setAllPlayerGames] = useState<ReadonlyArray<ReadonlyArray<CurrentGame>>>(initialAllPlayerGames);
 
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const setGeneralGameCountRef = useRef<
@@ -134,8 +134,8 @@ export default function useSyncedState({
         { event: "add_game" },
         (payload: { payload: CurrentGameSync }) => {
           const change = payload.payload;
-          setAllPlayerGames(updateAllPlayerGames(
-            allPlayerGames,
+          setAllPlayerGames(oldAllPlayerGames => updateAllPlayerGames(
+            oldAllPlayerGames,
             { game: change.game, start_time: change.start_time },
             change.player_num,
           ));
@@ -259,7 +259,7 @@ function updateAllPlayerGames(
   playerNum: number
 ): ReadonlyArray<ReadonlyArray<CurrentGame>> {
   const oldGames = getGamesForPlayer(allPlayerGames, playerNum);
-  const newGames = [...oldGames, newGame];
+  const newGames = [newGame, ...oldGames];
   const newAllPlayerGames = [...allPlayerGames];
   newAllPlayerGames[playerNum] = newGames;
   return newAllPlayerGames

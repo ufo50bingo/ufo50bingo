@@ -213,7 +213,7 @@ export default function CastSettings({
                           if (typeof maybeStr !== "number" || maybeStr < 2 || maybeStr > 8) {
                             return;
                           }
-                          setNumPlayers(numPlayers);
+                          setNumPlayers(maybeStr);
                         }}
                       />
                     )}

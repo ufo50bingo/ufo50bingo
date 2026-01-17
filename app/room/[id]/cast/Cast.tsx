@@ -252,10 +252,10 @@ export default function Cast({
     const currentLeftGames = currentGames.filter((g, index) => g != null && index % 2 === 0);
     const currentRightGames = currentGames.filter((g, index) => g != null && index % 2 === 1);
     const leftIndices = currentLeftGames.
-      flatMap(game => game.game != null ? gameToGoals[game.game] : [])
+      flatMap(game => game.game != null ? (gameToGoals[game.game] ?? []) : [])
       .map(item => item[1]);
     const rightIndices = currentRightGames
-      .flatMap(game => game.game != null ? gameToGoals[game.game] : [])
+      .flatMap(game => game.game != null ? (gameToGoals[game.game] ?? []) : [])
       .map(item => item[1]);
     const highlights = Array(25)
       .fill(null)
@@ -354,7 +354,7 @@ export default function Cast({
               {(new Array(numPlayers)).fill(null).map((_, playerNum) => (
                 <GameSelector
                   key={playerNum}
-                  color={leftColor}
+                  color={playerNum % 2 === 0 ? leftColor : rightColor}
                   game={getGamesForPlayer(allPlayerGames, playerNum)[0]?.game ?? null}
                   onChange={(newGame: ProperGame | null) => addGame(newGame, playerNum)}
                 />

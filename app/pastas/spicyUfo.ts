@@ -112,8 +112,8 @@ export const SPICY_UFO = {
       railheist: [
         "RAIL HEIST: Beat levels 1, 2, and 3 while knocking every lawman off the train",
         "RAIL HEIST: Beat levels 1 through 5 with a speed record of 18 or less on each",
-        "RAIL HEIST: Collect the Angel and Devil stars on {{rh_level}}, {{rh_level}}, and {{rh_level}}",
-        "RAIL HEIST: Obtain both the Devil Star & Time Star on 6 levels (Levels 1-3 excluded)",
+        "RAIL HEIST: LAZY-COPS allowed; Collect the Angel and Devil stars on {{rh_level}}, {{rh_level}}, and {{rh_level}}",
+        "RAIL HEIST: LAZY-COPS allowed; Obtain both the Devil Star & Time Star on 6 levels (Levels 1-3 excluded)",
       ],
       vainger: [
         "VAINGER: Defeat {{vainger_boss}} with at least two modules placed in {{vainger_slot}}",
@@ -443,7 +443,7 @@ export const SPICY_UFO = {
         "VELGRESS: Gold disk without being stunned by any enemies or traps",
       ],
       planetzoldath: [
-        "PLANET ZOLDATH: Collect 2 map pieces; You must kill all enemies/NPCs (except Snails) whenever possible before changing screens",
+        "PLANET ZOLDATH: Collect 2 map pieces; Must kill all enemies/NPCs (excl. Snails) before leaving a screen if holding capable equipment",
         "PLANET ZOLDATH: Collect the dungeon Map Piece or trade Map Piece without picking up any energy cubes",
       ],
       attactics: [
@@ -502,7 +502,9 @@ export const SPICY_UFO = {
       ],
       oniondelivery: [
         "ONION DELIVERY: Deliver 10 onions and complete the day on 4 separate days in a run",
+        "ONION DELIVERY: Make 20 overtime deliveries in a week (must complete days to count)",
         "ONION DELIVERY: Gold Disk without landing in any slime pits",
+        "ONION DELIVERY: Gold Disk with no failed days",
       ],
       caramelcaramel: [
         "CARAMEL CARAMEL: Score 100,000+ points",
@@ -696,7 +698,7 @@ export const SPICY_UFO = {
         "ONION DELIVERY: Cherry Disk with at least 7 onions delivered each day",
         "ONION DELIVERY: Cherry Disk with exactly 5 onions delivered on days 1 & 2",
         "ONION DELIVERY: Gold Disk with no failed days",
-        "ONION DELIVERY: Gold Disk without hitting any time boxes in the run",
+        "ONION DELIVERY: Cherry Disk with 64+ onions delivered",
       ],
       caramelcaramel: [
         "CARAMEL CARAMEL: Cherry disk with max of 1 death",
@@ -896,7 +898,8 @@ export const SPICY_UFO = {
       "Obtain 50% completion in Porgy",
     ],
     cons_games: [
-      "6 consecutive games under THINKY PLAY library sort",
+      "3 consecutive games under THINKY PLAY library sort",
+      "3 consecutive games under REFLEX PLAY library sort",
       "6 consecutive games under QUICK PLAY library sort",
     ],
     gen_boss: [
@@ -1072,6 +1075,7 @@ export const SPICY_UFO = {
   },
   categories_with_global_group_repeat_prevention: ["general"],
 } as const;
+
 
 
 

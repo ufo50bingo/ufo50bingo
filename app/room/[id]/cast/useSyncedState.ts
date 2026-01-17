@@ -3,6 +3,7 @@ import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { useEffect, useMemo, useRef, useState } from "react";
 import getSupabaseClient from "./getSupabaseClient";
 import { GeneralCounts } from "./CastPage";
+import getGamesForPlayer from "./getGamesForPlayer";
 
 export interface CountState {
   leftCounts: { [game: string]: number };
@@ -15,8 +16,7 @@ type Props = {
   initialCounts: GeneralCounts;
   initialLeftColor: BingosyncColor;
   initialRightColor: BingosyncColor;
-  initialLeftGames: ReadonlyArray<CurrentGame>;
-  initialRightGames: ReadonlyArray<CurrentGame>;
+  initialAllPlayerGames: ReadonlyArray<ReadonlyArray<CurrentGame>>;
 };
 
 interface ColorChangeSync {
@@ -50,7 +50,7 @@ export interface CurrentGame {
 
 interface CurrentGameSync extends CurrentGame {
   seed: number;
-  is_left: boolean;
+  player_num: number;
 }
 
 export interface CurrentGameRow extends CurrentGameSync {
@@ -59,12 +59,10 @@ export interface CurrentGameRow extends CurrentGameSync {
 
 export type SyncedState = {
   leftColor: BingosyncColor;
-  leftGames: ReadonlyArray<CurrentGame>;
   rightColor: BingosyncColor;
-  rightGames: ReadonlyArray<CurrentGame>;
   generals: GeneralCounts;
-  addLeftGame: (newGame: null | ProperGame) => unknown;
-  addRightGame: (newGame: null | ProperGame) => unknown;
+  allPlayerGames: ReadonlyArray<ReadonlyArray<CurrentGame>>;
+  addGame: (newGame: null | ProperGame, playerNum: number) => unknown;
   setLeftColor: (newColor: BingosyncColor) => unknown;
   setRightColor: (newColor: BingosyncColor) => unknown;
   setGeneralGameCount: (change: CountChange) => unknown;
@@ -76,8 +74,7 @@ export default function useSyncedState({
   initialCounts,
   initialLeftColor,
   initialRightColor,
-  initialLeftGames,
-  initialRightGames,
+  initialAllPlayerGames,
 }: Props): SyncedState {
   const supabase = getSupabaseClient();
 
@@ -86,10 +83,7 @@ export default function useSyncedState({
   const [rightColor, setRightColorRaw] =
     useState<BingosyncColor>(initialRightColor);
   const [generals, setGeneralsRaw] = useState<GeneralCounts>(initialCounts);
-  const [leftGames, setLeftGamesRaw] =
-    useState<ReadonlyArray<CurrentGame>>(initialLeftGames);
-  const [rightGames, setRightGamesRaw] =
-    useState<ReadonlyArray<CurrentGame>>(initialRightGames);
+  const [allPlayerGames, setAllPlayerGames] = useState<ReadonlyArray<ReadonlyArray<CurrentGame>>>([]);
 
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const setGeneralGameCountRef = useRef<
@@ -99,8 +93,7 @@ export default function useSyncedState({
   // eslint-disable-next-line react-hooks/refs
   if (seedRef.current !== seed) {
     setGeneralsRaw({});
-    setLeftGamesRaw([]);
-    setRightGamesRaw([]);
+    setAllPlayerGames([]);
     // eslint-disable-next-line react-hooks/refs
     seedRef.current = seed;
   }
@@ -141,17 +134,11 @@ export default function useSyncedState({
         { event: "add_game" },
         (payload: { payload: CurrentGameSync }) => {
           const change = payload.payload;
-          if (change.is_left) {
-            setLeftGamesRaw((prevGames) => [
-              { game: change.game, start_time: change.start_time },
-              ...prevGames,
-            ]);
-          } else {
-            setRightGamesRaw((prevGames) => [
-              { game: change.game, start_time: change.start_time },
-              ...prevGames,
-            ]);
-          }
+          setAllPlayerGames(updateAllPlayerGames(
+            allPlayerGames,
+            { game: change.game, start_time: change.start_time },
+            change.player_num,
+          ));
         }
       )
       .subscribe();
@@ -185,8 +172,17 @@ export default function useSyncedState({
       setRightColorRaw(newColor);
       await syncColor(newColor, false);
     };
-    const syncCurrentGame = async (newGame: CurrentGame, isLeft: boolean) => {
-      const syncChange: CurrentGameSync = { ...newGame, is_left: isLeft, seed };
+    const addGame = async (newGame: null | ProperGame, playerNum: number) => {
+      const newEntry: CurrentGame = {
+        game: newGame,
+        start_time: Date.now(),
+      };
+      setAllPlayerGames(updateAllPlayerGames(
+        allPlayerGames,
+        newEntry,
+        playerNum,
+      ));
+      const syncChange: CurrentGameSync = { ...newEntry, player_num: playerNum, seed };
       const rowChange: CurrentGameRow = { ...syncChange, room_id: id };
       if (channelRef.current != null) {
         channelRef.current.send({
@@ -196,22 +192,6 @@ export default function useSyncedState({
         });
       }
       await supabase.from("current_game").insert(rowChange);
-    };
-    const addLeftGame = async (newGame: null | ProperGame) => {
-      const newEntry: CurrentGame = {
-        game: newGame,
-        start_time: Date.now(),
-      };
-      setLeftGamesRaw((prevGames) => [newEntry, ...prevGames]);
-      await syncCurrentGame(newEntry, true);
-    };
-    const addRightGame = async (newGame: null | ProperGame) => {
-      const newEntry: CurrentGame = {
-        game: newGame,
-        start_time: Date.now(),
-      };
-      setRightGamesRaw((prevGames) => [newEntry, ...prevGames]);
-      await syncCurrentGame(newEntry, false);
     };
     const setGeneralGameCount = async (
       change: CountChange,
@@ -223,13 +203,13 @@ export default function useSyncedState({
       newCounts[change.game] = change.count;
       const newGeneralState = change.is_left
         ? {
-            leftCounts: newCounts,
-            rightCounts,
-          }
+          leftCounts: newCounts,
+          rightCounts,
+        }
         : {
-            leftCounts,
-            rightCounts: newCounts,
-          };
+          leftCounts,
+          rightCounts: newCounts,
+        };
       const newGenerals = {
         ...generals,
         [change.goal]: newGeneralState,
@@ -256,10 +236,8 @@ export default function useSyncedState({
       generals,
       leftColor,
       rightColor,
-      leftGames,
-      rightGames,
-      addLeftGame,
-      addRightGame,
+      allPlayerGames,
+      addGame,
       setLeftColor,
       setRightColor,
       setGeneralGameCount,
@@ -267,11 +245,22 @@ export default function useSyncedState({
   }, [
     leftColor,
     rightColor,
-    leftGames,
-    rightGames,
+    allPlayerGames,
     generals,
     id,
     seed,
     supabase,
   ]);
+}
+
+function updateAllPlayerGames(
+  allPlayerGames: ReadonlyArray<ReadonlyArray<CurrentGame>>,
+  newGame: CurrentGame,
+  playerNum: number
+): ReadonlyArray<ReadonlyArray<CurrentGame>> {
+  const oldGames = getGamesForPlayer(allPlayerGames, playerNum);
+  const newGames = [...oldGames, newGame];
+  const newAllPlayerGames = [...allPlayerGames];
+  newAllPlayerGames[playerNum] = newGames;
+  return newAllPlayerGames
 }

@@ -2,7 +2,7 @@ import { fetchBoard, fetchFeed, getSocketKey } from "@/app/fetchMatchInfo";
 import { BingosyncColor, getBoard } from "@/app/matches/parseBingosyncData";
 import CastWrapper from "./CastWrapper";
 import getSupabaseClient from "./getSupabaseClient";
-import { CountChangeRow, CountState, CurrentGameRow } from "./useSyncedState";
+import { CountChangeRow, CountState, CurrentGame, CurrentGameRow } from "./useSyncedState";
 import { RoomCookie, toBingosyncCookie } from "../roomCookie";
 import getSeed from "../common/getSeed";
 
@@ -36,12 +36,12 @@ export default async function CastPage({ id, roomCookie }: Props) {
   const currentGamesForSeed = rawCurrentGames.filter(
     (entry) => entry.seed === seed
   );
-  const leftGames = currentGamesForSeed
-    .filter((entry) => entry.is_left === true)
-    .map((entry) => ({ game: entry.game, start_time: entry.start_time }));
-  const rightGames = currentGamesForSeed
-    .filter((entry) => entry.is_left === false)
-    .map((entry) => ({ game: entry.game, start_time: entry.start_time }));
+  const allPlayerGames: Array<Array<CurrentGame>> = [];
+  for (const entry of currentGamesForSeed) {
+    const curGames = allPlayerGames[entry.player_num] ?? [];
+    curGames.push({ game: entry.game, start_time: entry.start_time });
+    allPlayerGames[entry.player_num] = curGames;
+  }
   const structuredCounts = structureCounts(countsForSeed);
   const board = getBoard(rawBoard);
   return (
@@ -54,8 +54,7 @@ export default async function CastPage({ id, roomCookie }: Props) {
       initialCounts={structuredCounts}
       initialLeftColor={colors.left}
       initialRightColor={colors.right}
-      initialLeftGames={leftGames}
-      initialRightGames={rightGames}
+      initialAllPlayerGames={allPlayerGames}
       playerName={roomCookie.name}
     />
   );

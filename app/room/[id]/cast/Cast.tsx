@@ -10,7 +10,7 @@ import {
 import { Group, Stack } from "@mantine/core";
 import { useCallback, useMemo, useState } from "react";
 import Feed from "../common/Feed";
-import { Game, ORDERED_GAMES } from "@/app/goals";
+import { Game, ORDERED_GAMES, ProperGame } from "@/app/goals";
 import { getAllTerminalCodes, getGameToGoals } from "./findAllGames";
 import GeneralGoal from "./GeneralGoal";
 import InfoCard from "./InfoCard";
@@ -32,6 +32,7 @@ import SideCell from "./SideCell";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import findGoal, { FoundGoal } from "@/app/findGoal";
 import { StandardGeneral } from "@/app/pastas/pastaTypes";
+import getGamesForPlayer from "./getGamesForPlayer";
 
 export type FoundStandardGeneral = FoundGoal<
   StandardGeneral,
@@ -52,10 +53,12 @@ export type CastProps = {
   initialCounts: { [goal: string]: CountState };
   initialLeftColor: BingosyncColor;
   initialRightColor: BingosyncColor;
-  initialLeftGames: ReadonlyArray<CurrentGame>;
-  initialRightGames: ReadonlyArray<CurrentGame>;
+  initialAllPlayerGames: ReadonlyArray<ReadonlyArray<CurrentGame>>;
   playerName: string;
 };
+
+// TODO: Add selector
+const NUM_PLAYERS = 2;
 
 export default function Cast({
   id,
@@ -66,8 +69,7 @@ export default function Cast({
   initialCounts,
   initialLeftColor,
   initialRightColor,
-  initialLeftGames,
-  initialRightGames,
+  initialAllPlayerGames,
   playerName,
 }: CastProps) {
   const [gameToGoals, setGameToGoals] = useState(() =>
@@ -106,18 +108,15 @@ export default function Cast({
     setRightColor,
     generals,
     setGeneralGameCount,
-    leftGames,
-    rightGames,
-    addLeftGame,
-    addRightGame,
+    allPlayerGames,
+    addGame,
   } = useSyncedState({
     id,
     seed,
     initialCounts,
     initialLeftColor,
     initialRightColor,
-    initialLeftGames,
-    initialRightGames,
+    initialAllPlayerGames,
   });
   const {
     shownDifficulties,
@@ -246,19 +245,19 @@ export default function Cast({
     />
   );
 
-  const leftGame = leftGames.length > 0 ? leftGames[0].game : null;
-  const rightGame = rightGames.length > 0 ? rightGames[0].game : null;
-
   const highlights = useMemo(() => {
     if (!highlightCurrentGame) {
       return undefined;
     }
-    const leftIndices = (
-      (leftGame == null ? null : gameToGoals[leftGame]) ?? []
-    ).map((item) => item[1]);
-    const rightIndices = (
-      (rightGame == null ? null : gameToGoals[rightGame]) ?? []
-    ).map((item) => item[1]);
+    const currentGames = allPlayerGames.map(playerGames => playerGames[0]);
+    const currentLeftGames = currentGames.filter((g, index) => g != null && index % 2 === 0);
+    const currentRightGames = currentGames.filter((g, index) => g != null && index % 2 === 1);
+    const leftIndices = currentLeftGames.
+      flatMap(game => game.game != null ? gameToGoals[game.game] : [])
+      .map(item => item[1]);
+    const rightIndices = currentRightGames
+      .flatMap(game => game.game != null ? gameToGoals[game.game] : [])
+      .map(item => item[1]);
     const highlights = Array(25)
       .fill(null)
       .map((_, index) => {
@@ -273,13 +272,15 @@ export default function Cast({
       });
     return highlights;
   }, [
+    allPlayerGames,
     leftColor,
     rightColor,
-    leftGame,
-    rightGame,
     gameToGoals,
     highlightCurrentGame,
   ]);
+
+  const leftGames = getGamesForPlayer(allPlayerGames, 0);
+  const rightGames = getGamesForPlayer(allPlayerGames, 1);
 
   return (
     <>
@@ -351,16 +352,14 @@ export default function Cast({
         {showGameSelector ? (
           <Stack gap={8}>
             <Group>
-              <GameSelector
-                color={leftColor}
-                game={leftGame}
-                onChange={addLeftGame}
-              />
-              <GameSelector
-                color={rightColor}
-                game={rightGame}
-                onChange={addRightGame}
-              />
+              {(new Array(NUM_PLAYERS)).fill(null).map((_, playerNum) => (
+                <GameSelector
+                  key={playerNum}
+                  color={leftColor}
+                  game={getGamesForPlayer(allPlayerGames, playerNum)[0]?.game ?? null}
+                  onChange={(newGame: ProperGame | null) => addGame(newGame, playerNum)}
+                />
+              ))}
             </Group>
             {generalGoals.length > 0 ? (
               getCard(generalGoals[0], 431)

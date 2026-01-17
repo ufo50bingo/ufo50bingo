@@ -281,6 +281,9 @@ export default function Cast({
   const leftGames = getGamesForPlayer(allPlayerGames, 0);
   const rightGames = getGamesForPlayer(allPlayerGames, 1);
 
+  const numRows = Math.ceil(numPlayers / 2);
+  const gameSelectorHeight = numRows * 44;
+
   return (
     <>
       <Group>
@@ -350,7 +353,7 @@ export default function Cast({
         <Feed rawFeed={rawFeed} />
         {showGameSelector ? (
           <Stack gap={8}>
-            <Group>
+            <Group wrap="wrap" w={268} gap={8} justify="space-between">
               {(new Array(numPlayers)).fill(null).map((_, playerNum) => (
                 <GameSelector
                   key={playerNum}
@@ -361,9 +364,9 @@ export default function Cast({
               ))}
             </Group>
             {generalGoals.length > 0 ? (
-              getCard(generalGoals[0], 431)
+              getCard(generalGoals[0], 475 - gameSelectorHeight)
             ) : (
-              <InfoCard title="Multi-goal games" height={431}>
+              <InfoCard title="Multi-goal games" height={475 - gameSelectorHeight}>
                 <Stack gap={4}>
                   {multiGoalGameElements.length > 0
                     ? multiGoalGameElements

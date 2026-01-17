@@ -201,7 +201,7 @@ export default function CastSettings({
                         setHighlightCurrentGame(event.target.checked)
                       }
                     />
-                    {highlightCurrentGame && (
+                    {showGameSelector && highlightCurrentGame && (
                       <NumberInput
                         label="Number of players"
                         description="General goals and recent games are only tracked for the first two players"

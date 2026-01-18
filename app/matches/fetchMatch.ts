@@ -1,8 +1,9 @@
 import getSql from "../getSql";
 import { MATCH_FIELDS, getMatchFromRaw } from "./getMatchFromRaw";
 import { Match } from "./Matches";
+import { cache } from 'react'
 
-export default async function fetchMatch(id: string): Promise<null | Match> {
+async function fetchMatch(id: string): Promise<null | Match> {
   const sql = getSql();
   const result = await sql`
     SELECT
@@ -15,3 +16,5 @@ export default async function fetchMatch(id: string): Promise<null | Match> {
   }
   return getMatchFromRaw(result[0]);
 }
+
+export default cache(fetchMatch);

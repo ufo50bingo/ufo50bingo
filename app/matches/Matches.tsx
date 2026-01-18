@@ -28,7 +28,7 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import { refreshMatch } from "./refreshMatch";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import ResultModal from "./ResultModal";
 import deleteMatch from "./deleteMatch";
 import {
@@ -263,13 +263,13 @@ export default function Matches({ matches, totalPages }: Props) {
   const isDirty =
     (getSeasonStr(season) ?? null) !== (searchParams.get("season") ?? null) ||
     (tier == null || tier === "" ? null : tier) !==
-      (searchParams.get("tier") ?? null) ||
+    (searchParams.get("tier") ?? null) ||
     (week == null || week === "" ? null : week) !==
-      (searchParams.get("week") ?? null) ||
+    (searchParams.get("week") ?? null) ||
     (player == null || player === "" ? null : player) !==
-      (searchParams.get("player") ?? null) ||
+    (searchParams.get("player") ?? null) ||
     (admin == null || admin === "" ? null : admin) !==
-      (searchParams.get("admin") ?? null);
+    (searchParams.get("admin") ?? null);
 
   const viewingMatch =
     viewingId == null ? null : matches.find((match) => match.id === viewingId);
@@ -289,6 +289,22 @@ export default function Matches({ matches, totalPages }: Props) {
   // 525px is the width of the board, which is also the default width of the modal
   const isMobile = useMediaQuery("(max-width: 525px)");
 
+  useEffect(() => {
+    const onPopState = () => {
+      if (window.location.pathname === '/matches') {
+        setViewingId(null)
+      } else {
+        const regexResult = window.location.pathname.match(`^/match/(.*)/?$`);
+        if (regexResult != null) {
+          const id = regexResult[1];
+          setViewingId(id);
+        }
+      }
+    }
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
+  }, [])
+
   if (!isMounted || (hideByDefault && revealedMatchIDs == null)) {
     return null;
   }
@@ -298,7 +314,7 @@ export default function Matches({ matches, totalPages }: Props) {
         <Alert variant="light">
           <Text size="sm">
             When you finish your match, please use the{" "}
-            <ActionIcon color="green" onClick={() => {}}>
+            <ActionIcon color="green" onClick={() => { }}>
               <IconEdit size={16} />
             </ActionIcon>{" "}
             icon to Refresh data from Bingosync and add a VOD Link, if
@@ -511,6 +527,7 @@ export default function Matches({ matches, totalPages }: Props) {
                             <Anchor
                               size="sm"
                               onClick={() => {
+                                history.pushState({}, '', `/match/${match.id}`)
                                 setViewingId(match.id);
                               }}
                             >
@@ -650,6 +667,7 @@ export default function Matches({ matches, totalPages }: Props) {
           match={viewingMatch}
           onClose={() => {
             setViewingId(null);
+            history.back();
           }}
         />
       )}

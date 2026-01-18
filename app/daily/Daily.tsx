@@ -46,6 +46,12 @@ import getRTContent from "./getRTContent";
 import RTView from "./RTView";
 import LinkWithVariant from "../links/LinkWithVariant";
 import useSession from "../session/useSession";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "UFO 50 Daily Bingo",
+  description: "Take on the daily UFO 50 Bingo board!",
+};
 
 const EditDaily = dynamic(() => import("./EditDaily"), { ssr: false });
 
@@ -90,9 +96,9 @@ export default function Daily({
   const finalMark = feed.findLastIndex((item) => item.type === "mark");
   const finalBoard =
     finalMark >= 0 &&
-    finalMark !== bingo &&
-    finalMark !== majority &&
-    finalMark !== blackout
+      finalMark !== bingo &&
+      finalMark !== majority &&
+      finalMark !== blackout
       ? finalMark
       : null;
 
@@ -435,9 +441,8 @@ export default function Daily({
                         ? duration - completions[index - 1][2]
                         : duration;
                     const formattedDur = getDurationText(ms, false);
-                    return `${index + 1}. ${formattedDur} — ${
-                      plainBoard[squareIndex]
-                    }`;
+                    return `${index + 1}. ${formattedDur} — ${plainBoard[squareIndex]
+                      }`;
                   }
                 );
                 summary += "\n";

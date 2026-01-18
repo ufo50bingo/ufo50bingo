@@ -10,6 +10,12 @@ import splitAtTokens, { ResolvedToken } from "../generator/splitAtTokens";
 import getResolvedGoalText from "../generator/getResolvedGoalText";
 import findGoalFromAny from "../findGoalFromAny";
 import usePracticePasta, { ALL_PRACTICE_PASTAS } from "../usePracticePasta";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "UFO 50 Bingo Practice",
+  description: "Practice UFO 50 Bingo goals and track your stats!",
+};
 
 export default function Practice() {
   const {

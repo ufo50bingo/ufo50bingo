@@ -2,6 +2,12 @@
 
 import { Alert, Card, Container, List, Title } from "@mantine/core";
 import LinkWithVariant from "../links/LinkWithVariant";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "UFO 50 Bingo Resources",
+  description: "View community resources for UFO 50 Bingo",
+};
 
 export default function Resources() {
   return (

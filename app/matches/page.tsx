@@ -2,6 +2,12 @@ import Matches, { AdminFilter, Match } from "./Matches";
 import getSql from "../getSql";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 import { NeonQueryFunction, NeonQueryPromise } from "@neondatabase/serverless";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "UFO 50 Bingo Matches",
+  description: "View results for recent matches",
+};
 
 const PAGE_SIZE = 20;
 
@@ -52,8 +58,8 @@ function getFilterSql(searchParams: FilterParams | undefined): SQL {
     season == null
       ? sql``
       : season == 0
-      ? sql`AND league_season IS NULL`
-      : sql`AND league_season = ${season}`;
+        ? sql`AND league_season IS NULL`
+        : sql`AND league_season = ${season}`;
 
   const weekStr = searchParams?.week;
   const weekSql =

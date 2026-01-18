@@ -19,7 +19,7 @@ import {
 
 export const metadata: Metadata = {
   title: "UFO 50 Bingo",
-  description: "Organize games or practice goals!",
+  description: "Your home for UFO 50 Bingo. Create a match, watch streams, view results, practice goals, or try the daily bingo!",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

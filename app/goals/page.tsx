@@ -35,6 +35,12 @@ import usePracticePasta from "../usePracticePasta";
 import getSubcategoryName from "../generator/getSubcategoryName";
 import getCategoryName from "../generator/getCategoryName";
 import { PracticeVariant, usePracticeVariant } from "../PracticeVariantContext";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "All UFO 50 Bingo Goals",
+  description: "See the full list of UFO 50 Bingo goals, and your stats for each!",
+};
 
 export default function AllGoals() {
   const practiceVariant = usePracticeVariant();

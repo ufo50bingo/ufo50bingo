@@ -22,6 +22,12 @@ import MigrateHistory from "./MigrateHistory";
 import { useState } from "react";
 import enableAdmin from "../session/enableAdmin";
 import useSession from "../session/useSession";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "UFO 50 Bingo Settings",
+  description: "Manage your UFO 50 Bingo Settings",
+};
 
 export default function Settings() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();

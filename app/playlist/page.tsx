@@ -7,6 +7,12 @@ import { useAppContext } from "../AppContextProvider";
 import { db } from "../db";
 import { PRIORITY_MULTIPLIER } from "../PlaylistAddButton";
 import LinkWithVariant from "../links/LinkWithVariant";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "UFO 50 Bingo Playlist",
+  description: "Manage your UFO 50 Bingo practice playlist!",
+};
 
 export default function Playlist() {
   const { playlist } = useAppContext();
@@ -93,7 +99,7 @@ export default function Playlist() {
       ) : (
         <>
           Your playlist is empty! Add goals to your playlist by clicking{" "}
-          <ActionIcon onClick={() => {}} color="green">
+          <ActionIcon onClick={() => { }} color="green">
             <IconPlaylistAdd size={16} />
           </ActionIcon>{" "}
           on the <LinkWithVariant href="/goals">All Goals</LinkWithVariant> or{" "}

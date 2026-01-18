@@ -46,12 +46,6 @@ import getRTContent from "./getRTContent";
 import RTView from "./RTView";
 import LinkWithVariant from "../links/LinkWithVariant";
 import useSession from "../session/useSession";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "UFO 50 Daily Bingo",
-  description: "Take on the daily UFO 50 Bingo board!",
-};
 
 const EditDaily = dynamic(() => import("./EditDaily"), { ssr: false });
 

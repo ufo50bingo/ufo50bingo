@@ -6,12 +6,6 @@ import Board from "../Board";
 import { useState } from "react";
 import { BingosyncColor, TBoard } from "../matches/parseBingosyncData";
 import LinkWithVariant from "../links/LinkWithVariant";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "How to play UFO 50 Bingo",
-  description: "Learn how to play UFO 50 Bingo!",
-};
 
 const COLOR: BingosyncColor = "red";
 

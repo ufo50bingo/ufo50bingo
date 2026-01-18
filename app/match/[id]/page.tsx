@@ -16,7 +16,7 @@ export async function generateMetadata({
   }
   return {
     title: match.name,
-    description: `View results for ${match.name}`,
+    description: `View results for UFO 50 Bingo match "${match.name}"`,
   }
 }
 

@@ -13,6 +13,12 @@ import ufoGenerator, { UFOPasta } from "../generator/ufoGenerator";
 import { StandardGeneral } from "../pastas/pastaTypes";
 import { readSession } from "../session/sessionUtil";
 import { redirect, RedirectType } from "next/navigation";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "UFO 50 Daily Bingo",
+  description: "Take on the daily UFO 50 Bingo board!",
+};
 
 export const dynamic = "force-dynamic";
 

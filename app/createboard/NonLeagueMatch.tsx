@@ -437,20 +437,36 @@ export default function NonLeagueMatch() {
           setIsCreationInProgress(true);
 
           try {
+            let bingosyncVariant;
+            switch (metadata.type) {
+              case "UFO":
+              case "UFODraft":
+                bingosyncVariant = "18";
+                break;
+              case "GameNames":
+                bingosyncVariant = "172";
+                break;
+              case "Custom":
+                switch (customType) {
+                  case "srl_v5":
+                    bingosyncVariant = "187";
+                    break;
+                  case "ufo":
+                  case "fixed_board":
+                    bingosyncVariant = "18";
+                    break;
+                  case "randomized":
+                    bingosyncVariant = "172";
+                    break;
+                }
+                break;
+            }
             const id = await createMatch({
               roomName,
               password,
               isPublic,
               variant,
-              bingosyncVariant:
-                metadata.type === "UFO" ||
-                  (metadata.type === "Custom" &&
-                    (customType === "fixed_board" || customType === "ufo"))
-                  ? "18"
-                  : metadata.type === "GameNames" ||
-                    (metadata.type === "Custom" && customType === "randomized")
-                    ? "172"
-                    : "187",
+              bingosyncVariant,
               isCustom:
                 showFilters &&
                 (metadata.type === "GameNames" || metadata.type === "UFO"),

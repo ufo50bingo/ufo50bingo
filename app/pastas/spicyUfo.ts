@@ -99,7 +99,7 @@ export const SPICY_UFO = {
       ],
       partyhouse: [
         "PARTY HOUSE: Get 4 climbers to 9 popularity & win the scenario",
-        "PARTY HOUSE: Have 8 trouble guests in a party at once without using any fetch or peek abilities",
+        "PARTY HOUSE: Have 8 trouble guests in a party at once without using any fetch or peek abilities (counselor & busting OK)",
       ],
       hotfoot: [
         "HOT FOOT: Reach round 4; in each round, the teammate that gets the first point must score all points that round",
@@ -1075,6 +1075,7 @@ export const SPICY_UFO = {
   },
   categories_with_global_group_repeat_prevention: ["general"],
 } as const;
+
 
 
 

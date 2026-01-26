@@ -525,7 +525,7 @@ export const SPICY_UFO = {
         "DIVERS: Reach level 5 and collect an emblem",
       ],
       railheist: [
-        "RAIL HEIST: LAZY-COPS allowed; Beat any 7 levels (1, 2, 3 & 18 excluded) {{rh_hard_req1}}",
+        "RAIL HEIST: LAZY-COPS allowed; Beat any 6 levels (1, 2, 3 & 18 excluded) {{rh_hard_req1}}",
         "RAIL HEIST: LAZY-COPS allowed; Beat levels {{rh_hard_lv}} {{rh_hard_req2}}",
       ],
       vainger: [
@@ -890,8 +890,8 @@ export const SPICY_UFO = {
     levels_option: [
       "Beat 6 story scenarios in Avianos",
       "Cherry Disk Hyper Contender",
-      "Beat 4 story missions in Lords of Diskonia",
-      "Beat 25 levels in Block Koala",
+      "Beat 3 story missions in Lords of Diskonia",
+      "Beat 20 levels in Block Koala",
       "Cherry Disk Ninpek",
       "Collect all clubs in Golfaria (have 80 total strokes)",
       "Beat 5 levels in Rock On! Island",
@@ -1075,6 +1075,7 @@ export const SPICY_UFO = {
   },
   categories_with_global_group_repeat_prevention: ["general"],
 } as const;
+
 
 
 

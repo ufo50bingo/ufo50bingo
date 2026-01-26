@@ -749,9 +749,7 @@ export const SPICY_UFO = {
         "CAMPANELLA 2: Cherry disk with at least 6 upgrades (square icons on left of screen)",
         "CAMPANELLA 2: Gold disk with at least 8 upgrades (square icons on left of screen)",
       ],
-      hypercontender: [
-        "HYPER CONTENDER: Gold disk on Hyper difficulty",
-      ],
+      hypercontender: ["HYPER CONTENDER: Gold disk on Hyper difficulty"],
       valbrace: [
         "VALBRACE: Gold Disk",
         "VALBRACE: Level up at four thrones in one run",
@@ -1075,9 +1073,3 @@ export const SPICY_UFO = {
   },
   categories_with_global_group_repeat_prevention: ["general"],
 } as const;
-
-
-
-
-
-

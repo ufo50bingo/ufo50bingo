@@ -6,6 +6,8 @@ import {
   Button,
   Card,
   Container,
+  Group,
+  SegmentedControl,
   Select,
   Stack,
   Text,
@@ -67,7 +69,10 @@ export default function TimestampCopier() {
   });
   const [is12Hour, setIs12Hour] = useLocalBool({
     key: "timestamp-12-hour",
-    defaultValue: true,
+    defaultValue:
+      Intl.DateTimeFormat(navigator.language, {
+        hour: "numeric",
+      }).resolvedOptions().hour12 ?? true,
   });
 
   const isMobile = useMediaQuery("(max-width: 525px)");
@@ -93,17 +98,25 @@ export default function TimestampCopier() {
           weekendDays={[]}
           firstDayOfWeek={0}
         />
-        <TimePicker
-          hoursRef={hoursRef}
-          key={is12Hour ? "12" : "24"}
-          value={time}
-          onChange={setTime}
-          size="lg"
-          format={is12Hour ? "12h" : "24h"}
-          withDropdown={!isMobile}
-          hoursStep={1}
-          minutesStep={15}
-        />
+        <Group>
+          <TimePicker
+            hoursRef={hoursRef}
+            key={is12Hour ? "12" : "24"}
+            value={time}
+            onChange={setTime}
+            size="lg"
+            format={is12Hour ? "12h" : "24h"}
+            withDropdown={!isMobile}
+            hoursStep={1}
+            minutesStep={15}
+          />
+          <SegmentedControl
+            size="lg"
+            value={is12Hour ? "12hr" : "24hr"}
+            onChange={(val) => setIs12Hour(val === "12hr")}
+            data={["12hr", "24hr"]}
+          />
+        </Group>
       </Stack>
       <Select
         allowDeselect={false}
@@ -140,13 +153,6 @@ export default function TimestampCopier() {
           in your timezone may be 6 AM the next day in another user's timezone.
         </Alert>
       )}
-      <Select
-        size="lg"
-        label="Clock Type"
-        value={is12Hour ? "12 hour (AM/PM)" : "24 hour"}
-        onChange={(val) => setIs12Hour(val === "12 hour (AM/PM)")}
-        data={["12 hour (AM/PM)", "24 hour"]}
-      />
     </Stack>
   );
   return isMobile ? (

@@ -44,9 +44,9 @@ type Format = (typeof FORMATS)[number];
 function getFormatStr(format: Format): string {
   switch (format) {
     case "F":
-      return "dddd, MMMM Do, YYYY, h:mm A";
+      return "dddd, MMMM Do, YYYY h:mm A";
     case "f":
-      return "MMMM Do, YYYY, h:mm A";
+      return "MMMM Do, YYYY h:mm A";
     case "s":
       return "MM/DD/YYYY h:mm A";
     case "t":

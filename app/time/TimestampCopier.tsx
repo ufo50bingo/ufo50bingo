@@ -25,18 +25,12 @@ import {
   IconAlertSquareRounded,
   IconBrandDiscordFilled,
 } from "@tabler/icons-react";
-import { Metadata } from "next";
 import { useMediaQuery } from "@mantine/hooks";
 import useLocalBool from "../localStorage/useLocalBool";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advancedFormat);
-
-export const metadata: Metadata = {
-  title: "UFO 50 Bingo Timestamps",
-  description: "Create timestamps to paste into Discord",
-};
 
 const FORMATS = ["F", "f", "s", "t"] as const;
 type Format = (typeof FORMATS)[number];

@@ -159,11 +159,12 @@ export default function TimestampCopier() {
         </u>
         : {timestamp.tz("America/New_York").format(getFormatStr(format))}
       </Text>
-      {format === "t" && (
+      {format === "t" && !includeRelative && (
         <Alert variant="light" color="yellow" icon={<IconAlertSquareRounded />}>
-          The time-only format is not recommended, because it may represent
-          different dates for viewers in different timezones. For example, 10 PM
-          in your timezone may be 6 AM the next day in another user's timezone.
+          The time-only format is not recommended when excluding relative time,
+          because it may represent different dates for viewers in different
+          timezones. For example, 10 PM in your timezone may be 6 AM the next
+          day in another user's timezone.
         </Alert>
       )}
     </Stack>

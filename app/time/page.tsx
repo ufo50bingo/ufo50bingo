@@ -1,7 +1,5 @@
-import TimestampCopier from "./TimestampCopier";
-
-export const dynamic = "force-dynamic";
+import TimestampCopierWrapper from "./TimestampCopierWrapper";
 
 export default function TimePage() {
-  return <TimestampCopier />;
+  return <TimestampCopierWrapper />;
 }

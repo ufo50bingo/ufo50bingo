@@ -10,6 +10,7 @@ import {
   SegmentedControl,
   Select,
   Stack,
+  Switch,
   Text,
   Title,
 } from "@mantine/core";
@@ -20,6 +21,7 @@ import dayjs from "dayjs";
 
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import relativeTime from "dayjs/plugin/relativeTime";
 import advancedFormat from "dayjs/plugin/advancedFormat.js";
 import {
   IconAlertSquareRounded,
@@ -31,6 +33,7 @@ import useLocalBool from "../localStorage/useLocalBool";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advancedFormat);
+dayjs.extend(relativeTime);
 
 const FORMATS = ["F", "f", "s", "t"] as const;
 type Format = (typeof FORMATS)[number];
@@ -68,9 +71,14 @@ export default function TimestampCopier() {
         hour: "numeric",
       }).resolvedOptions().hour12 ?? true,
   });
+  const [includeRelative, setIncludeRelative] = useLocalBool({
+    key: "timestamp-include-relative",
+    defaultValue: false,
+  });
 
+  const timeStr = `${date}T${time}`;
   const isMobile = useMediaQuery("(max-width: 525px)");
-  const timestamp = dayjs(`${date}T${time}`);
+  const timestamp = dayjs(timeStr);
   const hoursRef = useRef<HTMLInputElement>(null);
 
   const body = (
@@ -123,12 +131,23 @@ export default function TimestampCopier() {
         value={format}
         onChange={(newFormat) => setFormat(newFormat as Format)}
       />
+      <Switch
+        checked={includeRelative}
+        size="lg"
+        onChange={(event) => setIncludeRelative(event.currentTarget.checked)}
+        key={timeStr}
+        label={`Include relative time (${dayjs().to(timestamp)})`}
+      />
       <Button
         size="lg"
         color="indigo"
         leftSection={<IconBrandDiscordFilled size={40} />}
         onClick={() => {
-          navigator.clipboard.writeText(`<t:${timestamp.unix()}:${format}>`);
+          let discordStr = `<t:${timestamp.unix()}:${format}>`;
+          if (includeRelative) {
+            discordStr += ` (<t:${timestamp.unix()}:R>)`;
+          }
+          navigator.clipboard.writeText(discordStr);
         }}
       >
         Copy Discord Timestamp

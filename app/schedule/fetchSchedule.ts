@@ -66,7 +66,7 @@ async function fetchScheduleForSheet({
       },
       {
         fetchImplementation,
-      }
+      },
     ),
     sheet.spreadsheets.values.get(
       {
@@ -75,7 +75,7 @@ async function fetchScheduleForSheet({
         auth,
         fields: "values",
       },
-      { fetchImplementation }
+      { fetchImplementation },
     ),
   ]);
 
@@ -94,9 +94,9 @@ async function fetchScheduleForSheet({
   });
 
   const currentTime = Math.round(Date.now() / 1000);
-  // we want to show yesterday onward in the viewer's timezone
-  // we don't know what the timezone is, so include 48 hrs
-  const cutoff = currentTime - 2 * 24 * 60 * 60;
+  // we want to show 8 days prior in the viewer's timezone
+  // we don't know what the timezone is, so include 9 days
+  const cutoff = currentTime - 9 * 24 * 60 * 60;
   const scheduled: null | undefined | ReadonlyArray<ScheduledMatch> =
     matchesResult.data.values
       ?.map((row) => {
@@ -132,7 +132,7 @@ async function fetchScheduleForSheet({
 
 export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMatch>> {
   const allSchedules = await Promise.all(
-    SHEETS.map((sheet) => fetchScheduleForSheet(sheet))
+    SHEETS.map((sheet) => fetchScheduleForSheet(sheet)),
   );
   const final = allSchedules
     .map((schedule) => schedule ?? [])
@@ -144,7 +144,7 @@ export async function fetchSchedule(): Promise<null | ReadonlyArray<ScheduledMat
 
 function fetchImplementation(
   input: string | URL | globalThis.Request,
-  init?: RequestInit
+  init?: RequestInit,
 ) {
   return fetch(input, {
     ...init,

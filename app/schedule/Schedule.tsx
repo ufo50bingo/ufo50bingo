@@ -11,6 +11,7 @@ import { ScheduledMatch } from "./fetchSchedule";
 import ScheduledMatchView from "./ScheduledMatchView";
 import { revalidateSchedule } from "./revalidateSchedule";
 import { CopyToDiscord } from "./CopyToDiscord";
+import { Ref, useEffect, useRef } from "react";
 
 type Props = {
   schedule: ReadonlyArray<ScheduledMatch>;
@@ -19,7 +20,7 @@ type Props = {
 function getMatches(
   schedule: ReadonlyArray<ScheduledMatch>,
   startOfDay: number,
-  endOfDay: number
+  endOfDay: number,
 ): ReadonlyArray<ScheduledMatch> {
   return schedule.filter((m) => m.time >= startOfDay && m.time < endOfDay);
 }
@@ -28,12 +29,20 @@ function ScheduledMatchList({
   title,
   matches,
   includeDate,
+  isToday,
+  ref,
 }: {
   title: string;
   matches: ReadonlyArray<ScheduledMatch>;
   includeDate: boolean;
+  isToday?: boolean;
+  ref?: Ref<HTMLDivElement>;
 }) {
-  const titleElement = <Title order={3}>{title}</Title>;
+  const titleElement = (
+    <Title ref={ref} order={3}>
+      {isToday === true ? <u>{title}</u> : title}
+    </Title>
+  );
   return (
     <>
       {matches.length > 0 ? (
@@ -45,38 +54,56 @@ function ScheduledMatchList({
       )}
       {matches.length > 0
         ? matches.map((m) => (
-          <ScheduledMatchView
-            key={m.name + m.time.toString()}
-            match={m}
-            includeDate={includeDate}
-          />
-        ))
+            <ScheduledMatchView
+              key={m.name + m.time.toString()}
+              match={m}
+              includeDate={includeDate}
+            />
+          ))
         : "No matches found!"}
     </>
   );
 }
 
 export default function Schedule({ schedule }: Props) {
+  const todayRef = useRef<HTMLDivElement>(null);
+
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   const dayAfter = new Date();
   dayAfter.setDate(dayAfter.getDate() + 2);
+  const weekBeforeYesterday = new Date();
+  weekBeforeYesterday.setDate(weekBeforeYesterday.getDate() - 8);
 
   const startOfToday = Math.round(new Date().setHours(0, 0, 0, 0) / 1000);
   const startOfYesterday = Math.round(yesterday.setHours(0, 0, 0, 0) / 1000);
   const startOfTomorrow = Math.round(tomorrow.setHours(0, 0, 0, 0) / 1000);
   const startOfDayAfter = Math.round(dayAfter.setHours(0, 0, 0, 0) / 1000);
+  const startOfWeekBeforeYesterday = Math.round(
+    weekBeforeYesterday.setHours(0, 0, 0, 0) / 1000,
+  );
 
+  const earlierMatches = getMatches(
+    schedule,
+    startOfWeekBeforeYesterday,
+    startOfYesterday,
+  );
   const yesterdayMatches = getMatches(schedule, startOfYesterday, startOfToday);
   const todayMatches = getMatches(schedule, startOfToday, startOfTomorrow);
   const tomorrowMatches = getMatches(
     schedule,
     startOfTomorrow,
-    startOfDayAfter
+    startOfDayAfter,
   );
   const laterMatches = getMatches(schedule, startOfDayAfter, Infinity);
+
+  useEffect(() => {
+    if (todayRef.current != null) {
+      todayRef.current.scrollIntoView({ behavior: "instant" });
+    }
+  }, []);
   return (
     <Container>
       <Stack>
@@ -120,6 +147,11 @@ export default function Schedule({ schedule }: Props) {
         <Card>
           <Stack>
             <ScheduledMatchList
+              title="Previous week"
+              matches={earlierMatches}
+              includeDate={true}
+            />
+            <ScheduledMatchList
               title="Yesterday"
               matches={yesterdayMatches}
               includeDate={false}
@@ -128,6 +160,8 @@ export default function Schedule({ schedule }: Props) {
               title="Today"
               matches={todayMatches}
               includeDate={false}
+              isToday={true}
+              ref={todayRef}
             />
             <ScheduledMatchList
               title="Tomorrow"

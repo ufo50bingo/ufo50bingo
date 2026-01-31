@@ -186,7 +186,7 @@ export function getResult(
           tiedColors as unknown as BingosyncColor[]
         );
         const opponentColor: BingosyncColor = tiedColors.find(
-          (player) => player !== winnerName
+          (player) => player !== winningColor
         ) as unknown as BingosyncColor;
         return {
           winnerName: colorToPlayers[winningColor].join(" / "),

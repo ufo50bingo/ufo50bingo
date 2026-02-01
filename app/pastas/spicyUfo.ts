@@ -68,7 +68,7 @@ export const SPICY_UFO = {
 		"CAMPANELLA: Finish stage A with all 8 coffees and an on-screen clear time of 2:05 or less",
 	  ],
       golfaria: [
-        "GOLFARIA: Collect two Holy Tee pieces ",
+        "GOLFARIA: Collect two Holy Tee pieces",
         "GOLFARIA: Activate 3 different checkpoints (excluding Waking Cave)",
         "GOLFARIA: Have 44+ total strokes (collect 8 clubs)",
       ],
@@ -798,6 +798,7 @@ export const SPICY_UFO = {
 	  ],
 	  cyberowls: [
 	    "CYBER OWLS: Cherry disk",
+      ],
     },
     general: {
       goldcherry1: [
@@ -916,11 +917,11 @@ export const SPICY_UFO = {
 	rh_level: ["Guarded by Gat", "Shifting Gears", "Vault Robbery", "Winging It", "Daring Duo", "Rescue Mission", "Armored Up", "Root Around"],
 	m2_char: ["Warrior", "Engineer", "Bomber", "Gunner"],
 	dig1: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
-  dig2": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
-  dig3: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
-  dig4: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
-  dig5: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
-  dig6: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
+    dig2: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
+    dig3: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
+    dig4: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
+    dig5: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
+    dig6: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
   },
   default_counts: {
     easy: 5,

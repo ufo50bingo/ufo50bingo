@@ -366,7 +366,7 @@ export const SPICY_UFO = {
       ],
       "grimstone": [
         "GRIMSTONE: Defeat Big Alp",
-        "GRIMSTONE: Win three encounters in the western mine in one visit"
+        "GRIMSTONE: Win three encounters in the western mine in one visit",
 		"GRIMSTONE: Win encounters against 6 unique enemy types"
       ],
       "lordsofdiskonia": [
@@ -374,8 +374,7 @@ export const SPICY_UFO = {
         "LORDS OF DISKONIA: Win a full war on Knight difficulty {{disk_rest}}"
       ],
       "nightmanor": [
-        "NIGHT MANOR: Cherry disk with 100% of items obtained and 17 journal entries",
-        "NIGHT MANOR: Use OPEN-CAGE: Escape the nightmare without being caught by the killer; hitting the killer is not allowed (Counts as Cherry Disk)"
+        "NIGHT MANOR: Cherry disk with 100% of items obtained and 17 journal entries"
       ],
       "elfazarshat": [
         "ELFAZAR’S HAT: Clear stages 1, 2, and 3 without dying, and without any upgrades or healing",
@@ -408,7 +407,7 @@ export const SPICY_UFO = {
       ],
       "cyberowls": [
         "CYBER OWLS: Beat Chicago without using the charged fist & Beat Congo without blowing up any barrels or vehicles",
-        "CYBER OWLS: Use GETM-EOUT; Complete the rescue mini-game six times in a row"
+        "CYBER OWLS: Use GETM-EOUT; Complete 6 random rescue mini-games in a row"
       ]
     },
     "hard": {
@@ -781,6 +780,9 @@ export const SPICY_UFO = {
         "LORDS OF DISKONIA: Win a Full War on Commander difficulty; {{disk_scroll}} & {{disk_scroll}} skills are banned",
         "LORDS OF DISKONIA: Win a Full War on Commander difficulty; You must buy units at each Tavern until you can no longer do so"
       ],
+	  "nightmanor": [
+		"NIGHT MANOR: Use OPEN-CAGE: Escape the nightmare without being caught by the killer; hitting the killer is not allowed (Counts as Cherry Disk)"
+	  ],
       "elfazarshat": [
         "ELFAZAR’S HAT: Cherry Disk with 9 tickets collected",
         "ELFAZAR’S HAT: Cherry Disk without obtaining any upgrades from 3 matching cards",
@@ -1246,4 +1248,5 @@ export const SPICY_UFO = {
     "general"
   ]
 } as const;
+
 

@@ -44,7 +44,7 @@ function ScheduledMatchList({
     </Title>
   );
   return (
-    <>
+    <Stack p="md" bg={isToday ? "var(--mantine-primary-color-light)" : undefined}>
       {matches.length > 0 ? (
         <CopyToDiscord matches={matches} includeDate={includeDate}>
           {titleElement}
@@ -54,14 +54,14 @@ function ScheduledMatchList({
       )}
       {matches.length > 0
         ? matches.map((m) => (
-            <ScheduledMatchView
-              key={m.name + m.time.toString()}
-              match={m}
-              includeDate={includeDate}
-            />
-          ))
+          <ScheduledMatchView
+            key={m.name + m.time.toString()}
+            match={m}
+            includeDate={includeDate}
+          />
+        ))
         : "No matches found!"}
-    </>
+    </Stack>
   );
 }
 
@@ -144,8 +144,8 @@ export default function Schedule({ schedule }: Props) {
             click here.
           </Anchor>
         </Alert>
-        <Card>
-          <Stack>
+        <Card p={0}>
+          <Stack gap={0}>
             <ScheduledMatchList
               title="Previous week"
               matches={earlierMatches}

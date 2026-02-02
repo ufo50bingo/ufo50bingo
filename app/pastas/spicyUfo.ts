@@ -44,9 +44,9 @@ export const SPICY_UFO = {
         "KICK CLUB: Score 101,000+ points"
       ],
       "avianos": [
-        "AVIANOS: Win an Adult game; Must own 11+ {{avianos_resource}} when the war ends",
-        "AVIANOS: Win an Adult game; You may only pray to 3 ancestors",
-        "AVIANOS: Win a Fledgling game; Must spend each applicable resource every turn until you can no longer buy anything"
+        "AVIANOS: BLUE-BEAK allowed; Beat Trial {{avianos_hard_trial1}}; Must own 11+ {{avianos_resource}} when the war ends",
+        "AVIANOS: BLUE-BEAK allowed; Beat Trial {{avianos_hard_trial1}}; You may only pray to 3 ancestors",
+        "AVIANOS: BLUE-BEAK allowed; Beat Trial {{avianos_hard_trial1}}; Must spend each applicable resource every turn until you can no longer buy anything"
       ],
       "mooncat": [
         "MOONCAT: Kill a gray spider and a spear thrower, and find the egg at the end of the run",
@@ -220,8 +220,8 @@ export const SPICY_UFO = {
         "MAGIC GARDEN: Gold disk; Ignore the first 5 star pads and never kill the 5 mushrooms that spawn"
       ],
       "velgress": [
-        "VELGRESS: Cherry disk with in-game time of 3:09 or less (no star blocks)",
-        "VELGRESS: Gold disk with in-game time of 2:11 or less (no star blocks)"
+        "VELGRESS: Cherry disk with in-game time of under 3:09 (no star blocks)",
+        "VELGRESS: Gold disk with in-game time of under 2:11 (no star blocks)"
       ],
       "planetzoldath": [
         "PLANET ZOLDATH: Collect the dungeon map piece in under 7 minutes of Zoldath time",
@@ -242,10 +242,10 @@ export const SPICY_UFO = {
         "KICK CLUB: Reach Ice World with 38,000 points or less"
       ],
       "avianos": [
-        "AVIANOS: Win an Adult game; You may only obtain units from {{ancestor_units}}",
-        "AVIANOS: Win an Adult game; You may never select {{ancestor}} or {{ancestor}}",
-        "AVIANOS: Win an Adult game; The first ancestor you pray to must be maxed out when the war is over",
-        "AVIANOS: Win a Fledgling game; You must have {{avianos_unit}} when the war ends"
+        "AVIANOS: BLUE-BEAK allowed; Beat Trial {{avianos_hard_trial1}}; You may only obtain units from {{ancestor_units}}",
+        "AVIANOS: BLUE-BEAK allowed; Beat Trial {{avianos_hard_trial1}}; You may never select {{ancestor}} or {{ancestor}}",
+        "AVIANOS: BLUE-BEAK allowed; Beat Trial {{avianos_hard_trial1}}; The first ancestor you pray to must be maxed out when the war is over",
+        "AVIANOS: BLUE-BEAK allowed; Beat Trial {{avianos_hard_trial1}}; You must have {{avianos_unit}} when the war ends"
       ],
       "mooncat": [
         "MOONCAT: Find the Green Egg without dying before the boss",
@@ -1248,5 +1248,6 @@ export const SPICY_UFO = {
     "general"
   ]
 } as const;
+
 
 

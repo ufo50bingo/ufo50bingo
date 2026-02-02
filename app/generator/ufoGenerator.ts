@@ -76,22 +76,28 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     (index) => orderedCategories[index]
   );
 
+  const availableGamesByDifficulty: { [difficulty: string]: Array<string> } = {};
   const gameByIndex: Array<string | null> = Array(25).fill(null);
   const finalBoard: Array<string | null> = Array(25).fill(null);
   fillOrder.forEach((index) => {
     const difficulty = difficultyByIndex[index];
     const synergyCheckIndices =
       pasta.categories_with_global_group_repeat_prevention != null &&
-      pasta.categories_with_global_group_repeat_prevention.includes(difficulty)
+        pasta.categories_with_global_group_repeat_prevention.includes(difficulty)
         ? [...Array(25)].map((_, x) => x)
         : SAME_LINE_INDICES[index];
 
     let bestSynergy = Infinity;
     let bestGame = null;
     let bestGoal = "ERROR: Failed to find goal";
+
     const gameToGoals = pasta.goals[difficulty];
-    const games = Object.keys(gameToGoals);
-    shuffle(games);
+
+    let games = availableGamesByDifficulty[difficulty];
+    if (games == null || games.length < 1) {
+      games = Object.keys(gameToGoals);
+      shuffle(games);
+    }
     for (const game of games) {
       const synergy = synergyCheckIndices.reduce(
         (acc, checkGame) => (gameByIndex[checkGame] === game ? acc + 1 : acc),
@@ -113,6 +119,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     }
     finalBoard[index] = bestGoal;
     gameByIndex[index] = bestGame;
+    availableGamesByDifficulty[difficulty] = games.filter(g => g !== bestGame);
   });
 
   return finalBoard.map((goal) => replaceTokens(goal!, pasta.tokens));

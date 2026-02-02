@@ -597,7 +597,7 @@ export const SPICY_UFO = {
         "COMBATANTS: Slay a spider on three different levels"
 	  ],
       "quibblerace": [
-        "QUIBBLE RACE: Gold disk; Must always bet on the highest odds Quibble in the round",
+        "QUIBBLE RACE: Gold disk; Must always bet on the Quibble with worst odds (highest payout) in the round",
         "QUIBBLE RACE: Cherry disk"
       ],
       "seasidedrive": [
@@ -1248,6 +1248,7 @@ export const SPICY_UFO = {
     "general"
   ]
 } as const;
+
 
 
 

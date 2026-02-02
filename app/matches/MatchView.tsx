@@ -185,8 +185,12 @@ export default function MatchView({ match }: Props) {
       onClick={async () => {
         setIsRefreshing(true);
         try {
+          // HACK: This prevents navigation to the single match page on revalidation
+          history.pushState({}, '', `/matches`)
           await refreshMatch(match.id);
         } finally {
+          // HACK: Revert back to the expected URL
+          history.back();
           setIsRefreshing(false);
         }
       }}

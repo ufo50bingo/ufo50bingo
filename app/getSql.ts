@@ -9,11 +9,11 @@ export default function getSql(
     throw new Error("Could not find DB URL");
   }
   if (forceCache && tags.length > 0) {
-    return neon(dbUrl, { fetchOptions: { cache: "force-cache", tags } });
+    return neon(dbUrl, { fetchOptions: { cache: "force-cache", next: { tags } } });
   } else if (forceCache) {
     return neon(dbUrl, { fetchOptions: { cache: "force-cache" } });
   } else if (tags.length > 0) {
-    return neon(dbUrl, { fetchOptions: { tags } });
+    return neon(dbUrl, { fetchOptions: { next: { tags } } });
   }
   return neon(dbUrl);
 }

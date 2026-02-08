@@ -352,7 +352,7 @@ export const SPICY_UFO = {
       ],
       "valbrace": [
         "VALBRACE: Drink from 8 different fountains in one run",
-        "VALBRACE: Use 4RCH-M4GE; Level up at two thrones, then defeat the Phantom Knight. Only WIS upgrades allowed"
+        "VALBRACE: Use 4RCH-M4GE; Level up at two thrones, then defeat the Phantom Knight"
       ],
       "rakshasa": [
         "RAKSHASA: Collect both halves of four bell pickups in one run, with no revive minigames after the first one",
@@ -845,7 +845,7 @@ export const SPICY_UFO = {
         "Collect {{gold_card}} gold disks from games on this card",
         "Collect {{bingo_line}} from games in bingo lines with this goal",
         "Collect {{cherry_card}} cherry disks from games on this card",
-        "Satisfy the Dark Cherry condition for {{dark_cherry}} games on this card"
+        "Satisfy the Dark Cherry condition for 2 games on this card"
       ],
       "theme": [
         "TRIATHLON II: Cherry Disk any 3 of the 5 “SPORT” games",
@@ -1248,6 +1248,7 @@ export const SPICY_UFO = {
     "general"
   ]
 } as const;
+
 
 
 

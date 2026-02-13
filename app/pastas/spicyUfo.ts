@@ -122,7 +122,7 @@ export const SPICY_UFO = {
       ],
       "rockonisland": [
         "ROCK ON! ISLAND: Beat Initial Encounter with an upgraded caveman (rock, spear, or fire) on every available tile",
-        "ROCK ON! ISLAND: CLUB-PASS allowed; Perfect {{roi_med_lv3}}; Buying cavemen must cycle between Spear, Rock, and Fire in order. No retiring cavemen",
+        "ROCK ON! ISLAND: CLUB-PASS allowed; Perfect {{roi_med_lv3}}; Initial caveman upgrades must cycle between Spear, Rock, and Fire in order. No retiring cavemen",
         "ROCK ON! ISLAND: CLUB-PASS allowed; Perfect Underbrush with 4 or fewer cavemen, and no chickens"
       ],
       "pingolf": [
@@ -1248,6 +1248,7 @@ export const SPICY_UFO = {
     "general"
   ]
 } as const;
+
 
 
 

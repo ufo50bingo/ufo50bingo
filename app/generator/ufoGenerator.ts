@@ -126,7 +126,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
       const curCountByGame = difficultyToGameToUsedCount[difficulty] ?? {};
       const curCount = curCountByGame[game] ?? 0;
       const goalCount = gameToGoals[game].length;
-      if (curCount > goalCount) {
+      if (curCount < goalCount) {
         bestSynergy = synergy;
         bestGame = game;
         curCountByGame[game] = curCount + 1;
@@ -138,6 +138,8 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
       (g) => g !== bestGame,
     );
   });
+
+  console.log("Game by index:", gameByIndex);
 
   for (let i = 0; i < 25; i++) {
     let finalGoal = "ERROR: Failed to find goal";

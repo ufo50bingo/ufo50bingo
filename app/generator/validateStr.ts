@@ -3,15 +3,29 @@ import { UFOPasta } from "./ufoGenerator";
 import validateUfo from "./validateUfo";
 
 export type Return = {
-  pasta: UFOPasta | null,
-  errors: ReadonlyArray<string>,
-  warnings: ReadonlyArray<string>,
+  pasta: UFOPasta | null;
+  errors: ReadonlyArray<string>;
+  warnings: ReadonlyArray<string>;
 };
 
 const UfoPasta = zod.strictObject({
   goals: zod.record(
     zod.string(),
-    zod.record(zod.string(), zod.array(zod.string()))
+    zod.record(
+      zod.string(),
+      zod.array(
+        zod.union([
+          zod.string(),
+          zod.strictObject({
+            name: zod.string(),
+            restriction: zod.strictObject({
+              count: zod.number(),
+              options: zod.union([zod.string(), zod.array(zod.string())]),
+            }),
+          }),
+        ]),
+      ),
+    ),
   ),
   tokens: zod.record(zod.string(), zod.array(zod.string())),
   category_counts: zod.record(zod.string(), zod.int()),
@@ -19,6 +33,9 @@ const UfoPasta = zod.strictObject({
     .array(zod.string())
     .optional(),
   category_difficulty_tiers: zod.array(zod.array(zod.string())).optional(),
+  restriction_option_lists: zod
+    .record(zod.string(), zod.array(zod.string()))
+    .optional(),
 });
 
 export default function validateStr(json: string): Return {
@@ -30,9 +47,19 @@ export default function validateStr(json: string): Return {
     if (err instanceof zod.ZodError) {
       return { pasta: null, errors: [zod.prettifyError(err)], warnings: [] };
     } else if (err instanceof Error) {
-      return { pasta: null, errors: [`✖ ${err.message}.\nTry pasting your pasta into a general-purpose JSON linter, such as https://jsonlint.com/`], warnings: [] };
+      return {
+        pasta: null,
+        errors: [
+          `✖ ${err.message}.\nTry pasting your pasta into a general-purpose JSON linter, such as https://jsonlint.com/`,
+        ],
+        warnings: [],
+      };
     } else {
-      return { pasta: null, errors: ['✖ Unknown error occurred'], warnings: [] };
+      return {
+        pasta: null,
+        errors: ["✖ Unknown error occurred"],
+        warnings: [],
+      };
     }
   }
 }

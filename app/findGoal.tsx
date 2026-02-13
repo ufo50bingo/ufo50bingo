@@ -1,12 +1,13 @@
 "use client";
 
+import getGoalName from "./generator/getGoalName";
 import { UFOPasta } from "./generator/ufoGenerator";
 import regexpEscape from "regexp.escape";
 
 const CACHE: Array<
   [
     UFOPasta,
-    [ProcessedPasta, Map<string, null | FoundGoal<string, string, string>>]
+    [ProcessedPasta, Map<string, null | FoundGoal<string, string, string>>],
   ]
 > = [];
 
@@ -35,7 +36,7 @@ type ProcessedPasta = {
 
 export default function findGoal(
   goal: string,
-  pasta: UFOPasta
+  pasta: UFOPasta,
 ): null | FoundGoal<string, string, string> {
   let cached = CACHE.find((item) => item[0] === pasta)?.[1];
   if (cached == null) {
@@ -92,7 +93,7 @@ function escape(str: string): string {
 const TOKEN_REGEX = /\{\{([^{}]*)\}\}/g;
 function preprocessGoalWithToken(
   goal: string,
-  pasta: UFOPasta
+  pasta: UFOPasta,
 ): WithTokenNoTags {
   const matches = goal.matchAll(TOKEN_REGEX);
   // token locations should all be disjoint since they cannot be nested
@@ -122,12 +123,13 @@ function preprocess(pasta: UFOPasta): ProcessedPasta {
   Object.keys(pasta.goals).forEach((category) => {
     Object.keys(pasta.goals[category]).forEach((subcategory) => {
       pasta.goals[category][subcategory].forEach((goal) => {
+        const goalName = getGoalName(goal);
         const tags = { category, subcategory };
-        if (goal.includes("{{")) {
-          const output = preprocessGoalWithToken(goal, pasta);
+        if (goalName.includes("{{")) {
+          const output = preprocessGoalWithToken(goalName, pasta);
           withTokens.push({ ...output, tags });
         }
-        plain[goal] = tags;
+        plain[goalName] = tags;
         return;
       });
     });

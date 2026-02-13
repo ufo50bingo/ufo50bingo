@@ -1005,6 +1005,7 @@ export const STANDARD_UFO = {
     ],
     roi_level: [
       "The Oasis",
+      "Underbrush",
       "Jungle Rush",
       "Wasteland",
       "The Spiral",
@@ -1043,3 +1044,4 @@ export const STANDARD_UFO = {
   },
   categories_with_global_group_repeat_prevention: ["general"],
 } as const;
+

@@ -1,7 +1,9 @@
 import shuffle from "../createboard/shuffle";
+import { findGamesForGoal } from "../room/[id]/cast/findAllGames";
 import getGoalAndFallback from "./getGoalAndFallback";
 import getMagicSquare from "./getMagicSquare";
 import replaceTokens from "./replaceTokens";
+import splitAtTokens from "./splitAtTokens";
 
 export type Restriction = {
   name: string;
@@ -87,7 +89,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     }
     return categories;
   });
-  const difficultyByIndex = magicSquare.map(
+  const difficultyByIndex: Array<string> = magicSquare.map(
     (index) => orderedCategories[index],
   );
 
@@ -95,6 +97,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     {};
   const gameByIndex: Array<string> = Array(25).fill("");
   const finalBoard: Array<string | null> = Array(25).fill(null);
+  const finalBoardWithTokens: Array<string | null> = Array(25).fill(null);
   const difficultyToGameToUsedCount: {
     [difficulty: string]: { [game: string]: number };
   } = {};
@@ -102,7 +105,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     const difficulty = difficultyByIndex[index];
     const synergyCheckIndices =
       pasta.categories_with_global_group_repeat_prevention != null &&
-      pasta.categories_with_global_group_repeat_prevention.includes(difficulty)
+        pasta.categories_with_global_group_repeat_prevention.includes(difficulty)
         ? [...Array(25)].map((_, x) => x)
         : SAME_LINE_INDICES[index];
 
@@ -147,28 +150,108 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     );
   });
 
+  const gamesOnCard = new Set<string>();
+
   const unrestricted: Array<number> = [];
   const restricted: Array<number> = [];
-  // const restrictedWithoutNewOnThisCard = [];
-  // const restrictedWithNewOnThisCard = [];
   for (let i = 0; i < 25; i++) {
-    let finalGoal = "ERROR: Failed to find goal";
+    const difficulty = difficultyByIndex[i];
+    const game = gameByIndex[i];
+    const goals = pasta.goals[difficulty][game];
+    if (goals.every(goal => typeof goal === "string")) {
+      unrestricted.push(i);
+    } else {
+      restricted.push(i);
+    }
+  }
+
+  const fillIndex = (i: number) => {
+    let finalGoal = null;
     const game = gameByIndex[i];
     const difficulty = difficultyByIndex[i];
-    const goals = [...pasta.goals[difficulty][game!]];
+    const goals = [...pasta.goals[difficulty][game]];
+    let fallback: null | string = null;
     shuffle(goals);
     for (const goal of goals) {
       const goalAndFallback = getGoalAndFallback(goal);
       if (
-        !finalBoard.includes(goalAndFallback[0]) &&
-        (goalAndFallback[1] == null || !finalBoard.includes(goalAndFallback[1]))
+        finalBoard.includes(goalAndFallback[0]) ||
+        (goalAndFallback[1] != null && !finalBoard.includes(goalAndFallback[1]))
       ) {
-        finalGoal = goalAndFallback[0];
-        break;
+        continue;
       }
+      if (typeof goal === "object") {
+        const optionsRaw = goal.restriction.options;
+        const options = typeof optionsRaw === "string" ? pasta.restriction_option_lists![optionsRaw] : optionsRaw;
+        const onCardCount = options.filter(option => gamesOnCard.has(option)).length;
+        if (onCardCount < goal.restriction.count) {
+          if (fallback == null) {
+            fallback = goalAndFallback[1];
+          }
+          continue;
+        }
+      }
+      finalGoal = goalAndFallback[0];
+      break;
     }
+
+    if (finalGoal == null) {
+      finalGoal = fallback ?? "ERROR: Failed to find goal";
+    }
+
     finalBoard[i] = finalGoal;
+    finalBoardWithTokens[i] = replaceTokens(finalGoal, pasta.tokens);
+    for (const onCard of findGamesForGoal(finalBoardWithTokens[i])) {
+      gamesOnCard.add(onCard);
+    }
+  };
+
+  for (const i of unrestricted) {
+    fillIndex(i);
   }
 
-  return finalBoard.map((goal) => replaceTokens(goal!, pasta.tokens));
+  const restrictedWithNewGames: Array<number> = [];
+  const restrictedWithoutNewGames: Array<number> = [];
+
+  for (const i of restricted) {
+    const game = gameByIndex[i];
+    const difficulty = difficultyByIndex[i];
+    const goals = pasta.goals[difficulty][game];
+
+    const mayHaveNewGame = goals.some(goal => {
+      const goalAndFallback = getGoalAndFallback(goal);
+      for (const g of goalAndFallback) {
+        for (const game of findGamesForGoal(g)) {
+          if (!gamesOnCard.has(game)) {
+            return true;
+          }
+        }
+        const tokens = splitAtTokens(g).filter(item => item.type === "token");
+        for (const token of tokens) {
+          for (const option of pasta.tokens[token.token]) {
+            for (const game of findGamesForGoal(option)) {
+              if (!gamesOnCard.has(game)) {
+                return true;
+              }
+            }
+          }
+        }
+      }
+    });
+    if (mayHaveNewGame) {
+      restrictedWithNewGames.push(i);
+    } else {
+      restrictedWithoutNewGames.push(i);
+    }
+  }
+
+  for (const i of restrictedWithoutNewGames) {
+    fillIndex(i);
+  }
+
+  for (const i of restrictedWithNewGames) {
+    fillIndex(i);
+  }
+
+  return finalBoardWithTokens as Array<string>;
 }

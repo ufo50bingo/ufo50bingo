@@ -140,7 +140,7 @@ function getAbbreviatedName(goal: FoundStandardGeneral): string {
       return "Puzzler (15 levels)";
     case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot":
       return "Amy (5 levels)";
-    case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants with 2+ in each":
+    case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
       return "War Is Bad (9 battles)";
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
       return "Metroidvania (6 abilities)";

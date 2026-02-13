@@ -134,7 +134,7 @@ function getWinnerBitSrc(goal: StandardGeneral, isHidden: boolean): string {
     case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
     case "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank":
     case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot":
-    case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants with 2+ in each":
+    case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
       return "/general/winnerbit/Icon_Multi-Game_Generic.png";
     default:
@@ -192,7 +192,7 @@ function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/sprites/IconPuzzler.png";
     case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot":
       return "/general/sprites/IconAmy.png";
-    case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants with 2+ in each":
+    case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
       return "/general/sprites/IconWarIsBad.png";
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
       return "/general/sprites/IconMetroidvania.png";

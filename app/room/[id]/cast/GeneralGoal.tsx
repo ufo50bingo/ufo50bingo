@@ -155,7 +155,7 @@ export default function GeneralGoal({
     case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
     case "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank":
     case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot":
-    case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants with 2+ in each":
+    case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
       recommendations = {
         always: findGamesForGoal(foundGoal.resolvedGoal),

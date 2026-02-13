@@ -248,7 +248,9 @@ export default function NonLeagueMatch() {
           >
             #bingo-chat
           </a>{" "}
-          on the <a href="https://50games.fans">Discord</a>!
+          on the <a href="https://50games.fans">Discord</a>.
+          <br />
+          <a href="/signup">Sign up for Season 3 by Friday, February 27!</a>
           <br />
           Season 2 goals are still available as the "Season 2" variant after
           clicking "..."

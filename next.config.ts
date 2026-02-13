@@ -12,7 +12,13 @@ const nextConfig: NextConfig = {
       {
         source: "/league",
         destination:
-          "https://docs.google.com/spreadsheets/d/1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA/edit?gid=521253915#gid=521253915",
+          "https://docs.google.com/spreadsheets/d/1ptNQfJw39CCtHBrGldZ8ln0OrTUUSjAw8QVQHQI1LBU/edit?usp=sharing",
+        permanent: true,
+      },
+      {
+        source: "/signup",
+        destination:
+          "https://docs.google.com/forms/d/e/1FAIpQLSfXdceuQF1_5mh-mBmwLp6uhk_S0GlMHzjvs0aiP-v3fbumFA/viewform",
         permanent: true,
       },
       {

@@ -10,6 +10,7 @@ import { CLARITY_UFO } from "./clarityUfo";
 import { NOZZLO_UFO } from "./nozzloUfo";
 import { PROTOTYPE_UFO } from "./prototypeUfo";
 import { SEASON_1_UFO } from "./season1Ufo";
+import { SEASON_2_UFO } from "./season2Ufo";
 
 const RAW_METADATA = [
   {
@@ -149,64 +150,9 @@ const RAW_METADATA = [
     ),
   },
   {
-    type: "UFO",
-    name: "Nozzlo",
-    pasta: NOZZLO_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>
-          An absurdly difficult variant with very long, deliberately
-          unbalanced/unfair goals.
-        </span>
-        <a
-          target="_blank"
-          href="https://docs.google.com/document/d/1CLCDLDH4F0ufhGAcnDuKTtcZISrfwBonuPnbTQldh4Y/edit?tab=t.0"
-        >
-          View the official rules here.
-        </a>
-        <List>
-          <List.Item>Review period optional</List.Item>
-          <List.Item>No reviewing the goal list at all in advance</List.Item>
-          <List.Item>No time limit</List.Item>
-          <List.Item>
-            No resources, generally speaking (other players may assist you)
-          </List.Item>
-          <List.Item>
-            No difficulty tiers; all goals roughly equal in length and challenge
-          </List.Item>
-          <List.Item>
-            Can be played as player vs player, but is almost exclusively played
-            in “raid boss” mode where a team of players work together to make 3
-            bingos on one board
-          </List.Item>
-        </List>
-        <Text size="xs">
-          <em>Created by Peter Peladon</em>
-        </Text>
-      </Stack>
-    ),
-  },
-  {
-    type: "GameNames",
-    name: "Game Names",
-    isMenu: false,
-    hovercard: (
-      <Stack>
-        <span>
-          Create a board containing only names of games. Useful if you want to
-          race for Gifts, Gold Disks, or Cherry Disks across the collection.
-        </span>
-        <Text size="xs">
-          <em>Created by UFOSoft</em>
-        </Text>
-      </Stack>
-    ),
-  },
-  {
     type: "Custom",
     name: "Custom",
-    isMenu: true,
+    isMenu: false,
     hovercard: (
       <Stack>
         <span>
@@ -231,6 +177,22 @@ const RAW_METADATA = [
         </span>
         <Text size="xs">
           <em>Created by chocolatecake5000</em>
+        </Text>
+      </Stack>
+    ),
+  },
+  {
+    type: "GameNames",
+    name: "Game Names",
+    isMenu: true,
+    hovercard: (
+      <Stack>
+        <span>
+          Create a board containing only names of games. Useful if you want to
+          race for Gifts, Gold Disks, or Cherry Disks across the collection.
+        </span>
+        <Text size="xs">
+          <em>Created by UFOSoft</em>
         </Text>
       </Stack>
     ),
@@ -276,6 +238,67 @@ const RAW_METADATA = [
         </span>
         <Text size="xs">
           <em>Created by the bingo admins</em>
+        </Text>
+      </Stack>
+    ),
+  },
+  {
+    type: "UFO",
+    name: "Season 2",
+    pasta: SEASON_2_UFO,
+    isMenu: true,
+    hovercard: (
+      <Stack>
+        <span>
+          The goals used for{" "}
+          <a
+            target="blank"
+            href="https://docs.google.com/spreadsheets/d/1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA/edit?gid=521253915#gid=521253915"
+          >
+            Season 2 of Bingo League.
+          </a>
+        </span>
+        <Text size="xs">
+          <em>Created by the bingo admins</em>
+        </Text>
+      </Stack>
+    ),
+  },
+  {
+    type: "UFO",
+    name: "Nozzlo",
+    pasta: NOZZLO_UFO,
+    isMenu: true,
+    hovercard: (
+      <Stack>
+        <span>
+          An absurdly difficult variant with very long, deliberately
+          unbalanced/unfair goals.
+        </span>
+        <a
+          target="_blank"
+          href="https://docs.google.com/document/d/1CLCDLDH4F0ufhGAcnDuKTtcZISrfwBonuPnbTQldh4Y/edit?tab=t.0"
+        >
+          View the official rules here.
+        </a>
+        <List>
+          <List.Item>Review period optional</List.Item>
+          <List.Item>No reviewing the goal list at all in advance</List.Item>
+          <List.Item>No time limit</List.Item>
+          <List.Item>
+            No resources, generally speaking (other players may assist you)
+          </List.Item>
+          <List.Item>
+            No difficulty tiers; all goals roughly equal in length and challenge
+          </List.Item>
+          <List.Item>
+            Can be played as player vs player, but is almost exclusively played
+            in “raid boss” mode where a team of players work together to make 3
+            bingos on one board
+          </List.Item>
+        </List>
+        <Text size="xs">
+          <em>Created by Peter Peladon</em>
         </Text>
       </Stack>
     ),

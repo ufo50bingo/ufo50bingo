@@ -1,5 +1,5 @@
 import shuffle from "../createboard/shuffle";
-import { findGamesForGoal } from "../room/[id]/cast/findAllGames";
+import { findGamesForGoal, findGamesForResult } from "../room/[id]/cast/findAllGames";
 import getGoalAndFallback from "./getGoalAndFallback";
 import getMagicSquare from "./getMagicSquare";
 import replaceTokens from "./replaceTokens";
@@ -201,7 +201,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
 
     finalBoard[i] = finalGoal;
     finalBoardWithTokens[i] = replaceTokens(finalGoal, pasta.tokens);
-    for (const onCard of findGamesForGoal(finalBoardWithTokens[i])) {
+    for (const onCard of findGamesForResult(finalBoardWithTokens[i], { subcategory: game })) {
       gamesOnCard.add(onCard);
     }
   };
@@ -221,16 +221,16 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     const mayHaveNewGame = goals.some(goal => {
       const goalAndFallback = getGoalAndFallback(goal);
       for (const g of goalAndFallback) {
-        for (const game of findGamesForGoal(g)) {
-          if (!gamesOnCard.has(game)) {
+        for (const testGame of findGamesForResult(g, { subcategory: game })) {
+          if (!gamesOnCard.has(testGame)) {
             return true;
           }
         }
         const tokens = splitAtTokens(g).filter(item => item.type === "token");
         for (const token of tokens) {
           for (const option of pasta.tokens[token.token]) {
-            for (const game of findGamesForGoal(option)) {
-              if (!gamesOnCard.has(game)) {
+            for (const testGame of findGamesForResult(option, null)) {
+              if (!gamesOnCard.has(testGame)) {
                 return true;
               }
             }

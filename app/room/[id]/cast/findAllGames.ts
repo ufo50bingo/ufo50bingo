@@ -6,7 +6,7 @@ import {
 } from "@/app/goals";
 import { TBoard } from "@/app/matches/parseBingosyncData";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
-import findGoal from "@/app/findGoal";
+import findGoal, { FoundGoal } from "@/app/findGoal";
 import { SPICY_UFO } from "@/app/pastas/spicyUfo";
 
 function stripText(text: string): string {
@@ -22,6 +22,13 @@ export type GameToGoals = { [game: string]: ReadonlyArray<[string, number]> };
 
 export function findGamesForGoal(goal: string): Game[] {
   const result = findGoal(goal, STANDARD_UFO) ?? findGoal(goal, SPICY_UFO);
+  return findGamesForResult(goal, result);
+}
+
+interface WithSubcategory {
+  subcategory: string;
+}
+export function findGamesForResult(goal: string, result: WithSubcategory | null): Game[] {
   // this is an old goal, or from a non-standard variant
   if (result == null) {
     const split = goal.split(":");
@@ -51,8 +58,8 @@ export function findGamesForGoal(goal: string): Game[] {
       name === "mortol"
         ? strippedGoal.replace("mortolii", "")
         : name === "campanella"
-        ? strippedGoal.replace("campanella2", "").replace("campanella3", "")
-        : strippedGoal;
+          ? strippedGoal.replace("campanella2", "").replace("campanella3", "")
+          : strippedGoal;
     if (testGoal.includes(testName)) {
       games.push(name);
     }

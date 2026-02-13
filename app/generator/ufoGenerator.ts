@@ -176,7 +176,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
       const goalAndFallback = getGoalAndFallback(goal);
       if (
         finalBoard.includes(goalAndFallback[0]) ||
-        (goalAndFallback[1] != null && !finalBoard.includes(goalAndFallback[1]))
+        (goalAndFallback[1] != null && finalBoard.includes(goalAndFallback[1]))
       ) {
         continue;
       }

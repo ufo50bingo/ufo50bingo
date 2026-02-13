@@ -67,7 +67,6 @@ export default async function createMatch({
       passphrase: password,
       nickname: "ufo50bingobot",
       game_type: "18",
-      // TODO: Pass variant_type in from the front end
       variant_type: bingosyncVariant,
       custom_json: pasta,
       lockout_mode: isLockout ? "2" : "1",
@@ -79,7 +78,7 @@ export default async function createMatch({
 
   if (createResponse.status !== 302) {
     throw new Error(
-      `Bingosync failed to redirect to room page with status ${createResponse.status}`
+      `Bingosync failed to redirect to room page with status ${createResponse.status}`,
     );
   }
 

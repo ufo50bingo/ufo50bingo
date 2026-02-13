@@ -75,7 +75,7 @@ export default function GeneralIcons({
             ? 0
             : Object.keys(countState).reduce(
                 (acc, game) => acc + countState[game],
-                0
+                0,
               )
         }
         iconType={iconType}
@@ -94,54 +94,48 @@ function getWinnerBitSrc(goal: StandardGeneral, isHidden: boolean): string {
     return "/general/winnerbit/Icon_Unrevealed_Goal.png";
   }
   switch (goal) {
-    case "Collect {{cherry_count}} cherry disks from games on this card":
-      return "/general/winnerbit/Icon_Cherry.png";
-    case "Collect {{gold_count}} gold disks from games on this card":
-      return "/general/winnerbit/Icon_Gold.png";
+    // GIFT
     case "Collect {{gift_count}} gifts from games on this card":
       return "/general/winnerbit/Icon_Gift.png";
-    case "Collect a beverage in 6 games":
-      return "/general/winnerbit/Icon_Beverage.png";
-    case "Collect a food item in 8 games":
-      return "/general/winnerbit/Icon_Food.png";
-    case "Beat 2 levels in 8 different games":
-    case "Beat 4 levels in 5 different games":
-    case "Beat 8 levels in 3 different games":
+    // GOLD/CHERRY
+    case "Cherry disk {{cherry_count}} games on this card":
+      return "/general/winnerbit/Icon_Cherry.png";
+    case "Gold disk {{gold_count}} games on this card":
+      return "/general/winnerbit/Icon_Gold.png";
+    // BOSS/LEVEL
+    case "Beat 2 levels in 6 games on this card":
+    case "Beat 4 levels in 5 games on this card":
+    case "Beat 8 levels in 3 games on this card":
       return "/general/winnerbit/Icon_Level.png";
-    case "Collect a key in 7 games":
+    case "Defeat 2 bosses in 3 games on this card":
+    case "Defeat 7 bosses from games on this card":
+    case "Defeat a boss in 5 games on this card":
+      return "/general/winnerbit/Icon_Boss.png";
+    // COLLECTATHON
+    case "Collect 2 keys in 5 games":
       return "/general/winnerbit/Icon_Key.png";
     case "Open 2 chests in 5 games":
       return "/general/winnerbit/Icon_Chest.png";
-    case "Buy an item from a shop in 10 games":
+    case "Buy an item from 2 unique shops in one run in 6 games":
       return "/general/winnerbit/Icon_Shop.png";
-    case "Find an easter egg UFO in 5 games":
-      return "/general/winnerbit/Icon_UFO.png";
-    case "Earn an extra life/1UP in 8 games":
+    case "Earn 2 extra lives/1-Ups in 5 games":
       return "/general/winnerbit/Icon_Life.png";
-    case "Find an egg in 10 games":
-      return "/general/winnerbit/Icon_Egg.png";
-    case "Increase your base HP in 6 games":
+    case "Increase your base HP twice in 4 games":
       return "/general/winnerbit/Icon_HP.png";
-    case "Defeat 2 bosses in 4 different games":
-    case "Defeat 7 bosses":
-    case "Defeat a boss in 6 different games":
-      return "/general/winnerbit/Icon_Boss.png";
-    // case "Enter a top 3 score on 2 arcade leaderboards":
-    // case "Enter a top 3 score on 3 arcade leaderboards":
-    case "Enter a top 5 score on 4 arcade leaderboards":
+    case "Surpass the top 5 score from 4 arcade leaderboards":
       return "/general/winnerbit/Icon_Leaderboard.png";
-    case "PILOT PARTY: Collect 4 gifts: Campanella 1/2/3, Planet Zoldath, Pilot Quest, The Big Bell Race":
-    case "ALPHA TRILOGY: Gold Velgress, Overbold, and Quibble Race as Alpha":
-    case "AMY: Playing as Amy, beat 1 level in Party House, 2 in Hot Foot, 2 in Fist Hell":
-    case "CAMPANELLA TRILOGY: Beat two worlds in Campanella, two in Campanella 2, one in Campanella 3":
-    case "DAY JOB: Beat 1 level in Bug Hunter, 2 in Onion Delivery, 3 in Rail Heist":
-    case "METROIDVANIA: Collect Abilities: 3 in Porgy, 2 in Vainger, 1 in Golfaria":
-    case "PUZZLER: Beat 5 levels in Block Koala, Camouflage, Warptank":
-    case "RACER: Win 4 races in Paint Chase, The Big Bell Race, Quibble Race":
-    case "ROLE-PLAYER: Level up all your characters twice in Divers, Valbrace, Grimstone":
-    case "WAR IS BAD: Win 3 battles in Attactics, Avianos, Combatants":
-    case "ARCADE ACE: Gold Disk any 3 of the 16 “ARCADE” games":
-    case "TRIATHLON: Gold Disk any 3 of the 5 “SPORT” games":
+    case "Defeat 6 different enemy types in 6 games":
+      // TODO: Get new icon
+      return "/general/winnerbit/Icon_Unknown_Goal.png";
+    // THEME
+    case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
+    case "SHOOTER: Beat 5 waves/stages across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
+    case "DAY JOB: Beat 9 levels across Rail Heist, Onion Delivery, and Bug Hunter":
+    case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
+    case "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank":
+    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot":
+    case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants with 2+ in each":
+    case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
       return "/general/winnerbit/Icon_Multi-Game_Generic.png";
     default:
       return "/general/winnerbit/Icon_Unknown_Goal.png";
@@ -153,66 +147,57 @@ function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
     return "/general/sprites/IconUnknown.png";
   }
   switch (goal) {
-    case "Collect {{cherry_count}} cherry disks from games on this card":
-      return "/general/sprites/IconCherry.png";
-    case "Collect {{gold_count}} gold disks from games on this card":
-      return "/general/sprites/IconGold.png";
+    // GIFT
     case "Collect {{gift_count}} gifts from games on this card":
       return "/general/sprites/IconGarden.png";
-    case "ARCADE ACE: Gold Disk any 3 of the 16 “ARCADE” games":
-      return "/general/sprites/IconAce.png";
-    case "TRIATHLON: Gold Disk any 3 of the 5 “SPORT” games":
-      return "/general/sprites/IconTriathlon.png";
-    case "Collect a beverage in 6 games":
-      return "/general/sprites/IconBev.png";
-    case "Collect a food item in 8 games":
-      return "/general/sprites/IconFood.png";
-    case "Beat 2 levels in 8 different games":
-    case "Beat 4 levels in 5 different games":
-    case "Beat 8 levels in 3 different games":
+    // GOLD/CHERRY
+    case "Cherry disk {{cherry_count}} games on this card":
+      return "/general/sprites/IconCherry.png";
+    case "Gold disk {{gold_count}} games on this card":
+      return "/general/sprites/IconGold.png";
+    // BOSS/LEVEL
+    case "Beat 2 levels in 6 games on this card":
+    case "Beat 4 levels in 5 games on this card":
+    case "Beat 8 levels in 3 games on this card":
       return "/general/sprites/IconLevel.png";
-    case "Collect a key in 7 games":
+    case "Defeat 2 bosses in 3 games on this card":
+    case "Defeat 7 bosses from games on this card":
+    case "Defeat a boss in 5 games on this card":
+      return "/general/sprites/IconBoss.png";
+    // COLLECTATHON
+    case "Collect 2 keys in 5 games":
       return "/general/sprites/IconKey.png";
     case "Open 2 chests in 5 games":
       return "/general/sprites/IconChest.png";
-    case "Buy an item from a shop in 10 games":
+    case "Buy an item from 2 unique shops in one run in 6 games":
       return "/general/sprites/IconShops.png";
-    case "Find an easter egg UFO in 5 games":
-      return "/general/sprites/IconUfo.png";
-    case "Earn an extra life/1UP in 8 games":
+    case "Earn 2 extra lives/1-Ups in 5 games":
       return "/general/sprites/Icon1up.png";
-    case "Find an egg in 10 games":
-      return "/general/sprites/IconEgg.png";
-    case "Increase your base HP in 6 games":
+    case "Increase your base HP twice in 4 games":
       return "/general/sprites/IconHealth.png";
-    case "Defeat 2 bosses in 4 different games":
-    case "Defeat 7 bosses":
-    case "Defeat a boss in 6 different games":
-      return "/general/sprites/IconBoss.png";
-    // case "Enter a top 3 score on 2 arcade leaderboards":
-    // case "Enter a top 3 score on 3 arcade leaderboards":
-    case "Enter a top 5 score on 4 arcade leaderboards":
+    case "Surpass the top 5 score from 4 arcade leaderboards":
       return "/general/sprites/IconLeaderboard.png";
-    case "PILOT PARTY: Collect 4 gifts: Campanella 1/2/3, Planet Zoldath, Pilot Quest, The Big Bell Race":
-      return "/general/sprites/IconPilot.png";
-    case "ALPHA TRILOGY: Gold Velgress, Overbold, and Quibble Race as Alpha":
-      return "/general/sprites/IconAlpha.png";
-    case "AMY: Playing as Amy, beat 1 level in Party House, 2 in Hot Foot, 2 in Fist Hell":
-      return "/general/sprites/IconAmy.png";
-    case "CAMPANELLA TRILOGY: Beat two worlds in Campanella, two in Campanella 2, one in Campanella 3":
+    case "Defeat 6 different enemy types in 6 games":
+      // TODO: Get new icon
+      return "/general/sprites/IconUnknown.png";
+    // THEME
+    case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
       return "/general/sprites/IconCampTrilogy.png";
-    case "DAY JOB: Beat 1 level in Bug Hunter, 2 in Onion Delivery, 3 in Rail Heist":
+    case "SHOOTER: Beat 5 waves/stages across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
+      // TODO: Get new icon
+      return "/general/sprites/IconUnknown.png";
+    case "DAY JOB: Beat 9 levels across Rail Heist, Onion Delivery, and Bug Hunter":
       return "/general/sprites/IconDayJob.png";
-    case "METROIDVANIA: Collect Abilities: 3 in Porgy, 2 in Vainger, 1 in Golfaria":
-      return "/general/sprites/IconMetroidvania.png";
-    case "PUZZLER: Beat 5 levels in Block Koala, Camouflage, Warptank":
-      return "/general/sprites/IconPuzzler.png";
-    case "RACER: Win 4 races in Paint Chase, The Big Bell Race, Quibble Race":
+    case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
       return "/general/sprites/IconRacer.png";
-    case "ROLE-PLAYER: Level up all your characters twice in Divers, Valbrace, Grimstone":
-      return "/general/sprites/IconRoleplayer.png";
-    case "WAR IS BAD: Win 3 battles in Attactics, Avianos, Combatants":
+    case "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank":
+      return "/general/sprites/IconPuzzler.png";
+    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot":
+      return "/general/sprites/IconAmy.png";
+    case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants with 2+ in each":
       return "/general/sprites/IconWarIsBad.png";
+    case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
+      return "/general/sprites/IconMetroidvania.png";
     default:
       return "/general/sprites/IconUnknown.png";
   }

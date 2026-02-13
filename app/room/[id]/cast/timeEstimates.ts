@@ -177,7 +177,7 @@ const GIFT_DESCRIPTION_ENTRIES: ReadonlyArray<[Game, string]> = [
   ["lordsofdiskonia", "5 lvls"],
 ];
 export const GIFT_DESCRIPTIONS: Descriptions = Object.fromEntries(
-  GIFT_DESCRIPTION_ENTRIES
+  GIFT_DESCRIPTION_ENTRIES,
 );
 export const GIFTS: Recommendations = {
   always: [],
@@ -232,25 +232,6 @@ export const GIFTS: Recommendations = {
   never: ["grimstone", "warptank", "rockonisland", "lordsofdiskonia"],
 };
 
-// TOP 3 has been removed. Keeping here in case it comes back later
-// const TOP_3_ENTRIES: ReadonlyArray<[Game, string]> = [
-//   ["magicgarden", "8k"],
-//   ["ninpek", "8k"],
-//   ["starwaspir", "100k"],
-//   ["campanella", "15k"],
-//   ["kickclub", "75k"],
-//   ["rakshasa", "30k"],
-//   ["seasidedrive", "100k"],
-//   ["caramelcaramel", "60k"],
-//   ["paintchase", "320"],
-// ];
-// export const TOP_3_SCORES: Descriptions = Object.fromEntries(TOP_3_ENTRIES);
-// export const TOP_3: Recommendations = {
-//   always: ["magicgarden", "ninpek", "starwaspir", "campanella"],
-//   synergy: ["kickclub", "rakshasa", "seasidedrive", "caramelcaramel"],
-//   never: ["paintchase"],
-// };
-
 const TOP_5_ENTRIES: ReadonlyArray<[Game, string]> = [
   ["campanella", "5k"],
   ["magicgarden", "6k"],
@@ -274,35 +255,6 @@ export const TOP_5: Recommendations = {
   ],
   synergy: ["rakshasa", "seasidedrive", "paintchase"],
   never: [],
-};
-
-export const SPORT: Recommendations = {
-  always: [
-    "bushidoball",
-    "pingolf",
-    "hotfoot",
-    "hypercontender",
-    "thebigbellrace",
-  ],
-  synergy: [],
-  never: [],
-};
-
-export const ARCADE: Recommendations = {
-  always: ["waldorfsjourney", "velgress", "magicgarden", "overbold"],
-  synergy: [
-    "starwaspir",
-    "ninpek",
-    "oniondelivery",
-    "campanella",
-    "caramelcaramel",
-    "kickclub",
-    "seasidedrive",
-    "campanella3",
-    "fisthell",
-    "elfazarshat",
-  ],
-  never: ["paintchase", "attactics"],
 };
 
 export const TWO_LEVELS: Recommendations = {
@@ -413,43 +365,6 @@ export const EIGHT_LEVELS: Recommendations = {
   ],
 };
 
-export const BEVERAGE: Recommendations = {
-  always: [
-    "divers",
-    "campanella",
-    "magicgarden",
-    "lordsofdiskonia",
-    "miniandmax",
-    "hotfoot",
-    "valbrace",
-  ],
-  synergy: ["warptank", "ninpek"],
-  never: ["grimstone"],
-};
-
-export const FOOD: Recommendations = {
-  always: [
-    "kickclub",
-    "ninpek",
-    "waldorfsjourney",
-    "fisthell",
-    "combatants",
-    "rockonisland",
-    "cyberowls",
-    "camouflage",
-  ],
-  synergy: [
-    "planetzoldath",
-    "grimstone",
-    "valbrace",
-    "campanella2",
-    "pilotquest",
-    "miniandmax",
-    "barbuta",
-  ],
-  never: [],
-};
-
 export const KEYS: Recommendations = {
   always: [
     "mortolii",
@@ -503,19 +418,6 @@ export const SHOPS: Recommendations = {
   never: [],
 };
 
-export const UFOS: Recommendations = {
-  always: [
-    "starwaspir",
-    "pingolf",
-    "oniondelivery",
-    "fisthell",
-    "golfaria",
-    "rakshasa",
-  ],
-  synergy: ["elfazarshat", "partyhouse", "seasidedrive"],
-  never: ["divers", "nightmanor"],
-};
-
 export const LIVES: Recommendations = {
   always: [
     "mortol",
@@ -537,24 +439,6 @@ export const LIVES: Recommendations = {
     "barbuta",
   ],
   never: [],
-};
-
-export const EGGS: Recommendations = {
-  always: [
-    "barbuta",
-    "thebigbellrace",
-    "divers",
-    "starwaspir",
-    "ninpek",
-    "oniondelivery",
-    "campanella2",
-    "rakshasa",
-    "caramelcaramel",
-    "bughunter",
-  ],
-
-  synergy: ["miniandmax", "nightmanor", "avianos", "mooncat", "porgy"],
-  never: ["valbrace", "elfazarshat", "campanella3"],
 };
 
 export const HP: Recommendations = {

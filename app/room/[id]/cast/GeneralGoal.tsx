@@ -1,7 +1,6 @@
 import { Game, ORDERED_GAMES } from "@/app/goals";
 import { Anchor, Button, Checkbox, Group, Stack } from "@mantine/core";
 import {
-  // TOP_3,
   TOP_5,
   RecommendationsWithTerminal,
   Descriptions,
@@ -10,23 +9,16 @@ import {
   GIFT_DESCRIPTIONS,
   TerminalEntry,
   GOLDS,
-  ARCADE,
-  SPORT,
-  BEVERAGE,
-  FOOD,
   TWO_LEVELS,
   FOUR_LEVELS,
   EIGHT_LEVELS,
   KEYS,
   TWO_CHESTS,
   SHOPS,
-  UFOS,
   LIVES,
-  EGGS,
   HP,
   TWO_BOSSES,
   BOSSES,
-  // TOP_3_SCORES,
   TOP_5_SCORES,
 } from "./timeEstimates";
 import { findGamesForGoal, GameToGoals } from "./findAllGames";
@@ -58,7 +50,7 @@ type Props = {
 function getOtherGoals(
   entry: TerminalEntry,
   gameToGoals: GameToGoals,
-  resolvedGoal: string
+  resolvedGoal: string,
 ): null | ReadonlyArray<[string, number]> {
   const game = typeof entry === "string" ? entry : entry.game;
   const goals = gameToGoals[game];
@@ -91,110 +83,90 @@ export default function GeneralGoal({
   let descriptions: null | Descriptions = null;
   let isChecks = true;
   switch (foundGoal.goal) {
-    case "Collect {{cherry_count}} cherry disks from games on this card":
-      recommendations = CHERRIES;
-      onCardOnly = true;
-      break;
-    case "Collect {{gold_count}} gold disks from games on this card":
-      recommendations = GOLDS;
-      onCardOnly = true;
-      break;
+    // GIFT
     case "Collect {{gift_count}} gifts from games on this card":
       recommendations = GIFTS;
       onCardOnly = true;
       descriptions = GIFT_DESCRIPTIONS;
       break;
-    case "ARCADE ACE: Gold Disk any 3 of the 16 “ARCADE” games":
-      recommendations = ARCADE;
+    // GOLD/CHERRY
+    case "Cherry disk {{cherry_count}} games on this card":
+      recommendations = CHERRIES;
+      onCardOnly = true;
       break;
-    case "TRIATHLON: Gold Disk any 3 of the 5 “SPORT” games":
-      recommendations = SPORT;
+    case "Gold disk {{gold_count}} games on this card":
+      recommendations = GOLDS;
+      onCardOnly = true;
       break;
-    case "Collect a beverage in 6 games":
-      recommendations = BEVERAGE;
-      break;
-    case "Collect a food item in 8 games":
-      recommendations = FOOD;
-      break;
-    case "Beat 2 levels in 8 different games":
+    // BOSS/LEVEL
+    case "Beat 2 levels in 6 games on this card":
       recommendations = TWO_LEVELS;
+      onCardOnly = true;
       break;
-    case "Beat 4 levels in 5 different games":
+    case "Beat 4 levels in 5 games on this card":
       recommendations = FOUR_LEVELS;
+      onCardOnly = true;
       break;
-    case "Beat 8 levels in 3 different games":
+    case "Beat 8 levels in 3 games on this card":
       recommendations = EIGHT_LEVELS;
+      onCardOnly = true;
       break;
-    case "Collect a key in 7 games":
-      recommendations = KEYS;
+    case "Defeat 2 bosses in 3 games on this card":
+      recommendations = TWO_BOSSES;
+      onCardOnly = true;
+      break;
+    case "Defeat 7 bosses from games on this card":
+      recommendations = BOSSES;
+      isChecks = false;
+      onCardOnly = true;
+      break;
+    case "Defeat a boss in 5 games on this card":
+      recommendations = BOSSES;
+      onCardOnly = true;
+      break;
+    // COLLECTATHON
+    case "Buy an item from 2 unique shops in one run in 6 games":
+      // TODO: Update recommendations
+      recommendations = SHOPS;
+      break;
+    case "Increase your base HP twice in 4 games":
+      // TODO: Update recommendations
+      recommendations = HP;
       break;
     case "Open 2 chests in 5 games":
       recommendations = TWO_CHESTS;
       break;
-    case "Buy an item from a shop in 10 games":
-      recommendations = SHOPS;
-      break;
-    case "Find an easter egg UFO in 5 games":
-      recommendations = UFOS;
-      break;
-    case "Earn an extra life/1UP in 8 games":
+    case "Earn 2 extra lives/1-Ups in 5 games":
+      // TODO: Update recommendations
       recommendations = LIVES;
       break;
-    case "Find an egg in 10 games":
-      recommendations = EGGS;
+    case "Collect 2 keys in 5 games":
+      // TODO: Update recommendations
+      recommendations = KEYS;
       break;
-    case "Increase your base HP in 6 games":
-      recommendations = HP;
-      break;
-    case "Defeat 2 bosses in 4 different games":
-      recommendations = TWO_BOSSES;
-      break;
-    case "Defeat 7 bosses":
-      recommendations = BOSSES;
-      isChecks = false;
-      break;
-    case "Defeat a boss in 6 different games":
-      recommendations = BOSSES;
-      break;
-    // case "Enter a top 3 score on 2 arcade leaderboards":
-    //   recommendations = TOP_3;
-    //   descriptions = TOP_3_SCORES;
-    //   break;
-    // case "Enter a top 3 score on 3 arcade leaderboards":
-    //   recommendations = TOP_3;
-    //   descriptions = TOP_3_SCORES;
-    //   break;
-    case "Enter a top 5 score on 4 arcade leaderboards":
+    case "Surpass the top 5 score from 4 arcade leaderboards":
       recommendations = TOP_5;
       descriptions = TOP_5_SCORES;
       break;
-
-    case "PILOT PARTY: Collect 4 gifts: Campanella 1/2/3, Planet Zoldath, Pilot Quest, The Big Bell Race":
-      descriptions = GIFT_DESCRIPTIONS;
-      const allGames = findGamesForGoal(foundGoal.resolvedGoal);
-      recommendations = {
-        always: GIFTS.always
-          .concat(GIFTS.synergy)
-          .concat(GIFTS.never)
-          .filter((gift) => allGames.includes(gift)),
-        synergy: [],
-        never: [],
-      };
+    case "Defeat 6 different enemy types in 6 games":
+      // TODO: Add recommendations
+      recommendations = KEYS;
       break;
-    case "ALPHA TRILOGY: Gold Velgress, Overbold, and Quibble Race as Alpha":
-    case "AMY: Playing as Amy, beat 1 level in Party House, 2 in Hot Foot, 2 in Fist Hell":
-    case "CAMPANELLA TRILOGY: Beat two worlds in Campanella, two in Campanella 2, one in Campanella 3":
-    case "DAY JOB: Beat 1 level in Bug Hunter, 2 in Onion Delivery, 3 in Rail Heist":
-    case "METROIDVANIA: Collect Abilities: 3 in Porgy, 2 in Vainger, 1 in Golfaria":
-    case "PUZZLER: Beat 5 levels in Block Koala, Camouflage, Warptank":
-    case "RACER: Win 4 races in Paint Chase, The Big Bell Race, Quibble Race":
-    case "ROLE-PLAYER: Level up all your characters twice in Divers, Valbrace, Grimstone":
-    case "WAR IS BAD: Win 3 battles in Attactics, Avianos, Combatants":
+    // THEME
+    case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
+    case "SHOOTER: Beat 5 waves/stages across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
+    case "DAY JOB: Beat 9 levels across Rail Heist, Onion Delivery, and Bug Hunter":
+    case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
+    case "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank":
+    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot":
+    case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants with 2+ in each":
+    case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
       recommendations = {
         always: findGamesForGoal(foundGoal.resolvedGoal),
         synergy: [],
         never: [],
       };
+      isChecks = false;
       break;
     default:
       return (
@@ -218,13 +190,13 @@ export default function GeneralGoal({
       <BingosyncColored color={leftColor}>
         {Object.keys(leftCounts).reduce(
           (acc, game) => acc + leftCounts[game],
-          0
+          0,
         )}
       </BingosyncColored>{" "}
       <BingosyncColored color={rightColor}>
         {Object.keys(rightCounts).reduce(
           (acc, game) => acc + rightCounts[game],
-          0
+          0,
         )}
       </BingosyncColored>
       )
@@ -287,7 +259,7 @@ export default function GeneralGoal({
       break;
     case "chronological":
       finalEntries.sort(
-        (a, b) => ORDERED_GAMES.indexOf(a[0]) - ORDERED_GAMES.indexOf(b[0])
+        (a, b) => ORDERED_GAMES.indexOf(a[0]) - ORDERED_GAMES.indexOf(b[0]),
       );
       break;
   }

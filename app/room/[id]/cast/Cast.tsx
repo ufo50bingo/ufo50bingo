@@ -19,7 +19,7 @@ import CastSettings from "./CastSettings";
 import GeneralIcons from "./GeneralIcons";
 import EditSquare from "./EditSquare";
 import { getResult } from "@/app/matches/computeResult";
-import useSyncedState, { AllPlayerGames, CountState, CurrentGame } from "./useSyncedState";
+import useSyncedState, { AllPlayerGames, CountState } from "./useSyncedState";
 import useLocalState from "./useLocalState";
 import useBingosyncSocket from "../common/useBingosyncSocket";
 import useDings from "../play/useDings";
@@ -71,10 +71,10 @@ export default function Cast({
   playerName,
 }: CastProps) {
   const [gameToGoals, setGameToGoals] = useState(() =>
-    getGameToGoals(initialBoard)
+    getGameToGoals(initialBoard),
   );
   const [terminalCodes, setTerminalCodes] = useState(() =>
-    getAllTerminalCodes(initialBoard)
+    getAllTerminalCodes(initialBoard),
   );
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
 
@@ -135,12 +135,15 @@ export default function Cast({
     setShowRecentGames,
   } = useLocalState(id, seed);
 
-  const [numPlayers, setNumPlayers] = useLocalNumber({ key: 'num-players', defaultValue: 2 });
+  const [numPlayers, setNumPlayers] = useLocalNumber({
+    key: "num-players",
+    defaultValue: 2,
+  });
   const [isHiddenRaw, setIsHidden] = useState(hideByDefault);
 
   const leftScore = board.filter((square) => square.color === leftColor).length;
   const rightScore = board.filter(
-    (square) => square.color === rightColor
+    (square) => square.color === rightColor,
   ).length;
 
   const isHidden = isHiddenRaw && leftScore === 0 && rightScore === 0;
@@ -191,7 +194,7 @@ export default function Cast({
     let spliceIndex = filtered.findIndex((item) => isGift(item.foundGoal.goal));
     if (spliceIndex < 0) {
       spliceIndex = filtered.findIndex((item) =>
-        isGoldCherry(item.foundGoal.goal)
+        isGoldCherry(item.foundGoal.goal),
       );
     }
     if (spliceIndex < 0) {
@@ -203,7 +206,7 @@ export default function Cast({
   }, [board]);
 
   const multiGoalGames = Object.keys(gameToGoals).filter(
-    (game) => gameToGoals[game].length > 1
+    (game) => gameToGoals[game].length > 1,
   );
   switch (sortType) {
     case "fast":
@@ -213,7 +216,7 @@ export default function Cast({
     case "chronological":
       multiGoalGames.sort(
         (a, b) =>
-          ORDERED_GAMES.indexOf(a as Game) - ORDERED_GAMES.indexOf(b as Game)
+          ORDERED_GAMES.indexOf(a as Game) - ORDERED_GAMES.indexOf(b as Game),
       );
       break;
   }
@@ -248,15 +251,25 @@ export default function Cast({
     if (!highlightCurrentGame) {
       return undefined;
     }
-    const currentGames = allPlayerGames.map(playerGames => playerGames == null ? null : playerGames[0]);
-    const currentLeftGames = currentGames.filter((g, index) => g != null && index % 2 === 0);
-    const currentRightGames = currentGames.filter((g, index) => g != null && index % 2 === 1);
-    const leftIndices = currentLeftGames.
-      flatMap(game => game?.game != null ? (gameToGoals[game.game] ?? []) : [])
-      .map(item => item[1]);
+    const currentGames = allPlayerGames.map((playerGames) =>
+      playerGames == null ? null : playerGames[0],
+    );
+    const currentLeftGames = currentGames.filter(
+      (g, index) => g != null && index % 2 === 0,
+    );
+    const currentRightGames = currentGames.filter(
+      (g, index) => g != null && index % 2 === 1,
+    );
+    const leftIndices = currentLeftGames
+      .flatMap((game) =>
+        game?.game != null ? (gameToGoals[game.game] ?? []) : [],
+      )
+      .map((item) => item[1]);
     const rightIndices = currentRightGames
-      .flatMap(game => game?.game != null ? (gameToGoals[game.game] ?? []) : [])
-      .map(item => item[1]);
+      .flatMap((game) =>
+        game?.game != null ? (gameToGoals[game.game] ?? []) : [],
+      )
+      .map((item) => item[1]);
     const highlights = Array(25)
       .fill(null)
       .map((_, index) => {
@@ -354,19 +367,27 @@ export default function Cast({
         {showGameSelector ? (
           <Stack gap={8}>
             <Group wrap="wrap" w={268} gap={8} justify="space-between">
-              {(new Array(numPlayers)).fill(null).map((_, playerNum) => (
+              {new Array(numPlayers).fill(null).map((_, playerNum) => (
                 <GameSelector
                   key={playerNum}
                   color={playerNum % 2 === 0 ? leftColor : rightColor}
-                  game={getGamesForPlayer(allPlayerGames, playerNum)[0]?.game ?? null}
-                  onChange={(newGame: ProperGame | null) => addGame(newGame, playerNum)}
+                  game={
+                    getGamesForPlayer(allPlayerGames, playerNum)[0]?.game ??
+                    null
+                  }
+                  onChange={(newGame: ProperGame | null) =>
+                    addGame(newGame, playerNum)
+                  }
                 />
               ))}
             </Group>
             {generalGoals.length > 0 ? (
               getCard(generalGoals[0], 475 - gameSelectorHeight)
             ) : (
-              <InfoCard title="Multi-goal games" height={475 - gameSelectorHeight}>
+              <InfoCard
+                title="Multi-goal games"
+                height={475 - gameSelectorHeight}
+              >
                 <Stack gap={4}>
                   {multiGoalGameElements.length > 0
                     ? multiGoalGameElements

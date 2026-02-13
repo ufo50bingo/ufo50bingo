@@ -6,7 +6,7 @@ import {
 } from "@/app/goals";
 import { TBoard } from "@/app/matches/parseBingosyncData";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
-import findGoal, { FoundGoal } from "@/app/findGoal";
+import findGoal from "@/app/findGoal";
 import { SPICY_UFO } from "@/app/pastas/spicyUfo";
 
 function stripText(text: string): string {
@@ -28,7 +28,10 @@ export function findGamesForGoal(goal: string): Game[] {
 interface WithSubcategory {
   subcategory: string;
 }
-export function findGamesForResult(goal: string, result: WithSubcategory | null): Game[] {
+export function findGamesForResult(
+  goal: string,
+  result: WithSubcategory | null,
+): Game[] {
   // this is an old goal, or from a non-standard variant
   if (result == null) {
     const split = goal.split(":");

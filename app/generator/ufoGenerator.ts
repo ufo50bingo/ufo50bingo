@@ -1,5 +1,5 @@
 import shuffle from "../createboard/shuffle";
-import { findGamesForGoal, findGamesForResult } from "../room/[id]/cast/findAllGames";
+import { findGamesForResult } from "../room/[id]/cast/findAllGames";
 import getGoalAndFallback from "./getGoalAndFallback";
 import getMagicSquare from "./getMagicSquare";
 import replaceTokens from "./replaceTokens";
@@ -105,7 +105,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     const difficulty = difficultyByIndex[index];
     const synergyCheckIndices =
       pasta.categories_with_global_group_repeat_prevention != null &&
-        pasta.categories_with_global_group_repeat_prevention.includes(difficulty)
+      pasta.categories_with_global_group_repeat_prevention.includes(difficulty)
         ? [...Array(25)].map((_, x) => x)
         : SAME_LINE_INDICES[index];
 
@@ -158,7 +158,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     const difficulty = difficultyByIndex[i];
     const game = gameByIndex[i];
     const goals = pasta.goals[difficulty][game];
-    if (goals.every(goal => typeof goal === "string")) {
+    if (goals.every((goal) => typeof goal === "string")) {
       unrestricted.push(i);
     } else {
       restricted.push(i);
@@ -182,8 +182,13 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
       }
       if (typeof goal === "object") {
         const optionsRaw = goal.restriction.options;
-        const options = typeof optionsRaw === "string" ? pasta.restriction_option_lists![optionsRaw] : optionsRaw;
-        const onCardCount = options.filter(option => gamesOnCard.has(option)).length;
+        const options =
+          typeof optionsRaw === "string"
+            ? pasta.restriction_option_lists![optionsRaw]
+            : optionsRaw;
+        const onCardCount = options.filter((option) =>
+          gamesOnCard.has(option),
+        ).length;
         if (onCardCount < goal.restriction.count) {
           if (fallback == null) {
             fallback = goalAndFallback[1];
@@ -201,7 +206,9 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
 
     finalBoard[i] = finalGoal;
     finalBoardWithTokens[i] = replaceTokens(finalGoal, pasta.tokens);
-    for (const onCard of findGamesForResult(finalBoardWithTokens[i], { subcategory: game })) {
+    for (const onCard of findGamesForResult(finalBoardWithTokens[i], {
+      subcategory: game,
+    })) {
       gamesOnCard.add(onCard);
     }
   };
@@ -218,7 +225,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     const difficulty = difficultyByIndex[i];
     const goals = pasta.goals[difficulty][game];
 
-    const mayHaveNewGame = goals.some(goal => {
+    const mayHaveNewGame = goals.some((goal) => {
       const goalAndFallback = getGoalAndFallback(goal);
       for (const g of goalAndFallback) {
         for (const testGame of findGamesForResult(g, { subcategory: game })) {
@@ -226,7 +233,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
             return true;
           }
         }
-        const tokens = splitAtTokens(g).filter(item => item.type === "token");
+        const tokens = splitAtTokens(g).filter((item) => item.type === "token");
         for (const token of tokens) {
           for (const option of pasta.tokens[token.token]) {
             for (const testGame of findGamesForResult(option, null)) {

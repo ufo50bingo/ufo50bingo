@@ -33,16 +33,15 @@ import ufoGenerator, {
 } from "../generator/ufoGenerator";
 import UFODifficultySelectors from "./UFODifficultySelectors";
 import UFODraftCreator from "./UFODraftCreator";
-import validateUfo from "../generator/validateUfo";
 import useLocalEnum from "../localStorage/useLocalEnum";
 import { CheckerSort } from "./CheckerSortSelector";
 import validateStr from "../generator/validateStr";
 
 const options: ReadonlyArray<VariantMetadata> = METADATA.filter(
-  (d) => !d.isMenu
+  (d) => !d.isMenu,
 );
 const menuOptions: ReadonlyArray<VariantMetadata> = METADATA.filter(
-  (d) => d.isMenu
+  (d) => d.isMenu,
 );
 
 type CustomType = "srl_v5" | "ufo" | "fixed_board" | "randomized";
@@ -61,8 +60,8 @@ export default function NonLeagueMatch() {
       (checkerSort === "chronological"
         ? ORDERED_PROPER_GAMES
         : ORDERED_PROPER_GAMES.toSorted()
-      ).map((key) => [key, true])
-    )
+      ).map((key) => [key, true]),
+    ),
   );
   const [numPlayers, setNumPlayers] = useState(2);
   const [draftCheckState, setDraftCheckState] = useState<
@@ -72,8 +71,8 @@ export default function NonLeagueMatch() {
       (checkerSort === "chronological"
         ? ORDERED_PROPER_GAMES
         : ORDERED_PROPER_GAMES.toSorted()
-      ).map((key) => [key, null])
-    )
+      ).map((key) => [key, null]),
+    ),
   );
 
   const setCheckerSort = (newSort: CheckerSort) => {
@@ -83,16 +82,16 @@ export default function NonLeagueMatch() {
         (newSort === "chronological"
           ? ORDERED_PROPER_GAMES
           : ORDERED_PROPER_GAMES.toSorted()
-        ).map((key) => [key, checkState.get(key) ?? true])
-      )
+        ).map((key) => [key, checkState.get(key) ?? true]),
+      ),
     );
     setDraftCheckState(
       new Map(
         (newSort === "chronological"
           ? ORDERED_PROPER_GAMES
           : ORDERED_PROPER_GAMES.toSorted()
-        ).map((key) => [key, draftCheckState.get(key) ?? null])
-      )
+        ).map((key) => [key, draftCheckState.get(key) ?? null]),
+      ),
     );
   };
 
@@ -144,18 +143,18 @@ export default function NonLeagueMatch() {
         return stringify(
           showFilters
             ? Array.from(
-              checkState
-                .entries()
-                .filter(([_gameKey, checkState]) => checkState)
-            ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
+                checkState
+                  .entries()
+                  .filter(([_gameKey, checkState]) => checkState),
+              ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
             : ORDERED_PROPER_GAMES.map((gameKey) => ({
-              name: GAME_NAMES[gameKey],
-            }))
+                name: GAME_NAMES[gameKey],
+              })),
         );
       case "UFODraft":
         if (draftPasta != null) {
           return stringify(
-            ufoGenerator(draftPasta).map((goal) => ({ name: goal }))
+            ufoGenerator(draftPasta).map((goal) => ({ name: goal })),
           );
         } else {
           throw new Error("draftPasta expected to be nonnull");
@@ -163,7 +162,7 @@ export default function NonLeagueMatch() {
       case "UFO":
         if (!showFilters) {
           return stringify(
-            ufoGenerator(metadata.pasta).map((goal) => ({ name: goal }))
+            ufoGenerator(metadata.pasta).map((goal) => ({ name: goal })),
           );
         }
         // we check for excluded games instead of included
@@ -187,7 +186,7 @@ export default function NonLeagueMatch() {
             ...metadata.pasta,
             goals: filtered,
             category_counts: difficultyCounts[metadata.name],
-          }).map((goal) => ({ name: goal }))
+          }).map((goal) => ({ name: goal })),
         );
     }
   };
@@ -241,12 +240,12 @@ export default function NonLeagueMatch() {
       <Group justify="space-between">
         {((metadata.type === "UFO" && metadata.isGeneric !== true) ||
           metadata.type === "GameNames") && (
-            <Checkbox
-              checked={showFilters}
-              label="Customize"
-              onChange={(event) => setShowFilters(event.currentTarget.checked)}
-            />
-          )}
+          <Checkbox
+            checked={showFilters}
+            label="Customize"
+            onChange={(event) => setShowFilters(event.currentTarget.checked)}
+          />
+        )}
         {metadata.type === "UFO" && (
           <Tooltip label="Copy the source in the new “UFO” format.">
             <Button
@@ -254,7 +253,7 @@ export default function NonLeagueMatch() {
               size="xs"
               onClick={() => {
                 navigator.clipboard.writeText(
-                  JSON.stringify(metadata.pasta, null, 2)
+                  JSON.stringify(metadata.pasta, null, 2),
                 );
               }}
             >

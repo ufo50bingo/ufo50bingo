@@ -1,4 +1,4 @@
-import getGoalName from "./getGoalName";
+import getGoalAndFallback from "./getGoalAndFallback";
 import { UFOPasta } from "./ufoGenerator";
 
 export interface UFOGoal {
@@ -21,7 +21,7 @@ export default function getFlatGoals(pasta: UFOPasta): ReadonlyArray<UFOGoal> {
     Object.entries(subcatToGoals).forEach(([subcategory, goals]) => {
       goals.forEach((goal) => {
         flatGoals.push({
-          name: getGoalName(goal),
+          name: getGoalAndFallback(goal)[0],
           subcategory,
           category,
         });

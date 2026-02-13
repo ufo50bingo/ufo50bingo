@@ -1,5 +1,5 @@
 import shuffle from "../createboard/shuffle";
-import getGoalName from "./getGoalName";
+import getGoalAndFallback from "./getGoalAndFallback";
 import getMagicSquare from "./getMagicSquare";
 import replaceTokens from "./replaceTokens";
 
@@ -7,6 +7,7 @@ export type Restriction = {
   name: string;
   restriction: {
     count: number;
+    fallback: string;
     options: string | ReadonlyArray<string>;
   };
 };
@@ -94,6 +95,9 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     {};
   const gameByIndex: Array<string | null> = Array(25).fill(null);
   const finalBoard: Array<string | null> = Array(25).fill(null);
+  const difficultyToGameToUsedCount: {
+    [difficulty: string]: { [game: string]: number };
+  } = {};
   fillOrder.forEach((index) => {
     const difficulty = difficultyByIndex[index];
     const synergyCheckIndices =
@@ -104,8 +108,6 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
 
     let bestSynergy = Infinity;
     let bestGame = null;
-    let bestGoal = "ERROR: Failed to find goal";
-
     const gameToGoals = pasta.goals[difficulty];
 
     let games = availableGamesByDifficulty[difficulty];
@@ -121,24 +123,40 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
       if (synergy > bestSynergy) {
         continue;
       }
-      const goals = [...gameToGoals[game]];
-      shuffle(goals);
-      for (const goal of goals) {
-        const goalName = getGoalName(goal);
-        if (!finalBoard.includes(goalName)) {
-          bestGoal = goalName;
-          bestSynergy = synergy;
-          bestGame = game;
-          break;
-        }
+      const curCountByGame = difficultyToGameToUsedCount[difficulty] ?? {};
+      const curCount = curCountByGame[game] ?? 0;
+      const goalCount = gameToGoals[game].length;
+      if (curCount > goalCount) {
+        bestSynergy = synergy;
+        bestGame = game;
+        curCountByGame[game] = curCount + 1;
+        difficultyToGameToUsedCount[difficulty] = curCountByGame;
       }
     }
-    finalBoard[index] = bestGoal;
     gameByIndex[index] = bestGame;
     availableGamesByDifficulty[difficulty] = games.filter(
       (g) => g !== bestGame,
     );
   });
+
+  for (let i = 0; i < 25; i++) {
+    let finalGoal = "ERROR: Failed to find goal";
+    const game = gameByIndex[i];
+    const difficulty = difficultyByIndex[i];
+    const goals = [...pasta.goals[difficulty][game!]];
+    shuffle(goals);
+    for (const goal of goals) {
+      const goalAndFallback = getGoalAndFallback(goal);
+      if (
+        !finalBoard.includes(goalAndFallback[0]) &&
+        (goalAndFallback[1] == null || !finalBoard.includes(goalAndFallback[1]))
+      ) {
+        finalGoal = goalAndFallback[0];
+        break;
+      }
+    }
+    finalBoard[i] = finalGoal;
+  }
 
   return finalBoard.map((goal) => replaceTokens(goal!, pasta.tokens));
 }

@@ -20,6 +20,7 @@ const UfoPasta = zod.strictObject({
             name: zod.string(),
             restriction: zod.strictObject({
               count: zod.number(),
+              fallback: zod.string(),
               options: zod.union([zod.string(), zod.array(zod.string())]),
             }),
           }),

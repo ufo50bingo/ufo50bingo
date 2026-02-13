@@ -1,4 +1,4 @@
-import getGoalName from "./getGoalName";
+import getGoalAndFallback from "./getGoalAndFallback";
 import { UFODifficulties } from "./ufoGenerator";
 
 const REGEX = /\{\{([^{}]*)\}\}/g;
@@ -12,7 +12,7 @@ export default function findAllTokens(goals: UFODifficulties): {
     Object.keys(categoryGoals).forEach((group) => {
       const groupGoals = categoryGoals[group];
       groupGoals.forEach((goal) => {
-        const goalName = getGoalName(goal);
+        const goalName = getGoalAndFallback(goal)[0];
         const matches = [...goalName.matchAll(REGEX)];
         const tokens = matches.map((match) => match[1]);
         const localCounts: { [token: string]: number } = {};

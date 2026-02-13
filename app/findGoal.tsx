@@ -1,6 +1,6 @@
 "use client";
 
-import getGoalName from "./generator/getGoalName";
+import getGoalAndFallback from "./generator/getGoalAndFallback";
 import { UFOPasta } from "./generator/ufoGenerator";
 import regexpEscape from "regexp.escape";
 
@@ -123,7 +123,7 @@ function preprocess(pasta: UFOPasta): ProcessedPasta {
   Object.keys(pasta.goals).forEach((category) => {
     Object.keys(pasta.goals[category]).forEach((subcategory) => {
       pasta.goals[category][subcategory].forEach((goal) => {
-        const goalName = getGoalName(goal);
+        const goalName = getGoalAndFallback(goal)[0];
         const tags = { category, subcategory };
         if (goalName.includes("{{")) {
           const output = preprocessGoalWithToken(goalName, pasta);

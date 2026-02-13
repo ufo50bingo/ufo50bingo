@@ -139,8 +139,6 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     );
   });
 
-  console.log("Game by index:", gameByIndex);
-
   for (let i = 0; i < 25; i++) {
     let finalGoal = "ERROR: Failed to find goal";
     const game = gameByIndex[i];

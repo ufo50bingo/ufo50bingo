@@ -131,6 +131,9 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
         bestGame = game;
         curCountByGame[game] = curCount + 1;
         difficultyToGameToUsedCount[difficulty] = curCountByGame;
+        if (synergy === 0) {
+          break;
+        }
       }
     }
     gameByIndex[index] = bestGame;

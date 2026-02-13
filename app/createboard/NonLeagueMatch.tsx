@@ -237,6 +237,23 @@ export default function NonLeagueMatch() {
           value={variant}
         />
       )}
+      {metadata.name === "Standard" && (
+        <Alert title="Updated for Season 3!">
+          The Standard variant has been updated for Season 3 of Bingo League!{" "}
+          <a href="/goals">You can see the full goal list here.</a> Please leave
+          any feedback in{" "}
+          <a
+            href="https://discord.com/channels/525973026429206530/1332514343899627591"
+            target="_blank"
+          >
+            #bingo-chat
+          </a>{" "}
+          on the <a href="https://50games.fans">Discord</a>!
+          <br />
+          Season 2 goals are still available as the "Season 2" variant after
+          clicking "..."
+        </Alert>
+      )}
       <Group justify="space-between">
         {((metadata.type === "UFO" && metadata.isGeneric !== true) ||
           metadata.type === "GameNames") && (

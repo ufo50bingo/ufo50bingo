@@ -170,7 +170,7 @@ export default function Shell({ children }: Props) {
               >
                 #bingo-chat
               </a>{" "}
-              on the <a href="https://50games.fans">discord</a>
+              on the <a href="https://50games.fans">Discord</a>
             </Text>
           </Group>
         </div>

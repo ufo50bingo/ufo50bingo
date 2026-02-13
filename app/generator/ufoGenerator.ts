@@ -93,7 +93,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
 
   const availableGamesByDifficulty: { [difficulty: string]: Array<string> } =
     {};
-  const gameByIndex: Array<string | null> = Array(25).fill(null);
+  const gameByIndex: Array<string> = Array(25).fill("");
   const finalBoard: Array<string | null> = Array(25).fill(null);
   const difficultyToGameToUsedCount: {
     [difficulty: string]: { [game: string]: number };
@@ -136,12 +136,21 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
         }
       }
     }
+    if (bestGame == null) {
+      throw new Error(
+        `Failed to generate card! Not enough goals for difficulty ${difficulty}.`,
+      );
+    }
     gameByIndex[index] = bestGame;
     availableGamesByDifficulty[difficulty] = games.filter(
       (g) => g !== bestGame,
     );
   });
 
+  const unrestricted: Array<number> = [];
+  const restricted: Array<number> = [];
+  // const restrictedWithoutNewOnThisCard = [];
+  // const restrictedWithNewOnThisCard = [];
   for (let i = 0; i < 25; i++) {
     let finalGoal = "ERROR: Failed to find goal";
     const game = gameByIndex[i];

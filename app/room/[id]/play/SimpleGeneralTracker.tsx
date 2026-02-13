@@ -144,6 +144,8 @@ function getAbbreviatedName(goal: FoundStandardGeneral): string {
       return "War Is Bad (9 battles)";
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
       return "Metroidvania (6 abilities)";
+    case "ROLE PLAYER: Level up all your characters 6 total times across Grimstone, Divers, Valbrace":
+      return "Role Player (6 level ups)";
     default:
       return goal.resolvedGoal;
   }

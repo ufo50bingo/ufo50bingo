@@ -136,6 +136,7 @@ function getWinnerBitSrc(goal: StandardGeneral, isHidden: boolean): string {
     case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot":
     case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
+    case "ROLE PLAYER: Level up all your characters 6 total times across Grimstone, Divers, Valbrace":
       return "/general/winnerbit/Icon_Multi-Game_Generic.png";
     default:
       return "/general/winnerbit/Icon_Unknown_Goal.png";
@@ -196,6 +197,8 @@ function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/sprites/IconWarIsBad.png";
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
       return "/general/sprites/IconMetroidvania.png";
+    case "ROLE PLAYER: Level up all your characters 6 total times across Grimstone, Divers, Valbrace":
+      return "/general/sprites/IconRoleplayer.png";
     default:
       return "/general/sprites/IconUnknown.png";
   }

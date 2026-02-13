@@ -877,6 +877,15 @@ export const STANDARD_UFO = {
               "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria",
           },
         },
+        {
+          name: "ROLE PLAYER: Level up all your characters 6 total times across Grimstone, Divers, Valbrace",
+          restriction: {
+            count: 1,
+            options: ["grimstone", "divers", "valbrace"],
+            fallback:
+              "ROLE PLAYER: Level up all your characters 6 total times across Grimstone, Divers, Valbrace",
+          },
+        },
       ],
     },
   },
@@ -1044,4 +1053,3 @@ export const STANDARD_UFO = {
   },
   categories_with_global_group_repeat_prevention: ["general"],
 } as const;
-

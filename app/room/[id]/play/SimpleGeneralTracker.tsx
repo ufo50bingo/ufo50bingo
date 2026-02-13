@@ -119,7 +119,7 @@ function getAbbreviatedName(goal: FoundStandardGeneral): string {
       return "2 chests (5)";
     case "Buy an item from 2 unique shops in one run in 6 games":
       return "2 shops (6)";
-    case "Earn 2 extra lives/1-Ups in 5 games":
+    case "Earn 2 extra lives in 5 games":
       return "2 extra lives (5)";
     case "Increase your base HP twice in 4 games":
       return "2 HP (4)";

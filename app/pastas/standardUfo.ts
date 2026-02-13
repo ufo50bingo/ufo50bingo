@@ -653,7 +653,7 @@ export const STANDARD_UFO = {
         "Buy an item from 2 unique shops in one run in 6 games",
         "Increase your base HP twice in 4 games",
         "Open 2 chests in 5 games",
-        "Earn 2 extra lives/1-Ups in 5 games",
+        "Earn 2 extra lives in 5 games",
         "Collect 2 keys in 5 games",
         "Surpass the top 5 score from 4 arcade leaderboards",
         "Defeat 6 different enemy types in 6 games",

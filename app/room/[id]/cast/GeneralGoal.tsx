@@ -135,7 +135,7 @@ export default function GeneralGoal({
     case "Open 2 chests in 5 games":
       recommendations = TWO_CHESTS;
       break;
-    case "Earn 2 extra lives/1-Ups in 5 games":
+    case "Earn 2 extra lives in 5 games":
       recommendations = TWO_LIVES;
       break;
     case "Collect 2 keys in 5 games":

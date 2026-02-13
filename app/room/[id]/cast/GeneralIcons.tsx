@@ -118,7 +118,7 @@ function getWinnerBitSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/winnerbit/Icon_Chest.png";
     case "Buy an item from 2 unique shops in one run in 6 games":
       return "/general/winnerbit/Icon_Shop.png";
-    case "Earn 2 extra lives/1-Ups in 5 games":
+    case "Earn 2 extra lives in 5 games":
       return "/general/winnerbit/Icon_Life.png";
     case "Increase your base HP twice in 4 games":
       return "/general/winnerbit/Icon_HP.png";
@@ -171,7 +171,7 @@ function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/sprites/IconChest.png";
     case "Buy an item from 2 unique shops in one run in 6 games":
       return "/general/sprites/IconShops.png";
-    case "Earn 2 extra lives/1-Ups in 5 games":
+    case "Earn 2 extra lives in 5 games":
       return "/general/sprites/Icon1up.png";
     case "Increase your base HP twice in 4 games":
       return "/general/sprites/IconHealth.png";

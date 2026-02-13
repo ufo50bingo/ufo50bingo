@@ -178,14 +178,12 @@ function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
     case "Surpass the top 5 score from 4 arcade leaderboards":
       return "/general/sprites/IconLeaderboard.png";
     case "Defeat 6 different enemy types in 6 games":
-      // TODO: Get new icon
-      return "/general/sprites/IconUnknown.png";
+      return "/general/sprites/IconEnemy.png";
     // THEME
     case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
       return "/general/sprites/IconCampTrilogy.png";
     case "SHOOTER: Beat 5 waves/stages across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
-      // TODO: Get new icon
-      return "/general/sprites/IconUnknown.png";
+      return "/general/sprites/IconShooter.png";
     case "DAY JOB: Beat 9 levels across Rail Heist, Onion Delivery, and Bug Hunter":
       return "/general/sprites/IconDayJob.png";
     case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":

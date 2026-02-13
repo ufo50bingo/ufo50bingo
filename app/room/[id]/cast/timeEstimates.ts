@@ -365,18 +365,17 @@ export const EIGHT_LEVELS: Recommendations = {
   ],
 };
 
-export const KEYS: Recommendations = {
+export const TWO_KEYS: Recommendations = {
   always: [
     "mortolii",
-    "valbrace",
     "waldorfsjourney",
     "velgress",
     "cyberowls",
-    "barbuta",
+    "valbrace",
     "nightmanor",
   ],
-  synergy: ["miniandmax", "vainger", "campanella2"],
-  never: ["grimstone"],
+  synergy: ["vainger"],
+  never: [],
 };
 
 export const TWO_CHESTS: Recommendations = {
@@ -392,23 +391,19 @@ export const TWO_CHESTS: Recommendations = {
   never: [],
 };
 
-export const SHOPS: Recommendations = {
+export const TWO_SHOPS: Recommendations = {
   always: [
-    "divers",
-    "partyhouse",
     "quibblerace",
-    "avianos",
-    "bughunter",
-    "waldorfsjourney",
     "rockonisland",
-    "grimstone",
+    "avianos",
+    "waldorfsjourney",
     "lordsofdiskonia",
-    "pilotquest",
-    "miniandmax",
   ],
   synergy: [
-    "overbold",
+    "pilotquest",
     "velgress",
+    "grimstone",
+    "miniandmax",
     "campanella2",
     "fisthell",
     "barbuta",
@@ -418,44 +413,38 @@ export const SHOPS: Recommendations = {
   never: [],
 };
 
-export const LIVES: Recommendations = {
+export const TWO_LIVES: Recommendations = {
   always: [
-    "mortol",
-    "waldorfsjourney",
     "campanella",
+    "waldorfsjourney",
+    "mortol",
     "cyberowls",
-    "kickclub",
     "rakshasa",
-    "caramelcaramel",
-    "ninpek",
-    "starwaspir",
-  ],
-  synergy: [
-    "vainger",
-    "elfazarshat",
     "seasidedrive",
-    "campanella3",
-    "paintchase",
-    "barbuta",
+    "kickclub",
+    "ninpek",
+    "elfazarshat",
+    "starwaspir",
+    "caramelcaramel",
   ],
+  synergy: ["barbuta", "vainger", "campanella3", "paintchase"],
   never: [],
 };
 
-export const HP: Recommendations = {
+export const TWO_HP: Recommendations = {
   always: [
     "porgy",
-    "planetzoldath",
-    "elfazarshat",
-    "lordsofdiskonia",
     "golfaria",
     "overbold",
+    "valbrace",
+    "planetzoldath",
+    "miniandmax",
+    "divers",
+    "vainger",
     "campanella2",
     "grimstone",
-    "divers",
-    "miniandmax",
-    "vainger",
   ],
-  synergy: ["valbrace"],
+  synergy: [],
   never: [],
 };
 
@@ -540,6 +529,50 @@ export const TWO_BOSSES: Recommendations = {
     "divers",
     "grimstone",
   ],
+};
+
+export const SIX_ENEMIES: RecommendationsWithTerminal = {
+  always: [
+    { type: "include", code: "EVEN-COAT", game: "paintchase" },
+    "cyberowls",
+    "bughunter",
+    "caramelcaramel",
+    "mortolii",
+    "elfazarshat",
+    "attactics",
+    "campanella2",
+    { type: "include", code: "OPEN-TOMB", game: "mortol" },
+    "porgy",
+    "overbold",
+    "rakshasa",
+    "velgress",
+    "mooncat",
+    "warptank",
+    "miniandmax",
+    "ninpek",
+    "campanella",
+    "vainger",
+  ],
+  synergy: [
+    "campanella3",
+    "kickclub",
+    "starwaspir",
+    "pingolf",
+    "seasidedrive",
+    "barbuta",
+    "golfaria",
+    "divers",
+    "grimstone",
+    "valbrace",
+    "fisthell",
+    "planetzoldath",
+    "lordsofdiskonia",
+    "pilotquest",
+    { type: "exclude", code: "EVEN-COAT", game: "paintchase" },
+    { type: "exclude", code: "OPEN-TOMB", game: "mortol" },
+    { type: "include", code: "CLUB-PASS", game: "rockonisland" },
+  ],
+  never: [{ type: "exclude", code: "CLUB-PASS", game: "rockonisland" }],
 };
 
 // GIFT ESTIMATES

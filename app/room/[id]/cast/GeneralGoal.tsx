@@ -12,14 +12,15 @@ import {
   TWO_LEVELS,
   FOUR_LEVELS,
   EIGHT_LEVELS,
-  KEYS,
   TWO_CHESTS,
-  SHOPS,
-  LIVES,
-  HP,
   TWO_BOSSES,
   BOSSES,
   TOP_5_SCORES,
+  TWO_SHOPS,
+  TWO_HP,
+  TWO_LIVES,
+  TWO_KEYS,
+  SIX_ENEMIES,
 } from "./timeEstimates";
 import { findGamesForGoal, GameToGoals } from "./findAllGames";
 import InfoCard from "./InfoCard";
@@ -126,31 +127,26 @@ export default function GeneralGoal({
       break;
     // COLLECTATHON
     case "Buy an item from 2 unique shops in one run in 6 games":
-      // TODO: Update recommendations
-      recommendations = SHOPS;
+      recommendations = TWO_SHOPS;
       break;
     case "Increase your base HP twice in 4 games":
-      // TODO: Update recommendations
-      recommendations = HP;
+      recommendations = TWO_HP;
       break;
     case "Open 2 chests in 5 games":
       recommendations = TWO_CHESTS;
       break;
     case "Earn 2 extra lives/1-Ups in 5 games":
-      // TODO: Update recommendations
-      recommendations = LIVES;
+      recommendations = TWO_LIVES;
       break;
     case "Collect 2 keys in 5 games":
-      // TODO: Update recommendations
-      recommendations = KEYS;
+      recommendations = TWO_KEYS;
       break;
     case "Surpass the top 5 score from 4 arcade leaderboards":
       recommendations = TOP_5;
       descriptions = TOP_5_SCORES;
       break;
     case "Defeat 6 different enemy types in 6 games":
-      // TODO: Add recommendations
-      recommendations = KEYS;
+      recommendations = SIX_ENEMIES;
       break;
     // THEME
     case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":

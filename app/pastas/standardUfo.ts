@@ -143,7 +143,7 @@ export const STANDARD_UFO = {
       ],
       starwaspir: [
         "STAR WASPIR: Beat wave 1 with 1500+ points (before bonus) without touching any letters",
-        "STAR WASPIR: Complete wave 1 without attacking the boss",
+        "STAR WASPIR: Complete wave 1 without defeating either boss enemy",
       ],
       grimstone: [
         "GRIMSTONE: Defeat 15 enemies",
@@ -1053,6 +1053,7 @@ export const STANDARD_UFO = {
   },
   categories_with_global_group_repeat_prevention: ["general"],
 } as const;
+
 
 
 

@@ -158,7 +158,7 @@ export const STANDARD_UFO = {
         "NIGHT MANOR: Win the hiding minigame twice",
       ],
       elfazarshat: [
-        "ELFAZAR'S HAT: Earn a continue in the bonus round",
+        "ELFAZAR'S HAT: Earn an extra life in the bonus round",
         "ELFAZAR'S HAT: Get three different level 2 upgrades in a run",
       ],
       pilotquest: [
@@ -1053,5 +1053,6 @@ export const STANDARD_UFO = {
   },
   categories_with_global_group_repeat_prevention: ["general"],
 } as const;
+
 
 

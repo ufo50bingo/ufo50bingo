@@ -193,7 +193,7 @@ export const STANDARD_UFO = {
         "BARBUTA: Visit 25+ rooms",
       ],
       bughunter: [
-        "BUG HUNTER: Use GOOD-JOBS; Beat Job 1 on {{dig1}}{dig2}}{{dig3}}{{dig4}}{{dig5}}{{dig6}}",
+        "BUG HUNTER: Use GOOD-JOBS; Beat Job 1 on {{dig1}}{{dig2}}{{dig3}}{{dig4}}{{dig5}}{{dig6}}",
         "BUG HUNTER: Complete a job",
       ],
       ninpek: [
@@ -1053,4 +1053,5 @@ export const STANDARD_UFO = {
   },
   categories_with_global_group_repeat_prevention: ["general"],
 } as const;
+
 

@@ -996,7 +996,6 @@ export const STANDARD_UFO = {
       "Daring Duo",
       "Root Around",
       "Cow Poke",
-      "Rescue Mission",
     ],
     rail_stars: [
       "Fowl Business",
@@ -1053,6 +1052,7 @@ export const STANDARD_UFO = {
   },
   categories_with_global_group_repeat_prevention: ["general"],
 } as const;
+
 
 
 

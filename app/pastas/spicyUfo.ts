@@ -484,7 +484,7 @@ export const SPICY_UFO = {
       ],
       "golfaria": [
         "GOLFARIA: Rescue 7 green ball NPCs",
-        "GOLFARIA: Obtain 15 clubs (have 50+ total strokes)",
+        "GOLFARIA: Obtain 15 clubs (have 65+ total strokes)",
         "GOLFARIA: Hit 6 parbots",
         "GOLFARIA: Show 25% completion in the library without obtaining the Brakes"
       ],
@@ -1248,6 +1248,7 @@ export const SPICY_UFO = {
     "general"
   ]
 } as const;
+
 
 
 

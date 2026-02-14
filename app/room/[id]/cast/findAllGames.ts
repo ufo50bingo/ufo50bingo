@@ -50,7 +50,10 @@ export function findGamesForResult(
     return [game as ProperGame];
   }
   const games: Game[] = [];
-  if (goal.includes("Campanella 1/2/3")) {
+  if (
+    goal.includes("Campanella 1/2/3") ||
+    goal.includes("Campanella 1, 2, and 3")
+  ) {
     games.push("campanella2");
     games.push("campanella3");
   }

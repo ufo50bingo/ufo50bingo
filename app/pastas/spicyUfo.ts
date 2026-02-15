@@ -935,7 +935,7 @@ export const SPICY_UFO = {
       "Beat 20 levels in Block Koala",
       "Cherry Disk Ninpek",
       "Collect all clubs in Golfaria (have 80 total strokes)",
-      "Beat 5 levels in Rock On! Island",
+      "Beat 4 levels in Rock On! Island",
       "Obtain 50% completion in Porgy"
     ],
     "cons_games": [
@@ -1248,6 +1248,7 @@ export const SPICY_UFO = {
     "general"
   ]
 } as const;
+
 
 
 

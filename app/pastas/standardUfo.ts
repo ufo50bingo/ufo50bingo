@@ -56,7 +56,7 @@ export const STANDARD_UFO = {
       ],
       blockkoala: [
         "BLOCK KOALA: Beat 3 story levels without using the undo button",
-        "BLOCK KOALA: WORM-1234 allowed; Beat levels {{bk_easy}}, {{bk_easy}}, {{bk_easy}}, and {{bk_easy}}",
+        "BLOCK KOALA: WORM-1234 allowed; Beat levels {{bk_easy}}, {{bk_easy}}, {{bk_easy}}, {{bk_easy}}",
       ],
       camouflage: [
         "CAMOUFLAGE: Escape with 10 oranges",
@@ -242,7 +242,7 @@ export const STANDARD_UFO = {
         "BUSHIDO BALL: Beat the first two rounds as {{bushido_all}} (laws on, 8+ points)",
       ],
       blockkoala: [
-        "BLOCK KOALA: WORM-1234 allowed; beat levels: {{bk_med}}, {{bk_med}}, {{bk_med}}, {{bk_med}}",
+        "BLOCK KOALA: WORM-1234 allowed; Beat levels {{bk_med}}, {{bk_med}}, {{bk_med}}, {{bk_med}}",
       ],
       camouflage: ["CAMOUFLAGE: Escape with 5 babies", "CAMOUFLAGE: Gold disk"],
       campanella: [
@@ -431,7 +431,7 @@ export const STANDARD_UFO = {
         "BUSHIDO BALL: Win 3 matches in a tournament as {{bushido_all}} (laws on, 8+ points)",
       ],
       blockkoala: [
-        "BLOCK KOALA: WORM-1234 allowed; beat levels {{bk_hard}}, {{bk_hard}}, and {{bk_hard}}",
+        "BLOCK KOALA: WORM-1234 allowed; Beat levels {{bk_hard}}, {{bk_hard}}, {{bk_hard}}",
       ],
       camouflage: [
         "CAMOUFLAGE: FORM-ELDA allowed; Escape with 2/3 collectibles on: {{camo_two_ez}}, {{camo_two_ez}}, {{camo_two_long}}, {{camo_two_long}}, {{camo_two_long}}",
@@ -591,7 +591,7 @@ export const STANDARD_UFO = {
         "BUSHIDO BALL: Gold disk as {{bushido_gold}} (laws on, 8+ points)",
       ],
       blockkoala: [
-        "BLOCK KOALA: WORM-1234 allowed; Beat levels {{bk_easy}}, {{bk_easy}}, {{bk_easy}}, {{bk_med}}, {{bk_med}}, {{bk_hard}}, {{bk_hard}}, & {{bk_vhard}}",
+        "BLOCK KOALA: WORM-1234 allowed; Beat levels {{bk_easy}}, {{bk_easy}}, {{bk_easy}}, {{bk_med}}, {{bk_med}}, {{bk_hard}}, {{bk_hard}}, {{bk_vhard}}",
       ],
       camouflage: ["CAMOUFLAGE: Show 70%+ Completion in the library"],
       campanella: ["CAMPANELLA: Gold disk"],
@@ -1052,6 +1052,7 @@ export const STANDARD_UFO = {
   },
   categories_with_global_group_repeat_prevention: ["general"],
 } as const;
+
 
 
 

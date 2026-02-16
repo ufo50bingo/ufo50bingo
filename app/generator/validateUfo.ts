@@ -1,6 +1,8 @@
 import { UFOPasta } from "./ufoGenerator";
 import findAllTokens from "./findAllTokens";
 import { Return } from "./validateStr";
+import findAllGoalsWithSortedTokens from "./findAllGoalsWithSortedTokens";
+import splitAtTokens from "./splitAtTokens";
 
 export default function validateUfo(pasta: UFOPasta): Return {
   try {
@@ -25,7 +27,7 @@ export default function validateUfo(pasta: UFOPasta): Return {
         warnings.push(`⚠ Token "${token}" is defined in the "tokens" object but is not used in any goals`);
       }
     });
-    // do categories add up propery?
+    // do categories add up properly?
     const categorySum = Object.values(pasta.category_counts).reduce((acc, count) => acc + count);
     if (categorySum !== 25) {
       errors.push(`✖ category_counts sum must be 25, but got ${categorySum}`);
@@ -66,6 +68,42 @@ export default function validateUfo(pasta: UFOPasta): Return {
         warnings.push(`⚠ Category "${category}" appears in the "categories_with_global_group_repeat_prevention" object but not the "category_counts" object`);
       }
     });
+    // validations for goals with sorted tokens
+    const goalsWithSortedTokens = findAllGoalsWithSortedTokens(pasta.goals);
+    for (const goal of goalsWithSortedTokens) {
+      const sortTokens = goal.sort_tokens!;
+      // are any definitions missing?
+      if (typeof sortTokens === "string" && sortTokens !== "$numeric" && pasta.sort_orders?.[sortTokens] == null) {
+        errors.push(`✖ Sort order "${sortTokens}" is not defined in the sort_orders object`);
+        continue;
+      }
+      const allTokenValuesSet: Set<string> = new Set();
+      for (const part of splitAtTokens(goal.name)) {
+        if (part.type === "plain") {
+          continue;
+        }
+        for (const option of pasta.tokens?.[part.token] ?? []) {
+          allTokenValuesSet.add(option);
+        }
+      }
+      const allTokenValues = [...allTokenValuesSet];
+      // do any $numeric sorts have non-numeric values?
+      if (sortTokens === "$numeric") {
+        const nanValues = allTokenValues.filter(v => isNaN(Number(v)));
+        if (nanValues.length > 0) {
+          const nanPretty = nanValues.map(v => `"${v}"`).join(", ");
+          warnings.push(`⚠ Goal ${goal.name} has $numeric sort_tokens, but may include non-numeric token values: ${nanPretty}`);
+        }
+      } else {
+        // do any explicit sorts have missing values?
+        const sortOrder = typeof sortTokens === "string" ? pasta.sort_orders?.[sortTokens]! : sortTokens;
+        const missingValues = allTokenValues.filter(v => !sortOrder.includes(v));
+        if (missingValues.length > 0) {
+          const missingPretty = missingValues.map(v => `"${v}"`).join(", ");
+          warnings.push(`⚠ Goal ${goal.name} has token values missing in provided sort order: ${missingPretty}`);
+        }
+      }
+    }
     return errors.length > 0
       ? { pasta: null, errors, warnings }
       : { pasta, errors, warnings };

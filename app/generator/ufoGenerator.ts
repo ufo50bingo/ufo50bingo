@@ -116,10 +116,11 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     let bestSynergy = Infinity;
     let bestGame = null;
     const gameToGoals = pasta.goals[difficulty];
+    const curCountByGame = difficultyToGameToUsedCount[difficulty] ?? {};
 
     let games = availableGamesByDifficulty[difficulty];
     if (games == null || games.length < 1) {
-      games = Object.keys(gameToGoals);
+      games = Object.keys(gameToGoals).filter(game => gameToGoals[game].length > (curCountByGame[game] ?? 0));
       shuffle(games);
     }
     for (const game of games) {
@@ -130,17 +131,10 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
       if (synergy > bestSynergy) {
         continue;
       }
-      const curCountByGame = difficultyToGameToUsedCount[difficulty] ?? {};
-      const curCount = curCountByGame[game] ?? 0;
-      const goalCount = gameToGoals[game].length;
-      if (curCount < goalCount) {
-        bestSynergy = synergy;
-        bestGame = game;
-        curCountByGame[game] = curCount + 1;
-        difficultyToGameToUsedCount[difficulty] = curCountByGame;
-        if (synergy === 0) {
-          break;
-        }
+      bestSynergy = synergy;
+      bestGame = game;
+      if (synergy === 0) {
+        break;
       }
     }
     if (bestGame == null) {
@@ -148,6 +142,9 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
         `Failed to generate card! Not enough goals for difficulty ${difficulty}.`,
       );
     }
+    const curCount = curCountByGame[bestGame] ?? 0;
+    curCountByGame[bestGame] = curCount + 1;
+    difficultyToGameToUsedCount[difficulty] = curCountByGame;
     gameByIndex[index] = bestGame;
     availableGamesByDifficulty[difficulty] = games.filter(
       (g) => g !== bestGame,

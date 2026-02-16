@@ -5,17 +5,18 @@ import getMagicSquare from "./getMagicSquare";
 import replaceTokens from "./replaceTokens";
 import splitAtTokens from "./splitAtTokens";
 
-export type Restriction = {
-  name: string;
-  restriction: {
+export type UFOGoalConfig<T extends string = string> = {
+  name: T;
+  restriction?: {
     count: number;
     fallback: string;
     options: string | ReadonlyArray<string>;
   };
+  sort_tokens?: string | ReadonlyArray<string>;
 };
 
 export type UFOGameGoals = {
-  [game: string]: ReadonlyArray<string | Restriction>;
+  [game: string]: ReadonlyArray<string | UFOGoalConfig>;
 };
 
 export type UFODifficulties = { [difficulty: string]: UFOGameGoals };
@@ -32,6 +33,9 @@ export type UFOPasta = {
   category_difficulty_tiers?: ReadonlyArray<ReadonlyArray<string>>;
   restriction_option_lists?: {
     [listName: string]: ReadonlyArray<string>;
+  };
+  sort_orders?: {
+    [sortName: string]: ReadonlyArray<string>;
   };
 };
 
@@ -105,7 +109,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     const difficulty = difficultyByIndex[index];
     const synergyCheckIndices =
       pasta.categories_with_global_group_repeat_prevention != null &&
-      pasta.categories_with_global_group_repeat_prevention.includes(difficulty)
+        pasta.categories_with_global_group_repeat_prevention.includes(difficulty)
         ? [...Array(25)].map((_, x) => x)
         : SAME_LINE_INDICES[index];
 
@@ -180,7 +184,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
       ) {
         continue;
       }
-      if (typeof goal === "object") {
+      if (typeof goal === "object" && goal.restriction != null) {
         const optionsRaw = goal.restriction.options;
         const options =
           typeof optionsRaw === "string"

@@ -1,9 +1,14 @@
-import { Restriction } from "./ufoGenerator";
+import { UFOGoalConfig } from "./ufoGenerator";
 
 export default function getGoalAndFallback(
-  goal: string | Restriction,
+  goal: string | UFOGoalConfig,
 ): string[] {
-  return typeof goal === "string"
-    ? [goal]
-    : [goal.name, goal.restriction.fallback];
+  if (typeof goal === "string") {
+    return [goal];
+  }
+  const goalAndFallback = [goal.name];
+  if (goal.restriction != null) {
+    goalAndFallback.push(goal.restriction.fallback);
+  }
+  return goalAndFallback;
 }

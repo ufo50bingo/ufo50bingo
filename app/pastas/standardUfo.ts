@@ -31,7 +31,7 @@ export const STANDARD_UFO = {
       ],
       planetzoldath: [
         "PLANET ZOLDATH: Drop 4 items at your ship in one run",
-        "PLANET ZOLDATH: Max out health by collecting 4 energy cubes",
+        "PLANET ZOLDATH: Collect 4 energy cubes in a run",
       ],
       attactics: [
         "ATTACTICS: Have 3 Heroes at once (Ranked or Survival Mode)",
@@ -86,7 +86,7 @@ export const STANDARD_UFO = {
       ],
       waldorfsjourney: [
         "WALDORF'S JOURNEY: Have 35 shells at once",
-        "WALDORF'S JOURNEY: Read 5 signs",
+        "WALDORF'S JOURNEY: Have 4 puffins at once",
       ],
       porgy: [
         "PORGY: Collect 4 fuel tanks",
@@ -215,7 +215,7 @@ export const STANDARD_UFO = {
       ],
       magicgarden: [
         "MAGIC GARDEN: Save 100 oppies before scoring 4,000 points",
-        "MAGIC GARDEN: Reach a score of 10,000+ before saving 50 Oppies",
+        "MAGIC GARDEN: Score 10,000+ points before saving 50 Oppies",
       ],
       mortol: ["MORTOL: Clear all levels in World 1", "MORTOL: Have 50+ Lives"],
       velgress: [
@@ -275,7 +275,7 @@ export const STANDARD_UFO = {
       ],
       waldorfsjourney: [
         "WALDORF'S JOURNEY: Open 2 chests in a run",
-        "WALDORF'S JOURNEY: Have 50 shells at once before reaching the palace",
+        "WALDORF'S JOURNEY: Have 50 shells at once before entering the palace",
       ],
       porgy: [
         "PORGY: Collect 4 torpedo upgrades",
@@ -406,7 +406,7 @@ export const STANDARD_UFO = {
       ninpek: ["NINPEK: Collect 3 crowns", "NINPEK: Score 18,000+ points"],
       paintchase: [
         "PAINT CHASE: EVEN-COAT allowed; Pass courses 18-25",
-        "PAINT CHASE: Reach a score of 180+",
+        "PAINT CHASE: Score 180+ points",
       ],
       magicgarden: [
         "MAGIC GARDEN: Gold disk",
@@ -613,8 +613,8 @@ export const STANDARD_UFO = {
     veryhard: {
       barbuta: ["BARBUTA: Pay the hammer man to destroy the wall"],
       bughunter: ["BUG HUNTER: Gold disk"],
-      ninpek: ["NINPEK: Use HARD-LOOP; reach a score of 22,000+"],
-      paintchase: ["PAINT CHASE: Reach a score of 350+"],
+      ninpek: ["NINPEK: Use HARD-LOOP; Score 22,000+ points"],
+      paintchase: ["PAINT CHASE: Score 350+ points"],
       magicgarden: ["MAGIC GARDEN: Win with a score of 50,000+"],
       mortol: ["MORTOL: OPEN-TOMB allowed; beat all World 3 & World 4 levels"],
       velgress: ["VELGRESS: Cherry disk without Upgrades or Jump Pads"],
@@ -1171,3 +1171,4 @@ export const STANDARD_UFO = {
     ],
   },
 } as const;
+

@@ -242,7 +242,7 @@ function createTemplate(): string {
   const csv = Papa.unparse(
     getFlatGoals(STANDARD_UFO).map((row) => {
       const estimate: Estimate = {
-        Goal: replaceTokens(row.name, STANDARD_UFO.tokens),
+        Goal: replaceTokens(row.name, STANDARD_UFO, row.sortTokens),
         "Number of attempts": null,
         "Average time in mins (example: 1.5)": null,
         "(optional) Best time in mins (example: 1.0)": null,

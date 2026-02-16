@@ -1,10 +1,14 @@
 import resolveTokens from "./resolveTokens";
 import splitAtTokens from "./splitAtTokens";
-import { Tokens } from "./ufoGenerator";
+import { UFOPasta } from "./ufoGenerator";
 
-export default function replaceTokens(goal: string, tokens: Tokens): string {
+export default function replaceTokens(
+  goal: string,
+  pasta: UFOPasta,
+  sortTokens: null | undefined | string | ReadonlyArray<string>,
+): string {
   const parts = splitAtTokens(goal);
-  return resolveTokens(parts, tokens)
+  return resolveTokens(parts, pasta, sortTokens)
     .map((part) => part.text)
     .join("");
 }

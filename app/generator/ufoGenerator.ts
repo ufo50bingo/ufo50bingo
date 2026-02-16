@@ -175,6 +175,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     const difficulty = difficultyByIndex[i];
     const goals = [...pasta.goals[difficulty][game]];
     let fallback: null | string = null;
+    let sortTokens: null | undefined | string | ReadonlyArray<string> = null;
     shuffle(goals);
     for (const goal of goals) {
       const goalAndFallback = getGoalAndFallback(goal);
@@ -200,6 +201,9 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
           continue;
         }
       }
+      if (typeof goal === "object") {
+        sortTokens = goal?.sort_tokens;
+      }
       finalGoal = goalAndFallback[0];
       break;
     }
@@ -209,7 +213,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     }
 
     finalBoard[i] = finalGoal;
-    finalBoardWithTokens[i] = replaceTokens(finalGoal, pasta.tokens);
+    finalBoardWithTokens[i] = replaceTokens(finalGoal, pasta, sortTokens);
     for (const onCard of findGamesForResult(finalBoardWithTokens[i], {
       subcategory: game,
     })) {

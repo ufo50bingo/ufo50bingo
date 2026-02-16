@@ -16,7 +16,8 @@ import resolveTokens from "./generator/resolveTokens";
 import usePracticePasta from "./usePracticePasta";
 import { UFOPasta } from "./generator/ufoGenerator";
 import { STANDARD_UFO } from "./pastas/standardUfo";
-import getFlatGoals from "./generator/getFlatGoals";
+import getFlatGoals, { UFOGoal } from "./generator/getFlatGoals";
+import findGoal from "./findGoal";
 
 export enum NextGoalChoice {
   RANDOM = "RANDOM",
@@ -59,7 +60,7 @@ export function AppContextProvider({
   const [nextGoalChoice, setNextGoalChoiceRaw] = useState(
     global.window != undefined &&
       localStorage?.getItem("nextGoalChoice") ===
-        NextGoalChoice.PREFER_FEWER_ATTEMPTS
+      NextGoalChoice.PREFER_FEWER_ATTEMPTS
       ? NextGoalChoice.PREFER_FEWER_ATTEMPTS
       : NextGoalChoice.RANDOM
   );
@@ -103,8 +104,7 @@ export function AppContextProvider({
 
   const getRandomGoal = useCallback(() => {
     const selectedGoals = getFlatGoals(pasta)
-      .filter((goal) => !unselectedGoals.has(goal.name))
-      .map((goal) => goal.name);
+      .filter((goal) => !unselectedGoals.has(goal.name));
     let goal;
     switch (nextGoalChoice) {
       case NextGoalChoice.PREFER_FEWER_ATTEMPTS:
@@ -116,7 +116,7 @@ export function AppContextProvider({
         break;
     }
     return {
-      goalParts: resolveTokens(splitAtTokens(goal), pasta.tokens),
+      goalParts: resolveTokens(splitAtTokens(goal.name), pasta, goal.sortTokens),
       pasta,
     };
   }, [nextGoalChoice, unselectedGoals, goalStats, pasta]);
@@ -135,7 +135,7 @@ export function AppContextProvider({
   useEffect(() => {
     setHideByDefaultRaw(
       global.window != undefined &&
-        localStorage?.getItem("hideByDefault") === "true"
+      localStorage?.getItem("hideByDefault") === "true"
     );
   }, []);
   const setHideByDefault = useCallback(
@@ -202,13 +202,13 @@ export function useAppContext() {
 }
 
 function getGoalPreferFewerAttempts(
-  selectedGoals: ReadonlyArray<string>,
+  selectedGoals: ReadonlyArray<UFOGoal>,
   goalStats: Map<string, GoalStats>
-): string {
+): UFOGoal {
   let cumulativeWeight = 0;
   const allCumulativeWeights: number[] = [];
   selectedGoals.forEach((goal) => {
-    const count = goalStats.get(goal)?.count ?? 0;
+    const count = goalStats.get(goal.name)?.count ?? 0;
     // if the goal hasn't been done before, it's weighted 4 times as heavily as a single completion
     const weight = count === 0 ? 4 : 1 / count;
     cumulativeWeight += weight;

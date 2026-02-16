@@ -5,6 +5,7 @@ export interface UFOGoal {
   name: string;
   subcategory: string;
   category: string;
+  sortTokens: null | undefined | string | ReadonlyArray<string>;
 }
 
 const CACHE: Array<[UFOPasta, ReadonlyArray<UFOGoal>]> = [];
@@ -20,10 +21,12 @@ export default function getFlatGoals(pasta: UFOPasta): ReadonlyArray<UFOGoal> {
     const subcatToGoals = pasta.goals[category];
     Object.entries(subcatToGoals).forEach(([subcategory, goals]) => {
       goals.forEach((goal) => {
+        const sortTokens = typeof goal === "string" ? undefined : goal.sort_tokens;
         flatGoals.push({
           name: getGoalAndFallback(goal)[0],
           subcategory,
           category,
+          sortTokens,
         });
       });
     });

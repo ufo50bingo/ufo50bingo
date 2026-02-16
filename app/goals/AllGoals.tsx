@@ -65,9 +65,10 @@ function Inner({ practiceVariant }: { practiceVariant: PracticeVariant }) {
 
     const router = useRouter();
     const onTryGoal = (
-        goalParts: ReadonlyArray<Plain | BaseToken | ResolvedToken>
+        goalParts: ReadonlyArray<Plain | BaseToken | ResolvedToken>,
+        sortTokens: null | undefined | string | ReadonlyArray<string>,
     ) => {
-        setGoalPartsAndPasta(resolveTokens(goalParts, pasta.tokens), pasta);
+        setGoalPartsAndPasta(resolveTokens(goalParts, pasta, sortTokens), pasta);
         if (practiceVariant !== "standard") {
             router.push(`/practice?v=${practiceVariant}`);
         } else {
@@ -283,13 +284,13 @@ function Inner({ practiceVariant }: { practiceVariant: PracticeVariant }) {
                                 <Table.Td>
                                     <Group gap={4} wrap="nowrap">
                                         <Tooltip label="Attempt this goal">
-                                            <ActionIcon onClick={() => onTryGoal(goal.parts)}>
+                                            <ActionIcon onClick={() => onTryGoal(goal.parts, goal.sortTokens)}>
                                                 <IconPlayerPlay size={16} />
                                             </ActionIcon>
                                         </Tooltip>
                                         <PlaylistAddButton
                                             goal={goal.partiallyResolvedGoal}
-                                            tokens={pasta.tokens}
+                                            pasta={pasta}
                                         />
                                     </Group>
                                 </Table.Td>

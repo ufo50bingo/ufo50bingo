@@ -87,6 +87,7 @@ export default function Goal({
       leftSection={<IconArrowsShuffle />}
       onClick={() => {
         let newParts;
+        const foundGoal = findGoal(goal, pasta);
         do {
           newParts = resolveTokens(
             goalParts.map((part) =>
@@ -94,7 +95,8 @@ export default function Goal({
                 ? { type: "token", token: part.token }
                 : part
             ),
-            pasta.tokens
+            pasta,
+            foundGoal?.sortTokens,
           );
         } while (getResolvedGoalText(newParts) === goal);
         setGoalPartsAndPasta(newParts, pasta);

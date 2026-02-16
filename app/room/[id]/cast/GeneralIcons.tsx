@@ -74,9 +74,9 @@ export default function GeneralIcons({
           countState == null
             ? 0
             : Object.keys(countState).reduce(
-                (acc, game) => acc + countState[game],
-                0,
-              )
+              (acc, game) => acc + countState[game],
+              0,
+            )
         }
         iconType={iconType}
         src={
@@ -125,8 +125,7 @@ function getWinnerBitSrc(goal: StandardGeneral, isHidden: boolean): string {
     case "Surpass the top 5 score from 4 arcade leaderboards":
       return "/general/winnerbit/Icon_Leaderboard.png";
     case "Defeat 6 different enemy types in 6 games":
-      // TODO: Get new icon
-      return "/general/winnerbit/Icon_Unknown_Goal.png";
+      return "/general/winnerbit/Icon_Enemy.png";
     // THEME
     case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
     case "SHOOTER: Beat 5 waves/stages across Elfazar's Hat, Seaside Drive, and Caramel Caramel":

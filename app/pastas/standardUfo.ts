@@ -56,11 +56,17 @@ export const STANDARD_UFO = {
       ],
       blockkoala: [
         "BLOCK KOALA: Beat 3 story levels without using the undo button",
-        "BLOCK KOALA: WORM-1234 allowed; Beat levels {{bk_easy}}, {{bk_easy}}, {{bk_easy}}, {{bk_easy}}",
+        {
+          name: "BLOCK KOALA: WORM-1234 allowed; Beat levels {{bk_easy}}, {{bk_easy}}, {{bk_easy}}, {{bk_easy}}",
+          sort_tokens: "$numeric",
+        },
       ],
       camouflage: [
         "CAMOUFLAGE: Escape with 10 oranges",
-        "CAMOUFLAGE: FORM-ELDA allowed; Beat levels {{camo_easy}}, {{camo_easy}}, and {{camo_easy}}",
+        {
+          name: "CAMOUFLAGE: FORM-ELDA allowed; Beat levels {{camo_easy}}, {{camo_easy}}, and {{camo_easy}}",
+          sort_tokens: "$numeric",
+        },
       ],
       campanella: [
         "CAMPANELLA: Collect 7 coffees",
@@ -72,7 +78,10 @@ export const STANDARD_UFO = {
         "THE BIG BELL RACE: Win Race 1 without boosters",
       ],
       warptank: [
-        "WARPTANK: SLIM-TANK allowed; Beat sectors: {{warp_easy}}, {{warp_easy}}, and {{warp_easy}}",
+        {
+          name: "WARPTANK: SLIM-TANK allowed; Beat sectors: {{warp_easy}}, {{warp_easy}}, and {{warp_easy}}",
+          sort_tokens: "warptank_order",
+        },
         "WARPTANK: Beat 3 sectors, defeating all possible enemies in each",
       ],
       waldorfsjourney: [
@@ -242,7 +251,10 @@ export const STANDARD_UFO = {
         "BUSHIDO BALL: Beat the first two rounds as {{bushido_all}} (laws on, 8+ points)",
       ],
       blockkoala: [
-        "BLOCK KOALA: WORM-1234 allowed; Beat levels {{bk_med}}, {{bk_med}}, {{bk_med}}, {{bk_med}}",
+        {
+          name: "BLOCK KOALA: WORM-1234 allowed; Beat levels {{bk_med}}, {{bk_med}}, {{bk_med}}, {{bk_med}}",
+          sort_tokens: "$numeric",
+        },
       ],
       camouflage: ["CAMOUFLAGE: Escape with 5 babies", "CAMOUFLAGE: Gold disk"],
       campanella: [
@@ -256,7 +268,10 @@ export const STANDARD_UFO = {
       ],
       warptank: [
         "WARPTANK: Beat Healing Sector with your tank color changed",
-        "WARPTANK: SLIM-TANK allowed; Beat sectors: {{warp_med}}, {{warp_med}}, {{warp_med}}",
+        {
+          name: "WARPTANK: SLIM-TANK allowed; Beat sectors: {{warp_med}}, {{warp_med}}, {{warp_med}}",
+          sort_tokens: "warptank_order",
+        },
       ],
       waldorfsjourney: [
         "WALDORF'S JOURNEY: Open 2 chests in a run",
@@ -357,7 +372,10 @@ export const STANDARD_UFO = {
         "MINI & MAX: Return the stolen Termite Egg to the outlet",
       ],
       combatants: [
-        "COMBATANTS: ANTS-ANTS allowed; Beat {{ants_med}} & {{ants_med}}",
+        {
+          name: "COMBATANTS: ANTS-ANTS allowed; Beat {{ants_med}} & {{ants_med}}",
+          sort_tokens: "combatants_order",
+        },
       ],
       quibblerace: [
         "QUIBBLE RACE: WILD-BETS allowed; have $25,000+",
@@ -431,11 +449,20 @@ export const STANDARD_UFO = {
         "BUSHIDO BALL: Win 3 matches in a tournament as {{bushido_all}} (laws on, 8+ points)",
       ],
       blockkoala: [
-        "BLOCK KOALA: WORM-1234 allowed; Beat levels {{bk_hard}}, {{bk_hard}}, {{bk_hard}}",
+        {
+          name: "BLOCK KOALA: WORM-1234 allowed; Beat levels {{bk_hard}}, {{bk_hard}}, {{bk_hard}}",
+          sort_tokens: "$numeric",
+        },
       ],
       camouflage: [
-        "CAMOUFLAGE: FORM-ELDA allowed; Escape with 2/3 collectibles on: {{camo_two_ez}}, {{camo_two_ez}}, {{camo_two_long}}, {{camo_two_long}}, {{camo_two_long}}",
-        "CAMOUFLAGE: FORM-ELDA allowed; Escape with 3/3 collectibles on: {{camo_easy}}, {{camo_three}}, {{camo_three}}, {{camo_three}}",
+        {
+          name: "CAMOUFLAGE: FORM-ELDA allowed; Escape with 2/3 collectibles on: {{camo_two_ez}}, {{camo_two_ez}}, {{camo_two_long}}, {{camo_two_long}}, {{camo_two_long}}",
+          sort_tokens: "$numeric",
+        },
+        {
+          name: "CAMOUFLAGE: FORM-ELDA allowed; Escape with 3/3 collectibles on: {{camo_easy}}, {{camo_three}}, {{camo_three}}, {{camo_three}}",
+          sort_tokens: "$numeric",
+        },
       ],
       campanella: [
         "CAMPANELLA: Finish Stage C only earning points from bosses and bonus stages in the run",
@@ -451,7 +478,10 @@ export const STANDARD_UFO = {
       ],
       warptank: [
         "WARPTANK: Collect 4 coffees outside the starting room",
-        "WARPTANK: SLIM-TANK allowed; beat sectors: {{warp_hard}}, {{warp_hard}}, and {{warp_hard}}",
+        {
+          name: "WARPTANK: SLIM-TANK allowed; beat sectors: {{warp_hard}}, {{warp_hard}}, and {{warp_hard}}",
+          sort_tokens: "warptank_order",
+        },
       ],
       waldorfsjourney: [
         "WALDORF'S JOURNEY: Cherry disk",
@@ -479,8 +509,14 @@ export const STANDARD_UFO = {
       ],
       divers: ["DIVERS: Obtain a Lance weapon", "DIVERS: Pull 2 levers"],
       railheist: [
-        "RAIL HEIST: LAZY-COPS allowed; Beat levels with a money crate in tact: {{rail_easy}}, {{rail_crate}}, {{rail_crate}}, {{rail_crate}}",
-        "RAIL HEIST: LAZY-COPS allowed; Beat levels with 3/3 stars: {{rail_easy}}, {{rail_stars}}, {{rail_stars}}",
+        {
+          name: "RAIL HEIST: LAZY-COPS allowed; Beat levels with a money crate in tact: {{rail_easy}}, {{rail_crate}}, {{rail_crate}}, {{rail_crate}}",
+          sort_tokens: "railheist_order",
+        },
+        {
+          name: "RAIL HEIST: LAZY-COPS allowed; Beat levels with 3/3 stars: {{rail_easy}}, {{rail_stars}}, {{rail_stars}}",
+          sort_tokens: "railheist_order",
+        },
       ],
       vainger: [
         "VAINGER: Obtain the Multi Mod from Latom Sector",
@@ -551,7 +587,10 @@ export const STANDARD_UFO = {
         "MINI & MAX: Have 150+ shinies at once without obtaining the Shrink Potion",
       ],
       combatants: [
-        "COMBATANTS: ANTS-ANTS allowed; beat {{ants_hard}} & {{ants_hard}}",
+        {
+          name: "COMBATANTS: ANTS-ANTS allowed; beat {{ants_hard}} & {{ants_hard}}",
+          sort_tokens: "combatants_order",
+        },
         "COMBATANTS: ANTS-ANTS allowed; Slay a spider on 2 different levels",
       ],
       quibblerace: [
@@ -591,7 +630,10 @@ export const STANDARD_UFO = {
         "BUSHIDO BALL: Gold disk as {{bushido_gold}} (laws on, 8+ points)",
       ],
       blockkoala: [
-        "BLOCK KOALA: WORM-1234 allowed; Beat levels {{bk_easy}}, {{bk_easy}}, {{bk_easy}}, {{bk_med}}, {{bk_med}}, {{bk_hard}}, {{bk_hard}}, {{bk_vhard}}",
+        {
+          name: "BLOCK KOALA: WORM-1234 allowed; Beat levels {{bk_easy}}, {{bk_easy}}, {{bk_easy}}, {{bk_med}}, {{bk_med}}, {{bk_hard}}, {{bk_hard}}, {{bk_vhard}}",
+          sort_tokens: "$numeric",
+        },
       ],
       camouflage: ["CAMOUFLAGE: Show 70%+ Completion in the library"],
       campanella: ["CAMPANELLA: Gold disk"],
@@ -940,7 +982,7 @@ export const STANDARD_UFO = {
     warp_med: [
       "Dyad",
       "Sacrum",
-      "Axom",
+      "Axon",
       "Nest",
       "Mazurka",
       "Tower",
@@ -987,7 +1029,7 @@ export const STANDARD_UFO = {
       "Marc",
       "Mascot",
     ],
-    rail_easy: ["A Simple Heist", "Roof Assault", "Cargo Ambust", "High Alert"],
+    rail_easy: ["A Simple Heist", "Roof Assault", "Cargo Ambush", "High Alert"],
     rail_crate: [
       "Guarded by Gat",
       "Shifting Gears",
@@ -1051,10 +1093,70 @@ export const STANDARD_UFO = {
     general: 5,
   },
   categories_with_global_group_repeat_prevention: ["general"],
+  sort_orders: {
+    railheist_order: [
+      "A Simple Heist",
+      "Roof Assault",
+      "Cargo Ambush",
+      "High Alert",
+      "Fowl Business",
+      "Guarded by Gat",
+      "Shifting Gears",
+      "Vault Robbery",
+      "Winging It",
+      "Daring Duo",
+      "Root Around",
+      "Cow Poke",
+      "Rescue Mission",
+      "Long Haul",
+      "Resupply",
+      "Armored Up",
+      "Powder Keg",
+      "Sitting Ducks",
+      "Vengeance!",
+      "The Final Score",
+    ],
+    warptank_order: [
+      "Crust",
+      "Yard",
+      "Piston",
+      "Jr",
+      "Bomb",
+      "Meal",
+      "Stare",
+      "Healing",
+      "Tower",
+      "Mazurka",
+      "Nest",
+      "Orb",
+      "Form",
+      "Sore",
+      "Deep",
+      "Nugget",
+      "Garl",
+      "Axon",
+      "Sacrum",
+      "Dyad",
+      "Port",
+      "Shock",
+      "Soft",
+      "Kraft",
+      "Guide",
+      "Riot",
+    ],
+    combatants_order: [
+      "First Blood",
+      "Skirmish",
+      "Surprise!",
+      "Commando",
+      "Ambush",
+      "Pincered",
+      "Commando 2",
+      "Spidernest",
+      "Open Field",
+      "The Push",
+      "Deathsdoor",
+      "This Is It",
+    ],
+  },
 } as const;
-
-
-
-
-
-

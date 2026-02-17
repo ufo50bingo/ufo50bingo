@@ -121,8 +121,8 @@ export default function validateUfo(pasta: UFOPasta): Return {
           typeof sortTokens === "string"
             ? pasta.sort_orders![sortTokens]!
             : sortTokens;
-        const missingValues = allTokenValues.filter(
-          (v) => !sortOrder.includes(v),
+        const missingValues = allTokenValues.filter((v) =>
+          sortOrder.includes(v),
         );
         if (missingValues.length > 0) {
           const missingPretty = missingValues.map((v) => `"${v}"`).join(", ");

@@ -48,7 +48,7 @@ type CustomType = "srl_v5" | "ufo" | "fixed_board" | "randomized";
 
 export default function NonLeagueMatch() {
   const [showAll, setShowAll] = useState(false);
-  const [checkerSort, setCheckerSortRaw] = useLocalEnum({
+  const [checkerSort, setCheckerSort] = useLocalEnum({
     key: "checker-sort",
     defaultValue: "chronological",
     options: ["chronological", "alphabetical"],
@@ -65,35 +65,8 @@ export default function NonLeagueMatch() {
   );
   const [numPlayers, setNumPlayers] = useState(2);
   const [draftCheckState, setDraftCheckState] = useState<
-    Map<Game, null | number>
-  >(
-    new Map(
-      (checkerSort === "chronological"
-        ? ORDERED_PROPER_GAMES
-        : ORDERED_PROPER_GAMES.toSorted()
-      ).map((key) => [key, null]),
-    ),
-  );
-
-  const setCheckerSort = (newSort: CheckerSort) => {
-    setCheckerSortRaw(newSort);
-    setCheckState(
-      new Map(
-        (newSort === "chronological"
-          ? ORDERED_PROPER_GAMES
-          : ORDERED_PROPER_GAMES.toSorted()
-        ).map((key) => [key, checkState.get(key) ?? true]),
-      ),
-    );
-    setDraftCheckState(
-      new Map(
-        (newSort === "chronological"
-          ? ORDERED_PROPER_GAMES
-          : ORDERED_PROPER_GAMES.toSorted()
-        ).map((key) => [key, draftCheckState.get(key) ?? null]),
-      ),
-    );
-  };
+    Map<string, number>
+  >(new Map());
 
   const [draftPasta, setDraftPasta] = useState<null | UFOPasta>(null);
   const [showFilters, setShowFilters] = useState(false);
@@ -143,13 +116,13 @@ export default function NonLeagueMatch() {
         return stringify(
           showFilters
             ? Array.from(
-                checkState
-                  .entries()
-                  .filter(([_gameKey, checkState]) => checkState),
-              ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
+              checkState
+                .entries()
+                .filter(([_gameKey, checkState]) => checkState),
+            ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
             : ORDERED_PROPER_GAMES.map((gameKey) => ({
-                name: GAME_NAMES[gameKey],
-              })),
+              name: GAME_NAMES[gameKey],
+            })),
         );
       case "UFODraft":
         if (draftPasta != null) {
@@ -259,12 +232,12 @@ export default function NonLeagueMatch() {
       <Group justify="space-between">
         {((metadata.type === "UFO" && metadata.isGeneric !== true) ||
           metadata.type === "GameNames") && (
-          <Checkbox
-            checked={showFilters}
-            label="Customize"
-            onChange={(event) => setShowFilters(event.currentTarget.checked)}
-          />
-        )}
+            <Checkbox
+              checked={showFilters}
+              label="Customize"
+              onChange={(event) => setShowFilters(event.currentTarget.checked)}
+            />
+          )}
         {metadata.type === "UFO" && (
           <Tooltip label="Copy the source in the new “UFO” format.">
             <Button

@@ -29,7 +29,6 @@ export type UFOPasta = {
   goals: UFODifficulties;
   tokens: Tokens;
   category_counts: Counts;
-  categories_with_global_group_repeat_prevention?: ReadonlyArray<string>;
   category_difficulty_tiers?: ReadonlyArray<ReadonlyArray<string>>;
   restriction_option_lists?: {
     [listName: string]: ReadonlyArray<string>;
@@ -107,11 +106,6 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
   } = {};
   fillOrder.forEach((index) => {
     const difficulty = difficultyByIndex[index];
-    const synergyCheckIndices =
-      pasta.categories_with_global_group_repeat_prevention != null &&
-        pasta.categories_with_global_group_repeat_prevention.includes(difficulty)
-        ? [...Array(25)].map((_, x) => x)
-        : SAME_LINE_INDICES[index];
 
     let bestSynergy = Infinity;
     let bestGame = null;
@@ -120,11 +114,13 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
 
     let games = availableGamesByDifficulty[difficulty];
     if (games == null || games.length < 1) {
-      games = Object.keys(gameToGoals).filter(game => gameToGoals[game].length > (curCountByGame[game] ?? 0));
+      games = Object.keys(gameToGoals).filter(
+        (game) => gameToGoals[game].length > (curCountByGame[game] ?? 0),
+      );
       shuffle(games);
     }
     for (const game of games) {
-      const synergy = synergyCheckIndices.reduce(
+      const synergy = SAME_LINE_INDICES[index].reduce(
         (acc, checkGame) => (gameByIndex[checkGame] === game ? acc + 1 : acc),
         0,
       );

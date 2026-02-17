@@ -18,12 +18,16 @@ const UfoPasta = zod.strictObject({
           zod.string(),
           zod.strictObject({
             name: zod.string(),
-            restriction: zod.strictObject({
-              count: zod.number(),
-              fallback: zod.string(),
-              options: zod.union([zod.string(), zod.array(zod.string())]),
-            }).optional(),
-            sort_tokens: zod.union([zod.string(), zod.array(zod.string())]).optional(),
+            restriction: zod
+              .strictObject({
+                count: zod.number(),
+                fallback: zod.string(),
+                options: zod.union([zod.string(), zod.array(zod.string())]),
+              })
+              .optional(),
+            sort_tokens: zod
+              .union([zod.string(), zod.array(zod.string())])
+              .optional(),
           }),
         ]),
       ),
@@ -31,9 +35,6 @@ const UfoPasta = zod.strictObject({
   ),
   tokens: zod.record(zod.string(), zod.array(zod.string())),
   category_counts: zod.record(zod.string(), zod.int()),
-  categories_with_global_group_repeat_prevention: zod
-    .array(zod.string())
-    .optional(),
   category_difficulty_tiers: zod.array(zod.array(zod.string())).optional(),
   restriction_option_lists: zod
     .record(zod.string(), zod.array(zod.string()))

@@ -701,5 +701,4 @@ export const SEASON_2_UFO = {
     veryhard: 2,
     general: 5,
   },
-  categories_with_global_group_repeat_prevention: ["general"],
 } as const;

@@ -1092,7 +1092,6 @@ export const STANDARD_UFO = {
     veryhard: 2,
     general: 5,
   },
-  categories_with_global_group_repeat_prevention: ["general"],
   sort_orders: {
     railheist_order: [
       "A Simple Heist",

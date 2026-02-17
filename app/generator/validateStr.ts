@@ -40,6 +40,10 @@ const UfoPasta = zod.strictObject({
     .record(zod.string(), zod.array(zod.string()))
     .optional(),
   sort_orders: zod.record(zod.string(), zod.array(zod.string())).optional(),
+  draft: zod.strictObject({
+    excluded_categories: zod.array(zod.string()),
+    category_counts: zod.array(zod.record(zod.string(), zod.number())),
+  }).optional(),
 });
 
 export default function validateStr(json: string): Return {

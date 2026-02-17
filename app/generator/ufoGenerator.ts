@@ -36,6 +36,10 @@ export type UFOPasta = {
   sort_orders?: {
     [sortName: string]: ReadonlyArray<string>;
   };
+  draft?: {
+    excluded_categories: ReadonlyArray<string>;
+    category_counts: ReadonlyArray<{ [category: string]: number }>;
+  };
 };
 
 const SAME_LINE_INDICES = [

@@ -1157,5 +1157,12 @@ export const STANDARD_UFO = {
       "Deathsdoor",
       "This Is It",
     ],
+    draft: {
+      excluded_categories: ["general"],
+      category_counts: [
+        { easy: 3, medium: 3, hard: 3, veryhard: 3 },
+        { easy: 4, medium: 4, hard: 3, veryhard: 2 },
+      ],
+    },
   },
 } as const;

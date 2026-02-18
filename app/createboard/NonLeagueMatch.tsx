@@ -421,7 +421,8 @@ export default function NonLeagueMatch() {
           (metadata.type === "Custom" && custom === "") ||
           (metadata.type === "Custom" &&
             customType === "ufo" &&
-            customUfo == null)
+            customUfo == null) ||
+          (metadata.type === "UFODraft" && draftPasta == null)
         }
         onClick={async () => {
           setIsCreationInProgress(true);
@@ -491,9 +492,10 @@ export default function NonLeagueMatch() {
       </Button>
       <Button
         disabled={
-          metadata.type === "Custom" &&
-          customType === "ufo" &&
-          customUfo == null
+          (metadata.type === "Custom" &&
+            customType === "ufo" &&
+            customUfo == null) ||
+          (metadata.type === "UFODraft" && draftPasta == null)
         }
         onClick={() => {
           navigator.clipboard.writeText(getSerializedPasta(true));

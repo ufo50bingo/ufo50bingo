@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Alert, Group, NumberInput, Stack, Text } from "@mantine/core";
 import DraftChecker from "./DraftChecker";
-import { UFODifficulties, UFOPasta } from "../generator/ufoGenerator";
+import { UFODifficulties, UFODraftPasta } from "../generator/ufoGenerator";
 import { CheckerSort } from "./CheckerSortSelector";
 import getCategoryName from "../generator/getCategoryName";
 import { IconAlertSquareRounded } from "@tabler/icons-react";
@@ -11,8 +11,8 @@ type Props = {
   setDraftCheckState: (newState: Map<string, number>) => void;
   numPlayers: number;
   setNumPlayers: (newNumPlayers: number) => void;
-  pasta: UFOPasta;
-  onChangePasta: (newPasta: null | UFOPasta) => void;
+  pasta: UFODraftPasta;
+  onChangePasta: (newPasta: null | UFODraftPasta) => void;
   sort: CheckerSort;
   setSort: (newSort: CheckerSort) => unknown;
 };
@@ -27,24 +27,27 @@ export default function UFODraftCreator({
   sort,
   setSort,
 }: Props) {
-  const draft = pasta.draft!;
   // TODO: Maybe order these based on category_counts
   const draftCategories = useMemo(() => {
     return Object.keys(pasta.goals).filter(
-      (cat) => !draft.excluded_categories.includes(cat),
+      (cat) => !pasta.draft.excluded_categories.includes(cat),
     );
-  }, [pasta, draft]);
+  }, [pasta]);
   const excludedCategories = useMemo(() => {
     return Object.keys(pasta.goals).filter((cat) =>
-      draft.excluded_categories.includes(cat),
+      pasta.draft.excluded_categories.includes(cat),
     );
-  }, [pasta, draft]);
+  }, [pasta]);
   const [excludedCounts, setExcludedCounts] = useState<Map<string, number>>(
     new Map(excludedCategories.map((category) => [category, 0])),
   );
   const [rawDifficultyCountsByPlayer, setDifficultyCountsByPlayer] = useState<
     ReadonlyArray<Map<string, number>>
-  >(draft.category_counts.map((counts) => new Map(Object.entries(counts))));
+  >(
+    pasta.draft.category_counts.map(
+      (counts) => new Map(Object.entries(counts)),
+    ),
+  );
   const difficultyCountsByPlayer = useMemo(
     () => rawDifficultyCountsByPlayer.slice(0, numPlayers),
     [rawDifficultyCountsByPlayer, numPlayers],
@@ -67,7 +70,7 @@ export default function UFODraftCreator({
       difficultyCountsByPlayer[playerIndex].values().some((count) => count > 0),
   );
 
-  const customizedPasta: UFOPasta = useMemo(() => {
+  const customizedPasta: UFODraftPasta = useMemo(() => {
     const finalGoals: UFODifficulties = {};
     draftCategories.forEach((category) => {
       Object.keys(pasta.goals[category]).map((group) => {

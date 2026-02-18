@@ -28,8 +28,8 @@ import Link from "next/link";
 import ufoGenerator, {
   Counts,
   UFODifficulties,
+  UFODraftPasta,
   UFOGameGoals,
-  UFOPasta,
 } from "../generator/ufoGenerator";
 import UFODifficultySelectors from "./UFODifficultySelectors";
 import UFODraftCreator from "./UFODraftCreator";
@@ -67,7 +67,7 @@ export default function NonLeagueMatch() {
     new Map(),
   );
 
-  const [draftPasta, setDraftPasta] = useState<null | UFOPasta>(null);
+  const [draftPasta, setDraftPasta] = useState<null | UFODraftPasta>(null);
   const [showFilters, setShowFilters] = useState(false);
 
   const [roomName, setRoomName] = useState("");

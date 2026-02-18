@@ -25,7 +25,7 @@ export type Tokens = { [token: string]: ReadonlyArray<string> };
 
 export type Counts = { [difficulty: string]: number };
 
-export type UFOPasta = {
+export interface UFOPasta {
   goals: UFODifficulties;
   tokens: Tokens;
   category_counts: Counts;
@@ -40,7 +40,11 @@ export type UFOPasta = {
     excluded_categories: ReadonlyArray<string>;
     category_counts: ReadonlyArray<{ [category: string]: number }>;
   };
-};
+}
+
+export interface UFODraftPasta extends UFOPasta {
+  draft: NonNullable<UFOPasta["draft"]>;
+}
 
 const SAME_LINE_INDICES = [
   [1, 2, 3, 4, 5, 10, 15, 20, 6, 12, 18, 24],

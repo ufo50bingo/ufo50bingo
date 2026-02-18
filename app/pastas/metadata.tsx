@@ -1,6 +1,6 @@
 import { List, Stack, Text } from "@mantine/core";
 import { ReactNode } from "react";
-import { UFOPasta } from "../generator/ufoGenerator";
+import { UFODraftPasta, UFOPasta } from "../generator/ufoGenerator";
 import { STANDARD_UFO } from "./standardUfo";
 import { SPICY_UFO } from "./spicyUfo";
 import { BLITZ_UFO } from "./blitzUfo";
@@ -370,7 +370,7 @@ interface UFO extends MetadataBase {
 
 interface UFODraft extends MetadataBase {
   type: "UFODraft";
-  pasta: UFOPasta;
+  pasta: UFODraftPasta;
 }
 
 export type VariantMetadata = GameNames | Custom | UFO | UFODraft;

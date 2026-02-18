@@ -13,8 +13,8 @@ const DIFFICULTIES: ReadonlyArray<Difficulty> = [
 ];
 
 type Props = {
-  draftCheckState: Map<Game, null | number>;
-  setDraftCheckState: (newState: Map<Game, null | number>) => void;
+  draftCheckState: Map<string, number>;
+  setDraftCheckState: (newState: Map<string, number>) => void;
   numPlayers: number;
   setNumPlayers: (newNumPlayers: number) => void;
   pasta: UFOPasta;
@@ -33,82 +33,74 @@ export default function UFODraftCreator({
   sort,
   setSort,
 }: Props) {
-  const [numGenerals, setNumGenerals] = useState(0);
+  const draft = pasta.draft!;
+  // TODO: Maybe order these based on category_counts
+  const draftCategories = useMemo(() => {
+    return Object.keys(pasta.goals).filter(
+      (cat) => !draft.excluded_categories.includes(cat),
+    );
+  }, [pasta, draft]);
+  const excludedCategories = useMemo(() => {
+    return Object.keys(pasta.goals).filter((cat) =>
+      draft.excluded_categories.includes(cat),
+    );
+  }, [pasta, draft]);
+  const [excludedCounts, setExcludedCounts] = useState<Map<string, number>>(
+    new Map(excludedCategories.map((category) => [category, 0])),
+  );
   const [rawDifficultyCountsByPlayer, setDifficultyCountsByPlayer] = useState<
-    ReadonlyArray<Map<Difficulty, number>>
-  >([
-    new Map([
-      ["easy", 3],
-      ["medium", 3],
-      ["hard", 3],
-      ["veryhard", 3],
-    ]),
-    new Map([
-      ["easy", 4],
-      ["medium", 4],
-      ["hard", 3],
-      ["veryhard", 2],
-    ]),
-    new Map([
-      ["easy", 0],
-      ["medium", 0],
-      ["hard", 0],
-      ["veryhard", 0],
-    ]),
-    new Map([
-      ["easy", 0],
-      ["medium", 0],
-      ["hard", 0],
-      ["veryhard", 0],
-    ]),
-    new Map([
-      ["easy", 0],
-      ["medium", 0],
-      ["hard", 0],
-      ["veryhard", 0],
-    ]),
-  ]);
+    ReadonlyArray<Map<string, number>>
+  >(draft.category_counts.map((counts) => new Map(Object.entries(counts))));
   const difficultyCountsByPlayer = useMemo(
     () => rawDifficultyCountsByPlayer.slice(0, numPlayers),
-    [rawDifficultyCountsByPlayer, numPlayers]
+    [rawDifficultyCountsByPlayer, numPlayers],
   );
 
-  const difficultySum = difficultyCountsByPlayer.reduce(
+  const playerDifficultySum = difficultyCountsByPlayer.reduce(
     (acc, difficultyCount) =>
       acc +
       difficultyCount.values().reduce((playerAcc, next) => playerAcc + next, 0),
-    numGenerals
+    0,
   );
+  const excludedDifficultySum = excludedCounts
+    .values()
+    .reduce((acc, next) => acc + next, 0);
+  const difficultySum = playerDifficultySum + excludedDifficultySum;
 
   const customizedPasta: UFOPasta = useMemo(() => {
     const finalGoals: UFODifficulties = {};
-    Object.keys(pasta.goals).map((category) => {
+    draftCategories.forEach((category) => {
       Object.keys(pasta.goals[category]).map((group) => {
-        // should remove the game typing here
-        const checkedPlayer = draftCheckState.get(group as ProperGame);
+        const checkedPlayer = draftCheckState.get(group);
         if (checkedPlayer == null) {
           return;
         }
-        const categoryName = getCategoryName(checkedPlayer, category);
+        const categoryName = getCategoryKey(checkedPlayer, category);
         const categoryGoals = finalGoals[categoryName] ?? {};
         categoryGoals[group] = pasta.goals[category][group];
         finalGoals[categoryName] = categoryGoals;
       });
     });
-    finalGoals["general"] = pasta.goals["general"];
+    excludedCategories.forEach((category) => {
+      finalGoals[category] = pasta.goals[category];
+    });
     const categoryCounts: { [category: string]: number } = {};
     difficultyCountsByPlayer.entries().forEach(([playerNum, counts]) => {
       counts.entries().forEach(([category, count]) => {
-        categoryCounts[getCategoryName(playerNum, category)] = count;
+        categoryCounts[getCategoryKey(playerNum, category)] = count;
       });
     });
-    categoryCounts["general"] = numGenerals;
+    excludedCategories.forEach((category) => {
+      categoryCounts[category] = excludedCounts.get(category) ?? 0;
+    });
     const tiers = DIFFICULTIES.map((difficulty) =>
       [...Array(numPlayers)].map((_, playerNum) =>
-        getCategoryName(playerNum, difficulty)
-      )
+        getCategoryKey(playerNum, difficulty),
+      ),
     );
-    tiers.push(["general"]);
+    excludedCategories.forEach((category) => {
+      tiers.push([category]);
+    });
     return {
       ...pasta,
       goals: finalGoals,
@@ -117,8 +109,10 @@ export default function UFODraftCreator({
     };
   }, [
     difficultyCountsByPlayer,
+    draftCategories,
     draftCheckState,
-    numGenerals,
+    excludedCategories,
+    excludedCounts,
     numPlayers,
     pasta,
   ]);
@@ -126,19 +120,19 @@ export default function UFODraftCreator({
   const playerToAvailableGoalDifficultyCounts = useMemo(
     () =>
       [...Array(numPlayers)].map((_, playerNum) => {
-        const counts = new Map<Difficulty, number>([]);
-        DIFFICULTIES.forEach((difficulty: Difficulty) => {
+        const counts = new Map<string, number>([]);
+        draftCategories.forEach((difficulty) => {
           const goals =
-            customizedPasta.goals[getCategoryName(playerNum, difficulty)] ?? [];
+            customizedPasta.goals[getCategoryKey(playerNum, difficulty)] ?? [];
           const count = Object.values(goals).reduce(
             (acc, gameGoals) => acc + gameGoals.length,
-            0
+            0,
           );
           counts.set(difficulty, count);
         });
         return counts;
       }),
-    [customizedPasta.goals, numPlayers]
+    [customizedPasta.goals, numPlayers],
   );
 
   const hasWrongSum = difficultySum != 25;
@@ -149,8 +143,8 @@ export default function UFODraftCreator({
         .some(
           ([difficulty, availableCount]) =>
             availableCount <
-            (difficultyCountsByPlayer[playerIndex].get(difficulty) ?? 0)
-        )
+            (difficultyCountsByPlayer[playerIndex].get(difficulty) ?? 0),
+        ),
   );
 
   useEffect(() => {
@@ -218,37 +212,37 @@ export default function UFODraftCreator({
         }}
       />
       {difficultyCountsByPlayer.map((difficultyCount, playerIndex) => (
-        <Group key={playerIndex} wrap="nowrap">
-          {Array.from(
-            difficultyCount.entries().map(([difficulty, count]) => {
-              const availableCount =
-                playerToAvailableGoalDifficultyCounts[playerIndex].get(
-                  difficulty
-                ) ?? 0;
-              return (
-                <NumberInput
-                  key={difficulty}
-                  label={`P${playerIndex + 1} ${DIFFICULTY_NAMES[difficulty]}`}
-                  description={`${availableCount} available`}
-                  clampBehavior="strict"
-                  min={0}
-                  value={count}
-                  onChange={(newCount) => {
-                    if (typeof newCount === "number") {
-                      const newDifficultyCount = new Map(difficultyCount);
-                      newDifficultyCount.set(difficulty, newCount);
-                      const newDifficultyCountsByPlayer = [
-                        ...rawDifficultyCountsByPlayer,
-                      ];
-                      newDifficultyCountsByPlayer[playerIndex] =
-                        newDifficultyCount;
-                      setDifficultyCountsByPlayer(newDifficultyCountsByPlayer);
-                    }
-                  }}
-                />
-              );
-            })
-          )}
+        <Group key={playerIndex}>
+          {draftCategories.map((difficulty) => {
+            const availableCount =
+              playerToAvailableGoalDifficultyCounts[playerIndex].get(
+                difficulty,
+              ) ?? 0;
+            return (
+              <NumberInput
+                key={difficulty}
+                label={`P${playerIndex + 1} ${DIFFICULTY_NAMES[difficulty]}`}
+                description={`${availableCount} available`}
+                clampBehavior="strict"
+                min={0}
+                value={
+                  difficultyCountsByPlayer[playerIndex]?.get(difficulty) ?? 0
+                }
+                onChange={(newCount) => {
+                  if (typeof newCount === "number") {
+                    const newDifficultyCount = new Map(difficultyCount);
+                    newDifficultyCount.set(difficulty, newCount);
+                    const newDifficultyCountsByPlayer = [
+                      ...rawDifficultyCountsByPlayer,
+                    ];
+                    newDifficultyCountsByPlayer[playerIndex] =
+                      newDifficultyCount;
+                    setDifficultyCountsByPlayer(newDifficultyCountsByPlayer);
+                  }
+                }}
+              />
+            );
+          })}
         </Group>
       ))}
       {hasWrongSum && (
@@ -269,6 +263,6 @@ export default function UFODraftCreator({
   );
 }
 
-function getCategoryName(playerNum: number, category: string): string {
+function getCategoryKey(playerNum: number, category: string): string {
   return `p${playerNum}-${category}`;
 }

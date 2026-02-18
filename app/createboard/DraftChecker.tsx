@@ -3,6 +3,8 @@ import { Game, GAME_NAMES } from "../goals";
 import { BingosyncColor } from "../matches/parseBingosyncData";
 import getColorHex from "../room/[id]/cast/getColorHex";
 import CheckerSortSelector, { CheckerSort } from "./CheckerSortSelector";
+import { UFOPasta } from "../generator/ufoGenerator";
+import { useMemo } from "react";
 
 const COLORS: ReadonlyArray<BingosyncColor> = [
   "red",
@@ -14,19 +16,33 @@ const COLORS: ReadonlyArray<BingosyncColor> = [
 
 type Props = {
   numPlayers: number;
-  draftCheckState: Map<Game, null | number>;
-  setDraftCheckState: (newCheckState: Map<Game, null | number>) => void;
+  pasta: UFOPasta;
+  draftCategories: ReadonlyArray<string>;
+  draftCheckState: Map<string, number>;
+  setDraftCheckState: (newCheckState: Map<string, number>) => void;
   sort: CheckerSort;
   setSort: (newSort: CheckerSort) => unknown;
 };
 
 export default function DraftChecker({
+  draftCategories,
   draftCheckState,
   setDraftCheckState,
   numPlayers,
+  pasta,
   sort,
   setSort,
 }: Props) {
+  const sortedCategories = useMemo(() => {
+    const subcategories: Set<string> = new Set();
+    for (const category of draftCategories) {
+      for (const subcategory of Object.keys(pasta.goals[category])) {
+        subcategories.add(subcategory);
+      }
+    }
+    return sort === "chronological" ? subcategories : subcategories.toSorted();
+  }, [draftCategories, pasta.goals, sort]);
+
   return (
     <>
       <Group>
@@ -50,7 +66,7 @@ export default function DraftChecker({
                       const newState = new Map(draftCheckState);
                       newState.set(
                         game,
-                        event.currentTarget.checked ? playerIndex : null
+                        event.currentTarget.checked ? playerIndex : null,
                       );
                       setDraftCheckState(newState);
                     }}
@@ -58,7 +74,7 @@ export default function DraftChecker({
                 ))}
               <Text size="sm">{GAME_NAMES[game]}</Text>
             </Group>
-          ))
+          )),
         )}
       </SimpleGrid>
     </>

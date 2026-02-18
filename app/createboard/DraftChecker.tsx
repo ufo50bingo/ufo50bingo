@@ -5,6 +5,7 @@ import getColorHex from "../room/[id]/cast/getColorHex";
 import CheckerSortSelector, { CheckerSort } from "./CheckerSortSelector";
 import { UFOPasta } from "../generator/ufoGenerator";
 import { useMemo } from "react";
+import getSubcategoryName from "../generator/getSubcategoryName";
 
 const COLORS: ReadonlyArray<BingosyncColor> = [
   "red",
@@ -33,14 +34,18 @@ export default function DraftChecker({
   sort,
   setSort,
 }: Props) {
-  const sortedCategories = useMemo(() => {
+  const sortedSubcategories = useMemo(() => {
     const subcategories: Set<string> = new Set();
     for (const category of draftCategories) {
       for (const subcategory of Object.keys(pasta.goals[category])) {
         subcategories.add(subcategory);
       }
     }
-    return sort === "chronological" ? subcategories : subcategories.toSorted();
+    const subcatArray = [...subcategories];
+    if (sort !== "chronological") {
+      subcatArray.sort();
+    }
+    return subcatArray;
   }, [draftCategories, pasta.goals, sort]);
 
   return (
@@ -52,30 +57,32 @@ export default function DraftChecker({
         <CheckerSortSelector sort={sort} setSort={setSort} />
       </Group>
       <SimpleGrid cols={3}>
-        {Array.from(
-          draftCheckState.entries().map(([game, checkedPlayer]) => (
-            <Group key={game}>
-              {Array(numPlayers)
-                .fill(null)
-                .map((_, playerIndex) => (
-                  <Checkbox
-                    key={playerIndex}
-                    color={getColorHex(COLORS[playerIndex])}
-                    checked={checkedPlayer === playerIndex}
-                    onChange={(event) => {
-                      const newState = new Map(draftCheckState);
+        {sortedSubcategories.map((game) => (
+          <Group key={game}>
+            {Array(numPlayers)
+              .fill(null)
+              .map((_, playerIndex) => (
+                <Checkbox
+                  key={playerIndex}
+                  color={getColorHex(COLORS[playerIndex])}
+                  checked={draftCheckState.get(game) === playerIndex}
+                  onChange={(event) => {
+                    const newState = new Map(draftCheckState);
+                    if (event.currentTarget.checked) {
                       newState.set(
                         game,
-                        event.currentTarget.checked ? playerIndex : null,
+                        playerIndex,
                       );
-                      setDraftCheckState(newState);
-                    }}
-                  />
-                ))}
-              <Text size="sm">{GAME_NAMES[game]}</Text>
-            </Group>
-          )),
-        )}
+                    } else {
+                      newState.delete(game);
+                    }
+                    setDraftCheckState(newState);
+                  }}
+                />
+              ))}
+            <Text size="sm">{getSubcategoryName(game)}</Text>
+          </Group>
+        ))}
       </SimpleGrid>
     </>
   );

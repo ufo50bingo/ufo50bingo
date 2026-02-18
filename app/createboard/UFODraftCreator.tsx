@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Alert, Group, NumberInput, Stack, Text } from "@mantine/core";
-import { Difficulty, DIFFICULTY_NAMES, Game, ProperGame } from "../goals";
+import { Difficulty, DIFFICULTY_NAMES } from "../goals";
 import DraftChecker from "./DraftChecker";
 import { UFODifficulties, UFOPasta } from "../generator/ufoGenerator";
 import { CheckerSort } from "./CheckerSortSelector";
+import getCategoryName from "../generator/getCategoryName";
+import { IconAlertSquareRounded } from "@tabler/icons-react";
 
 const DIFFICULTIES: ReadonlyArray<Difficulty> = [
   "easy",
@@ -188,29 +190,42 @@ export default function UFODraftCreator({
         }}
       />
       <DraftChecker
+        draftCategories={draftCategories}
         draftCheckState={draftCheckState}
         setDraftCheckState={setDraftCheckState}
         numPlayers={numPlayers}
+        pasta={pasta}
         sort={sort}
         setSort={setSort}
       />
       <Text>
         <strong>Choose difficulty distribution</strong>
       </Text>
-      <NumberInput
-        label="General"
-        description="General goals are not guaranteed to be completable with the games you've selected. If you're including General goals, please have a caster or admin verify the board before playing."
-        clampBehavior="strict"
-        min={0}
-        value={numGenerals}
-        allowDecimal={false}
-        allowNegative={false}
-        onChange={(newNumGenerals: string | number) => {
-          if (typeof newNumGenerals === "number") {
-            setNumGenerals(newNumGenerals);
-          }
-        }}
-      />
+      <Group>
+        {excludedCategories.map(category =>
+          <NumberInput
+            w={100}
+            key="category"
+            label={getCategoryName(category)}
+            clampBehavior="strict"
+            min={0}
+            value={excludedCounts.get(category) ?? 0}
+            allowDecimal={false}
+            allowNegative={false}
+            onChange={(newNumExcluded: string | number) => {
+              if (typeof newNumExcluded === "number") {
+                const newMap = new Map(excludedCounts);
+                newMap.set(category, newNumExcluded);
+                setExcludedCounts(newMap);
+              }
+            }}
+          />)}
+      </Group>
+      {excludedDifficultySum > 0 && (
+        <Alert color="yellow" icon={<IconAlertSquareRounded />}>
+          General goals are not guaranteed to be completable. You may want to have a caster or admin verify the board before playing.
+        </Alert>
+      )}
       {difficultyCountsByPlayer.map((difficultyCount, playerIndex) => (
         <Group key={playerIndex}>
           {draftCategories.map((difficulty) => {
@@ -221,7 +236,8 @@ export default function UFODraftCreator({
             return (
               <NumberInput
                 key={difficulty}
-                label={`P${playerIndex + 1} ${DIFFICULTY_NAMES[difficulty]}`}
+                w={100}
+                label={`P${playerIndex + 1} ${getCategoryName(difficulty)}`}
                 description={`${availableCount} available`}
                 clampBehavior="strict"
                 min={0}

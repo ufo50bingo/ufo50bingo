@@ -17,7 +17,6 @@ import usePracticePasta from "./usePracticePasta";
 import { UFOPasta } from "./generator/ufoGenerator";
 import { STANDARD_UFO } from "./pastas/standardUfo";
 import getFlatGoals, { UFOGoal } from "./generator/getFlatGoals";
-import findGoal from "./findGoal";
 
 export enum NextGoalChoice {
   RANDOM = "RANDOM",
@@ -31,7 +30,7 @@ type AppContextType = {
   unselectedGoals: Set<string>;
   setGoalPartsAndPasta: (
     goalParts: ReadonlyArray<Plain | ResolvedToken>,
-    pasta: UFOPasta
+    pasta: UFOPasta,
   ) => void;
   getRandomGoal: () => GoalPartsAndPasta;
   setNextGoalChoice: (newNextGoalChoice: NextGoalChoice) => void;
@@ -60,9 +59,9 @@ export function AppContextProvider({
   const [nextGoalChoice, setNextGoalChoiceRaw] = useState(
     global.window != undefined &&
       localStorage?.getItem("nextGoalChoice") ===
-      NextGoalChoice.PREFER_FEWER_ATTEMPTS
+        NextGoalChoice.PREFER_FEWER_ATTEMPTS
       ? NextGoalChoice.PREFER_FEWER_ATTEMPTS
-      : NextGoalChoice.RANDOM
+      : NextGoalChoice.RANDOM,
   );
 
   useEffect(() => setIsMounted(true), []);
@@ -72,7 +71,7 @@ export function AppContextProvider({
       setNextGoalChoiceRaw(newNextGoalChoice);
       window?.localStorage?.setItem("nextGoalChoice", newNextGoalChoice);
     },
-    [setNextGoalChoiceRaw]
+    [setNextGoalChoiceRaw],
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,7 +81,7 @@ export function AppContextProvider({
         .orderBy("startTime")
         .filter((attempt) => attempt.goal != null && attempt.goal !== "")
         .reverse()
-        .toArray()
+        .toArray(),
     ) ?? [];
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const playlist =
@@ -99,12 +98,13 @@ export function AppContextProvider({
   const unselectedGoalsArray = useLiveQuery(() => db.unselectedGoals.toArray());
   const unselectedGoals = useMemo(
     () => new Set(unselectedGoalsArray?.map((row) => row.goal) ?? []),
-    [unselectedGoalsArray]
+    [unselectedGoalsArray],
   );
 
   const getRandomGoal = useCallback(() => {
-    const selectedGoals = getFlatGoals(pasta)
-      .filter((goal) => !unselectedGoals.has(goal.name));
+    const selectedGoals = getFlatGoals(pasta).filter(
+      (goal) => !unselectedGoals.has(goal.name),
+    );
     let goal;
     switch (nextGoalChoice) {
       case NextGoalChoice.PREFER_FEWER_ATTEMPTS:
@@ -116,7 +116,11 @@ export function AppContextProvider({
         break;
     }
     return {
-      goalParts: resolveTokens(splitAtTokens(goal.name), pasta, goal.sortTokens),
+      goalParts: resolveTokens(
+        splitAtTokens(goal.name),
+        pasta,
+        goal.sortTokens,
+      ),
       pasta,
     };
   }, [nextGoalChoice, unselectedGoals, goalStats, pasta]);
@@ -128,14 +132,14 @@ export function AppContextProvider({
     () => setGoalPartsAndPastaRaw(getRandomGoal()),
     // This should intentionally run only on initialization and when pasta changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [pasta]
+    [pasta],
   );
 
   const [hideByDefault, setHideByDefaultRaw] = useState(false);
   useEffect(() => {
     setHideByDefaultRaw(
       global.window != undefined &&
-      localStorage?.getItem("hideByDefault") === "true"
+        localStorage?.getItem("hideByDefault") === "true",
     );
   }, []);
   const setHideByDefault = useCallback(
@@ -143,10 +147,10 @@ export function AppContextProvider({
       setHideByDefaultRaw(newHideByDefault);
       window?.localStorage?.setItem(
         "hideByDefault",
-        newHideByDefault ? "true" : "false"
+        newHideByDefault ? "true" : "false",
       );
     },
-    [setHideByDefaultRaw]
+    [setHideByDefaultRaw],
   );
 
   const setGoalPartsAndPasta = useCallback(
@@ -154,7 +158,7 @@ export function AppContextProvider({
       setGoalPartsAndPastaRaw({ goalParts: goal, pasta: newPasta });
       window.scrollTo({ top: 0, behavior: "instant" });
     },
-    [setGoalPartsAndPastaRaw]
+    [setGoalPartsAndPastaRaw],
   );
 
   const value = useMemo(
@@ -187,7 +191,7 @@ export function AppContextProvider({
       hideByDefault,
       setHideByDefault,
       isMounted,
-    ]
+    ],
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
@@ -203,7 +207,7 @@ export function useAppContext() {
 
 function getGoalPreferFewerAttempts(
   selectedGoals: ReadonlyArray<UFOGoal>,
-  goalStats: Map<string, GoalStats>
+  goalStats: Map<string, GoalStats>,
 ): UFOGoal {
   let cumulativeWeight = 0;
   const allCumulativeWeights: number[] = [];
@@ -218,7 +222,7 @@ function getGoalPreferFewerAttempts(
   const randomWeight = Math.random() * cumulativeWeight;
 
   const goalIndex = allCumulativeWeights.findIndex(
-    (cutoff) => cutoff >= randomWeight
+    (cutoff) => cutoff >= randomWeight,
   );
   return selectedGoals[goalIndex];
 }

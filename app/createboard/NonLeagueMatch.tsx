@@ -34,7 +34,6 @@ import ufoGenerator, {
 import UFODifficultySelectors from "./UFODifficultySelectors";
 import UFODraftCreator from "./UFODraftCreator";
 import useLocalEnum from "../localStorage/useLocalEnum";
-import { CheckerSort } from "./CheckerSortSelector";
 import validateStr from "../generator/validateStr";
 
 const options: ReadonlyArray<VariantMetadata> = METADATA.filter(
@@ -64,9 +63,9 @@ export default function NonLeagueMatch() {
     ),
   );
   const [numPlayers, setNumPlayers] = useState(2);
-  const [draftCheckState, setDraftCheckState] = useState<
-    Map<string, number>
-  >(new Map());
+  const [draftCheckState, setDraftCheckState] = useState<Map<string, number>>(
+    new Map(),
+  );
 
   const [draftPasta, setDraftPasta] = useState<null | UFOPasta>(null);
   const [showFilters, setShowFilters] = useState(false);
@@ -116,13 +115,13 @@ export default function NonLeagueMatch() {
         return stringify(
           showFilters
             ? Array.from(
-              checkState
-                .entries()
-                .filter(([_gameKey, checkState]) => checkState),
-            ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
+                checkState
+                  .entries()
+                  .filter(([_gameKey, checkState]) => checkState),
+              ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
             : ORDERED_PROPER_GAMES.map((gameKey) => ({
-              name: GAME_NAMES[gameKey],
-            })),
+                name: GAME_NAMES[gameKey],
+              })),
         );
       case "UFODraft":
         if (draftPasta != null) {
@@ -232,12 +231,12 @@ export default function NonLeagueMatch() {
       <Group justify="space-between">
         {((metadata.type === "UFO" && metadata.isGeneric !== true) ||
           metadata.type === "GameNames") && (
-            <Checkbox
-              checked={showFilters}
-              label="Customize"
-              onChange={(event) => setShowFilters(event.currentTarget.checked)}
-            />
-          )}
+          <Checkbox
+            checked={showFilters}
+            label="Customize"
+            onChange={(event) => setShowFilters(event.currentTarget.checked)}
+          />
+        )}
         {metadata.type === "UFO" && (
           <Tooltip label="Copy the source in the new “UFO” format.">
             <Button

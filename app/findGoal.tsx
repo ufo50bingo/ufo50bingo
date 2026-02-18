@@ -76,7 +76,9 @@ export default function findGoal(
         resolvedGoal: goal,
         category: option.tags.category,
         subcategory: option.tags.subcategory,
-        tokens: goalParts.filter(p => p.type === "resolved").map(p => p.text),
+        tokens: goalParts
+          .filter((p) => p.type === "resolved")
+          .map((p) => p.text),
         goalParts,
         sortTokens: option.sortTokens,
       };
@@ -109,16 +111,17 @@ function preprocessGoalWithToken(
   // token locations should all be disjoint since they cannot be nested
   let regexStr = "";
   let startIndex = 0;
-  const tokens = matches.map(match => match[1]);
+  const tokens = matches.map((match) => match[1]);
   let combinedOptions = undefined;
   if (sortTokens != null) {
     const uniqueTokens = [...new Set(tokens)];
-    combinedOptions = uniqueTokens.flatMap(t => pasta.tokens[t]);
+    combinedOptions = uniqueTokens.flatMap((t) => pasta.tokens[t]);
   }
   for (const match of matches) {
     regexStr += escape(goalName.slice(startIndex, match.index));
     startIndex = match.index + match[0].length;
-    const tokenOptions = combinedOptions == null ? pasta.tokens[match[1]] : combinedOptions;
+    const tokenOptions =
+      combinedOptions == null ? pasta.tokens[match[1]] : combinedOptions;
     const tokenRegex = tokenOptions.map((option) => escape(option)).join("|");
     regexStr += "(" + tokenRegex + ")";
   }
@@ -152,7 +155,11 @@ function preprocess(pasta: UFOPasta): ProcessedPasta {
   return { plain, withTokens };
 }
 
-function getGoalPartsFromToken(goal: string, option: WithToken, tokenOptions: Tokens): null | Array<Plain | ResolvedToken> {
+function getGoalPartsFromToken(
+  goal: string,
+  option: WithToken,
+  tokenOptions: Tokens,
+): null | Array<Plain | ResolvedToken> {
   const match = goal.match(option.regex);
   if (match == null) {
     return null;
@@ -165,15 +172,23 @@ function getGoalPartsFromToken(goal: string, option: WithToken, tokenOptions: To
       if (part.type === "plain") {
         final.push(part);
       } else {
-        final.push({ type: "resolved", token: part.token, text: match[curMatch] });
+        final.push({
+          type: "resolved",
+          token: part.token,
+          text: match[curMatch],
+        });
         curMatch += 1;
       }
     }
     return final;
   }
-  const allTokens = parts.filter(p => p.type === "token").map(p => p.token);
+  const allTokens = parts.filter((p) => p.type === "token").map((p) => p.token);
   const allTokenValues = match.slice(1);
-  const assignment = assignTextToTokens(allTokenValues, allTokens, tokenOptions);
+  const assignment = assignTextToTokens(
+    allTokenValues,
+    allTokens,
+    tokenOptions,
+  );
   if (assignment == null) {
     return null;
   }
@@ -183,7 +198,11 @@ function getGoalPartsFromToken(goal: string, option: WithToken, tokenOptions: To
     if (part.type === "plain") {
       final.push(part);
     } else {
-      final.push({ type: "resolved", token: assignment[curMatch], text: allTokenValues[curMatch] });
+      final.push({
+        type: "resolved",
+        token: assignment[curMatch],
+        text: allTokenValues[curMatch],
+      });
       curMatch += 1;
     }
   }
@@ -193,14 +212,20 @@ function getGoalPartsFromToken(goal: string, option: WithToken, tokenOptions: To
 // values is an array of actual text matched to token slots by the regex
 // tokens is a list of all tokens used in the original goal
 // returns an array assigning each value to a particular token or null if impossible
-function assignTextToTokens(values: ReadonlyArray<string>, tokens: ReadonlyArray<string>, tokenOptions: Tokens): null | ReadonlyArray<string> {
+function assignTextToTokens(
+  values: ReadonlyArray<string>,
+  tokens: ReadonlyArray<string>,
+  tokenOptions: Tokens,
+): null | ReadonlyArray<string> {
   const tokenCounts: { [token: string]: number } = {};
   for (const token of tokens) {
     tokenCounts[token] = (tokenCounts[token] ?? 0) + 1;
   }
-  const finalAssignment = values.map(v => "");
+  const finalAssignment = values.map((_) => "");
   const uniqueTokens = [...new Set(tokens)];
-  const validTokensByIndex = values.map(v => uniqueTokens.filter(t => tokenOptions[t].includes(v)));
+  const validTokensByIndex = values.map((v) =>
+    uniqueTokens.filter((t) => tokenOptions[t].includes(v)),
+  );
 
   const tryAssignment = (index: number): boolean => {
     for (const token of validTokensByIndex[index]) {

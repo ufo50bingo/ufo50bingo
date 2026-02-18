@@ -1,10 +1,9 @@
-import getGoalAndFallback from "./getGoalAndFallback";
 import { UFODifficulties, UFOGoalConfig } from "./ufoGenerator";
 
-const REGEX = /\{\{([^{}]*)\}\}/g;
-
-export default function findAllGoalsWithSortedTokens(goals: UFODifficulties): Array<UFOGoalConfig> {
-  const goalsWithSort: Array<UFOGoalConfig> = []
+export default function findAllGoalsWithSortedTokens(
+  goals: UFODifficulties,
+): Array<UFOGoalConfig> {
+  const goalsWithSort: Array<UFOGoalConfig> = [];
   Object.keys(goals).forEach((category) => {
     const categoryGoals = goals[category];
     Object.keys(categoryGoals).forEach((group) => {

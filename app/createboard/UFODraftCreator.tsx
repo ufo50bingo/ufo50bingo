@@ -61,6 +61,12 @@ export default function UFODraftCreator({
     .reduce((acc, next) => acc + next, 0);
   const difficultySum = playerDifficultySum + excludedDifficultySum;
 
+  const allPlayersHaveDifficulty = [...Array(numPlayers)].every(
+    (_, playerIndex) =>
+      difficultyCountsByPlayer[playerIndex] != null &&
+      difficultyCountsByPlayer[playerIndex].values().some((count) => count > 0),
+  );
+
   const customizedPasta: UFOPasta = useMemo(() => {
     const finalGoals: UFODifficulties = {};
     draftCategories.forEach((category) => {
@@ -142,8 +148,18 @@ export default function UFODraftCreator({
   );
 
   useEffect(() => {
-    onChangePasta(hasWrongSum || hasTooFewGoals ? null : customizedPasta);
-  }, [customizedPasta, hasTooFewGoals, hasWrongSum, onChangePasta]);
+    onChangePasta(
+      hasWrongSum || hasTooFewGoals || !allPlayersHaveDifficulty
+        ? null
+        : customizedPasta,
+    );
+  }, [
+    allPlayersHaveDifficulty,
+    customizedPasta,
+    hasTooFewGoals,
+    hasWrongSum,
+    onChangePasta,
+  ]);
   return (
     <Stack>
       <Alert>
@@ -269,6 +285,13 @@ export default function UFODraftCreator({
           variant="light"
           color="red"
           title="Error: One of your difficulties has a higher count than the number of available goals"
+        />
+      )}
+      {!allPlayersHaveDifficulty && (
+        <Alert
+          variant="light"
+          color="red"
+          title="Error: One of your players has no difficulty counts selected"
         />
       )}
     </Stack>

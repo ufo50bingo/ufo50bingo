@@ -1,18 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { Alert, Group, NumberInput, Stack, Text } from "@mantine/core";
-import { Difficulty, DIFFICULTY_NAMES } from "../goals";
 import DraftChecker from "./DraftChecker";
 import { UFODifficulties, UFOPasta } from "../generator/ufoGenerator";
 import { CheckerSort } from "./CheckerSortSelector";
 import getCategoryName from "../generator/getCategoryName";
 import { IconAlertSquareRounded } from "@tabler/icons-react";
-
-const DIFFICULTIES: ReadonlyArray<Difficulty> = [
-  "easy",
-  "medium",
-  "hard",
-  "veryhard",
-];
 
 type Props = {
   draftCheckState: Map<string, number>;
@@ -95,7 +87,7 @@ export default function UFODraftCreator({
     excludedCategories.forEach((category) => {
       categoryCounts[category] = excludedCounts.get(category) ?? 0;
     });
-    const tiers = DIFFICULTIES.map((difficulty) =>
+    const tiers = draftCategories.map((difficulty) =>
       [...Array(numPlayers)].map((_, playerNum) =>
         getCategoryKey(playerNum, difficulty),
       ),
@@ -134,7 +126,7 @@ export default function UFODraftCreator({
         });
         return counts;
       }),
-    [customizedPasta.goals, numPlayers],
+    [customizedPasta.goals, draftCategories, numPlayers],
   );
 
   const hasWrongSum = difficultySum != 25;
@@ -145,7 +137,7 @@ export default function UFODraftCreator({
         .some(
           ([difficulty, availableCount]) =>
             availableCount <
-            (difficultyCountsByPlayer[playerIndex].get(difficulty) ?? 0),
+            (difficultyCountsByPlayer[playerIndex]?.get(difficulty) ?? 0),
         ),
   );
 
@@ -202,7 +194,7 @@ export default function UFODraftCreator({
         <strong>Choose difficulty distribution</strong>
       </Text>
       <Group>
-        {excludedCategories.map(category =>
+        {excludedCategories.map((category) => (
           <NumberInput
             w={100}
             key="category"
@@ -219,14 +211,16 @@ export default function UFODraftCreator({
                 setExcludedCounts(newMap);
               }
             }}
-          />)}
+          />
+        ))}
       </Group>
       {excludedDifficultySum > 0 && (
         <Alert color="yellow" icon={<IconAlertSquareRounded />}>
-          General goals are not guaranteed to be completable. You may want to have a caster or admin verify the board before playing.
+          General goals are not guaranteed to be completable. You may want to
+          have a caster or admin verify the board before playing.
         </Alert>
       )}
-      {difficultyCountsByPlayer.map((difficultyCount, playerIndex) => (
+      {[...Array(numPlayers)].map((_, playerIndex) => (
         <Group key={playerIndex}>
           {draftCategories.map((difficulty) => {
             const availableCount =
@@ -246,7 +240,9 @@ export default function UFODraftCreator({
                 }
                 onChange={(newCount) => {
                   if (typeof newCount === "number") {
-                    const newDifficultyCount = new Map(difficultyCount);
+                    const newDifficultyCount = new Map(
+                      difficultyCountsByPlayer[playerIndex],
+                    );
                     newDifficultyCount.set(difficulty, newCount);
                     const newDifficultyCountsByPlayer = [
                       ...rawDifficultyCountsByPlayer,

@@ -42,6 +42,7 @@ import EditLeagueModal from "./EditLeagueModal";
 import { useMediaQuery } from "@mantine/hooks";
 import { LEAGUE_SEASON } from "../createboard/leagueConstants";
 import useSession from "../session/useSession";
+import { useRouter } from "next/navigation";
 
 type Props = {
   match: Match;
@@ -49,7 +50,7 @@ type Props = {
 
 function getOverlays(
   changelog: Changelog,
-  analysisSeconds: number
+  analysisSeconds: number,
 ): ReadonlyArray<null | ReactNode> {
   const orders: (null | number)[] = Array(25).fill(null);
   let count = 1;
@@ -101,6 +102,7 @@ function getOverlays(
 
 export default function MatchView({ match }: Props) {
   const { hideByDefault, isMounted, revealedMatchIDs } = useAppContext();
+  const router = useRouter();
   const session = useSession();
   const isAdmin = session?.admin ?? false;
   const isCreatorOrAdmin =
@@ -184,14 +186,18 @@ export default function MatchView({ match }: Props) {
       disabled={isTooOld(match.dateCreated) || isRefreshing}
       onClick={async () => {
         setIsRefreshing(true);
+        let shouldRefresh = false;
         try {
           // HACK: This prevents navigation to the single match page on revalidation
-          history.pushState({}, '', `/matches`)
-          await refreshMatch(match.id);
+          history.pushState({}, "", `/matches`);
+          shouldRefresh = await refreshMatch(match.id, board, changelog);
         } finally {
           // HACK: Revert back to the expected URL
           history.back();
           setIsRefreshing(false);
+          if (shouldRefresh) {
+            router.refresh();
+          }
         }
       }}
     >
@@ -246,7 +252,7 @@ export default function MatchView({ match }: Props) {
                   size="sm"
                   onClick={() =>
                     navigator.clipboard.writeText(
-                      `https://ufo50.bingo/match/${match.id}`
+                      `https://ufo50.bingo/match/${match.id}`,
                     )
                   }
                   variant="subtle"
@@ -446,9 +452,9 @@ export default function MatchView({ match }: Props) {
                 vod={
                   match.vod != null && match.vod.startSeconds != null
                     ? {
-                      url: match.vod.url,
-                      startSeconds: match.vod.startSeconds,
-                    }
+                        url: match.vod.url,
+                        startSeconds: match.vod.startSeconds,
+                      }
                     : null
                 }
                 analysisSeconds={match.analysisSeconds}

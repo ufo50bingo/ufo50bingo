@@ -36,11 +36,12 @@ import {
   usePathname,
   useSearchParams,
 } from "next/navigation";
-import { BingosyncColor } from "./parseBingosyncData";
+import { BingosyncColor, TBoard, Changelog } from "./parseBingosyncData";
 import { getVariantText, getWinType } from "./matchUtil";
 import EditVodModal from "./EditVodModal";
 import { getHost, getVodLink } from "./vodUtil";
 import classes from "./Matches.module.css";
+import { useRouter } from "next/navigation";
 
 import { useAppContext } from "../AppContextProvider";
 import { LeagueInfo } from "../createboard/createMatch";
@@ -116,7 +117,7 @@ function getHrefFromParams(pathname: string, params: URLSearchParams): string {
 }
 
 function getSeasonStr(
-  season: null | undefined | Season
+  season: null | undefined | Season,
 ): null | undefined | string {
   switch (season) {
     case null:
@@ -138,7 +139,7 @@ function getFilterHref(
   tier: null | undefined | string,
   week: null | undefined | string,
   player: undefined | string,
-  admin: null | undefined | string
+  admin: null | undefined | string,
 ): string {
   const params = new URLSearchParams(curParams);
 
@@ -190,28 +191,28 @@ function getSeasonFromParams(params: ReadonlyURLSearchParams): null | Season {
 }
 
 function getPlayerFromParams(
-  params: ReadonlyURLSearchParams
+  params: ReadonlyURLSearchParams,
 ): undefined | string {
   const player = params.get("player");
   return player == null || player === "" ? undefined : player;
 }
 
 function getTierFromParams(
-  params: ReadonlyURLSearchParams
+  params: ReadonlyURLSearchParams,
 ): undefined | string {
   const tier = params.get("tier");
   return tier == null || tier === "" ? undefined : tier;
 }
 
 function getWeekFromParams(
-  params: ReadonlyURLSearchParams
+  params: ReadonlyURLSearchParams,
 ): undefined | string {
   const week = params.get("week");
   return week == null || week === "" ? undefined : week;
 }
 
 function getAdminFromParams(
-  params: ReadonlyURLSearchParams
+  params: ReadonlyURLSearchParams,
 ): undefined | string {
   const admin = params.get("admin");
   return admin == null || admin === "" ? undefined : admin;
@@ -220,6 +221,7 @@ function getAdminFromParams(
 export default function Matches({ matches, totalPages }: Props) {
   const { isMounted, hideByDefault, setHideByDefault, revealedMatchIDs } =
     useAppContext();
+  const router = useRouter();
   const session = useSession();
   const isAdmin = session?.admin ?? false;
 
@@ -245,31 +247,31 @@ export default function Matches({ matches, totalPages }: Props) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshingIDs, setRefreshingIDs] = useState<ReadonlyArray<string>>([]);
   const [season, setSeason] = useState<null | undefined | Season>(
-    getSeasonFromParams(searchParams)
+    getSeasonFromParams(searchParams),
   );
   const [tier, setTier] = useState<null | undefined | string>(
-    getTierFromParams(searchParams)
+    getTierFromParams(searchParams),
   );
   const [week, setWeek] = useState<null | undefined | string>(
-    getWeekFromParams(searchParams)
+    getWeekFromParams(searchParams),
   );
   const [player, setPlayer] = useState<undefined | string>(
-    getPlayerFromParams(searchParams)
+    getPlayerFromParams(searchParams),
   );
   const [admin, setAdmin] = useState<null | undefined | string>(
-    getAdminFromParams(searchParams)
+    getAdminFromParams(searchParams),
   );
 
   const isDirty =
     (getSeasonStr(season) ?? null) !== (searchParams.get("season") ?? null) ||
     (tier == null || tier === "" ? null : tier) !==
-    (searchParams.get("tier") ?? null) ||
+      (searchParams.get("tier") ?? null) ||
     (week == null || week === "" ? null : week) !==
-    (searchParams.get("week") ?? null) ||
+      (searchParams.get("week") ?? null) ||
     (player == null || player === "" ? null : player) !==
-    (searchParams.get("player") ?? null) ||
+      (searchParams.get("player") ?? null) ||
     (admin == null || admin === "" ? null : admin) !==
-    (searchParams.get("admin") ?? null);
+      (searchParams.get("admin") ?? null);
 
   const viewingMatch =
     viewingId == null ? null : matches.find((match) => match.id === viewingId);
@@ -291,8 +293,8 @@ export default function Matches({ matches, totalPages }: Props) {
 
   useEffect(() => {
     const onPopState = () => {
-      if (window.location.pathname === '/matches') {
-        setViewingId(null)
+      if (window.location.pathname === "/matches") {
+        setViewingId(null);
       } else {
         const regexResult = window.location.pathname.match(`^/match/(.*)/?$`);
         if (regexResult != null) {
@@ -300,10 +302,10 @@ export default function Matches({ matches, totalPages }: Props) {
           setViewingId(id);
         }
       }
-    }
-    window.addEventListener('popstate', onPopState)
-    return () => window.removeEventListener('popstate', onPopState)
-  }, [])
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
 
   if (!isMounted || (hideByDefault && revealedMatchIDs == null)) {
     return null;
@@ -314,7 +316,7 @@ export default function Matches({ matches, totalPages }: Props) {
         <Alert variant="light">
           <Text size="sm">
             When you finish your match, please use the{" "}
-            <ActionIcon color="green" onClick={() => { }}>
+            <ActionIcon color="green" onClick={() => {}}>
               <IconEdit size={16} />
             </ActionIcon>{" "}
             icon to Refresh data from Bingosync and add a VOD Link, if
@@ -383,7 +385,7 @@ export default function Matches({ matches, totalPages }: Props) {
                 tier,
                 week,
                 player,
-                admin
+                admin,
               )}
             >
               Apply Filters
@@ -432,12 +434,20 @@ export default function Matches({ matches, totalPages }: Props) {
                       leftSection={<IconRefresh size={16} />}
                       onClick={async () => {
                         setRefreshingIDs((prev) => [...prev, match.id]);
+                        let shouldRefresh = false;
                         try {
-                          await refreshMatch(match.id);
+                          shouldRefresh = await refreshMatch(
+                            match.id,
+                            getBoard(match.boardJson),
+                            getChangelog(match.changelogJson),
+                          );
                         } finally {
                           setRefreshingIDs((prev) =>
-                            prev.filter((id) => id !== match.id)
+                            prev.filter((id) => id !== match.id),
                           );
+                          if (shouldRefresh) {
+                            router.refresh();
+                          }
                         }
                       }}
                     >
@@ -527,7 +537,7 @@ export default function Matches({ matches, totalPages }: Props) {
                             <Anchor
                               size="sm"
                               onClick={() => {
-                                history.pushState({}, '', `/match/${match.id}`)
+                                history.pushState({}, "", `/match/${match.id}`);
                                 setViewingId(match.id);
                               }}
                             >
@@ -547,7 +557,7 @@ export default function Matches({ matches, totalPages }: Props) {
                             day: "numeric",
                             hour: "numeric",
                             minute: "numeric",
-                          }
+                          },
                         )}
                       </Table.Td>
                       <Table.Td>{getVariantText(match)}</Table.Td>
@@ -652,7 +662,7 @@ export default function Matches({ matches, totalPages }: Props) {
                   return getPropsForPage(totalPages);
                 case "next":
                   return getPropsForPage(
-                    page < totalPages ? page + 1 : totalPages
+                    page < totalPages ? page + 1 : totalPages,
                   );
                 case "previous":
                   return getPropsForPage(page > 1 ? page - 1 : 1);
@@ -720,4 +730,28 @@ export default function Matches({ matches, totalPages }: Props) {
       )}
     </>
   );
+}
+
+function getBoard(boardJson: string | null | undefined): TBoard {
+  if (boardJson == null) {
+    return [];
+  }
+  try {
+    return JSON.parse(boardJson);
+  } catch {
+    return [];
+  }
+}
+
+function getChangelog(
+  changelogJson: string | null | undefined,
+): Changelog | null {
+  if (changelogJson == null) {
+    return null;
+  }
+  try {
+    return JSON.parse(changelogJson);
+  } catch {
+    return null;
+  }
 }

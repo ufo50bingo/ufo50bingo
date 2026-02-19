@@ -95,7 +95,11 @@ function areChangelogsEqual(a: Changelog, b: Changelog): boolean {
   return true;
 }
 
-export async function refreshMatch(id: string): Promise<void> {
+export async function refreshMatch(
+  id: string,
+  currentBoard: TBoard,
+  currentChangelog: Changelog | null,
+): Promise<boolean> {
   const cookie = await getSessionCookie(id);
   const [
     boardJson,
@@ -115,7 +119,12 @@ export async function refreshMatch(id: string): Promise<void> {
     areBoardsEqual(existingBoard, board) &&
     areChangelogsEqual(existingChangelog, changelog)
   ) {
-    return;
+    // if current board is not equal, we want to force the client to refresh
+    return (
+      !areBoardsEqual(currentBoard, board) ||
+      currentChangelog == null ||
+      !areChangelogsEqual(currentChangelog, changelog)
+    );
   }
 
   const result = getResult(board, changelog, leagueP1, leagueP2);
@@ -147,5 +156,6 @@ export async function refreshMatch(id: string): Promise<void> {
     const rawMatch = sqlResult[0];
     const match = getMatchFromRaw(rawMatch);
     await syncToGSheet(match);
-  } catch { }
+  } catch {}
+  return false;
 }

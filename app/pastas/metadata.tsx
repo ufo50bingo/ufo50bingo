@@ -11,6 +11,7 @@ import { NOZZLO_UFO } from "./nozzloUfo";
 import { PROTOTYPE_UFO } from "./prototypeUfo";
 import { SEASON_1_UFO } from "./season1Ufo";
 import { SEASON_2_UFO } from "./season2Ufo";
+import { COMBO_UFO } from "./comboUfo";
 
 const RAW_METADATA = [
   {
@@ -125,6 +126,17 @@ const RAW_METADATA = [
           Players draft/ban games, and then a custom board is created where each
           player's picks are represented equally.
         </span>
+      </Stack>
+    ),
+  },
+  {
+    type: "UFODraft",
+    name: "Combo Draft",
+    pasta: COMBO_UFO,
+    isMenu: false,
+    hovercard: (
+      <Stack>
+        <span>Create a Draft game with both Standard and Spicy goals!</span>
       </Stack>
     ),
   },

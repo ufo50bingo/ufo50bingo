@@ -216,7 +216,7 @@ export default function UFODraftCreator({
         {excludedCategories.map((category) => (
           <NumberInput
             w={100}
-            key="category"
+            key={category}
             label={getCategoryName(category)}
             clampBehavior="strict"
             min={0}

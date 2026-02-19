@@ -285,7 +285,7 @@ export default function MatchView({ match }: Props) {
                   </>
                 )
               }
-              shownDifficulties={[]}
+              shownDifficulties={["general", "veryhard"]}
             />
             {isRevealed && (
               <Group justify="space-between">

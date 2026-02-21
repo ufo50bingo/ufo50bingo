@@ -194,6 +194,7 @@ export default function Play({
                   score={myScore}
                   color={selectedColor}
                   hasTiebreaker={tiebreakWinner === selectedColor}
+                  isDouble={false}
                 />
               </div>
               <div style={{ width: "62px", height: "62px" }}>
@@ -201,6 +202,7 @@ export default function Play({
                   score={opponent?.score ?? 0}
                   color={opponent?.color ?? "blank"}
                   hasTiebreaker={tiebreakWinner === opponent?.color}
+                  isDouble={false}
                 />
               </div>
             </div>

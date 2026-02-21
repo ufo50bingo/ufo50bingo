@@ -7,6 +7,13 @@
     border: 1px solid rgb(66, 66, 66);
     box-sizing: border-box;
     height: 475px;
-    width: 80px;
     background-color: black;
+}
+
+.normal {
+    width: 80px;
+}
+
+.sidebyside {
+    width: 118px;
 }

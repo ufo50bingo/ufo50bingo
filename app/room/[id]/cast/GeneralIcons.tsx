@@ -4,42 +4,75 @@ import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { IconType } from "./useLocalState";
 import { GeneralCounts } from "./CastPage";
 import SideCell from "./SideCell";
-import { GeneralItem } from "./Cast";
+import { GeneralItem, TCountPosition } from "./Cast";
 import { StandardGeneral } from "@/app/pastas/pastaTypes";
+import { Group } from "@mantine/core";
 
 type IconProps = {
+  isLeft: boolean;
   goal: string;
   color: BingosyncColor;
   squareColor: BingosyncColor;
   src: string;
   count: number;
   iconType: IconType;
+  countPosition: TCountPosition;
 };
 
-function Icon({ goal, src, count, color, squareColor, iconType }: IconProps) {
+function Icon({ goal, src, count, color, squareColor, iconType, countPosition, isLeft }: IconProps) {
   const iconClass =
     iconType === "winnerbit"
       ? classes.icon
       : `${classes.icon} ${classes.spritesIcon}`;
   const imgClass =
     squareColor !== "blank" ? `${iconClass} ${classes.grayscale}` : iconClass;
-  const tag =
-    squareColor === color ? (
+
+  if (countPosition === "inset") {
+    const tag =
+      squareColor === color ? (
+        <IconCircleCheckFilled
+          className={classes.tagPosition}
+          color="green"
+          size={24}
+        />
+      ) : (
+        <div className={classes.tag}>{count}</div>
+      );
+    return (
+      <SideCell>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className={imgClass} src={src} alt={goal} />
+        {tag}
+      </SideCell>
+    );
+  } else {
+    const tag = squareColor === color ? (
       <IconCircleCheckFilled
-        className={classes.tagPosition}
         color="green"
-        size={24}
+        size={30}
       />
     ) : (
-      <div className={classes.tag}>{count}</div>
+      <div className={`${classes.sideBySideTag} ${squareColor !== "blank" ? classes.opponentClaimed : ""}`}>{count}</div>
     );
-  return (
-    <SideCell>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className={imgClass} src={src} alt={goal} />
-      {tag}
-    </SideCell>
-  );
+    return (
+      <SideCell>
+        <Group gap={8}>
+          {isLeft ? (
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className={imgClass} src={src} alt={goal} />
+              {tag}
+            </>
+          ) : (
+            <>
+              {tag}
+              <img className={imgClass} src={src} alt={goal} />
+            </>
+          )}
+        </Group>
+      </SideCell>
+    );
+  }
 }
 
 type Props = {
@@ -49,6 +82,7 @@ type Props = {
   isLeft: boolean;
   iconType: IconType;
   isHidden: boolean;
+  countPosition: TCountPosition;
 };
 
 export default function GeneralIcons({
@@ -58,6 +92,7 @@ export default function GeneralIcons({
   isLeft,
   iconType,
   isHidden,
+  countPosition,
 }: Props) {
   return generalGoals.map((item) => {
     const { goal, resolvedGoal } = item.foundGoal;
@@ -86,6 +121,8 @@ export default function GeneralIcons({
               ? getWinnerBitSrc(goal, isHidden)
               : getClassicSrc(goal, isHidden)
         }
+        countPosition={countPosition}
+        isLeft={isLeft}
       />
     );
   });

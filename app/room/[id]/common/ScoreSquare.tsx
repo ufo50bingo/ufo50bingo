@@ -6,11 +6,12 @@ type Props = {
   color: BingosyncColor;
   score: number;
   hasTiebreaker: boolean;
+  isDouble: boolean;
 };
 
-export default function ScoreSquare({ color, score, hasTiebreaker }: Props) {
+export default function ScoreSquare({ color, score, hasTiebreaker, isDouble }: Props) {
   return (
-    <div className={`${classes.score} ${getColorClass(color)}`}>
+    <div className={`${classes.score} ${isDouble ? classes.double : classes.normal} ${getColorClass(color)}`}>
       {hasTiebreaker ? <u>{score}</u> : score}
     </div>
   );

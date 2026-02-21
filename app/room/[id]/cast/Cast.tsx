@@ -308,21 +308,23 @@ export default function Cast({
   const numRows = Math.ceil(numPlayers / 2);
   const gameSelectorHeight = numRows * 44;
 
+  const isDouble = generalGoals.length > 0 && countPosition === "side_by_side";
   return (
     <>
       <Group align="start">
         <Group gap={0}>
           {showRecentGames && generalGoals.length > 0 && (
-            <SideColumn>
+            <SideColumn isDouble={false}>
               <RecentGames limit={6} recentGames={leftGames} />
             </SideColumn>
           )}
-          <SideColumn>
+          <SideColumn isDouble={isDouble}>
             <SideCell>
               <ScoreSquare
                 color={leftColor}
                 score={leftScore}
                 hasTiebreaker={tiebreakWinner === leftColor}
+                isDouble={isDouble}
               />
             </SideCell>
             <GeneralIcons
@@ -332,6 +334,7 @@ export default function Cast({
               generalState={generals}
               iconType={iconType}
               isHidden={isHidden}
+              countPosition={countPosition}
             />
             {showRecentGames && generalGoals.length === 0 && (
               <RecentGames limit={5} recentGames={leftGames} />
@@ -348,12 +351,13 @@ export default function Cast({
             pauseRequestName={pauseRequestName}
             clearPauseRequest={() => setPauseRequestName(null)}
           />
-          <SideColumn>
+          <SideColumn isDouble={isDouble}>
             <SideCell>
               <ScoreSquare
                 color={rightColor}
                 score={rightScore}
                 hasTiebreaker={tiebreakWinner === rightColor}
+                isDouble={isDouble}
               />
             </SideCell>
             <GeneralIcons
@@ -363,13 +367,14 @@ export default function Cast({
               generalState={generals}
               iconType={iconType}
               isHidden={isHidden}
+              countPosition={countPosition}
             />
             {showRecentGames && generalGoals.length === 0 && (
               <RecentGames limit={5} recentGames={rightGames} />
             )}
           </SideColumn>
           {showRecentGames && generalGoals.length > 0 && (
-            <SideColumn>
+            <SideColumn isDouble={false}>
               <RecentGames limit={6} recentGames={rightGames} />
             </SideColumn>
           )}

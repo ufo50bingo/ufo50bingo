@@ -4,9 +4,16 @@
     color: white;
     border-radius: 8px;
     height: 62px;
-    width: 62px;
 
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.normal {
+    width: 62px;
+}
+
+.double {
+    width: 100%;
 }

@@ -7,6 +7,8 @@ import SideCell from "./SideCell";
 import { GeneralItem, TCountPosition } from "./Cast";
 import { StandardGeneral } from "@/app/pastas/pastaTypes";
 import { Group } from "@mantine/core";
+import { Font } from "@/app/font/useFont";
+import getFontClassname from "@/app/font/getFontClassname";
 
 type IconProps = {
   isLeft: boolean;
@@ -17,9 +19,10 @@ type IconProps = {
   count: number;
   iconType: IconType;
   countPosition: TCountPosition;
+  font: Font;
 };
 
-function Icon({ goal, src, count, color, squareColor, iconType, countPosition, isLeft }: IconProps) {
+function Icon({ goal, src, count, color, squareColor, iconType, countPosition, isLeft, font }: IconProps) {
   const iconClass =
     iconType === "winnerbit"
       ? classes.icon
@@ -36,7 +39,7 @@ function Icon({ goal, src, count, color, squareColor, iconType, countPosition, i
           size={24}
         />
       ) : (
-        <div className={classes.tag}>{count}</div>
+        <div className={classes.tag}><span className={getFontClassname(font)}>{count}</span></div>
       );
     return (
       <SideCell>
@@ -52,7 +55,11 @@ function Icon({ goal, src, count, color, squareColor, iconType, countPosition, i
         size={30}
       />
     ) : (
-      <div className={`${classes.sideBySideTag} ${squareColor !== "blank" ? classes.opponentClaimed : ""}`}>{count}</div>
+      <div className={`${classes.sideBySideTag} ${squareColor !== "blank" ? classes.opponentClaimed : ""}`}>
+        <span className={getFontClassname(font)}>
+          {count}
+        </span>
+      </div>
     );
     return (
       <SideCell>
@@ -83,6 +90,7 @@ type Props = {
   iconType: IconType;
   isHidden: boolean;
   countPosition: TCountPosition;
+  font: Font;
 };
 
 export default function GeneralIcons({
@@ -93,6 +101,7 @@ export default function GeneralIcons({
   iconType,
   isHidden,
   countPosition,
+  font,
 }: Props) {
   return generalGoals.map((item) => {
     const { goal, resolvedGoal } = item.foundGoal;
@@ -123,6 +132,7 @@ export default function GeneralIcons({
         }
         countPosition={countPosition}
         isLeft={isLeft}
+        font={font}
       />
     );
   });

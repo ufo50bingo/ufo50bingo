@@ -36,6 +36,7 @@ import getGamesForPlayer from "./getGamesForPlayer";
 import useLocalNumber from "@/app/localStorage/useLocalNumber";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
 import { GENERAL_ORDER } from "./GeneralOrderSelector";
+import useFont from "@/app/font/useFont";
 
 export type FoundStandardGeneral = FoundGoal<
   StandardGeneral,
@@ -145,6 +146,7 @@ export default function Cast({
     defaultValue: "reading",
   });
 
+  const [font, setFont] = useFont();
   const [numPlayers, setNumPlayers] = useLocalNumber({
     key: "num-players",
     defaultValue: 2,
@@ -318,7 +320,7 @@ export default function Cast({
         <Group gap={0}>
           {showRecentGames && generalGoals.length > 0 && (
             <SideColumn isDouble={false}>
-              <RecentGames limit={6} recentGames={leftGames} />
+              <RecentGames limit={6} recentGames={leftGames} font={font} />
             </SideColumn>
           )}
           <SideColumn isDouble={isDouble}>
@@ -328,6 +330,7 @@ export default function Cast({
                 score={leftScore}
                 hasTiebreaker={tiebreakWinner === leftColor}
                 isDouble={isDouble}
+                font={font}
               />
             </SideCell>
             <GeneralIcons
@@ -338,9 +341,10 @@ export default function Cast({
               iconType={iconType}
               isHidden={isHidden}
               countPosition={countPosition}
+              font={font}
             />
             {showRecentGames && generalGoals.length === 0 && (
-              <RecentGames limit={5} recentGames={leftGames} />
+              <RecentGames limit={5} recentGames={leftGames} font={font} />
             )}
           </SideColumn>
           <Board
@@ -361,6 +365,7 @@ export default function Cast({
                 score={rightScore}
                 hasTiebreaker={tiebreakWinner === rightColor}
                 isDouble={isDouble}
+                font={font}
               />
             </SideCell>
             <GeneralIcons
@@ -371,14 +376,15 @@ export default function Cast({
               iconType={iconType}
               isHidden={isHidden}
               countPosition={countPosition}
+              font={font}
             />
             {showRecentGames && generalGoals.length === 0 && (
-              <RecentGames limit={5} recentGames={rightGames} />
+              <RecentGames limit={5} recentGames={rightGames} font={font} />
             )}
           </SideColumn>
           {showRecentGames && generalGoals.length > 0 && (
             <SideColumn isDouble={false}>
-              <RecentGames limit={6} recentGames={rightGames} />
+              <RecentGames limit={6} recentGames={rightGames} font={font} />
             </SideColumn>
           )}
         </Group>
@@ -472,6 +478,8 @@ export default function Cast({
         setCountPosition={setCountPosition}
         generalOrder={generalOrder}
         setGeneralOrder={setGeneralOrder}
+        font={font}
+        setFont={setFont}
       />
       {editingIndex != null && (
         <EditSquare

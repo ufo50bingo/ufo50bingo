@@ -25,6 +25,8 @@ import FileSyncSection from "./FileSyncSection";
 import { GeneralCounts } from "./CastPage";
 import { GeneralItem, TCountPosition } from "./Cast";
 import GeneralOrderSelector, { TGeneralOrder } from "./GeneralOrderSelector";
+import { Font } from "@/app/font/useFont";
+import FontSelector from "@/app/font/FontSelector";
 
 type Props = {
   id: string;
@@ -59,6 +61,8 @@ type Props = {
   setCountPosition: (newCountPosition: TCountPosition) => unknown;
   generalOrder: TGeneralOrder;
   setGeneralOrder: (newGeneralOrder: TGeneralOrder) => unknown;
+  font: Font;
+  setFont: (newFont: Font) => unknown;
 };
 
 export default function CastSettings({
@@ -94,6 +98,8 @@ export default function CastSettings({
   setCountPosition,
   generalOrder,
   setGeneralOrder,
+  font,
+  setFont,
 }: Props) {
   const [isShown, setIsShown] = useState(leftColor === rightColor);
 
@@ -205,6 +211,7 @@ export default function CastSettings({
                         setCountPosition((newCountPosition ?? "side_by_side") as TCountPosition)
                       }
                     />
+                    <FontSelector font={font} setFont={setFont} />
                     <Checkbox
                       label="Hide board by default"
                       checked={hideByDefault}

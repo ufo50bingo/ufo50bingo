@@ -27,6 +27,7 @@ import findGoal from "@/app/findGoal";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import { FoundStandardGeneral, GeneralItem } from "../cast/Cast";
 import useLocalBool from "@/app/localStorage/useLocalBool";
+import useFont from "@/app/font/useFont";
 
 export type Props = {
   id: string;
@@ -54,6 +55,7 @@ export default function Play({
   );
   const [pauseRequestName, setPauseRequestName] = useState<string | null>(null);
   const pauseRef = useRef<null | (() => unknown)>(null);
+  const [font, setFont] = useFont();
 
   const selectedColor = color ?? "red";
 
@@ -195,6 +197,7 @@ export default function Play({
                   color={selectedColor}
                   hasTiebreaker={tiebreakWinner === selectedColor}
                   isDouble={false}
+                  font={font}
                 />
               </div>
               <div style={{ width: "62px", height: "62px" }}>
@@ -203,6 +206,7 @@ export default function Play({
                   color={opponent?.color ?? "blank"}
                   hasTiebreaker={tiebreakWinner === opponent?.color}
                   isDouble={false}
+                  font={font}
                 />
               </div>
             </div>
@@ -239,6 +243,8 @@ export default function Play({
             isMobile={isMobile}
             showGeneralTracker={showGeneralTracker}
             setShowGeneralTracker={setShowGeneralTracker}
+            font={font}
+            setFont={setFont}
           />
         </Stack>
         <Feed

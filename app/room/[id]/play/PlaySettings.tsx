@@ -12,6 +12,8 @@ import RequestPauseSection from "../common/RequestPauseSection";
 import CountdownSection from "../common/CountdownSection";
 import CreateBoardSection from "../common/CreateBoardSection";
 import BottomSection from "../common/BottomSection";
+import { Font } from "@/app/font/useFont";
+import FontSelector from "@/app/font/FontSelector";
 
 type Props = {
   id: string;
@@ -26,6 +28,8 @@ type Props = {
   isMobile: boolean;
   showGeneralTracker: boolean;
   setShowGeneralTracker: (newShown: boolean) => unknown;
+  font: Font;
+  setFont: (newFont: Font) => unknown;
 };
 
 export default function PlaySettings({
@@ -41,6 +45,8 @@ export default function PlaySettings({
   isMobile,
   showGeneralTracker,
   setShowGeneralTracker,
+  font,
+  setFont,
 }: Props) {
   const [isShown, setIsShown] = useState(color == null);
   return (
@@ -108,6 +114,7 @@ export default function PlaySettings({
                       }
                       label="Show general goal tracker"
                     />
+                    <FontSelector font={font} setFont={setFont} />
                   </Stack>
                 </Accordion.Panel>
               </Accordion.Item>

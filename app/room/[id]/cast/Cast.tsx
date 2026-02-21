@@ -34,6 +34,7 @@ import findGoal, { FoundGoal } from "@/app/findGoal";
 import { StandardGeneral } from "@/app/pastas/pastaTypes";
 import getGamesForPlayer from "./getGamesForPlayer";
 import useLocalNumber from "@/app/localStorage/useLocalNumber";
+import useLocalEnum from "@/app/localStorage/useLocalEnum";
 
 export type FoundStandardGeneral = FoundGoal<
   StandardGeneral,
@@ -57,6 +58,9 @@ export type CastProps = {
   initialAllPlayerGames: AllPlayerGames;
   playerName: string;
 };
+
+const COUNT_POSITION = ["side_by_side", "inset"] as const;
+export type TCountPosition = (typeof COUNT_POSITION)[number];
 
 export default function Cast({
   id,
@@ -139,6 +143,13 @@ export default function Cast({
     key: "num-players",
     defaultValue: 2,
   });
+
+  const [countPosition, setCountPosition] = useLocalEnum({
+    key: "count-position",
+    defaultValue: "side_by_side",
+    options: COUNT_POSITION,
+  });
+
   const [isHiddenRaw, setIsHidden] = useState(hideByDefault);
 
   const leftScore = board.filter((square) => square.color === leftColor).length;
@@ -449,6 +460,8 @@ export default function Cast({
         setShowRecentGames={setShowRecentGames}
         numPlayers={numPlayers}
         setNumPlayers={setNumPlayers}
+        countPosition={countPosition}
+        setCountPosition={setCountPosition}
       />
       {editingIndex != null && (
         <EditSquare

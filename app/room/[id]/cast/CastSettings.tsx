@@ -23,7 +23,7 @@ import CountdownSection from "../common/CountdownSection";
 import BottomSection from "../common/BottomSection";
 import FileSyncSection from "./FileSyncSection";
 import { GeneralCounts } from "./CastPage";
-import { GeneralItem } from "./Cast";
+import { GeneralItem, TCountPosition } from "./Cast";
 
 type Props = {
   id: string;
@@ -54,6 +54,8 @@ type Props = {
   setShowRecentGames: (newShowRecentGames: boolean) => unknown;
   numPlayers: number;
   setNumPlayers: (numPlayers: number) => unknown;
+  countPosition: TCountPosition,
+  setCountPosition: (newCountPosition: TCountPosition) => unknown;
 };
 
 export default function CastSettings({
@@ -85,6 +87,8 @@ export default function CastSettings({
   setShowRecentGames,
   numPlayers,
   setNumPlayers,
+  countPosition,
+  setCountPosition,
 }: Props) {
   const [isShown, setIsShown] = useState(leftColor === rightColor);
 
@@ -179,6 +183,17 @@ export default function CastSettings({
                       value={iconType}
                       onChange={(newIconType: string | null) =>
                         setIconType((newIconType ?? "winnerbit") as IconType)
+                      }
+                    />
+                    <Select
+                      label="Count position"
+                      data={[
+                        { value: "side_by_side", label: "Side-by-side" },
+                        { value: "inset", label: "Inset" },
+                      ]}
+                      value={countPosition}
+                      onChange={(newCountPosition: string | null) =>
+                        setCountPosition((newCountPosition ?? "side_by_side") as TCountPosition)
                       }
                     />
                     <Checkbox

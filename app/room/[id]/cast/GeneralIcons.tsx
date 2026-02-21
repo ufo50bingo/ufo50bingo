@@ -18,9 +18,9 @@ type IconProps = {
 
 function Icon({ goal, src, count, color, squareColor, iconType }: IconProps) {
   const iconClass =
-    iconType === "sprites"
-      ? `${classes.icon} ${classes.spritesIcon}`
-      : classes.icon;
+    iconType === "winnerbit"
+      ? classes.icon
+      : `${classes.icon} ${classes.spritesIcon}`;
   const imgClass =
     squareColor !== "blank" ? `${iconClass} ${classes.grayscale}` : iconClass;
   const tag =

@@ -46,7 +46,7 @@ export default function useLocalState(id: string, seed: number): CasterState {
   const [iconType, setIconType] = useLocalEnum<IconType>({
     key: "icon_type",
     defaultValue: "winnerbit",
-    options: ["winnerbit", "sprites", "matt"],
+    options: ["winnerbit", "sprites", "classic"],
   });
   const [hideByDefault, setHideByDefault] = useLocalBool({
     key: "hide_by_default",

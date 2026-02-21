@@ -50,6 +50,18 @@
     image-rendering: pixelated;
 }
 
+.smallCheck {
+    width: 18px;
+    height: 18px;
+    image-rendering: pixelated;
+}
+
+.bigCheck {
+    width: 29px;
+    height: 29px;
+    image-rendering: pixelated;
+}
+
 .grayscale {
     filter: grayscale(1);
 }

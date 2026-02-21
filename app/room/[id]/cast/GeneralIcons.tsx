@@ -33,11 +33,16 @@ function Icon({ goal, src, count, color, squareColor, iconType, countPosition, i
   if (countPosition === "inset") {
     const tag =
       squareColor === color ? (
-        <IconCircleCheckFilled
-          className={classes.tagPosition}
-          color="green"
-          size={24}
-        />
+        font === "ufo50" ? (
+          <div className={classes.tag}><img className={classes.smallCheck} src="/elf_check.png" alt="checkmark" /></div>
+        )
+          : (
+            <IconCircleCheckFilled
+              className={classes.tagPosition}
+              color="green"
+              size={24}
+            />
+          )
       ) : (
         <div className={classes.tag}><span className={getFontClassname(font)}>{count}</span></div>
       );
@@ -50,10 +55,14 @@ function Icon({ goal, src, count, color, squareColor, iconType, countPosition, i
     );
   } else {
     const tag = squareColor === color ? (
-      <IconCircleCheckFilled
-        color="green"
-        size={30}
-      />
+      font === "ufo50" ? (
+        <img className={classes.bigCheck} src="/elf_check.png" alt="checkmark" />
+      ) : (
+        <IconCircleCheckFilled
+          color="green"
+          size={30}
+        />
+      )
     ) : (
       <div className={`${classes.sideBySideTag} ${squareColor !== "blank" ? classes.opponentClaimed : ""}`}>
         <span className={getFontClassname(font)}>

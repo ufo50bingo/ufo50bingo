@@ -24,6 +24,7 @@ import BottomSection from "../common/BottomSection";
 import FileSyncSection from "./FileSyncSection";
 import { GeneralCounts } from "./CastPage";
 import { GeneralItem, TCountPosition } from "./Cast";
+import GeneralOrderSelector, { TGeneralOrder } from "./GeneralOrderSelector";
 
 type Props = {
   id: string;
@@ -56,6 +57,8 @@ type Props = {
   setNumPlayers: (numPlayers: number) => unknown;
   countPosition: TCountPosition,
   setCountPosition: (newCountPosition: TCountPosition) => unknown;
+  generalOrder: TGeneralOrder;
+  setGeneralOrder: (newGeneralOrder: TGeneralOrder) => unknown;
 };
 
 export default function CastSettings({
@@ -89,6 +92,8 @@ export default function CastSettings({
   setNumPlayers,
   countPosition,
   setCountPosition,
+  generalOrder,
+  setGeneralOrder,
 }: Props) {
   const [isShown, setIsShown] = useState(leftColor === rightColor);
 
@@ -153,8 +158,8 @@ export default function CastSettings({
                               event.currentTarget.checked
                                 ? [...shownDifficulties, difficulty]
                                 : shownDifficulties.filter(
-                                  (d) => d !== difficulty
-                                )
+                                  (d) => d !== difficulty,
+                                ),
                             )
                           }
                           label={DIFFICULTY_NAMES[difficulty]}
@@ -172,6 +177,10 @@ export default function CastSettings({
                       onChange={(newSortType: string | null) =>
                         setSortType((newSortType ?? "fast") as SortType)
                       }
+                    />
+                    <GeneralOrderSelector
+                      generalOrder={generalOrder}
+                      setGeneralOrder={setGeneralOrder}
                     />
                     <Select
                       label="Icon type"
@@ -226,7 +235,11 @@ export default function CastSettings({
                         allowDecimal={false}
                         value={numPlayers}
                         onChange={(maybeStr) => {
-                          if (typeof maybeStr !== "number" || maybeStr < 2 || maybeStr > 8) {
+                          if (
+                            typeof maybeStr !== "number" ||
+                            maybeStr < 2 ||
+                            maybeStr > 8
+                          ) {
                             return;
                           }
                           setNumPlayers(maybeStr);

@@ -35,6 +35,7 @@ import { StandardGeneral } from "@/app/pastas/pastaTypes";
 import getGamesForPlayer from "./getGamesForPlayer";
 import useLocalNumber from "@/app/localStorage/useLocalNumber";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
+import { GENERAL_ORDER } from "./GeneralOrderSelector";
 
 export type FoundStandardGeneral = FoundGoal<
   StandardGeneral,
@@ -138,6 +139,11 @@ export default function Cast({
     showRecentGames,
     setShowRecentGames,
   } = useLocalState(id, seed);
+  const [generalOrder, setGeneralOrder] = useLocalEnum({
+    key: "general-order",
+    options: GENERAL_ORDER,
+    defaultValue: "reading",
+  });
 
   const [numPlayers, setNumPlayers] = useLocalNumber({
     key: "num-players",
@@ -190,7 +196,7 @@ export default function Cast({
   }, [leftScore, rightScore, leftColor, rightColor, rawFeed, board]);
 
   const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(() => {
-    const filtered = board
+    return board
       .map((square) => {
         const foundGoal = findGoal(square.name, STANDARD_UFO);
         if (foundGoal == null || foundGoal.category !== "general") {
@@ -202,19 +208,16 @@ export default function Cast({
         };
       })
       .filter((item) => item != null);
-    let spliceIndex = filtered.findIndex((item) => isGift(item.foundGoal.goal));
-    if (spliceIndex < 0) {
-      spliceIndex = filtered.findIndex((item) =>
-        isGoldCherry(item.foundGoal.goal),
-      );
-    }
-    if (spliceIndex < 0) {
-      return filtered;
-    }
-    const [toMove] = filtered.splice(spliceIndex, 1);
-    filtered.unshift(toMove);
-    return filtered;
   }, [board]);
+
+  const sortedGenerals = useMemo<ReadonlyArray<GeneralItem>>(() => {
+    const correctOrder = Object.keys(STANDARD_UFO.goals.general);
+    return generalGoals.toSorted((a, b) => {
+      const aIdx = correctOrder.indexOf(a.foundGoal.subcategory);
+      const bIdx = correctOrder.indexOf(b.foundGoal.subcategory);
+      return aIdx - bIdx;
+    });
+  }, [generalGoals]);
 
   const multiGoalGames = Object.keys(gameToGoals).filter(
     (game) => gameToGoals[game].length > 1,
@@ -330,7 +333,7 @@ export default function Cast({
             <GeneralIcons
               isLeft={true}
               color={leftColor}
-              generalGoals={generalGoals}
+              generalGoals={generalOrder === "reading" ? generalGoals : sortedGenerals}
               generalState={generals}
               iconType={iconType}
               isHidden={isHidden}
@@ -363,7 +366,7 @@ export default function Cast({
             <GeneralIcons
               isLeft={false}
               color={rightColor}
-              generalGoals={generalGoals}
+              generalGoals={generalOrder === "reading" ? generalGoals : sortedGenerals}
               generalState={generals}
               iconType={iconType}
               isHidden={isHidden}
@@ -398,7 +401,7 @@ export default function Cast({
               ))}
             </Group>
             {generalGoals.length > 0 ? (
-              getCard(generalGoals[0], 475 - gameSelectorHeight)
+              getCard(sortedGenerals[0], 475 - gameSelectorHeight)
             ) : (
               <InfoCard
                 title="Multi-goal games"
@@ -413,7 +416,7 @@ export default function Cast({
             )}
           </Stack>
         ) : generalGoals.length > 0 ? (
-          getCard(generalGoals[0], 475)
+          getCard(sortedGenerals[0], 475)
         ) : (
           <InfoCard title="Multi-goal games" height={475}>
             <Stack gap={4}>
@@ -425,7 +428,7 @@ export default function Cast({
         )}
         {generalGoals.length > 0 && (
           <Group w="100%">
-            {generalGoals.slice(1).map((g) => getCard(g, null))}
+            {sortedGenerals.slice(1).map((g) => getCard(g, null))}
             <InfoCard title="Multi-goal games" height={null} width={205}>
               <Stack gap={4}>
                 {multiGoalGameElements.length > 0
@@ -456,7 +459,7 @@ export default function Cast({
         leftScore={leftScore}
         rightScore={rightScore}
         generalCounts={generals}
-        generalGoals={generalGoals}
+        generalGoals={generalOrder === "reading" ? generalGoals : sortedGenerals}
         showGameSelector={showGameSelector}
         setShowGameSelector={setShowGameSelector}
         highlightCurrentGame={highlightCurrentGame}
@@ -467,6 +470,8 @@ export default function Cast({
         setNumPlayers={setNumPlayers}
         countPosition={countPosition}
         setCountPosition={setCountPosition}
+        generalOrder={generalOrder}
+        setGeneralOrder={setGeneralOrder}
       />
       {editingIndex != null && (
         <EditSquare

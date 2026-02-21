@@ -691,15 +691,6 @@ export const STANDARD_UFO = {
         "Cherry disk {{cherry_count}} games on this card",
         "Gold disk {{gold_count}} games on this card",
       ],
-      collectathon: [
-        "Buy an item from 2 unique shops in one run in 6 games",
-        "Increase your base HP twice in 4 games",
-        "Open 2 chests in 5 games",
-        "Earn 2 extra lives in 5 games",
-        "Collect 2 keys in 5 games",
-        "Surpass the top 5 score from 4 arcade leaderboards",
-        "Defeat 6 different enemy types in 6 games",
-      ],
       bosslevel: [
         "Defeat 7 bosses from games on this card",
         {
@@ -845,6 +836,15 @@ export const STANDARD_UFO = {
             fallback: "Beat 8 levels in 3 games",
           },
         },
+      ],
+      collectathon: [
+        "Buy an item from 2 unique shops in one run in 6 games",
+        "Increase your base HP twice in 4 games",
+        "Open 2 chests in 5 games",
+        "Earn 2 extra lives in 5 games",
+        "Collect 2 keys in 5 games",
+        "Surpass the top 5 score from 4 arcade leaderboards",
+        "Defeat 6 different enemy types in 6 games",
       ],
       theme: [
         {

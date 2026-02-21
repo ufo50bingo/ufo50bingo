@@ -22,7 +22,17 @@ type IconProps = {
   font: Font;
 };
 
-function Icon({ goal, src, count, color, squareColor, iconType, countPosition, isLeft, font }: IconProps) {
+function Icon({
+  goal,
+  src,
+  count,
+  color,
+  squareColor,
+  iconType,
+  countPosition,
+  isLeft,
+  font,
+}: IconProps) {
   const iconClass =
     iconType === "winnerbit"
       ? classes.icon
@@ -34,17 +44,24 @@ function Icon({ goal, src, count, color, squareColor, iconType, countPosition, i
     const tag =
       squareColor === color ? (
         font === "ufo50" ? (
-          <div className={classes.tag}><img className={classes.smallCheck} src="/elf_check.png" alt="checkmark" /></div>
-        )
-          : (
-            <IconCircleCheckFilled
-              className={classes.tagPosition}
-              color="green"
-              size={24}
+          <div className={classes.tag}>
+            <img
+              className={classes.smallCheck}
+              src="/elf_check.png"
+              alt="checkmark"
             />
-          )
+          </div>
+        ) : (
+          <IconCircleCheckFilled
+            className={classes.tagPosition}
+            color="green"
+            size={24}
+          />
+        )
       ) : (
-        <div className={classes.tag}><span className={getFontClassname(font)}>{count}</span></div>
+        <div className={classes.tag}>
+          <span className={getFontClassname(font)}>{count}</span>
+        </div>
       );
     return (
       <SideCell>
@@ -54,22 +71,24 @@ function Icon({ goal, src, count, color, squareColor, iconType, countPosition, i
       </SideCell>
     );
   } else {
-    const tag = squareColor === color ? (
-      font === "ufo50" ? (
-        <img className={classes.bigCheck} src="/elf_check.png" alt="checkmark" />
+    const tag =
+      squareColor === color ? (
+        font === "ufo50" ? (
+          <img
+            className={classes.bigCheck}
+            src="/elf_check.png"
+            alt="checkmark"
+          />
+        ) : (
+          <IconCircleCheckFilled color="green" size={30} />
+        )
       ) : (
-        <IconCircleCheckFilled
-          color="green"
-          size={30}
-        />
-      )
-    ) : (
-      <div className={`${classes.sideBySideTag} ${squareColor !== "blank" ? classes.opponentClaimed : ""}`}>
-        <span className={getFontClassname(font)}>
-          {count}
-        </span>
-      </div>
-    );
+        <div
+          className={`${classes.sideBySideTag} ${squareColor !== "blank" ? classes.opponentClaimed : ""}`}
+        >
+          <span className={getFontClassname(font)}>{count}</span>
+        </div>
+      );
     return (
       <SideCell>
         <Group gap={8}>
@@ -127,9 +146,9 @@ export default function GeneralIcons({
           countState == null
             ? 0
             : Object.keys(countState).reduce(
-              (acc, game) => acc + countState[game],
-              0,
-            )
+                (acc, game) => acc + countState[game],
+                0,
+              )
         }
         iconType={iconType}
         src={
@@ -316,9 +335,8 @@ function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
       return "/general/matt/METROIDVANIA.png";
     case "ROLE PLAYER: Level up all your characters 6 total times across Grimstone, Divers, Valbrace":
-      return "/general/sprites/ROLEPLAYER.png";
+      return "/general/matt/ROLEPLAYER.png";
     default:
       return "/general/sprites/IconUnknown.png";
   }
 }
-

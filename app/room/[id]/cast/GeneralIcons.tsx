@@ -82,7 +82,9 @@ export default function GeneralIcons({
         src={
           iconType === "sprites"
             ? getSpritesSrc(goal, isHidden)
-            : getWinnerBitSrc(goal, isHidden)
+            : iconType === "winnerbit"
+              ? getWinnerBitSrc(goal, isHidden)
+              : getClassicSrc(goal, isHidden)
         }
       />
     );
@@ -142,7 +144,7 @@ function getWinnerBitSrc(goal: StandardGeneral, isHidden: boolean): string {
   }
 }
 
-function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
+function getClassicSrc(goal: StandardGeneral, isHidden: boolean): string {
   if (isHidden) {
     return "/general/sprites/IconUnknown.png";
   }
@@ -202,3 +204,65 @@ function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/sprites/IconUnknown.png";
   }
 }
+
+function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
+  if (isHidden) {
+    return "/general/sprites/IconUnknown.png";
+  }
+  switch (goal) {
+    // GIFT
+    case "Collect {{gift_count}} gifts from games on this card":
+      return "/general/matt/GIFT.png";
+    // GOLD/CHERRY
+    case "Cherry disk {{cherry_count}} games on this card":
+      return "/general/matt/CHERRY.png";
+    case "Gold disk {{gold_count}} games on this card":
+      return "/general/matt/GOLD.png";
+    // BOSS/LEVEL
+    case "Beat 2 levels in 6 games on this card":
+    case "Beat 4 levels in 5 games on this card":
+    case "Beat 8 levels in 3 games on this card":
+      return "/general/matt/LEVEL.png";
+    case "Defeat 2 bosses in 3 games on this card":
+    case "Defeat 7 bosses from games on this card":
+    case "Defeat a boss in 5 games on this card":
+      return "/general/matt/BOSS.png";
+    // COLLECTATHON
+    case "Collect 2 keys in 5 games":
+      return "/general/matt/KEYS.png";
+    case "Open 2 chests in 5 games":
+      return "/general/matt/CHEST.png";
+    case "Buy an item from 2 unique shops in one run in 6 games":
+      return "/general/matt/SHOPS.png";
+    case "Earn 2 extra lives in 5 games":
+      return "/general/matt/1UP.png";
+    case "Increase your base HP twice in 4 games":
+      return "/general/matt/HP.png";
+    case "Surpass the top 5 score from 4 arcade leaderboards":
+      return "/general/matt/BOARDS.png";
+    case "Defeat 6 different enemy types in 6 games":
+      return "/general/matt/6ENEMIES.png";
+    // THEME
+    case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
+      return "/general/matt/CAMPTRILOGY.png";
+    case "SHOOTER: Beat 5 waves/stages across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
+      return "/general/matt/SHOOTER.png";
+    case "DAY JOB: Beat 9 levels across Rail Heist, Onion Delivery, and Bug Hunter":
+      return "/general/matt/DAYJOB.png";
+    case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
+      return "/general/matt/RACER.png";
+    case "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank":
+      return "/general/matt/PUZZLER.png";
+    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot":
+      return "/general/matt/AMY.png";
+    case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
+      return "/general/matt/WARISBAD.png";
+    case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
+      return "/general/matt/METROIDVANIA.png";
+    case "ROLE PLAYER: Level up all your characters 6 total times across Grimstone, Divers, Valbrace":
+      return "/general/sprites/ROLEPLAYER.png";
+    default:
+      return "/general/sprites/IconUnknown.png";
+  }
+}
+

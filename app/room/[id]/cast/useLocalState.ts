@@ -4,7 +4,7 @@ import useLocalEnum from "@/app/localStorage/useLocalEnum";
 import { useMemo, useState } from "react";
 
 export type SortType = "fast" | "alphabetical" | "chronological";
-export type IconType = "winnerbit" | "sprites";
+export type IconType = "winnerbit" | "sprites" | "classic";
 
 interface BaseState {
   shownDifficulties: ReadonlyArray<Difficulty>;
@@ -46,7 +46,7 @@ export default function useLocalState(id: string, seed: number): CasterState {
   const [iconType, setIconType] = useLocalEnum<IconType>({
     key: "icon_type",
     defaultValue: "winnerbit",
-    options: ["winnerbit", "sprites"],
+    options: ["winnerbit", "sprites", "matt"],
   });
   const [hideByDefault, setHideByDefault] = useLocalBool({
     key: "hide_by_default",

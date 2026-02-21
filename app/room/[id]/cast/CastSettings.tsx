@@ -174,6 +174,7 @@ export default function CastSettings({
                       data={[
                         { value: "winnerbit", label: "WinnerBit" },
                         { value: "sprites", label: "Sprites" },
+                        { value: "classic", label: "Classic" },
                       ]}
                       value={iconType}
                       onChange={(newIconType: string | null) =>

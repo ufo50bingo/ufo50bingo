@@ -22,6 +22,11 @@ export default function useGoalStats(
       }
       const foundGoals = findGoalFromEvery(attempt.goal);
       for (const foundGoal of foundGoals) {
+        // if foundGoal has no tokens, then it's already accounted for
+        // above, so we don't need to add it again
+        if (foundGoal.goal === attempt.goal) {
+          continue;
+        }
         const tokenExistingTimes = goalToTimes.get(foundGoal.goal);
         if (tokenExistingTimes == null) {
           goalToTimes.set(foundGoal.goal, [attempt.duration]);

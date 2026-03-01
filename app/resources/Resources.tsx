@@ -17,8 +17,8 @@ export default function Resources() {
         <p>Bingo League</p>
         <List>
           <List.Item>
-            <a href="/signup" target="_blank">
-              Sign up for Bingo League Season 3 by Friday, February 27!
+            <a href="https://docs.google.com/spreadsheets/d/1ptNQfJw39CCtHBrGldZ8ln0OrTUUSjAw8QVQHQI1LBU/edit?gid=521253915#gid=521253915" target="_blank">
+              Bingo League Season 3 (March 2 - May 17)
             </a>
           </List.Item>
           <List.Item>

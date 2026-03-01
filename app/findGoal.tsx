@@ -141,14 +141,15 @@ function preprocess(pasta: UFOPasta): ProcessedPasta {
   Object.keys(pasta.goals).forEach((category) => {
     Object.keys(pasta.goals[category]).forEach((subcategory) => {
       pasta.goals[category][subcategory].forEach((goal) => {
-        const goalName = getGoalAndFallback(goal)[0];
-        const tags = { category, subcategory };
-        if (goalName.includes("{{")) {
-          const output = preprocessGoalWithToken(goal, pasta);
-          withTokens.push({ ...output, tags });
+        const goalAndFallback = new Set(getGoalAndFallback(goal));
+        for (const goalName of goalAndFallback) {
+          const tags = { category, subcategory };
+          if (goalName.includes("{{")) {
+            const output = preprocessGoalWithToken(goal, pasta);
+            withTokens.push({ ...output, tags });
+          }
+          plain[goalName] = tags;
         }
-        plain[goalName] = tags;
-        return;
       });
     });
   });

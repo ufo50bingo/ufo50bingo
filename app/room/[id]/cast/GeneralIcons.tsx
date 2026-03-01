@@ -60,7 +60,7 @@ function Icon({
         )
       ) : (
         <div className={classes.tag}>
-          <span className={getFontClassname(font)}>{count}</span>
+          <span className={getFontClassname(font, count > 9)}>{count}</span>
         </div>
       );
     return (
@@ -86,7 +86,7 @@ function Icon({
         <div
           className={`${classes.sideBySideTag} ${squareColor !== "blank" ? classes.opponentClaimed : ""}`}
         >
-          <span className={getFontClassname(font)}>{count}</span>
+          <span className={getFontClassname(font, false, count > 9)}>{count}</span>
         </div>
       );
     return (

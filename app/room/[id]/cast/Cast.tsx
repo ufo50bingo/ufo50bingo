@@ -23,7 +23,6 @@ import useSyncedState, { AllPlayerGames, CountState } from "./useSyncedState";
 import useLocalState from "./useLocalState";
 import useBingosyncSocket from "../common/useBingosyncSocket";
 import useDings from "../play/useDings";
-import { isGift, isGoldCherry } from "@/app/daily/giftGoldCherry";
 import GameSelector from "./GameSelector";
 import SideColumn from "./SideColumn";
 import RecentGames from "./RecentGames";

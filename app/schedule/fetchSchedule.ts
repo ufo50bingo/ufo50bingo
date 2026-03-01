@@ -1,10 +1,10 @@
 import { google } from "googleapis";
 import { DateTime } from "luxon";
 
-// const LEAGUE_SHEET_ID = "1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA";
-const UNDERGROUND_SHEET_ID = "1OocDHEbrJC3BqO8qrPFCYxyy2nzqAaTT6Hmix076Ea0";
+const LEAGUE_SHEET_ID = "1ptNQfJw39CCtHBrGldZ8ln0OrTUUSjAw8QVQHQI1LBU";
+// const UNDERGROUND_SHEET_ID = "1OocDHEbrJC3BqO8qrPFCYxyy2nzqAaTT6Hmix076Ea0";
 const OFFSEASON_SHEET_ID = "1FuvQLFIM38sZKXF4hnMtLWjWBo1jOokM659N-BRu2uk";
-const SPICY_SHEET_ID = "1oQktL5q8eVWrI_Zbacjv-supFhuQI4h63tiVcMkan4E";
+// const SPICY_SHEET_ID = "1oQktL5q8eVWrI_Zbacjv-supFhuQI4h63tiVcMkan4E";
 // Copy of the official sheet to help with debugging
 // const LEAGUE_SHEET_ID = "1NdF25XWmISftQzATmOjSTLz-nE0dhwLIjbllgxDDTMk";
 
@@ -14,10 +14,10 @@ type Sheet = {
 };
 
 const SHEETS: ReadonlyArray<Sheet> = [
-  // { sheetID: LEAGUE_SHEET_ID, leaguePrefix: "" },
-  { sheetID: UNDERGROUND_SHEET_ID, leaguePrefix: "Underground " },
+  { sheetID: LEAGUE_SHEET_ID, leaguePrefix: "" },
+  // { sheetID: UNDERGROUND_SHEET_ID, leaguePrefix: "Underground " },
   { sheetID: OFFSEASON_SHEET_ID, leaguePrefix: null },
-  { sheetID: SPICY_SHEET_ID, leaguePrefix: "" },
+  // { sheetID: SPICY_SHEET_ID, leaguePrefix: "" },
 ];
 
 export type ScheduledMatch = {

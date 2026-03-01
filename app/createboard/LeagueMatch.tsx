@@ -27,8 +27,8 @@ import ufoGenerator from "../generator/ufoGenerator";
 
 export default function LeagueMatch() {
   const [week, setWeek] = useState<null | string>(getCurrentWeek());
-  const [p1, setP1] = useState<null | string>(null);
-  const [p2, setP2] = useState<null | string>(null);
+  const [p1, setP1Raw] = useState<null | string>(null);
+  const [p2, setP2Raw] = useState<null | string>(null);
   const [password, setPassword] = useState("");
   const [isCreationInProgress, setIsCreationInProgress] = useState(false);
   const [url, setUrl] = useState("");
@@ -38,6 +38,33 @@ export default function LeagueMatch() {
 
   const p1Tier = p1 != null ? PLAYER_TO_TIER[p1] : null;
   const p2Tier = p2 != null ? PLAYER_TO_TIER[p2] : null;
+
+  const updateGameNumberIfNecessary = (
+    newP1: null | string,
+    newP2: null | string,
+  ) => {
+    if (newP1 != null && newP2 != null) {
+      const newP1Tier = PLAYER_TO_TIER[newP1];
+      const newP2Tier = PLAYER_TO_TIER[newP2];
+      if (newP1Tier === newP2Tier) {
+        if (newP1Tier === "A" && gameNumber == null) {
+          setGameNumber(1);
+        } else if (newP1Tier !== "A" && gameNumber != null) {
+          setGameNumber(null);
+        }
+      }
+    }
+  };
+
+  const setP1 = (newP1: null | string) => {
+    setP1Raw(newP1);
+    updateGameNumberIfNecessary(newP1, p2);
+  };
+
+  const setP2 = (newP2: null | string) => {
+    setP2Raw(newP2);
+    updateGameNumberIfNecessary(p1, newP2);
+  };
 
   const tierMismatch = p1 != null && p2 != null && p1Tier != p2Tier;
 
@@ -77,6 +104,24 @@ export default function LeagueMatch() {
         }
         label="Is part of multi-game series"
       />
+      {gameNumber == null && p1Tier === "A" && p2Tier === "A" && (
+        <Alert variant="light" color="yellow">
+          A tier players are expected to play a 2-game series every week. Please
+          select "Is part of multi-game series" unless you have special
+          circumstances.
+        </Alert>
+      )}
+      {gameNumber != null &&
+        p1Tier !== "A" &&
+        p2Tier !== "A" &&
+        p1Tier != null &&
+        p2Tier != null && (
+          <Alert variant="light" color="yellow">
+            Only A tier players are expected to play a multi-game series. Please
+            deselect "Is part of multi-game series" unless you have special
+            circumstances.
+          </Alert>
+        )}
       {gameNumber != null && (
         <NumberInput
           label="Game number"
@@ -127,7 +172,7 @@ export default function LeagueMatch() {
               isCustom: false,
               isLockout: true,
               pasta: JSON.stringify(
-                ufoGenerator(STANDARD_UFO).map((goal) => ({ name: goal }))
+                ufoGenerator(STANDARD_UFO).map((goal) => ({ name: goal })),
               ),
               leagueInfo: {
                 season: LEAGUE_SEASON,
@@ -179,8 +224,8 @@ export default function LeagueMatch() {
               JSON.stringify(
                 ufoGenerator(STANDARD_UFO).map((goal) => ({ name: goal })),
                 null,
-                2
-              )
+                2,
+              ),
             );
           }}
         >

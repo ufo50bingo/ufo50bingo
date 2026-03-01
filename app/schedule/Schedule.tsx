@@ -44,7 +44,10 @@ function ScheduledMatchList({
     </Title>
   );
   return (
-    <Stack p="md" bg={isToday ? "var(--mantine-primary-color-light)" : undefined}>
+    <Stack
+      p="md"
+      bg={isToday ? "var(--mantine-primary-color-light)" : undefined}
+    >
       {matches.length > 0 ? (
         <CopyToDiscord matches={matches} includeDate={includeDate}>
           {titleElement}
@@ -54,12 +57,12 @@ function ScheduledMatchList({
       )}
       {matches.length > 0
         ? matches.map((m) => (
-          <ScheduledMatchView
-            key={m.name + m.time.toString()}
-            match={m}
-            includeDate={includeDate}
-          />
-        ))
+            <ScheduledMatchView
+              key={m.name + m.time.toString()}
+              match={m}
+              includeDate={includeDate}
+            />
+          ))
         : "No matches found!"}
     </Stack>
   );
@@ -113,20 +116,10 @@ export default function Schedule({ schedule }: Props) {
             <List.Item>
               <Anchor
                 size="sm"
-                href="https://docs.google.com/spreadsheets/d/1OocDHEbrJC3BqO8qrPFCYxyy2nzqAaTT6Hmix076Ea0/edit?gid=1881722267#gid=1881722267"
+                href="https://docs.google.com/spreadsheets/d/1ptNQfJw39CCtHBrGldZ8ln0OrTUUSjAw8QVQHQI1LBU/edit?gid=0#gid=0"
                 target="_blank"
               >
-                Underground Season 2 schedule
-              </Anchor>
-            </List.Item>
-
-            <List.Item>
-              <Anchor
-                size="sm"
-                href="https://docs.google.com/spreadsheets/d/1oQktL5q8eVWrI_Zbacjv-supFhuQI4h63tiVcMkan4E/edit?gid=1916787881#gid=1916787881"
-                target="_blank"
-              >
-                Spicy League schedule
+                Season 3 schedule
               </Anchor>
             </List.Item>
             <List.Item>

@@ -1,4 +1,4 @@
-const WEEK_1_END = 1757941200;
+const WEEK_1_END = 1773061200;
 const SEC_IN_WEEK = 7 * 24 * 60 * 60;
 
 const WEEK_DATA = [
@@ -189,6 +189,78 @@ const S1_PLAYERS = [
   "Val1407",
 ];
 
+const S2_PLAYERS = [
+  "10Dads",
+  "A Ghost House",
+  "A guy",
+  "aBeautifulDave",
+  "adoor",
+  "Aha! Eeeeerr Uhm Oh-oh!",
+  "amarettosis",
+  "Aranq",
+  "Augite",
+  "boardsofhannahda",
+  "bosco!!",
+  "Burgerboy",
+  "CG65",
+  "chocolatecake5000",
+  "Cosmoing",
+  "Crumble",
+  "CuthBucket",
+  "dahdumbguy",
+  "deccy",
+  "Dom",
+  "Firelion348",
+  "Flesh177",
+  "Flick",
+  "frogmoss10",
+  "glove",
+  "goose",
+  "Grape",
+  "heckaroni",
+  "Hewhoamareismyself",
+  "Hugo",
+  "ifdots",
+  "ivanilos",
+  "Johnathan",
+  "Julie",
+  "Kami",
+  "Kanvas",
+  "Keeny Peeny Weeny",
+  "Khana",
+  "Lizstar",
+  "Luminant",
+  "Marshmallow",
+  "Matt",
+  "MBI",
+  "Morzis",
+  "Nitro",
+  "Parchment",
+  "Phi",
+  "PigeonPat27",
+  "Pine",
+  "RedRobot",
+  "Rollnaway",
+  "RPM",
+  "ScouSin",
+  "sio",
+  "Sleepy",
+  "smo",
+  "Spooty",
+  "Stew",
+  "stnfwds",
+  "thumpus",
+  "trootyfruity",
+  "Tutes",
+  "Tyler233",
+  "Uncle Slam",
+  "Val1407",
+  "Vanstrummer",
+  "WinnerBit",
+  "zachary20XX",
+  "Zuzu",
+];
+
 export const ALIASES: { [verified: string]: ReadonlyArray<string> } = {
   amarettosis: ["vanilla"],
   parchmentEng: ["parchment"],
@@ -215,16 +287,20 @@ Object.keys(TIER_TO_PLAYERS).forEach((tier) => {
   });
 });
 
-const PLAYERS_WITH_DUPES = [...Object.keys(PLAYER_TO_TIER), ...S1_PLAYERS];
+const PLAYERS_WITH_DUPES = [
+  ...Object.keys(PLAYER_TO_TIER),
+  ...S1_PLAYERS,
+  ...S2_PLAYERS,
+];
 const UNIQUE_PLAYERS = [...new Set(PLAYERS_WITH_DUPES)];
 
 export const ALL_PLAYERS: ReadonlyArray<string> = Object.keys(
-  PLAYER_TO_TIER
+  PLAYER_TO_TIER,
 ).toSorted((a, b) => a.toLocaleLowerCase().localeCompare(b.toLowerCase()));
 
 export const PLAYERS_FOR_FILTER: ReadonlyArray<string> =
   UNIQUE_PLAYERS.toSorted((a, b) =>
-    a.toLocaleLowerCase().localeCompare(b.toLowerCase())
+    a.toLocaleLowerCase().localeCompare(b.toLowerCase()),
   );
 
 // manually defining because tiers are different in S1 and S2

@@ -14,6 +14,7 @@ import { useState } from "react";
 import {
   ALL_PLAYERS,
   getCurrentWeek,
+  LEAGUE_SEASON,
   PLAYER_TO_TIER,
   WEEKS,
 } from "../createboard/leagueConstants";
@@ -25,13 +26,13 @@ type Props = {
   onClose: () => void;
 };
 
-const SEASONS = ["Season 2", "Non-League"] as const;
+const SEASONS = ["Season 3", "Non-League"] as const;
 type Season = (typeof SEASONS)[number];
 
 function getSeason(num: null | number): null | Season {
   switch (num) {
-    case 2:
-      return "Season 2";
+    case 3:
+      return "Season 3";
     case null:
       return "Non-League";
     default:
@@ -45,16 +46,16 @@ export default function EditLeagueModal({ isMobile, match, onClose }: Props) {
   const { leagueInfo } = match;
 
   const [season, setSeason] = useState<null | Season>(
-    getSeason(leagueInfo?.season ?? null)
+    getSeason(leagueInfo?.season ?? null),
   );
   const [week, setWeek] = useState<null | string>(
-    leagueInfo?.week ?? getCurrentWeek()
+    leagueInfo?.week ?? getCurrentWeek(),
   );
   const [p1, setP1] = useState<null | string>(leagueInfo?.p1 ?? null);
   const [p2, setP2] = useState<null | string>(leagueInfo?.p2 ?? null);
   const [name, setName] = useState<string>(match.name);
   const [gameNumber, setGameNumber] = useState<number | null>(
-    leagueInfo?.game ?? null
+    leagueInfo?.game ?? null,
   );
 
   const p1Tier = p1 != null ? PLAYER_TO_TIER[p1] : null;
@@ -161,7 +162,7 @@ export default function EditLeagueModal({ isMobile, match, onClose }: Props) {
             <Button
               disabled={
                 isSaving ||
-                (season === "Season 2" && tierMismatch) ||
+                (season === "Season 3" && tierMismatch) ||
                 week == null ||
                 p1 == null ||
                 p2 == null ||
@@ -186,7 +187,7 @@ export default function EditLeagueModal({ isMobile, match, onClose }: Props) {
                     return {
                       type: "league",
                       // TODO: Add a CURRENT_SEASON constant or something like that
-                      season: 2,
+                      season: LEAGUE_SEASON!,
                       tier: p1Tier,
                       week,
                       p1,

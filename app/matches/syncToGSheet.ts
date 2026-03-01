@@ -16,6 +16,7 @@ import { GAME_NAMES } from "../goals";
 const SHEET_ID = "1bW8zjoR2bpr74w-dA4HHt04SqvGg1aj8FJeOs3EqdNE";
 const NON_LEAGUE_NAME = "Non-League";
 const SEASON_2_NAME = "Season 2";
+const SEASON_3_NAME = "Season 3";
 export default async function syncToGSheet(match: Match): Promise<void> {
   const vodURL = match.vod?.url;
   const vodStartSeconds = match.vod?.startSeconds;
@@ -54,7 +55,7 @@ export default async function syncToGSheet(match: Match): Promise<void> {
     colorToVerifiedName = getColorToVerifiedName(
       changelog.changes,
       match.leagueInfo.p1,
-      match.leagueInfo.p2
+      match.leagueInfo.p2,
     );
   }
   const changesWithCorrectedNames =
@@ -69,7 +70,7 @@ export default async function syncToGSheet(match: Match): Promise<void> {
       : changes;
   const ranges = getSquareCompletionRanges(
     matchStartTime,
-    changesWithCorrectedNames
+    changesWithCorrectedNames,
   );
   const rows = ranges
     .map((range, squareIndex) => {
@@ -80,10 +81,10 @@ export default async function syncToGSheet(match: Match): Promise<void> {
       const player = range[0];
       const opponent =
         player === match.winner?.name
-          ? match.opponent?.name ?? ""
+          ? (match.opponent?.name ?? "")
           : player === match.opponent?.name
-          ? match.winner?.name ?? ""
-          : "";
+            ? (match.winner?.name ?? "")
+            : "";
       // For Non-League, sheet is
       // Room Name,	Date,	Player,	Opponent,	Game,	Goal,	Time (mins),	Start,	End, Match ID
       // For League, sheet is
@@ -130,7 +131,7 @@ export default async function syncToGSheet(match: Match): Promise<void> {
     auth,
   });
   const nonLeagueId = metadata.data.sheets?.find(
-    (s) => s.properties?.title === sheetName
+    (s) => s.properties?.title === sheetName,
   )?.properties?.sheetId;
   const values: ReadonlyArray<ReadonlyArray<string>> = result.data.values ?? [];
   if (nonLeagueId == null) {
@@ -176,6 +177,8 @@ function getSheetName(season: number | null | undefined): null | string {
     return NON_LEAGUE_NAME;
   } else if (season === 2) {
     return SEASON_2_NAME;
+  } else if (season === 3) {
+    return SEASON_3_NAME;
   } else {
     return null;
   }
@@ -183,7 +186,7 @@ function getSheetName(season: number | null | undefined): null | string {
 
 function getRangesToDelete(
   rows: ReadonlyArray<ReadonlyArray<string>>,
-  value: string
+  value: string,
 ): ReadonlyArray<[number, number]> {
   const ranges: [number, number][] = [];
   let startIndex: null | number = null;

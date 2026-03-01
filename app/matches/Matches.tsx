@@ -109,7 +109,7 @@ export function isTooOld(dateCreated: number): boolean {
   return Date.now() - dateCreated * 1000 > MS_IN_DAY;
 }
 
-const SEASONS = ["Season 2", "Season 1", "Non-League"] as const;
+const SEASONS = ["Season 3", "Season 2", "Season 1", "Non-League"] as const;
 type Season = (typeof SEASONS)[number];
 
 function getHrefFromParams(pathname: string, params: URLSearchParams): string {
@@ -125,6 +125,8 @@ function getSeasonStr(
       return null;
     case "Non-League":
       return "0";
+    case "Season 3":
+      return "3";
     case "Season 2":
       return "2";
     case "Season 1":
@@ -181,8 +183,12 @@ function getFilterHref(
 function getSeasonFromParams(params: ReadonlyURLSearchParams): null | Season {
   const season = params.get("season");
   switch (season) {
+    case "3":
+      return "Season 3";
     case "2":
       return "Season 2";
+    case "1":
+      return "Season 1";
     case "0":
       return "Non-League";
     default:

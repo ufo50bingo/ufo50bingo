@@ -99,33 +99,27 @@ function getAbbreviatedName(goal: FoundStandardGeneral): string {
       return `Cherry (${goal.tokens[0]})`;
     case "Gold disk {{gold_count}} games on this card":
       return `Gold (${goal.tokens[0]})`;
-    // BOSS/LEVEL
+    // LEVELS
     case "Beat 2 levels in 6 games on this card":
+    case "Beat 2 levels in 6 games":
       return "2 levels (6)";
     case "Beat 4 levels in 5 games on this card":
+    case "Beat 4 levels in 5 games":
       return "4 levels (5)";
     case "Beat 8 levels in 3 games on this card":
+    case "Beat 8 levels in 3 games":
       return "8 levels (3)";
-    case "Defeat 2 bosses in 3 games on this card":
-      return "2 bosses (3)";
-    case "Defeat 7 bosses from games on this card":
-      return "Bosses (7)";
-    case "Defeat a boss in 5 games on this card":
-      return "Boss (5)";
-    // COLLECTATHON
-    case "Collect 2 keys in 5 games":
-      return "2 keys (5)";
-    case "Open 2 chests in 5 games":
-      return "2 chests (5)";
-    case "Buy an item from 2 unique shops in one run in 6 games":
-      return "2 shops (6)";
-    case "Earn 2 extra lives in 5 games":
-      return "2 extra lives (5)";
-    case "Increase your base HP twice in 4 games":
-      return "2 HP (4)";
-    case "Surpass the top 5 score from 4 arcade leaderboards":
-      return "Top 5 (4)";
-    case "Defeat 6 different enemy types in 6 games":
+    // BOSS/ENEMY
+    case "Defeat 2 bosses in 4 games on this card":
+    case "Defeat 2 bosses in 4 games":
+      return "2 bosses (4)";
+    case "Defeat 8 bosses from games on this card":
+      return "Bosses (8)";
+    case "Defeat a boss in 6 games on this card":
+    case "Defeat a boss in 6 games":
+      return "Boss (6)";
+    case "Defeat 6 enemy types in 6 games on this card":
+    case "Defeat 6 enemy types in 6 games":
       return "6 enemy types (6)";
     // THEME
     case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":

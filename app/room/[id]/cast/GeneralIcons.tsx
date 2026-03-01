@@ -146,9 +146,9 @@ export default function GeneralIcons({
           countState == null
             ? 0
             : Object.keys(countState).reduce(
-                (acc, game) => acc + countState[game],
-                0,
-              )
+              (acc, game) => acc + countState[game],
+              0,
+            )
         }
         iconType={iconType}
         src={
@@ -179,29 +179,23 @@ function getWinnerBitSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/winnerbit/Icon_Cherry.png";
     case "Gold disk {{gold_count}} games on this card":
       return "/general/winnerbit/Icon_Gold.png";
-    // BOSS/LEVEL
+    // LEVEL
     case "Beat 2 levels in 6 games on this card":
+    case "Beat 2 levels in 6 games":
     case "Beat 4 levels in 5 games on this card":
+    case "Beat 4 levels in 5 games":
     case "Beat 8 levels in 3 games on this card":
+    case "Beat 8 levels in 3 games":
       return "/general/winnerbit/Icon_Level.png";
-    case "Defeat 2 bosses in 3 games on this card":
-    case "Defeat 7 bosses from games on this card":
-    case "Defeat a boss in 5 games on this card":
+    // BOSS/ENEMY
+    case "Defeat 2 bosses in 4 games on this card":
+    case "Defeat 2 bosses in 4 games":
+    case "Defeat 8 bosses from games on this card":
+    case "Defeat a boss in 6 games on this card":
+    case "Defeat a boss in 6 games":
       return "/general/winnerbit/Icon_Boss.png";
-    // COLLECTATHON
-    case "Collect 2 keys in 5 games":
-      return "/general/winnerbit/Icon_Key.png";
-    case "Open 2 chests in 5 games":
-      return "/general/winnerbit/Icon_Chest.png";
-    case "Buy an item from 2 unique shops in one run in 6 games":
-      return "/general/winnerbit/Icon_Shop.png";
-    case "Earn 2 extra lives in 5 games":
-      return "/general/winnerbit/Icon_Life.png";
-    case "Increase your base HP twice in 4 games":
-      return "/general/winnerbit/Icon_HP.png";
-    case "Surpass the top 5 score from 4 arcade leaderboards":
-      return "/general/winnerbit/Icon_Leaderboard.png";
-    case "Defeat 6 different enemy types in 6 games":
+    case "Defeat 6 enemy types in 6 games on this card":
+    case "Defeat 6 enemy types in 6 games":
       return "/general/winnerbit/Icon_Enemy.png";
     // THEME
     case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
@@ -232,30 +226,24 @@ function getClassicSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/sprites/IconCherry.png";
     case "Gold disk {{gold_count}} games on this card":
       return "/general/sprites/IconGold.png";
-    // BOSS/LEVEL
+    // LEVEL
     case "Beat 2 levels in 6 games on this card":
+    case "Beat 2 levels in 6 games":
     case "Beat 4 levels in 5 games on this card":
+    case "Beat 4 levels in 5 games":
     case "Beat 8 levels in 3 games on this card":
+    case "Beat 8 levels in 3 games":
       return "/general/sprites/IconLevel.png";
-    case "Defeat 2 bosses in 3 games on this card":
-    case "Defeat 7 bosses from games on this card":
-    case "Defeat a boss in 5 games on this card":
+    // BOSS/ENEMY
+    case "Defeat 2 bosses in 4 games on this card":
+    case "Defeat 2 bosses in 4 games":
+    case "Defeat 8 bosses from games on this card":
+    case "Defeat a boss in 6 games on this card":
+    case "Defeat a boss in 6 games":
       return "/general/sprites/IconBoss.png";
-    // COLLECTATHON
-    case "Collect 2 keys in 5 games":
-      return "/general/sprites/IconKey.png";
-    case "Open 2 chests in 5 games":
-      return "/general/sprites/IconChest.png";
-    case "Buy an item from 2 unique shops in one run in 6 games":
-      return "/general/sprites/IconShops.png";
-    case "Earn 2 extra lives in 5 games":
-      return "/general/sprites/Icon1up.png";
-    case "Increase your base HP twice in 4 games":
-      return "/general/sprites/IconHealth.png";
-    case "Surpass the top 5 score from 4 arcade leaderboards":
-      return "/general/sprites/IconLeaderboard.png";
-    case "Defeat 6 different enemy types in 6 games":
-      return "/general/sprites/IconEnemy.png";
+    case "Defeat 6 enemy types in 6 games":
+    case "Defeat 6 enemy types in 6 games on this card":
+      return "/general/sprites/IconEnemy.png"
     // THEME
     case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
       return "/general/sprites/IconCampTrilogy.png";
@@ -293,29 +281,23 @@ function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/matt/CHERRY.png";
     case "Gold disk {{gold_count}} games on this card":
       return "/general/matt/GOLD.png";
-    // BOSS/LEVEL
+    // LEVEL
     case "Beat 2 levels in 6 games on this card":
+    case "Beat 2 levels in 6 games":
     case "Beat 4 levels in 5 games on this card":
+    case "Beat 4 levels in 5 games":
     case "Beat 8 levels in 3 games on this card":
+    case "Beat 8 levels in 3 games":
       return "/general/matt/LEVEL.png";
-    case "Defeat 2 bosses in 3 games on this card":
-    case "Defeat 7 bosses from games on this card":
-    case "Defeat a boss in 5 games on this card":
+    // BOSS/ENEMY
+    case "Defeat 2 bosses in 4 games on this card":
+    case "Defeat 2 bosses in 4 games":
+    case "Defeat 8 bosses from games on this card":
+    case "Defeat a boss in 6 games on this card":
+    case "Defeat a boss in 6 games":
       return "/general/matt/BOSS.png";
-    // COLLECTATHON
-    case "Collect 2 keys in 5 games":
-      return "/general/matt/KEYS.png";
-    case "Open 2 chests in 5 games":
-      return "/general/matt/CHEST.png";
-    case "Buy an item from 2 unique shops in one run in 6 games":
-      return "/general/matt/SHOPS.png";
-    case "Earn 2 extra lives in 5 games":
-      return "/general/matt/1UP.png";
-    case "Increase your base HP twice in 4 games":
-      return "/general/matt/HP.png";
-    case "Surpass the top 5 score from 4 arcade leaderboards":
-      return "/general/matt/BOARDS.png";
-    case "Defeat 6 different enemy types in 6 games":
+    case "Defeat 6 enemy types in 6 games":
+    case "Defeat 6 enemy types in 6 games on this card":
       return "/general/matt/6ENEMIES.png";
     // THEME
     case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":

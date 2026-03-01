@@ -1,7 +1,6 @@
 import { Game, ORDERED_GAMES } from "@/app/goals";
 import { Anchor, Button, Checkbox, Group, Stack } from "@mantine/core";
 import {
-  TOP_5,
   RecommendationsWithTerminal,
   Descriptions,
   CHERRIES,
@@ -12,14 +11,8 @@ import {
   TWO_LEVELS,
   FOUR_LEVELS,
   EIGHT_LEVELS,
-  TWO_CHESTS,
   TWO_BOSSES,
   BOSSES,
-  TOP_5_SCORES,
-  TWO_SHOPS,
-  TWO_HP,
-  TWO_LIVES,
-  TWO_KEYS,
   SIX_ENEMIES,
 } from "./timeEstimates";
 import { findGamesForGoal, GameToGoals } from "./findAllGames";
@@ -99,53 +92,53 @@ export default function GeneralGoal({
       recommendations = GOLDS;
       onCardOnly = true;
       break;
-    // BOSS/LEVEL
+    // LEVELS
     case "Beat 2 levels in 6 games on this card":
       recommendations = TWO_LEVELS;
       onCardOnly = true;
+      break;
+    case "Beat 2 levels in 6 games":
+      recommendations = TWO_LEVELS;
       break;
     case "Beat 4 levels in 5 games on this card":
       recommendations = FOUR_LEVELS;
       onCardOnly = true;
       break;
+    case "Beat 4 levels in 5 games":
+      recommendations = FOUR_LEVELS;
+      break;
     case "Beat 8 levels in 3 games on this card":
       recommendations = EIGHT_LEVELS;
       onCardOnly = true;
       break;
-    case "Defeat 2 bosses in 3 games on this card":
+    case "Beat 8 levels in 3 games":
+      recommendations = EIGHT_LEVELS;
+      break;
+    // BOSS/ENEMY
+    case "Defeat 2 bosses in 4 games on this card":
       recommendations = TWO_BOSSES;
       onCardOnly = true;
       break;
-    case "Defeat 7 bosses from games on this card":
+    case "Defeat 2 bosses in 4 games":
+      recommendations = TWO_BOSSES;
+      break;
+    case "Defeat 8 bosses from games on this card":
       recommendations = BOSSES;
       isChecks = false;
       onCardOnly = true;
       break;
-    case "Defeat a boss in 5 games on this card":
+    case "Defeat a boss in 6 games on this card":
       recommendations = BOSSES;
       onCardOnly = true;
       break;
-    // COLLECTATHON
-    case "Buy an item from 2 unique shops in one run in 6 games":
-      recommendations = TWO_SHOPS;
+    case "Defeat a boss in 6 games":
+      recommendations = BOSSES;
       break;
-    case "Increase your base HP twice in 4 games":
-      recommendations = TWO_HP;
+    case "Defeat 6 enemy types in 6 games on this card":
+      recommendations = SIX_ENEMIES;
+      onCardOnly = true;
       break;
-    case "Open 2 chests in 5 games":
-      recommendations = TWO_CHESTS;
-      break;
-    case "Earn 2 extra lives in 5 games":
-      recommendations = TWO_LIVES;
-      break;
-    case "Collect 2 keys in 5 games":
-      recommendations = TWO_KEYS;
-      break;
-    case "Surpass the top 5 score from 4 arcade leaderboards":
-      recommendations = TOP_5;
-      descriptions = TOP_5_SCORES;
-      break;
-    case "Defeat 6 different enemy types in 6 games":
+    case "Defeat 6 enemy types in 6 games":
       recommendations = SIX_ENEMIES;
       break;
     // THEME

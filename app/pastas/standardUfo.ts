@@ -896,9 +896,9 @@ export const STANDARD_UFO = {
       "bossenemy": [
         "Defeat 8 bosses from games on this card",
         {
-          "name": "Defeat a boss in 5 games on this card",
+          "name": "Defeat a boss in 6 games on this card",
           "restriction": {
-            "count": 6,
+            "count": 7,
             "options": [
               "barbuta",
               "ninpek",
@@ -948,7 +948,7 @@ export const STANDARD_UFO = {
               "campanella3",
               "cyberowls"
             ],
-            "fallback": "Defeat 2 bosses in 3 games"
+            "fallback": "Defeat 2 bosses in 4 games"
           }
         },
         {

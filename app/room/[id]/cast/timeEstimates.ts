@@ -232,30 +232,30 @@ export const GIFTS: Recommendations = {
   never: ["grimstone", "warptank", "rockonisland", "lordsofdiskonia"],
 };
 
-const TOP_5_ENTRIES: ReadonlyArray<[Game, string]> = [
-  ["campanella", "5k"],
-  ["magicgarden", "6k"],
-  ["ninpek", "5k"],
-  ["starwaspir", "60k"],
-  ["caramelcaramel", "20k"],
-  ["kickclub", "25k"],
-  ["rakshasa", "10k"],
-  ["seasidedrive", "40k"],
-  ["paintchase", "240"],
-];
-export const TOP_5_SCORES: Descriptions = Object.fromEntries(TOP_5_ENTRIES);
-export const TOP_5: Recommendations = {
-  always: [
-    "campanella",
-    "magicgarden",
-    "ninpek",
-    "kickclub",
-    "starwaspir",
-    "caramelcaramel",
-  ],
-  synergy: ["rakshasa", "seasidedrive", "paintchase"],
-  never: [],
-};
+// const TOP_5_ENTRIES: ReadonlyArray<[Game, string]> = [
+//   ["campanella", "5k"],
+//   ["magicgarden", "6k"],
+//   ["ninpek", "5k"],
+//   ["starwaspir", "60k"],
+//   ["caramelcaramel", "20k"],
+//   ["kickclub", "25k"],
+//   ["rakshasa", "10k"],
+//   ["seasidedrive", "40k"],
+//   ["paintchase", "240"],
+// ];
+// export const TOP_5_SCORES: Descriptions = Object.fromEntries(TOP_5_ENTRIES);
+// export const TOP_5: Recommendations = {
+//   always: [
+//     "campanella",
+//     "magicgarden",
+//     "ninpek",
+//     "kickclub",
+//     "starwaspir",
+//     "caramelcaramel",
+//   ],
+//   synergy: ["rakshasa", "seasidedrive", "paintchase"],
+//   never: [],
+// };
 
 export const TWO_LEVELS: Recommendations = {
   always: [
@@ -365,88 +365,88 @@ export const EIGHT_LEVELS: Recommendations = {
   ],
 };
 
-export const TWO_KEYS: Recommendations = {
-  always: [
-    "mortolii",
-    "waldorfsjourney",
-    "velgress",
-    "cyberowls",
-    "valbrace",
-    "nightmanor",
-  ],
-  synergy: ["vainger"],
-  never: [],
-};
+// export const TWO_KEYS: Recommendations = {
+//   always: [
+//     "mortolii",
+//     "waldorfsjourney",
+//     "velgress",
+//     "cyberowls",
+//     "valbrace",
+//     "nightmanor",
+//   ],
+//   synergy: ["vainger"],
+//   never: [],
+// };
 
-export const TWO_CHESTS: Recommendations = {
-  always: [
-    "valbrace",
-    "divers",
-    "nightmanor",
-    "barbuta",
-    "grimstone",
-    "waldorfsjourney",
-  ],
-  synergy: ["campanella2", "pilotquest", "elfazarshat"],
-  never: [],
-};
+// export const TWO_CHESTS: Recommendations = {
+//   always: [
+//     "valbrace",
+//     "divers",
+//     "nightmanor",
+//     "barbuta",
+//     "grimstone",
+//     "waldorfsjourney",
+//   ],
+//   synergy: ["campanella2", "pilotquest", "elfazarshat"],
+//   never: [],
+// };
 
-export const TWO_SHOPS: Recommendations = {
-  always: [
-    "quibblerace",
-    "rockonisland",
-    "avianos",
-    "waldorfsjourney",
-    "lordsofdiskonia",
-  ],
-  synergy: [
-    "pilotquest",
-    "velgress",
-    "grimstone",
-    "miniandmax",
-    "campanella2",
-    "fisthell",
-    "barbuta",
-    "planetzoldath",
-    "valbrace",
-  ],
-  never: [],
-};
+// export const TWO_SHOPS: Recommendations = {
+//   always: [
+//     "quibblerace",
+//     "rockonisland",
+//     "avianos",
+//     "waldorfsjourney",
+//     "lordsofdiskonia",
+//   ],
+//   synergy: [
+//     "pilotquest",
+//     "velgress",
+//     "grimstone",
+//     "miniandmax",
+//     "campanella2",
+//     "fisthell",
+//     "barbuta",
+//     "planetzoldath",
+//     "valbrace",
+//   ],
+//   never: [],
+// };
 
-export const TWO_LIVES: Recommendations = {
-  always: [
-    "campanella",
-    "waldorfsjourney",
-    "mortol",
-    "cyberowls",
-    "rakshasa",
-    "seasidedrive",
-    "kickclub",
-    "ninpek",
-    "elfazarshat",
-    "starwaspir",
-    "caramelcaramel",
-  ],
-  synergy: ["barbuta", "vainger", "campanella3", "paintchase"],
-  never: [],
-};
+// export const TWO_LIVES: Recommendations = {
+//   always: [
+//     "campanella",
+//     "waldorfsjourney",
+//     "mortol",
+//     "cyberowls",
+//     "rakshasa",
+//     "seasidedrive",
+//     "kickclub",
+//     "ninpek",
+//     "elfazarshat",
+//     "starwaspir",
+//     "caramelcaramel",
+//   ],
+//   synergy: ["barbuta", "vainger", "campanella3", "paintchase"],
+//   never: [],
+// };
 
-export const TWO_HP: Recommendations = {
-  always: [
-    "porgy",
-    "golfaria",
-    "overbold",
-    "valbrace",
-    "planetzoldath",
-    "miniandmax",
-    "divers",
-    "vainger",
-    "campanella2",
-    "grimstone",
-  ],
-  synergy: [],
-  never: [],
-};
+// export const TWO_HP: Recommendations = {
+//   always: [
+//     "porgy",
+//     "golfaria",
+//     "overbold",
+//     "valbrace",
+//     "planetzoldath",
+//     "miniandmax",
+//     "divers",
+//     "vainger",
+//     "campanella2",
+//     "grimstone",
+//   ],
+//   synergy: [],
+//   never: [],
+// };
 
 export type TerminalEntry =
   | Game

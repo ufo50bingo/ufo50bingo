@@ -23,6 +23,8 @@ export default function getFlatGoals(pasta: UFOPasta): ReadonlyArray<UFOGoal> {
       goals.forEach((goal) => {
         const sortTokens = typeof goal === "string" ? undefined : goal.sort_tokens;
         flatGoals.push({
+          // ignoring the fallback is fine here because getFlatGoals isn't used in
+          // actual cards where the fallback might be necessary
           name: getGoalAndFallback(goal)[0],
           subcategory,
           category,

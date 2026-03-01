@@ -12,6 +12,7 @@ export default function findAllTokens(goals: UFODifficulties): {
     Object.keys(categoryGoals).forEach((group) => {
       const groupGoals = categoryGoals[group];
       groupGoals.forEach((goal) => {
+        // TODO: Check fallbacks here
         const goalName = getGoalAndFallback(goal)[0];
         const matches = [...goalName.matchAll(REGEX)];
         const tokens = matches.map((match) => match[1]);

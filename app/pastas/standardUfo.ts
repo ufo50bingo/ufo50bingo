@@ -598,7 +598,7 @@ export const STANDARD_UFO = {
         "GRIMSTONE: Reach Level 4 with any character"
       ],
       "lordsofdiskonia": [
-        "LORDS OF DISKONIA: Win 2 battles in a Full War",
+        "LORDS OF DISKONIA: Win 2 battles in one Full War",
         "LORDS OF DISKONIA: Win 1 battle in a Full War on Commander difficulty"
       ],
       "nightmanor": [
@@ -748,7 +748,7 @@ export const STANDARD_UFO = {
         "OVERBOLD: Cherry Disk"
       ],
       "campanella2": [
-        "CAMPANELLA 2: Obtain 6 power-up items in one run (square icons on left of screen)"
+        "CAMPANELLA 2: Obtain 6 power-up items in one run (square icons)"
       ],
       "hypercontender": [
         "HYPER CONTENDER: Gold disk on Hard or Hyper Difficulty"
@@ -1545,4 +1545,5 @@ export const STANDARD_UFO = {
     ]
   }
 } as const;
+
 

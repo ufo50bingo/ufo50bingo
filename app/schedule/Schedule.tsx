@@ -39,14 +39,16 @@ function ScheduledMatchList({
   ref?: Ref<HTMLDivElement>;
 }) {
   const titleElement = (
-    <Title ref={ref} order={3}>
+    <Title order={3}>
       {isToday === true ? <u>{title}</u> : title}
     </Title>
   );
   return (
     <Stack
+      ref={ref}
       p="md"
       bg={isToday ? "var(--mantine-primary-color-light)" : undefined}
+      style={{ scrollMarginTop: "45px" }}
     >
       {matches.length > 0 ? (
         <CopyToDiscord matches={matches} includeDate={includeDate}>
@@ -57,12 +59,12 @@ function ScheduledMatchList({
       )}
       {matches.length > 0
         ? matches.map((m) => (
-            <ScheduledMatchView
-              key={m.name + m.time.toString()}
-              match={m}
-              includeDate={includeDate}
-            />
-          ))
+          <ScheduledMatchView
+            key={m.name + m.time.toString()}
+            match={m}
+            includeDate={includeDate}
+          />
+        ))
         : "No matches found!"}
     </Stack>
   );

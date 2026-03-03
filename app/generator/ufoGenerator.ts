@@ -74,7 +74,22 @@ const SAME_LINE_INDICES = [
   [0, 6, 12, 18, 20, 21, 22, 23, 19, 14, 9, 4],
 ];
 
+const MAX_TRIES = 100;
 export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
+  let bestBoard: null | ReadonlyArray<string> = null;
+  let bestFallbacks = Infinity;
+  let tryNum = 0;
+  while (bestFallbacks > 0 && tryNum < MAX_TRIES) {
+    tryNum += 1;
+    const result = generateCandidate(pasta, bestFallbacks);
+    if (result != null) {
+      [bestBoard, bestFallbacks] = result;
+    }
+  }
+  return bestBoard!;
+}
+
+function generateCandidate(pasta: UFOPasta, bestFallbacks: number): null | [ReadonlyArray<string>, number] {
   // fill squares in order of how many bingo lines they're on
   // this helps prevent having two goals from the same game on one line
   const centerIndex = 12;
@@ -170,6 +185,8 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     }
   }
 
+  let numFallbacks = 0;
+
   const fillIndex = (i: number) => {
     let finalGoal = null;
     const game = gameByIndex[i];
@@ -210,6 +227,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     }
 
     if (finalGoal == null) {
+      numFallbacks += 1;
       finalGoal = fallback ?? "ERROR: Failed to find goal";
     }
 
@@ -224,6 +242,9 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
 
   for (const i of unrestricted) {
     fillIndex(i);
+    if (numFallbacks >= bestFallbacks) {
+      return null;
+    }
   }
 
   const restrictedWithNewGames: Array<number> = [];
@@ -263,11 +284,17 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
 
   for (const i of restrictedWithNewGames) {
     fillIndex(i);
+    if (numFallbacks >= bestFallbacks) {
+      return null;
+    }
   }
 
   for (const i of restrictedWithoutNewGames) {
     fillIndex(i);
+    if (numFallbacks >= bestFallbacks) {
+      return null;
+    }
   }
 
-  return finalBoardWithTokens as Array<string>;
+  return [finalBoardWithTokens as Array<string>, numFallbacks];
 }

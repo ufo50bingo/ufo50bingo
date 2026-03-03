@@ -11,7 +11,7 @@ export default async function chooseColor(id: string, color: BingosyncColor) {
     );
   }
 
-  await fetch("https://www.bingosync.com/api/color", {
+  await fetch("https://celestebingo.rhelmot.io/api/color", {
     method: "PUT",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",

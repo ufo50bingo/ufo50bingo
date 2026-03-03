@@ -46,7 +46,7 @@ export default function Login({ id }: Props) {
               Please copy this URL and send it to all players and casters!
               <br />
               If you prefer to use the standard Bingosync page,{" "}
-              <a href={`https://www.bingosync.com/room/${id}`} target="_blank">
+              <a href={`https://celestebingo.rhelmot.io/room/${id}`} target="_blank">
                 click here
               </a>
               .
@@ -54,7 +54,7 @@ export default function Login({ id }: Props) {
             <Alert>
               Please note that the Playing and Casting pages currently support
               only <strong>Lockout</strong> games.{" "}
-              <a href={`https://www.bingosync.com/room/${id}`} target="_blank">
+              <a href={`https://celestebingo.rhelmot.io/room/${id}`} target="_blank">
                 For non-Lockout games, use the old Bingosync page.
               </a>
             </Alert>
@@ -137,7 +137,7 @@ export default function Login({ id }: Props) {
                 match before using it for an important league match. If you're
                 not sure you want to use the new UI,{" "}
                 <a
-                  href={`https://www.bingosync.com/room/${id}`}
+                  href={`https://celestebingo.rhelmot.io/room/${id}`}
                   target="_blank"
                 >
                   go to the old Bingosync room instead

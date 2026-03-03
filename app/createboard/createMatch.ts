@@ -9,7 +9,7 @@ import {
   writeSession,
 } from "../session/sessionUtil";
 
-const BINGOSYNC_BASE_URL = "https://www.bingosync.com/";
+const BINGOSYNC_BASE_URL = "https://celestebingo.rhelmot.io/";
 
 export interface LeagueInfo {
   season: number;

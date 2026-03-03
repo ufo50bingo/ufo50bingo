@@ -10,7 +10,7 @@ export default async function revealBoard(id: string) {
     );
   }
 
-  await fetch("https://www.bingosync.com/api/revealed", {
+  await fetch("https://celestebingo.rhelmot.io/api/revealed", {
     method: "PUT",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",

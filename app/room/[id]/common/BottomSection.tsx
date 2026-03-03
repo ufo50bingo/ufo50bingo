@@ -9,7 +9,7 @@ type Props = {
 export default function BottomSection({ id, isMobile }: Props) {
   return (
     <Stack p="md">
-      <Button component="a" href={`https://www.bingosync.com/room/${id}`}>
+      <Button component="a" href={`https://celestebingo.rhelmot.io/room/${id}`}>
         View Bingosync room
       </Button>
       <DisconnectButton isMobile={isMobile} />

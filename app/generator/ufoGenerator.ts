@@ -261,11 +261,11 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
     }
   }
 
-  for (const i of restrictedWithoutNewGames) {
+  for (const i of restrictedWithNewGames) {
     fillIndex(i);
   }
 
-  for (const i of restrictedWithNewGames) {
+  for (const i of restrictedWithoutNewGames) {
     fillIndex(i);
   }
 

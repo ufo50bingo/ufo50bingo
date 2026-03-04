@@ -638,7 +638,7 @@ export const STANDARD_UFO = {
       ],
       "cyberowls": [
         "CYBER OWLS: Clear Moscow with 1200+ score",
-        "CYBER OWLS: Show 2000+ points at HQ without playing Congo"
+        "CYBER OWLS: Show 2000+ points at HQ without playing Congo Basin"
       ]
     },
     "veryhard": {
@@ -1374,7 +1374,7 @@ export const STANDARD_UFO = {
       "Ambush"
     ],
     "owls": [
-      "Congo",
+      "Congo Basin",
       "Chicago",
       "Moscow",
       "Hong Kong"
@@ -1545,5 +1545,6 @@ export const STANDARD_UFO = {
     ]
   }
 } as const;
+
 
 

@@ -15,6 +15,7 @@ import { fetchBoard, fetchFeed, getSessionCookie } from "../fetchMatchInfo";
 
 export type PlayerScores = { [name: string]: number };
 
+// dummy comment to force push
 type ExistingMatch = {
   leagueP1: string | null | undefined;
   leagueP2: string | null | undefined;
@@ -156,6 +157,6 @@ export async function refreshMatch(
     const rawMatch = sqlResult[0];
     const match = getMatchFromRaw(rawMatch);
     await syncToGSheet(match);
-  } catch {}
+  } catch { }
   return false;
 }

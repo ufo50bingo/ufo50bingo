@@ -291,6 +291,7 @@ function Inner({ practiceVariant }: { practiceVariant: PracticeVariant }) {
                                         <PlaylistAddButton
                                             goal={goal.partiallyResolvedGoal}
                                             pasta={pasta}
+                                            sortTokens={goal.sortTokens}
                                         />
                                     </Group>
                                 </Table.Td>

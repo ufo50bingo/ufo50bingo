@@ -3,22 +3,22 @@ import { ActionIcon, Tooltip } from "@mantine/core";
 import { db } from "./db";
 import replaceTokens from "./generator/replaceTokens";
 import { UFOPasta } from "./generator/ufoGenerator";
-import findGoal from "./findGoal";
 
 export const PRIORITY_MULTIPLIER = 1024;
 
 type Props = {
   goal: string;
   pasta: null | UFOPasta;
+  sortTokens: null | undefined | string | ReadonlyArray<string>;
 };
 
-export default function PlaylistAddButton({ goal, pasta }: Props) {
+export default function PlaylistAddButton({ goal, pasta, sortTokens }: Props) {
   return (
     <Tooltip label="Add to playlist">
       <ActionIcon
         onClick={() => {
           if (pasta != null) {
-            addToPlaylist(replaceTokens(goal, pasta, findGoal(goal, pasta)?.sortTokens));
+            addToPlaylist(replaceTokens(goal, pasta, sortTokens));
             return;
           }
           addToPlaylist(goal);

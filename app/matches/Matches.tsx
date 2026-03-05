@@ -689,6 +689,7 @@ export default function Matches({ matches, totalPages }: Props) {
       )}
       {editingVodMatch != null && (
         <EditVodModal
+          isMatchesPage={false}
           isMobile={isMobile}
           match={editingVodMatch}
           onClose={() => setEditingVodId(null)}
@@ -696,6 +697,7 @@ export default function Matches({ matches, totalPages }: Props) {
       )}
       {editingLeagueMatch != null && (
         <EditLeagueModal
+          isMatchesPage={false}
           isMobile={isMobile}
           match={editingLeagueMatch}
           onClose={() => setEditingLeagueId(null)}

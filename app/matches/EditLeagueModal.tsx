@@ -19,8 +19,11 @@ import {
   WEEKS,
 } from "../createboard/leagueConstants";
 import updateLeagueInfo, { LeagueInfoUpdate } from "./updateLeagueInfo";
+import runWithMaybeRefresh from "./runWithMaybeRefresh";
+import { useRouter } from "next/navigation";
 
 type Props = {
+  isMatchesPage: boolean;
   isMobile: boolean;
   match: Match;
   onClose: () => void;
@@ -40,7 +43,13 @@ function getSeason(num: null | number): null | Season {
   }
 }
 
-export default function EditLeagueModal({ isMobile, match, onClose }: Props) {
+export default function EditLeagueModal({
+  isMatchesPage,
+  isMobile,
+  match,
+  onClose,
+}: Props) {
+  const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
 
   const { leagueInfo } = match;
@@ -170,36 +179,40 @@ export default function EditLeagueModal({ isMobile, match, onClose }: Props) {
                 name === ""
               }
               onClick={async () => {
-                try {
-                  setIsSaving(true);
-                  const getUpdateInfo = (): LeagueInfoUpdate => {
-                    if (season === "Non-League") {
-                      return { type: "nonleague", name };
-                    }
-                    if (
-                      p1Tier == null ||
-                      week == null ||
-                      p1 == null ||
-                      p2 == null
-                    ) {
-                      throw new Error("Failed to update information");
-                    }
-                    return {
-                      type: "league",
-                      // TODO: Add a CURRENT_SEASON constant or something like that
-                      season: LEAGUE_SEASON!,
-                      tier: p1Tier,
-                      week,
-                      p1,
-                      p2,
-                      game: gameNumber,
-                    };
+                setIsSaving(true);
+                const getUpdateInfo = (): LeagueInfoUpdate => {
+                  if (season === "Non-League") {
+                    return { type: "nonleague", name };
+                  }
+                  if (
+                    p1Tier == null ||
+                    week == null ||
+                    p1 == null ||
+                    p2 == null
+                  ) {
+                    throw new Error("Failed to update information");
+                  }
+                  return {
+                    type: "league",
+                    // TODO: Add a CURRENT_SEASON constant or something like that
+                    season: LEAGUE_SEASON!,
+                    tier: p1Tier,
+                    week,
+                    p1,
+                    p2,
+                    game: gameNumber,
                   };
-                  await updateLeagueInfo(match.id, getUpdateInfo());
-                  onClose();
-                } finally {
-                  setIsSaving(false);
-                }
+                };
+                await runWithMaybeRefresh(
+                  router,
+                  isMatchesPage,
+                  async () => {
+                    await updateLeagueInfo(match.id, getUpdateInfo());
+                    onClose();
+                    return true;
+                  },
+                  () => setIsSaving(false),
+                );
               }}
               color="green"
             >

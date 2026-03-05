@@ -43,9 +43,11 @@ import { useMediaQuery } from "@mantine/hooks";
 import { LEAGUE_SEASON } from "../createboard/leagueConstants";
 import useSession from "../session/useSession";
 import { useRouter } from "next/navigation";
+import runWithMaybeRefresh from "./runWithMaybeRefresh";
 
 type Props = {
   match: Match;
+  isMatchesPage: boolean;
 };
 
 function getOverlays(
@@ -100,7 +102,7 @@ function getOverlays(
   return overlays;
 }
 
-export default function MatchView({ match }: Props) {
+export default function MatchView({ match, isMatchesPage }: Props) {
   const { hideByDefault, isMounted, revealedMatchIDs } = useAppContext();
   const router = useRouter();
   const session = useSession();
@@ -186,19 +188,12 @@ export default function MatchView({ match }: Props) {
       disabled={isTooOld(match.dateCreated) || isRefreshing}
       onClick={async () => {
         setIsRefreshing(true);
-        let shouldRefresh = false;
-        try {
-          // HACK: This prevents navigation to the single match page on revalidation
-          history.pushState({}, "", `/matches`);
-          shouldRefresh = await refreshMatch(match.id, board, changelog);
-        } finally {
-          // HACK: Revert back to the expected URL
-          history.back();
-          setIsRefreshing(false);
-          if (shouldRefresh) {
-            router.refresh();
-          }
-        }
+        await runWithMaybeRefresh(
+          router,
+          isMatchesPage,
+          async () => await refreshMatch(match.id, board, changelog),
+          () => setIsRefreshing(false),
+        );
       }}
     >
       Refresh Data
@@ -465,6 +460,7 @@ export default function MatchView({ match }: Props) {
       </Drawer.Root>
       {isEditingVod && (
         <EditVodModal
+          isMatchesPage={isMatchesPage}
           isMobile={isMobile}
           match={match}
           onClose={() => setIsEditingVod(false)}
@@ -472,6 +468,7 @@ export default function MatchView({ match }: Props) {
       )}
       {isEditingLeague && (
         <EditLeagueModal
+          isMatchesPage={isMatchesPage}
           isMobile={isMobile}
           match={match}
           onClose={() => setIsEditingLeague(false)}

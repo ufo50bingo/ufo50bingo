@@ -14,18 +14,27 @@ import { IconAlertSquareRounded, IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
 import { getBaseUrlAndStartSeconds, getVodLink, getWarning } from "./vodUtil";
 import updateVod from "./updateVod";
+import runWithMaybeRefresh from "./runWithMaybeRefresh";
+import { useRouter } from "next/navigation";
 
 type Props = {
+  isMatchesPage: boolean;
   isMobile: boolean;
   match: Match;
   onClose: () => void;
 };
 
-export default function EditVodModal({ isMobile, match, onClose }: Props) {
+export default function EditVodModal({
+  isMatchesPage,
+  isMobile,
+  match,
+  onClose,
+}: Props) {
+  const router = useRouter();
   const oldVodLink = getVodLink(match, 0) ?? "";
   const [newVodLink, setNewVodLink] = useState<string>(oldVodLink);
   const [analysisSeconds, setAnalysisSeconds] = useState<number | string>(
-    match.analysisSeconds
+    match.analysisSeconds,
   );
   const [isSaving, setIsSaving] = useState(false);
 
@@ -90,20 +99,24 @@ export default function EditVodModal({ isMobile, match, onClose }: Props) {
               isSaving
             }
             onClick={async () => {
-              try {
-                setIsSaving(true);
-                const [baseUrl, startSeconds] =
-                  getBaseUrlAndStartSeconds(newVodLink);
-                await updateVod(
-                  match.id,
-                  baseUrl,
-                  startSeconds,
-                  analysisSeconds === "" ? 60 : Number(analysisSeconds)
-                );
-                onClose();
-              } finally {
-                setIsSaving(false);
-              }
+              setIsSaving(true);
+              await runWithMaybeRefresh(
+                router,
+                isMatchesPage,
+                async () => {
+                  const [baseUrl, startSeconds] =
+                    getBaseUrlAndStartSeconds(newVodLink);
+                  await updateVod(
+                    match.id,
+                    baseUrl,
+                    startSeconds,
+                    analysisSeconds === "" ? 60 : Number(analysisSeconds),
+                  );
+                  onClose();
+                  return true;
+                },
+                () => setIsSaving(false),
+              );
             }}
             color="green"
           >

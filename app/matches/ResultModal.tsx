@@ -18,7 +18,7 @@ export default function ResultModal({ isMobile, match, onClose }: Props) {
       size="auto"
       withCloseButton={isMobile}
     >
-      <MatchView match={match} />
+      <MatchView match={match} isMatchesPage={true} />
     </Modal>
   );
 }

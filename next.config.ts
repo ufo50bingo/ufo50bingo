@@ -16,6 +16,12 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/doc",
+        destination:
+          "https://docs.google.com/document/d/1RK6UH8mte79lF7yobr9yvkdpMHINBRBRV3hjJVb4MIk/edit?tab=t.0",
+        permanent: true,
+      },
+      {
         source: "/signup",
         destination:
           "https://docs.google.com/forms/d/e/1FAIpQLSfXdceuQF1_5mh-mBmwLp6uhk_S0GlMHzjvs0aiP-v3fbumFA/viewform",

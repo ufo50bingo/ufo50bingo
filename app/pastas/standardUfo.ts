@@ -163,7 +163,7 @@ export const STANDARD_UFO = {
         "RAKSHASA: Score 2,000+ points with each of the three weapon types in one run"
       ],
       "starwaspir": [
-        "STAR WASPIR: Beat wave 1 with 1500+ points (before bonus) without touching any letters",
+        "STAR WASPIR: Reach Wave 2 with 20,000+ points using the {{waspir_ship}} ship",
         "STAR WASPIR: Complete wave 1 without defeating either boss enemy"
       ],
       "grimstone": [
@@ -192,7 +192,7 @@ export const STANDARD_UFO = {
       ],
       "combatants": [
         "COMBATANTS: Beat First Blood without shooting",
-        "COMBATANTS: Beat Skirmish"
+        "COMBATANTS: Beat 2 levels"
       ],
       "quibblerace": [
         "QUIBBLE RACE: Bet against your sponsored Quibble and win the round",
@@ -513,7 +513,7 @@ export const STANDARD_UFO = {
       ],
       "waldorfsjourney": [
         "WALDORF'S JOURNEY: Cherry disk",
-        "WALDORF'S JOURNEY: Beat the game without collecting any puffins"
+        "WALDORF'S JOURNEY: Enter the palace without collecting any puffins"
       ],
       "porgy": [
         "PORGY: Defeat a boss",
@@ -950,36 +950,6 @@ export const STANDARD_UFO = {
             ],
             "fallback": "Defeat 2 bosses in 4 games"
           }
-        },
-        {
-          "name": "Defeat 6 enemy types in 6 games on this card",
-          "restriction": {
-            "count": 7,
-            "options": [
-              "mortolii",
-              "overbold",
-              "velgress",
-              "mooncat",
-              "starwaspir",
-              "campanella",
-              "rakshasa",
-              "cyberowls",
-              "hotfoot",
-              "kickclub",
-              "vainger",
-              "fisthell",
-              "miniandmax",
-              "ninpek",
-              "caramelcaramel",
-              "attactics",
-              "bughunter",
-              "porgy",
-              "campanella2",
-              "lordsofdiskonia",
-              "pilotquest"
-            ],
-            "fallback": "Defeat 6 enemy types in 6 games"
-          }
         }
       ],
       "theme": [
@@ -1044,7 +1014,7 @@ export const STANDARD_UFO = {
           }
         },
         {
-          "name": "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot",
+          "name": "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each",
           "restriction": {
             "count": 1,
             "options": [
@@ -1052,7 +1022,7 @@ export const STANDARD_UFO = {
               "fisthell",
               "hotfoot"
             ],
-            "fallback": "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot"
+            "fallback": "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each"
           }
         },
         {
@@ -1079,6 +1049,18 @@ export const STANDARD_UFO = {
             "fallback": "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria"
           }
         },
+		{
+          "name": "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island",
+          "restriction": {
+            "count": 1,
+            "options": [
+              "mortol",
+              "cyberowls",
+              "rockonisland"
+            ],
+            "fallback": "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island"
+          }
+        },
         {
           "name": "ROLE PLAYER: Level up all your characters 6 total times across Grimstone, Divers, Valbrace",
           "restriction": {
@@ -1088,7 +1070,7 @@ export const STANDARD_UFO = {
               "divers",
               "valbrace"
             ],
-            "fallback": "ROLE PLAYER: Level up all your characters 6 total times across Grimstone, Divers, Valbrace"
+            "fallback": "ROLE PLAYER: Level up all your characters 5 total times across Grimstone, Divers, Valbrace"
           }
         }
       ]
@@ -1170,6 +1152,7 @@ export const STANDARD_UFO = {
       "31",
       "37",
       "39",
+	  "40",
       "47"
     ],
     "bk_vhard": [
@@ -1251,7 +1234,7 @@ export const STANDARD_UFO = {
     "porgy_upgrade": [
       "Buster Torpedoes",
       "Super Booster (Motor)"
-	],
+    ],
     "porgy_upgrade2": [
       "Drill",
       "Missile System"
@@ -1545,6 +1528,7 @@ export const STANDARD_UFO = {
     ]
   }
 } as const;
+
 
 
 

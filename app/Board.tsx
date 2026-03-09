@@ -189,7 +189,7 @@ export default function Board({
               : getBorderStyles(resolvedHighlights[squareIndex])
           }
         >
-          {rightClickBehavior === "star" && starred.includes(squareIndex) && (
+          {rightClickHighlights == null && starred.includes(squareIndex) && (
             <div className={classes.starred} />
           )}
           {shownDifficulties.length > 0 &&

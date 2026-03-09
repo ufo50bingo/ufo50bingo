@@ -16,10 +16,12 @@ import {
   PracticeVariantInit,
   PracticeVariantProvider,
 } from "./PracticeVariantContext";
+import { RightClickBehaviorContextProvider } from "./settings/RightClickBehaviorContext";
 
 export const metadata: Metadata = {
   title: "UFO 50 Bingo",
-  description: "Your home for UFO 50 Bingo. Create a match, watch streams, view results, practice goals, or try the daily bingo!",
+  description:
+    "Your home for UFO 50 Bingo. Create a match, watch streams, view results, practice goals, or try the daily bingo!",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -36,9 +38,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <MantineProvider defaultColorScheme="dark" theme={theme}>
           <PracticeVariantProvider>
-            <AppContextProvider>
-              <Shell>{children}</Shell>
-            </AppContextProvider>
+            <RightClickBehaviorContextProvider>
+              <AppContextProvider>
+                <Shell>{children}</Shell>
+              </AppContextProvider>
+            </RightClickBehaviorContextProvider>
             <Suspense>
               <PracticeVariantInit />
             </Suspense>

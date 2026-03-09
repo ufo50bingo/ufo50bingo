@@ -1,12 +1,14 @@
 import SquareText from "./SquareText";
 import classes from "./Board.module.css";
-import { CSSProperties, ReactNode, useState } from "react";
+import { CSSProperties, ReactNode, useMemo, useState } from "react";
 import { BingosyncColor, TBoard } from "./matches/parseBingosyncData";
 import { Difficulty } from "./goals";
 import getColorHex from "./room/[id]/cast/getColorHex";
 import findGoal from "./findGoal";
 import { STANDARD_UFO } from "./pastas/standardUfo";
 import { SPICY_UFO } from "./pastas/spicyUfo";
+import { useRightClickBehaviorContext } from "./settings/RightClickBehaviorContext";
+import { COLORS } from "./room/[id]/common/ColorSelector";
 
 type Props = {
   board: TBoard;
@@ -20,6 +22,7 @@ type Props = {
   hiddenText?: ReactNode;
   shownDifficulties: ReadonlyArray<Difficulty>;
   onReveal?: () => unknown;
+  viewerColor: BingosyncColor | null;
 };
 
 function getColorClass(color: string): string {
@@ -53,7 +56,7 @@ function getColorClass(color: string): string {
 
 function getDifficulty(
   name: string,
-  shownDifficulties: ReadonlyArray<Difficulty>
+  shownDifficulties: ReadonlyArray<Difficulty>,
 ): null | ReactNode {
   const result = findGoal(name, STANDARD_UFO) ?? findGoal(name, SPICY_UFO);
   if (result == null) {
@@ -98,15 +101,24 @@ function getDifficulty(
   );
 }
 
+function getColorHexOrCustom(color: string): string {
+  if (COLORS.includes(color as BingosyncColor)) {
+    return getColorHex(color as BingosyncColor);
+  }
+  return color;
+}
+
 function getBorderStyles(
-  colors: null | undefined | ReadonlyArray<BingosyncColor>
+  colors: null | undefined | ReadonlyArray<string>,
 ): undefined | CSSProperties {
   if (colors == null || colors.length < 1) {
     return undefined;
   }
-  const topAndLeft = getColorHex(colors[0]);
+  const topAndLeft = getColorHexOrCustom(colors[0]);
   const bottomAndRight =
-    colors.length > 1 ? getColorHex(colors[1]) : getColorHex(colors[0]);
+    colors.length > 1
+      ? getColorHexOrCustom(colors[1])
+      : getColorHexOrCustom(colors[0]);
 
   const boxShadow = `inset 10px 0 10px -10px ${topAndLeft}, inset 0 10px 10px -10px ${topAndLeft}, inset -10px 0 10px -10px ${bottomAndRight}, inset 0 -10px 10px -10px ${bottomAndRight}`;
 
@@ -131,15 +143,36 @@ export default function Board({
   onReveal,
   pauseRequestName,
   clearPauseRequest,
+  viewerColor,
 }: Props) {
+  const { rightClickBehavior, customColor } = useRightClickBehaviorContext();
   const [starred, setStarred] = useState<ReadonlyArray<number>>([]);
+
+  const rightClickHighlights = useMemo(() => {
+    if (
+      highlights != null ||
+      viewerColor == null ||
+      rightClickBehavior === "star"
+    ) {
+      return null;
+    }
+    const highlightColor =
+      rightClickBehavior === "my_color" ? viewerColor : customColor;
+    const newHighlights: null | Array<null | ReadonlyArray<string>> =
+      Array(25).fill(null);
+    starred.forEach((squareIndex) => {
+      newHighlights[squareIndex] = [highlightColor];
+    });
+    return newHighlights;
+  }, [customColor, highlights, rightClickBehavior, starred, viewerColor]);
+  const resolvedHighlights = highlights ?? rightClickHighlights;
   return (
     <div className={classes.boardContainer}>
       {board.map((square, squareIndex) => (
         <div
           key={squareIndex}
           className={`${classes.unselectable} ${classes.square} ${getColorClass(
-            board[squareIndex].color
+            board[squareIndex].color,
           )}`}
           onClick={() => onClickSquare != null && onClickSquare(squareIndex)}
           onContextMenu={(event) => {
@@ -151,12 +184,14 @@ export default function Board({
             }
           }}
           style={
-            highlights == null || board[squareIndex].color !== "blank"
+            resolvedHighlights == null || board[squareIndex].color !== "blank"
               ? undefined
-              : getBorderStyles(highlights[squareIndex])
+              : getBorderStyles(resolvedHighlights[squareIndex])
           }
         >
-          {starred.includes(squareIndex) && <div className={classes.starred} />}
+          {rightClickBehavior === "star" && starred.includes(squareIndex) && (
+            <div className={classes.starred} />
+          )}
           {shownDifficulties.length > 0 &&
             getDifficulty(square.name, shownDifficulties)}
           <SquareText

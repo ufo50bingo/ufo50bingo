@@ -74,25 +74,25 @@ export default function Daily({
 
   const description: null | JSONContent = useMemo(
     () => getRTContent(dailyData.description),
-    [dailyData.description]
+    [dailyData.description],
   );
 
   const feed = useMemo(
     () => getDailyFeedWithoutMistakes(feedWithMistakes, attempt),
-    [feedWithMistakes, attempt]
+    [feedWithMistakes, attempt],
   );
   const feedWithDuration = useMemo(
     () => getFeedWithDuration(feed, attempt),
-    [feed, attempt]
+    [feed, attempt],
   );
   const { bingo, majority, blackout } =
     getFirstBingoMajorityBlackoutIndex(feed);
   const finalMark = feed.findLastIndex((item) => item.type === "mark");
   const finalBoard =
     finalMark >= 0 &&
-      finalMark !== bingo &&
-      finalMark !== majority &&
-      finalMark !== blackout
+    finalMark !== bingo &&
+    finalMark !== majority &&
+    finalMark !== blackout
       ? finalMark
       : null;
 
@@ -112,7 +112,7 @@ export default function Daily({
 
   const isHidden = useMemo(
     () => feed.every((item) => item.type !== "reveal"),
-    [feed]
+    [feed],
   );
 
   const board = useMemo<TBoard>(
@@ -121,13 +121,13 @@ export default function Daily({
         name,
         color: completedIndexes.has(index) ? color : "blank",
       })),
-    [plainBoard, completedIndexes, color]
+    [plainBoard, completedIndexes, color],
   );
 
   const { isRunning, pause, unpause, timer } = useFeedTimer(
     feed,
     isoDate,
-    attempt
+    attempt,
   );
 
   const isMobile = useMediaQuery("(max-width: 525px)");
@@ -201,7 +201,7 @@ export default function Daily({
               <Anchor
                 onClick={() => {
                   const fixedBoardJson = JSON.stringify(
-                    plainBoard.map((name) => ({ name }))
+                    plainBoard.map((name) => ({ name })),
                   );
                   navigator.clipboard.writeText(fixedBoardJson);
                 }}
@@ -264,6 +264,7 @@ export default function Daily({
                     });
                   }}
                   shownDifficulties={["general"]}
+                  viewerColor={color}
                 />
                 <Group justify="space-between">
                   <Text>
@@ -378,7 +379,7 @@ export default function Daily({
                   }
                   summary += `Bingo in ${getDurationText(
                     feedWithDuration[bingo][0],
-                    false
+                    false,
                   )}\n`;
                   summary += getEmojiBoard(getBoardAtIndex(feed, bingo), color);
                 }
@@ -390,11 +391,11 @@ export default function Daily({
                   }
                   summary += `Majority in ${getDurationText(
                     feedWithDuration[majority][0],
-                    false
+                    false,
                   )}\n`;
                   summary += getEmojiBoard(
                     getBoardAtIndex(feed, majority),
-                    color
+                    color,
                   );
                 }
                 if (blackout != null) {
@@ -405,11 +406,11 @@ export default function Daily({
                   }
                   summary += `Blackout in ${getDurationText(
                     feedWithDuration[blackout][0],
-                    false
+                    false,
                   )}\n`;
                   summary += getEmojiBoard(
                     getBoardAtIndex(feed, blackout),
-                    color
+                    color,
                   );
                 }
                 if (finalBoard != null) {
@@ -420,11 +421,11 @@ export default function Daily({
                   }
                   summary += `Final Board in ${getDurationText(
                     feedWithDuration[finalBoard][0],
-                    false
+                    false,
                   )}\n`;
                   summary += getEmojiBoard(
                     getBoardAtIndex(feed, finalBoard),
-                    color
+                    color,
                   );
                 }
                 const completions = getDailyTimes(finalMark, feedWithDuration);
@@ -435,9 +436,10 @@ export default function Daily({
                         ? duration - completions[index - 1][2]
                         : duration;
                     const formattedDur = getDurationText(ms, false);
-                    return `${index + 1}. ${formattedDur} — ${plainBoard[squareIndex]
-                      }`;
-                  }
+                    return `${index + 1}. ${formattedDur} — ${
+                      plainBoard[squareIndex]
+                    }`;
+                  },
                 );
                 summary += "\n";
                 summary += goalsAndTimes.join("\n");

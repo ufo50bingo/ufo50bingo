@@ -281,6 +281,7 @@ export default function MatchView({ match, isMatchesPage }: Props) {
                 )
               }
               shownDifficulties={["general", "veryhard"]}
+              viewerColor={null}
             />
             {isRevealed && (
               <Group justify="space-between">

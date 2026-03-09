@@ -50,6 +50,7 @@ export default function About({ initialBoard }: Props) {
             isHidden={isHidden}
             setIsHidden={setIsHidden}
             shownDifficulties={[]}
+            viewerColor={COLOR}
           />
         </div>
         <p>

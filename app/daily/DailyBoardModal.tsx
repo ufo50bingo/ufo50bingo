@@ -29,7 +29,7 @@ export default function DailyBoardModal({
   const board: TBoard = useMemo(() => {
     const boardMarked = getBoardAtIndex(
       feedWithDuration.map((item) => item[1]),
-      feedIndex
+      feedIndex,
     );
     return rawBoard.map((name, index) => ({
       name,
@@ -38,7 +38,7 @@ export default function DailyBoardModal({
   }, [feedWithDuration, feedIndex, color, rawBoard]);
   const overlays = useMemo(
     () => getDailyOverlays(feedIndex, feedWithDuration),
-    [feedIndex, feedWithDuration]
+    [feedIndex, feedWithDuration],
   );
   return (
     <Modal
@@ -58,6 +58,7 @@ export default function DailyBoardModal({
             isHidden={false}
             setIsHidden={() => {}}
             shownDifficulties={["general"]}
+            viewerColor={color}
           />
         </div>
         <Button

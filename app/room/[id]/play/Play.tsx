@@ -47,11 +47,14 @@ export default function Play({
   playerName,
 }: Props) {
   const [shownDifficulties, setShownDifficulties] = useShownDifficulties();
-  const [showGeneralTracker, setShowGeneralTracker] = useLocalBool({ key: "show_general_tracker", defaultValue: true });
+  const [showGeneralTracker, setShowGeneralTracker] = useLocalBool({
+    key: "show_general_tracker",
+    defaultValue: true,
+  });
   const [dings, setDings] = useDings("play");
   const [color, setColor] = useColor(id);
   const [isHidden, setIsHidden] = useState(() =>
-    initialBoard.every((square) => square.color === "blank")
+    initialBoard.every((square) => square.color === "blank"),
   );
   const [pauseRequestName, setPauseRequestName] = useState<string | null>(null);
   const pauseRef = useRef<null | (() => unknown)>(null);
@@ -110,7 +113,7 @@ export default function Play({
           };
         })
         .filter((item) => item != null),
-    [board]
+    [board],
   );
 
   const [myScore, opponent] = useMemo(() => {
@@ -174,7 +177,7 @@ export default function Play({
               const isClearing = board[squareIndex].color === selectedColor;
               try {
                 await changeColor(id, squareIndex, selectedColor, isClearing);
-              } catch { }
+              } catch {}
             }}
             isHidden={isHidden}
             setIsHidden={setIsHidden}
@@ -186,6 +189,7 @@ export default function Play({
             }}
             pauseRequestName={pauseRequestName}
             clearPauseRequest={() => setPauseRequestName(null)}
+            viewerColor={selectedColor}
           />
           <Group justify="space-between">
             <div style={{ display: "flex" }}>

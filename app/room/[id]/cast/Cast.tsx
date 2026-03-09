@@ -335,7 +335,9 @@ export default function Cast({
             <GeneralIcons
               isLeft={true}
               color={leftColor}
-              generalGoals={generalOrder === "reading" ? generalGoals : sortedGenerals}
+              generalGoals={
+                generalOrder === "reading" ? generalGoals : sortedGenerals
+              }
               generalState={generals}
               iconType={iconType}
               isHidden={isHidden}
@@ -356,6 +358,7 @@ export default function Cast({
             hiddenText="Click or start Countdown to reveal"
             pauseRequestName={pauseRequestName}
             clearPauseRequest={() => setPauseRequestName(null)}
+            viewerColor={null}
           />
           <SideColumn isDouble={isDouble}>
             <SideCell>
@@ -370,7 +373,9 @@ export default function Cast({
             <GeneralIcons
               isLeft={false}
               color={rightColor}
-              generalGoals={generalOrder === "reading" ? generalGoals : sortedGenerals}
+              generalGoals={
+                generalOrder === "reading" ? generalGoals : sortedGenerals
+              }
               generalState={generals}
               iconType={iconType}
               isHidden={isHidden}
@@ -464,7 +469,9 @@ export default function Cast({
         leftScore={leftScore}
         rightScore={rightScore}
         generalCounts={generals}
-        generalGoals={generalOrder === "reading" ? generalGoals : sortedGenerals}
+        generalGoals={
+          generalOrder === "reading" ? generalGoals : sortedGenerals
+        }
         showGameSelector={showGameSelector}
         setShowGameSelector={setShowGameSelector}
         highlightCurrentGame={highlightCurrentGame}

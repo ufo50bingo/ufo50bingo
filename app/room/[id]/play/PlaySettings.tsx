@@ -14,6 +14,7 @@ import CreateBoardSection from "../common/CreateBoardSection";
 import BottomSection from "../common/BottomSection";
 import { Font } from "@/app/font/useFont";
 import FontSelector from "@/app/font/FontSelector";
+import SelectRightClickBehavior from "@/app/settings/SelectRightClickBehavior";
 
 type Props = {
   id: string;
@@ -102,7 +103,7 @@ export default function PlaySettings({
                       checked={shownDifficulties.includes("general")}
                       onChange={(event) =>
                         setShownDifficulties(
-                          event.target.checked ? ["general"] : []
+                          event.target.checked ? ["general"] : [],
                         )
                       }
                       label="Label general goals"
@@ -115,6 +116,7 @@ export default function PlaySettings({
                       label="Show general goal tracker"
                     />
                     <FontSelector font={font} setFont={setFont} />
+                    <SelectRightClickBehavior label="Square right click behavior" />
                   </Stack>
                 </Accordion.Panel>
               </Accordion.Item>

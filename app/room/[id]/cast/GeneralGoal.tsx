@@ -13,7 +13,6 @@ import {
   EIGHT_LEVELS,
   TWO_BOSSES,
   BOSSES,
-  SIX_ENEMIES,
 } from "./timeEstimates";
 import { findGamesForGoal, GameToGoals } from "./findAllGames";
 import InfoCard from "./InfoCard";

@@ -134,23 +134,17 @@ export default function GeneralGoal({
     case "Defeat a boss in 6 games":
       recommendations = BOSSES;
       break;
-    case "Defeat 6 enemy types in 6 games on this card":
-      recommendations = SIX_ENEMIES;
-      onCardOnly = true;
-      break;
-    case "Defeat 6 enemy types in 6 games":
-      recommendations = SIX_ENEMIES;
-      break;
     // THEME
     case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
     case "SHOOTER: Beat 5 waves/stages across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
     case "DAY JOB: Beat 9 levels across Rail Heist, Onion Delivery, and Bug Hunter":
     case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
     case "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank":
-    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot":
+    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
     case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
-    case "ROLE PLAYER: Level up all your characters 6 total times across Grimstone, Divers, Valbrace":
+    case "ROLE PLAYER: Level up all your characters 5 total times across Grimstone, Divers, Valbrace":
+    case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
       recommendations = {
         always: findGamesForGoal(foundGoal.resolvedGoal),
         synergy: [],

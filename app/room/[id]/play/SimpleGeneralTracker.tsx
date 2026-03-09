@@ -118,9 +118,6 @@ function getAbbreviatedName(goal: FoundStandardGeneral): string {
     case "Defeat a boss in 6 games on this card":
     case "Defeat a boss in 6 games":
       return "Boss (6)";
-    case "Defeat 6 enemy types in 6 games on this card":
-    case "Defeat 6 enemy types in 6 games":
-      return "6 enemy types (6)";
     // THEME
     case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
       return "Camp Trilogy (5 worlds)";
@@ -132,14 +129,16 @@ function getAbbreviatedName(goal: FoundStandardGeneral): string {
       return "Racer (12 races)";
     case "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank":
       return "Puzzler (15 levels)";
-    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot":
-      return "Amy (5 levels)";
+    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
+      return "Amy (5 levels, 1+ each)";
     case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
       return "War Is Bad (9 battles)";
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
       return "Metroidvania (6 abilities)";
-    case "ROLE PLAYER: Level up all your characters 6 total times across Grimstone, Divers, Valbrace":
-      return "Role Player (6 level ups)";
+    case "ROLE PLAYER: Level up all your characters 5 total times across Grimstone, Divers, Valbrace":
+      return "Role Player (5 level ups)";
+    case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
+      return "Revolutionary (5 levels)";
     default:
       return goal.resolvedGoal;
   }

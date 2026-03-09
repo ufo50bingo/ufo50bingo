@@ -86,7 +86,9 @@ function Icon({
         <div
           className={`${classes.sideBySideTag} ${squareColor !== "blank" ? classes.opponentClaimed : ""}`}
         >
-          <span className={getFontClassname(font, false, count > 9)}>{count}</span>
+          <span className={getFontClassname(font, false, count > 9)}>
+            {count}
+          </span>
         </div>
       );
     return (
@@ -146,9 +148,9 @@ export default function GeneralIcons({
           countState == null
             ? 0
             : Object.keys(countState).reduce(
-              (acc, game) => acc + countState[game],
-              0,
-            )
+                (acc, game) => acc + countState[game],
+                0,
+              )
         }
         iconType={iconType}
         src={
@@ -194,19 +196,17 @@ function getWinnerBitSrc(goal: StandardGeneral, isHidden: boolean): string {
     case "Defeat a boss in 6 games on this card":
     case "Defeat a boss in 6 games":
       return "/general/winnerbit/Icon_Boss.png";
-    case "Defeat 6 enemy types in 6 games on this card":
-    case "Defeat 6 enemy types in 6 games":
-      return "/general/winnerbit/Icon_Enemy.png";
     // THEME
     case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
     case "SHOOTER: Beat 5 waves/stages across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
     case "DAY JOB: Beat 9 levels across Rail Heist, Onion Delivery, and Bug Hunter":
     case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
     case "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank":
-    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot":
+    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
     case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
-    case "ROLE PLAYER: Level up all your characters 6 total times across Grimstone, Divers, Valbrace":
+    case "ROLE PLAYER: Level up all your characters 5 total times across Grimstone, Divers, Valbrace":
+    case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
       return "/general/winnerbit/Icon_Multi-Game_Generic.png";
     default:
       return "/general/winnerbit/Icon_Unknown_Goal.png";
@@ -241,9 +241,6 @@ function getClassicSrc(goal: StandardGeneral, isHidden: boolean): string {
     case "Defeat a boss in 6 games on this card":
     case "Defeat a boss in 6 games":
       return "/general/sprites/IconBoss.png";
-    case "Defeat 6 enemy types in 6 games":
-    case "Defeat 6 enemy types in 6 games on this card":
-      return "/general/sprites/IconEnemy.png"
     // THEME
     case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
       return "/general/sprites/IconCampTrilogy.png";
@@ -255,14 +252,16 @@ function getClassicSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/sprites/IconRacer.png";
     case "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank":
       return "/general/sprites/IconPuzzler.png";
-    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot":
+    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
       return "/general/sprites/IconAmy.png";
     case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
       return "/general/sprites/IconWarIsBad.png";
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
       return "/general/sprites/IconMetroidvania.png";
-    case "ROLE PLAYER: Level up all your characters 6 total times across Grimstone, Divers, Valbrace":
+    case "ROLE PLAYER: Level up all your characters 5 total times across Grimstone, Divers, Valbrace":
       return "/general/sprites/IconRoleplayer.png";
+    case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
+      return "/general/sprites/IconRevolutionary.png";
     default:
       return "/general/sprites/IconUnknown.png";
   }
@@ -296,9 +295,6 @@ function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
     case "Defeat a boss in 6 games on this card":
     case "Defeat a boss in 6 games":
       return "/general/matt/BOSS.png";
-    case "Defeat 6 enemy types in 6 games":
-    case "Defeat 6 enemy types in 6 games on this card":
-      return "/general/matt/6ENEMIES.png";
     // THEME
     case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
       return "/general/matt/CAMPTRILOGY.png";
@@ -310,14 +306,16 @@ function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/matt/RACER.png";
     case "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank":
       return "/general/matt/PUZZLER.png";
-    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot":
+    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
       return "/general/matt/AMY.png";
     case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
       return "/general/matt/WARISBAD.png";
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
       return "/general/matt/METROIDVANIA.png";
-    case "ROLE PLAYER: Level up all your characters 6 total times across Grimstone, Divers, Valbrace":
+    case "ROLE PLAYER: Level up all your characters 5 total times across Grimstone, Divers, Valbrace":
       return "/general/matt/ROLEPLAYER.png";
+    case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
+      return "/general/matt/REVOLUTIONARY.png";
     default:
       return "/general/sprites/IconUnknown.png";
   }

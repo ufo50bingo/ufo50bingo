@@ -1,8 +1,12 @@
 import { Checkbox, Group, SimpleGrid, Text } from "@mantine/core";
-import { Game, GAME_NAMES } from "../goals";
+import { Game, ProperGame } from "../goals";
 import CheckerSortSelector, { CheckerSort } from "./CheckerSortSelector";
+import useCheckerSortInfo from "./useCheckerSortInfo";
+import { UFODifficulties, UFOPasta } from "../generator/ufoGenerator";
+import getSubcategoryName from "../generator/getSubcategoryName";
 
 type Props = {
+  ufoDifficulties: UFODifficulties,
   checkState: Map<Game, boolean>;
   setCheckState: (newCheckState: Map<Game, boolean>) => void;
   sort: CheckerSort;
@@ -10,6 +14,7 @@ type Props = {
 };
 
 export default function GameChecker({
+  ufoDifficulties,
   checkState,
   setCheckState,
   sort,
@@ -17,6 +22,12 @@ export default function GameChecker({
 }: Props) {
   const isAllChecked = checkState.values().every((isChecked) => isChecked);
   const isNoneChecked = checkState.values().every((isChecked) => !isChecked);
+
+  const [hasChronological, sortedSubcategories] = useCheckerSortInfo({
+    ufoDifficulties,
+    categories: Object.keys(ufoDifficulties).filter(cat => cat !== "general"),
+    sort,
+  });
   return (
     <>
       <Group>
@@ -41,20 +52,18 @@ export default function GameChecker({
             setCheckState(newState);
           }}
         />
-        {Array.from(
-          checkState.entries().map(([key, isChecked]) => (
-            <Checkbox
-              key={key}
-              label={GAME_NAMES[key]}
-              checked={isChecked}
-              onChange={(event) => {
-                const newState = new Map(checkState);
-                newState.set(key, event.currentTarget.checked);
-                setCheckState(newState);
-              }}
-            />
-          ))
-        )}
+        {sortedSubcategories.map((subcategory) => (
+          <Checkbox
+            key={subcategory}
+            label={getSubcategoryName(subcategory)}
+            checked={checkState.get(subcategory as ProperGame) !== false}
+            onChange={(event) => {
+              const newState = new Map(checkState);
+              newState.set(subcategory as ProperGame, event.currentTarget.checked);
+              setCheckState(newState);
+            }}
+          />
+        ))}
       </SimpleGrid>
     </>
   );

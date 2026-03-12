@@ -251,16 +251,25 @@ export default function NonLeagueMatch() {
           </Tooltip>
         )}
       </Group>
-      {(metadata.type === "GameNames" ||
-        (metadata.type === "UFO" && metadata.isGeneric !== true)) &&
+      {metadata.type === "UFO" && metadata.isGeneric !== true &&
         showFilters && (
           <GameChecker
             checkState={checkState}
             setCheckState={setCheckState}
             sort={checkerSort}
             setSort={setCheckerSort}
+            ufoDifficulties={metadata.pasta.goals}
           />
         )}
+      {metadata.type === "GameNames" && showFilters && (
+        <GameChecker
+          checkState={checkState}
+          setCheckState={setCheckState}
+          sort={checkerSort}
+          setSort={setCheckerSort}
+          ufoDifficulties={GAME_NAMES_PARTIAL_PASTA}
+        />
+      )}
       {metadata.type === "GameNames" && showFilters && hasLessThan25Games && (
         <Alert
           variant="light"
@@ -530,3 +539,6 @@ export default function NonLeagueMatch() {
     </Stack>
   );
 }
+
+const GAME_NAMES_PARTIAL_PASTA: UFODifficulties = { all: {} };
+ORDERED_PROPER_GAMES.forEach(g => GAME_NAMES_PARTIAL_PASTA.all[g] = ["fake"]);

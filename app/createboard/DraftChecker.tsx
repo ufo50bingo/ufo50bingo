@@ -3,9 +3,8 @@ import { BingosyncColor } from "../matches/parseBingosyncData";
 import getColorHex from "../room/[id]/cast/getColorHex";
 import CheckerSortSelector, { CheckerSort } from "./CheckerSortSelector";
 import { UFOPasta } from "../generator/ufoGenerator";
-import { useMemo } from "react";
 import getSubcategoryName from "../generator/getSubcategoryName";
-import { ORDERED_PROPER_GAMES } from "../goals";
+import useCheckerSortInfo from "./useCheckerSortInfo";
 
 const COLORS: ReadonlyArray<BingosyncColor> = [
   "red",
@@ -34,27 +33,7 @@ export default function DraftChecker({
   sort,
   setSort,
 }: Props) {
-  const allSubcategories = useMemo(() => {
-    const subcategories: Set<string> = new Set();
-    for (const category of draftCategories) {
-      for (const subcategory of Object.keys(pasta.goals[category])) {
-        subcategories.add(subcategory);
-      }
-    }
-    return subcategories;
-  }, [draftCategories, pasta.goals]);
-  const hasChronological = useMemo(() => {
-    return allSubcategories.isSubsetOf(new Set(ORDERED_PROPER_GAMES));
-  }, [allSubcategories]);
-  const sortedSubcategories = useMemo(() => {
-    if (hasChronological && sort === "chronological") {
-      return ORDERED_PROPER_GAMES.filter((game) => allSubcategories.has(game));
-    }
-    const subcatArray = [...allSubcategories];
-    subcatArray.sort();
-    return subcatArray;
-  }, [allSubcategories, hasChronological, sort]);
-
+  const [hasChronological, sortedSubcategories] = useCheckerSortInfo({ ufoDifficulties: pasta.goals, categories: draftCategories, sort });
   return (
     <>
       <Group>

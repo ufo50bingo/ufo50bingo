@@ -15,7 +15,7 @@ export const STANDARD_UFO = {
       ],
       paintchase: [
         "PAINT CHASE: EVEN-COAT allowed; beat courses 16, 17, and 20 while destroying all spike mines",
-        "PAINT CHASE: Reach 90+ score after beating at least 3 levels",
+        "PAINT CHASE: Reach a score of 90+",
       ],
       magicgarden: [
         "MAGIC GARDEN: Defeat an enemy worth at least 700 points",
@@ -113,7 +113,7 @@ export const STANDARD_UFO = {
         "RAIL HEIST: Beat 5 levels",
         "RAIL HEIST: LAZY-COPS allowed; beat Root Around while destroying every barrel",
       ],
-      vainger: ["VAINGER: Collect 3 items", "VAINGER: Defeat a boss"],
+      vainger: ["VAINGER: Collect 3 pickups", "VAINGER: Defeat a boss"],
       rockonisland: [
         "ROCK ON! ISLAND: Beat Initial Encounter",
         "ROCK ON! ISLAND: Have all 6 fully upgraded cavemen types at once (no villages)",
@@ -214,8 +214,8 @@ export const STANDARD_UFO = {
         "PAINT CHASE: Beat 6 courses",
       ],
       magicgarden: [
-        "MAGIC GARDEN: Save 100 oppies before scoring 4,000 points",
-        "MAGIC GARDEN: Score 10,000+ points before saving 50 Oppies",
+        "MAGIC GARDEN: Have 100+ Oppies saved with fewer than 4,000 points",
+        "MAGIC GARDEN: Score 10,000+ points with fewer than 50 Oppies saved",
       ],
       mortol: ["MORTOL: Clear all levels in World 1", "MORTOL: Have 50+ Lives"],
       velgress: [
@@ -275,7 +275,7 @@ export const STANDARD_UFO = {
       ],
       waldorfsjourney: [
         "WALDORF'S JOURNEY: Open 2 chests in a run",
-        "WALDORF'S JOURNEY: Have 50 shells at once before entering the palace",
+        "WALDORF'S JOURNEY: Have 50 shells at once while outside the palace",
       ],
       porgy: [
         "PORGY: Collect 4 torpedo upgrades",
@@ -307,7 +307,7 @@ export const STANDARD_UFO = {
       ],
       vainger: [
         "VAINGER: Beat 3 bosses",
-        "VAINGER: Collect 5 items",
+        "VAINGER: Collect 5 pickups",
         "VAINGER: Obtain a Keycode from a major boss",
       ],
       rockonisland: ["ROCK ON! ISLAND: CLUB-PASS allowed; beat {{roi_level}}"],

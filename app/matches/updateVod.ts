@@ -4,12 +4,13 @@ import { revalidatePath } from "next/cache";
 import getSql from "../getSql";
 import syncToGSheet from "./syncToGSheet";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
+import syncVodToLeagueSheet from "./syncVodToLeagueSheet";
 
 export default async function updateVod(
   id: string,
   url: string | null,
   startSeconds: number | null,
-  analysisSeconds: number | null
+  analysisSeconds: number | null,
 ): Promise<void> {
   const sql = getSql(false);
 
@@ -25,6 +26,6 @@ export default async function updateVod(
   try {
     const rawMatch = result[0];
     const match = getMatchFromRaw(rawMatch);
-    await syncToGSheet(match);
+    await Promise.all([syncToGSheet(match), syncVodToLeagueSheet(match)]);
   } catch {}
 }

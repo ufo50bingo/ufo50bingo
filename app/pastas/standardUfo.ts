@@ -818,7 +818,6 @@ export const STANDARD_UFO = {
             count: 5,
             options: [
               "kickclub",
-              "mooncat",
               "campanella",
               "porgy",
               "caramelcaramel",

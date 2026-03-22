@@ -22,7 +22,7 @@ import {
 import { useAppContext } from "../AppContextProvider";
 import { db } from "../db";
 import Duration from "../practice/Duration";
-import { compareByDifficulty } from "../goals";
+import { compareByDifficulty, ProperGame } from "../goals";
 import PlaylistAddButton from "../PlaylistAddButton";
 import { BaseToken, Plain, ResolvedToken } from "../generator/splitAtTokens";
 import EditableParts from "./EditableParts";
@@ -36,6 +36,9 @@ import getSubcategoryName from "../generator/getSubcategoryName";
 import getCategoryName from "../generator/getCategoryName";
 import { PracticeVariant, usePracticeVariant } from "../PracticeVariantContext";
 import { Metadata } from "next";
+import { STANDARD_UFO } from "../pastas/standardUfo";
+import { DOC_LINKS } from "../practice/docLinks";
+import Link from "next/link";
 
 export const metadata: Metadata = {
     title: "All UFO 50 Bingo Goals",
@@ -223,6 +226,14 @@ function Inner({ practiceVariant }: { practiceVariant: PracticeVariant }) {
                         );
                         const averageDuration = stats?.averageDuration;
                         const bestDuration = stats?.bestDuration;
+                        let resourceLink = null;
+                        if (pasta === STANDARD_UFO) {
+                            if (goal.category === "general") {
+                                resourceLink = DOC_LINKS["general"];
+                            } else {
+                                resourceLink = DOC_LINKS[goal.subcategory as ProperGame];
+                            }
+                        }
                         return (
                             <Table.Tr key={goal.name}>
                                 <Table.Td>
@@ -264,7 +275,15 @@ function Inner({ practiceVariant }: { practiceVariant: PracticeVariant }) {
                                         tokens={pasta.tokens}
                                     />
                                 </Table.Td>
-                                <Table.Td>{getSubcategoryName(goal.subcategory)}</Table.Td>
+                                <Table.Td>{resourceLink != null
+                                    ? (
+                                        <Tooltip label="View community-maintained resources for this game">
+                                            <Link href={resourceLink} target="_blank">
+                                                {getSubcategoryName(goal.subcategory)}
+                                            </Link>
+                                        </Tooltip>
+                                    )
+                                    : getSubcategoryName(goal.subcategory)}</Table.Td>
                                 <Table.Td>{getCategoryName(goal.category)}</Table.Td>
                                 <Table.Td>
                                     {averageDuration == null ? (

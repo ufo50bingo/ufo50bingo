@@ -126,7 +126,8 @@ const TYPED_SUBCATEGORY_NAMES = {
   goldcherry: "Gold/Cherry",
   collectathon: "Collectathon",
   theme: "Theme",
-  bosslevel: "Boss/Level",
+  bossenemy: "Boss",
+  level: "Level"
 };
 
 export const SUBCATEGORY_NAMES: { [subcategory: string]: string } =

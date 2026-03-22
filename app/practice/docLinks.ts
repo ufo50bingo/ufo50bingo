@@ -1,4 +1,4 @@
-const DOC_LINKS = {
+export const DOC_LINKS = {
   "general": "https://docs.google.com/document/d/1RK6UH8mte79lF7yobr9yvkdpMHINBRBRV3hjJVb4MIk/edit?tab=t.uvbv5nd828ek#heading=h.49ykwvj25bpo",
   "barbuta": "https://docs.google.com/document/d/1RK6UH8mte79lF7yobr9yvkdpMHINBRBRV3hjJVb4MIk/edit?tab=t.jkt2r7kxs0js#heading=h.ah8t70nhfndi",
   "bughunter": "https://docs.google.com/document/d/1RK6UH8mte79lF7yobr9yvkdpMHINBRBRV3hjJVb4MIk/edit?tab=t.4mnyfhtr4n08#heading=h.1hdxpnj5hh6k",

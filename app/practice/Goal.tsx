@@ -3,11 +3,12 @@ import {
   IconArrowForward,
   IconArrowsShuffle,
   IconCircleCheck,
+  IconHelp,
   IconPlayerPause,
   IconPlayerPlay,
   IconReload,
 } from "@tabler/icons-react";
-import { Badge, Button, Card, Group, Stack, Text } from "@mantine/core";
+import { ActionIcon, Badge, Button, Card, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { db } from "../db";
 import useTimer from "../useTimer";
 import { Plain, ResolvedToken } from "../generator/splitAtTokens";
@@ -18,6 +19,10 @@ import { GoalPartsAndPasta } from "../AppContextProvider";
 import { UFOPasta } from "../generator/ufoGenerator";
 import findGoal from "../findGoal";
 import getCategoryName from "../generator/getCategoryName";
+import { STANDARD_UFO } from "../pastas/standardUfo";
+import { DOC_LINKS } from "./docLinks";
+import { ProperGame } from "../goals";
+import Link from "next/link";
 
 enum State {
   NOT_STARTED,
@@ -176,7 +181,18 @@ export default function Goal({
       break;
   }
 
-  const category = findGoal(goal, pasta)?.category;
+  const foundGoal = findGoal(goal, pasta);
+  const category = foundGoal?.category;
+  const subcategory = foundGoal?.subcategory;
+
+  let resourceLink = null;
+  if (pasta === STANDARD_UFO && category != null && subcategory != null) {
+    if (category === "general") {
+      resourceLink = DOC_LINKS["general"];
+    } else {
+      resourceLink = DOC_LINKS[subcategory as ProperGame];
+    }
+  }
 
   return (
     <Card shadow="sm" padding="sm" radius="md" withBorder>
@@ -197,11 +213,25 @@ export default function Goal({
               />
             </strong>
           </Text>
-          {category != null && (
-            <Badge color="cyan" size="sm">
-              {getCategoryName(category)}
-            </Badge>
-          )}
+          <Group gap={4}>
+            {category != null && (
+              <Badge color="cyan" size="sm">
+                {getCategoryName(category)}
+              </Badge>
+            )}
+            {resourceLink != null && (
+              <Tooltip label="View community-maintained resources for this game">
+                <ActionIcon
+                  variant="subtle"
+                  component={Link}
+                  href={resourceLink}
+                  target="_blank"
+                >
+                  <IconHelp size={18} />
+                </ActionIcon>
+              </Tooltip>
+            )}
+          </Group>
         </Group>
         {content}
       </Stack>

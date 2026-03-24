@@ -559,7 +559,7 @@ export const STANDARD_UFO = {
       ],
       "pingolf": [
         "PINGOLF: Hole-in-one on 3 different courses",
-        "PINGOLF: Par or better on 5 courses with no purple objects remaining"
+        "PINGOLF: Par or better on 6 courses with no purple objects remaining"
       ],
       "mortolii": [
         "MORTOL II: Gold disk without blowing anything up",

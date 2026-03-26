@@ -1230,7 +1230,7 @@ export const STANDARD_UFO = {
       "Kraft",
 	  "Mazurka",
 	  "Sacrum",
-	  "Azon",
+	  "Axon",
       "Riot"
     ],
     "porgy_upgrade": [

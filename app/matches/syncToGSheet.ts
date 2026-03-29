@@ -88,7 +88,21 @@ export default async function syncToGSheet(match: Match): Promise<void> {
       // For Non-League, sheet is
       // Room Name,	Date,	Player,	Opponent,	Game,	Goal,	Time (mins),	Start,	End, Match ID
       // For League, sheet is
-      // Week, Tier, Date, Player, Opponent, Game, Goal, Time (mins), Start, End, Match ID
+      // Name
+      // Week
+      // Tier
+      // Date
+      // Player 1
+      // Player 2
+      // Completed By
+      // Game
+      // Goal
+      // Time (mins)
+      // Time after match start
+      // Completion order
+      // Start
+      // End
+      // Match Link
       const remainingColumns = [
         new Date(match.dateCreated * 1000).toLocaleDateString("en-US", {
           timeZone: "America/New_York",

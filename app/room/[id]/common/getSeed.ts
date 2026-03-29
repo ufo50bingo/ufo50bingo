@@ -1,5 +1,5 @@
 export default async function getSeed(id: string): Promise<number> {
-  const settingsUrl = `https://www.bingosync.com/room/${id}/room-settings`;
+  const settingsUrl = `https://celestebingo.rhelmot.io/room/${id}/room-settings`;
   const settingsResponse = await fetch(settingsUrl, {
     method: "GET",
     headers: {

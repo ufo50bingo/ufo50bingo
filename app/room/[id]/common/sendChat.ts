@@ -13,7 +13,7 @@ export default async function sendChat(
     );
   }
 
-  await fetch("https://www.bingosync.com/api/chat", {
+  await fetch("https://celestebingo.rhelmot.io/api/chat", {
     method: "PUT",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",

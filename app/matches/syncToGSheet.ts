@@ -97,6 +97,7 @@ export default async function syncToGSheet(match: Match): Promise<void> {
       // Completed By
       // Game
       // Goal
+      // Source goal
       // Time (mins)
       // Time after match start
       // Completion order

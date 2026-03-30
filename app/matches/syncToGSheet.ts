@@ -12,24 +12,21 @@ import { Match } from "./Matches";
 import { setUrlAtTime } from "./vodUtil";
 import getBaseUrlAndHost from "./getBaseUrlAndHost";
 import { GAME_NAMES } from "../goals";
+import findGoal from "../findGoal";
+import { STANDARD_UFO } from "../pastas/standardUfo";
 
-const SHEET_ID = "1bW8zjoR2bpr74w-dA4HHt04SqvGg1aj8FJeOs3EqdNE";
-const NON_LEAGUE_NAME = "Non-League";
-const SEASON_2_NAME = "Season 2";
-const SEASON_3_NAME = "Season 3";
+const SEASON_3_SHEET = "12QxCeOhHnmnoRQhiSmD56dPSl3rNnw2mfDt7qScz9Ds";
+
+const DIAGONALS = [0, 6, 18, 24, 4, 8, 16, 20];
+const CENTER = 12;
+
 export default async function syncToGSheet(match: Match): Promise<void> {
   const vodURL = match.vod?.url;
   const vodStartSeconds = match.vod?.startSeconds;
   const boardJson = match.boardJson;
   const changelogJson = match.changelogJson;
-  const sheetName = getSheetName(match.leagueInfo?.season);
-  if (
-    vodURL == null ||
-    vodStartSeconds == null ||
-    boardJson == null ||
-    changelogJson == null ||
-    sheetName == null
-  ) {
+  // TODO account for seasons
+  if (boardJson == null || changelogJson == null) {
     return;
   }
   const board: TBoard = JSON.parse(boardJson);
@@ -40,10 +37,13 @@ export default async function syncToGSheet(match: Match): Promise<void> {
   }
 
   const urlAndHost = getBaseUrlAndHost(vodURL);
-  if (urlAndHost == null) {
-    return;
-  }
+
+  const matchLink = `https://ufo50.bingo/match/${match.id}`;
+
   const getLink = (time: number) => {
+    if (urlAndHost == null || vodStartSeconds == null) {
+      return null;
+    }
     const url = new URL(urlAndHost[0]);
     setUrlAtTime(urlAndHost[1], url, vodStartSeconds + time - matchStartTime);
     return url.toString();
@@ -72,28 +72,26 @@ export default async function syncToGSheet(match: Match): Promise<void> {
     matchStartTime,
     changesWithCorrectedNames,
   );
+  const completionOrder = ranges
+    .map((range, squareIndex) => ({ range, squareIndex }))
+    .filter(({ range, squareIndex: _squareIndex }) => range != null)
+    .toSorted((a, b) => (a.range![2] ?? 0) - (b.range![2] ?? 0))
+    .map(({ range: _range, squareIndex }) => squareIndex);
   const rows = ranges
     .map((range, squareIndex) => {
-      if (range == null) {
-        return null;
-      }
       const goal = board[squareIndex].name;
-      const player = range[0];
-      const opponent =
-        player === match.winner?.name
-          ? (match.opponent?.name ?? "")
-          : player === match.opponent?.name
-            ? (match.winner?.name ?? "")
-            : "";
-      // For Non-League, sheet is
-      // Room Name,	Date,	Player,	Opponent,	Game,	Goal,	Time (mins),	Start,	End, Match ID
-      // For League, sheet is
-      // Name
+      const player = range?.[0];
+      // For League, first columns are
+
       // Week
       // Tier
-      // Date
+      // Game number
       // Player 1
       // Player 2
+
+      // Shared columns are:
+
+      // Date
       // Completed By
       // Game
       // Goal
@@ -101,26 +99,38 @@ export default async function syncToGSheet(match: Match): Promise<void> {
       // Time (mins)
       // Time after match start
       // Completion order
+      // Square type
       // Start
       // End
       // Match Link
+      const order = completionOrder.indexOf(squareIndex);
       const remainingColumns = [
         new Date(match.dateCreated * 1000).toLocaleDateString("en-US", {
           timeZone: "America/New_York",
         }),
         player,
-        opponent,
         getGameForGoal(goal),
         goal,
-        ((range[2] - range[1]) / 60).toFixed(1),
-        getLink(range[1]),
-        getLink(range[2]),
-        match.id,
+        findGoal(goal, STANDARD_UFO)?.goal ?? goal,
+        range != null ? (range[2] - range[1]) / 60 : null,
+        range != null ? (range[2] - matchStartTime) / 60 : null,
+        order !== -1 ? order + 1 : null,
+        CENTER === squareIndex
+          ? "Center"
+          : DIAGONALS.includes(squareIndex)
+            ? "Diagonal"
+            : "Other",
+        range != null ? getLink(range[1]) : null,
+        range != null ? getLink(range[2]) : null,
+        matchLink,
       ];
       return match.leagueInfo?.season != null
         ? [
-            match.leagueInfo?.week ?? "",
-            match.leagueInfo?.tier ?? "",
+            match.leagueInfo?.week,
+            match.leagueInfo?.tier,
+            match.leagueInfo?.game,
+            match.leagueInfo?.p1,
+            match.leagueInfo?.p2,
             ...remainingColumns,
           ]
         : [match.name, ...remainingColumns];
@@ -134,28 +144,28 @@ export default async function syncToGSheet(match: Match): Promise<void> {
   });
   const sheet = google.sheets("v4");
 
-  const idRange = match.leagueInfo?.season == null ? "J2:J" : "K2:K";
+  const idRange = match.leagueInfo?.season == null ? "M2:M" : "Q2:Q";
   const result = await sheet.spreadsheets.values.get({
-    spreadsheetId: SHEET_ID,
-    range: `'${sheetName}'!${idRange}`,
+    spreadsheetId: SEASON_3_SHEET,
+    range: `Data!${idRange}`,
     auth,
     fields: "values",
   });
   const metadata = await sheet.spreadsheets.get({
-    spreadsheetId: SHEET_ID,
+    spreadsheetId: SEASON_3_SHEET,
     auth,
   });
-  const nonLeagueId = metadata.data.sheets?.find(
-    (s) => s.properties?.title === sheetName,
+  const dataSheetId = metadata.data.sheets?.find(
+    (s) => s.properties?.title === "Data",
   )?.properties?.sheetId;
   const values: ReadonlyArray<ReadonlyArray<string>> = result.data.values ?? [];
-  if (nonLeagueId == null) {
+  if (dataSheetId == null) {
     return;
   }
-  const rangesToDelete = getRangesToDelete(values, match.id);
+  const rangesToDelete = getRangesToDelete(values, matchLink);
   if (rangesToDelete.length > 0) {
     await sheet.spreadsheets.batchUpdate({
-      spreadsheetId: SHEET_ID,
+      spreadsheetId: SEASON_3_SHEET,
       auth,
       requestBody: {
         // need to reverse rangesToDelete because the API will apply all the
@@ -164,7 +174,7 @@ export default async function syncToGSheet(match: Match): Promise<void> {
         requests: rangesToDelete.toReversed().map((range) => ({
           deleteDimension: {
             range: {
-              sheetId: nonLeagueId,
+              sheetId: dataSheetId,
               dimension: "ROWS",
               // first row is the header
               startIndex: range[0] + 1,
@@ -177,26 +187,14 @@ export default async function syncToGSheet(match: Match): Promise<void> {
   }
 
   await sheet.spreadsheets.values.append({
-    spreadsheetId: SHEET_ID,
+    spreadsheetId: SEASON_3_SHEET,
     auth: auth,
-    range: sheetName,
+    range: "Data",
     valueInputOption: "RAW",
     requestBody: {
       values: rows,
     },
   });
-}
-
-function getSheetName(season: number | null | undefined): null | string {
-  if (season == null) {
-    return NON_LEAGUE_NAME;
-  } else if (season === 2) {
-    return SEASON_2_NAME;
-  } else if (season === 3) {
-    return SEASON_3_NAME;
-  } else {
-    return null;
-  }
 }
 
 function getRangesToDelete(

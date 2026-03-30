@@ -1,5 +1,3 @@
-"use client";
-
 import getGoalAndFallback from "./generator/getGoalAndFallback";
 import splitAtTokens, { Plain, ResolvedToken } from "./generator/splitAtTokens";
 import { Tokens, UFOGoalConfig, UFOPasta } from "./generator/ufoGenerator";

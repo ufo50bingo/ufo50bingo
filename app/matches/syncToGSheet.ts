@@ -41,7 +41,10 @@ export default async function syncToGSheet(match: Match): Promise<void> {
   }
   let writeIndex: number | null = null;
   const existingRanges = getExistingRanges(values, matchLink);
-  if (existingRanges.length === 1 && existingRanges[0][1] === 25) {
+  if (
+    existingRanges.length === 1 &&
+    existingRanges[0][1] - existingRanges[0][0] === 25
+  ) {
     writeIndex = existingRanges[0][0] + 1;
   } else {
     // first delete existing rows for this match
@@ -78,6 +81,28 @@ export default async function syncToGSheet(match: Match): Promise<void> {
       (existingUnixtime) => existingUnixtime[0] > match.dateCreated,
     );
     writeIndex = foundIndex === -1 ? null : foundIndex + 1;
+    if (writeIndex != null) {
+      // insert blank rows
+      await sheet.spreadsheets.batchUpdate({
+        spreadsheetId: SEASON_3_SHEET,
+        auth,
+        requestBody: {
+          requests: [
+            {
+              insertDimension: {
+                range: {
+                  sheetId: dataSheetId,
+                  dimension: "ROWS",
+                  startIndex: writeIndex,
+                  endIndex: writeIndex + 25,
+                },
+                inheritFromBefore: false,
+              },
+            },
+          ],
+        },
+      });
+    }
   }
 
   if (writeIndex == null) {
@@ -91,29 +116,11 @@ export default async function syncToGSheet(match: Match): Promise<void> {
       },
     });
   } else {
-    // insert blank rows
-    await sheet.spreadsheets.batchUpdate({
-      spreadsheetId: SEASON_3_SHEET,
-      auth,
-      requestBody: {
-        requests: [
-          {
-            insertDimension: {
-              range: {
-                sheetId: dataSheetId,
-                dimension: "ROWS",
-                startIndex: writeIndex,
-                endIndex: writeIndex + 25,
-              },
-              inheritFromBefore: false,
-            },
-          },
-        ],
-      },
-    });
     await sheet.spreadsheets.values.update({
       spreadsheetId: SEASON_3_SHEET,
-      range: `Data!A${writeIndex}`,
+      auth,
+      // not totally sure why we need to add 1 again...
+      range: `Data!A${writeIndex + 1}`,
       valueInputOption: "RAW",
       requestBody: {
         values: data,

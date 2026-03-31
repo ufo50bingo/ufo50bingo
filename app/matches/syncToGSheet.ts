@@ -1,142 +1,19 @@
 "use server";
 
 import { google } from "googleapis";
-import { Changelog, TBoard } from "./parseBingosyncData";
-import {
-  getChangesWithoutMistakes,
-  getColorToVerifiedName,
-  getMatchStartTime,
-  getSquareCompletionRanges,
-} from "./analyzeMatch";
 import { Match } from "./Matches";
-import { setUrlAtTime } from "./vodUtil";
-import getBaseUrlAndHost from "./getBaseUrlAndHost";
-import { GAME_NAMES } from "../goals";
-import findGoal from "../findGoal";
-import { STANDARD_UFO } from "../pastas/standardUfo";
+import getGsheetSyncData from "./getGsheetSyncData";
 
 const SEASON_3_SHEET = "12QxCeOhHnmnoRQhiSmD56dPSl3rNnw2mfDt7qScz9Ds";
 
-const DIAGONALS = [0, 6, 18, 24, 4, 8, 16, 20];
-const CENTER = 12;
-
 export default async function syncToGSheet(match: Match): Promise<void> {
-  const vodURL = match.vod?.url;
-  const vodStartSeconds = match.vod?.startSeconds;
-  const boardJson = match.boardJson;
-  const changelogJson = match.changelogJson;
-  // TODO account for seasons
-  if (boardJson == null || changelogJson == null) {
-    return;
-  }
-  const board: TBoard = JSON.parse(boardJson);
-  const changelog: Changelog = JSON.parse(changelogJson);
-  const matchStartTime = getMatchStartTime(changelog, match.analysisSeconds);
-  if (matchStartTime == null) {
-    return;
-  }
-
-  const urlAndHost = getBaseUrlAndHost(vodURL);
-
   const matchLink = `https://ufo50.bingo/match/${match.id}`;
-
-  const getLink = (time: number) => {
-    if (urlAndHost == null || vodStartSeconds == null) {
-      return null;
-    }
-    const url = new URL(urlAndHost[0]);
-    setUrlAtTime(urlAndHost[1], url, vodStartSeconds + time - matchStartTime);
-    return url.toString();
-  };
-
-  const changes = getChangesWithoutMistakes(changelog.changes);
-  let colorToVerifiedName = null;
-  if (match.leagueInfo != null) {
-    colorToVerifiedName = getColorToVerifiedName(
-      changelog.changes,
-      match.leagueInfo.p1,
-      match.leagueInfo.p2,
-    );
+  const data = getGsheetSyncData(match);
+  if (data == null) {
+    return;
   }
-  const changesWithCorrectedNames =
-    colorToVerifiedName != null
-      ? changes.map((change) => {
-          const correctedName = colorToVerifiedName[change.color];
-          return {
-            ...change,
-            name: correctedName ?? change.name,
-          };
-        })
-      : changes;
-  const ranges = getSquareCompletionRanges(
-    matchStartTime,
-    changesWithCorrectedNames,
-  );
-  const completionOrder = ranges
-    .map((range, squareIndex) => ({ range, squareIndex }))
-    .filter(({ range, squareIndex: _squareIndex }) => range != null)
-    .toSorted((a, b) => (a.range![2] ?? 0) - (b.range![2] ?? 0))
-    .map(({ range: _range, squareIndex }) => squareIndex);
-  const rows = ranges
-    .map((range, squareIndex) => {
-      const goal = board[squareIndex].name;
-      const player = range?.[0];
-      // For League, first columns are
-
-      // Week
-      // Tier
-      // Game number
-      // Player 1
-      // Player 2
-
-      // Shared columns are:
-
-      // Date
-      // Completed By
-      // Game
-      // Goal
-      // Source goal
-      // Time (mins)
-      // Time after match start
-      // Completion order
-      // Square type
-      // Start
-      // End
-      // Match Link
-      const order = completionOrder.indexOf(squareIndex);
-      const remainingColumns = [
-        new Date(match.dateCreated * 1000).toLocaleDateString("en-US", {
-          timeZone: "America/New_York",
-        }),
-        player,
-        getGameForGoal(goal),
-        goal,
-        findGoal(goal, STANDARD_UFO)?.goal ?? goal,
-        range != null ? (range[2] - range[1]) / 60 : null,
-        range != null ? (range[2] - matchStartTime) / 60 : null,
-        order !== -1 ? order + 1 : null,
-        CENTER === squareIndex
-          ? "Center"
-          : DIAGONALS.includes(squareIndex)
-            ? "Diagonal"
-            : "Other",
-        range != null ? getLink(range[1]) : null,
-        range != null ? getLink(range[2]) : null,
-        matchLink,
-      ];
-      return match.leagueInfo?.season != null
-        ? [
-            match.leagueInfo?.week,
-            match.leagueInfo?.tier,
-            match.leagueInfo?.game,
-            match.leagueInfo?.p1,
-            match.leagueInfo?.p2,
-            ...remainingColumns,
-          ]
-        : [match.name, ...remainingColumns];
-    })
-    .filter((row) => row != null);
-
+  // TODO account for seasons
+  // TODO handle deleting/new card
   const auth = new google.auth.JWT({
     email: process.env.GSHEETS_ACCOUNT_EMAIL,
     key: process.env.GSHEETS_ACCOUNT_PRIVATE_KEY,
@@ -162,7 +39,7 @@ export default async function syncToGSheet(match: Match): Promise<void> {
   if (dataSheetId == null) {
     return;
   }
-  const rangesToDelete = getRangesToDelete(values, matchLink);
+  const rangesToDelete = getExistingRanges(values, matchLink);
   if (rangesToDelete.length > 0) {
     await sheet.spreadsheets.batchUpdate({
       spreadsheetId: SEASON_3_SHEET,
@@ -192,12 +69,12 @@ export default async function syncToGSheet(match: Match): Promise<void> {
     range: "Data",
     valueInputOption: "RAW",
     requestBody: {
-      values: rows,
+      values: data,
     },
   });
 }
 
-function getRangesToDelete(
+function getExistingRanges(
   rows: ReadonlyArray<ReadonlyArray<string>>,
   value: string,
 ): ReadonlyArray<[number, number]> {
@@ -215,12 +92,4 @@ function getRangesToDelete(
     ranges.push([startIndex, rows.length]);
   }
   return ranges;
-}
-
-const GAME_NAMES_STRINGS: { [strippedName: string]: string } = GAME_NAMES;
-function getGameForGoal(goal: string): string {
-  const beforeColon = goal.split(":")[0];
-  const search = beforeColon.toLowerCase().replace(/[^0-9a-z]/gi, "");
-  const game = search === "minimax" ? "Mini & Max" : GAME_NAMES_STRINGS[search];
-  return game ?? "General";
 }

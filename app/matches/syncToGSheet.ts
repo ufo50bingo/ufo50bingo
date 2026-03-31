@@ -39,39 +39,87 @@ export default async function syncToGSheet(match: Match): Promise<void> {
   if (dataSheetId == null) {
     return;
   }
-  const rangesToDelete = getExistingRanges(values, matchLink);
-  if (rangesToDelete.length > 0) {
+  let writeIndex: number | null = null;
+  const existingRanges = getExistingRanges(values, matchLink);
+  if (existingRanges.length === 1 && existingRanges[0][1] === 25) {
+    writeIndex = existingRanges[0][0] + 1;
+  } else {
+    // first delete existing rows for this match
+    if (existingRanges.length > 0) {
+      await sheet.spreadsheets.batchUpdate({
+        spreadsheetId: SEASON_3_SHEET,
+        auth,
+        requestBody: {
+          // need to reverse rangesToDelete because the API will apply all the
+          // deletions *in order*. This means that once the first range is deleted,
+          // the indexes for all the other ranges will be off
+          requests: existingRanges.toReversed().map((range) => ({
+            deleteDimension: {
+              range: {
+                sheetId: dataSheetId,
+                dimension: "ROWS",
+                // first row is the header
+                startIndex: range[0] + 1,
+                endIndex: range[1] + 1,
+              },
+            },
+          })),
+        },
+      });
+    }
+    // find correct place to insert new rows
+    const unixtimeResult = await sheet.spreadsheets.values.get({
+      spreadsheetId: SEASON_3_SHEET,
+      auth,
+      range: "Data!R2:R",
+    });
+    const unixtimeRows = unixtimeResult.data.values ?? [];
+    const foundIndex = unixtimeRows.findIndex(
+      (existingUnixtime) => existingUnixtime[0] > match.dateCreated,
+    );
+    writeIndex = foundIndex === -1 ? null : foundIndex + 1;
+  }
+
+  if (writeIndex == null) {
+    await sheet.spreadsheets.values.append({
+      spreadsheetId: SEASON_3_SHEET,
+      auth: auth,
+      range: "Data",
+      valueInputOption: "RAW",
+      requestBody: {
+        values: data,
+      },
+    });
+  } else {
+    // insert blank rows
     await sheet.spreadsheets.batchUpdate({
       spreadsheetId: SEASON_3_SHEET,
       auth,
       requestBody: {
-        // need to reverse rangesToDelete because the API will apply all the
-        // deletions *in order*. This means that once the first range is deleted,
-        // the indexes for all the other ranges will be off
-        requests: rangesToDelete.toReversed().map((range) => ({
-          deleteDimension: {
-            range: {
-              sheetId: dataSheetId,
-              dimension: "ROWS",
-              // first row is the header
-              startIndex: range[0] + 1,
-              endIndex: range[1] + 1,
+        requests: [
+          {
+            insertDimension: {
+              range: {
+                sheetId: dataSheetId,
+                dimension: "ROWS",
+                startIndex: writeIndex,
+                endIndex: writeIndex + 25,
+              },
+              inheritFromBefore: false,
             },
           },
-        })),
+        ],
+      },
+    });
+    await sheet.spreadsheets.values.update({
+      spreadsheetId: SEASON_3_SHEET,
+      range: `Data!A${writeIndex}`,
+      valueInputOption: "RAW",
+      requestBody: {
+        values: data,
       },
     });
   }
-
-  await sheet.spreadsheets.values.append({
-    spreadsheetId: SEASON_3_SHEET,
-    auth: auth,
-    range: "Data",
-    valueInputOption: "RAW",
-    requestBody: {
-      values: data,
-    },
-  });
 }
 
 function getExistingRanges(

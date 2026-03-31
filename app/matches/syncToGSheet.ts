@@ -3,8 +3,7 @@
 import { google } from "googleapis";
 import { Match } from "./Matches";
 import getGsheetSyncData from "./getGsheetSyncData";
-
-const SEASON_3_SHEET = "12QxCeOhHnmnoRQhiSmD56dPSl3rNnw2mfDt7qScz9Ds";
+import getDataSheetId from "./getDataSheetId";
 
 export default async function syncToGSheet(match: Match): Promise<void> {
   const matchLink = `https://ufo50.bingo/match/${match.id}`;
@@ -12,7 +11,6 @@ export default async function syncToGSheet(match: Match): Promise<void> {
   if (data == null) {
     return;
   }
-  // TODO account for seasons
   // TODO handle deleting/new card
   const auth = new google.auth.JWT({
     email: process.env.GSHEETS_ACCOUNT_EMAIL,
@@ -21,15 +19,17 @@ export default async function syncToGSheet(match: Match): Promise<void> {
   });
   const sheet = google.sheets("v4");
 
+  const spreadsheetId = getDataSheetId(match.leagueInfo?.season);
+
   const idRange = match.leagueInfo?.season == null ? "M2:M" : "Q2:Q";
   const result = await sheet.spreadsheets.values.get({
-    spreadsheetId: SEASON_3_SHEET,
+    spreadsheetId,
     range: `Data!${idRange}`,
     auth,
     fields: "values",
   });
   const metadata = await sheet.spreadsheets.get({
-    spreadsheetId: SEASON_3_SHEET,
+    spreadsheetId,
     auth,
   });
   const dataSheetId = metadata.data.sheets?.find(
@@ -50,7 +50,7 @@ export default async function syncToGSheet(match: Match): Promise<void> {
     // first delete existing rows for this match
     if (existingRanges.length > 0) {
       await sheet.spreadsheets.batchUpdate({
-        spreadsheetId: SEASON_3_SHEET,
+        spreadsheetId,
         auth,
         requestBody: {
           // need to reverse rangesToDelete because the API will apply all the
@@ -72,7 +72,7 @@ export default async function syncToGSheet(match: Match): Promise<void> {
     }
     // find correct place to insert new rows
     const unixtimeResult = await sheet.spreadsheets.values.get({
-      spreadsheetId: SEASON_3_SHEET,
+      spreadsheetId,
       auth,
       range: "Data!R2:R",
     });
@@ -84,7 +84,7 @@ export default async function syncToGSheet(match: Match): Promise<void> {
     if (writeIndex != null) {
       // insert blank rows
       await sheet.spreadsheets.batchUpdate({
-        spreadsheetId: SEASON_3_SHEET,
+        spreadsheetId,
         auth,
         requestBody: {
           requests: [
@@ -107,7 +107,7 @@ export default async function syncToGSheet(match: Match): Promise<void> {
 
   if (writeIndex == null) {
     await sheet.spreadsheets.values.append({
-      spreadsheetId: SEASON_3_SHEET,
+      spreadsheetId,
       auth: auth,
       range: "Data",
       valueInputOption: "RAW",
@@ -117,7 +117,7 @@ export default async function syncToGSheet(match: Match): Promise<void> {
     });
   } else {
     await sheet.spreadsheets.values.update({
-      spreadsheetId: SEASON_3_SHEET,
+      spreadsheetId,
       auth,
       // not totally sure why we need to add 1 again...
       range: `Data!A${writeIndex + 1}`,

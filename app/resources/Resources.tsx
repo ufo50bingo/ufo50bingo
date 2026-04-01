@@ -17,8 +17,11 @@ export default function Resources() {
         <p>Bingo League</p>
         <List>
           <List.Item>
-            <a href="https://docs.google.com/spreadsheets/d/1ptNQfJw39CCtHBrGldZ8ln0OrTUUSjAw8QVQHQI1LBU/edit?gid=521253915#gid=521253915" target="_blank">
-              Bingo League Season 3 (March 2 - May 17)
+            <a
+              href="https://docs.google.com/spreadsheets/d/1ptNQfJw39CCtHBrGldZ8ln0OrTUUSjAw8QVQHQI1LBU/edit?gid=521253915#gid=521253915"
+              target="_blank"
+            >
+              Bingo League Season 3 (March 2 - May 17, 2026)
             </a>
           </List.Item>
           <List.Item>
@@ -26,7 +29,7 @@ export default function Resources() {
               href="https://docs.google.com/spreadsheets/d/1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA/edit?gid=521253915#gid=521253915"
               target="_blank"
             >
-              Bingo League Season 2 (September 8 - November 23).
+              Bingo League Season 2 (September 8 - November 23, 2025).
             </a>
           </List.Item>
           <List.Item>
@@ -34,7 +37,7 @@ export default function Resources() {
               href="https://docs.google.com/spreadsheets/d/1aYcmIA1KoviLQvQHDNTfzkIyG_BwHrO1cTtgimZtWZw/edit?gid=521253915#gid=521253915"
               target="_blank"
             >
-              Bingo League Season 1 (Ended May 4, 2025)
+              Bingo League Season 1 (February 1 - May 4, 2025)
             </a>
           </List.Item>
         </List>
@@ -50,11 +53,10 @@ export default function Resources() {
           </List.Item>
           <List.Item>
             <a
-              href="https://docs.google.com/spreadsheets/d/1bW8zjoR2bpr74w-dA4HHt04SqvGg1aj8FJeOs3EqdNE/edit?gid=0#gid=0"
+              href="https://docs.google.com/document/d/1iGmlFIqfsjOsWMqG6GcIiBaOujKH7kmeq8HTZ8gisO8/edit?tab=t.0"
               target="_blank"
             >
-              Stats and VOD links for every goal completion from streamed
-              matches
+              Stats and VOD links for every goal from every match
             </a>
           </List.Item>
         </List>
@@ -82,7 +84,9 @@ export default function Resources() {
             Non-League section of{" "}
             <LinkWithVariant href="/">Create Match</LinkWithVariant>
           </List.Item>
-          <p>Community Tools</p>
+        </List>
+        <p>Community Tools</p>
+        <List>
           <List.Item>
             <a
               href="https://gretgor.itch.io/ufo50-bingo-training-dummy"

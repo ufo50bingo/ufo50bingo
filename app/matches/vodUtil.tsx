@@ -29,7 +29,7 @@ function getHrsMinsSecs(time: number): [number, number, number] {
 export function setUrlAtTime(
   host: VodHost,
   url: URL,
-  startSeconds: number
+  startSeconds: number,
 ): void {
   const seconds = Math.max(0, Math.round(startSeconds));
   switch (host) {
@@ -108,7 +108,7 @@ function getStartSeconds(url: URL, host: VodHost): null | number {
 }
 
 export function getBaseUrlAndStartSeconds(
-  newVodLink: string
+  newVodLink: string,
 ): [string, null | number] {
   try {
     const url = new URL(newVodLink);
@@ -129,7 +129,7 @@ export function getBaseUrlAndStartSeconds(
 
 export function getWarning(
   oldVodLink: string,
-  newVodLink: string
+  newVodLink: string,
 ): null | [string, undefined | ReactNode] {
   if (oldVodLink === newVodLink) {
     return null;
@@ -160,7 +160,7 @@ export function getWarning(
           specific goals from the Changelog and integrations with{" "}
           <Anchor
             size="sm"
-            href="https://docs.google.com/spreadsheets/d/1bW8zjoR2bpr74w-dA4HHt04SqvGg1aj8FJeOs3EqdNE/edit?gid=0#gid=0"
+            href="https://docs.google.com/document/d/1iGmlFIqfsjOsWMqG6GcIiBaOujKH7kmeq8HTZ8gisO8/edit?tab=t.0"
             target="_blank"
           >
             UFO 50 Bingo VOD Links and Stats

@@ -4,20 +4,24 @@ import { google } from "googleapis";
 import { Match } from "./Matches";
 import getGsheetSyncData from "./getGsheetSyncData";
 import getDataSheetId from "./getDataSheetId";
+import getExistingRanges from "./getExistingRanges";
+import deleteRanges from "./deleteRanges";
+import removeFromGsheet from "./removeFromGsheet";
 
 export default async function syncToGSheet(match: Match): Promise<void> {
   const matchLink = `https://ufo50.bingo/match/${match.id}`;
-  const data = getGsheetSyncData(match);
-  if (data == null) {
-    return;
-  }
-  // TODO handle deleting/new card
   const auth = new google.auth.JWT({
     email: process.env.GSHEETS_ACCOUNT_EMAIL,
     key: process.env.GSHEETS_ACCOUNT_PRIVATE_KEY,
     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
   });
   const sheet = google.sheets("v4");
+
+  const data = getGsheetSyncData(match);
+  if (data == null) {
+    await removeFromGsheet(match.id, match.leagueInfo?.season);
+    return;
+  }
 
   const spreadsheetId = getDataSheetId(match.leagueInfo?.season);
 
@@ -48,28 +52,7 @@ export default async function syncToGSheet(match: Match): Promise<void> {
     writeIndex = existingRanges[0][0] + 1;
   } else {
     // first delete existing rows for this match
-    if (existingRanges.length > 0) {
-      await sheet.spreadsheets.batchUpdate({
-        spreadsheetId,
-        auth,
-        requestBody: {
-          // need to reverse rangesToDelete because the API will apply all the
-          // deletions *in order*. This means that once the first range is deleted,
-          // the indexes for all the other ranges will be off
-          requests: existingRanges.toReversed().map((range) => ({
-            deleteDimension: {
-              range: {
-                sheetId: dataSheetId,
-                dimension: "ROWS",
-                // first row is the header
-                startIndex: range[0] + 1,
-                endIndex: range[1] + 1,
-              },
-            },
-          })),
-        },
-      });
-    }
+    await deleteRanges(existingRanges, spreadsheetId, dataSheetId, auth);
     // find correct place to insert new rows
     const unixtimeResult = await sheet.spreadsheets.values.get({
       spreadsheetId,
@@ -127,24 +110,4 @@ export default async function syncToGSheet(match: Match): Promise<void> {
       },
     });
   }
-}
-
-function getExistingRanges(
-  rows: ReadonlyArray<ReadonlyArray<string>>,
-  value: string,
-): ReadonlyArray<[number, number]> {
-  const ranges: [number, number][] = [];
-  let startIndex: null | number = null;
-  rows.forEach((row, index) => {
-    if (startIndex == null && row[0] === value) {
-      startIndex = index;
-    } else if (startIndex != null && row[0] !== value) {
-      ranges.push([startIndex, index]);
-      startIndex = null;
-    }
-  });
-  if (startIndex != null) {
-    ranges.push([startIndex, rows.length]);
-  }
-  return ranges;
 }

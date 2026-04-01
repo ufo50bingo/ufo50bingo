@@ -207,7 +207,11 @@ export default function EditLeagueModal({
                   router,
                   isMatchesPage,
                   async () => {
-                    await updateLeagueInfo(match.id, getUpdateInfo());
+                    await updateLeagueInfo(
+                      match.id,
+                      match.leagueInfo?.season,
+                      getUpdateInfo(),
+                    );
                     onClose();
                     return true;
                   },

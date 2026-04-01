@@ -11,6 +11,7 @@ import { getResult, getResultSql } from "./computeResult";
 import { Match } from "./Matches";
 import fetchMatch from "./fetchMatch";
 import { readSession, writeSession } from "../session/sessionUtil";
+import removeFromGsheet from "./removeFromGsheet";
 
 interface LeagueUpdate extends LeagueInfo {
   type: "league";
@@ -25,7 +26,8 @@ export type LeagueInfoUpdate = LeagueUpdate | NonLeagueUpdate;
 
 export default async function updateLeagueInfo(
   id: string,
-  update: LeagueInfoUpdate
+  oldSeason: number | null | undefined,
+  update: LeagueInfoUpdate,
 ): Promise<void> {
   const [match, session] = await Promise.all([fetchMatch(id), readSession()]);
   if (match == null) {
@@ -77,13 +79,16 @@ export default async function updateLeagueInfo(
   revalidatePath(`/match/${id}`);
   const rawMatch = result[0];
   const finalMatch = getMatchFromRaw(rawMatch);
+  if (finalMatch.leagueInfo?.season !== oldSeason) {
+    await removeFromGsheet(id, oldSeason);
+  }
   await syncToGSheet(finalMatch);
   await writeSession(session);
 }
 
 function getMatchResultSql(
   match: Match | null,
-  update: LeagueUpdate | NonLeagueUpdate
+  update: LeagueUpdate | NonLeagueUpdate,
 ): SQL {
   if (
     match == null ||

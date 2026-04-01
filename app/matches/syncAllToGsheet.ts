@@ -19,10 +19,15 @@ export default async function syncAllToGsheet(
         ${MATCH_FIELDS}
       FROM match
       WHERE ${seasonFilter}
+        AND is_deleted = FALSE
+        AND is_public = TRUE
       ORDER BY date_created ASC`;
-  const matches = result.map(r => getMatchFromRaw(r));
+  const matches = result.map((r) => getMatchFromRaw(r));
 
-  const allRows = matches.map(match => getGsheetSyncData(match)).filter(result => result != null).flat();
+  const allRows = matches
+    .map((match) => getGsheetSyncData(match))
+    .filter((result) => result != null)
+    .flat();
 
   const auth = new google.auth.JWT({
     email: process.env.GSHEETS_ACCOUNT_EMAIL,

@@ -22,7 +22,7 @@ export default function getGsheetSyncData(
   const vodStartSeconds = match.vod?.startSeconds;
   const boardJson = match.boardJson;
   const changelogJson = match.changelogJson;
-  if (boardJson == null || changelogJson == null) {
+  if (boardJson == null || changelogJson == null || !match.isBoardVisible) {
     return null;
   }
   const board: TBoard = JSON.parse(boardJson);

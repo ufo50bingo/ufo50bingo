@@ -18,7 +18,8 @@ export default async function syncAllToGsheet(
       SELECT
         ${MATCH_FIELDS}
       FROM match
-      WHERE${seasonFilter}`;
+      WHERE ${seasonFilter}
+      ORDER BY date_created ASC`;
   const matches = result.map(r => getMatchFromRaw(r));
 
   const allRows = matches.map(match => getGsheetSyncData(match)).filter(result => result != null).flat();

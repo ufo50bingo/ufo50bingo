@@ -1,10 +1,10 @@
 const SEASON_SHEETS = [
-  "aaa", // season 1
-  "aaa", // season 2
+  "1V5-vbfdSoK8tBQa8bKAQCpGFslXlgwDpOeQryaitJ4k", // season 1
+  "1ol2G0VhzvXmgcGvMnQJuIMTl6x4KEpj3-cW_ot93-r4", // season 2
   "12QxCeOhHnmnoRQhiSmD56dPSl3rNnw2mfDt7qScz9Ds", // season 3
 ];
 
-const NON_LEAGUE_SHEET = "aaa";
+const NON_LEAGUE_SHEET = "1ltJGLwAM_PE4yVtl5QnFWKhfYQ5lYTS7ITax2EpCTAw";
 
 export default function getDataSheetId(
   season: null | undefined | number,

@@ -1,5 +1,8 @@
 import findGoal from "../findGoal";
 import { GAME_NAMES } from "../goals";
+import { BLITZ_UFO } from "../pastas/blitzUfo";
+import { CHOCO_UFO } from "../pastas/chocoUfo";
+import { SPICY_UFO } from "../pastas/spicyUfo";
 import { STANDARD_UFO } from "../pastas/standardUfo";
 import {
   getMatchStartTime,
@@ -103,6 +106,11 @@ export default function getGsheetSyncData(
     // Match Link
     // Unixtime
     const order = completionOrder.indexOf(squareIndex);
+    const foundGoal =
+      findGoal(goal, STANDARD_UFO) ??
+      findGoal(goal, SPICY_UFO) ??
+      findGoal(goal, BLITZ_UFO) ??
+      findGoal(goal, CHOCO_UFO);
     const remainingColumns = [
       new Date(match.dateCreated * 1000).toLocaleDateString("en-US", {
         timeZone: "America/New_York",
@@ -110,7 +118,7 @@ export default function getGsheetSyncData(
       player,
       getGameForGoal(goal),
       goal,
-      findGoal(goal, STANDARD_UFO)?.goal ?? goal,
+      foundGoal?.goal ?? goal,
       range != null ? (range[2] - range[1]) / 60 : null,
       range != null ? (range[2] - matchStartTime) / 60 : null,
       order !== -1 ? order + 1 : null,

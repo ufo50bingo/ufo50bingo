@@ -21,7 +21,6 @@ const RAW_METADATA = [
     isMenu: false,
     hovercard: (
       <Stack>
-        .
         <span>
           This is the default goal set and format for bingo, and the one used in
           Bingo League play.

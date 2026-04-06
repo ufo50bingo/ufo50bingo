@@ -15,8 +15,7 @@ import { useState } from "react";
 import ColorSelector from "../common/ColorSelector";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { IconType, SortType } from "./useLocalState";
-import { Ding } from "../play/useDings";
-import NotificationsSection from "../common/NotificationsSection";
+import NotificationsSection, { SetSoundChoices, SoundChoices } from "../common/NotificationsSection";
 import CreateBoardSection from "../common/CreateBoardSection";
 import RequestPauseSection from "../common/RequestPauseSection";
 import CountdownSection from "../common/CountdownSection";
@@ -43,8 +42,8 @@ type Props = {
   setIconType: (newIconType: IconType) => unknown;
   hideByDefault: boolean;
   setHideByDefault: (newHideByDefault: boolean) => unknown;
-  dings: ReadonlyArray<Ding>;
-  setDings: (newDings: ReadonlyArray<Ding>) => unknown;
+  soundChoices: SoundChoices;
+  setSoundChoices: SetSoundChoices;
   leftScore: number;
   rightScore: number;
   generalCounts: GeneralCounts;
@@ -80,8 +79,8 @@ export default function CastSettings({
   setIconType,
   hideByDefault,
   setHideByDefault,
-  dings,
-  setDings,
+  soundChoices,
+  setSoundChoices,
   leftScore,
   rightScore,
   generalCounts,
@@ -263,7 +262,7 @@ export default function CastSettings({
                   </Stack>
                 </Accordion.Panel>
               </Accordion.Item>
-              <NotificationsSection dings={dings} setDings={setDings} />
+              <NotificationsSection soundChoices={soundChoices} setSoundChoices={setSoundChoices} />
               <FileSyncSection
                 leftScore={leftScore}
                 rightScore={rightScore}

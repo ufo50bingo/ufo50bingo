@@ -1,38 +1,33 @@
 import { Stack, Checkbox, Text, Accordion } from "@mantine/core";
-import { Ding } from "../play/useDings";
+import SoundSelector from "./SoundSelector";
+import { Sound } from "./sounds";
 
 type Props = {
-  dings: ReadonlyArray<Ding>;
-  setDings: (newDings: ReadonlyArray<Ding>) => unknown;
+  soundChoices: SoundChoices;
+  setSoundChoices: SetSoundChoices;
 };
 
-const ALL_DINGS: ReadonlyArray<{ value: Ding; name: string }> = [
-  { value: "pause", name: "Pause is requested" },
-  { value: "chat", name: "Chat message is received" },
-  { value: "square", name: "Square is marked" },
-];
+export type SoundChoices = {
+  pause: null | Sound,
+  chat: null | Sound,
+  square: null | Sound,
+};
 
-export default function NotificationsSection({ dings, setDings }: Props) {
+export type SetSoundChoices = {
+  setPause: (newSound: null | Sound) => unknown;
+  setSquare: (newSound: null | Sound) => unknown;
+  setChat: (newSound: null | Sound) => unknown;
+};
+
+export default function NotificationsSection({ soundChoices, setSoundChoices }: Props) {
   return (
     <Accordion.Item value="notifications">
       <Accordion.Control>Notifications</Accordion.Control>
       <Accordion.Panel>
         <Stack>
-          <Text size="sm">Play notification sound when:</Text>
-          {ALL_DINGS.map((ding) => (
-            <Checkbox
-              key={ding.value}
-              checked={dings.includes(ding.value)}
-              onChange={(event) =>
-                setDings(
-                  event.currentTarget.checked
-                    ? [...dings, ding.value]
-                    : dings.filter((d) => d !== ding.value)
-                )
-              }
-              label={ding.name}
-            />
-          ))}
+          <SoundSelector label="Pause requested" sound={soundChoices.pause} setSound={setSoundChoices.setPause} />
+          <SoundSelector label="Square claimed" sound={soundChoices.square} setSound={setSoundChoices.setSquare} />
+          <SoundSelector label="Chat received" sound={soundChoices.chat} setSound={setSoundChoices.setChat} />
         </Stack>
       </Accordion.Panel>
     </Accordion.Item>

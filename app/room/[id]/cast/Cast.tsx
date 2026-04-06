@@ -22,7 +22,7 @@ import { getResult } from "@/app/matches/computeResult";
 import useSyncedState, { AllPlayerGames, CountState } from "./useSyncedState";
 import useLocalState from "./useLocalState";
 import useBingosyncSocket from "../common/useBingosyncSocket";
-import useDings from "../play/useDings";
+import useSounds from "../play/useSounds";
 import GameSelector from "./GameSelector";
 import SideColumn from "./SideColumn";
 import RecentGames from "./RecentGames";
@@ -89,9 +89,9 @@ export default function Cast({
   }, []);
 
   const [pauseRequestName, setPauseRequestName] = useState<string | null>(null);
-  const [dings, setDings] = useDings("cast");
+  const [soundChoices, setSoundChoices] = useSounds("cast");
 
-  const { board, rawFeed, seed, reconnectModal, dingAudio } =
+  const { board, rawFeed, seed, reconnectModal, audio } =
     useBingosyncSocket({
       id,
       initialBoard,
@@ -101,7 +101,7 @@ export default function Cast({
       onNewCard,
       playerName,
       setPauseRequestName,
-      dings,
+      soundChoices,
     });
 
   const {
@@ -464,8 +464,8 @@ export default function Cast({
         setIconType={setIconType}
         hideByDefault={hideByDefault}
         setHideByDefault={setHideByDefault}
-        dings={dings}
-        setDings={setDings}
+        soundChoices={soundChoices}
+        setSoundChoices={setSoundChoices}
         leftScore={leftScore}
         rightScore={rightScore}
         generalCounts={generals}
@@ -496,7 +496,7 @@ export default function Cast({
         />
       )}
       {reconnectModal}
-      {dingAudio}
+      {audio}
     </>
   );
 }

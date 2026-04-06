@@ -13,7 +13,7 @@ import revealBoard from "./revealBoard";
 import PlaySettings from "./PlaySettings";
 import useColor from "./useColor";
 import useShownDifficulties from "./useShownDifficulties";
-import useDings from "./useDings";
+import useSounds from "./useSounds";
 import useWakeLock from "./useWakeLock";
 import changeColor from "../cast/changeColor";
 import Feed from "../common/Feed";
@@ -51,7 +51,7 @@ export default function Play({
     key: "show_general_tracker",
     defaultValue: true,
   });
-  const [dings, setDings] = useDings("play");
+  const [soundChoices, setSoundChoices] = useSounds("play");
   const [color, setColor] = useColor(id);
   const [isHidden, setIsHidden] = useState(() =>
     initialBoard.every((square) => square.color === "blank"),
@@ -71,7 +71,7 @@ export default function Play({
     setIsHidden(true);
   }, []);
 
-  const { board, rawFeed, seed, reconnectModal, dingAudio } =
+  const { board, rawFeed, seed, reconnectModal, audio } =
     useBingosyncSocket({
       id,
       initialBoard,
@@ -81,7 +81,7 @@ export default function Play({
       pauseRef,
       playerName,
       setPauseRequestName,
-      dings,
+      soundChoices,
       onNewCard,
     });
 
@@ -177,7 +177,7 @@ export default function Play({
               const isClearing = board[squareIndex].color === selectedColor;
               try {
                 await changeColor(id, squareIndex, selectedColor, isClearing);
-              } catch {}
+              } catch { }
             }}
             isHidden={isHidden}
             setIsHidden={setIsHidden}
@@ -240,8 +240,8 @@ export default function Play({
             setColor={setColor}
             shownDifficulties={shownDifficulties}
             setShownDifficulties={setShownDifficulties}
-            dings={dings}
-            setDings={setDings}
+            soundChoices={soundChoices}
+            setSoundChoices={setSoundChoices}
             timerState={timerState}
             setTimerState={setTimerState}
             isMobile={isMobile}
@@ -257,7 +257,7 @@ export default function Play({
         />
       </Group>
       {reconnectModal}
-      {dingAudio}
+      {audio}
     </>
   );
 }

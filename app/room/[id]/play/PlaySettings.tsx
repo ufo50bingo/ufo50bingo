@@ -3,11 +3,10 @@ import { Accordion, Button, Checkbox, Drawer, Stack } from "@mantine/core";
 import { IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
-import { Ding } from "./useDings";
 import ColorSelector from "../common/ColorSelector";
 import TimerSection from "../common/TimerSection";
 import { TimerState } from "../common/useMatchTimer";
-import NotificationsSection from "../common/NotificationsSection";
+import NotificationsSection, { SetSoundChoices, SoundChoices } from "../common/NotificationsSection";
 import RequestPauseSection from "../common/RequestPauseSection";
 import CountdownSection from "../common/CountdownSection";
 import CreateBoardSection from "../common/CreateBoardSection";
@@ -22,8 +21,8 @@ type Props = {
   setColor: (newcolor: BingosyncColor) => unknown;
   shownDifficulties: ReadonlyArray<Difficulty>;
   setShownDifficulties: (newShown: ReadonlyArray<Difficulty>) => unknown;
-  dings: ReadonlyArray<Ding>;
-  setDings: (newDings: ReadonlyArray<Ding>) => unknown;
+  soundChoices: SoundChoices;
+  setSoundChoices: SetSoundChoices;
   timerState: TimerState;
   setTimerState: (newState: TimerState) => unknown;
   isMobile: boolean;
@@ -39,8 +38,8 @@ export default function PlaySettings({
   setColor,
   shownDifficulties,
   setShownDifficulties,
-  dings,
-  setDings,
+  soundChoices,
+  setSoundChoices,
   timerState,
   setTimerState,
   isMobile,
@@ -94,7 +93,7 @@ export default function PlaySettings({
                 isMobile={isMobile}
               />
               <CountdownSection view="play" />
-              <NotificationsSection dings={dings} setDings={setDings} />
+              <NotificationsSection soundChoices={soundChoices} setSoundChoices={setSoundChoices} />
               <Accordion.Item value="display">
                 <Accordion.Control>Display Settings</Accordion.Control>
                 <Accordion.Panel>

@@ -15,7 +15,8 @@ import {
 } from "react";
 import { Modal, Stack, Group, Button } from "@mantine/core";
 import { REQUEST_PAUSE_CHAT } from "./REQUEST_PAUSE_CHAT";
-import { Ding } from "../play/useDings";
+import { SoundChoices } from "./NotificationsSection";
+import { SOUNDS } from "./sounds";
 
 type Props = {
   id: string;
@@ -24,7 +25,7 @@ type Props = {
   socketKey: string;
   initialSeed: number;
   onNewCard?: (newBoard: TBoard) => unknown;
-  dings: ReadonlyArray<Ding>;
+  soundChoices: SoundChoices;
   playerName: string;
   setPauseRequestName: (newName: string) => unknown;
   pauseRef?: RefObject<(() => unknown) | null>;
@@ -35,7 +36,7 @@ type Response = {
   rawFeed: RawFeed;
   seed: number;
   reconnectModal: null | undefined | ReactNode;
-  dingAudio: null | undefined | ReactNode;
+  audio: null | undefined | ReactNode;
 };
 
 export default function useBingosyncSocket({
@@ -45,7 +46,7 @@ export default function useBingosyncSocket({
   initialSeed,
   socketKey,
   onNewCard,
-  dings,
+  soundChoices,
   playerName,
   setPauseRequestName,
   pauseRef,
@@ -56,11 +57,13 @@ export default function useBingosyncSocket({
   const [shouldReconnect, setShouldReconnect] = useState(false);
   const socketRef = useRef<null | WebSocket>(null);
 
-  const dingRef = useRef<HTMLAudioElement | null>(null);
-  const alarmRef = useRef<HTMLAudioElement | null>(null);
-  const selectedDingsRef = useRef<ReadonlyArray<Ding>>(dings);
+  const pauseAudioRef = useRef<HTMLAudioElement | null>(null);
+  const squareAudioRef = useRef<HTMLAudioElement | null>(null);
+  const chatAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  const soundChoicesRef = useRef<SoundChoices>(soundChoices);
   // eslint-disable-next-line react-hooks/refs
-  selectedDingsRef.current = dings;
+  soundChoicesRef.current = soundChoices;
 
   const onMessage = useCallback(
     (newItem: RawFeedItem) => {
@@ -78,29 +81,19 @@ export default function useBingosyncSocket({
       if (newItem.type === "chat") {
         if (
           isPause &&
-          selectedDingsRef.current.includes("pause") &&
-          alarmRef.current != null
+          soundChoicesRef.current.pause != null
         ) {
-          alarmRef.current.play();
+          pauseAudioRef.current?.play();
         } else if (
-          selectedDingsRef.current.includes("chat") &&
-          dingRef.current != null
+          soundChoicesRef.current.chat != null
         ) {
-          dingRef.current.play();
-        } else {
-          if (
-            selectedDingsRef.current.includes("chat") &&
-            dingRef.current != null
-          ) {
-            dingRef.current.play();
-          }
+          chatAudioRef.current?.play();
         }
       } else if (newItem.type === "goal") {
         if (
-          selectedDingsRef.current.includes("square") &&
-          dingRef.current != null
+          soundChoicesRef.current.square != null
         ) {
-          dingRef.current.play();
+          squareAudioRef.current?.play();
         }
       }
     },
@@ -196,10 +189,11 @@ export default function useBingosyncSocket({
         </Stack>
       </Modal>
     ),
-    dingAudio: dings.length > 0 && (
+    audio: (
       <>
-        <audio preload="none" src="/ding.mp3" ref={dingRef} />
-        <audio preload="none" src="/alarm.mp3" ref={alarmRef} />
+        {soundChoices.pause != null && <audio preload="none" src={SOUNDS[soundChoices.pause]} ref={pauseAudioRef} />}
+        {soundChoices.square != null && <audio preload="none" src={SOUNDS[soundChoices.square]} ref={squareAudioRef} />}
+        {soundChoices.chat != null && <audio preload="none" src={SOUNDS[soundChoices.chat]} ref={chatAudioRef} />}
       </>
     ),
   };

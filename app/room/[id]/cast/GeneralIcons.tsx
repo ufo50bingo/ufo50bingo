@@ -205,7 +205,7 @@ function getWinnerBitSrc(goal: StandardGeneral, isHidden: boolean): string {
     case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
     case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
-    case "ROLE PLAYER: Level up all your characters 5 total times across Grimstone, Divers, Valbrace":
+    case "ROLE PLAYER: Level up your highest-level character 5 total times across Grimstone, Divers, Valbrace":
     case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
       return "/general/winnerbit/Icon_Multi-Game_Generic.png";
     default:
@@ -258,7 +258,7 @@ function getClassicSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/sprites/IconWarIsBad.png";
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
       return "/general/sprites/IconMetroidvania.png";
-    case "ROLE PLAYER: Level up all your characters 5 total times across Grimstone, Divers, Valbrace":
+    case "ROLE PLAYER: Level up your highest-level character 5 total times across Grimstone, Divers, Valbrace":
       return "/general/sprites/IconRoleplayer.png";
     case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
       return "/general/sprites/IconRevolutionary.png";
@@ -312,7 +312,7 @@ function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/matt/WARISBAD.png";
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
       return "/general/matt/METROIDVANIA.png";
-    case "ROLE PLAYER: Level up all your characters 5 total times across Grimstone, Divers, Valbrace":
+    case "ROLE PLAYER: Level up your highest-level character 5 total times across Grimstone, Divers, Valbrace":
       return "/general/matt/ROLEPLAYER.png";
     case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
       return "/general/matt/REVOLUTIONARY.png";

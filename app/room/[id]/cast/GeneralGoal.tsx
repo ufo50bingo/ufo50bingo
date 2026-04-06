@@ -142,7 +142,7 @@ export default function GeneralGoal({
     case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
     case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
-    case "ROLE PLAYER: Level up all your characters 5 total times across Grimstone, Divers, Valbrace":
+    case "ROLE PLAYER: Level up your highest-level character 5 total times across Grimstone, Divers, Valbrace":
     case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
       recommendations = {
         always: findGamesForGoal(foundGoal.resolvedGoal),

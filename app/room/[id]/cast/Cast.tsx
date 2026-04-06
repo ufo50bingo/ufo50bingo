@@ -407,6 +407,7 @@ export default function Cast({
                   onChange={(newGame: ProperGame | null) =>
                     addGame(newGame, playerNum)
                   }
+                  terminalCodes={terminalCodes}
                 />
               ))}
             </Group>

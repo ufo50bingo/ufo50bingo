@@ -45,11 +45,31 @@ export default function Resources() {
         <List>
           <List.Item>
             <a
-              href="https://docs.google.com/document/d/1RK6UH8mte79lF7yobr9yvkdpMHINBRBRV3hjJVb4MIk/edit?tab=t.0#heading=h.uxdzbgi90akp"
+              href="https://ufo50.bingo/doc"
               target="_blank"
             >
-              Community-maintained guides for nearly every game
+              Community-maintained resource doc with guides for nearly every game
             </a>
+            <List>
+              <List.Item>
+                You can also access the resource doc at <a
+                  href="https://ufo50.bingo/doc"
+                  target="_blank"
+                >
+                  https://ufo50.bingo/doc
+                </a>, or jump straight to a game's section by appending a game name or abbreviation, like <a
+                  href="https://ufo50.bingo/doc/roi"
+                  target="_blank"
+                >
+                  https://ufo50.bingo/roi
+                </a> or <a
+                  href="https://ufo50.bingo/doc/rockon"
+                  target="_blank"
+                >
+                  https://ufo50.bingo/rockon
+                </a>
+              </List.Item>
+            </List>
           </List.Item>
           <List.Item>
             <a

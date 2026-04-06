@@ -140,6 +140,7 @@ function getAbbreviatedName(goal: FoundStandardGeneral): string {
     case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
       return "Revolutionary (5 levels)";
     default:
+      goal.goal satisfies never;
       return goal.resolvedGoal;
   }
 }

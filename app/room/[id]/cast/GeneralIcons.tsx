@@ -209,6 +209,7 @@ function getWinnerBitSrc(goal: StandardGeneral, isHidden: boolean): string {
     case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
       return "/general/winnerbit/Icon_Multi-Game_Generic.png";
     default:
+      goal satisfies never;
       return "/general/winnerbit/Icon_Unknown_Goal.png";
   }
 }
@@ -263,6 +264,7 @@ function getClassicSrc(goal: StandardGeneral, isHidden: boolean): string {
     case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
       return "/general/sprites/IconRevolutionary.png";
     default:
+      goal satisfies never;
       return "/general/sprites/IconUnknown.png";
   }
 }
@@ -317,6 +319,7 @@ function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
     case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
       return "/general/matt/REVOLUTIONARY.png";
     default:
+      goal satisfies never;
       return "/general/sprites/IconUnknown.png";
   }
 }

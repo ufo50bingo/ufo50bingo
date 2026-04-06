@@ -152,6 +152,7 @@ export default function GeneralGoal({
       isChecks = false;
       break;
     default:
+      foundGoal.goal satisfies never;
       return (
         <InfoCard
           title={

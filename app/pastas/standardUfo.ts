@@ -15,7 +15,7 @@ export const STANDARD_UFO = {
       ],
       "paintchase": [
         "PAINT CHASE: EVEN-COAT allowed; Beat courses 16, 17, and 20 while destroying all spike mines",
-        "PAINT CHASE: Reach a score of 90+"
+        "PAINT CHASE: Score 90+ points"
       ],
       "magicgarden": [
         "MAGIC GARDEN: Defeat an enemy worth at least 700 points",
@@ -27,7 +27,7 @@ export const STANDARD_UFO = {
       ],
       "velgress": [
         "VELGRESS: Clear out a shop's stock",
-        "VELGRESS: Hold 50 coins at once"
+        "VELGRESS: Hold 50+ coins at once"
       ],
       "planetzoldath": [
         "PLANET ZOLDATH: Drop 4 items at your ship in one run",
@@ -54,7 +54,7 @@ export const STANDARD_UFO = {
         "MOONCAT: Use 3 warps"
       ],
       "bushidoball": [
-        "BUSHIDO BALL: Win a 10+ point match (laws on)",
+        "BUSHIDO BALL: Win a 10+ point round (laws on)",
         "BUSHIDO BALL: Win 2 rounds in a tournament (laws on)"
       ],
       "blockkoala": [
@@ -135,7 +135,7 @@ export const STANDARD_UFO = {
         "PINGOLF: Under par on 5 courses"
       ],
       "mortolii": [
-        "MORTOL II: Activate all the switches",
+        "MORTOL II: Activate all 3 switches",
         "MORTOL II: In one run, kill 6 chickens without damaging them as Bomber"
       ],
       "fisthell": [
@@ -264,8 +264,8 @@ export const STANDARD_UFO = {
         "MOONCAT: Spawn 3 different sets of egg blocks"
       ],
       "bushidoball": [
-        "BUSHIDO BALL: Win a 16-point match on Hyper speed (laws on)",
-        "BUSHIDO BALL: Beat the first two rounds as {{bushido_all}} (laws on, 8+ points)"
+        "BUSHIDO BALL: Win a 16-point round on Hyper speed (laws on, timer off)",
+        "BUSHIDO BALL: Win the first two rounds as {{bushido_all}} (laws on, 8+ points)"
       ],
       "blockkoala": [
         {
@@ -473,8 +473,8 @@ export const STANDARD_UFO = {
         "MOONCAT: Beat a room that contains a spear thrower and one that contains a gray spider"
       ],
       "bushidoball": [
-        "BUSHIDO BALL: Win the first match as every character",
-        "BUSHIDO BALL: Win 3 matches in a tournament as {{bushido_all}} (laws on, 8+ points)"
+        "BUSHIDO BALL: Win the first round as every character",
+        "BUSHIDO BALL: Win 3 rounds in a tournament as {{bushido_all}} (laws on, 8+ points)"
       ],
       "blockkoala": [
         {
@@ -563,7 +563,7 @@ export const STANDARD_UFO = {
       ],
       "mortolii": [
         "MORTOL II: Gold disk without blowing anything up",
-        "MORTOL II: Defeat all three mini bosses without damaging them as Bomber"
+        "MORTOL II: Defeat all 3 mini bosses without damaging them as Bomber"
       ],
       "fisthell": [
         "FIST HELL: Beat the 3rd Scare",
@@ -739,10 +739,10 @@ export const STANDARD_UFO = {
         "PINGOLF: Cherry disk without going over par on more than two holes"
       ],
       "mortolii": [
-        "MORTOL II: Activate all three switches without using portals or double jumps"
+        "MORTOL II: Activate all 3 switches without using portals or double jumps"
       ],
       "fisthell": [
-        "FIST HELL: Clear the 4th scare"
+        "FIST HELL: Beat the 4th scare"
       ],
       "overbold": [
         "OVERBOLD: Cherry disk"
@@ -1061,7 +1061,7 @@ export const STANDARD_UFO = {
           }
         },
         {
-          "name": "ROLE PLAYER: Level up all your characters 5 total times across Grimstone, Divers, Valbrace",
+          "name": "ROLE PLAYER: Level up your highest-level character 5 total times across Grimstone, Divers, Valbrace",
           "restriction": {
             "count": 1,
             "options": [
@@ -1215,6 +1215,8 @@ export const STANDARD_UFO = {
     "warp_med": [
       "Stare",
       "Form",
+	  "Tower",
+      "Nest",
       "Sore",
       "Orb",
       "Garl",

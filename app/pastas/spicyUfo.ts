@@ -496,7 +496,8 @@ export const SPICY_UFO = {
       ],
       "warptank": [
         "WARPTANK: Change your tank to each color in the hub world (there are 4 new colors)",
-        "WARPTANK: Collect 14+ coffees"
+		"WARPTANK: Collect 14 coffees",
+        "WARPTANK: Defeat Renegade"
       ],
       "waldorfsjourney": [
         "WALDORF’S JOURNEY: Gold disk using only maximum strength jumps (flying & items OK)",
@@ -696,8 +697,8 @@ export const SPICY_UFO = {
         "THE BIG BELL RACE: Cherry disk with no deaths"
       ],
       "warptank": [
-        "WARPTANK: Defeat Renegade",
-        "WARPTANK: Enter the cafe with at least 11 coffees"
+        "WARPTANK: Gold disk",
+        "WARPTANK: Collect 21 coffees"
       ],
       "waldorfsjourney": [
         "WALDORF’S JOURNEY: Cherry disk with at least 91 shells",

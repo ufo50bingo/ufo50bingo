@@ -490,10 +490,9 @@ export const SPICY_UFO = {
         "CAMPANELLA: Win with 50,000+ points"
       ],
       "golfaria": [
-        "GOLFARIA: Rescue 7 green ball NPCs",
+        "GOLFARIA: Rescue all 8 green balls",
         "GOLFARIA: Obtain 15 clubs (have 65+ strokes)",
-        "GOLFARIA: Hit 6 parbots",
-        "GOLFARIA: Show 30%+ completion in the library without the Brakes"
+        "GOLFARIA: Hit 8 parbots"
       ],
       "warptank": [
         "WARPTANK: Change your tank to each color in the hub world (there are 4 new colors)",
@@ -690,8 +689,8 @@ export const SPICY_UFO = {
         "CAMPANELLA: Gold disk with max of 3 deaths"
       ],
       "golfaria": [
-        "GOLFARIA: Achieve 35% Completion with at least 3 of the 4 power-ups collected",
-        "GOLFARIA: Obtain all four major upgrades and at least two tee pieces"
+        "GOLFARIA: Show 40%+ Completion in the library without the Brakes",
+        "GOLFARIA: Gold disk with 50+ total strokes"
       ],
       "thebigbellrace": [
         "THE BIG BELL RACE: Cherry disk with no deaths"

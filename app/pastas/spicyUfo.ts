@@ -74,7 +74,7 @@ export const SPICY_UFO = {
       ],
       "thebigbellrace": [
         "THE BIG BELL RACE: Win 1st place 4 courses in a row without using power-ups",
-        "THE BIG BELL RACE: Win 1st place on two courses where 1+ enemy dies each lap"
+        "THE BIG BELL RACE: Win 1st place in a race where 1+ enemy dies each lap"
       ],
       "warptank": [
         "WARPTANK: Beat Sectors while destroying all possible enemies & blocks: Piston, Bomb, Tower, Healing, Stare",
@@ -581,7 +581,7 @@ export const SPICY_UFO = {
       ],
       "grimstone": [
         "GRIMSTONE: Get Rufus to level 4 in a party of four",
-        "GRIMSTONE: Reach Level 6 with any character with a party of at least 3"
+        "GRIMSTONE: Reach Level 5 with any character with a party of at least 3"
       ],
       "nightmanor": [
         "NIGHT MANOR: Cherry disk",

@@ -18,7 +18,7 @@ export const STANDARD_UFO = {
         "PAINT CHASE: Score 90+ points",
       ],
       magicgarden: [
-        "MAGIC GARDEN: Defeat an enemy worth at least 700 points",
+        "MAGIC GARDEN: Defeat an enemy worth 700+ points",
         "MAGIC GARDEN: Use OVER-GROW; Save 30+ oppies in a run",
       ],
       mortol: [
@@ -79,7 +79,7 @@ export const STANDARD_UFO = {
       ],
       warptank: [
         {
-          name: "WARPTANK: SLIM-TANK allowed; Beat sectors: {{warp_easy}}, {{warp_easy}}, {{warp_easy}}",
+          name: "WARPTANK: Beat sectors: {{warp_easy}}, {{warp_easy}}, {{warp_easy}}",
           sort_tokens: "warptank_order",
         },
         "WARPTANK: Beat 3 sectors, defeating all possible enemies in each",
@@ -136,7 +136,7 @@ export const STANDARD_UFO = {
       ],
       campanella2: [
         "CAMPANELLA 2: Defeat Rotondo at end of Burrows II",
-        "CAMPANELLA 2: Have two upgrades at once (square icons)",
+        "CAMPANELLA 2: Have 2 upgrades at once (square icons)",
       ],
       hypercontender: [
         "HYPER CONTENDER: Use PAST-RULE; Beat Draft Mode twice",
@@ -152,7 +152,7 @@ export const STANDARD_UFO = {
       ],
       starwaspir: [
         "STAR WASPIR: Score 20,000+ points using the {{waspir_ship}} ship",
-        "STAR WASPIR: Complete wave 1 without defeating either boss enemy",
+        "STAR WASPIR: Beat Wave 1 without defeating either boss enemy",
       ],
       grimstone: [
         "GRIMSTONE: Defeat 15 enemies",
@@ -224,14 +224,14 @@ export const STANDARD_UFO = {
       ],
       planetzoldath: [
         "PLANET ZOLDATH: Collect the overworld ground Map Piece",
-        "PLANET ZOLDATH: Have 2 of each resource at once",
+        "PLANET ZOLDATH: Have 2+ of each resource at once",
       ],
       attactics: [
         "ATTACTICS: Beat Campaign level 8",
         "ATTACTICS: Reach Lieutenant (50+) in Ranked Mode",
       ],
       devilition: [
-        "DEVILITION: Beat 5 rounds in a run without placing the middle piece",
+        "DEVILITION: Reach round 6",
         "DEVILITION: Have 6 villagers at once",
       ],
       kickclub: [
@@ -248,7 +248,7 @@ export const STANDARD_UFO = {
       ],
       bushidoball: [
         "BUSHIDO BALL: Win a 16-point round on Hyper speed (laws on, timer off)",
-        "BUSHIDO BALL: Win the first two rounds as {{bushido_all}} (laws on, 8+ points)",
+        "BUSHIDO BALL: Win the first 2 rounds as {{bushido_all}} (laws on, 8+ points)",
       ],
       blockkoala: [
         {
@@ -263,7 +263,7 @@ export const STANDARD_UFO = {
       ],
       golfaria: ["GOLFARIA: Hit 3 Parbots", "GOLFARIA: Obtain the Brakes"],
       thebigbellrace: [
-        "THE BIG BELL RACE: Win 3 different races without collecting power-ups",
+        "THE BIG BELL RACE: Win on 3 courses without collecting power-ups",
         "THE BIG BELL RACE: Use KIWI-AURA; Win on 3 courses",
       ],
       warptank: [
@@ -275,7 +275,7 @@ export const STANDARD_UFO = {
       ],
       waldorfsjourney: [
         "WALDORF'S JOURNEY: Open 2 chests in a run",
-        "WALDORF'S JOURNEY: Have 50 shells at once while outside the palace",
+        "WALDORF'S JOURNEY: Have 50+ shells at once while outside the palace",
       ],
       porgy: [
         "PORGY: Collect 4 torpedo upgrades",
@@ -283,7 +283,7 @@ export const STANDARD_UFO = {
       ],
       oniondelivery: [
         "ONION DELIVERY: Complete day 3",
-        "ONION DELIVERY: Show 12 deliveries made on the counter",
+        "ONION DELIVERY: Show 12+ deliveries made on the counter",
       ],
       caramelcaramel: [
         "CARAMEL CARAMEL: Beat the Egg",
@@ -295,7 +295,7 @@ export const STANDARD_UFO = {
       ],
       hotfoot: [
         "HOT FOOT: Win 2 games in a row without jumping using {{hf_char}} & {{hf_char}}",
-        "HOT FOOT: Win 3 games in a tournament without using any jump specials, using {{hf_char}} & {{hf_char}}",
+        "HOT FOOT: Win 3 games in a tournament without jump specials, using {{hf_char}} & {{hf_char}}",
       ],
       divers: [
         "DIVERS: Open 3 chests that do not contain money",
@@ -303,10 +303,10 @@ export const STANDARD_UFO = {
       ],
       railheist: [
         "RAIL HEIST: LAZY-COPS allowed; Beat Vengeance! & The Final Score",
-        "RAIL HEIST: GOOD-SPUR allowed; Beat Fowl Business with all chickens and lawmen killed",
+        "RAIL HEIST: Use GOOD-SPUR; Beat Fowl Business with all chickens and lawmen killed",
       ],
       vainger: [
-        "VAINGER: Beat 3 bosses",
+        "VAINGER: Defeat 3 bosses",
         "VAINGER: Collect 5 pickups",
         "VAINGER: Obtain a Keycode from a major boss",
       ],
@@ -414,7 +414,7 @@ export const STANDARD_UFO = {
       ],
       mortol: [
         "MORTOL: OPEN-TOMB allowed; Clear all World 2 levels",
-        "MORTOL: OPEN-TOMB allowed; Clear any 3 levels with +12 lives or better on each",
+        "MORTOL: OPEN-TOMB allowed; Clear 3 levels with +12 lives or better on each",
       ],
       velgress: [
         "VELGRESS: Collect all 3 keys in a run",
@@ -426,11 +426,11 @@ export const STANDARD_UFO = {
       ],
       attactics: [
         "ATTACTICS: Score 1000+ points in Survival Mode",
-        "ATTACTICS: Use SLOW-DOWN; Win a rank 160 battle after spawning at least 2 heroes",
+        "ATTACTICS: Use SLOW-DOWN; Win a rank 160 battle after spawning 2+ heroes",
       ],
       devilition: [
         "DEVILITION: Beat 5 rounds in a run, destroying all demons and humans each round",
-        "DEVILITION: Clear the screen of demons with at least 18 pieces remaining",
+        "DEVILITION: Clear the screen of demons with 18+ pieces remaining",
       ],
       kickclub: [
         "KICK CLUB: Defeat the Goalie, then the Net in Ice World",
@@ -505,7 +505,7 @@ export const STANDARD_UFO = {
       ],
       hotfoot: [
         "HOT FOOT: Beat round 4 using {{hf_char}} & {{hf_char}}",
-        "HOT FOOT: Get 3 blowouts in one tournament using {{hf_char}} & {{hf_char}}",
+        "HOT FOOT: Get 3 blowouts in a tournament using {{hf_char}} & {{hf_char}}",
       ],
       divers: ["DIVERS: Obtain a Lance weapon", "DIVERS: Pull 2 levers"],
       railheist: [
@@ -571,7 +571,7 @@ export const STANDARD_UFO = {
         "LORDS OF DISKONIA: Win 1 battle in a Full War on Commander difficulty",
       ],
       nightmanor: [
-        "NIGHT MANOR: Win the hiding minigame in five different places",
+        "NIGHT MANOR: Win the hiding minigame in 5 different places",
         "NIGHT MANOR: Show 60%+ items found in the library",
       ],
       elfazarshat: [
@@ -583,8 +583,8 @@ export const STANDARD_UFO = {
         "PILOT QUEST: Obtain the Blaster",
       ],
       miniandmax: [
-        "MINI & MAX: Collect a big shiny",
-        "MINI & MAX: Have 150+ shinies at once without obtaining the Shrink Potion",
+        "MINI & MAX: Collect a Big Shiny",
+        "MINI & MAX: Have 150+ Shinies at once without obtaining the Shrink Potion",
       ],
       combatants: [
         {
@@ -637,9 +637,9 @@ export const STANDARD_UFO = {
       ],
       camouflage: ["CAMOUFLAGE: Show 70%+ Completion in the library"],
       campanella: ["CAMPANELLA: Gold disk"],
-      golfaria: ["GOLFARIA: Collect 5 clubs & the Sand Roll in one run"],
+      golfaria: ["GOLFARIA: Collect 5 clubs & the Sand Roll"],
       thebigbellrace: ["THE BIG BELL RACE: Gold disk with no deaths"],
-      warptank: ["WARPTANK: Beat any 9 sectors and speak to 3 NPCs"],
+      warptank: ["WARPTANK: Beat 9 sectors and speak to 3 NPCs"],
       waldorfsjourney: ["WALDORF'S JOURNEY: Enter the palace with 6 Puffins"],
       porgy: ["PORGY: Show 20%+ Completion in the library"],
       oniondelivery: ["ONION DELIVERY: Gold disk"],
@@ -678,7 +678,7 @@ export const STANDARD_UFO = {
       nightmanor: ["NIGHT MANOR: Cherry disk"],
       elfazarshat: ["ELFAZAR'S HAT: Clear Stage 4"],
       pilotquest: ["PILOT QUEST: Return a ship part to the crash site"],
-      miniandmax: ["MINI & MAX: Have 350+ shinies at once"],
+      miniandmax: ["MINI & MAX: Have 350+ Shinies at once"],
       combatants: ["COMBATANTS: ANTS-ANTS allowed; Beat This Is It"],
       quibblerace: ["QUIBBLE RACE: Cherry disk"],
       seasidedrive: ["SEASIDE DRIVE: Score 200,000+ points or gold disk"],

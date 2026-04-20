@@ -8,7 +8,7 @@ import {
   TBoard,
 } from "@/app/matches/parseBingosyncData";
 import { Group, Stack } from "@mantine/core";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Feed from "../common/Feed";
 import { Game, ORDERED_GAMES, ProperGame } from "@/app/goals";
 import { getAllTerminalCodes, getGameToGoals } from "./findAllGames";
@@ -36,6 +36,7 @@ import useLocalNumber from "@/app/localStorage/useLocalNumber";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
 import { GENERAL_ORDER } from "./GeneralOrderSelector";
 import useFont from "@/app/font/useFont";
+import getServerOffset from "../getServerOffset";
 
 export type FoundStandardGeneral = FoundGoal<
   StandardGeneral,
@@ -75,6 +76,9 @@ export default function Cast({
   initialAllPlayerGames,
   playerName,
 }: CastProps) {
+  useEffect(() => {
+    getServerOffset().then((o) => console.log(o));
+  }, []);
   const [gameToGoals, setGameToGoals] = useState(() =>
     getGameToGoals(initialBoard),
   );
@@ -91,18 +95,17 @@ export default function Cast({
   const [pauseRequestName, setPauseRequestName] = useState<string | null>(null);
   const [soundChoices, setSoundChoices] = useSounds("cast");
 
-  const { board, rawFeed, seed, reconnectModal, audio } =
-    useBingosyncSocket({
-      id,
-      initialBoard,
-      initialRawFeed,
-      initialSeed,
-      socketKey,
-      onNewCard,
-      playerName,
-      setPauseRequestName,
-      soundChoices,
-    });
+  const { board, rawFeed, seed, reconnectModal, audio } = useBingosyncSocket({
+    id,
+    initialBoard,
+    initialRawFeed,
+    initialSeed,
+    socketKey,
+    onNewCard,
+    playerName,
+    setPauseRequestName,
+    soundChoices,
+  });
 
   const {
     leftColor,

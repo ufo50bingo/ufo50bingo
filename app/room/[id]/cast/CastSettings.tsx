@@ -5,6 +5,7 @@ import {
   Button,
   Checkbox,
   Drawer,
+  Group,
   NumberInput,
   Select,
   Stack,
@@ -15,7 +16,10 @@ import { useState } from "react";
 import ColorSelector from "../common/ColorSelector";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { IconType, SortType } from "./useLocalState";
-import NotificationsSection, { SetSoundChoices, SoundChoices } from "../common/NotificationsSection";
+import NotificationsSection, {
+  SetSoundChoices,
+  SoundChoices,
+} from "../common/NotificationsSection";
 import CreateBoardSection from "../common/CreateBoardSection";
 import RequestPauseSection from "../common/RequestPauseSection";
 import CountdownSection from "../common/CountdownSection";
@@ -26,6 +30,8 @@ import { GeneralItem, TCountPosition } from "./Cast";
 import GeneralOrderSelector, { TGeneralOrder } from "./GeneralOrderSelector";
 import { Font } from "@/app/font/useFont";
 import FontSelector from "@/app/font/FontSelector";
+
+import classes from "./CastSettings.module.css";
 
 type Props = {
   id: string;
@@ -56,7 +62,7 @@ type Props = {
   setShowRecentGames: (newShowRecentGames: boolean) => unknown;
   numPlayers: number;
   setNumPlayers: (numPlayers: number) => unknown;
-  countPosition: TCountPosition,
+  countPosition: TCountPosition;
   setCountPosition: (newCountPosition: TCountPosition) => unknown;
   generalOrder: TGeneralOrder;
   setGeneralOrder: (newGeneralOrder: TGeneralOrder) => unknown;
@@ -144,6 +150,19 @@ export default function CastSettings({
                     color={rightColor}
                     setColor={setRightColor}
                   />
+                  {((leftColor === "pink" && rightColor === "blue") ||
+                    (leftColor === "blue" && rightColor === "pink")) && (
+                    <Group mt={8} gap={4}>
+                      <img className={classes.emoji} src="/transflag.svg" />
+                      <img className={classes.emoji} src="/transflag.svg" />
+                      <img className={classes.emoji} src="/transflag.svg" />
+                      <img className={classes.emoji} src="/transflag.svg" />
+                      <img className={classes.emoji} src="/transflag.svg" />
+                      <img className={classes.emoji} src="/transflag.svg" />
+                      <img className={classes.emoji} src="/transflag.svg" />
+                      <img className={classes.emoji} src="/transflag.svg" />
+                    </Group>
+                  )}
                 </Accordion.Panel>
               </Accordion.Item>
               <CountdownSection view="cast" />
@@ -163,8 +182,8 @@ export default function CastSettings({
                               event.currentTarget.checked
                                 ? [...shownDifficulties, difficulty]
                                 : shownDifficulties.filter(
-                                  (d) => d !== difficulty,
-                                ),
+                                    (d) => d !== difficulty,
+                                  ),
                             )
                           }
                           label={DIFFICULTY_NAMES[difficulty]}
@@ -207,7 +226,10 @@ export default function CastSettings({
                       ]}
                       value={countPosition}
                       onChange={(newCountPosition: string | null) =>
-                        setCountPosition((newCountPosition ?? "side_by_side") as TCountPosition)
+                        setCountPosition(
+                          (newCountPosition ??
+                            "side_by_side") as TCountPosition,
+                        )
                       }
                     />
                     <FontSelector font={font} setFont={setFont} />
@@ -262,7 +284,10 @@ export default function CastSettings({
                   </Stack>
                 </Accordion.Panel>
               </Accordion.Item>
-              <NotificationsSection soundChoices={soundChoices} setSoundChoices={setSoundChoices} />
+              <NotificationsSection
+                soundChoices={soundChoices}
+                setSoundChoices={setSoundChoices}
+              />
               <FileSyncSection
                 leftScore={leftScore}
                 rightScore={rightScore}

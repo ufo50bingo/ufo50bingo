@@ -1,9 +1,11 @@
 import getSupabaseClient from "./cast/getSupabaseClient";
 
-export default async function getServerOffset(): Promise<number> {
+export default async function getServerOffset(
+  numTrials: number,
+): Promise<number> {
   const supabase = getSupabaseClient();
-  const trials = [];
-  for (let i = 0; i < 3; i++) {
+  let offsetSum = 0;
+  for (let i = 0; i < numTrials; i++) {
     const start = Date.now();
     const { data } = await supabase.rpc("get_server_time_ms");
     const end = Date.now();
@@ -14,7 +16,7 @@ export default async function getServerOffset(): Promise<number> {
     // this is the time in the user's browser at the (estimated) instant that the server computes its timestamp
     const clientTime = start + latency;
     const offset = data - clientTime;
-    trials.push(offset);
+    offsetSum += offset;
   }
-  return trials.reduce((acc, next) => acc + next) / trials.length;
+  return offsetSum / numTrials;
 }

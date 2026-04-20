@@ -3,8 +3,11 @@
 import dynamic from "next/dynamic";
 import { CastProps } from "./Cast";
 
-const Cast = dynamic(() => import("./Cast"), { ssr: false });
+const CastWithOffsetProvider = dynamic(
+  () => import("./CastWithOffsetProvider"),
+  { ssr: false },
+);
 
 export default function CastWrapper(props: CastProps) {
-  return <Cast {...props} />;
+  return <CastWithOffsetProvider {...props} />;
 }

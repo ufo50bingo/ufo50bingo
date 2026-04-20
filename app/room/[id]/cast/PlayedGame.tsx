@@ -4,6 +4,7 @@ import RunningDuration from "@/app/practice/RunningDuration";
 import Duration from "@/app/practice/Duration";
 import { Font } from "@/app/font/useFont";
 import getFontClassname from "@/app/font/getFontClassname";
+import { useServerOffsetContext } from "../ServerOffsetContext";
 
 type Props = {
   game: ProperGame;
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export default function PlayedGame({ game, startTime, endTime, font }: Props) {
+  const { getClientMsFromServerMs } = useServerOffsetContext();
   return (
     <div className={classes.container}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -21,7 +23,7 @@ export default function PlayedGame({ game, startTime, endTime, font }: Props) {
         <span className={getFontClassname(font)}>
           {endTime == null ? (
             <RunningDuration
-              curStartTime={startTime}
+              curStartTime={getClientMsFromServerMs(startTime)}
               accumulatedDuration={0}
               showDecimal={false}
             />

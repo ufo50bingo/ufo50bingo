@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import getSupabaseClient from "./getSupabaseClient";
 import { GeneralCounts } from "./CastPage";
 import getGamesForPlayer from "./getGamesForPlayer";
+import { useServerOffsetContext } from "../ServerOffsetContext";
 
 export interface CountState {
   leftCounts: { [game: string]: number };
@@ -59,7 +60,9 @@ export interface CurrentGameRow extends CurrentGameSync {
 
 // null | undefined is here because we sometimes update later indices before we
 // define earlier indices
-export type AllPlayerGames = ReadonlyArray<null | undefined | ReadonlyArray<CurrentGame>>;
+export type AllPlayerGames = ReadonlyArray<
+  null | undefined | ReadonlyArray<CurrentGame>
+>;
 
 export type SyncedState = {
   leftColor: BingosyncColor;
@@ -87,7 +90,10 @@ export default function useSyncedState({
   const [rightColor, setRightColorRaw] =
     useState<BingosyncColor>(initialRightColor);
   const [generals, setGeneralsRaw] = useState<GeneralCounts>(initialCounts);
-  const [allPlayerGames, setAllPlayerGames] = useState<AllPlayerGames>(initialAllPlayerGames);
+  const [allPlayerGames, setAllPlayerGames] = useState<AllPlayerGames>(
+    initialAllPlayerGames,
+  );
+  const { getServerMsFromClientMs } = useServerOffsetContext();
 
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const setGeneralGameCountRef = useRef<
@@ -119,7 +125,7 @@ export default function useSyncedState({
           ) {
             setGeneralGameCountRef.current(change, false);
           }
-        }
+        },
       )
       .on(
         "broadcast",
@@ -131,19 +137,21 @@ export default function useSyncedState({
           } else {
             setRightColorRaw(change.color);
           }
-        }
+        },
       )
       .on(
         "broadcast",
         { event: "add_game" },
         (payload: { payload: CurrentGameSync }) => {
           const change = payload.payload;
-          setAllPlayerGames(oldAllPlayerGames => updateAllPlayerGames(
-            oldAllPlayerGames,
-            { game: change.game, start_time: change.start_time },
-            change.player_num,
-          ));
-        }
+          setAllPlayerGames((oldAllPlayerGames) =>
+            updateAllPlayerGames(
+              oldAllPlayerGames,
+              { game: change.game, start_time: change.start_time },
+              change.player_num,
+            ),
+          );
+        },
       )
       .subscribe();
 
@@ -179,14 +187,16 @@ export default function useSyncedState({
     const addGame = async (newGame: null | ProperGame, playerNum: number) => {
       const newEntry: CurrentGame = {
         game: newGame,
-        start_time: Date.now(),
+        start_time: getServerMsFromClientMs(Date.now()),
       };
-      setAllPlayerGames(updateAllPlayerGames(
-        allPlayerGames,
-        newEntry,
-        playerNum,
-      ));
-      const syncChange: CurrentGameSync = { ...newEntry, player_num: playerNum, seed };
+      setAllPlayerGames(
+        updateAllPlayerGames(allPlayerGames, newEntry, playerNum),
+      );
+      const syncChange: CurrentGameSync = {
+        ...newEntry,
+        player_num: playerNum,
+        seed,
+      };
       const rowChange: CurrentGameRow = { ...syncChange, room_id: id };
       if (channelRef.current != null) {
         channelRef.current.send({
@@ -199,7 +209,7 @@ export default function useSyncedState({
     };
     const setGeneralGameCount = async (
       change: CountChange,
-      shouldBroadcast: boolean = true
+      shouldBroadcast: boolean = true,
     ) => {
       const leftCounts = generals[change.goal]?.leftCounts ?? {};
       const rightCounts = generals[change.goal]?.rightCounts ?? {};
@@ -207,13 +217,13 @@ export default function useSyncedState({
       newCounts[change.game] = change.count;
       const newGeneralState = change.is_left
         ? {
-          leftCounts: newCounts,
-          rightCounts,
-        }
+            leftCounts: newCounts,
+            rightCounts,
+          }
         : {
-          leftCounts,
-          rightCounts: newCounts,
-        };
+            leftCounts,
+            rightCounts: newCounts,
+          };
       const newGenerals = {
         ...generals,
         [change.goal]: newGeneralState,
@@ -247,24 +257,25 @@ export default function useSyncedState({
       setGeneralGameCount,
     };
   }, [
+    generals,
     leftColor,
     rightColor,
     allPlayerGames,
-    generals,
     id,
-    seed,
     supabase,
+    getServerMsFromClientMs,
+    seed,
   ]);
 }
 
 function updateAllPlayerGames(
   allPlayerGames: AllPlayerGames,
   newGame: CurrentGame,
-  playerNum: number
+  playerNum: number,
 ): AllPlayerGames {
   const oldGames = getGamesForPlayer(allPlayerGames, playerNum);
   const newGames = [newGame, ...oldGames];
   const newAllPlayerGames = [...allPlayerGames];
   newAllPlayerGames[playerNum] = newGames;
-  return newAllPlayerGames
+  return newAllPlayerGames;
 }

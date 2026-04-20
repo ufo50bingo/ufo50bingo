@@ -131,7 +131,7 @@ export const STANDARD_UFO = {
         "FIST HELL: Reach wave 7 in the gym",
       ],
       overbold: [
-        "OVERBOLD: Max out 4 upgrades at once",
+        "OVERBOLD: Have 4 upgrades maxed out at once",
         "OVERBOLD: Purchase 3 price hiked items in one run",
       ],
       campanella2: [
@@ -1087,7 +1087,7 @@ export const STANDARD_UFO = {
       "Donkus",
     ],
     waspir_ship: ["Gray", "Yellow", "Red"],
-    gemstone: ["Emerald", "Diamond", "Topaz"],
+    gemstone: ["Emerald from the fountain", "Diamond from the safe", "Topaz from the body bag"],
     ants_med: ["Spidernest", "Commando", "Surprise!"],
     ants_hard: ["Open Field", "Pincered", "Ambush"],
     owls: ["Congo Basin", "Chicago", "Moscow", "Hong Kong"],

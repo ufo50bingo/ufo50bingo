@@ -39,8 +39,8 @@ export function ServerOffsetContextProvider({
 
   const value = useMemo(
     () => ({
-      getClientMsFromServerMs: (serverMs: number) => serverMs + offsetMs,
-      getServerMsFromClientMs: (clientMs: number) => clientMs - offsetMs,
+      getClientMsFromServerMs: (serverMs: number) => serverMs - offsetMs,
+      getServerMsFromClientMs: (clientMs: number) => clientMs + offsetMs,
     }),
     [offsetMs],
   );

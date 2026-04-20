@@ -2,7 +2,12 @@ import { fetchBoard, fetchFeed, getSocketKey } from "@/app/fetchMatchInfo";
 import { BingosyncColor, getBoard } from "@/app/matches/parseBingosyncData";
 import CastWrapper from "./CastWrapper";
 import getSupabaseClient from "./getSupabaseClient";
-import { CountChangeRow, CountState, CurrentGame, CurrentGameRow } from "./useSyncedState";
+import {
+  CountChangeRow,
+  CountState,
+  CurrentGame,
+  CurrentGameRow,
+} from "./useSyncedState";
 import { RoomCookie, toBingosyncCookie } from "../roomCookie";
 import getSeed from "../common/getSeed";
 
@@ -34,7 +39,7 @@ export default async function CastPage({ id, roomCookie }: Props) {
   ]);
   const countsForSeed = rawGeneralCounts.filter((entry) => entry.seed === seed);
   const currentGamesForSeed = rawCurrentGames.filter(
-    (entry) => entry.seed === seed
+    (entry) => entry.seed === seed,
   );
   const allPlayerGames: Array<Array<CurrentGame>> = [];
   for (const entry of currentGamesForSeed) {
@@ -70,7 +75,7 @@ async function getGeneralCounts(id: string): Promise<CountChangeRow[]> {
 }
 
 async function getColors(
-  id: string
+  id: string,
 ): Promise<{ left: BingosyncColor; right: BingosyncColor }> {
   const supabase = getSupabaseClient();
   const { data } = await supabase.from("color").select().eq("room_id", id);
@@ -93,7 +98,7 @@ async function getCurrentGames(id: string): Promise<CurrentGameRow[]> {
 }
 
 function structureCounts(
-  rawCounts: ReadonlyArray<CountChangeRow>
+  rawCounts: ReadonlyArray<CountChangeRow>,
 ): GeneralCounts {
   const generals: GeneralCounts = {};
   rawCounts.forEach((rawCount) => {

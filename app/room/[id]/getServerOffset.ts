@@ -18,5 +18,5 @@ export default async function getServerOffset(
     const offset = data - clientTime;
     offsetSum += offset;
   }
-  return offsetSum / numTrials;
+  return Math.round(offsetSum / numTrials);
 }

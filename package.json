@@ -42,6 +42,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "regexp.escape": "^2.0.1",
+    "xxhash-wasm": "^1.1.0",
     "zod": "^4.2.1"
   },
   "devDependencies": {

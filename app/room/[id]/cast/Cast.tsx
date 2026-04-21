@@ -7,7 +7,7 @@ import {
   RawFeed,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
-import { Group, Stack } from "@mantine/core";
+import { Group, Stack, Text } from "@mantine/core";
 import { useCallback, useMemo, useState } from "react";
 import Feed from "../common/Feed";
 import { Game, ORDERED_GAMES, ProperGame } from "@/app/goals";
@@ -36,6 +36,7 @@ import useLocalNumber from "@/app/localStorage/useLocalNumber";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
 import { GENERAL_ORDER } from "./GeneralOrderSelector";
 import useFont from "@/app/font/useFont";
+import RunningDuration from "@/app/practice/RunningDuration";
 
 export type FoundStandardGeneral = FoundGoal<
   StandardGeneral,
@@ -391,7 +392,21 @@ export default function Cast({
             </SideColumn>
           )}
         </Group>
-        <Feed rawFeed={rawFeed} />
+        <Stack gap={8}>
+          <Text
+            style={{
+              alignSelf: "center",
+              fontVariantNumeric: "tabular-nums",
+              fontSize: '23px',
+            }}
+          >
+            <RunningDuration
+              curStartTime={1776749054000}
+              accumulatedDuration={0}
+            />
+          </Text>
+          <Feed height={`${475 - 44}px`} rawFeed={rawFeed} />
+        </Stack>
         {showGameSelector ? (
           <Stack gap={8}>
             <Group wrap="wrap" w={268} gap={8} justify="space-between">

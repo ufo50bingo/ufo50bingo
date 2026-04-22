@@ -1,6 +1,7 @@
 import { IconBrandTwitch, IconBrandYoutube } from "@tabler/icons-react";
 import { ScheduledMatch } from "./fetchSchedule";
 import { ActionIcon, Anchor, Text, Tooltip } from "@mantine/core";
+import { CopyToDiscord } from "./CopyToDiscord";
 
 type Props = {
   match: ScheduledMatch;
@@ -20,7 +21,7 @@ export default function ScheduledMatchView({ match, includeDate }: Props) {
       : {
           hour: "numeric",
           minute: "numeric",
-        }
+        },
   );
   const streamer =
     match.streamer == null || match.streamer === "" ? (
@@ -46,9 +47,11 @@ export default function ScheduledMatchView({ match, includeDate }: Props) {
     );
   const tier = match.tier == null ? "" : ` — ${match.tier}`;
   return (
-    <Text>
-      {date}
-      {tier} — {match.name} — {streamer}
-    </Text>
+    <CopyToDiscord includeDate={true} matches={[match]}>
+      <Text>
+        {date}
+        {tier} — {match.name} — {streamer}
+      </Text>
+    </CopyToDiscord>
   );
 }

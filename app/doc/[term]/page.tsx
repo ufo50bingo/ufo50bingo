@@ -50,6 +50,10 @@ export default async function Page({
     params: Promise<{ term: string }>
 }) {
     const { term } = await params;
+
+    if (term === "gatsby") {
+        return redirect("https://blog.prepscholar.com/the-great-gatsby-dr-tj-eckleburg-eyes-symbol");
+    }
     let bestScore = null;
     let bestGame = null;
 

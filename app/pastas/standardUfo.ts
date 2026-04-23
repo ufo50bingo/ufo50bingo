@@ -683,7 +683,7 @@ export const STANDARD_UFO = {
       quibblerace: ["QUIBBLE RACE: Cherry disk"],
       seasidedrive: ["SEASIDE DRIVE: Score 200,000+ points or gold disk"],
       campanella3: ["CAMPANELLA 3: Earn 2 star waves in Stage D"],
-      cyberowls: ["CYBER OWLS: HAWK-BASE allowed; Beat Antarctica"],
+      cyberowls: ["CYBER OWLS: HAWK-BASE allowed; Beat Antarctica (No out of bounds)"],
     },
     general: {
       gift: ["Collect {{gift_count}} gifts from games on this card"],

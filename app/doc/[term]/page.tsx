@@ -40,6 +40,7 @@ const ALIASES: { [alias: string]: Game } = {
   sw: "starwaspir",
   mm: "miniandmax",
   mandm: "miniandmax",
+  mini: "miniandmax",
   co: "cyberowls",
   gen: "general",
 };

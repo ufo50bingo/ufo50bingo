@@ -43,7 +43,7 @@ function getStandardResult(
   opponentName: string | null,
   players: PlayerToColors,
   scores: PlayerScores,
-  winnerBingo: boolean
+  winnerBingo: boolean,
 ): MatchResult {
   const winnerColor = players[winnerName].join(" ");
   const winnerScore = scores[winnerName];
@@ -66,194 +66,138 @@ function getStandardResult(
   };
 }
 
+export function getTeamColors(
+  board: TBoard,
+  changelog: Changelog,
+  leagueP1: string | null | undefined,
+  leagueP2: string | null | undefined,
+): PlayerToColors {
+  const verifiedPlayerToColors = getVerifiedPlayerToColors(
+    changelog.changes,
+    leagueP1,
+    leagueP2,
+  );
+  const playerColors =
+    verifiedPlayerToColors ?? getPlayerColors(changelog.changes);
+  // this is not a league match, and every player has exactly 1 color.
+  // we can turn it into a team game
+  if (
+    verifiedPlayerToColors == null &&
+    Object.keys(playerColors).length > 0 &&
+    Object.keys(playerColors).every(
+      (player) => playerColors[player].length === 1,
+    )
+  ) {
+    const colorToPlayers: { [color: string]: string[] } = {};
+    Object.keys(playerColors).forEach((player) => {
+      const color = playerColors[player][0];
+      const existing = colorToPlayers[color] ?? [];
+      existing.push(player);
+      colorToPlayers[color] = existing;
+    });
+    const teams: PlayerToColors = {};
+    Object.keys(colorToPlayers).forEach((color) => {
+      teams[colorToPlayers[color].join(" / ")] = [color as BingosyncColor];
+    });
+    return teams;
+  }
+  const teams: PlayerToColors = {};
+  Object.keys(playerColors).forEach((player) => {
+    teams[player] = playerColors[player];
+  });
+  return teams;
+}
+
+export function getTeamScores(
+  board: TBoard,
+  teamColors: PlayerToColors,
+): PlayerScores {
+  const teamScores: PlayerScores = {};
+  Object.keys(teamColors).forEach((teamName) => {
+    teamScores[teamName] = 0;
+  });
+  board.forEach((square) => {
+    Object.keys(teamColors).forEach((teamName) => {
+      if (teamColors[teamName].includes(square.color)) {
+        const newScore = (teamScores[teamName] ?? 0) + 1;
+        teamScores[teamName] = newScore;
+      }
+    });
+  });
+  return teamScores;
+}
+
 export function getResult(
   board: TBoard,
   changelog: Changelog,
   leagueP1: string | null | undefined,
-  leagueP2: string | null | undefined
+  leagueP2: string | null | undefined,
 ): null | MatchResult {
-  const verifiedPlayerToColors = getVerifiedPlayerToColors(
-    changelog.changes,
-    leagueP1,
-    leagueP2
-  );
-  const playerColors =
-    verifiedPlayerToColors ?? getPlayerColors(changelog.changes);
-  const playerScores: PlayerScores = {};
-  if (verifiedPlayerToColors != null) {
-    // initialize to 0 in case this player didn't actually score a point
-    Object.keys(verifiedPlayerToColors).forEach((verifiedPlayer) => {
-      playerScores[verifiedPlayer] = 0;
-    });
-  }
-  board.forEach((square) => {
-    Object.keys(playerColors).map((name) => {
-      if (playerColors[name].includes(square.color)) {
-        const newScore = (playerScores[name] ?? 0) + 1;
-        playerScores[name] = newScore;
-      }
-    });
-  });
-  const playerEntries = Object.entries(playerScores);
-  // sort so that the player with the most goals is first
-  playerEntries.sort((a, b) => b[1] - a[1]);
+  const teamColors = getTeamColors(board, changelog, leagueP1, leagueP2);
+  const teamScores = getTeamScores(board, teamColors);
+  const teamEntries = Object.entries(teamScores);
+  // sort so that the team with the most goals is first
+  teamEntries.sort((a, b) => b[1] - a[1]);
 
   const isValid = getIsValid(board, changelog["changes"]);
-  if (!isValid || playerEntries.length === 0) {
+  if (!isValid || teamEntries.length === 0) {
     return null;
   }
 
-  const bingoPlayer = getFirstBingoPlayer(changelog["changes"], playerColors);
-  if (verifiedPlayerToColors == null && Object.keys(playerColors).length > 0) {
-    // if each player has exactly 1 color
-    if (
-      Object.keys(playerColors).every(
-        (player) => playerColors[player].length === 1
-      )
-    ) {
-      const colorToPlayers: { [color: string]: string[] } = {};
-      Object.keys(playerColors).forEach((player) => {
-        const color = playerColors[player][0];
-        const existing = colorToPlayers[color] ?? [];
-        existing.push(player);
-        colorToPlayers[color] = existing;
-      });
-      if (
-        Object.keys(colorToPlayers).every(
-          (color) => colorToPlayers[color].length > 1
-        )
-      ) {
-        // it's probably a team game
-        const colorScores: { [color: string]: number } = {};
-        board.forEach((square) => {
-          if (square.color === "blank") {
-            return;
-          }
-          const existingCount = colorScores[square.color] ?? 0;
-          colorScores[square.color] = existingCount + 1;
-        });
-        const colorEntries = Object.entries(colorScores);
-        // sort so that the color with the most goals is first
-        colorEntries.sort((a, b) => b[1] - a[1]);
-        if (bingoPlayer != null) {
-          const bingoColor = playerColors[bingoPlayer][0];
-          const bestOpponentColor =
-            colorEntries.find(([color, _]) => color !== bingoColor)?.[0] ??
-            null;
-          return {
-            winnerName: colorToPlayers[bingoColor].join(" / "),
-            winnerColor: bingoColor,
-            winnerScore: colorScores[bingoColor],
-            winnerBingo: true,
-            opponentName:
-              bestOpponentColor != null
-                ? colorToPlayers[bestOpponentColor].join(" / ")
-                : null,
-            opponentColor: bestOpponentColor,
-            opponentScore:
-              bestOpponentColor != null ? colorScores[bestOpponentColor] : null,
-          };
-        }
-        if (colorEntries.length === 1) {
-          return {
-            winnerName: colorToPlayers[colorEntries[0][0]].join(" / "),
-            winnerColor: colorEntries[0][0],
-            winnerScore: colorScores[colorEntries[0][0]],
-            winnerBingo: false,
-            opponentName: null,
-            opponentColor: null,
-            opponentScore: null,
-          };
-        }
-        const bestScore = colorEntries[0][1];
-        const secondBestScore = colorEntries[1][1];
-        if (bestScore > secondBestScore) {
-          return {
-            winnerName: colorToPlayers[colorEntries[0][0]].join(" / "),
-            winnerColor: colorEntries[0][0],
-            winnerScore: colorScores[colorEntries[0][0]],
-            winnerBingo: false,
-            opponentName: colorToPlayers[colorEntries[1][0]].join(" / "),
-            opponentColor: colorEntries[1][0],
-            opponentScore: colorScores[colorEntries[1][0]],
-          };
-        }
-        const tiedColors = colorEntries
-          .filter((entry) => entry[1] === bestScore)
-          .map((entry) => entry[0]);
-        const winningColor = getColorWithLeastRecentClaim(
-          changelog["changes"],
-          tiedColors as unknown as BingosyncColor[]
-        );
-        const opponentColor: BingosyncColor = tiedColors.find(
-          (player) => player !== winningColor
-        ) as unknown as BingosyncColor;
-        return {
-          winnerName: colorToPlayers[winningColor].join(" / "),
-          winnerColor: winningColor,
-          winnerScore: colorScores[winningColor],
-          winnerBingo: false,
-          opponentName: colorToPlayers[opponentColor].join(" / "),
-          opponentColor: opponentColor,
-          opponentScore: colorScores[opponentColor],
-        };
-      }
-    }
-  }
-
-  if (bingoPlayer != null) {
+  const bingoTeam = getFirstBingoPlayer(changelog["changes"], teamColors);
+  if (bingoTeam != null) {
     const bestOpponent =
-      playerEntries.find(([name, _]) => name !== bingoPlayer)?.[0] ?? null;
+      teamEntries.find(([name, _]) => name !== bingoTeam)?.[0] ?? null;
     return getStandardResult(
-      bingoPlayer,
+      bingoTeam,
       bestOpponent,
-      playerColors,
-      playerScores,
-      true
+      teamColors,
+      teamScores,
+      true,
     );
   }
 
-  if (playerEntries.length === 1) {
+  if (teamEntries.length === 1) {
     return getStandardResult(
-      playerEntries[0][0],
+      teamEntries[0][0],
       null,
-      playerColors,
-      playerScores,
-      false
+      teamColors,
+      teamScores,
+      false,
     );
   }
 
-  const bestScore = playerEntries[0][1];
-  const secondBestScore = playerEntries[1][1];
+  const bestScore = teamEntries[0][1];
+  const secondBestScore = teamEntries[1][1];
   if (bestScore > secondBestScore) {
     return getStandardResult(
-      playerEntries[0][0],
-      playerEntries[1][0],
-      playerColors,
-      playerScores,
-      false
+      teamEntries[0][0],
+      teamEntries[1][0],
+      teamColors,
+      teamScores,
+      false,
     );
   }
 
-  const tiedPlayers = playerEntries
+  const tiedTeams = teamEntries
     .filter((entry) => entry[1] === bestScore)
     .map((entry) => entry[0]);
 
-  const tiedPlayerToColors: PlayerToColors = {};
-  tiedPlayers.forEach((player) => {
-    tiedPlayerToColors[player] = playerColors[player];
+  const tiedTeamToColors: PlayerToColors = {};
+  tiedTeams.forEach((team) => {
+    tiedTeamToColors[team] = teamColors[team];
   });
+  // TODO: This is broken!! Fix to work with colors
   const winnerName = getPlayerWithLeastRecentClaim(
     changelog["changes"],
-    tiedPlayerToColors
+    tiedTeamToColors,
   );
-  const opponentName =
-    tiedPlayers.find((player) => player !== winnerName) ?? null;
+  const opponentName = tiedTeams.find((team) => team !== winnerName) ?? null;
   return getStandardResult(
     winnerName,
     opponentName,
-    playerColors,
-    playerScores,
-    false
+    teamColors,
+    teamScores,
+    false,
   );
 }

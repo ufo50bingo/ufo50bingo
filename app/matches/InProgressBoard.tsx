@@ -15,8 +15,8 @@ import { db } from "../db";
 
 type Props = {
   finalBoard: TBoard;
-  changes: ReadonlyArray<Change>;
-  startTime: number;
+  changes: null | undefined | ReadonlyArray<Change>;
+  startTime: null | undefined | number;
   seekMs: number;
   leagueP1: string | null | undefined;
   leagueP2: string | null | undefined;
@@ -27,10 +27,10 @@ type Props = {
 };
 
 export default function InProgressBoard({
-  changes,
+  changes: rawChanges,
   finalBoard,
   seekMs,
-  startTime,
+  startTime: rawStartTime,
   leagueP1,
   leagueP2,
   isRevealed,
@@ -38,6 +38,8 @@ export default function InProgressBoard({
   isBoardVisible,
   showOverlays,
 }: Props) {
+  const changes = rawChanges ?? [];
+  const startTime = rawStartTime ?? 0;
   const curTime = startTime + seekMs;
   const endIndex = useMemo(() => {
     const endIndex = changes.findIndex((change) => change.time > curTime);
@@ -120,7 +122,7 @@ export default function InProgressBoard({
   return (
     <>
       <Board
-        board={board}
+        board={rawChanges == null || rawStartTime == null || isFinal ? finalBoard : board}
         overlays={showOverlays && overlays != null ? overlays : undefined}
         onClickSquare={null}
         isHidden={!isRevealed || !isBoardVisible}

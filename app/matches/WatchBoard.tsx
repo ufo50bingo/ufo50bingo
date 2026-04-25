@@ -42,6 +42,7 @@ export default function WatchBoard({
   isBoardVisible,
   showOverlays,
 }: Props) {
+  const prevMaxSeekSec = useRef<null | number>(null);
   const maxSeekSec =
     changes != null && startTime != null
       ? Math.max(changes[changes.length - 1].time - startTime, 0)
@@ -93,6 +94,15 @@ export default function WatchBoard({
     };
   }, [isPlaying, maxSeekSec, speedMult]);
 
+  useEffect(() => {
+    if (prevMaxSeekSec.current != null && prevMaxSeekSec.current !== maxSeekSec) {
+      setSeekSec(maxSeekSec);
+      setIsPlaying(false);
+    }
+  }, [maxSeekSec]);
+
+  prevMaxSeekSec.current = maxSeekSec;
+
   return (
     <>
       <InProgressBoard
@@ -132,7 +142,7 @@ export default function WatchBoard({
             </ActionIcon>
             <Popover width={200} position="bottom" withArrow shadow="md">
               <Popover.Target>
-                <Button size="compact-xs" w="42px">
+                <Button size="compact-xs" w="48px">
                   {speedMult}x
                 </Button>
               </Popover.Target>

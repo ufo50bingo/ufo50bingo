@@ -175,7 +175,7 @@ export default function Cast({
         return null;
       }
       const changelog = getChangelog(rawFeed);
-      const result = getResult(board, changelog, null, null);
+      const result = getResult(board, changelog.changes, null, null);
       if (result == null) {
         return null;
       }

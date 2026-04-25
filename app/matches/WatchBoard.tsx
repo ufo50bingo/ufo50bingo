@@ -19,11 +19,27 @@ type Props = {
   finalBoard: TBoard;
   changes: ReadonlyArray<Change>;
   startTime: number;
+  leagueP1: string | null | undefined;
+  leagueP2: string | null | undefined;
+  isRevealed: boolean;
+  playbackId: string;
+  matchId: string;
+  isBoardVisible: boolean;
 };
 
 const SPEED_MULT_OPTIONS = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512];
 
-export default function WatchBoard({ finalBoard, changes, startTime }: Props) {
+export default function WatchBoard({
+  finalBoard,
+  changes,
+  startTime,
+  leagueP1,
+  leagueP2,
+  isRevealed,
+  playbackId,
+  matchId,
+  isBoardVisible,
+}: Props) {
   const maxSeekSec = Math.max(changes[changes.length - 1].time - startTime, 0);
   const hasHours = maxSeekSec >= 60 * 60;
   const [seekSec, setSeekSec] = useState(maxSeekSec);
@@ -73,70 +89,77 @@ export default function WatchBoard({ finalBoard, changes, startTime }: Props) {
   }, [isPlaying, maxSeekSec, speedMult]);
 
   return (
-    <Stack>
+    <>
       <InProgressBoard
         finalBoard={finalBoard}
         changes={changes}
         startTime={startTime}
         seekMs={seekSec}
+        leagueP1={leagueP1}
+        leagueP2={leagueP2}
+        isRevealed={isRevealed}
+        matchId={matchId}
+        isBoardVisible={isBoardVisible}
       />
-      <Group gap={8}>
-        <ActionIcon
-          size="sm"
-          onClick={() => {
-            if (isPlaying) {
-              setIsPlaying(false);
-            } else {
-              if (seekSec === maxSeekSec) {
-                setSeekSec(0);
+      {isRevealed && (
+        <Group gap={8} id={playbackId}>
+          <ActionIcon
+            size="sm"
+            onClick={() => {
+              if (isPlaying) {
+                setIsPlaying(false);
+              } else {
+                if (seekSec === maxSeekSec) {
+                  setSeekSec(0);
+                }
+                setIsPlaying(true);
               }
-              setIsPlaying(true);
-            }
-          }}
-        >
-          {isPlaying ? (
-            <IconPlayerPause size={12} />
-          ) : (
-            <IconPlayerPlay size={12} />
-          )}
-        </ActionIcon>
-        <Popover width={200} position="bottom" withArrow shadow="md">
-          <Popover.Target>
-            <Button size="compact-xs" w="42px">
-              {speedMult}x
-            </Button>
-          </Popover.Target>
-          <Popover.Dropdown w="100px">
-            <Radio.Group
-              value={speedMult.toString()}
-              onChange={(newMult) => setSpeedMult(Number(newMult))}
-            >
-              <Stack>
-                {SPEED_MULT_OPTIONS.map((mult) => (
-                  <Radio
-                    key={mult}
-                    value={mult.toString()}
-                    label={`${mult}x`}
-                  />
-                ))}
-              </Stack>
-            </Radio.Group>
-          </Popover.Dropdown>
-        </Popover>
-        <Text size="xs" style={{ fontVariantNumeric: "tabular-nums" }}>
-          {getTime(seekSec)}/{getTime(maxSeekSec)}
-        </Text>
-        <Slider
-          min={0}
-          max={maxSeekSec}
-          label={getTime}
-          value={seekSec}
-          onChange={setSeekSec}
-          step={0.1}
-          styles={{ markLabel: { display: "none" } }}
-          flex="1"
-        />
-      </Group>
-    </Stack>
+            }}
+          >
+            {isPlaying ? (
+              <IconPlayerPause size={12} />
+            ) : (
+              <IconPlayerPlay size={12} />
+            )}
+          </ActionIcon>
+          <Popover width={200} position="bottom" withArrow shadow="md">
+            <Popover.Target>
+              <Button size="compact-xs" w="42px">
+                {speedMult}x
+              </Button>
+            </Popover.Target>
+            <Popover.Dropdown w="100px">
+              <Radio.Group
+                value={speedMult.toString()}
+                onChange={(newMult) => setSpeedMult(Number(newMult))}
+              >
+                <Stack>
+                  {SPEED_MULT_OPTIONS.map((mult) => (
+                    <Radio
+                      key={mult}
+                      value={mult.toString()}
+                      label={`${mult}x`}
+                    />
+                  ))}
+                </Stack>
+              </Radio.Group>
+            </Popover.Dropdown>
+          </Popover>
+          <Text size="xs" style={{ fontVariantNumeric: "tabular-nums" }}>
+            {getTime(seekSec)}/{getTime(maxSeekSec)}
+          </Text>
+          <Slider
+            min={0}
+            max={maxSeekSec}
+            label={getTime}
+            value={seekSec}
+            onChange={setSeekSec}
+            step={0.1}
+            styles={{ markLabel: { display: "none" } }}
+            flex="1"
+          />
+        </Group>
+      )}
+    </>
   );
 }

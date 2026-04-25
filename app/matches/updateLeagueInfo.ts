@@ -113,5 +113,5 @@ function getMatchResultSql(
 
   const leagueP1 = update.type === "league" ? update.p1 : null;
   const leagueP2 = update.type === "league" ? update.p2 : null;
-  return getResultSql(getResult(board, changelog, leagueP1, leagueP2));
+  return getResultSql(getResult(board, changelog.changes, leagueP1, leagueP2));
 }

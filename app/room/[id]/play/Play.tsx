@@ -71,19 +71,18 @@ export default function Play({
     setIsHidden(true);
   }, []);
 
-  const { board, rawFeed, seed, reconnectModal, audio } =
-    useBingosyncSocket({
-      id,
-      initialBoard,
-      initialRawFeed,
-      initialSeed,
-      socketKey,
-      pauseRef,
-      playerName,
-      setPauseRequestName,
-      soundChoices,
-      onNewCard,
-    });
+  const { board, rawFeed, seed, reconnectModal, audio } = useBingosyncSocket({
+    id,
+    initialBoard,
+    initialRawFeed,
+    initialSeed,
+    socketKey,
+    pauseRef,
+    playerName,
+    setPauseRequestName,
+    soundChoices,
+    onNewCard,
+  });
 
   const {
     timer,
@@ -147,7 +146,7 @@ export default function Play({
         return null;
       }
       const changelog = getChangelog(rawFeed);
-      const result = getResult(board, changelog, null, null);
+      const result = getResult(board, changelog.changes, null, null);
       if (result == null) {
         return null;
       }
@@ -177,7 +176,7 @@ export default function Play({
               const isClearing = board[squareIndex].color === selectedColor;
               try {
                 await changeColor(id, squareIndex, selectedColor, isClearing);
-              } catch { }
+              } catch {}
             }}
             isHidden={isHidden}
             setIsHidden={setIsHidden}

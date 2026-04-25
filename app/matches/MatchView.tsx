@@ -22,10 +22,8 @@ import {
 } from "@tabler/icons-react";
 import html2canvas from "html2canvas";
 import { useMemo, ReactNode, useRef, useState } from "react";
-import Board from "../Board";
-import BingosyncColored from "./BingosyncColored";
 import { isTooOld, Match } from "./Matches";
-import { getWinType, getVariantText } from "./matchUtil";
+import { getVariantText } from "./matchUtil";
 import { TBoard, Changelog } from "./parseBingosyncData";
 import ViewChangelog from "./ViewChangelog";
 import { getHost, getVodLink } from "./vodUtil";
@@ -33,7 +31,6 @@ import { getChangesWithoutMistakes, getMatchStartTime } from "./analyzeMatch";
 import { refreshMatch } from "./refreshMatch";
 import EditVodModal from "./EditVodModal";
 import { useAppContext } from "../AppContextProvider";
-import { db } from "../db";
 import EditLeagueModal from "./EditLeagueModal";
 import { useMediaQuery } from "@mantine/hooks";
 import { LEAGUE_SEASON } from "../createboard/leagueConstants";
@@ -103,8 +100,6 @@ export default function MatchView({ match, isMatchesPage }: Props) {
   const [isEditingVod, setIsEditingVod] = useState(false);
   const [isEditingLeague, setIsEditingLeague] = useState(false);
 
-  const winType = getWinType(match);
-
   let isTwitch = false;
   const vod = match.vod;
   if (vod != null) {
@@ -116,6 +111,7 @@ export default function MatchView({ match, isMatchesPage }: Props) {
   const vodLink = getVodLink(match, -90);
   const vodId = `vodLink_${match.id}`;
   const permalinkId = `permalink_${match.id}`;
+  const playbackId = `playback_${match.id}`;
 
   const leagueInfo = match.leagueInfo;
   const date = new Date(match.dateCreated * 1000).toLocaleString(undefined, {
@@ -214,30 +210,13 @@ export default function MatchView({ match, isMatchesPage }: Props) {
               finalBoard={board}
               changes={changelog!.changes}
               startTime={matchStartTime!}
+              leagueP1={match.leagueInfo?.p1}
+              leagueP2={match.leagueInfo?.p2}
+              isRevealed={isRevealed ?? false}
+              playbackId={playbackId}
+              matchId={match.id}
+              isBoardVisible={match.isBoardVisible}
             />
-            {isRevealed && (
-              <Group justify="space-between">
-                {match.winner != null && (
-                  <BingosyncColored color={match.winner.color}>
-                    <Text>
-                      <strong>
-                        {match.winner.name}: {match.winner.score}
-                        {winType != null && ` (${winType} win)`}
-                      </strong>
-                    </Text>
-                  </BingosyncColored>
-                )}
-                {match.opponent != null && (
-                  <BingosyncColored color={match.opponent.color}>
-                    <Text>
-                      <strong>
-                        {match.opponent.name}: {match.opponent.score}
-                      </strong>
-                    </Text>
-                  </BingosyncColored>
-                )}
-              </Group>
-            )}
           </Stack>
         </div>
         {isRevealed && match.isBoardVisible && (
@@ -308,6 +287,10 @@ export default function MatchView({ match, isMatchesPage }: Props) {
                       const permalink = cloneDoc.getElementById(permalinkId);
                       if (permalink != null) {
                         permalink.style.display = "none";
+                      }
+                      const playback = cloneDoc.getElementById(playbackId);
+                      if (playback != null) {
+                        playback.style.display = "none";
                       }
                       element.style.padding = "8px";
                       element.style.width = "541px";

@@ -1,6 +1,5 @@
 import getSql from "../getSql";
 import {
-  getColorWithLeastRecentClaim,
   getFirstBingoPlayer,
   getIsValid,
   getPlayerWithLeastRecentClaim,
@@ -9,14 +8,14 @@ import {
 import { SQL } from "./page";
 import {
   BingosyncColor,
-  Changelog,
+  Change,
   getPlayerColors,
   PlayerToColors,
   TBoard,
 } from "./parseBingosyncData";
 import { PlayerScores } from "./refreshMatch";
 
-type MatchResult = {
+export type MatchResult = {
   winnerName: string;
   winnerColor: string;
   winnerScore: number;
@@ -68,17 +67,16 @@ function getStandardResult(
 
 export function getTeamColors(
   board: TBoard,
-  changelog: Changelog,
+  changes: ReadonlyArray<Change>,
   leagueP1: string | null | undefined,
   leagueP2: string | null | undefined,
 ): PlayerToColors {
   const verifiedPlayerToColors = getVerifiedPlayerToColors(
-    changelog.changes,
+    changes,
     leagueP1,
     leagueP2,
   );
-  const playerColors =
-    verifiedPlayerToColors ?? getPlayerColors(changelog.changes);
+  const playerColors = verifiedPlayerToColors ?? getPlayerColors(changes);
   // this is not a league match, and every player has exactly 1 color.
   // we can turn it into a team game
   if (
@@ -97,7 +95,9 @@ export function getTeamColors(
     });
     const teams: PlayerToColors = {};
     Object.keys(colorToPlayers).forEach((color) => {
-      teams[colorToPlayers[color].join(" / ")] = [color as BingosyncColor];
+      teams[colorToPlayers[color].toSorted().join(" / ")] = [
+        color as BingosyncColor,
+      ];
     });
     return teams;
   }
@@ -127,24 +127,22 @@ export function getTeamScores(
   return teamScores;
 }
 
-export function getResult(
+export function getResultForTeams(
   board: TBoard,
-  changelog: Changelog,
-  leagueP1: string | null | undefined,
-  leagueP2: string | null | undefined,
+  changes: ReadonlyArray<Change>,
+  teamColors: PlayerToColors,
+  teamScores: PlayerScores,
 ): null | MatchResult {
-  const teamColors = getTeamColors(board, changelog, leagueP1, leagueP2);
-  const teamScores = getTeamScores(board, teamColors);
   const teamEntries = Object.entries(teamScores);
   // sort so that the team with the most goals is first
   teamEntries.sort((a, b) => b[1] - a[1]);
 
-  const isValid = getIsValid(board, changelog["changes"]);
+  const isValid = getIsValid(board, changes);
   if (!isValid || teamEntries.length === 0) {
     return null;
   }
 
-  const bingoTeam = getFirstBingoPlayer(changelog["changes"], teamColors);
+  const bingoTeam = getFirstBingoPlayer(changes, teamColors);
   if (bingoTeam != null) {
     const bestOpponent =
       teamEntries.find(([name, _]) => name !== bingoTeam)?.[0] ?? null;
@@ -187,11 +185,7 @@ export function getResult(
   tiedTeams.forEach((team) => {
     tiedTeamToColors[team] = teamColors[team];
   });
-  // TODO: This is broken!! Fix to work with colors
-  const winnerName = getPlayerWithLeastRecentClaim(
-    changelog["changes"],
-    tiedTeamToColors,
-  );
+  const winnerName = getPlayerWithLeastRecentClaim(changes, tiedTeamToColors);
   const opponentName = tiedTeams.find((team) => team !== winnerName) ?? null;
   return getStandardResult(
     winnerName,
@@ -200,4 +194,15 @@ export function getResult(
     teamScores,
     false,
   );
+}
+
+export function getResult(
+  board: TBoard,
+  changes: ReadonlyArray<Change>,
+  leagueP1: string | null | undefined,
+  leagueP2: string | null | undefined,
+): null | MatchResult {
+  const teamColors = getTeamColors(board, changes, leagueP1, leagueP2);
+  const teamScores = getTeamScores(board, teamColors);
+  return getResultForTeams(board, changes, teamColors, teamScores);
 }

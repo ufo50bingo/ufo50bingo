@@ -29,7 +29,7 @@ export const BINGO_LINES = [
 // check whether the final board state can be recreated from the changelog
 export function getIsValid(
   board: TBoard,
-  changes: ReadonlyArray<Change>
+  changes: ReadonlyArray<Change>,
 ): boolean {
   const boardFromChangelog = getFinalColors(changes);
   for (let index = 0; index < 25; index++) {
@@ -41,7 +41,7 @@ export function getIsValid(
 }
 
 function getFinalColors(
-  changes: ReadonlyArray<Change>
+  changes: ReadonlyArray<Change>,
 ): ReadonlyArray<BingosyncColor> {
   const board: BingosyncColor[] = Array(25).fill("blank");
   changes.forEach((change) => {
@@ -53,10 +53,10 @@ function getFinalColors(
 function isBingoForColors(
   lineIndex: number,
   boardColors: ReadonlyArray<BingosyncColor>,
-  playerColors: ReadonlyArray<BingosyncColor>
+  playerColors: ReadonlyArray<BingosyncColor>,
 ): boolean {
   return BINGO_LINES[lineIndex].every((squareIndex) =>
-    playerColors.includes(boardColors[squareIndex])
+    playerColors.includes(boardColors[squareIndex]),
   );
 }
 
@@ -66,7 +66,7 @@ type BingoLine = {
 };
 function getBingoLines(
   boardColors: ReadonlyArray<BingosyncColor>,
-  players: PlayerToColors
+  players: PlayerToColors,
 ): ReadonlyArray<BingoLine> {
   const bingoLines: BingoLine[] = [];
   for (let lineIndex = 0; lineIndex < BINGO_LINES.length; lineIndex++) {
@@ -81,7 +81,7 @@ function getBingoLines(
 
 export function getFirstBingoPlayer(
   changes: ReadonlyArray<Change>,
-  players: PlayerToColors
+  players: PlayerToColors,
 ): null | string {
   const boardFromChangelog: BingosyncColor[] = Array(25).fill("blank");
   let validBingoLines: BingoLine[] = [];
@@ -95,8 +95,8 @@ export function getFirstBingoPlayer(
         curBingoLines.find(
           (currentLine) =>
             currentLine.lineIndex === line.lineIndex &&
-            currentLine.player === line.player
-        ) != null
+            currentLine.player === line.player,
+        ) != null,
     );
     // add new lines that weren't present previously
     curBingoLines.forEach((curLine) => {
@@ -104,7 +104,7 @@ export function getFirstBingoPlayer(
         newLines.find(
           (prevLine) =>
             prevLine.lineIndex === curLine.lineIndex &&
-            prevLine.player === curLine.player
+            prevLine.player === curLine.player,
         ) == null
       ) {
         newLines.push(curLine);
@@ -115,38 +115,9 @@ export function getFirstBingoPlayer(
   return validBingoLines.length > 0 ? validBingoLines[0].player : null;
 }
 
-export function getColorWithLeastRecentClaim(
-  changes: ReadonlyArray<Change>,
-  colors: ReadonlyArray<BingosyncColor>
-): string {
-  // time that color most recently claimed each square
-  // has null if square is not claimed. Set back to null
-  // if square is claimed and then unclaimed.
-  // The "time" is the position in the changelog
-  const colorClaimTimes: { [color: string]: (null | number)[] } = {};
-  colors.forEach((color) => (colorClaimTimes[color] = Array(25).fill(null)));
-
-  changes.forEach((change, changePosition) => {
-    if (change.color === "blank") {
-      colors.forEach((color) => {
-        colorClaimTimes[color][change.index] = null;
-      });
-      return;
-    }
-    colorClaimTimes[change.color][change.index] = changePosition;
-  });
-
-  const finalClaimTimes = colors.map((color) =>
-    Math.max(...colorClaimTimes[color].filter((time) => time != null))
-  );
-  const minClaimTime = Math.min(...finalClaimTimes);
-  const indexOfBest = finalClaimTimes.findIndex((v) => v === minClaimTime);
-  return colors[indexOfBest];
-}
-
 export function getPlayerWithLeastRecentClaim(
   changes: ReadonlyArray<Change>,
-  players: PlayerToColors
+  players: PlayerToColors,
 ): string {
   // time that player most recently claimed each square
   // has null if square is not claimed. Set back to null
@@ -154,7 +125,7 @@ export function getPlayerWithLeastRecentClaim(
   // The "time" is the position in the changelog
   const playerClaimTimes: { [player: string]: (null | number)[] } = {};
   Object.keys(players).forEach(
-    (player) => (playerClaimTimes[player] = Array(25).fill(null))
+    (player) => (playerClaimTimes[player] = Array(25).fill(null)),
   );
 
   changes.forEach((change, changePosition) => {
@@ -172,7 +143,9 @@ export function getPlayerWithLeastRecentClaim(
   });
 
   const finalClaimTimes = Object.keys(players).map((player) =>
-    Math.max(...playerClaimTimes[player].filter((position) => position != null))
+    Math.max(
+      ...playerClaimTimes[player].filter((position) => position != null),
+    ),
   );
   const minClaimTime = Math.min(...finalClaimTimes);
   const indexOfBest = finalClaimTimes.findIndex((v) => v === minClaimTime);
@@ -181,7 +154,7 @@ export function getPlayerWithLeastRecentClaim(
 
 export function getMatchStartTime(
   changelog: Changelog,
-  analysisSeconds: number
+  analysisSeconds: number,
 ): null | number {
   const revealTime = changelog.reveals?.[0]?.time;
   return revealTime == null ? null : revealTime + analysisSeconds;
@@ -189,7 +162,7 @@ export function getMatchStartTime(
 
 export function getSquareCompletionRanges(
   matchStartTime: null | number,
-  changesWithoutMistakes: ReadonlyArray<Change>
+  changesWithoutMistakes: ReadonlyArray<Change>,
 ): ReadonlyArray<[string, number, number] | null> {
   const finalTimes: ([string, number, number] | null)[] = Array(25).fill(null);
   const prevTimeByPlayer: { [player: string]: number } = {};
@@ -210,7 +183,7 @@ export function getSquareCompletionRanges(
 }
 
 function getChangesWithoutDuplicates(
-  changes: ReadonlyArray<Change>
+  changes: ReadonlyArray<Change>,
 ): ReadonlyArray<Change> {
   return changes.filter((change, idx) => {
     if (idx === 0) {
@@ -231,7 +204,7 @@ function getChangesWithoutDuplicates(
 // bingosync also sometimes includes the same item in the the feed with very
 // slightly different timestamps, so remove those as well
 export function getChangesWithoutMistakes(
-  changes: ReadonlyArray<Change>
+  changes: ReadonlyArray<Change>,
 ): ReadonlyArray<Change> {
   const withouDuplicates = getChangesWithoutDuplicates(changes);
   const changesBySquare: Change[][] = Array(25)
@@ -241,7 +214,7 @@ export function getChangesWithoutMistakes(
     changesBySquare[change.index].push(change);
   });
   changesBySquare.forEach((changesForSquare) =>
-    removeMistakesForSquare(changesForSquare)
+    removeMistakesForSquare(changesForSquare),
   );
   const allChanges = changesBySquare.flat();
   allChanges.sort((x, y) => x.time - y.time);
@@ -282,7 +255,7 @@ function getTopPlayer(playerToNetAdditiosn: {
   [player: string]: number;
 }): string {
   return Object.keys(playerToNetAdditiosn).reduce((a, b) =>
-    playerToNetAdditiosn[a] > playerToNetAdditiosn[b] ? a : b
+    playerToNetAdditiosn[a] > playerToNetAdditiosn[b] ? a : b,
   );
 }
 
@@ -290,7 +263,7 @@ function getSimilarity(verifiedName: string, name: string): number {
   const aliases = ALIASES[verifiedName] ?? [];
   const allNames = [verifiedName, ...aliases];
   const allScores = allNames.map((verifiedOrAlias) =>
-    new SequenceMatcher(null, verifiedOrAlias, name).ratio()
+    new SequenceMatcher(null, verifiedOrAlias, name).ratio(),
   );
   return Math.max(...allScores);
 }
@@ -298,7 +271,7 @@ function getSimilarity(verifiedName: string, name: string): number {
 export function getColorToVerifiedName(
   changes: ReadonlyArray<Change>,
   verifiedP1: string,
-  verifiedP2: string
+  verifiedP2: string,
 ): null | {
   [color: string]: string;
 } {
@@ -375,7 +348,7 @@ export function getColorToVerifiedName(
 export function getVerifiedPlayerToColors(
   changes: ReadonlyArray<Change>,
   leagueP1: string | null | undefined,
-  leagueP2: string | null | undefined
+  leagueP2: string | null | undefined,
 ): null | PlayerToColors {
   if (leagueP1 == null || leagueP2 == null) {
     return null;
@@ -383,7 +356,7 @@ export function getVerifiedPlayerToColors(
   const colorToVerifiedName = getColorToVerifiedName(
     changes,
     leagueP1,
-    leagueP2
+    leagueP2,
   );
   if (colorToVerifiedName == null) {
     return null;

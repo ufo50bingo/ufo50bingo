@@ -128,7 +128,7 @@ export async function refreshMatch(
     );
   }
 
-  const result = getResult(board, changelog, leagueP1, leagueP2);
+  const result = getResult(board, changelog.changes, leagueP1, leagueP2);
   const isAllBlank = board.every((square) => square.color === "blank");
 
   const changelogJson = changelog != null ? JSON.stringify(changelog) : null;

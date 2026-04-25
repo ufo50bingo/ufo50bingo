@@ -1,7 +1,7 @@
 export default function getDurationText(
   duration: number,
   showDecimal: boolean = true,
-  forceShowHours: boolean = false
+  forceShowHours: boolean = false,
 ): string {
   // round to nearest 10th of a second before computing hours/mins
   // this prevents issues like an actual value of 13:59.99 displaying

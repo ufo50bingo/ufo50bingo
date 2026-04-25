@@ -190,7 +190,7 @@ export const SPICY_UFO = {
       "campanella3": [
         "CAMPANELLA 3: Have 5 continues at once",
         "CAMPANELLA 3: Win the bonus game with only one star wave"
-	  ],
+      ],
       "seasidedrive": [
         "SEASIDE DRIVE: Use WEAK-SHOT; Clear Stage 1 without dying and at least 17,700 points"
       ],
@@ -228,7 +228,7 @@ export const SPICY_UFO = {
       ],
       "planetzoldath": [
         "PLANET ZOLDATH: Collect the dungeon map piece in under 7 minutes of Zoldath time",
-		"PLANET ZOLDATH: Collect the trade map piece in under 8 minutes of Zoldath time",
+        "PLANET ZOLDATH: Collect the trade map piece in under 8 minutes of Zoldath time",
         "PLANET ZOLDATH: Have 5+ of each resource at once"
       ],
       "attactics": [
@@ -260,7 +260,7 @@ export const SPICY_UFO = {
         "BUSHIDO BALL: Cherry disk as {{bushido}}",
         "BUSHIDO BALL: Win the first match as 4 different characters; enemies may not score more than 2 points"
       ],
-	  "blockkoala": [
+      "blockkoala": [
         "BLOCK KOALA: WORM-1234 allowed; Beat levels {{bk_med}}, {{bk_med}}, {{bk_med}}, {{bk_med}}, {{bk_med}}, {{bk_med}}"
       ],
       "camouflage": [
@@ -476,7 +476,7 @@ export const SPICY_UFO = {
         "BUSHIDO BALL: Cherry Disk with both {{bushido_m}} and {{bushido_f}}",
         "BUSHIDO BALL: Win 3 rounds of 16-point Hyper using both {{bushido_m}} and {{bushido_f}}"
       ],
-	   "blockkoala": [
+      "blockkoala": [
         "BLOCK KOALA: WORM-1234 allowed; Beat levels {{bk_hard}}, {{bk_hard}}, {{bk_hard}}, {{bk_hard}}, {{bk_hard}}"
       ],
       "camouflage": [
@@ -496,7 +496,7 @@ export const SPICY_UFO = {
       ],
       "warptank": [
         "WARPTANK: Change your tank to each color in the hub world (there are 4 new colors)",
-		"WARPTANK: Collect 14 coffees",
+        "WARPTANK: Collect 14 coffees",
         "WARPTANK: Defeat Renegade"
       ],
       "waldorfsjourney": [
@@ -558,7 +558,7 @@ export const SPICY_UFO = {
         "OVERBOLD: Gold disk with all upgrades maxed out except Dash Attack",
         "OVERBOLD: Gold disk; ONLY purchases allowed are SALE & HIKE items",
         "OVERBOLD: Gold disk; You may only purchase upgrades in 2 rows",
-		"OVERBOLD: Gold disk; You may only purchase upgrades in 2 columns",
+        "OVERBOLD: Gold disk; You may only purchase upgrades in 2 columns",
         "OVERBOLD: Use CASH-BUMP; Purchases only allowed in first shop; Clear rounds 2-4 with $900+ stakes"
       ],
       "campanella2": [
@@ -677,12 +677,12 @@ export const SPICY_UFO = {
       ],
       "blockkoala": [
         "BLOCK KOALA: WORM-1234 allowed; beat 12 odd-numbered story levels (Lv 1-10 excluded)",
-		"BLOCK KOALA: WORM-1234 allowed; beat 13 even-numbered story levels (Lv 1-10 excluded)",
+        "BLOCK KOALA: WORM-1234 allowed; beat 13 even-numbered story levels (Lv 1-10 excluded)",
         "BLOCK KOALA: WORM-1234 allowed; Beat {{bk_easy}}, {{bk_easy}}, {{bk_med}}, {{bk_med}}, {{bk_hard}}, {{bk_hard}}, {{bk_vhard}}, {{bk_vhard}}"
       ],
       "camouflage": [
         "CAMOUFLAGE: Cherry disk",
-        "CAMOUFLAGE: Cherry Disk; must start over any levels if caught",
+        "CAMOUFLAGE: Cherry disk; must start over any levels if caught",
         "CAMOUFLAGE: Gold disk without ever being caught (New Game required if caught)"
       ],
       "campanella": [
@@ -723,7 +723,7 @@ export const SPICY_UFO = {
       ],
       "hotfoot": [
         "HOT FOOT: Cherry disk disk using {{hf_char}} & {{hf_char}}",
-        "HOT FOOT: Cherry disk twice with 4 unique characters"
+        "HOT FOOT: Cherry disk using 2 unique teams"
       ],
       "divers": [
         "DIVERS: Defeat Guelap",
@@ -760,7 +760,7 @@ export const SPICY_UFO = {
         "OVERBOLD: Cherry disk with 4 or fewer upgrades invested in",
         "OVERBOLD: Cherry disk with final total of $6500+",
         "OVERBOLD: Cherry disk; Row 2 & 4 items are banned until the final shop",
-		"OVERBOLD: Cherry disk; Row 1 & 3 items are banned until the final shop"	
+        "OVERBOLD: Cherry disk; Row 1 & 3 items are banned until the final shop"
       ],
       "campanella2": [
         "CAMPANELLA 2: Cherry disk with 6+ upgrades (square icons)",
@@ -788,7 +788,7 @@ export const SPICY_UFO = {
         "LORDS OF DISKONIA: Win a Full War on Commander difficulty; Must buy units at each Tavern visited until no longer possible"
       ],
       "nightmanor": [
-        "NIGHT MANOR: Use OPEN-CAGE: Cherry dsk without being caught; hitting the killer not allowed (Counts as CHERRY DISK)"
+        "NIGHT MANOR: Use OPEN-CAGE: Cherry disk without being caught; hitting the killer not allowed (Counts as CHERRY DISK)"
       ],
       "elfazarshat": [
         "ELFAZAR’S HAT: Cherry disk with 9 tickets collected",
@@ -801,7 +801,7 @@ export const SPICY_UFO = {
       ],
       "miniandmax": [
         "MINI & MAX: Gold disk",
-		"MINI & MAX: Have 600+ shinies"
+        "MINI & MAX: Have 600+ shinies"
       ],
       "combatants": [
         "COMBATANTS: Beat 9 levels"
@@ -838,8 +838,10 @@ export const SPICY_UFO = {
         "Collect 10 gifts - 1 from each column ({{chrono_alpha}})",
         "Collect 12 gifts - 6 from the first 25, 6 from the second 25 in {{chrono_alpha}}",
         "Collect {{gifts_card}} gifts from games on this card",
+		"Collect {{gifts_card}} gifts from games on this card",
+        "Defeat {{gen_boss}}",
+        "Defeat {{gen_boss}}",
 		"Defeat {{gen_boss}}",
-	    "Defeat {{gen_boss}}",
         "Beat {{gen_board}}"
       ],
       "misc": [
@@ -864,13 +866,13 @@ export const SPICY_UFO = {
         "ALPHA TRILOGY II: Cherry Disk Velgress, Overbold, and Quibble Race",
         "ARCADE ACE II: Cherry Disk 4 of the 16 “ARCADE” games",
         "RACER II: Cherry Disk Paint Chase, The Big Bell Race, and Quibble Race",
-        "DAY JOB II: Earn the gift in any 2 and gold disk the third: Rail Heist, Bug Hunter, Onion Delivery",
-        "EXPLORER: Visit 30 rooms in Barbuta, 20 in Mooncat, and reach 40%+ exploration in Vainger",
-        "AMY II: Gold disk 2 of 3 games playing as Amy: Fist Hell, Party House, Hot Foot",
+        "DAY JOB II: Earn the gift in 2 and gold disk the third: Rail Heist, Bug Hunter, Onion Delivery",
+        "EXPLORER: Visit 30+ rooms in Barbuta, 20+ in Mooncat, and reach 40%+ exploration in Vainger",
+        "AMY II: Gold disk 2/3 and earn the gift in the other, using Amy: Fist Hell, Party House, Hot Foot",
         "PILOT PARTY II: Collect the Gift in ALL 6 games: Campanella 1/2/3, Planet Zoldath, Pilot Quest, The Big Bell Race",
         "WAR IS GOOD: Beat story missions: 2 in Avianos, 5 in Combatants, 12 in Attactics",
         "SHOOTER: Gold disk 3 of the 8 “SHOOTER” games",
-        "ADVENTUREVANIA: Defeat 8 total bosses across Vainger, Porgy, Mini & Max, and Warptank, with at least one in 3 of the games"
+        "ADVENTUREVANIA: Defeat 9 total bosses across Vainger, Porgy, Mini & Max, and Warptank, with 1+ in 3 of the games"
       ]
     }
   },
@@ -884,7 +886,6 @@ export const SPICY_UFO = {
       "2 cherry disks"
     ],
     "cherry_card": [
-      "3",
       "4",
       "5"
     ],
@@ -893,8 +894,7 @@ export const SPICY_UFO = {
       "6"
     ],
     "dark_cherry": [
-      "2",
-      "3"
+      "2"
     ],
     "cherry_option": [
       "Rail Heist",
@@ -906,6 +906,8 @@ export const SPICY_UFO = {
       "Cyber Owls",
       "Fist Hell",
       "Mortol",
+	  "Elfazar's Hat",
+	  "Seaside Drive",
       "Warptank"
     ],
     "gold_option": [
@@ -913,13 +915,15 @@ export const SPICY_UFO = {
       "Golfaria",
       "Valbrace",
       "Vainger",
-      "Elfazar's Hat",
       "Mini & Max",
+	  "Attactics",
+	  "Devilition",
       "Cyber Owls",
       "Combatants"
     ],
     "levels_special": [
-      "3 levels in 5 games from 5 different library rows (chronology)",
+      "3 levels in 5 games from 5 different rows (chronology)",
+	  "3 levels in 5 games from 5 different rows (ALPHABETICAL)",
       "5 levels in 5 Epic Play games",
       "4 levels in 6 different Thinky Play games"
     ],
@@ -938,14 +942,15 @@ export const SPICY_UFO = {
       "four games in row five (ALPHABETICAL)"
     ],
     "levels_option": [
-      "Beat 6 story scenarios in Avianos",
+      "Beat 5 story scenarios in Avianos",
       "Cherry Disk Hyper Contender",
       "Beat 3 story missions in Lords of Diskonia",
       "Beat 20 levels in Block Koala",
       "Cherry Disk Ninpek",
       "Collect all clubs in Golfaria (have 80 total strokes)",
       "Beat 4 levels in Rock On! Island",
-      "Obtain 50% completion in Porgy"
+	  "Show 60+ completion in Vainger",
+      "Show 50%+ completion in Porgy"
     ],
     "cons_games": [
       "3 consecutive games under THINKY PLAY library sort",
@@ -967,8 +972,8 @@ export const SPICY_UFO = {
       "ALPHABETICAL"
     ],
     "gifts_card": [
-      "9",
-      "10"
+      "10",
+      "11"
     ],
     "2x2": [
       "Chronology",
@@ -1032,7 +1037,7 @@ export const SPICY_UFO = {
       "Tomoe",
       "Chiyome"
     ],
-	 "bk_easy": [
+    "bk_easy": [
       "7",
       "17",
       "34",
@@ -1086,7 +1091,7 @@ export const SPICY_UFO = {
       "43",
       "45",
       "50"
-	],
+    ],
     "hc_char": [
       "Elka",
       "Sephy",
@@ -1188,7 +1193,7 @@ export const SPICY_UFO = {
     ],
     "bh_easy_rest": [
       "Without letting a second bug type evolve",
-      "with a maximum of 6 module uses per turn",
+      "with a maximum of 7 module uses per turn",
       "without letting any eggs appear"
     ],
     "workless_0": [
@@ -1304,7 +1309,7 @@ export const SPICY_UFO = {
       "Armored Up",
       "Root Around"
     ],
-	 "dig1": [
+    "dig1": [
       "0",
       "1",
       "2",

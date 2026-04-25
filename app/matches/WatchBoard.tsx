@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { TBoard, Change } from "./parseBingosyncData";
 import InProgressBoard from "./InProgressBoard";
 import {
@@ -21,7 +21,7 @@ type Props = {
   startTime: number;
 };
 
-const SPEED_MULT_OPTIONS = [1, 2, 4, 8, 16, 32];
+const SPEED_MULT_OPTIONS = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512];
 
 export default function WatchBoard({ finalBoard, changes, startTime }: Props) {
   const maxSeekSec = Math.max(changes[changes.length - 1].time - startTime, 0);
@@ -30,13 +30,47 @@ export default function WatchBoard({ finalBoard, changes, startTime }: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [speedMult, setSpeedMult] = useLocalNumber({
     key: "playback-mult",
-    defaultValue: 16,
+    defaultValue: 128,
   });
 
   const getTime = useCallback(
     (secs: number) => getDurationText(secs * 1000, false, hasHours),
     [hasHours],
   );
+
+  const lastFrameRef = useRef<number | null>(null);
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!isPlaying) {
+      return;
+    }
+
+    const tick = (timestampMs: number) => {
+      if (lastFrameRef.current != null) {
+        const delta = (timestampMs - lastFrameRef.current) / 1000;
+        setSeekSec((prev) => {
+          const newSeekSec = Math.min(prev + delta * speedMult, maxSeekSec);
+          if (newSeekSec === maxSeekSec) {
+            setIsPlaying(false);
+          }
+          return newSeekSec;
+        });
+      }
+
+      lastFrameRef.current = timestampMs;
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+
+    return () => {
+      if (rafRef.current != null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+      lastFrameRef.current = null;
+    };
+  }, [isPlaying, maxSeekSec, speedMult]);
 
   return (
     <Stack>
@@ -68,7 +102,9 @@ export default function WatchBoard({ finalBoard, changes, startTime }: Props) {
         </ActionIcon>
         <Popover width={200} position="bottom" withArrow shadow="md">
           <Popover.Target>
-            <Button size="compact-xs">{speedMult}x</Button>
+            <Button size="compact-xs" w="42px">
+              {speedMult}x
+            </Button>
           </Popover.Target>
           <Popover.Dropdown w="100px">
             <Radio.Group

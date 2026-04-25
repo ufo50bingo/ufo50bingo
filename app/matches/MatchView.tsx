@@ -29,11 +29,7 @@ import { getWinType, getVariantText } from "./matchUtil";
 import { TBoard, Changelog } from "./parseBingosyncData";
 import ViewChangelog from "./ViewChangelog";
 import { getHost, getVodLink } from "./vodUtil";
-import {
-  getChangesWithoutMistakes,
-  getMatchStartTime,
-  getSquareCompletionRanges,
-} from "./analyzeMatch";
+import { getChangesWithoutMistakes, getMatchStartTime } from "./analyzeMatch";
 import { refreshMatch } from "./refreshMatch";
 import EditVodModal from "./EditVodModal";
 import { useAppContext } from "../AppContextProvider";
@@ -44,63 +40,13 @@ import { LEAGUE_SEASON } from "../createboard/leagueConstants";
 import useSession from "../session/useSession";
 import { useRouter } from "next/navigation";
 import runWithMaybeRefresh from "./runWithMaybeRefresh";
+import getOverlays from "./getOverlays";
+import WatchBoard from "./WatchBoard";
 
 type Props = {
   match: Match;
   isMatchesPage: boolean;
 };
-
-function getOverlays(
-  changelog: Changelog,
-  analysisSeconds: number,
-): ReadonlyArray<null | ReactNode> {
-  const orders: (null | number)[] = Array(25).fill(null);
-  let count = 1;
-  const matchStartTime = getMatchStartTime(changelog, analysisSeconds);
-  const changes = getChangesWithoutMistakes(changelog.changes);
-  const ranges = getSquareCompletionRanges(matchStartTime, changes);
-
-  changes.forEach((change) => {
-    if (change.color == "blank") {
-      const oldOrder = orders[change.index];
-      orders[change.index] = null;
-      if (oldOrder != null) {
-        for (let i = 0; i < 25; i++) {
-          const thisOrder = orders[i];
-          if (thisOrder != null && thisOrder > oldOrder) {
-            orders[i] = thisOrder - 1;
-          }
-        }
-      }
-      count -= 1;
-    } else {
-      orders[change.index] = count;
-      count += 1;
-    }
-  });
-
-  const overlays = Array(25)
-    .fill(null)
-    .map((_, index) => {
-      const order = orders[index];
-      const orderStr = order == null ? "#?" : `#${order}`;
-
-      const range = ranges[index];
-      if (order == null && range == null) {
-        return null;
-      }
-
-      const timeStr =
-        range != null ? ((range[2] - range[1]) / 60).toFixed(1) : null;
-
-      let finalOverlay = orderStr;
-      if (timeStr != null) {
-        finalOverlay += `, ${timeStr}m`;
-      }
-      return finalOverlay;
-    });
-  return overlays;
-}
 
 export default function MatchView({ match, isMatchesPage }: Props) {
   const { hideByDefault, isMounted, revealedMatchIDs } = useAppContext();
@@ -136,12 +82,19 @@ export default function MatchView({ match, isMatchesPage }: Props) {
   }, [changelogJson]);
 
   const analysisSeconds = match.analysisSeconds;
+  const matchStartTime = useMemo(() => {
+    if (changelog == null) {
+      return null;
+    }
+    return getMatchStartTime(changelog, analysisSeconds);
+  }, [changelog, analysisSeconds]);
   const overlays = useMemo<null | ReadonlyArray<ReactNode>>(() => {
     if (changelog == null) {
       return null;
     }
-    return getOverlays(changelog, analysisSeconds);
-  }, [changelog, analysisSeconds]);
+    const changes = getChangesWithoutMistakes(changelog.changes);
+    return getOverlays(changes, matchStartTime);
+  }, [changelog, matchStartTime]);
 
   const ref = useRef<HTMLDivElement>(null);
   const [showChangelog, setShowChangelog] = useState(false);
@@ -257,31 +210,10 @@ export default function MatchView({ match, isMatchesPage }: Props) {
               </Tooltip>
             </Title>
             <Text>{subtitle}</Text>
-            <Board
-              board={board}
-              overlays={showOverlays && overlays != null ? overlays : undefined}
-              onClickSquare={null}
-              isHidden={!isRevealed || !match.isBoardVisible}
-              setIsHidden={async (newIsHidden) => {
-                if (!newIsHidden && match.isBoardVisible) {
-                  await db.revealedMatches.add({ id: match.id });
-                }
-              }}
-              hiddenText={
-                match.isBoardVisible ? (
-                  "Click to reveal match details"
-                ) : (
-                  <>
-                    No goals have been claimed yet! The board can be
-                    <br />
-                    viewed after at least one goal has been claimed
-                    <br />
-                    and data has been refreshed.
-                  </>
-                )
-              }
-              shownDifficulties={["general", "veryhard"]}
-              viewerColor={null}
+            <WatchBoard
+              finalBoard={board}
+              changes={changelog!.changes}
+              startTime={matchStartTime!}
             />
             {isRevealed && (
               <Group justify="space-between">

@@ -42,7 +42,6 @@ export default function WatchBoard({
   isBoardVisible,
   showOverlays,
 }: Props) {
-  const prevMaxSeekSec = useRef<null | number>(null);
   const maxSeekSec =
     changes != null && startTime != null
       ? Math.max(changes[changes.length - 1].time - startTime, 0)
@@ -95,13 +94,9 @@ export default function WatchBoard({
   }, [isPlaying, maxSeekSec, speedMult]);
 
   useEffect(() => {
-    if (prevMaxSeekSec.current != null && prevMaxSeekSec.current !== maxSeekSec) {
-      setSeekSec(maxSeekSec);
-      setIsPlaying(false);
-    }
+    setSeekSec(maxSeekSec);
+    setIsPlaying(false);
   }, [maxSeekSec]);
-
-  prevMaxSeekSec.current = maxSeekSec;
 
   return (
     <>

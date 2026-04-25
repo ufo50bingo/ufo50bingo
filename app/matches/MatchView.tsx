@@ -37,7 +37,6 @@ import { LEAGUE_SEASON } from "../createboard/leagueConstants";
 import useSession from "../session/useSession";
 import { useRouter } from "next/navigation";
 import runWithMaybeRefresh from "./runWithMaybeRefresh";
-import getOverlays from "./getOverlays";
 import WatchBoard from "./WatchBoard";
 
 type Props = {
@@ -85,13 +84,6 @@ export default function MatchView({ match, isMatchesPage }: Props) {
     }
     return getMatchStartTime(changelog, analysisSeconds);
   }, [changelog, analysisSeconds]);
-  const overlays = useMemo<null | ReadonlyArray<ReactNode>>(() => {
-    if (changelog == null) {
-      return null;
-    }
-    const changes = getChangesWithoutMistakes(changelog.changes);
-    return getOverlays(changes, matchStartTime);
-  }, [changelog, matchStartTime]);
 
   const ref = useRef<HTMLDivElement>(null);
   const [showChangelog, setShowChangelog] = useState(false);
@@ -208,37 +200,36 @@ export default function MatchView({ match, isMatchesPage }: Props) {
             <Text>{subtitle}</Text>
             <WatchBoard
               finalBoard={board}
-              changes={changelog!.changes}
-              startTime={matchStartTime!}
+              changes={changelog?.changes}
+              startTime={matchStartTime}
               leagueP1={match.leagueInfo?.p1}
               leagueP2={match.leagueInfo?.p2}
               isRevealed={isRevealed ?? false}
               playbackId={playbackId}
               matchId={match.id}
               isBoardVisible={match.isBoardVisible}
+              showOverlays={showOverlays}
             />
           </Stack>
         </div>
         {isRevealed && match.isBoardVisible && (
           <Group justify="end">
-            {overlays != null && (
-              <Tooltip
-                label={
-                  <>
-                    Times assume that the match started 1 min after
-                    <br />
-                    the card was first revealed.
-                  </>
-                }
+            <Tooltip
+              label={
+                <>
+                  Times assume that the match started 1 min after
+                  <br />
+                  the card was first revealed.
+                </>
+              }
+            >
+              <Button
+                leftSection={<IconClock size={16} />}
+                onClick={() => setShowOverlays(!showOverlays)}
               >
-                <Button
-                  leftSection={<IconClock size={16} />}
-                  onClick={() => setShowOverlays(!showOverlays)}
-                >
-                  {showOverlays ? "Hide Times" : "Show Times"}
-                </Button>
-              </Tooltip>
-            )}
+                {showOverlays ? "Hide Times" : "Show Times"}
+              </Button>
+            </Tooltip>
             {changelog != null && (
               <Tooltip
                 label={

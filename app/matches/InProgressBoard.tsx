@@ -23,6 +23,7 @@ type Props = {
   isRevealed: boolean;
   matchId: string;
   isBoardVisible: boolean;
+  showOverlays: boolean;
 };
 
 export default function InProgressBoard({
@@ -35,6 +36,7 @@ export default function InProgressBoard({
   isRevealed,
   matchId,
   isBoardVisible,
+  showOverlays,
 }: Props) {
   const curTime = startTime + seekMs;
   const endIndex = useMemo(() => {
@@ -119,7 +121,7 @@ export default function InProgressBoard({
     <>
       <Board
         board={board}
-        overlays={overlays != null ? overlays : undefined}
+        overlays={showOverlays && overlays != null ? overlays : undefined}
         onClickSquare={null}
         isHidden={!isRevealed || !isBoardVisible}
         setIsHidden={async (newIsHidden) => {

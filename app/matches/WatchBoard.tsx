@@ -44,7 +44,7 @@ export default function WatchBoard({
 }: Props) {
   const maxSeekSec =
     changes != null && startTime != null
-      ? Math.max(changes[changes.length - 1].time - startTime, 0)
+      ? Math.max(changes[changes.length - 1].time - startTime + 1, 0)
       : 0;
   const hasHours = maxSeekSec >= 60 * 60;
   const [seekSec, setSeekSec] = useState(maxSeekSec);

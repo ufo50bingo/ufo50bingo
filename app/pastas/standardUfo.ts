@@ -849,7 +849,7 @@ export const STANDARD_UFO = {
           },
         },
         {
-          name: "SHOOTER: Beat 5 waves/stages across Elfazar's Hat, Seaside Drive, and Caramel Caramel",
+          name: "SHOOTER: Beat 5 levels across Elfazar's Hat, Seaside Drive, and Caramel Caramel",
           restriction: {
             count: 1,
             options: ["elfazarshat", "seasidedrive", "caramelcaramel"],

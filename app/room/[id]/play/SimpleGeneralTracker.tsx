@@ -121,8 +121,8 @@ function getAbbreviatedName(goal: FoundStandardGeneral): string {
     // THEME
     case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
       return "Camp Trilogy (5 worlds)";
-    case "SHOOTER: Beat 5 waves/stages across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
-      return "Shooter (5 waves/stages)";
+    case "SHOOTER: Beat 5 levels across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
+      return "Shooter (5 levels)";
     case "DAY JOB: Beat 9 levels across Rail Heist, Onion Delivery, and Bug Hunter":
       return "Day Job (9 levels)";
     case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":

@@ -854,7 +854,7 @@ export const STANDARD_UFO = {
             count: 1,
             options: ["elfazarshat", "seasidedrive", "caramelcaramel"],
             fallback:
-              "SHOOTER: Beat 5 waves/stages across Elfazar's Hat, Seaside Drive, and Caramel Caramel",
+              "SHOOTER: Beat 5 levels across Elfazar's Hat, Seaside Drive, and Caramel Caramel",
           },
         },
         {

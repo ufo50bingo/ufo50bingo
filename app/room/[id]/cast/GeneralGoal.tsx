@@ -135,7 +135,7 @@ export default function GeneralGoal({
       break;
     // THEME
     case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
-    case "SHOOTER: Beat 5 waves/stages across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
+    case "SHOOTER: Beat 5 levels across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
     case "DAY JOB: Beat 9 levels across Rail Heist, Onion Delivery, and Bug Hunter":
     case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
     case "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank":

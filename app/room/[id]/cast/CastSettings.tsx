@@ -32,6 +32,7 @@ import { Font } from "@/app/font/useFont";
 import FontSelector from "@/app/font/FontSelector";
 
 import classes from "./CastSettings.module.css";
+import { FullSyncedTimerEvent } from "../common/useSyncedTimer";
 
 type Props = {
   id: string;
@@ -68,6 +69,7 @@ type Props = {
   setGeneralOrder: (newGeneralOrder: TGeneralOrder) => unknown;
   font: Font;
   setFont: (newFont: Font) => unknown;
+  addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
 };
 
 export default function CastSettings({
@@ -105,6 +107,7 @@ export default function CastSettings({
   setGeneralOrder,
   font,
   setFont,
+  addEvent,
 }: Props) {
   const [isShown, setIsShown] = useState(leftColor === rightColor);
 
@@ -165,8 +168,8 @@ export default function CastSettings({
                   )}
                 </Accordion.Panel>
               </Accordion.Item>
-              <CountdownSection view="cast" />
-              <RequestPauseSection id={id} />
+              <CountdownSection view="cast" addEvent={addEvent} seed={seed} />
+              <RequestPauseSection id={id} addEvent={addEvent} seed={seed} />
               <Accordion.Item value="display">
                 <Accordion.Control>Display Settings</Accordion.Control>
                 <Accordion.Panel>

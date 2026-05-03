@@ -23,7 +23,7 @@ interface SyncedTimerEventFromBroadcast extends SyncedTimerEvent {
   seed: number;
 }
 
-interface FullSyncedTimerEvent extends SyncedTimerEventFromBroadcast {
+export interface FullSyncedTimerEvent extends SyncedTimerEventFromBroadcast {
   room_id: string;
 }
 
@@ -48,7 +48,7 @@ type TimerState = Running | Paused;
 
 type Return = {
   timer: ReactNode;
-  addEvent: (newEvent: FullSyncedTimerEvent) => void;
+  addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
 };
 
 export default function useSyncedTimer({

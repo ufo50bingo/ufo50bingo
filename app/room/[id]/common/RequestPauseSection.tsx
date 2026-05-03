@@ -1,12 +1,15 @@
 import { Button, Stack, Text, Accordion } from "@mantine/core";
-import { REQUEST_PAUSE_CHAT } from "./REQUEST_PAUSE_CHAT";
-import sendChat from "./sendChat";
+import { FullSyncedTimerEvent } from "./useSyncedTimer";
+import { useServerOffsetContext } from "../ServerOffsetContext";
 
 type Props = {
   id: string;
+  seed: number;
+  addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
 };
 
-export default function RequestPauseSection({ id }: Props) {
+export default function RequestPauseSection({ addEvent, id, seed }: Props) {
+  const { getServerMsFromClientMs } = useServerOffsetContext();
   return (
     <Accordion.Item value="pause">
       <Accordion.Control>Request Pause</Accordion.Control>
@@ -22,7 +25,13 @@ export default function RequestPauseSection({ id }: Props) {
           </Text>
           <Button
             onClick={async () => {
-              await sendChat(id, REQUEST_PAUSE_CHAT);
+              await addEvent({
+                room_id: id,
+                seed,
+                time: getServerMsFromClientMs(Date.now()),
+                event: "pause",
+                duration: null,
+              });
             }}
           >
             Request Pause

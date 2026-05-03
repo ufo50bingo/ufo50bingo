@@ -36,7 +36,7 @@ import useLocalNumber from "@/app/localStorage/useLocalNumber";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
 import { GENERAL_ORDER } from "./GeneralOrderSelector";
 import useFont from "@/app/font/useFont";
-import RunningDuration from "@/app/practice/RunningDuration";
+import useSyncedTimer from "../common/useSyncedTimer";
 
 export type FoundStandardGeneral = FoundGoal<
   StandardGeneral,
@@ -139,6 +139,9 @@ export default function Cast({
     showRecentGames,
     setShowRecentGames,
   } = useLocalState(id, seed);
+
+  const { timer, addEvent } = useSyncedTimer({ id, seed, initialEvents: [] });
+
   const [generalOrder, setGeneralOrder] = useLocalEnum({
     key: "general-order",
     options: GENERAL_ORDER,
@@ -397,13 +400,10 @@ export default function Cast({
             style={{
               alignSelf: "center",
               fontVariantNumeric: "tabular-nums",
-              fontSize: '23px',
+              fontSize: "23px",
             }}
           >
-            <RunningDuration
-              curStartTime={1776749054000}
-              accumulatedDuration={0}
-            />
+            {timer}
           </Text>
           <Feed height={`${475 - 44}px`} rawFeed={rawFeed} />
         </Stack>
@@ -501,6 +501,7 @@ export default function Cast({
         setGeneralOrder={setGeneralOrder}
         font={font}
         setFont={setFont}
+        addEvent={addEvent}
       />
       {editingIndex != null && (
         <EditSquare

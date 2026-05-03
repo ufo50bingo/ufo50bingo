@@ -9,19 +9,23 @@ import {
 import Duration from "@/app/practice/Duration";
 import RunningDuration from "@/app/practice/RunningDuration";
 import getSupabaseClient from "../cast/getSupabaseClient";
-import { CountChange } from "../cast/useSyncedState";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 
 type SyncedTimerEventName = "set_duration" | "pause" | "start";
 
-type SyncedTimerEvent = {
-  id: number;
-  room_id: string;
-  seed: number;
+interface SyncedTimerEvent {
   time: number;
   event: SyncedTimerEventName;
   duration: null | undefined | number;
-};
+}
+
+interface SyncedTimerEventFromBroadcast extends SyncedTimerEvent {
+  seed: number;
+}
+
+interface FullSyncedTimerEvent extends SyncedTimerEventFromBroadcast {
+  room_id: string;
+}
 
 type Input = {
   id: string;
@@ -44,7 +48,7 @@ type TimerState = Running | Paused;
 
 type Return = {
   timer: ReactNode;
-  addEvent: (newEvent: SyncedTimerEvent) => void;
+  addEvent: (newEvent: FullSyncedTimerEvent) => void;
 };
 
 export default function useSyncedTimer({
@@ -54,6 +58,11 @@ export default function useSyncedTimer({
 }: Input): Return {
   const [events, setEvents] =
     useState<ReadonlyArray<SyncedTimerEvent>>(initialEvents);
+
+  const supabase = getSupabaseClient();
+
+  const { getClientMsFromServerMs } = useServerOffsetContext();
+
   const timerState = useMemo<TimerState>(() => {
     let accumulatedDuration = -60000;
     let curStartTime: null | number = null;
@@ -86,17 +95,14 @@ export default function useSyncedTimer({
     });
     return curStartTime == null
       ? { type: hasStarted ? "paused" : "not_started", accumulatedDuration }
-      : { type: "running", startTime: curStartTime ?? 0, accumulatedDuration };
-  }, [events]);
-
-  const supabase = getSupabaseClient();
-
-  const { getServerMsFromClientMs } = useServerOffsetContext();
+      : {
+          type: "running",
+          startTime: getClientMsFromServerMs(curStartTime ?? 0),
+          accumulatedDuration,
+        };
+  }, [events, getClientMsFromServerMs]);
 
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
-  const setGeneralGameCountRef = useRef<
-    null | ((change: CountChange, shouldBroadcast: boolean) => unknown)
-  >(null);
   const seedRef = useRef<number>(seed);
   // eslint-disable-next-line react-hooks/refs
   if (seedRef.current !== seed) {
@@ -106,48 +112,21 @@ export default function useSyncedTimer({
   }
 
   useEffect(() => {
-    const newChannel = supabase.channel(`room:${id}:sync`, {
+    const newChannel = supabase.channel(`room:${id}:all_sync`, {
       config: { private: false },
     });
 
     newChannel
       .on(
         "broadcast",
-        { event: "change_count" },
-        (payload: { payload: CountChangeSync }) => {
-          const change = payload.payload;
-          if (
-            setGeneralGameCountRef.current != null &&
-            seedRef.current === change.seed
-          ) {
-            setGeneralGameCountRef.current(change, false);
+        { event: "add_timer_event" },
+        (payload: { payload: SyncedTimerEventFromBroadcast }) => {
+          const event = payload.payload;
+          if (seedRef.current === event.seed) {
+            setEvents((prevEvents) =>
+              [...prevEvents, event].toSorted((a, b) => a.time - b.time),
+            );
           }
-        },
-      )
-      .on(
-        "broadcast",
-        { event: "change_color" },
-        (payload: { payload: ColorChangeSync }) => {
-          const change = payload.payload;
-          if (change.is_left) {
-            setLeftColorRaw(change.color);
-          } else {
-            setRightColorRaw(change.color);
-          }
-        },
-      )
-      .on(
-        "broadcast",
-        { event: "add_game" },
-        (payload: { payload: CurrentGameSync }) => {
-          const change = payload.payload;
-          setAllPlayerGames((oldAllPlayerGames) =>
-            updateAllPlayerGames(
-              oldAllPlayerGames,
-              { game: change.game, start_time: change.start_time },
-              change.player_num,
-            ),
-          );
         },
       )
       .subscribe();
@@ -161,15 +140,32 @@ export default function useSyncedTimer({
   }, [id, supabase]);
 
   const timer =
-    state.curStartTime != null ? (
+    timerState.type === "running" ? (
       <RunningDuration
-        curStartTime={state.curStartTime}
-        accumulatedDuration={state.accumulatedDuration}
+        curStartTime={timerState.startTime}
+        accumulatedDuration={timerState.accumulatedDuration}
         showDecimal={false}
       />
     ) : (
-      <Duration showDecimal={false} duration={state.accumulatedDuration} />
+      <Duration showDecimal={false} duration={timerState.accumulatedDuration} />
     );
+
+  const addEvent = useCallback(
+    async (newEvent: FullSyncedTimerEvent) => {
+      setEvents((prevEvents) =>
+        [...prevEvents, newEvent].toSorted((a, b) => a.time - b.time),
+      );
+      if (channelRef.current != null) {
+        channelRef.current.send({
+          type: "broadcast",
+          event: "add_timer_event",
+          payload: newEvent,
+        });
+      }
+      await supabase.from("timer_event").upsert(newEvent);
+    },
+    [supabase],
+  );
 
   return {
     timer,

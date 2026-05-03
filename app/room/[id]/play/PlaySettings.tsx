@@ -4,9 +4,11 @@ import { IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import ColorSelector from "../common/ColorSelector";
-import TimerSection from "../common/TimerSection";
-import { TimerState } from "../common/useMatchTimer";
-import NotificationsSection, { SetSoundChoices, SoundChoices } from "../common/NotificationsSection";
+// import TimerSection from "../common/TimerSection";
+import NotificationsSection, {
+  SetSoundChoices,
+  SoundChoices,
+} from "../common/NotificationsSection";
 import RequestPauseSection from "../common/RequestPauseSection";
 import CountdownSection from "../common/CountdownSection";
 import CreateBoardSection from "../common/CreateBoardSection";
@@ -14,6 +16,7 @@ import BottomSection from "../common/BottomSection";
 import { Font } from "@/app/font/useFont";
 import FontSelector from "@/app/font/FontSelector";
 import SelectRightClickBehavior from "@/app/settings/SelectRightClickBehavior";
+import { FullSyncedTimerEvent } from "../common/useSyncedTimer";
 
 type Props = {
   id: string;
@@ -23,13 +26,13 @@ type Props = {
   setShownDifficulties: (newShown: ReadonlyArray<Difficulty>) => unknown;
   soundChoices: SoundChoices;
   setSoundChoices: SetSoundChoices;
-  timerState: TimerState;
-  setTimerState: (newState: TimerState) => unknown;
   isMobile: boolean;
   showGeneralTracker: boolean;
   setShowGeneralTracker: (newShown: boolean) => unknown;
   font: Font;
   setFont: (newFont: Font) => unknown;
+  addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
+  seed: number;
 };
 
 export default function PlaySettings({
@@ -40,13 +43,13 @@ export default function PlaySettings({
   setShownDifficulties,
   soundChoices,
   setSoundChoices,
-  timerState,
-  setTimerState,
   isMobile,
   showGeneralTracker,
   setShowGeneralTracker,
   font,
   setFont,
+  addEvent,
+  seed,
 }: Props) {
   const [isShown, setIsShown] = useState(color == null);
   return (
@@ -86,14 +89,17 @@ export default function PlaySettings({
                   />
                 </Accordion.Panel>
               </Accordion.Item>
-              <RequestPauseSection id={id} />
-              <TimerSection
+              <RequestPauseSection id={id} addEvent={addEvent} seed={seed} />
+              {/* <TimerSection
                 state={timerState}
                 setState={setTimerState}
                 isMobile={isMobile}
+              /> */}
+              <CountdownSection view="play" addEvent={addEvent} seed={seed} />
+              <NotificationsSection
+                soundChoices={soundChoices}
+                setSoundChoices={setSoundChoices}
               />
-              <CountdownSection view="play" />
-              <NotificationsSection soundChoices={soundChoices} setSoundChoices={setSoundChoices} />
               <Accordion.Item value="display">
                 <Accordion.Control>Display Settings</Accordion.Control>
                 <Accordion.Panel>

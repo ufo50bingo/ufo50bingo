@@ -8,7 +8,7 @@ import {
   TBoard,
 } from "@/app/matches/parseBingosyncData";
 import { Group, Stack, Text } from "@mantine/core";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import revealBoard from "./revealBoard";
 import PlaySettings from "./PlaySettings";
 import useColor from "./useColor";
@@ -20,7 +20,6 @@ import Feed from "../common/Feed";
 import useBingosyncSocket from "../common/useBingosyncSocket";
 import { getResult } from "@/app/matches/computeResult";
 import ScoreSquare from "../common/ScoreSquare";
-import useMatchTimer from "../common/useMatchTimer";
 import { useMediaQuery } from "@mantine/hooks";
 import SimpleGeneralTracker from "./SimpleGeneralTracker";
 import findGoal from "@/app/findGoal";
@@ -28,6 +27,7 @@ import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import { FoundStandardGeneral, GeneralItem } from "../cast/Cast";
 import useLocalBool from "@/app/localStorage/useLocalBool";
 import useFont from "@/app/font/useFont";
+import useSyncedTimer from "../common/useSyncedTimer";
 
 export type Props = {
   id: string;
@@ -57,7 +57,6 @@ export default function Play({
     initialBoard.every((square) => square.color === "blank"),
   );
   const [pauseRequestName, setPauseRequestName] = useState<string | null>(null);
-  const pauseRef = useRef<null | (() => unknown)>(null);
   const [font, setFont] = useFont();
 
   const selectedColor = color ?? "red";
@@ -77,26 +76,13 @@ export default function Play({
     initialRawFeed,
     initialSeed,
     socketKey,
-    pauseRef,
     playerName,
     setPauseRequestName,
     soundChoices,
     onNewCard,
   });
 
-  const {
-    timer,
-    start,
-    pause,
-    state: timerState,
-    setState: setTimerState,
-  } = useMatchTimer({
-    key: `${id}-${seed}`,
-    initialAccumulatedDuration: -60000,
-  });
-
-  // eslint-disable-next-line react-hooks/refs
-  pauseRef.current = pause;
+  const { timer, addEvent } = useSyncedTimer({ id, seed, initialEvents: [] });
 
   const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(
     () =>
@@ -183,7 +169,6 @@ export default function Play({
             shownDifficulties={shownDifficulties}
             hiddenText="Click to reveal"
             onReveal={async () => {
-              start();
               await revealBoard(id);
             }}
             pauseRequestName={pauseRequestName}
@@ -241,13 +226,13 @@ export default function Play({
             setShownDifficulties={setShownDifficulties}
             soundChoices={soundChoices}
             setSoundChoices={setSoundChoices}
-            timerState={timerState}
-            setTimerState={setTimerState}
             isMobile={isMobile}
             showGeneralTracker={showGeneralTracker}
             setShowGeneralTracker={setShowGeneralTracker}
             font={font}
             setFont={setFont}
+            addEvent={addEvent}
+            seed={seed}
           />
         </Stack>
         <Feed

@@ -5,16 +5,8 @@ import {
   RawFeedItem,
   TBoard,
 } from "@/app/matches/parseBingosyncData";
-import {
-  useState,
-  useEffect,
-  useRef,
-  ReactNode,
-  useCallback,
-  RefObject,
-} from "react";
+import { useState, useEffect, useRef, ReactNode, useCallback } from "react";
 import { Modal, Stack, Group, Button } from "@mantine/core";
-import { REQUEST_PAUSE_CHAT } from "./REQUEST_PAUSE_CHAT";
 import { SoundChoices } from "./NotificationsSection";
 import { SOUNDS } from "./sounds";
 
@@ -28,7 +20,6 @@ type Props = {
   soundChoices: SoundChoices;
   playerName: string;
   setPauseRequestName: (newName: string) => unknown;
-  pauseRef?: RefObject<(() => unknown) | null>;
 };
 
 type Response = {
@@ -48,8 +39,6 @@ export default function useBingosyncSocket({
   onNewCard,
   soundChoices,
   playerName,
-  setPauseRequestName,
-  pauseRef,
 }: Props): Response {
   const [seed, setSeed] = useState(initialSeed);
   const [board, setBoard] = useState(initialBoard);
@@ -57,7 +46,6 @@ export default function useBingosyncSocket({
   const [shouldReconnect, setShouldReconnect] = useState(false);
   const socketRef = useRef<null | WebSocket>(null);
 
-  const pauseAudioRef = useRef<HTMLAudioElement | null>(null);
   const squareAudioRef = useRef<HTMLAudioElement | null>(null);
   const chatAudioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -67,37 +55,18 @@ export default function useBingosyncSocket({
 
   const onMessage = useCallback(
     (newItem: RawFeedItem) => {
-      const isPause =
-        newItem.type === "chat" && newItem.text === REQUEST_PAUSE_CHAT;
-      if (isPause) {
-        if (pauseRef?.current != null) {
-          pauseRef.current();
-        }
-        setPauseRequestName(newItem.player.name);
-      }
       if (newItem.player.name === playerName) {
         return;
       }
-      if (newItem.type === "chat") {
-        if (
-          isPause &&
-          soundChoicesRef.current.pause != null
-        ) {
-          pauseAudioRef.current?.play();
-        } else if (
-          soundChoicesRef.current.chat != null
-        ) {
-          chatAudioRef.current?.play();
-        }
+      if (newItem.type === "chat" && soundChoicesRef.current.chat != null) {
+        chatAudioRef.current?.play();
       } else if (newItem.type === "goal") {
-        if (
-          soundChoicesRef.current.square != null
-        ) {
+        if (soundChoicesRef.current.square != null) {
           squareAudioRef.current?.play();
         }
       }
     },
-    [playerName, pauseRef, setPauseRequestName]
+    [playerName],
   );
 
   useEffect(() => {
@@ -191,9 +160,20 @@ export default function useBingosyncSocket({
     ),
     audio: (
       <>
-        {soundChoices.pause != null && <audio preload="none" src={SOUNDS[soundChoices.pause]} ref={pauseAudioRef} />}
-        {soundChoices.square != null && <audio preload="none" src={SOUNDS[soundChoices.square]} ref={squareAudioRef} />}
-        {soundChoices.chat != null && <audio preload="none" src={SOUNDS[soundChoices.chat]} ref={chatAudioRef} />}
+        {soundChoices.square != null && (
+          <audio
+            preload="none"
+            src={SOUNDS[soundChoices.square]}
+            ref={squareAudioRef}
+          />
+        )}
+        {soundChoices.chat != null && (
+          <audio
+            preload="none"
+            src={SOUNDS[soundChoices.chat]}
+            ref={chatAudioRef}
+          />
+        )}
       </>
     ),
   };

@@ -174,6 +174,7 @@ export default function Play({
             pauseRequestName={pauseRequestName}
             clearPauseRequest={() => setPauseRequestName(null)}
             viewerColor={selectedColor}
+            canReveal={false}
           />
           <Group justify="space-between">
             <div style={{ display: "flex" }}>

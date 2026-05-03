@@ -23,6 +23,7 @@ type Props = {
   shownDifficulties: ReadonlyArray<Difficulty>;
   onReveal?: () => unknown;
   viewerColor: BingosyncColor | null;
+  canReveal?: boolean;
 };
 
 function getColorClass(color: string): string {
@@ -144,6 +145,7 @@ export default function Board({
   pauseRequestName,
   clearPauseRequest,
   viewerColor,
+  canReveal = true,
 }: Props) {
   const { rightClickBehavior, customColor } = useRightClickBehaviorContext();
   const [starred, setStarred] = useState<ReadonlyArray<number>>([]);
@@ -208,6 +210,9 @@ export default function Board({
         <div
           className={`${classes.boardCover} ${classes.pauseRequestShadow} ${classes.unselectable}`}
           onClick={() => {
+            if (!canReveal) {
+              return;
+            }
             if (clearPauseRequest != null) {
               clearPauseRequest();
             }
@@ -227,6 +232,9 @@ export default function Board({
         <div
           className={`${classes.boardCover} ${classes.boardCoverShadow} ${classes.unselectable}`}
           onClick={() => {
+            if (!canReveal) {
+              return;
+            }
             setIsHidden(false);
             if (onReveal != null) {
               onReveal();

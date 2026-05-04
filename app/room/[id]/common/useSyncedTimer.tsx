@@ -68,7 +68,8 @@ export default function useSyncedTimer({
   const { getClientMsFromServerMs } = useServerOffsetContext();
 
   const timerState = useMemo<TimerState>(() => {
-    let accumulatedDuration = -60000;
+    // TODO: Fix
+    let accumulatedDuration = -6000;
     let curStartTime: null | number = null;
     let hasStarted = false;
 
@@ -106,9 +107,10 @@ export default function useSyncedTimer({
         };
   }, [events, getClientMsFromServerMs]);
 
-  const [isRevealed, setIsRevealed] = useState(
+  const [isRevealedWhenRunning, setIsRevealedWhenRunning] = useState(
     // eslint-disable-next-line react-hooks/purity
-    timerState.type === "running" && timerState.startTime <= Date.now(),
+    (timerState.type === "running" && timerState.startTime <= Date.now()) ||
+      timerState.accumulatedDuration >= 0,
   );
 
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
@@ -130,9 +132,14 @@ export default function useSyncedTimer({
         (payload: { payload: SyncedTimerEventFromBroadcast }) => {
           const event = payload.payload;
           if (seedRef.current === event.seed) {
-            setEvents((prevEvents) =>
-              [...prevEvents, event].toSorted((a, b) => a.time - b.time),
-            );
+            {
+              setEvents((prevEvents) =>
+                [...prevEvents, event].toSorted((a, b) => a.time - b.time),
+              );
+              if (event.event === "pause") {
+                setIsRevealedWhenRunning(false);
+              }
+            }
           }
         },
       )
@@ -160,7 +167,7 @@ export default function useSyncedTimer({
     );
 
   const onReveal = useCallback(async () => {
-    setIsRevealed(true);
+    setIsRevealedWhenRunning(true);
     await revealBoard(id);
   }, [id]);
 
@@ -190,6 +197,9 @@ export default function useSyncedTimer({
           payload: newEvent,
         });
       }
+      if (newEvent.event === "pause") {
+        setIsRevealedWhenRunning(false);
+      }
       await supabase.from("timer_event").upsert(newEvent);
     },
     [supabase],
@@ -198,7 +208,7 @@ export default function useSyncedTimer({
   return {
     timer,
     boardCover,
-    isRevealed,
+    isRevealed: timerState.type === "running" && isRevealedWhenRunning,
     addEvent,
   };
 }

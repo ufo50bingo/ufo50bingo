@@ -8,7 +8,7 @@ import {
   TBoard,
 } from "@/app/matches/parseBingosyncData";
 import { Group, Stack, Text } from "@mantine/core";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import PlaySettings from "./PlaySettings";
 import useColor from "./useColor";
 import useShownDifficulties from "./useShownDifficulties";
@@ -26,7 +26,7 @@ import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import { FoundStandardGeneral, GeneralItem } from "../cast/Cast";
 import useLocalBool from "@/app/localStorage/useLocalBool";
 import useFont from "@/app/font/useFont";
-import useSyncedTimer from "../common/useSyncedTimer";
+import useSyncedTimer, { FullSyncedTimerEvent } from "../common/useSyncedTimer";
 
 export type Props = {
   id: string;
@@ -34,6 +34,7 @@ export type Props = {
   rawFeed: RawFeed;
   socketKey: string;
   initialSeed: number;
+  initialTimerEvents: ReadonlyArray<FullSyncedTimerEvent>;
   playerName: string;
 };
 
@@ -44,6 +45,7 @@ export default function Play({
   socketKey,
   initialSeed,
   playerName,
+  initialTimerEvents,
 }: Props) {
   const [shownDifficulties, setShownDifficulties] = useShownDifficulties();
   const [showGeneralTracker, setShowGeneralTracker] = useLocalBool({
@@ -52,7 +54,6 @@ export default function Play({
   });
   const [soundChoices, setSoundChoices] = useSounds("play");
   const [color, setColor] = useColor(id);
-  const [pauseRequestName, setPauseRequestName] = useState<string | null>(null);
   const [font, setFont] = useFont();
 
   const selectedColor = color ?? "red";
@@ -69,16 +70,16 @@ export default function Play({
     initialSeed,
     socketKey,
     playerName,
-    setPauseRequestName,
     soundChoices,
     onNewCard: empty,
   });
 
-  const { timer, boardCover, isRevealed, addEvent } = useSyncedTimer({
-    id,
-    seed,
-    initialEvents: [],
-  });
+  const { timer, boardCover, isRevealed, addEvent, timerState } =
+    useSyncedTimer({
+      id,
+      seed,
+      initialEvents: initialTimerEvents,
+    });
 
   const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(
     () =>
@@ -163,10 +164,9 @@ export default function Play({
             setIsHidden={empty}
             shownDifficulties={shownDifficulties}
             hiddenText={boardCover}
-            pauseRequestName={pauseRequestName}
-            clearPauseRequest={() => setPauseRequestName(null)}
             viewerColor={selectedColor}
             canReveal={false}
+            isPaused={timerState.type === "paused"}
           />
           <Group justify="space-between">
             <div style={{ display: "flex" }}>
@@ -227,6 +227,7 @@ export default function Play({
             setFont={setFont}
             addEvent={addEvent}
             seed={seed}
+            playerName={playerName}
           />
         </Stack>
         <Feed

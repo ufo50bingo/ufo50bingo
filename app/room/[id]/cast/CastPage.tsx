@@ -10,6 +10,7 @@ import {
 } from "./useSyncedState";
 import { RoomCookie, toBingosyncCookie } from "../roomCookie";
 import getSeed from "../common/getSeed";
+import fetchTimerEvents from "../common/fetchTimerEvents";
 
 type Props = {
   id: string;
@@ -23,6 +24,7 @@ export default async function CastPage({ id, roomCookie }: Props) {
   const [
     rawBoard,
     rawFeed,
+    rawTimerEvents,
     socketKey,
     seed,
     rawGeneralCounts,
@@ -31,6 +33,7 @@ export default async function CastPage({ id, roomCookie }: Props) {
   ] = await Promise.all([
     fetchBoard(id),
     fetchFeed(id, bingosyncCookie),
+    fetchTimerEvents(id),
     getSocketKey(id, bingosyncCookie),
     getSeed(id),
     getGeneralCounts(id),
@@ -38,6 +41,7 @@ export default async function CastPage({ id, roomCookie }: Props) {
     getCurrentGames(id),
   ]);
   const countsForSeed = rawGeneralCounts.filter((entry) => entry.seed === seed);
+  const timerEventsForSeed = rawTimerEvents.filter((e) => e.seed === seed);
   const currentGamesForSeed = rawCurrentGames.filter(
     (entry) => entry.seed === seed,
   );
@@ -60,6 +64,7 @@ export default async function CastPage({ id, roomCookie }: Props) {
       initialLeftColor={colors.left}
       initialRightColor={colors.right}
       initialAllPlayerGames={allPlayerGames}
+      initialTimerEvents={timerEventsForSeed}
       playerName={roomCookie.name}
     />
   );

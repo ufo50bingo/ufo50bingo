@@ -17,13 +17,12 @@ type Props = {
   onClickSquare: null | ((squareIndex: number) => void);
   isHidden: boolean;
   setIsHidden: (isHidden: boolean) => void;
-  pauseRequestName?: null | string;
-  clearPauseRequest?: () => void;
   hiddenText?: ReactNode;
   shownDifficulties: ReadonlyArray<Difficulty>;
   onReveal?: () => unknown;
   viewerColor: BingosyncColor | null;
   canReveal?: boolean;
+  isPaused?: boolean;
 };
 
 function getColorClass(color: string): string {
@@ -142,10 +141,9 @@ export default function Board({
   hiddenText,
   shownDifficulties,
   onReveal,
-  pauseRequestName,
-  clearPauseRequest,
   viewerColor,
   canReveal = true,
+  isPaused = false,
 }: Props) {
   const { rightClickBehavior, customColor } = useRightClickBehaviorContext();
   const [starred, setStarred] = useState<ReadonlyArray<number>>([]);
@@ -206,31 +204,9 @@ export default function Board({
           )}
         </div>
       ))}
-      {pauseRequestName != null && (
+      {isHidden && (
         <div
-          className={`${classes.boardCover} ${classes.pauseRequestShadow} ${classes.unselectable}`}
-          onClick={() => {
-            if (!canReveal) {
-              return;
-            }
-            if (clearPauseRequest != null) {
-              clearPauseRequest();
-            }
-            setIsHidden(false);
-            if (onReveal != null) {
-              onReveal();
-            }
-          }}
-        >
-          Pause requested by {pauseRequestName}!<br />
-          Please pause your game and coordinate in chat.
-          <br />
-          Click to reveal the board again.
-        </div>
-      )}
-      {pauseRequestName == null && isHidden && (
-        <div
-          className={`${classes.boardCover} ${classes.boardCoverShadow} ${classes.unselectable}`}
+          className={`${classes.boardCover} ${isPaused ? classes.pauseRequestShadow : classes.boardCoverShadow} ${classes.unselectable}`}
           onClick={() => {
             if (!canReveal) {
               return;

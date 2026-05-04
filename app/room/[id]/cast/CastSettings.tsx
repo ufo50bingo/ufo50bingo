@@ -70,6 +70,7 @@ type Props = {
   font: Font;
   setFont: (newFont: Font) => unknown;
   addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
+  playerName: string;
 };
 
 export default function CastSettings({
@@ -108,6 +109,7 @@ export default function CastSettings({
   font,
   setFont,
   addEvent,
+  playerName,
 }: Props) {
   const [isShown, setIsShown] = useState(leftColor === rightColor);
 
@@ -169,7 +171,12 @@ export default function CastSettings({
                 </Accordion.Panel>
               </Accordion.Item>
               <CountdownSection view="cast" addEvent={addEvent} seed={seed} />
-              <RequestPauseSection id={id} addEvent={addEvent} seed={seed} />
+              <RequestPauseSection
+                id={id}
+                addEvent={addEvent}
+                seed={seed}
+                playerName={playerName}
+              />
               <Accordion.Item value="display">
                 <Accordion.Control>Display Settings</Accordion.Control>
                 <Accordion.Panel>

@@ -33,6 +33,7 @@ type Props = {
   setFont: (newFont: Font) => unknown;
   addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
   seed: number;
+  playerName: string;
 };
 
 export default function PlaySettings({
@@ -50,6 +51,7 @@ export default function PlaySettings({
   setFont,
   addEvent,
   seed,
+  playerName,
 }: Props) {
   const [isShown, setIsShown] = useState(color == null);
   return (
@@ -89,7 +91,12 @@ export default function PlaySettings({
                   />
                 </Accordion.Panel>
               </Accordion.Item>
-              <RequestPauseSection id={id} addEvent={addEvent} seed={seed} />
+              <RequestPauseSection
+                id={id}
+                addEvent={addEvent}
+                seed={seed}
+                playerName={playerName}
+              />
               {/* <TimerSection
                 state={timerState}
                 setState={setTimerState}

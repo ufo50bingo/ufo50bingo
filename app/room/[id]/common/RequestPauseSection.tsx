@@ -6,9 +6,15 @@ type Props = {
   id: string;
   seed: number;
   addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
+  playerName: string;
 };
 
-export default function RequestPauseSection({ addEvent, id, seed }: Props) {
+export default function RequestPauseSection({
+  addEvent,
+  id,
+  seed,
+  playerName,
+}: Props) {
   const { getServerMsFromClientMs } = useServerOffsetContext();
   return (
     <Accordion.Item value="pause">
@@ -31,6 +37,7 @@ export default function RequestPauseSection({ addEvent, id, seed }: Props) {
                 time: getServerMsFromClientMs(Date.now()),
                 event: "pause",
                 duration: null,
+                player_name: playerName,
               });
             }}
           >

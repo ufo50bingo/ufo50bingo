@@ -19,7 +19,6 @@ type Props = {
   onNewCard?: (newBoard: TBoard) => unknown;
   soundChoices: SoundChoices;
   playerName: string;
-  setPauseRequestName: (newName: string) => unknown;
 };
 
 type Response = {

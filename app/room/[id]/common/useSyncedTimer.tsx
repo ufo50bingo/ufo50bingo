@@ -19,6 +19,7 @@ interface SyncedTimerEvent {
   time: number;
   event: SyncedTimerEventName;
   duration: null | undefined | number;
+  player_name?: null | undefined | string;
 }
 
 interface SyncedTimerEventFromBroadcast extends SyncedTimerEvent {
@@ -44,6 +45,7 @@ type Running = {
 type Paused = {
   type: "paused" | "not_started";
   accumulatedDuration: number;
+  pauseRequester: null | undefined | number;
 };
 
 type TimerState = Running | Paused;
@@ -53,6 +55,7 @@ type Return = {
   boardCover: ReactNode;
   isRevealed: boolean;
   addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
+  timerState: TimerState;
 };
 
 export default function useSyncedTimer({
@@ -72,6 +75,7 @@ export default function useSyncedTimer({
     let accumulatedDuration = -6000;
     let curStartTime: null | number = null;
     let hasStarted = false;
+    let pauseRequester: null | undefined | string = null;
 
     events.forEach((item) => {
       switch (item.event) {
@@ -86,6 +90,7 @@ export default function useSyncedTimer({
             accumulatedDuration += item.time - curStartTime;
             curStartTime = null;
           }
+          pauseRequester = item.player_name;
           return;
         case "start":
           hasStarted = true;
@@ -99,7 +104,11 @@ export default function useSyncedTimer({
       }
     });
     return curStartTime == null
-      ? { type: hasStarted ? "paused" : "not_started", accumulatedDuration }
+      ? {
+          type: hasStarted ? "paused" : "not_started",
+          accumulatedDuration,
+          pauseRequester,
+        }
       : {
           type: "running",
           startTime: getClientMsFromServerMs(curStartTime ?? 0),
@@ -183,7 +192,16 @@ export default function useSyncedTimer({
         curStartTime={timerState.startTime}
         onReveal={onReveal}
       />
-    ) : null;
+    ) : (
+      <>
+        Pause requested
+        {timerState.pauseRequester != null && (
+          <> by {timerState.pauseRequester}</>
+        )}
+        !<br />
+        Please pause your game and coordinate in chat.
+      </>
+    );
 
   const addEvent = useCallback(
     async (newEvent: FullSyncedTimerEvent) => {
@@ -210,5 +228,6 @@ export default function useSyncedTimer({
     boardCover,
     isRevealed: timerState.type === "running" && isRevealedWhenRunning,
     addEvent,
+    timerState,
   };
 }

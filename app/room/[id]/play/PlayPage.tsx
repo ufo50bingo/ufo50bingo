@@ -3,6 +3,7 @@ import { getBoard } from "@/app/matches/parseBingosyncData";
 import PlayWrapper from "./PlayWrapper";
 import { RoomCookie, toBingosyncCookie } from "../roomCookie";
 import getSeed from "../common/getSeed";
+import fetchTimerEvents from "../common/fetchTimerEvents";
 
 type Props = {
   id: string;
@@ -11,12 +12,15 @@ type Props = {
 
 export default async function PlayPage({ id, roomCookie }: Props) {
   const bingosyncCookie = toBingosyncCookie(roomCookie);
-  const [rawBoard, rawFeed, socketKey, seed] = await Promise.all([
-    fetchBoard(id),
-    fetchFeed(id, bingosyncCookie),
-    getSocketKey(id, bingosyncCookie),
-    getSeed(id),
-  ]);
+  const [rawBoard, rawFeed, rawTimerEvents, socketKey, seed] =
+    await Promise.all([
+      fetchBoard(id),
+      fetchFeed(id, bingosyncCookie),
+      fetchTimerEvents(id),
+      getSocketKey(id, bingosyncCookie),
+      getSeed(id),
+    ]);
+  const timerEvents = rawTimerEvents.filter((e) => e.seed === seed);
   const board = getBoard(rawBoard);
   return (
     <PlayWrapper
@@ -26,6 +30,7 @@ export default async function PlayPage({ id, roomCookie }: Props) {
       socketKey={socketKey}
       initialSeed={seed}
       playerName={roomCookie.name}
+      initialTimerEvents={timerEvents}
     />
   );
 }

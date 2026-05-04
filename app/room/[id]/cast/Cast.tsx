@@ -36,7 +36,7 @@ import useLocalNumber from "@/app/localStorage/useLocalNumber";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
 import { GENERAL_ORDER } from "./GeneralOrderSelector";
 import useFont from "@/app/font/useFont";
-import useSyncedTimer from "../common/useSyncedTimer";
+import useSyncedTimer, { FullSyncedTimerEvent } from "../common/useSyncedTimer";
 
 export type FoundStandardGeneral = FoundGoal<
   StandardGeneral,
@@ -58,6 +58,7 @@ export type CastProps = {
   initialLeftColor: BingosyncColor;
   initialRightColor: BingosyncColor;
   initialAllPlayerGames: AllPlayerGames;
+  initialTimerEvents: ReadonlyArray<FullSyncedTimerEvent>;
   playerName: string;
 };
 
@@ -74,6 +75,7 @@ export default function Cast({
   initialLeftColor,
   initialRightColor,
   initialAllPlayerGames,
+  initialTimerEvents,
   playerName,
 }: CastProps) {
   const [gameToGoals, setGameToGoals] = useState(() =>
@@ -89,7 +91,6 @@ export default function Cast({
     setTerminalCodes(getAllTerminalCodes(newBoard));
   }, []);
 
-  const [pauseRequestName, setPauseRequestName] = useState<string | null>(null);
   const [soundChoices, setSoundChoices] = useSounds("cast");
 
   const { board, rawFeed, seed, reconnectModal, audio } = useBingosyncSocket({
@@ -100,7 +101,6 @@ export default function Cast({
     socketKey,
     onNewCard,
     playerName,
-    setPauseRequestName,
     soundChoices,
   });
 
@@ -140,7 +140,11 @@ export default function Cast({
     setShowRecentGames,
   } = useLocalState(id, seed);
 
-  const { timer, addEvent } = useSyncedTimer({ id, seed, initialEvents: [] });
+  const { timer, addEvent, timerState } = useSyncedTimer({
+    id,
+    seed,
+    initialEvents: initialTimerEvents,
+  });
 
   const [generalOrder, setGeneralOrder] = useLocalEnum({
     key: "general-order",
@@ -359,8 +363,7 @@ export default function Cast({
             setIsHidden={setIsHidden}
             shownDifficulties={shownDifficulties}
             hiddenText="Click or start Countdown to reveal"
-            pauseRequestName={pauseRequestName}
-            clearPauseRequest={() => setPauseRequestName(null)}
+            isPaused={timerState.type === "paused"}
             viewerColor={null}
           />
           <SideColumn isDouble={isDouble}>
@@ -502,6 +505,7 @@ export default function Cast({
         font={font}
         setFont={setFont}
         addEvent={addEvent}
+        playerName={playerName}
       />
       {editingIndex != null && (
         <EditSquare

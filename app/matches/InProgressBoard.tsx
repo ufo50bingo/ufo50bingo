@@ -26,6 +26,8 @@ type Props = {
   showOverlays: boolean;
 };
 
+const EMPTY_CHANGES: ReadonlyArray<Change> = [];
+
 export default function InProgressBoard({
   changes: rawChanges,
   finalBoard,
@@ -38,7 +40,7 @@ export default function InProgressBoard({
   isBoardVisible,
   showOverlays,
 }: Props) {
-  const changes = rawChanges ?? [];
+  const changes = rawChanges ?? EMPTY_CHANGES;
   const startTime = rawStartTime ?? 0;
   const curTime = startTime + seekMs;
   const endIndex = useMemo(() => {
@@ -122,7 +124,11 @@ export default function InProgressBoard({
   return (
     <>
       <Board
-        board={rawChanges == null || rawStartTime == null || isFinal ? finalBoard : board}
+        board={
+          rawChanges == null || rawStartTime == null || isFinal
+            ? finalBoard
+            : board
+        }
         overlays={showOverlays && overlays != null ? overlays : undefined}
         onClickSquare={null}
         isHidden={!isRevealed || !isBoardVisible}

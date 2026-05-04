@@ -7,9 +7,11 @@ import {
   useState,
 } from "react";
 import Duration from "@/app/practice/Duration";
-import RunningDuration from "@/app/practice/RunningDuration";
 import getSupabaseClient from "../cast/getSupabaseClient";
 import { useServerOffsetContext } from "../ServerOffsetContext";
+import RunningBoardCover from "./RunningBoardCover";
+import revealBoard from "../play/revealBoard";
+import RunningTimer from "./RunningTimer";
 
 type SyncedTimerEventName = "set_duration" | "pause" | "start";
 
@@ -48,6 +50,8 @@ type TimerState = Running | Paused;
 
 type Return = {
   timer: ReactNode;
+  boardCover: ReactNode;
+  isRevealed: boolean;
   addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
 };
 
@@ -102,12 +106,15 @@ export default function useSyncedTimer({
         };
   }, [events, getClientMsFromServerMs]);
 
+  const [isRevealed, setIsRevealed] = useState(
+    // eslint-disable-next-line react-hooks/purity
+    timerState.type === "running" && timerState.startTime <= Date.now(),
+  );
+
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const seedRef = useRef<number>(seed);
-  // eslint-disable-next-line react-hooks/refs
   if (seedRef.current !== seed) {
     setEvents([]);
-    // eslint-disable-next-line react-hooks/refs
     seedRef.current = seed;
   }
 
@@ -141,14 +148,35 @@ export default function useSyncedTimer({
 
   const timer =
     timerState.type === "running" ? (
-      <RunningDuration
+      <RunningTimer
         curStartTime={timerState.startTime}
         accumulatedDuration={timerState.accumulatedDuration}
-        showDecimal={false}
       />
     ) : (
-      <Duration showDecimal={false} duration={timerState.accumulatedDuration} />
+      <Duration
+        showDecimal={timerState.accumulatedDuration < 0}
+        duration={timerState.accumulatedDuration}
+      />
     );
+
+  const onReveal = useCallback(async () => {
+    setIsRevealed(true);
+    await revealBoard(id);
+  }, [id]);
+
+  const boardCover =
+    timerState.type === "not_started" ? (
+      <>
+        The board will be revealed automatically
+        <br />
+        when a countdown is started
+      </>
+    ) : timerState.type === "running" ? (
+      <RunningBoardCover
+        curStartTime={timerState.startTime}
+        onReveal={onReveal}
+      />
+    ) : null;
 
   const addEvent = useCallback(
     async (newEvent: FullSyncedTimerEvent) => {
@@ -169,6 +197,8 @@ export default function useSyncedTimer({
 
   return {
     timer,
+    boardCover,
+    isRevealed,
     addEvent,
   };
 }

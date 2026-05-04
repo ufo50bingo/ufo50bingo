@@ -8,8 +8,7 @@ import {
   TBoard,
 } from "@/app/matches/parseBingosyncData";
 import { Group, Stack, Text } from "@mantine/core";
-import { useCallback, useMemo, useState } from "react";
-import revealBoard from "./revealBoard";
+import { useMemo, useState } from "react";
 import PlaySettings from "./PlaySettings";
 import useColor from "./useColor";
 import useShownDifficulties from "./useShownDifficulties";
@@ -53,9 +52,6 @@ export default function Play({
   });
   const [soundChoices, setSoundChoices] = useSounds("play");
   const [color, setColor] = useColor(id);
-  const [isHidden, setIsHidden] = useState(() =>
-    initialBoard.every((square) => square.color === "blank"),
-  );
   const [pauseRequestName, setPauseRequestName] = useState<string | null>(null);
   const [font, setFont] = useFont();
 
@@ -66,10 +62,6 @@ export default function Play({
 
   useWakeLock();
 
-  const onNewCard = useCallback(() => {
-    setIsHidden(true);
-  }, []);
-
   const { board, rawFeed, seed, reconnectModal, audio } = useBingosyncSocket({
     id,
     initialBoard,
@@ -79,10 +71,14 @@ export default function Play({
     playerName,
     setPauseRequestName,
     soundChoices,
-    onNewCard,
+    onNewCard: empty,
   });
 
-  const { timer, addEvent } = useSyncedTimer({ id, seed, initialEvents: [] });
+  const { timer, boardCover, isRevealed, addEvent } = useSyncedTimer({
+    id,
+    seed,
+    initialEvents: [],
+  });
 
   const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(
     () =>
@@ -151,7 +147,6 @@ export default function Play({
       return null;
     }
   }, [opponent, myScore, selectedColor, rawFeed, board]);
-
   return (
     <>
       <Group align="start">
@@ -164,13 +159,10 @@ export default function Play({
                 await changeColor(id, squareIndex, selectedColor, isClearing);
               } catch {}
             }}
-            isHidden={isHidden}
-            setIsHidden={setIsHidden}
+            isHidden={!isRevealed}
+            setIsHidden={empty}
             shownDifficulties={shownDifficulties}
-            hiddenText="Click to reveal"
-            onReveal={async () => {
-              await revealBoard(id);
-            }}
+            hiddenText={boardCover}
             pauseRequestName={pauseRequestName}
             clearPauseRequest={() => setPauseRequestName(null)}
             viewerColor={selectedColor}
@@ -213,7 +205,8 @@ export default function Play({
           </Group>
           {showGeneralTracker && (
             <SimpleGeneralTracker
-              isHidden={isHidden}
+              // TODO: trackers should not be hidden
+              isHidden={!isRevealed}
               id={id}
               seed={seed}
               generalGoals={generalGoals}
@@ -245,4 +238,8 @@ export default function Play({
       {audio}
     </>
   );
+}
+
+function empty(): void {
+  return;
 }

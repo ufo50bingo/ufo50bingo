@@ -18,24 +18,19 @@ export default function CountdownSection({ view, seed, addEvent }: Props) {
       <Accordion.Control>Start Countdown</Accordion.Control>
       <Accordion.Panel>
         <Stack>
-          <Alert color="yellow" title="WARNING!">
-            You should not minimize your browser after starting a countdown!
-            {view === "play" && (
-              <>
-                <br />
-                <br />
-                If your game has a caster, please let the caster start the
-                countdown instead!
-              </>
-            )}
-          </Alert>
+          {view === "play" && (
+            <Alert color="yellow" title="WARNING!">
+              If your game has a caster, please let the caster start the
+              countdown instead!
+            </Alert>
+          )}
 
           <Button
             onClick={async () => {
               await addEvent({
                 room_id: id,
                 seed,
-                time: getServerMsFromClientMs(Date.now()),
+                time: getServerMsFromClientMs(Date.now() + 7000),
                 event: "start",
                 duration: null,
               });

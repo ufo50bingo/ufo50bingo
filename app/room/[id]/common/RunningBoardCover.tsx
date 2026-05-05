@@ -24,10 +24,15 @@ export default function RunningBoardCover({ curStartTime, onReveal }: Props) {
     return () => clearInterval(interval);
   }, [curStartTime, onReveal]);
   return curStartTime > now ? (
-    <Stack align="center">
+    <Stack align="center" gap={8}>
       Automatic reveal in
       <br />
-      <Text size="xl">{((curStartTime - now) / 1000).toFixed(1)}</Text>
+      <Text
+        style={{ fontVariantNumeric: "tabular-nums" }}
+        size="xl"
+      >
+        {((curStartTime - now) / 1000).toFixed(1)}
+      </Text>
     </Stack>
   ) : null;
 }

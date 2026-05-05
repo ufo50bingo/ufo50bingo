@@ -121,8 +121,7 @@ export default function useSyncedTimer({
 
   const [isRevealedWhenRunning, setIsRevealedWhenRunning] = useState(
     // eslint-disable-next-line react-hooks/purity
-    (timerState.type === "running" && timerState.startTime <= Date.now()) ||
-    timerState.accumulatedDuration >= 0,
+    timerState.type === "running" && timerState.startTime <= Date.now()
   );
 
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
@@ -189,7 +188,7 @@ export default function useSyncedTimer({
       <>
         The board will be revealed automatically
         <br />
-        when a countdown is started
+        when a countdown is started.
       </>
     ) : timerState.type === "running" ? (
       <RunningBoardCover
@@ -203,7 +202,10 @@ export default function useSyncedTimer({
           <> by {timerState.pauseRequester}</>
         )}
         !<br />
-        Please pause your game and coordinate in chat.
+        Please pause your game and coordinate in chat.<br />
+        <br />
+        The board will be revealed automatically<br />
+        when a countdown is started.
       </>
     );
 

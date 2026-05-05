@@ -39,21 +39,34 @@ type Input = {
   playAudio: (soundType: keyof SoundChoices) => void;
 };
 
-type Running = {
+interface TimerStateBase {
+  accumulatedDuration: number;
+}
+
+interface NotRunningBase extends TimerStateBase {
+  isForceRevealed: boolean;
+}
+
+interface Countdown extends NotRunningBase {
+  type: "countdown";
+  endTime: number;
+}
+
+interface Paused extends NotRunningBase {
+  type: "paused";
+  pauseRequester: null | undefined | string;
+}
+
+interface NotStarted extends NotRunningBase {
+  type: "not_started";
+}
+
+interface Running extends TimerStateBase {
   type: "running";
   startTime: number;
-  accumulatedDuration: number;
-  isForceRevealed: boolean;
-};
+}
 
-type Paused = {
-  type: "paused" | "not_started";
-  accumulatedDuration: number;
-  pauseRequester: null | undefined | number;
-  isForceRevealed: boolean;
-};
-
-type TimerState = Running | Paused;
+type TimerState = Running | Paused | NotStarted | Countdown;
 
 type Return = {
   timer: ReactNode;
@@ -86,6 +99,8 @@ export default function useSyncedTimer({
   );
 
   const { getClientMsFromServerMs } = useServerOffsetContext();
+
+  const [now, setNow] = useState(() => Date.now());
 
   const timerState = useMemo<TimerState>(() => {
     // TODO: Fix
@@ -130,26 +145,47 @@ export default function useSyncedTimer({
       ? {
           type: hasStarted ? "paused" : "not_started",
           accumulatedDuration,
-          pauseRequester,
+          pauseRequester: hasStarted ? pauseRequester : undefined,
           isForceRevealed,
         }
-      : {
-          type: "running",
-          startTime: getClientMsFromServerMs(curStartTime ?? 0),
-          accumulatedDuration,
-          isForceRevealed,
-        };
-  }, [events, getClientMsFromServerMs, lastForceReveal]);
+      : curStartTime < now
+        ? {
+            type: "running",
+            startTime: getClientMsFromServerMs(curStartTime),
+            accumulatedDuration,
+            isForceRevealed,
+          }
+        : {
+            type: "countdown",
+            endTime: getClientMsFromServerMs(curStartTime),
+            accumulatedDuration,
+            isForceRevealed,
+          };
+  }, [events, getClientMsFromServerMs, lastForceReveal, now]);
 
-  const [isRevealedWhenRunning, setIsRevealedWhenRunning] = useState(
-    // eslint-disable-next-line react-hooks/purity
-    timerState.type === "running" && timerState.startTime <= Date.now(),
-  );
+  useEffect(() => {
+    if (timerState.type !== "countdown") {
+      return;
+    }
+
+    const delay = timerState.endTime - Date.now();
+    if (delay <= 0) {
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      setNow(Date.now());
+    }, delay);
+
+    return () => clearTimeout(timeoutId);
+  }, [timerState]);
 
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const seedRef = useRef<number>(seed);
+  // eslint-disable-next-line react-hooks/refs
   if (seedRef.current !== seed) {
     setEvents([]);
+    // eslint-disable-next-line react-hooks/refs
     seedRef.current = seed;
   }
   const playAudioRef = useRef(playAudio);

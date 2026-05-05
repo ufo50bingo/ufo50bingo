@@ -40,9 +40,15 @@ export default function useSounds(
     setChat: (newSound: null | Sound) => setChatRaw(newSound ?? "None"),
   }), []);
 
-  const pauseAudio = useMemo(() => soundChoices.pause != null ? new Audio(soundChoices.pause) : null, [soundChoices.pause]);
-  const squareAudio = useMemo(() => soundChoices.square != null ? new Audio(soundChoices.square) : null, [soundChoices.square]);
-  const chatAudio = useMemo(() => soundChoices.chat != null ? new Audio(soundChoices.chat) : null, [soundChoices.chat]);
+  const pauseAudio = useMemo(() =>
+    soundChoices.pause != null ? new Audio(SOUNDS[soundChoices.pause]) : null,
+    [soundChoices.pause]);
+  const squareAudio = useMemo(() =>
+    soundChoices.square != null ? new Audio(SOUNDS[soundChoices.square]) : null,
+    [soundChoices.square]);
+  const chatAudio = useMemo(() =>
+    soundChoices.chat != null ? new Audio(SOUNDS[soundChoices.chat]) : null,
+    [soundChoices.chat]);
 
 
   const playAudio = useCallback((soundType: keyof SoundChoices) => {
@@ -62,8 +68,10 @@ export default function useSounds(
         break;
     }
     if (audio != null) {
-      audio.currentTime = 0;
-      audio.play();
+      try {
+        audio.currentTime = 0;
+        audio.play();
+      } catch { }
     }
   }, [pauseAudio, squareAudio, chatAudio]);
 

@@ -206,7 +206,7 @@ export default function Board({
       ))}
       {isHidden && (
         <div
-          className={`${classes.boardCover} ${isPaused ? classes.pauseRequestShadow : classes.boardCoverShadow} ${classes.unselectable}`}
+          className={`${classes.boardCover} ${isPaused ? classes.pauseRequestShadow : classes.boardCoverShadow} ${isPaused ? classes.boardCoverTransparent : classes.boardCoverOpaque} ${classes.unselectable}`}
           onClick={() => {
             if (!canReveal) {
               return;

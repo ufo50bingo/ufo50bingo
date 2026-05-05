@@ -13,6 +13,7 @@ import RunningBoardCover from "./RunningBoardCover";
 import revealBoard from "../play/revealBoard";
 import RunningTimer from "./RunningTimer";
 import { SoundChoices } from "./NotificationsSection";
+import useLocalNumber from "@/app/localStorage/useLocalNumber";
 
 type SyncedTimerEventName = "set_duration" | "pause" | "start";
 
@@ -42,12 +43,14 @@ type Running = {
   type: "running";
   startTime: number;
   accumulatedDuration: number;
+  isForceRevealed: boolean;
 };
 
 type Paused = {
   type: "paused" | "not_started";
   accumulatedDuration: number;
   pauseRequester: null | undefined | number;
+  isForceRevealed: boolean;
 };
 
 type TimerState = Running | Paused;
@@ -58,6 +61,7 @@ type Return = {
   isRevealed: boolean;
   addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
   timerState: TimerState;
+  forceReveal: () => void;
 };
 
 export default function useSyncedTimer({
@@ -71,6 +75,16 @@ export default function useSyncedTimer({
 
   const supabase = getSupabaseClient();
 
+  const [lastForceReveal, setLastForceReveal] = useLocalNumber({
+    key: `last-force-reveal-${id}`,
+    defaultValue: 0,
+  });
+
+  const forceReveal = useCallback(
+    () => setLastForceReveal(Date.now()),
+    [setLastForceReveal],
+  );
+
   const { getClientMsFromServerMs } = useServerOffsetContext();
 
   const timerState = useMemo<TimerState>(() => {
@@ -79,6 +93,7 @@ export default function useSyncedTimer({
     let curStartTime: null | number = null;
     let hasStarted = false;
     let pauseRequester: null | undefined | string = null;
+    let lastPauseTime: null | number = null;
 
     events.forEach((item) => {
       switch (item.event) {
@@ -94,6 +109,7 @@ export default function useSyncedTimer({
             curStartTime = null;
           }
           pauseRequester = item.player_name;
+          lastPauseTime = item.time;
           return;
         case "start":
           hasStarted = true;
@@ -106,22 +122,28 @@ export default function useSyncedTimer({
           return;
       }
     });
+    const isForceRevealed =
+      lastForceReveal > 0 &&
+      (lastPauseTime == null ||
+        getClientMsFromServerMs(lastPauseTime) < lastForceReveal);
     return curStartTime == null
       ? {
-        type: hasStarted ? "paused" : "not_started",
-        accumulatedDuration,
-        pauseRequester,
-      }
+          type: hasStarted ? "paused" : "not_started",
+          accumulatedDuration,
+          pauseRequester,
+          isForceRevealed,
+        }
       : {
-        type: "running",
-        startTime: getClientMsFromServerMs(curStartTime ?? 0),
-        accumulatedDuration,
-      };
-  }, [events, getClientMsFromServerMs]);
+          type: "running",
+          startTime: getClientMsFromServerMs(curStartTime ?? 0),
+          accumulatedDuration,
+          isForceRevealed,
+        };
+  }, [events, getClientMsFromServerMs, lastForceReveal]);
 
   const [isRevealedWhenRunning, setIsRevealedWhenRunning] = useState(
     // eslint-disable-next-line react-hooks/purity
-    timerState.type === "running" && timerState.startTime <= Date.now()
+    timerState.type === "running" && timerState.startTime <= Date.now(),
   );
 
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
@@ -130,6 +152,7 @@ export default function useSyncedTimer({
     setEvents([]);
     seedRef.current = seed;
   }
+  const playAudioRef = useRef(playAudio);
 
   useEffect(() => {
     const newChannel = supabase.channel(`room:${id}:all_sync`, {
@@ -149,7 +172,7 @@ export default function useSyncedTimer({
               );
               if (event.event === "pause") {
                 setIsRevealedWhenRunning(false);
-                playAudio("pause");
+                playAudioRef.current("pause");
               }
             }
           }
@@ -202,9 +225,11 @@ export default function useSyncedTimer({
           <> by {timerState.pauseRequester}</>
         )}
         !<br />
-        Please pause your game and coordinate in chat.<br />
+        Please pause your game and coordinate in chat.
         <br />
-        The board will be revealed automatically<br />
+        <br />
+        The board will be revealed automatically
+        <br />
         when a countdown is started.
       </>
     );
@@ -235,5 +260,6 @@ export default function useSyncedTimer({
     isRevealed: timerState.type === "running" && isRevealedWhenRunning,
     addEvent,
     timerState,
+    forceReveal,
   };
 }

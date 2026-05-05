@@ -159,7 +159,7 @@ export default function Play({
               const isClearing = board[squareIndex].color === selectedColor;
               try {
                 await changeColor(id, squareIndex, selectedColor, isClearing);
-              } catch { }
+              } catch {}
             }}
             isHidden={!isRevealed}
             setIsHidden={empty}
@@ -206,8 +206,7 @@ export default function Play({
           </Group>
           {showGeneralTracker && (
             <SimpleGeneralTracker
-              // TODO: trackers should not be hidden
-              isHidden={!isRevealed}
+              isHidden={!isRevealed && timerState.type !== "paused"}
               id={id}
               seed={seed}
               generalGoals={generalGoals}

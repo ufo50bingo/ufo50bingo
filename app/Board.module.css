@@ -17,13 +17,20 @@
     left: 0;
     right: 0;
     z-index: 2;
-    background: #101821;
 
     /* helps align text */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.boardCoverOpaque {
+    background: rgb(16, 24, 33);
+}
+
+.boardCoverTransparent {
+    background: rgba(16, 24, 33, 0.9);
 }
 
 .boardCoverShadow {
@@ -41,13 +48,19 @@
 }
 
 
-.boardCover:hover,
-.boardCover.hover {
+.boardCover:hover {
     cursor: pointer;
-    background: #05132E;
+}
+
+.boardCoverOpaque:hover {
+    background: rgb(5, 19, 46);
     box-shadow: inset 0px 0px 100px rgba(0, 0, 0, 0.6);
     -moz-box-shadow: inset 0px 0px 100px rgba(0, 0, 0, 0.6);
     -webkit-box-shadow: inset 0px 0px 100px rgba(0, 0, 0, 0.6);
+}
+
+.boardCoverTransparent:hover {
+    background: rgba(5, 19, 46, 0.9);
 }
 
 .unselectable {

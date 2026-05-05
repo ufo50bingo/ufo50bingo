@@ -8,7 +8,6 @@ import {
 import { useState, useEffect, useRef, ReactNode, useCallback } from "react";
 import { Modal, Stack, Group, Button } from "@mantine/core";
 import { SoundChoices } from "./NotificationsSection";
-import { SOUNDS } from "./sounds";
 
 type Props = {
   id: string;
@@ -17,8 +16,8 @@ type Props = {
   socketKey: string;
   initialSeed: number;
   onNewCard?: (newBoard: TBoard) => unknown;
-  soundChoices: SoundChoices;
   playerName: string;
+  playAudio: (soundType: keyof SoundChoices) => void;
 };
 
 type Response = {
@@ -26,7 +25,6 @@ type Response = {
   rawFeed: RawFeed;
   seed: number;
   reconnectModal: null | undefined | ReactNode;
-  audio: null | undefined | ReactNode;
 };
 
 export default function useBingosyncSocket({
@@ -36,8 +34,8 @@ export default function useBingosyncSocket({
   initialSeed,
   socketKey,
   onNewCard,
-  soundChoices,
   playerName,
+  playAudio,
 }: Props): Response {
   const [seed, setSeed] = useState(initialSeed);
   const [board, setBoard] = useState(initialBoard);
@@ -45,24 +43,19 @@ export default function useBingosyncSocket({
   const [shouldReconnect, setShouldReconnect] = useState(false);
   const socketRef = useRef<null | WebSocket>(null);
 
-  const squareAudioRef = useRef<HTMLAudioElement | null>(null);
-  const chatAudioRef = useRef<HTMLAudioElement | null>(null);
-
-  const soundChoicesRef = useRef<SoundChoices>(soundChoices);
+  const playAudioRef = useRef(playAudio);
   // eslint-disable-next-line react-hooks/refs
-  soundChoicesRef.current = soundChoices;
+  playAudioRef.current = playAudio;
 
   const onMessage = useCallback(
     (newItem: RawFeedItem) => {
       if (newItem.player.name === playerName) {
         return;
       }
-      if (newItem.type === "chat" && soundChoicesRef.current.chat != null) {
-        chatAudioRef.current?.play();
+      if (newItem.type === "chat") {
+        playAudioRef.current("chat");
       } else if (newItem.type === "goal") {
-        if (soundChoicesRef.current.square != null) {
-          squareAudioRef.current?.play();
-        }
+        playAudioRef.current("square");
       }
     },
     [playerName],
@@ -156,24 +149,6 @@ export default function useBingosyncSocket({
           </Group>
         </Stack>
       </Modal>
-    ),
-    audio: (
-      <>
-        {soundChoices.square != null && (
-          <audio
-            preload="none"
-            src={SOUNDS[soundChoices.square]}
-            ref={squareAudioRef}
-          />
-        )}
-        {soundChoices.chat != null && (
-          <audio
-            preload="none"
-            src={SOUNDS[soundChoices.chat]}
-            ref={chatAudioRef}
-          />
-        )}
-      </>
     ),
   };
 }

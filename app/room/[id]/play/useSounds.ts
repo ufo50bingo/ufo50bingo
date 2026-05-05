@@ -2,7 +2,7 @@ import useLocalEnum from "@/app/localStorage/useLocalEnum";
 import { SetSoundChoices, SoundChoices } from "../common/NotificationsSection";
 import { RoomView } from "../roomCookie";
 import { Sound, SOUNDS } from "../common/sounds";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 const SOUND_OPTIONS: ReadonlyArray<"None" | Sound> = [
   "None",
@@ -11,7 +11,7 @@ const SOUND_OPTIONS: ReadonlyArray<"None" | Sound> = [
 
 export default function useSounds(
   view: RoomView
-): [SoundChoices, SetSoundChoices] {
+): [SoundChoices, SetSoundChoices, ((soundType: keyof SoundChoices) => void)] {
   const [pauseRaw, setPauseRaw] = useLocalEnum({
     key: `${view}-pause`,
     options: SOUND_OPTIONS,
@@ -34,11 +34,38 @@ export default function useSounds(
     chat: chatRaw === "None" ? null : chatRaw,
   }), [pauseRaw, squareRaw, chatRaw]);
 
-  const SetSoundChoices = useMemo(() => ({
+  const setSoundChoices = useMemo(() => ({
     setPause: (newSound: null | Sound) => setPauseRaw(newSound ?? "None"),
     setSquare: (newSound: null | Sound) => setSquareRaw(newSound ?? "None"),
     setChat: (newSound: null | Sound) => setChatRaw(newSound ?? "None"),
   }), []);
 
-  return [soundChoices, SetSoundChoices];
+  const pauseAudio = useMemo(() => soundChoices.pause != null ? new Audio(soundChoices.pause) : null, [soundChoices.pause]);
+  const squareAudio = useMemo(() => soundChoices.square != null ? new Audio(soundChoices.square) : null, [soundChoices.square]);
+  const chatAudio = useMemo(() => soundChoices.chat != null ? new Audio(soundChoices.chat) : null, [soundChoices.chat]);
+
+
+  const playAudio = useCallback((soundType: keyof SoundChoices) => {
+    let audio: null | HTMLAudioElement = null;
+    switch (soundType) {
+      case "pause":
+        audio = pauseAudio;
+        break;
+      case "chat":
+        audio = chatAudio;
+        break;
+      case "square":
+        audio = squareAudio;
+        break;
+      default:
+        soundType satisfies never;
+        break;
+    }
+    if (audio != null) {
+      audio.currentTime = 0;
+      audio.play();
+    }
+  }, [pauseAudio, squareAudio, chatAudio]);
+
+  return [soundChoices, setSoundChoices, playAudio];
 }

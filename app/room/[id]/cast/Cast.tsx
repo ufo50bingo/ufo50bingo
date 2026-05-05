@@ -91,9 +91,9 @@ export default function Cast({
     setTerminalCodes(getAllTerminalCodes(newBoard));
   }, []);
 
-  const [soundChoices, setSoundChoices] = useSounds("cast");
+  const [soundChoices, setSoundChoices, playAudio] = useSounds("cast");
 
-  const { board, rawFeed, seed, reconnectModal, audio } = useBingosyncSocket({
+  const { board, rawFeed, seed, reconnectModal } = useBingosyncSocket({
     id,
     initialBoard,
     initialRawFeed,
@@ -101,7 +101,7 @@ export default function Cast({
     socketKey,
     onNewCard,
     playerName,
-    soundChoices,
+    playAudio,
   });
 
   const {
@@ -144,6 +144,7 @@ export default function Cast({
     id,
     seed,
     initialEvents: initialTimerEvents,
+    playAudio,
   });
 
   const [generalOrder, setGeneralOrder] = useLocalEnum({
@@ -516,7 +517,6 @@ export default function Cast({
         />
       )}
       {reconnectModal}
-      {audio}
     </>
   );
 }

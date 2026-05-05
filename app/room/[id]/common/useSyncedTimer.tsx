@@ -12,6 +12,7 @@ import { useServerOffsetContext } from "../ServerOffsetContext";
 import RunningBoardCover from "./RunningBoardCover";
 import revealBoard from "../play/revealBoard";
 import RunningTimer from "./RunningTimer";
+import { SoundChoices } from "./NotificationsSection";
 
 type SyncedTimerEventName = "set_duration" | "pause" | "start";
 
@@ -34,6 +35,7 @@ type Input = {
   id: string;
   seed: number;
   initialEvents: ReadonlyArray<SyncedTimerEvent>;
+  playAudio: (soundType: keyof SoundChoices) => void;
 };
 
 type Running = {
@@ -62,6 +64,7 @@ export default function useSyncedTimer({
   id,
   seed,
   initialEvents,
+  playAudio,
 }: Input): Return {
   const [events, setEvents] =
     useState<ReadonlyArray<SyncedTimerEvent>>(initialEvents);
@@ -105,21 +108,21 @@ export default function useSyncedTimer({
     });
     return curStartTime == null
       ? {
-          type: hasStarted ? "paused" : "not_started",
-          accumulatedDuration,
-          pauseRequester,
-        }
+        type: hasStarted ? "paused" : "not_started",
+        accumulatedDuration,
+        pauseRequester,
+      }
       : {
-          type: "running",
-          startTime: getClientMsFromServerMs(curStartTime ?? 0),
-          accumulatedDuration,
-        };
+        type: "running",
+        startTime: getClientMsFromServerMs(curStartTime ?? 0),
+        accumulatedDuration,
+      };
   }, [events, getClientMsFromServerMs]);
 
   const [isRevealedWhenRunning, setIsRevealedWhenRunning] = useState(
     // eslint-disable-next-line react-hooks/purity
     (timerState.type === "running" && timerState.startTime <= Date.now()) ||
-      timerState.accumulatedDuration >= 0,
+    timerState.accumulatedDuration >= 0,
   );
 
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
@@ -147,6 +150,7 @@ export default function useSyncedTimer({
               );
               if (event.event === "pause") {
                 setIsRevealedWhenRunning(false);
+                playAudio("pause");
               }
             }
           }

@@ -52,7 +52,7 @@ export default function Play({
     key: "show_general_tracker",
     defaultValue: true,
   });
-  const [soundChoices, setSoundChoices] = useSounds("play");
+  const [soundChoices, setSoundChoices, playAudio] = useSounds("play");
   const [color, setColor] = useColor(id);
   const [font, setFont] = useFont();
 
@@ -63,15 +63,15 @@ export default function Play({
 
   useWakeLock();
 
-  const { board, rawFeed, seed, reconnectModal, audio } = useBingosyncSocket({
+  const { board, rawFeed, seed, reconnectModal } = useBingosyncSocket({
     id,
     initialBoard,
     initialRawFeed,
     initialSeed,
     socketKey,
     playerName,
-    soundChoices,
     onNewCard: empty,
+    playAudio,
   });
 
   const { timer, boardCover, isRevealed, addEvent, timerState } =
@@ -79,6 +79,7 @@ export default function Play({
       id,
       seed,
       initialEvents: initialTimerEvents,
+      playAudio,
     });
 
   const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(
@@ -158,7 +159,7 @@ export default function Play({
               const isClearing = board[squareIndex].color === selectedColor;
               try {
                 await changeColor(id, squareIndex, selectedColor, isClearing);
-              } catch {}
+              } catch { }
             }}
             isHidden={!isRevealed}
             setIsHidden={empty}
@@ -236,7 +237,6 @@ export default function Play({
         />
       </Group>
       {reconnectModal}
-      {audio}
     </>
   );
 }

@@ -2,7 +2,7 @@ import useLocalEnum from "@/app/localStorage/useLocalEnum";
 import { SetSoundChoices, SoundChoices } from "../common/NotificationsSection";
 import { RoomView } from "../roomCookie";
 import { Sound, SOUNDS } from "../common/sounds";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
 const SOUND_OPTIONS: ReadonlyArray<"None" | Sound> = [
   "None",
@@ -46,51 +46,49 @@ export default function useSounds(
     [setChatRaw, setPauseRaw, setSquareRaw],
   );
 
-  const pauseAudio = useMemo(
-    () =>
-      soundChoices.pause != null ? new Audio(SOUNDS[soundChoices.pause]) : null,
-    [soundChoices.pause],
-  );
-  const squareAudio = useMemo(
-    () =>
+  const pauseAudioRef = useRef<HTMLAudioElement | null>(null);
+  const squareAudioRef = useRef<HTMLAudioElement | null>(null);
+  const chatAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    pauseAudioRef.current =
+      soundChoices.pause != null ? new Audio(SOUNDS[soundChoices.pause]) : null;
+  }, [soundChoices.pause]);
+  useEffect(() => {
+    squareAudioRef.current =
       soundChoices.square != null
         ? new Audio(SOUNDS[soundChoices.square])
-        : null,
-    [soundChoices.square],
-  );
-  const chatAudio = useMemo(
-    () =>
-      soundChoices.chat != null ? new Audio(SOUNDS[soundChoices.chat]) : null,
-    [soundChoices.chat],
-  );
+        : null;
+  }, [soundChoices.square]);
+  useEffect(() => {
+    chatAudioRef.current =
+      soundChoices.chat != null ? new Audio(SOUNDS[soundChoices.chat]) : null;
+  }, [soundChoices.chat]);
 
-  const playAudio = useCallback(
-    (soundType: keyof SoundChoices) => {
-      let audio: null | HTMLAudioElement = null;
-      switch (soundType) {
-        case "pause":
-          audio = pauseAudio;
-          break;
-        case "chat":
-          audio = chatAudio;
-          break;
-        case "square":
-          audio = squareAudio;
-          break;
-        default:
-          soundType satisfies never;
-          break;
-      }
-      if (audio != null) {
-        try {
-          // eslint-disable-next-line react-hooks/immutability
-          audio.currentTime = 0;
-          audio.play();
-        } catch {}
-      }
-    },
-    [pauseAudio, squareAudio, chatAudio],
-  );
+  const playAudio = useCallback((soundType: keyof SoundChoices) => {
+    let audio: null | HTMLAudioElement = null;
+    switch (soundType) {
+      case "pause":
+        audio = pauseAudioRef.current;
+        break;
+      case "chat":
+        audio = chatAudioRef.current;
+        break;
+      case "square":
+        audio = squareAudioRef.current;
+        break;
+      default:
+        soundType satisfies never;
+        break;
+    }
+    if (audio != null) {
+      try {
+        // eslint-disable-next-line react-hooks/immutability
+        audio.currentTime = 0;
+        audio.play();
+      } catch {}
+    }
+  }, []);
 
   return [soundChoices, setSoundChoices, playAudio];
 }

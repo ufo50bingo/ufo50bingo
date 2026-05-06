@@ -28,8 +28,8 @@ export default function TimerSection(props: Props) {
               Edit the current value of the timer.
               <br />
               <br />
-              Players are expected to begin playing when the timer hits 0:00,
-              so a negative value represents board analysis time.
+              Players are expected to begin playing when the timer hits 0:00, so
+              a negative value represents board analysis time.
             </Text>
             <Button onClick={() => setIsEditing(true)}>Edit Timer</Button>
           </Stack>
@@ -40,13 +40,20 @@ export default function TimerSection(props: Props) {
   );
 }
 
-function TimerModal({ timerState, close, isMobile, addEvent, seed }: ModalProps) {
+function TimerModal({
+  timerState,
+  close,
+  isMobile,
+  addEvent,
+  seed,
+}: ModalProps) {
   const { id } = useParams<{ id: string }>();
-  const { getClientMsFromServerMs, getServerMsFromClientMs } = useServerOffsetContext();
-  const [accumulatedDuration, setAccumulatedDuration] = useState<null | number>(() =>
-    timerState.type === "running"
-      ? timerState.accumulatedDuration + Date.now() - getClientMsFromServerMs(timerState.startTime)
-      : timerState.accumulatedDuration
+  const { getServerMsFromClientMs } = useServerOffsetContext();
+  const [accumulatedDuration, setAccumulatedDuration] = useState<null | number>(
+    () =>
+      timerState.type === "running"
+        ? timerState.accumulatedDuration + Date.now() - timerState.startTime
+        : timerState.accumulatedDuration,
   );
   return (
     <Modal

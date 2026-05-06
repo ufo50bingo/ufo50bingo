@@ -137,7 +137,7 @@ export default function useSyncedTimer({
           pauseRequester: hasStarted ? pauseRequester : undefined,
           isForceRevealed,
         }
-      : curStartTime < Date.now()
+      : getClientMsFromServerMs(curStartTime) < Date.now()
         ? {
             type: "running",
             startTime: getClientMsFromServerMs(curStartTime),

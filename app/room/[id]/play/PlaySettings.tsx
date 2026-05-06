@@ -4,19 +4,18 @@ import { IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import ColorSelector from "../common/ColorSelector";
-// import TimerSection from "../common/TimerSection";
 import NotificationsSection, {
   SetSoundChoices,
   SoundChoices,
 } from "../common/NotificationsSection";
-import RequestPauseSection from "../common/RequestPauseSection";
-import CountdownSection from "../common/CountdownSection";
 import CreateBoardSection from "../common/CreateBoardSection";
 import BottomSection from "../common/BottomSection";
 import { Font } from "@/app/font/useFont";
 import FontSelector from "@/app/font/FontSelector";
 import SelectRightClickBehavior from "@/app/settings/SelectRightClickBehavior";
-import { FullSyncedTimerEvent } from "../common/useSyncedTimer";
+import { FullSyncedTimerEvent, SyncedTimerState } from "../common/useSyncedTimer";
+import TimerSection from "../common/TimerSection";
+import RevealSection from "./RevealSection";
 
 type Props = {
   id: string;
@@ -31,9 +30,10 @@ type Props = {
   setShowGeneralTracker: (newShown: boolean) => unknown;
   font: Font;
   setFont: (newFont: Font) => unknown;
+  timerState: SyncedTimerState;
   addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
   seed: number;
-  playerName: string;
+  forceReveal: () => unknown;
 };
 
 export default function PlaySettings({
@@ -51,7 +51,8 @@ export default function PlaySettings({
   setFont,
   addEvent,
   seed,
-  playerName,
+  timerState,
+  forceReveal,
 }: Props) {
   const [isShown, setIsShown] = useState(color == null);
   return (
@@ -91,18 +92,13 @@ export default function PlaySettings({
                   />
                 </Accordion.Panel>
               </Accordion.Item>
-              <RequestPauseSection
-                id={id}
+              <TimerSection
+                timerState={timerState}
                 addEvent={addEvent}
                 seed={seed}
-                playerName={playerName}
-              />
-              {/* <TimerSection
-                state={timerState}
-                setState={setTimerState}
                 isMobile={isMobile}
-              /> */}
-              <CountdownSection view="play" addEvent={addEvent} seed={seed} />
+              />
+              <RevealSection forceReveal={forceReveal} />
               <NotificationsSection
                 soundChoices={soundChoices}
                 setSoundChoices={setSoundChoices}

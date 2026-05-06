@@ -39,6 +39,7 @@ import useFont from "@/app/font/useFont";
 import useSyncedTimer, { FullSyncedTimerEvent } from "../common/useSyncedTimer";
 import SyncedTimerBoardCover from "../common/SyncedTimerBoardCover";
 import SyncedTimer from "../common/SyncedTimer";
+import StartPauseButton from "../common/StartPauseButton";
 
 export type FoundStandardGeneral = FoundGoal<
   StandardGeneral,
@@ -147,6 +148,7 @@ export default function Cast({
     seed,
     initialEvents: initialTimerEvents,
     playAudio,
+    isCast: true,
   });
 
   const [generalOrder, setGeneralOrder] = useLocalEnum({
@@ -409,15 +411,18 @@ export default function Cast({
           )}
         </Group>
         <Stack gap={8}>
-          <Text
-            style={{
-              alignSelf: "center",
-              fontVariantNumeric: "tabular-nums",
-              fontSize: "23px",
-            }}
-          >
-            <SyncedTimer timerState={timerState} />
-          </Text>
+          <Group justify="space-between">
+            <Text
+              style={{
+                alignSelf: "center",
+                fontVariantNumeric: "tabular-nums",
+                fontSize: "23px",
+              }}
+            >
+              <SyncedTimer timerState={timerState} />
+            </Text>
+            <StartPauseButton timerState={timerState} isCast={true} addEvent={addEvent} seed={seed} playerName={playerName} />
+          </Group>
           <Feed height={`${475 - 44}px`} rawFeed={rawFeed} />
         </Stack>
         {showGameSelector ? (
@@ -515,7 +520,7 @@ export default function Cast({
         font={font}
         setFont={setFont}
         addEvent={addEvent}
-        playerName={playerName}
+        timerState={timerState}
       />
       {editingIndex != null && (
         <EditSquare

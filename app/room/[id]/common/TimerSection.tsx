@@ -1,12 +1,15 @@
 import { Accordion, Button, Group, Modal, Stack, Text } from "@mantine/core";
-import { TimerState } from "./useMatchTimer";
 import { useState } from "react";
 import DurationInput from "./DurationInput";
+import { FullSyncedTimerEvent, SyncedTimerState } from "./useSyncedTimer";
+import { useServerOffsetContext } from "../ServerOffsetContext";
+import { useParams } from "next/navigation";
 
 interface Props {
-  state: TimerState;
-  setState: (newState: TimerState) => unknown;
+  timerState: SyncedTimerState;
+  addEvent: (newEvent: FullSyncedTimerEvent) => unknown;
   isMobile: boolean;
+  seed: number;
 }
 
 interface ModalProps extends Props {
@@ -22,9 +25,11 @@ export default function TimerSection(props: Props) {
         <Accordion.Panel>
           <Stack>
             <Text size="sm">
-              The timer will start running as soon as you reveal the board. If
-              any player or caster requests a pause, your timer will
-              automatically pause.
+              Edit the current value of the timer.
+              <br />
+              <br />
+              Players are expected to begin playing when the timer hits 0:00,
+              so a negative value represents board analysis time.
             </Text>
             <Button onClick={() => setIsEditing(true)}>Edit Timer</Button>
           </Stack>
@@ -35,12 +40,13 @@ export default function TimerSection(props: Props) {
   );
 }
 
-function TimerModal({ close, state, setState, isMobile }: ModalProps) {
-  const [accumulatedDuration, setAccumulatedDuration] = useState<null | number>(
-    state.curStartTime == null
-      ? state.accumulatedDuration
-      : // eslint-disable-next-line react-hooks/purity
-        state.accumulatedDuration + Date.now() - state.curStartTime
+function TimerModal({ timerState, close, isMobile, addEvent, seed }: ModalProps) {
+  const { id } = useParams<{ id: string }>();
+  const { getClientMsFromServerMs, getServerMsFromClientMs } = useServerOffsetContext();
+  const [accumulatedDuration, setAccumulatedDuration] = useState<null | number>(() =>
+    timerState.type === "running"
+      ? timerState.accumulatedDuration + Date.now() - getClientMsFromServerMs(timerState.startTime)
+      : timerState.accumulatedDuration
   );
   return (
     <Modal
@@ -61,28 +67,21 @@ function TimerModal({ close, state, setState, isMobile }: ModalProps) {
           <Button
             color="green"
             disabled={accumulatedDuration == null}
-            onClick={() => {
+            onClick={async () => {
               if (accumulatedDuration == null) {
                 return;
               }
-              setState({ accumulatedDuration, curStartTime: null });
+              await addEvent({
+                room_id: id,
+                seed: seed,
+                time: getServerMsFromClientMs(Date.now()),
+                event: "set_duration",
+                duration: accumulatedDuration,
+              });
               close();
             }}
           >
-            Pause
-          </Button>
-          <Button
-            color="green"
-            disabled={accumulatedDuration == null}
-            onClick={() => {
-              if (accumulatedDuration == null) {
-                return;
-              }
-              setState({ accumulatedDuration, curStartTime: Date.now() });
-              close();
-            }}
-          >
-            Resume
+            Confirm
           </Button>
         </Group>
       </Stack>

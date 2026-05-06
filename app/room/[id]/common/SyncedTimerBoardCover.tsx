@@ -20,7 +20,6 @@ export default function SyncedTimerBoardCover({
     case "running":
       return null;
     case "not_started":
-      console.log(isBoardVisibleByDefault, timerState.isForceRevealed);
       if (isBoardVisibleByDefault || timerState.isForceRevealed) {
         return null;
       }

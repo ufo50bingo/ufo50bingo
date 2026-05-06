@@ -21,8 +21,6 @@ import NotificationsSection, {
   SoundChoices,
 } from "../common/NotificationsSection";
 import CreateBoardSection from "../common/CreateBoardSection";
-import RequestPauseSection from "../common/RequestPauseSection";
-import CountdownSection from "../common/CountdownSection";
 import BottomSection from "../common/BottomSection";
 import FileSyncSection from "./FileSyncSection";
 import { GeneralCounts } from "./CastPage";
@@ -32,7 +30,8 @@ import { Font } from "@/app/font/useFont";
 import FontSelector from "@/app/font/FontSelector";
 
 import classes from "./CastSettings.module.css";
-import { FullSyncedTimerEvent } from "../common/useSyncedTimer";
+import { FullSyncedTimerEvent, SyncedTimerState } from "../common/useSyncedTimer";
+import TimerSection from "../common/TimerSection";
 
 type Props = {
   id: string;
@@ -70,7 +69,7 @@ type Props = {
   font: Font;
   setFont: (newFont: Font) => unknown;
   addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
-  playerName: string;
+  timerState: SyncedTimerState;
 };
 
 export default function CastSettings({
@@ -109,7 +108,7 @@ export default function CastSettings({
   font,
   setFont,
   addEvent,
-  playerName,
+  timerState,
 }: Props) {
   const [isShown, setIsShown] = useState(leftColor === rightColor);
 
@@ -157,25 +156,24 @@ export default function CastSettings({
                   />
                   {((leftColor === "pink" && rightColor === "blue") ||
                     (leftColor === "blue" && rightColor === "pink")) && (
-                    <Group mt={8} gap={4}>
-                      <img className={classes.emoji} src="/transflag.svg" />
-                      <img className={classes.emoji} src="/transflag.svg" />
-                      <img className={classes.emoji} src="/transflag.svg" />
-                      <img className={classes.emoji} src="/transflag.svg" />
-                      <img className={classes.emoji} src="/transflag.svg" />
-                      <img className={classes.emoji} src="/transflag.svg" />
-                      <img className={classes.emoji} src="/transflag.svg" />
-                      <img className={classes.emoji} src="/transflag.svg" />
-                    </Group>
-                  )}
+                      <Group mt={8} gap={4}>
+                        <img className={classes.emoji} src="/transflag.svg" />
+                        <img className={classes.emoji} src="/transflag.svg" />
+                        <img className={classes.emoji} src="/transflag.svg" />
+                        <img className={classes.emoji} src="/transflag.svg" />
+                        <img className={classes.emoji} src="/transflag.svg" />
+                        <img className={classes.emoji} src="/transflag.svg" />
+                        <img className={classes.emoji} src="/transflag.svg" />
+                        <img className={classes.emoji} src="/transflag.svg" />
+                      </Group>
+                    )}
                 </Accordion.Panel>
               </Accordion.Item>
-              <CountdownSection view="cast" addEvent={addEvent} seed={seed} />
-              <RequestPauseSection
-                id={id}
+              <TimerSection
+                timerState={timerState}
                 addEvent={addEvent}
                 seed={seed}
-                playerName={playerName}
+                isMobile={false}
               />
               <Accordion.Item value="display">
                 <Accordion.Control>Display Settings</Accordion.Control>
@@ -192,8 +190,8 @@ export default function CastSettings({
                               event.currentTarget.checked
                                 ? [...shownDifficulties, difficulty]
                                 : shownDifficulties.filter(
-                                    (d) => d !== difficulty,
-                                  ),
+                                  (d) => d !== difficulty,
+                                ),
                             )
                           }
                           label={DIFFICULTY_NAMES[difficulty]}

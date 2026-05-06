@@ -29,6 +29,7 @@ import useFont from "@/app/font/useFont";
 import useSyncedTimer, { FullSyncedTimerEvent } from "../common/useSyncedTimer";
 import SyncedTimerBoardCover from "../common/SyncedTimerBoardCover";
 import SyncedTimer from "../common/SyncedTimer";
+import StartPauseButton from "../common/StartPauseButton";
 
 export type Props = {
   id: string;
@@ -81,6 +82,7 @@ export default function Play({
     seed,
     initialEvents: initialTimerEvents,
     playAudio,
+    isCast: false,
   });
 
   const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(
@@ -160,7 +162,7 @@ export default function Play({
               const isClearing = board[squareIndex].color === selectedColor;
               try {
                 await changeColor(id, squareIndex, selectedColor, isClearing);
-              } catch {}
+              } catch { }
             }}
             shownDifficulties={shownDifficulties}
             viewerColor={selectedColor}
@@ -206,9 +208,7 @@ export default function Play({
                 <SyncedTimer timerState={timerState} />
               </Text>
             </div>
-            <div>
-              Seed: <strong>{seed}</strong>
-            </div>
+            <StartPauseButton timerState={timerState} isCast={false} addEvent={addEvent} seed={seed} playerName={playerName} />
           </Group>
           {showGeneralTracker && (
             <SimpleGeneralTracker
@@ -239,7 +239,8 @@ export default function Play({
             setFont={setFont}
             addEvent={addEvent}
             seed={seed}
-            playerName={playerName}
+            timerState={timerState}
+            forceReveal={forceReveal}
           />
         </Stack>
         <Feed

@@ -3,6 +3,7 @@ import getSupabaseClient from "../cast/getSupabaseClient";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import { SoundChoices } from "./NotificationsSection";
 import useLocalNumber from "@/app/localStorage/useLocalNumber";
+import revealBoard from "../play/revealBoard";
 
 type SyncedTimerEventName = "set_duration" | "pause" | "start";
 
@@ -26,6 +27,7 @@ type Input = {
   seed: number;
   initialEvents: ReadonlyArray<SyncedTimerEvent>;
   playAudio: (soundType: keyof SoundChoices) => void;
+  isCast: boolean;
 };
 
 interface TimerStateBase {
@@ -69,6 +71,7 @@ export default function useSyncedTimer({
   seed,
   initialEvents,
   playAudio,
+  isCast,
 }: Input): Return {
   const [events, setEvents] =
     useState<ReadonlyArray<SyncedTimerEvent>>(initialEvents);
@@ -81,7 +84,10 @@ export default function useSyncedTimer({
   });
 
   const forceReveal = useCallback(
-    () => setLastForceReveal(Date.now()),
+    async () => {
+      setLastForceReveal(Date.now());
+      await revealBoard(id);
+    },
     [setLastForceReveal],
   );
 
@@ -90,8 +96,7 @@ export default function useSyncedTimer({
   const [now, setNow] = useState(() => Date.now());
 
   const timerState = useMemo<SyncedTimerState>(() => {
-    // TODO: Fix
-    let accumulatedDuration = -6000;
+    let accumulatedDuration = -60000;
     let curStartTime: null | number = null;
     let hasStarted = false;
     let pauseRequester: null | undefined | string = null;
@@ -130,25 +135,25 @@ export default function useSyncedTimer({
         getClientMsFromServerMs(lastPauseTime) < lastForceReveal);
     return curStartTime == null
       ? {
-          type: hasStarted ? "paused" : "not_started",
-          accumulatedDuration,
-          pauseRequester: hasStarted ? pauseRequester : undefined,
-          isForceRevealed,
-        }
+        type: hasStarted ? "paused" : "not_started",
+        accumulatedDuration,
+        pauseRequester: hasStarted ? pauseRequester : undefined,
+        isForceRevealed,
+      }
       : curStartTime < Date.now()
         ? {
-            type: "running",
-            startTime: getClientMsFromServerMs(curStartTime),
-            accumulatedDuration,
-            isForceRevealed,
-          }
+          type: "running",
+          startTime: getClientMsFromServerMs(curStartTime),
+          accumulatedDuration,
+          isForceRevealed,
+        }
         : {
-            type: "countdown",
-            endTime: getClientMsFromServerMs(curStartTime),
-            accumulatedDuration,
-            isForceRevealed,
-            wasPaused: lastPauseTime != null,
-          };
+          type: "countdown",
+          endTime: getClientMsFromServerMs(curStartTime),
+          accumulatedDuration,
+          isForceRevealed,
+          wasPaused: lastPauseTime != null,
+        };
     // including `now` to force it to re-run to change from countdown to running
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [events, getClientMsFromServerMs, lastForceReveal, now]);
@@ -161,7 +166,7 @@ export default function useSyncedTimer({
     const delay = timerState.endTime - Date.now();
 
     const timeoutId = setTimeout(
-      () => {
+      async () => {
         setNow(Date.now());
       },
       Math.max(delay, 0),
@@ -169,6 +174,18 @@ export default function useSyncedTimer({
 
     return () => clearTimeout(timeoutId);
   }, [timerState]);
+
+  const prevIsBeforeRevealRef = useRef<null | boolean>(null);
+  const isBeforeReveal = timerState.type === "not_started" || (timerState.type === "countdown" && !timerState.wasPaused);
+  useEffect(() => {
+    const prevIsBeforeReveal = prevIsBeforeRevealRef.current;
+    if (
+      !isCast && prevIsBeforeReveal && !isBeforeReveal
+    ) {
+      revealBoard(id);
+    }
+    prevIsBeforeRevealRef.current = isBeforeReveal;
+  }, [isBeforeReveal, isCast]);
 
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const seedRef = useRef<number>(seed);

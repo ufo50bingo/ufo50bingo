@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface LocalStringInput {
   key: string;
@@ -22,6 +22,7 @@ export default function useLocalString({
 
   useEffect(() => {
     if (global.window == undefined || localStorage == null) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setValueRaw(defaultValue);
       return;
     }
@@ -32,7 +33,7 @@ export default function useLocalString({
     }
     setValueRaw(fromStorage);
     return;
-  }, [key]);
+  }, [defaultValue, key]);
 
   const setValue = useCallback(
     (newValue: string) => {
@@ -42,7 +43,7 @@ export default function useLocalString({
       }
       localStorage.setItem(key, newValue);
     },
-    [key]
+    [key],
   );
 
   return [value, setValue];

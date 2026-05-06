@@ -2,11 +2,11 @@ import { Checkbox, Group, SimpleGrid, Text } from "@mantine/core";
 import { Game, ProperGame } from "../goals";
 import CheckerSortSelector, { CheckerSort } from "./CheckerSortSelector";
 import useCheckerSortInfo from "./useCheckerSortInfo";
-import { UFODifficulties, UFOPasta } from "../generator/ufoGenerator";
+import { UFODifficulties } from "../generator/ufoGenerator";
 import getSubcategoryName from "../generator/getSubcategoryName";
 
 type Props = {
-  ufoDifficulties: UFODifficulties,
+  ufoDifficulties: UFODifficulties;
   checkState: Map<Game, boolean>;
   setCheckState: (newCheckState: Map<Game, boolean>) => void;
   sort: CheckerSort;
@@ -25,7 +25,7 @@ export default function GameChecker({
 
   const [hasChronological, sortedSubcategories] = useCheckerSortInfo({
     ufoDifficulties,
-    categories: Object.keys(ufoDifficulties).filter(cat => cat !== "general"),
+    categories: Object.keys(ufoDifficulties).filter((cat) => cat !== "general"),
     sort,
   });
   return (
@@ -34,7 +34,9 @@ export default function GameChecker({
         <Text>
           <strong>Select included games</strong>
         </Text>
-        <CheckerSortSelector sort={sort} setSort={setSort} />
+        {hasChronological && (
+          <CheckerSortSelector sort={sort} setSort={setSort} />
+        )}
       </Group>
       <SimpleGrid cols={3}>
         <Checkbox
@@ -47,7 +49,7 @@ export default function GameChecker({
           checked={isAllChecked}
           onChange={() => {
             const newState = new Map(
-              checkState.keys().map((key) => [key, !isAllChecked])
+              checkState.keys().map((key) => [key, !isAllChecked]),
             );
             setCheckState(newState);
           }}
@@ -59,7 +61,10 @@ export default function GameChecker({
             checked={checkState.get(subcategory as ProperGame) !== false}
             onChange={(event) => {
               const newState = new Map(checkState);
-              newState.set(subcategory as ProperGame, event.currentTarget.checked);
+              newState.set(
+                subcategory as ProperGame,
+                event.currentTarget.checked,
+              );
               setCheckState(newState);
             }}
           />

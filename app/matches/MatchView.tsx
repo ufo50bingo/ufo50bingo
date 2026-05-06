@@ -21,13 +21,13 @@ import {
   IconTournament,
 } from "@tabler/icons-react";
 import html2canvas from "html2canvas";
-import { useMemo, ReactNode, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { isTooOld, Match } from "./Matches";
 import { getVariantText } from "./matchUtil";
 import { TBoard, Changelog } from "./parseBingosyncData";
 import ViewChangelog from "./ViewChangelog";
 import { getHost, getVodLink } from "./vodUtil";
-import { getChangesWithoutMistakes, getMatchStartTime } from "./analyzeMatch";
+import { getMatchStartTime } from "./analyzeMatch";
 import { refreshMatch } from "./refreshMatch";
 import EditVodModal from "./EditVodModal";
 import { useAppContext } from "../AppContextProvider";

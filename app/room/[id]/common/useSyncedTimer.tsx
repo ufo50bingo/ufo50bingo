@@ -83,13 +83,10 @@ export default function useSyncedTimer({
     defaultValue: 0,
   });
 
-  const forceReveal = useCallback(
-    async () => {
-      setLastForceReveal(Date.now());
-      await revealBoard(id);
-    },
-    [setLastForceReveal],
-  );
+  const forceReveal = useCallback(async () => {
+    setLastForceReveal(Date.now());
+    await revealBoard(id);
+  }, [id, setLastForceReveal]);
 
   const { getClientMsFromServerMs } = useServerOffsetContext();
 
@@ -135,25 +132,25 @@ export default function useSyncedTimer({
         getClientMsFromServerMs(lastPauseTime) < lastForceReveal);
     return curStartTime == null
       ? {
-        type: hasStarted ? "paused" : "not_started",
-        accumulatedDuration,
-        pauseRequester: hasStarted ? pauseRequester : undefined,
-        isForceRevealed,
-      }
-      : curStartTime < Date.now()
-        ? {
-          type: "running",
-          startTime: getClientMsFromServerMs(curStartTime),
+          type: hasStarted ? "paused" : "not_started",
           accumulatedDuration,
+          pauseRequester: hasStarted ? pauseRequester : undefined,
           isForceRevealed,
         }
+      : curStartTime < Date.now()
+        ? {
+            type: "running",
+            startTime: getClientMsFromServerMs(curStartTime),
+            accumulatedDuration,
+            isForceRevealed,
+          }
         : {
-          type: "countdown",
-          endTime: getClientMsFromServerMs(curStartTime),
-          accumulatedDuration,
-          isForceRevealed,
-          wasPaused: lastPauseTime != null,
-        };
+            type: "countdown",
+            endTime: getClientMsFromServerMs(curStartTime),
+            accumulatedDuration,
+            isForceRevealed,
+            wasPaused: lastPauseTime != null,
+          };
     // including `now` to force it to re-run to change from countdown to running
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [events, getClientMsFromServerMs, lastForceReveal, now]);
@@ -176,16 +173,16 @@ export default function useSyncedTimer({
   }, [timerState]);
 
   const prevIsBeforeRevealRef = useRef<null | boolean>(null);
-  const isBeforeReveal = timerState.type === "not_started" || (timerState.type === "countdown" && !timerState.wasPaused);
+  const isBeforeReveal =
+    timerState.type === "not_started" ||
+    (timerState.type === "countdown" && !timerState.wasPaused);
   useEffect(() => {
     const prevIsBeforeReveal = prevIsBeforeRevealRef.current;
-    if (
-      !isCast && prevIsBeforeReveal && !isBeforeReveal
-    ) {
+    if (!isCast && prevIsBeforeReveal && !isBeforeReveal) {
       revealBoard(id);
     }
     prevIsBeforeRevealRef.current = isBeforeReveal;
-  }, [isBeforeReveal, isCast]);
+  }, [id, isBeforeReveal, isCast]);
 
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const seedRef = useRef<number>(seed);

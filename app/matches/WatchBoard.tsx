@@ -94,6 +94,7 @@ export default function WatchBoard({
   }, [isPlaying, maxSeekSec, speedMult]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSeekSec(maxSeekSec);
     setIsPlaying(false);
   }, [maxSeekSec]);
@@ -112,67 +113,65 @@ export default function WatchBoard({
         isBoardVisible={isBoardVisible}
         showOverlays={showOverlays}
       />
-      {isRevealed &&
-        changes != null &&
-        startTime != null && (
-          <Group gap={8} id={playbackId}>
-            <ActionIcon
-              size="sm"
-              onClick={() => {
-                if (isPlaying) {
-                  setIsPlaying(false);
-                } else {
-                  if (seekSec === maxSeekSec) {
-                    setSeekSec(0);
-                  }
-                  setIsPlaying(true);
+      {isRevealed && changes != null && startTime != null && (
+        <Group gap={8} id={playbackId}>
+          <ActionIcon
+            size="sm"
+            onClick={() => {
+              if (isPlaying) {
+                setIsPlaying(false);
+              } else {
+                if (seekSec === maxSeekSec) {
+                  setSeekSec(0);
                 }
-              }}
-            >
-              {isPlaying ? (
-                <IconPlayerPause size={12} />
-              ) : (
-                <IconPlayerPlay size={12} />
-              )}
-            </ActionIcon>
-            <Popover width={200} position="bottom" withArrow shadow="md">
-              <Popover.Target>
-                <Button size="compact-xs" w="48px">
-                  {speedMult}x
-                </Button>
-              </Popover.Target>
-              <Popover.Dropdown w="100px">
-                <Radio.Group
-                  value={speedMult.toString()}
-                  onChange={(newMult) => setSpeedMult(Number(newMult))}
-                >
-                  <Stack>
-                    {SPEED_MULT_OPTIONS.map((mult) => (
-                      <Radio
-                        key={mult}
-                        value={mult.toString()}
-                        label={`${mult}x`}
-                      />
-                    ))}
-                  </Stack>
-                </Radio.Group>
-              </Popover.Dropdown>
-            </Popover>
-            <Text size="xs" style={{ fontVariantNumeric: "tabular-nums" }}>
-              {getTime(seekSec)}/{getTime(maxSeekSec)}
-            </Text>
-            <Slider
-              min={0}
-              max={maxSeekSec}
-              label={getTime}
-              value={seekSec}
-              onChange={setSeekSec}
-              step={0.1}
-              styles={{ markLabel: { display: "none" } }}
-              flex="1"
-            />
-          </Group>
-        )}
+                setIsPlaying(true);
+              }
+            }}
+          >
+            {isPlaying ? (
+              <IconPlayerPause size={12} />
+            ) : (
+              <IconPlayerPlay size={12} />
+            )}
+          </ActionIcon>
+          <Popover width={200} position="bottom" withArrow shadow="md">
+            <Popover.Target>
+              <Button size="compact-xs" w="48px">
+                {speedMult}x
+              </Button>
+            </Popover.Target>
+            <Popover.Dropdown w="100px">
+              <Radio.Group
+                value={speedMult.toString()}
+                onChange={(newMult) => setSpeedMult(Number(newMult))}
+              >
+                <Stack>
+                  {SPEED_MULT_OPTIONS.map((mult) => (
+                    <Radio
+                      key={mult}
+                      value={mult.toString()}
+                      label={`${mult}x`}
+                    />
+                  ))}
+                </Stack>
+              </Radio.Group>
+            </Popover.Dropdown>
+          </Popover>
+          <Text size="xs" style={{ fontVariantNumeric: "tabular-nums" }}>
+            {getTime(seekSec)}/{getTime(maxSeekSec)}
+          </Text>
+          <Slider
+            min={0}
+            max={maxSeekSec}
+            label={getTime}
+            value={seekSec}
+            onChange={setSeekSec}
+            step={0.1}
+            styles={{ markLabel: { display: "none" } }}
+            flex="1"
+          />
+        </Group>
+      )}
     </>
   );
 }

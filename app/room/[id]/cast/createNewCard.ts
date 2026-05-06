@@ -8,7 +8,7 @@ export default async function createNewCard(id: string): Promise<void> {
   const cookie = await readBingosyncCookie();
   if (cookie == null) {
     throw new Error(
-      "Failed to find sessionid cookie! Please refresh the page."
+      "Failed to find sessionid cookie! Please refresh the page.",
     );
   }
 
@@ -24,10 +24,10 @@ export default async function createNewCard(id: string): Promise<void> {
       game_type: "18",
       variant_type: "18",
       custom_json: JSON.stringify(
-        ufoGenerator(STANDARD_UFO).map((goal) => ({ name: goal }))
+        ufoGenerator(STANDARD_UFO).map((goal) => ({ name: goal })),
       ),
       lockout_mode: "2",
-      seed: "",
+      seed: Math.ceil(999999 * Math.random()).toString(),
       is_spectator: true,
     }),
   });

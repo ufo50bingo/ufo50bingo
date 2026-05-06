@@ -76,7 +76,7 @@ export default function useSyncedTimer({
   const supabase = getSupabaseClient();
 
   const [lastForceReveal, setLastForceReveal] = useLocalNumber({
-    key: `last-force-reveal-${id}`,
+    key: `last-force-reveal-${id}-${seed}`,
     defaultValue: 0,
   });
 

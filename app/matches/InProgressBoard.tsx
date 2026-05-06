@@ -12,6 +12,7 @@ import {
 import { Group, Text } from "@mantine/core";
 import BingosyncColored from "./BingosyncColored";
 import { db } from "../db";
+import StandardBoardCover from "../StandardBoardCover";
 
 type Props = {
   finalBoard: TBoard;
@@ -131,23 +132,28 @@ export default function InProgressBoard({
         }
         overlays={showOverlays && overlays != null ? overlays : undefined}
         onClickSquare={null}
-        isHidden={!isRevealed || !isBoardVisible}
-        setIsHidden={async (newIsHidden) => {
-          if (!newIsHidden && isBoardVisible) {
-            await db.revealedMatches.add({ id: matchId });
-          }
-        }}
-        hiddenText={
-          isBoardVisible ? (
-            "Click to reveal match details"
-          ) : (
-            <>
-              No goals have been claimed yet! The board can be
-              <br />
-              viewed after at least one goal has been claimed
-              <br />
-              and data has been refreshed.
-            </>
+        boardCover={
+          (!isRevealed || !isBoardVisible) && (
+            <StandardBoardCover
+              onReveal={async () => {
+                if (isBoardVisible) {
+                  await db.revealedMatches.add({ id: matchId });
+                }
+              }}
+              content={
+                isBoardVisible ? (
+                  "Click to reveal match details"
+                ) : (
+                  <>
+                    No goals have been claimed yet! The board can be
+                    <br />
+                    viewed after at least one goal has been claimed
+                    <br />
+                    and data has been refreshed.
+                  </>
+                )
+              }
+            />
           )
         }
         shownDifficulties={["general", "veryhard"]}

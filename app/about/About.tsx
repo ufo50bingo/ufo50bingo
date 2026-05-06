@@ -6,6 +6,7 @@ import Board from "../Board";
 import { useState } from "react";
 import { BingosyncColor, TBoard } from "../matches/parseBingosyncData";
 import LinkWithVariant from "../links/LinkWithVariant";
+import StandardBoardCover from "../StandardBoardCover";
 
 const COLOR: BingosyncColor = "red";
 
@@ -47,8 +48,11 @@ export default function About({ initialBoard }: Props) {
               newBoard[squareIndex] = newSquare;
               setBoard(newBoard);
             }}
-            isHidden={isHidden}
-            setIsHidden={setIsHidden}
+            boardCover={
+              isHidden && (
+                <StandardBoardCover onReveal={() => setIsHidden(false)} />
+              )
+            }
             shownDifficulties={[]}
             viewerColor={COLOR}
           />

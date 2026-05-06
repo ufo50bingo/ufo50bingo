@@ -15,14 +15,9 @@ type Props = {
   overlays?: ReadonlyArray<null | ReactNode>;
   highlights?: ReadonlyArray<null | ReadonlyArray<BingosyncColor>>;
   onClickSquare: null | ((squareIndex: number) => void);
-  isHidden: boolean;
-  setIsHidden: (isHidden: boolean) => void;
-  hiddenText?: ReactNode;
   shownDifficulties: ReadonlyArray<Difficulty>;
-  onReveal?: () => unknown;
   viewerColor: BingosyncColor | null;
-  canReveal?: boolean;
-  isPaused?: boolean;
+  boardCover: ReactNode;
 };
 
 function getColorClass(color: string): string {
@@ -136,14 +131,9 @@ export default function Board({
   overlays,
   highlights,
   onClickSquare,
-  isHidden,
-  setIsHidden,
-  hiddenText,
   shownDifficulties,
-  onReveal,
   viewerColor,
-  canReveal = true,
-  isPaused = false,
+  boardCover,
 }: Props) {
   const { rightClickBehavior, customColor } = useRightClickBehaviorContext();
   const [starred, setStarred] = useState<ReadonlyArray<number>>([]);
@@ -204,22 +194,7 @@ export default function Board({
           )}
         </div>
       ))}
-      {isHidden && (
-        <div
-          className={`${classes.boardCover} ${isPaused ? classes.pauseRequestShadow : classes.boardCoverShadow} ${isPaused ? classes.boardCoverTransparent : classes.boardCoverOpaque} ${classes.unselectable}`}
-          onClick={() => {
-            if (!canReveal) {
-              return;
-            }
-            setIsHidden(false);
-            if (onReveal != null) {
-              onReveal();
-            }
-          }}
-        >
-          {hiddenText ?? <span>Click to Reveal</span>}
-        </div>
-      )}
+      {boardCover}
     </div>
   );
 }

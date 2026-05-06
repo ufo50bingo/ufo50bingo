@@ -37,6 +37,8 @@ import useLocalEnum from "@/app/localStorage/useLocalEnum";
 import { GENERAL_ORDER } from "./GeneralOrderSelector";
 import useFont from "@/app/font/useFont";
 import useSyncedTimer, { FullSyncedTimerEvent } from "../common/useSyncedTimer";
+import SyncedTimerBoardCover from "../common/SyncedTimerBoardCover";
+import SyncedTimer from "../common/SyncedTimer";
 
 export type FoundStandardGeneral = FoundGoal<
   StandardGeneral,
@@ -140,7 +142,7 @@ export default function Cast({
     setShowRecentGames,
   } = useLocalState(id, seed);
 
-  const { timer, addEvent, timerState } = useSyncedTimer({
+  const { addEvent, timerState, forceReveal } = useSyncedTimer({
     id,
     seed,
     initialEvents: initialTimerEvents,
@@ -165,14 +167,10 @@ export default function Cast({
     options: COUNT_POSITION,
   });
 
-  const [isHiddenRaw, setIsHidden] = useState(hideByDefault);
-
   const leftScore = board.filter((square) => square.color === leftColor).length;
   const rightScore = board.filter(
     (square) => square.color === rightColor,
   ).length;
-
-  const isHidden = isHiddenRaw && leftScore === 0 && rightScore === 0;
 
   const tiebreakWinner = useMemo<BingosyncColor | null>(() => {
     try {
@@ -321,6 +319,13 @@ export default function Cast({
   const gameSelectorHeight = numRows * 44;
 
   const isDouble = generalGoals.length > 0 && countPosition === "side_by_side";
+
+  const areGeneralIconsHidden =
+    hideByDefault &&
+    ((timerState.type === "not_started" && !timerState.isForceRevealed) ||
+      (timerState.type === "countdown" &&
+        !timerState.wasPaused &&
+        !timerState.isForceRevealed));
   return (
     <>
       <Group align="start">
@@ -348,7 +353,7 @@ export default function Cast({
               }
               generalState={generals}
               iconType={iconType}
-              isHidden={isHidden}
+              isHidden={areGeneralIconsHidden}
               countPosition={countPosition}
               font={font}
             />
@@ -360,11 +365,15 @@ export default function Cast({
             board={board}
             highlights={highlights}
             onClickSquare={setEditingIndex}
-            isHidden={isHidden}
-            setIsHidden={setIsHidden}
+            boardCover={
+              <SyncedTimerBoardCover
+                isCast={true}
+                timerState={timerState}
+                isBoardVisibleByDefault={!hideByDefault}
+                forceReveal={forceReveal}
+              />
+            }
             shownDifficulties={shownDifficulties}
-            hiddenText="Click or start Countdown to reveal"
-            isPaused={timerState.type === "paused"}
             viewerColor={null}
           />
           <SideColumn isDouble={isDouble}>
@@ -385,7 +394,7 @@ export default function Cast({
               }
               generalState={generals}
               iconType={iconType}
-              isHidden={isHidden}
+              isHidden={areGeneralIconsHidden}
               countPosition={countPosition}
               font={font}
             />
@@ -407,7 +416,7 @@ export default function Cast({
               fontSize: "23px",
             }}
           >
-            {timer}
+            <SyncedTimer timerState={timerState} />
           </Text>
           <Feed height={`${475 - 44}px`} rawFeed={rawFeed} />
         </Stack>

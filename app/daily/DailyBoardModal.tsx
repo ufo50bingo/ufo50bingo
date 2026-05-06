@@ -55,8 +55,7 @@ export default function DailyBoardModal({
             board={board}
             overlays={overlays}
             onClickSquare={() => {}}
-            isHidden={false}
-            setIsHidden={() => {}}
+            boardCover={null}
             shownDifficulties={["general"]}
             viewerColor={color}
           />

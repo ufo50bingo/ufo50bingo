@@ -46,6 +46,7 @@ import getRTContent from "./getRTContent";
 import RTView from "./RTView";
 import LinkWithVariant from "../links/LinkWithVariant";
 import useSession from "../session/useSession";
+import StandardBoardCover from "../StandardBoardCover";
 
 const EditDaily = dynamic(() => import("./EditDaily"), { ssr: false });
 
@@ -242,27 +243,36 @@ export default function Daily({
                       });
                     }
                   }}
-                  hiddenText={
-                    <>
-                      <div>Click to reveal today's board.</div>
-                      <div>Your timer will start as soon as you reveal.</div>
-                      {attempt > 0 ? (
-                        <div>Start playing as soon as you reveal!</div>
-                      ) : (
-                        <div>Start playing when the timer hits 0:00.0!</div>
-                      )}
-                    </>
+                  boardCover={
+                    isHidden && (
+                      <StandardBoardCover
+                        onReveal={async () => {
+                          await db.dailyFeed.add({
+                            type: "reveal",
+                            time: Date.now(),
+                            date: isoDate,
+                            attempt,
+                            squareIndex: null,
+                          });
+                        }}
+                        content={
+                          <>
+                            <div>Click to reveal today's board.</div>
+                            <div>
+                              Your timer will start as soon as you reveal.
+                            </div>
+                            {attempt > 0 ? (
+                              <div>Start playing as soon as you reveal!</div>
+                            ) : (
+                              <div>
+                                Start playing when the timer hits 0:00.0!
+                              </div>
+                            )}
+                          </>
+                        }
+                      />
+                    )
                   }
-                  isHidden={isHidden}
-                  setIsHidden={async () => {
-                    await db.dailyFeed.add({
-                      type: "reveal",
-                      time: Date.now(),
-                      date: isoDate,
-                      attempt,
-                      squareIndex: null,
-                    });
-                  }}
                   shownDifficulties={["general"]}
                   viewerColor={color}
                 />

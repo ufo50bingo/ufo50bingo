@@ -27,6 +27,8 @@ import { FoundStandardGeneral, GeneralItem } from "../cast/Cast";
 import useLocalBool from "@/app/localStorage/useLocalBool";
 import useFont from "@/app/font/useFont";
 import useSyncedTimer, { FullSyncedTimerEvent } from "../common/useSyncedTimer";
+import SyncedTimerBoardCover from "../common/SyncedTimerBoardCover";
+import SyncedTimer from "../common/SyncedTimer";
 
 export type Props = {
   id: string;
@@ -74,13 +76,12 @@ export default function Play({
     playAudio,
   });
 
-  const { timer, boardCover, isRevealed, addEvent, timerState } =
-    useSyncedTimer({
-      id,
-      seed,
-      initialEvents: initialTimerEvents,
-      playAudio,
-    });
+  const { addEvent, timerState, forceReveal } = useSyncedTimer({
+    id,
+    seed,
+    initialEvents: initialTimerEvents,
+    playAudio,
+  });
 
   const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(
     () =>
@@ -161,13 +162,16 @@ export default function Play({
                 await changeColor(id, squareIndex, selectedColor, isClearing);
               } catch {}
             }}
-            isHidden={!isRevealed}
-            setIsHidden={empty}
             shownDifficulties={shownDifficulties}
-            hiddenText={boardCover}
             viewerColor={selectedColor}
-            canReveal={false}
-            isPaused={timerState.type === "paused"}
+            boardCover={
+              <SyncedTimerBoardCover
+                isCast={false}
+                timerState={timerState}
+                isBoardVisibleByDefault={false}
+                forceReveal={forceReveal}
+              />
+            }
           />
           <Group justify="space-between">
             <div style={{ display: "flex" }}>
@@ -198,7 +202,9 @@ export default function Play({
                 fontVariantNumeric: "tabular-nums",
               }}
             >
-              <Text size="44px">{timer}</Text>
+              <Text size="44px">
+                <SyncedTimer timerState={timerState} />
+              </Text>
             </div>
             <div>
               Seed: <strong>{seed}</strong>
@@ -206,7 +212,13 @@ export default function Play({
           </Group>
           {showGeneralTracker && (
             <SimpleGeneralTracker
-              isHidden={!isRevealed && timerState.type !== "paused"}
+              isHidden={
+                (timerState.type === "not_started" &&
+                  !timerState.isForceRevealed) ||
+                (timerState.type === "countdown" &&
+                  !timerState.wasPaused &&
+                  !timerState.isForceRevealed)
+              }
               id={id}
               seed={seed}
               generalGoals={generalGoals}

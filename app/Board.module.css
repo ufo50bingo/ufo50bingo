@@ -29,7 +29,7 @@
     background: rgb(16, 24, 33);
 }
 
-.boardCoverTransparent {
+.boardCoverTranslucent {
     background: rgba(16, 24, 33, 0.9);
 }
 
@@ -59,7 +59,7 @@
     -webkit-box-shadow: inset 0px 0px 100px rgba(0, 0, 0, 0.6);
 }
 
-.boardCoverTransparent:hover {
+.boardCoverTranslucent:hover {
     background: rgba(5, 19, 46, 0.9);
 }
 

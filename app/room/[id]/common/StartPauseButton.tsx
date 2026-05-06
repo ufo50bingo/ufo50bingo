@@ -78,7 +78,9 @@ export default function StartPauseButton({ timerState, isCast, addEvent, playerN
             );
         case "countdown":
             // TODO: Maybe add support for canceling countdown?
-            return <Button disabled={true}>Pause</Button>;
+            return <Button disabled={true} leftSection={
+                <IconPlayerPause />
+            }>Pause</Button>;
         case "running":
             return (
                 <Popover key="running" width={320} position={position} withArrow shadow="md">
@@ -106,6 +108,8 @@ export default function StartPauseButton({ timerState, isCast, addEvent, playerN
             );
         default:
             timerType satisfies never;
-            return <Button disabled={true}>Start</Button>;
+            return <Button disabled={true} leftSection={
+                <IconPlayerPlay />
+            }>Start</Button>;
     }
 }

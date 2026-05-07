@@ -1,5 +1,3 @@
-import brotliPromise from "brotli-wasm"; // Import the default export
-
 function base64ToBytes(base64: string): Uint8Array {
   const binString = atob(base64);
   return Uint8Array.from(binString, (v, _) => v.codePointAt(0)!);
@@ -21,12 +19,14 @@ function fromUrlSafe(urlSafe: string): string {
 }
 
 async function compress(str: string): Promise<Uint8Array> {
-  const brotli = await brotliPromise;
+  const brotliPromise = await import("brotli-wasm");
+  const brotli = await brotliPromise.default;
   return brotli.compress(new TextEncoder().encode(str));
 }
 
 async function decompress(encoded: Uint8Array): Promise<string> {
-  const brotli = await brotliPromise;
+  const brotliPromise = await import("brotli-wasm");
+  const brotli = await brotliPromise.default;
   return new TextDecoder().decode(brotli.decompress(encoded));
 }
 

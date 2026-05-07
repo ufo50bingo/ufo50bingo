@@ -3,6 +3,7 @@ import findAllTokens from "./findAllTokens";
 import { Return } from "./validateStr";
 import findAllGoalsWithSortedTokens from "./findAllGoalsWithSortedTokens";
 import splitAtTokens from "./splitAtTokens";
+import findAllGoalsWithShort from "./findAllGoalsWithShort";
 
 export default function validateUfo(pasta: UFOPasta): Return {
   try {
@@ -130,6 +131,35 @@ export default function validateUfo(pasta: UFOPasta): Return {
             `⚠ Goal ${goal.name} has token values missing in provided sort order: ${missingPretty}`,
           );
         }
+      }
+    }
+    // goals with short text
+    const goalsWithShort = findAllGoalsWithShort(pasta.goals);
+    for (const goal of goalsWithShort) {
+      const plainTokens = splitAtTokens(goal.name).filter(
+        (part) => part.type === "token",
+      );
+      const shortTokens = splitAtTokens(goal.name).filter(
+        (part) => part.type === "token",
+      );
+      if (plainTokens.length !== shortTokens.length) {
+        errors.push(
+          `✖ Goal "${goal.name}" and short "${goal.short}" must have exactly the same tokens in the same order`,
+        );
+        continue;
+      }
+      let hasMismatch = false;
+      for (let idx = 0; idx < plainTokens.length; idx++) {
+        if (plainTokens[idx].token !== shortTokens[idx].token) {
+          hasMismatch = true;
+          continue;
+        }
+      }
+      if (hasMismatch) {
+        errors.push(
+          `✖ Goal "${goal.name}" and short "${goal.short}" must have exactly the same tokens in the same order`,
+        );
+        continue;
       }
     }
     return errors.length > 0

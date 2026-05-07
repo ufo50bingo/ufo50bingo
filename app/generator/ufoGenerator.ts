@@ -7,6 +7,7 @@ import splitAtTokens from "./splitAtTokens";
 
 export type UFOGoalConfig<T extends string = string> = {
   name: T;
+  short?: string;
   restriction?: {
     count: number;
     fallback: string;
@@ -89,7 +90,10 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
   return bestBoard!;
 }
 
-function generateCandidate(pasta: UFOPasta, bestFallbacks: number): null | [ReadonlyArray<string>, number] {
+function generateCandidate(
+  pasta: UFOPasta,
+  bestFallbacks: number,
+): null | [ReadonlyArray<string>, number] {
   // fill squares in order of how many bingo lines they're on
   // this helps prevent having two goals from the same game on one line
   const centerIndex = 12;

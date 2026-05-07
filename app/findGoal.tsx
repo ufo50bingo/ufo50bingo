@@ -13,13 +13,18 @@ const CACHE: Array<
 export type FoundGoal<G extends string, C extends string, S extends string> = {
   goal: G;
   resolvedGoal: string;
+  short: null | Short;
   sortTokens?: string | ReadonlyArray<string>;
   category: C;
   subcategory: S;
   tokens: ReadonlyArray<string>;
   goalParts: ReadonlyArray<Plain | ResolvedToken>;
 };
-type Tags = { category: string; subcategory: string };
+type Short = {
+  resolved: string;
+  parts: ReadonlyArray<Plain | ResolvedToken>;
+};
+type Tags = { short: string | null; category: string; subcategory: string };
 type PlainText = { [goal: string]: Tags };
 interface WithTokenNoTags {
   regex: RegExp;
@@ -55,8 +60,16 @@ export default function findGoal(
   const plainResult = processed.plain[goal];
   if (plainResult != null) {
     const part: Plain = { type: "plain", text: goal };
+    const short: null | Short =
+      plainResult.short == null
+        ? null
+        : {
+            resolved: plainResult.short,
+            parts: [{ type: "plain", text: plainResult.short }],
+          };
     const res = {
       goal,
+      short,
       resolvedGoal: goal,
       category: plainResult.category,
       subcategory: plainResult.subcategory,
@@ -69,14 +82,27 @@ export default function findGoal(
   for (const option of processed.withTokens) {
     const goalParts = getGoalPartsFromToken(goal, option, pasta.tokens);
     if (goalParts != null) {
+      const resolvedTokens = goalParts.filter((p) => p.type === "resolved");
+      let shortParts: null | Array<Plain | ResolvedToken> = null;
+      if (option.tags.short != null) {
+        let tokenIdx = 0;
+        shortParts = splitAtTokens(option.tags.short).map((part) =>
+          part.type === "plain" ? part : resolvedTokens[tokenIdx++],
+        );
+      }
       const res = {
         goal: option.goal,
+        short:
+          shortParts == null
+            ? null
+            : {
+                resolved: shortParts.map((p) => p.text).join(""),
+                parts: shortParts,
+              },
         resolvedGoal: goal,
         category: option.tags.category,
         subcategory: option.tags.subcategory,
-        tokens: goalParts
-          .filter((p) => p.type === "resolved")
-          .map((p) => p.text),
+        tokens: resolvedTokens.map((p) => p.text),
         goalParts,
         sortTokens: option.sortTokens,
       };
@@ -141,7 +167,14 @@ function preprocess(pasta: UFOPasta): ProcessedPasta {
       pasta.goals[category][subcategory].forEach((goal) => {
         const goalAndFallback = new Set(getGoalAndFallback(goal));
         for (const goalName of goalAndFallback) {
-          const tags = { category, subcategory };
+          const tags = {
+            category,
+            subcategory,
+            short:
+              typeof goal !== "string" && goal.short != null
+                ? goal.short
+                : null,
+          };
           if (goalName.includes("{{")) {
             const output = preprocessGoalWithToken(goal, pasta);
             withTokens.push({ ...output, tags });

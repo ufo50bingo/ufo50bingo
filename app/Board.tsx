@@ -9,6 +9,7 @@ import { STANDARD_UFO } from "./pastas/standardUfo";
 import { SPICY_UFO } from "./pastas/spicyUfo";
 import { useRightClickBehaviorContext } from "./settings/RightClickBehaviorContext";
 import { COLORS } from "./room/[id]/common/ColorSelector";
+import { useShouldShortenContext } from "./settings/ShouldShortenContext";
 
 type Props = {
   board: TBoard;
@@ -18,7 +19,7 @@ type Props = {
   shownDifficulties: ReadonlyArray<Difficulty>;
   viewerColor: BingosyncColor | null;
   boardCover: ReactNode;
-  useShort?: boolean;
+  isCast?: boolean;
 };
 
 function getColorClass(color: string): string {
@@ -131,10 +132,13 @@ export default function Board({
   shownDifficulties,
   viewerColor,
   boardCover,
-  useShort = false,
+  isCast = false,
 }: Props) {
   const { rightClickBehavior, customColor } = useRightClickBehaviorContext();
+  const { shouldShortenPlay, shouldShortenCast } = useShouldShortenContext();
   const [starred, setStarred] = useState<ReadonlyArray<number>>([]);
+
+  const shouldShorten = isCast ? shouldShortenCast : shouldShortenPlay;
 
   const rightClickHighlights = useMemo(() => {
     if (
@@ -160,7 +164,7 @@ export default function Board({
         const foundGoal =
           findGoal(square.name, STANDARD_UFO) ??
           findGoal(square.name, SPICY_UFO);
-        const displayGoal = useShort
+        const displayGoal = shouldShorten
           ? (foundGoal?.short?.resolved ?? square.name)
           : square.name;
         return (

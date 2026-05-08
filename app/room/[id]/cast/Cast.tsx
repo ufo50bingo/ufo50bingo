@@ -377,6 +377,7 @@ export default function Cast({
             }
             shownDifficulties={shownDifficulties}
             viewerColor={null}
+            isCast={true}
           />
           <SideColumn isDouble={isDouble}>
             <SideCell>

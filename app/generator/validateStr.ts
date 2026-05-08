@@ -28,6 +28,7 @@ const UfoPasta = zod.strictObject({
             sort_tokens: zod
               .union([zod.string(), zod.array(zod.string())])
               .optional(),
+            short: zod.string().optional(),
           }),
         ]),
       ),

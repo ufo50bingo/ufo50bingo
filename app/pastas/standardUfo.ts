@@ -2244,7 +2244,7 @@ export const STANDARD_UFO = {
     "warp_easy": [
       "Crust",
       "Yard",
-      "JR",
+      "Jr",
       "Meal",
       "Bomb",
       "Piston"

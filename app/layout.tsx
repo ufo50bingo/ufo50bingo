@@ -17,6 +17,7 @@ import {
   PracticeVariantProvider,
 } from "./PracticeVariantContext";
 import { RightClickBehaviorContextProvider } from "./settings/RightClickBehaviorContext";
+import { ShouldShortenContextProvider } from "./settings/ShouldShortenContext";
 
 export const metadata: Metadata = {
   title: "UFO 50 Bingo",
@@ -39,9 +40,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <MantineProvider defaultColorScheme="dark" theme={theme}>
           <PracticeVariantProvider>
             <RightClickBehaviorContextProvider>
-              <AppContextProvider>
-                <Shell>{children}</Shell>
-              </AppContextProvider>
+              <ShouldShortenContextProvider>
+                <AppContextProvider>
+                  <Shell>{children}</Shell>
+                </AppContextProvider>
+              </ShouldShortenContextProvider>
             </RightClickBehaviorContextProvider>
             <Suspense>
               <PracticeVariantInit />

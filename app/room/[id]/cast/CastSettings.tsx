@@ -2,6 +2,7 @@ import { ORDERED_DIFFICULTY, DIFFICULTY_NAMES, Difficulty } from "@/app/goals";
 import {
   Accordion,
   Affix,
+  Alert,
   Button,
   Checkbox,
   Drawer,
@@ -11,7 +12,7 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
-import { IconSettings } from "@tabler/icons-react";
+import { IconAlertSquareRounded, IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
 import ColorSelector from "../common/ColorSelector";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
@@ -32,6 +33,7 @@ import FontSelector from "@/app/font/FontSelector";
 import classes from "./CastSettings.module.css";
 import { FullSyncedTimerEvent, SyncedTimerState } from "../common/useSyncedTimer";
 import TimerSection from "../common/TimerSection";
+import { useShouldShortenContext } from "@/app/settings/ShouldShortenContext";
 
 type Props = {
   id: string;
@@ -111,7 +113,7 @@ export default function CastSettings({
   timerState,
 }: Props) {
   const [isShown, setIsShown] = useState(leftColor === rightColor);
-
+  const { shouldShortenCast, setShouldShortenCast } = useShouldShortenContext();
   return (
     <>
       <Affix position={{ top: 6, right: 6 }}>
@@ -180,6 +182,19 @@ export default function CastSettings({
                 <Accordion.Panel>
                   <Stack>
                     <Stack>
+                      <Checkbox
+                        checked={shouldShortenCast}
+                        onChange={(event) =>
+                          setShouldShortenCast(
+                            event.target.checked,
+                          )
+                        }
+                        label="Show shortened goal text when available"
+                      />
+                      {shouldShortenCast && <Alert color="yellow" icon={<IconAlertSquareRounded />}>
+                        Shortened goals may leave out important information.{' '}
+                        You should only use shortened goal text if you are comfortable with the entire goal set.
+                      </Alert>}
                       <Text size="sm">Display difficulty tags for:</Text>
                       {ORDERED_DIFFICULTY.map((difficulty) => (
                         <Checkbox

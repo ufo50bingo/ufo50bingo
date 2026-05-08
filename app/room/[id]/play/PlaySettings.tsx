@@ -1,6 +1,6 @@
 import { Difficulty } from "@/app/goals";
-import { Accordion, Button, Checkbox, Drawer, Stack } from "@mantine/core";
-import { IconSettings } from "@tabler/icons-react";
+import { Accordion, Alert, Button, Checkbox, Drawer, Stack } from "@mantine/core";
+import { IconAlertSquareRounded, IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import ColorSelector from "../common/ColorSelector";
@@ -16,6 +16,7 @@ import SelectRightClickBehavior from "@/app/settings/SelectRightClickBehavior";
 import { FullSyncedTimerEvent, SyncedTimerState } from "../common/useSyncedTimer";
 import TimerSection from "../common/TimerSection";
 import RevealSection from "./RevealSection";
+import { useShouldShortenContext } from "@/app/settings/ShouldShortenContext";
 
 type Props = {
   id: string;
@@ -55,6 +56,7 @@ export default function PlaySettings({
   forceReveal,
 }: Props) {
   const [isShown, setIsShown] = useState(color == null);
+  const { shouldShortenPlay, setShouldShortenPlay } = useShouldShortenContext();
   return (
     <>
       <Button
@@ -107,6 +109,19 @@ export default function PlaySettings({
                 <Accordion.Control>Display Settings</Accordion.Control>
                 <Accordion.Panel>
                   <Stack>
+                    <Checkbox
+                      checked={shouldShortenPlay}
+                      onChange={(event) =>
+                        setShouldShortenPlay(
+                          event.target.checked,
+                        )
+                      }
+                      label="Show shortened goal text when possible"
+                    />
+                    {shouldShortenPlay && <Alert color="yellow" icon={<IconAlertSquareRounded />}>
+                      Shortened goals may leave out important information.{' '}
+                      You should only use shortened goal text if you are comfortable with the entire goal set.
+                    </Alert>}
                     <Checkbox
                       checked={shownDifficulties.includes("general")}
                       onChange={(event) =>

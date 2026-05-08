@@ -1,9 +1,11 @@
 "use client";
 
-import { IconMoon, IconSun } from "@tabler/icons-react";
+import { IconAlertSquareRounded, IconMoon, IconSun } from "@tabler/icons-react";
 import {
+  Alert,
   Button,
   Center,
+  Checkbox,
   Container,
   Group,
   MantineColorScheme,
@@ -24,6 +26,7 @@ import enableAdmin from "../session/enableAdmin";
 import useSession from "../session/useSession";
 import { Metadata } from "next";
 import SelectRightClickBehavior from "./SelectRightClickBehavior";
+import { useShouldShortenContext } from "./ShouldShortenContext";
 
 export const metadata: Metadata = {
   title: "UFO 50 Bingo Settings",
@@ -37,6 +40,7 @@ export default function Settings() {
   const [isSaving, setIsSaving] = useState(false);
   const [password, setPassword] = useState("");
   const isAdmin = useSession()?.admin;
+  const { shouldShortenPlay, setShouldShortenPlay } = useShouldShortenContext();
   return (
     <Container my="md">
       <Table variant="vertical" withTableBorder>
@@ -110,6 +114,26 @@ export default function Settings() {
                   },
                 ]}
               />
+            </Table.Td>
+          </Table.Tr>
+          <Table.Tr>
+            <Table.Th>Shorten goal text when possible</Table.Th>
+            <Table.Td>
+              <Stack>
+                <Checkbox
+                  checked={shouldShortenPlay}
+                  onChange={(event) =>
+                    setShouldShortenPlay(
+                      event.target.checked,
+                    )
+                  }
+                  label="Show shortened goal text when possible"
+                />
+                {shouldShortenPlay && <Alert color="yellow" icon={<IconAlertSquareRounded />}>
+                  Shortened goals may leave out important information.{' '}
+                  You should only use shortened goal text if you are comfortable with the entire goal set.
+                </Alert>}
+              </Stack>
             </Table.Td>
           </Table.Tr>
           <Table.Tr>

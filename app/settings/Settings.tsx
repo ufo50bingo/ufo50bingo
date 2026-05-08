@@ -130,7 +130,7 @@ export default function Settings() {
                   label="Show shortened goal text when possible"
                 />
                 {shouldShortenPlay && <Alert color="yellow" icon={<IconAlertSquareRounded />}>
-                  Shortened goals may leave out important information.{' '}
+                  Shortened goals may leave out important information.<br />
                   You should only use shortened goal text if you are comfortable with the entire goal set.
                 </Alert>}
               </Stack>

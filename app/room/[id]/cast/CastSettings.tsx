@@ -192,8 +192,8 @@ export default function CastSettings({
                         label="Show shortened goal text when available"
                       />
                       {shouldShortenCast && <Alert color="yellow" icon={<IconAlertSquareRounded />}>
-                        Shortened goals may leave out important information.{' '}
-                        You should only use shortened goal text if you are comfortable with the entire goal set.
+                        Shortened goals may leave out important information.<br />
+                        You should only use shortened goal text if you <strong>and any viewers of your stream</strong> are comfortable with the entire goal set.<br />
                       </Alert>}
                       <Text size="sm">Display difficulty tags for:</Text>
                       {ORDERED_DIFFICULTY.map((difficulty) => (

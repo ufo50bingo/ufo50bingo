@@ -4,7 +4,7 @@ import { CSSProperties, ReactNode, useMemo, useState } from "react";
 import { BingosyncColor, TBoard } from "./matches/parseBingosyncData";
 import { Difficulty } from "./goals";
 import getColorHex from "./room/[id]/cast/getColorHex";
-import findGoal from "./findGoal";
+import findGoal, { FoundGoal } from "./findGoal";
 import { STANDARD_UFO } from "./pastas/standardUfo";
 import { SPICY_UFO } from "./pastas/spicyUfo";
 import { useRightClickBehaviorContext } from "./settings/RightClickBehaviorContext";
@@ -18,6 +18,7 @@ type Props = {
   shownDifficulties: ReadonlyArray<Difficulty>;
   viewerColor: BingosyncColor | null;
   boardCover: ReactNode;
+  useShort?: boolean;
 };
 
 function getColorClass(color: string): string {
@@ -50,14 +51,10 @@ function getColorClass(color: string): string {
 }
 
 function getDifficulty(
-  name: string,
+  foundGoal: FoundGoal<string, string, string>,
   shownDifficulties: ReadonlyArray<Difficulty>,
 ): null | ReactNode {
-  const result = findGoal(name, STANDARD_UFO) ?? findGoal(name, SPICY_UFO);
-  if (result == null) {
-    return null;
-  }
-  const difficulty = result.category;
+  const difficulty = foundGoal.category;
   if (!shownDifficulties.includes(difficulty as Difficulty)) {
     return null;
   }
@@ -134,6 +131,7 @@ export default function Board({
   shownDifficulties,
   viewerColor,
   boardCover,
+  useShort = false,
 }: Props) {
   const { rightClickBehavior, customColor } = useRightClickBehaviorContext();
   const [starred, setStarred] = useState<ReadonlyArray<number>>([]);
@@ -158,42 +156,51 @@ export default function Board({
   const resolvedHighlights = highlights ?? rightClickHighlights;
   return (
     <div className={classes.boardContainer}>
-      {board.map((square, squareIndex) => (
-        <div
-          key={squareIndex}
-          className={`${classes.unselectable} ${classes.square} ${getColorClass(
-            board[squareIndex].color,
-          )}`}
-          onClick={() => onClickSquare != null && onClickSquare(squareIndex)}
-          onContextMenu={(event) => {
-            event.preventDefault();
-            if (starred.includes(squareIndex)) {
-              setStarred(starred.filter((idx) => idx !== squareIndex));
-            } else {
-              setStarred([...starred, squareIndex]);
+      {board.map((square, squareIndex) => {
+        const foundGoal =
+          findGoal(square.name, STANDARD_UFO) ??
+          findGoal(square.name, SPICY_UFO);
+        const displayGoal = useShort
+          ? (foundGoal?.short?.resolved ?? square.name)
+          : square.name;
+        return (
+          <div
+            key={squareIndex}
+            className={`${classes.unselectable} ${classes.square} ${getColorClass(
+              board[squareIndex].color,
+            )}`}
+            onClick={() => onClickSquare != null && onClickSquare(squareIndex)}
+            onContextMenu={(event) => {
+              event.preventDefault();
+              if (starred.includes(squareIndex)) {
+                setStarred(starred.filter((idx) => idx !== squareIndex));
+              } else {
+                setStarred([...starred, squareIndex]);
+              }
+            }}
+            style={
+              resolvedHighlights == null || board[squareIndex].color !== "blank"
+                ? undefined
+                : getBorderStyles(resolvedHighlights[squareIndex])
             }
-          }}
-          style={
-            resolvedHighlights == null || board[squareIndex].color !== "blank"
-              ? undefined
-              : getBorderStyles(resolvedHighlights[squareIndex])
-          }
-        >
-          {rightClickHighlights == null && starred.includes(squareIndex) && (
-            <div className={classes.starred} />
-          )}
-          {shownDifficulties.length > 0 &&
-            getDifficulty(square.name, shownDifficulties)}
-          <SquareText
-            key={square.name}
-            text={square.name}
-            hasOverlays={overlays != null}
-          />
-          {overlays != null && overlays[squareIndex] != null && (
-            <div className={classes.overlay}>{overlays[squareIndex]}</div>
-          )}
-        </div>
-      ))}
+          >
+            {rightClickHighlights == null && starred.includes(squareIndex) && (
+              <div className={classes.starred} />
+            )}
+            {shownDifficulties.length > 0 &&
+              foundGoal != null &&
+              getDifficulty(foundGoal, shownDifficulties)}
+            <SquareText
+              key={displayGoal}
+              text={displayGoal}
+              hasOverlays={overlays != null}
+            />
+            {overlays != null && overlays[squareIndex] != null && (
+              <div className={classes.overlay}>{overlays[squareIndex]}</div>
+            )}
+          </div>
+        );
+      })}
       {boardCover}
     </div>
   );

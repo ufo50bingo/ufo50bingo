@@ -31,9 +31,13 @@ import { Font } from "@/app/font/useFont";
 import FontSelector from "@/app/font/FontSelector";
 
 import classes from "./CastSettings.module.css";
-import { FullSyncedTimerEvent, SyncedTimerState } from "../common/useSyncedTimer";
+import {
+  FullSyncedTimerEvent,
+  SyncedTimerState,
+} from "../common/useSyncedTimer";
 import TimerSection from "../common/TimerSection";
 import { useShouldShortenContext } from "@/app/settings/ShouldShortenContext";
+import AutoGameSection from "./AutoGameSection";
 
 type Props = {
   id: string;
@@ -158,17 +162,17 @@ export default function CastSettings({
                   />
                   {((leftColor === "pink" && rightColor === "blue") ||
                     (leftColor === "blue" && rightColor === "pink")) && (
-                      <Group mt={8} gap={4}>
-                        <img className={classes.emoji} src="/transflag.svg" />
-                        <img className={classes.emoji} src="/transflag.svg" />
-                        <img className={classes.emoji} src="/transflag.svg" />
-                        <img className={classes.emoji} src="/transflag.svg" />
-                        <img className={classes.emoji} src="/transflag.svg" />
-                        <img className={classes.emoji} src="/transflag.svg" />
-                        <img className={classes.emoji} src="/transflag.svg" />
-                        <img className={classes.emoji} src="/transflag.svg" />
-                      </Group>
-                    )}
+                    <Group mt={8} gap={4}>
+                      <img className={classes.emoji} src="/transflag.svg" />
+                      <img className={classes.emoji} src="/transflag.svg" />
+                      <img className={classes.emoji} src="/transflag.svg" />
+                      <img className={classes.emoji} src="/transflag.svg" />
+                      <img className={classes.emoji} src="/transflag.svg" />
+                      <img className={classes.emoji} src="/transflag.svg" />
+                      <img className={classes.emoji} src="/transflag.svg" />
+                      <img className={classes.emoji} src="/transflag.svg" />
+                    </Group>
+                  )}
                 </Accordion.Panel>
               </Accordion.Item>
               <TimerSection
@@ -185,16 +189,20 @@ export default function CastSettings({
                       <Checkbox
                         checked={shouldShortenCast}
                         onChange={(event) =>
-                          setShouldShortenCast(
-                            event.target.checked,
-                          )
+                          setShouldShortenCast(event.target.checked)
                         }
                         label="Show shortened goal text when available"
                       />
-                      {shouldShortenCast && <Alert color="yellow" icon={<IconAlertSquareRounded />}>
-                        Shortened goals may leave out important information.<br />
-                        You should only use shortened goal text if you <strong>and any viewers of your stream</strong> are comfortable with the entire goal set.<br />
-                      </Alert>}
+                      {shouldShortenCast && (
+                        <Alert color="yellow" icon={<IconAlertSquareRounded />}>
+                          Shortened goals may leave out important information.
+                          <br />
+                          You should only use shortened goal text if you{" "}
+                          <strong>and any viewers of your stream</strong> are
+                          comfortable with the entire goal set.
+                          <br />
+                        </Alert>
+                      )}
                       <Text size="sm">Display difficulty tags for:</Text>
                       {ORDERED_DIFFICULTY.map((difficulty) => (
                         <Checkbox
@@ -205,8 +213,8 @@ export default function CastSettings({
                               event.currentTarget.checked
                                 ? [...shownDifficulties, difficulty]
                                 : shownDifficulties.filter(
-                                  (d) => d !== difficulty,
-                                ),
+                                    (d) => d !== difficulty,
+                                  ),
                             )
                           }
                           label={DIFFICULTY_NAMES[difficulty]}
@@ -311,6 +319,7 @@ export default function CastSettings({
                 soundChoices={soundChoices}
                 setSoundChoices={setSoundChoices}
               />
+              <AutoGameSection />
               <FileSyncSection
                 leftScore={leftScore}
                 rightScore={rightScore}

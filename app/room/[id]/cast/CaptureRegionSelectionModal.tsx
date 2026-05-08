@@ -7,6 +7,8 @@ type Props = {
 };
 
 export default function CaptureRegionSelectionModal({ snapshotUrl }: Props) {
+  // TODO: Add button for choosing more capture regions
+  // maybe sync with number of players?
   const [cropRect, setCropRect] = useState({
     x: 100,
     y: 100,
@@ -15,8 +17,7 @@ export default function CaptureRegionSelectionModal({ snapshotUrl }: Props) {
   });
   return (
     <Modal
-      fullScreen={false}
-      centered={true}
+      fullScreen={true}
       onClose={() => {}}
       opened={true}
       size="xl"

@@ -139,7 +139,7 @@ export default function validateUfo(pasta: UFOPasta): Return {
       const plainTokens = splitAtTokens(goal.name).filter(
         (part) => part.type === "token",
       );
-      const shortTokens = splitAtTokens(goal.name).filter(
+      const shortTokens = splitAtTokens(goal.short!).filter(
         (part) => part.type === "token",
       );
       if (plainTokens.length !== shortTokens.length) {
@@ -152,7 +152,7 @@ export default function validateUfo(pasta: UFOPasta): Return {
       for (let idx = 0; idx < plainTokens.length; idx++) {
         if (plainTokens[idx].token !== shortTokens[idx].token) {
           hasMismatch = true;
-          continue;
+          break;
         }
       }
       if (hasMismatch) {

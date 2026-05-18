@@ -30,7 +30,7 @@ const nextConfig: NextConfig = {
       {
         source: "/underground",
         destination:
-          "https://docs.google.com/spreadsheets/d/1OocDHEbrJC3BqO8qrPFCYxyy2nzqAaTT6Hmix076Ea0/edit?gid=467172056#gid=467172056",
+          "https://docs.google.com/spreadsheets/d/170o3g2g9144Bel6StX64BOyZET2mXZyAnYFpv6jSb9E/edit?gid=521253915#gid=521253915",
         permanent: true,
       },
       {

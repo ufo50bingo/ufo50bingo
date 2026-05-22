@@ -17,7 +17,7 @@ import LinkWithVariant from "./links/LinkWithVariant";
 
 export default function CreateBoard() {
   const [matchType, setMatchType] = useState<"league" | "non-league" | null>(
-    LEAGUE_SEASON == null ? "non-league" : null
+    LEAGUE_SEASON == null ? "non-league" : null,
   );
 
   return (
@@ -30,7 +30,9 @@ export default function CreateBoard() {
               <Text>
                 Use this page to create a UFO 50 Bingo Match! If you're new to
                 Bingo, check out the{" "}
-                <LinkWithVariant href="/about">How to Play</LinkWithVariant>{" "}
+                <LinkWithVariant prefetch={false} href="/about">
+                  How to Play
+                </LinkWithVariant>{" "}
                 page first!
               </Text>
               <Text>

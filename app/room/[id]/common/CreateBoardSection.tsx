@@ -61,7 +61,10 @@ export default function CreateBoardSection({ id, isMobile }: Props) {
               reversible. All data for the current board will be inaccessible on
               ufo50.bingo. Please only use this to correct a mistake! If you've
               already completed a game and want to start a new one, go to{" "}
-              <Link href="/">Create Board</Link> and create a new board instead!
+              <Link prefetch={false} href="/">
+                Create Board
+              </Link>{" "}
+              and create a new board instead!
               <br />
               <br />
               Are you sure you want to continue?

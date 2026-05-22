@@ -115,13 +115,13 @@ export default function NonLeagueMatch() {
         return stringify(
           showFilters
             ? Array.from(
-              checkState
-                .entries()
-                .filter(([_gameKey, checkState]) => checkState),
-            ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
+                checkState
+                  .entries()
+                  .filter(([_gameKey, checkState]) => checkState),
+              ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
             : ORDERED_PROPER_GAMES.map((gameKey) => ({
-              name: GAME_NAMES[gameKey],
-            })),
+                name: GAME_NAMES[gameKey],
+              })),
         );
       case "UFODraft":
         if (draftPasta != null) {
@@ -212,12 +212,12 @@ export default function NonLeagueMatch() {
       <Group justify="space-between">
         {((metadata.type === "UFO" && metadata.isGeneric !== true) ||
           metadata.type === "GameNames") && (
-            <Checkbox
-              checked={showFilters}
-              label="Customize"
-              onChange={(event) => setShowFilters(event.currentTarget.checked)}
-            />
-          )}
+          <Checkbox
+            checked={showFilters}
+            label="Customize"
+            onChange={(event) => setShowFilters(event.currentTarget.checked)}
+          />
+        )}
         {metadata.type === "UFO" && (
           <Tooltip label="Copy the source in the new “UFO” format.">
             <Button
@@ -234,7 +234,8 @@ export default function NonLeagueMatch() {
           </Tooltip>
         )}
       </Group>
-      {metadata.type === "UFO" && metadata.isGeneric !== true &&
+      {metadata.type === "UFO" &&
+        metadata.isGeneric !== true &&
         showFilters && (
           <GameChecker
             checkState={checkState}
@@ -504,7 +505,7 @@ export default function NonLeagueMatch() {
             Your new room is available at here.
           </a>
           <br />
-          <Link href={`/match/${id}`} target="_blank">
+          <Link prefetch={false} href={`/match/${id}`} target="_blank">
             Your Match results can be viewed here.
           </Link>
         </Alert>
@@ -524,4 +525,6 @@ export default function NonLeagueMatch() {
 }
 
 const GAME_NAMES_PARTIAL_PASTA: UFODifficulties = { all: {} };
-ORDERED_PROPER_GAMES.forEach(g => GAME_NAMES_PARTIAL_PASTA.all[g] = ["fake"]);
+ORDERED_PROPER_GAMES.forEach(
+  (g) => (GAME_NAMES_PARTIAL_PASTA.all[g] = ["fake"]),
+);

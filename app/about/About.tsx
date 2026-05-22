@@ -107,7 +107,10 @@ export default function About({ initialBoard }: Props) {
         </List>
         <p>
           For more information, see the{" "}
-          <Link href="https://docs.google.com/document/d/11kIVxD6NOsoXXXdv22owLPM_nj5oKiCpY53K418muW8/edit?usp=sharing">
+          <Link
+            prefetch={false}
+            href="https://docs.google.com/document/d/11kIVxD6NOsoXXXdv22owLPM_nj5oKiCpY53K418muW8/edit?usp=sharing"
+          >
             official UFO 50 Bingo Rules
           </Link>
           .
@@ -116,7 +119,10 @@ export default function About({ initialBoard }: Props) {
         <p>Creating a standard match is simple!</p>
         <List type="ordered">
           <List.Item>
-            Go to the <LinkWithVariant href="/">Create Match</LinkWithVariant>{" "}
+            Go to the{" "}
+            <LinkWithVariant prefetch={false} href="/">
+              Create Match
+            </LinkWithVariant>{" "}
             tab
           </List.Item>
           <List.Item>Click on "Non-League"</List.Item>
@@ -140,38 +146,55 @@ export default function About({ initialBoard }: Props) {
           Most players use the Standard variant (goal list), but UFO 50 Bingo
           supports other variants as well. Hover over the names of variants on
           the Non-League section of the{" "}
-          <LinkWithVariant href="/">Create Match</LinkWithVariant> tab to
-          explore them!
+          <LinkWithVariant prefetch={false} href="/">
+            Create Match
+          </LinkWithVariant>{" "}
+          tab to explore them!
         </p>
         <p>
           In addition to selecting alternate goal lists, the "Customize game and
           difficulty counts" checkbox on the Non-League section of the{" "}
-          <LinkWithVariant href="/">Create Match</LinkWithVariant> tab allows
-          you to change which goals will appear in your match. You can choose
-          games to include/exclude from your match, or update the difficulty
-          distribution to have an easier or harder match than usual.
+          <LinkWithVariant prefetch={false} href="/">
+            Create Match
+          </LinkWithVariant>{" "}
+          tab allows you to change which goals will appear in your match. You
+          can choose games to include/exclude from your match, or update the
+          difficulty distribution to have an easier or harder match than usual.
         </p>
         <Title order={2}>Practice Tools</Title>
         <p>
           If you want to practice goals on your own, you can use the Non-League
           section of the{" "}
-          <LinkWithVariant href="/">Create Match</LinkWithVariant> tab to create
-          a board for yourself, try the{" "}
-          <LinkWithVariant href="/daily">Daily Bingo</LinkWithVariant>, or use
-          the <LinkWithVariant href="/practice">Practice</LinkWithVariant> tab,
-          which automatically selects goals for you to attempt with built-in
-          stat tracking.
+          <LinkWithVariant prefetch={false} href="/">
+            Create Match
+          </LinkWithVariant>{" "}
+          tab to create a board for yourself, try the{" "}
+          <LinkWithVariant prefetch={false} href="/daily">
+            Daily Bingo
+          </LinkWithVariant>
+          , or use the{" "}
+          <LinkWithVariant prefetch={false} href="/practice">
+            Practice
+          </LinkWithVariant>{" "}
+          tab, which automatically selects goals for you to attempt with
+          built-in stat tracking.
         </p>
         <p>
-          The <LinkWithVariant href="goals">All Goals</LinkWithVariant> tab
-          contains the full list of Standard Bingo goals. From this tab, you can
+          The{" "}
+          <LinkWithVariant prefetch={false} href="goals">
+            All Goals
+          </LinkWithVariant>{" "}
+          tab contains the full list of Standard Bingo goals. From this tab, you
+          can
         </p>
         <List>
           <List.Item>View your stats for every goal</List.Item>
           <List.Item>
             Uncheck goals to remove them from the{" "}
-            <LinkWithVariant href="/practice">Practice</LinkWithVariant> tab
-            goal selection
+            <LinkWithVariant prefetch={false} href="/practice">
+              Practice
+            </LinkWithVariant>{" "}
+            tab goal selection
           </List.Item>
           <List.Item>
             Immediately attempt a goal by clicking the blue "Play" button
@@ -183,9 +206,11 @@ export default function About({ initialBoard }: Props) {
         </List>
         <p>
           You can also use the{" "}
-          <LinkWithVariant href="/settings">Settings</LinkWithVariant> tab to
-          change how practice goals are selected, back up your stats, or change
-          to dark mode.
+          <LinkWithVariant prefetch={false} href="/settings">
+            Settings
+          </LinkWithVariant>{" "}
+          tab to change how practice goals are selected, back up your stats, or
+          change to dark mode.
         </p>
       </Card>
     </Container>

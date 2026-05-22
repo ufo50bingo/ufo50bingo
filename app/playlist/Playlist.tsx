@@ -96,8 +96,15 @@ export default function Playlist() {
           <ActionIcon onClick={() => {}} color="green">
             <IconPlaylistAdd size={16} />
           </ActionIcon>{" "}
-          on the <LinkWithVariant href="/goals">All Goals</LinkWithVariant> or{" "}
-          <LinkWithVariant href="/practice">Practice</LinkWithVariant> tabs.
+          on the{" "}
+          <LinkWithVariant prefetch={false} href="/goals">
+            All Goals
+          </LinkWithVariant>{" "}
+          or{" "}
+          <LinkWithVariant prefetch={false} href="/practice">
+            Practice
+          </LinkWithVariant>{" "}
+          tabs.
         </>
       )}
     </Container>

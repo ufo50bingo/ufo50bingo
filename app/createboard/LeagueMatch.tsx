@@ -243,7 +243,7 @@ export default function LeagueMatch() {
             Your new room is available at here.
           </a>
           <br />
-          <Link href={`/match/${id}`} target="_blank">
+          <Link prefetch={false} href={`/match/${id}`} target="_blank">
             Your Match results can be viewed here.
           </Link>
         </Alert>

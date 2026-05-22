@@ -8,7 +8,7 @@ export default function Resources() {
     <Container my="md">
       <Card shadow="sm" padding="sm" radius="md" withBorder>
         <Alert variant="light">
-          <LinkWithVariant href="/about">
+          <LinkWithVariant prefetch={false} href="/about">
             <Title order={5}>
               If you are new to UFO 50 Bingo, click here first!
             </Title>
@@ -44,28 +44,23 @@ export default function Resources() {
         <p>Guides</p>
         <List>
           <List.Item>
-            <a
-              href="https://ufo50.bingo/doc"
-              target="_blank"
-            >
-              Community-maintained resource doc with guides for nearly every game
+            <a href="https://ufo50.bingo/doc" target="_blank">
+              Community-maintained resource doc with guides for nearly every
+              game
             </a>
             <List>
               <List.Item>
-                You can also access the resource doc at <a
-                  href="https://ufo50.bingo/doc"
-                  target="_blank"
-                >
+                You can also access the resource doc at{" "}
+                <a href="https://ufo50.bingo/doc" target="_blank">
                   https://ufo50.bingo/doc
-                </a>, or jump straight to a game's section by appending a game name or abbreviation, like <a
-                  href="https://ufo50.bingo/doc/roi"
-                  target="_blank"
-                >
+                </a>
+                , or jump straight to a game's section by appending a game name
+                or abbreviation, like{" "}
+                <a href="https://ufo50.bingo/doc/roi" target="_blank">
                   https://ufo50.bingo/roi
-                </a> or <a
-                  href="https://ufo50.bingo/doc/rockon"
-                  target="_blank"
-                >
+                </a>{" "}
+                or{" "}
+                <a href="https://ufo50.bingo/doc/rockon" target="_blank">
                   https://ufo50.bingo/rockon
                 </a>
               </List.Item>
@@ -102,7 +97,9 @@ export default function Resources() {
           <List.Item>
             For details about Variants, hover over the variant names on the
             Non-League section of{" "}
-            <LinkWithVariant href="/">Create Match</LinkWithVariant>
+            <LinkWithVariant prefetch={false} href="/">
+              Create Match
+            </LinkWithVariant>
           </List.Item>
         </List>
         <p>Community Tools</p>

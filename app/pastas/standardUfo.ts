@@ -1256,7 +1256,7 @@ export const STANDARD_UFO = {
         },
         {
           "name": "HOT FOOT: Get 3 blowouts in a tournament using {{hf_char}} & {{hf_char}}",
-          "short": "HOT FOOT: 3 blowouts as{{hf_char}} & {{hf_char}}"
+          "short": "HOT FOOT: 3 blowouts as {{hf_char}} & {{hf_char}}"
         }
       ],
       "divers": [

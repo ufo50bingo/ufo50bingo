@@ -91,9 +91,9 @@ export default function Daily({
   const finalMark = feed.findLastIndex((item) => item.type === "mark");
   const finalBoard =
     finalMark >= 0 &&
-    finalMark !== bingo &&
-    finalMark !== majority &&
-    finalMark !== blackout
+      finalMark !== bingo &&
+      finalMark !== majority &&
+      finalMark !== blackout
       ? finalMark
       : null;
 
@@ -162,6 +162,7 @@ export default function Daily({
                     component={LinkWithVariant}
                     variant="subtle"
                     href={`/daily?${prevSearchParams.toString()}`}
+                    prefetch={false}
                   >
                     <IconArrowLeft size={32} />
                   </ActionIcon>
@@ -446,9 +447,8 @@ export default function Daily({
                         ? duration - completions[index - 1][2]
                         : duration;
                     const formattedDur = getDurationText(ms, false);
-                    return `${index + 1}. ${formattedDur} — ${
-                      plainBoard[squareIndex]
-                    }`;
+                    return `${index + 1}. ${formattedDur} — ${plainBoard[squareIndex]
+                      }`;
                   },
                 );
                 summary += "\n";

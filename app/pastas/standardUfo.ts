@@ -2560,9 +2560,9 @@ export const STANDARD_UFO = {
         "veryhard": 3
       },
       {
-        "easy": 4,
+        "easy": 2,
         "medium": 4,
-        "hard": 3,
+        "hard": 5,
         "veryhard": 2
       }
     ]

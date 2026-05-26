@@ -41,10 +41,10 @@ import WatchBoard from "./WatchBoard";
 
 type Props = {
   match: Match;
-  isMatchesPage: boolean;
+  matchesUrl: string | null;
 };
 
-export default function MatchView({ match, isMatchesPage }: Props) {
+export default function MatchView({ match, matchesUrl }: Props) {
   const { hideByDefault, isMounted, revealedMatchIDs } = useAppContext();
   const router = useRouter();
   const session = useSession();
@@ -131,7 +131,7 @@ export default function MatchView({ match, isMatchesPage }: Props) {
         setIsRefreshing(true);
         await runWithMaybeRefresh(
           router,
-          isMatchesPage,
+          matchesUrl,
           async () => await refreshMatch(match.id, board, changelog),
           () => setIsRefreshing(false),
         );
@@ -354,9 +354,9 @@ export default function MatchView({ match, isMatchesPage }: Props) {
                 vod={
                   match.vod != null && match.vod.startSeconds != null
                     ? {
-                        url: match.vod.url,
-                        startSeconds: match.vod.startSeconds,
-                      }
+                      url: match.vod.url,
+                      startSeconds: match.vod.startSeconds,
+                    }
                     : null
                 }
                 analysisSeconds={match.analysisSeconds}
@@ -367,7 +367,7 @@ export default function MatchView({ match, isMatchesPage }: Props) {
       </Drawer.Root>
       {isEditingVod && (
         <EditVodModal
-          isMatchesPage={isMatchesPage}
+          matchesUrl={matchesUrl}
           isMobile={isMobile}
           match={match}
           onClose={() => setIsEditingVod(false)}
@@ -375,7 +375,7 @@ export default function MatchView({ match, isMatchesPage }: Props) {
       )}
       {isEditingLeague && (
         <EditLeagueModal
-          isMatchesPage={isMatchesPage}
+          matchesUrl={matchesUrl}
           isMobile={isMobile}
           match={match}
           onClose={() => setIsEditingLeague(false)}

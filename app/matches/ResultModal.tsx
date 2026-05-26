@@ -5,10 +5,11 @@ import MatchView from "./MatchView";
 type Props = {
   isMobile: boolean;
   match: Match;
+  matchesUrl: string | null;
   onClose: () => void;
 };
 
-export default function ResultModal({ isMobile, match, onClose }: Props) {
+export default function ResultModal({ isMobile, match, matchesUrl, onClose }: Props) {
   return (
     <Modal
       fullScreen={isMobile}
@@ -18,7 +19,7 @@ export default function ResultModal({ isMobile, match, onClose }: Props) {
       size="auto"
       withCloseButton={isMobile}
     >
-      <MatchView match={match} isMatchesPage={true} />
+      <MatchView match={match} matchesUrl={matchesUrl} />
     </Modal>
   );
 }

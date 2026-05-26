@@ -18,14 +18,14 @@ import runWithMaybeRefresh from "./runWithMaybeRefresh";
 import { useRouter } from "next/navigation";
 
 type Props = {
-  isMatchesPage: boolean;
+  matchesUrl: string | null;
   isMobile: boolean;
   match: Match;
   onClose: () => void;
 };
 
 export default function EditVodModal({
-  isMatchesPage,
+  matchesUrl,
   isMobile,
   match,
   onClose,
@@ -102,7 +102,7 @@ export default function EditVodModal({
               setIsSaving(true);
               await runWithMaybeRefresh(
                 router,
-                isMatchesPage,
+                matchesUrl,
                 async () => {
                   const [baseUrl, startSeconds] =
                     getBaseUrlAndStartSeconds(newVodLink);

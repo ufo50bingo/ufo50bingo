@@ -23,7 +23,7 @@ export default function SingleMatch({ match }: Props) {
           width: "fit-content",
         }}
       >
-        <MatchView match={match} isMatchesPage={false} />
+        <MatchView match={match} matchesUrl={null} />
       </Card>
     </div>
   );

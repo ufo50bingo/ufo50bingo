@@ -2,11 +2,11 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 
 export default async function runWithMaybeRefresh(
   router: AppRouterInstance,
-  isMatchesPage: boolean,
+  matchesUrl: string | null,
   getShouldRefresh: () => Promise<boolean>,
   inFinally: () => void,
 ): Promise<void> {
-  if (!isMatchesPage) {
+  if (matchesUrl == null) {
     try {
       await getShouldRefresh();
     } finally {
@@ -17,7 +17,7 @@ export default async function runWithMaybeRefresh(
   let shouldRefresh = false;
   try {
     // HACK: This prevents navigation to the single match page on revalidation
-    history.pushState({}, "", `/matches`);
+    history.pushState({}, "", matchesUrl);
     shouldRefresh = await getShouldRefresh();
   } finally {
     // HACK: Revert back to the expected URL

@@ -23,7 +23,7 @@ import runWithMaybeRefresh from "./runWithMaybeRefresh";
 import { useRouter } from "next/navigation";
 
 type Props = {
-  isMatchesPage: boolean;
+  matchesUrl: string | null;
   isMobile: boolean;
   match: Match;
   onClose: () => void;
@@ -44,7 +44,7 @@ function getSeason(num: null | number): null | Season {
 }
 
 export default function EditLeagueModal({
-  isMatchesPage,
+  matchesUrl,
   isMobile,
   match,
   onClose,
@@ -205,7 +205,7 @@ export default function EditLeagueModal({
                 };
                 await runWithMaybeRefresh(
                   router,
-                  isMatchesPage,
+                  matchesUrl,
                   async () => {
                     await updateLeagueInfo(
                       match.id,

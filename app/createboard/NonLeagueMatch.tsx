@@ -29,6 +29,7 @@ import ufoGenerator, {
   UFODifficulties,
   UFODraftPasta,
   UFOGameGoals,
+  UFOPasta,
 } from "../generator/ufoGenerator";
 import UFODifficultySelectors from "./UFODifficultySelectors";
 import UFODraftCreator from "./UFODraftCreator";
@@ -72,16 +73,9 @@ export default function NonLeagueMatch() {
   const [error, setError] = useState<Error | null>(null);
   const [customType, setCustomType] = useState<CustomType>("ufo");
 
-  const [difficultyCounts, setDifficultyCounts] = useState(() => {
-    const counts: { [name: string]: Counts } = {};
-    METADATA.forEach((data) => {
-      if (data.type !== "UFO") {
-        return;
-      }
-      counts[data.name] = data.pasta.category_counts;
-    });
-    return counts;
-  });
+  const [difficultyCounts, setDifficultyCounts] = useState<{
+    [name: string]: Counts;
+  }>({});
 
   const isPublic = isPublicRaw && isLockout;
   const metadata = METADATA.find((d) => d.name === variant)!;
@@ -89,10 +83,40 @@ export default function NonLeagueMatch() {
   const getSerializedPasta = (pretty: boolean): string => {
     const stringify = (structured: ReadonlyArray<{ name: string }>) =>
       pretty ? JSON.stringify(structured, null, 2) : JSON.stringify(structured);
+    const getUFOPastaWithCustomSelectors = (pasta: UFOPasta): string => {
+      if (!showFilters) {
+        return stringify(ufoGenerator(pasta).map((goal) => ({ name: goal })));
+      }
+      // we check for excluded games instead of included
+      // so we don't accidentally remove generals
+      const difficultyToGameToGoals = pasta.goals;
+      const filtered: UFODifficulties = {};
+      Object.keys(difficultyToGameToGoals).forEach((difficulty) => {
+        const gameToGoals = difficultyToGameToGoals[difficulty];
+        const newGameToGoals: UFOGameGoals = {};
+        Object.keys(gameToGoals).forEach((game) => {
+          if (!uncheckedGames.has(game)) {
+            newGameToGoals[game] = gameToGoals[game];
+          }
+        });
+        filtered[difficulty] = newGameToGoals;
+      });
+      return stringify(
+        ufoGenerator({
+          ...pasta,
+          goals: filtered,
+          category_counts:
+            difficultyCounts[metadata.name] ??
+            (metadata.type === "Custom"
+              ? customUfo!.category_counts
+              : metadata.pasta.category_counts),
+        }).map((goal) => ({ name: goal })),
+      );
+    };
     switch (metadata.type) {
       case "Custom":
         return customType === "ufo" && customUfo != null
-          ? stringify(ufoGenerator(customUfo).map((goal) => ({ name: goal })))
+          ? getUFOPastaWithCustomSelectors(customUfo)
           : custom;
       case "UFODraft":
         if (draftPasta != null) {
@@ -103,32 +127,7 @@ export default function NonLeagueMatch() {
           throw new Error("draftPasta expected to be nonnull");
         }
       case "UFO":
-        if (!showFilters) {
-          return stringify(
-            ufoGenerator(metadata.pasta).map((goal) => ({ name: goal })),
-          );
-        }
-        // we check for excluded games instead of included
-        // so we don't accidentally remove generals
-        const difficultyToGameToGoals = metadata.pasta.goals;
-        const filtered: UFODifficulties = {};
-        Object.keys(difficultyToGameToGoals).forEach((difficulty) => {
-          const gameToGoals = difficultyToGameToGoals[difficulty];
-          const newGameToGoals: UFOGameGoals = {};
-          Object.keys(gameToGoals).forEach((game) => {
-            if (!uncheckedGames.has(game)) {
-              newGameToGoals[game] = gameToGoals[game];
-            }
-          });
-          filtered[difficulty] = newGameToGoals;
-        });
-        return stringify(
-          ufoGenerator({
-            ...metadata.pasta,
-            goals: filtered,
-            category_counts: difficultyCounts[metadata.name],
-          }).map((goal) => ({ name: goal })),
-        );
+        return getUFOPastaWithCustomSelectors(metadata.pasta);
     }
   };
 
@@ -143,6 +142,14 @@ export default function NonLeagueMatch() {
       customUfoWarnings: result.warnings,
     };
   }, [customType, custom]);
+
+  const resetCustomDifficultyCounts = () => {
+    setDifficultyCounts((prevDifficultyCounts) => {
+      const newDifficultyCounts = { ...prevDifficultyCounts };
+      delete newDifficultyCounts["Custom"];
+      return newDifficultyCounts;
+    });
+  };
 
   return (
     <Stack gap={8}>
@@ -204,40 +211,6 @@ export default function NonLeagueMatch() {
           </Tooltip>
         )}
       </Group>
-      {metadata.type === "UFO" && showFilters && (
-        <>
-          <GameChecker
-            uncheckedGames={uncheckedGames}
-            setUncheckedGames={setUncheckedGames}
-            sort={checkerSort}
-            setSort={setCheckerSort}
-            ufoDifficulties={metadata.pasta.goals}
-          />
-          <UFODifficultySelectors
-            goals={metadata.pasta.goals}
-            uncheckedGames={uncheckedGames}
-            counts={difficultyCounts[metadata.name]}
-            setCounts={(newCounts) => {
-              setDifficultyCounts({
-                ...difficultyCounts,
-                [metadata.name]: newCounts,
-              });
-            }}
-          />
-        </>
-      )}
-      {metadata.type === "UFODraft" && (
-        <UFODraftCreator
-          draftCheckState={draftCheckState}
-          setDraftCheckState={setDraftCheckState}
-          numPlayers={numPlayers}
-          setNumPlayers={setNumPlayers}
-          pasta={metadata.pasta}
-          onChangePasta={setDraftPasta}
-          sort={checkerSort}
-          setSort={setCheckerSort}
-        />
-      )}
       {metadata.type === "Custom" && (
         <Stack>
           <Stack gap={4}>
@@ -270,7 +243,10 @@ export default function NonLeagueMatch() {
                 label="Add your pasta here:"
                 maxRows={12}
                 minRows={2}
-                onChange={(event) => setCustom(event.currentTarget.value)}
+                onChange={(event) => {
+                  resetCustomDifficultyCounts();
+                  setCustom(event.currentTarget.value);
+                }}
                 spellCheck={false}
                 value={custom}
                 data-monospace
@@ -293,6 +269,15 @@ export default function NonLeagueMatch() {
                   {customUfoWarnings.join("\n")}
                 </Alert>
               )}
+              {customUfo != null && (
+                <Checkbox
+                  checked={showFilters}
+                  label="Customize"
+                  onChange={(event) =>
+                    setShowFilters(event.currentTarget.checked)
+                  }
+                />
+              )}
             </>
           ) : (
             <JsonInput
@@ -300,13 +285,65 @@ export default function NonLeagueMatch() {
               label="Add your pasta here:"
               maxRows={12}
               minRows={2}
-              onChange={setCustom}
+              onChange={(value) => {
+                setCustom(value);
+                resetCustomDifficultyCounts();
+              }}
               spellCheck={false}
               validationError="Invalid JSON"
               value={custom}
             />
           )}
         </Stack>
+      )}
+      {(metadata.type === "UFO" ||
+        (metadata.type === "Custom" && customUfo != null)) &&
+        showFilters && (
+          <>
+            <GameChecker
+              uncheckedGames={uncheckedGames}
+              setUncheckedGames={setUncheckedGames}
+              sort={checkerSort}
+              setSort={setCheckerSort}
+              ufoDifficulties={
+                metadata.type === "Custom"
+                  ? customUfo!.goals
+                  : metadata.pasta.goals
+              }
+            />
+            <UFODifficultySelectors
+              goals={
+                metadata.type === "Custom"
+                  ? customUfo!.goals
+                  : metadata.pasta.goals
+              }
+              uncheckedGames={uncheckedGames}
+              counts={
+                difficultyCounts[metadata.name] ??
+                (metadata.type === "Custom"
+                  ? customUfo!.category_counts
+                  : metadata.pasta.category_counts)
+              }
+              setCounts={(newCounts) => {
+                setDifficultyCounts({
+                  ...difficultyCounts,
+                  [metadata.name]: newCounts,
+                });
+              }}
+            />
+          </>
+        )}
+      {metadata.type === "UFODraft" && (
+        <UFODraftCreator
+          draftCheckState={draftCheckState}
+          setDraftCheckState={setDraftCheckState}
+          numPlayers={numPlayers}
+          setNumPlayers={setNumPlayers}
+          pasta={metadata.pasta}
+          onChangePasta={setDraftPasta}
+          sort={checkerSort}
+          setSort={setCheckerSort}
+        />
       )}
       <Text>
         <strong>Configure Room</strong>

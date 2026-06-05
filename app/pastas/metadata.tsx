@@ -167,7 +167,7 @@ const RAW_METADATA = [
     hovercard: (
       <Stack>
         <span>
-          Create a board from a custom SRLv5 goal list. For advanced users only.
+          Create a board from a custom goal list. For advanced users only.
         </span>
         <Text size="xs">
           <em>Created by you!</em>

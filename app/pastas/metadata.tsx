@@ -279,14 +279,20 @@ const RAW_METADATA = [
   },
   {
     type: "UFO",
-    name: "Nozzlo",
+    name: "Nozzlo (Deprecated)",
     pasta: NOZZLO_UFO,
     isMenu: true,
     hovercard: (
       <Stack>
         <span>
           An absurdly difficult variant with very long, deliberately
-          unbalanced/unfair goals.
+          unbalanced/unfair goals. Nozzlo is usually played as a cooperative
+          "raid boss" event approximately once every quarter.
+        </span>
+        <span>
+          Nozzlo community events use a newer goal set which is{" "}
+          <strong>intentionally non-public</strong>. This variant uses the
+          original, unbalanced goal set.
         </span>
         <a
           target="_blank"
@@ -303,11 +309,6 @@ const RAW_METADATA = [
           </List.Item>
           <List.Item>
             No difficulty tiers; all goals roughly equal in length and challenge
-          </List.Item>
-          <List.Item>
-            Can be played as player vs player, but is almost exclusively played
-            in “raid boss” mode where a team of players work together to make 3
-            bingos on one board
           </List.Item>
         </List>
         <Text size="xs">

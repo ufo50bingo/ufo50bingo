@@ -28,7 +28,7 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import { refreshMatch } from "./refreshMatch";
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import ResultModal from "./ResultModal";
 import deleteMatch from "./deleteMatch";
 import {
@@ -242,7 +242,7 @@ export default function Matches({ matches, totalPages }: Props) {
     if (window.location.pathname === "/matches") {
       setMatchesUrl(window.location.href);
     }
-  }, [searchParams, pathname])
+  }, [searchParams, pathname]);
 
   const getPropsForPage = (page: number) => {
     const params = new URLSearchParams(searchParams);
@@ -281,13 +281,13 @@ export default function Matches({ matches, totalPages }: Props) {
   const isDirty =
     (getSeasonStr(season) ?? null) !== (searchParams.get("season") ?? null) ||
     (tier == null || tier === "" ? null : tier) !==
-    (searchParams.get("tier") ?? null) ||
+      (searchParams.get("tier") ?? null) ||
     (week == null || week === "" ? null : week) !==
-    (searchParams.get("week") ?? null) ||
+      (searchParams.get("week") ?? null) ||
     (player == null || player === "" ? null : player) !==
-    (searchParams.get("player") ?? null) ||
+      (searchParams.get("player") ?? null) ||
     (admin == null || admin === "" ? null : admin) !==
-    (searchParams.get("admin") ?? null);
+      (searchParams.get("admin") ?? null);
 
   const viewingMatch =
     viewingId == null ? null : matches.find((match) => match.id === viewingId);
@@ -332,7 +332,7 @@ export default function Matches({ matches, totalPages }: Props) {
         <Alert variant="light">
           <Text size="sm">
             When you finish your match, please use the{" "}
-            <ActionIcon color="green" onClick={() => { }}>
+            <ActionIcon color="green" onClick={() => {}}>
               <IconEdit size={16} />
             </ActionIcon>{" "}
             icon to Refresh data from Bingosync and add a VOD Link, if

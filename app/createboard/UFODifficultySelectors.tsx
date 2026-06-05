@@ -1,18 +1,17 @@
 import { useMemo } from "react";
-import { Game } from "../goals";
 import { Counts, UFODifficulties } from "../generator/ufoGenerator";
 import DifficultySelectors from "./DifficultySelectors";
 
 type Props = {
   goals: UFODifficulties;
-  checkState: Map<Game, boolean>;
+  uncheckedGames: Set<string>;
   counts: Counts;
   setCounts: (newCounts: Counts) => unknown;
 };
 
 export default function UFODifficultySelectors({
   goals,
-  checkState,
+  uncheckedGames,
   counts,
   setCounts,
 }: Props) {
@@ -20,16 +19,15 @@ export default function UFODifficultySelectors({
     const available: { [key: string]: number } = {};
     Object.keys(goals).forEach((difficulty) => {
       available[difficulty] = Object.keys(goals[difficulty]).reduce(
-        // game isn't guaranteed to be the right type, but that's ok
         (acc, game) =>
-          difficulty === "general" || checkState.get(game as Game) === true
+          !uncheckedGames.has(game)
             ? acc + goals[difficulty][game].length
             : acc,
-        0
+        0,
       );
     });
     return available;
-  }, [checkState, goals]);
+  }, [goals, uncheckedGames]);
   return (
     <DifficultySelectors
       availableCounts={availableCounts}

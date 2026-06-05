@@ -19,7 +19,6 @@ import {
   Tooltip,
 } from "@mantine/core";
 import GameChecker from "./GameChecker";
-import { Game, GAME_NAMES, ORDERED_PROPER_GAMES } from "../goals";
 import { METADATA, Variant, VariantMetadata } from "../pastas/metadata";
 import VariantHoverCard from "./VariantHoverCard";
 import createMatch from "./createMatch";
@@ -54,14 +53,7 @@ export default function NonLeagueMatch() {
   });
   const [variant, setVariant] = useState<Variant>(options[0].name);
   const [custom, setCustom] = useState("");
-  const [checkState, setCheckState] = useState<Map<Game, boolean>>(
-    new Map(
-      (checkerSort === "chronological"
-        ? ORDERED_PROPER_GAMES
-        : ORDERED_PROPER_GAMES.toSorted()
-      ).map((key) => [key, true]),
-    ),
-  );
+  const [uncheckedGames, setUncheckedGames] = useState<Set<string>>(new Set());
   const [numPlayers, setNumPlayers] = useState(2);
   const [draftCheckState, setDraftCheckState] = useState<Map<string, number>>(
     new Map(),
@@ -94,15 +86,6 @@ export default function NonLeagueMatch() {
   const isPublic = isPublicRaw && isLockout;
   const metadata = METADATA.find((d) => d.name === variant)!;
 
-  // for some reason it doesn't like checkState.values().filter(...)
-  let checkedGameCount = 0;
-  checkState.forEach((isChecked) => {
-    if (isChecked) {
-      checkedGameCount += 1;
-    }
-  });
-  const hasLessThan25Games = checkedGameCount < 25;
-
   const getSerializedPasta = (pretty: boolean): string => {
     const stringify = (structured: ReadonlyArray<{ name: string }>) =>
       pretty ? JSON.stringify(structured, null, 2) : JSON.stringify(structured);
@@ -111,18 +94,6 @@ export default function NonLeagueMatch() {
         return customType === "ufo" && customUfo != null
           ? stringify(ufoGenerator(customUfo).map((goal) => ({ name: goal })))
           : custom;
-      case "GameNames":
-        return stringify(
-          showFilters
-            ? Array.from(
-                checkState
-                  .entries()
-                  .filter(([_gameKey, checkState]) => checkState),
-              ).map(([gameKey, _]) => ({ name: GAME_NAMES[gameKey] }))
-            : ORDERED_PROPER_GAMES.map((gameKey) => ({
-                name: GAME_NAMES[gameKey],
-              })),
-        );
       case "UFODraft":
         if (draftPasta != null) {
           return stringify(
@@ -145,9 +116,7 @@ export default function NonLeagueMatch() {
           const gameToGoals = difficultyToGameToGoals[difficulty];
           const newGameToGoals: UFOGameGoals = {};
           Object.keys(gameToGoals).forEach((game) => {
-            // game isn't actually guaranteed to be type Game,
-            // but that's ok
-            if (checkState.get(game as Game) !== false) {
+            if (!uncheckedGames.has(game)) {
               newGameToGoals[game] = gameToGoals[game];
             }
           });
@@ -210,8 +179,7 @@ export default function NonLeagueMatch() {
         />
       )}
       <Group justify="space-between">
-        {((metadata.type === "UFO" && metadata.isGeneric !== true) ||
-          metadata.type === "GameNames") && (
+        {metadata.type === "UFO" && (
           <Checkbox
             checked={showFilters}
             label="Customize"
@@ -234,39 +202,18 @@ export default function NonLeagueMatch() {
           </Tooltip>
         )}
       </Group>
-      {metadata.type === "UFO" &&
-        metadata.isGeneric !== true &&
-        showFilters && (
+      {metadata.type === "UFO" && showFilters && (
+        <>
           <GameChecker
-            checkState={checkState}
-            setCheckState={setCheckState}
+            uncheckedGames={uncheckedGames}
+            setUncheckedGames={setUncheckedGames}
             sort={checkerSort}
             setSort={setCheckerSort}
             ufoDifficulties={metadata.pasta.goals}
           />
-        )}
-      {metadata.type === "GameNames" && showFilters && (
-        <GameChecker
-          checkState={checkState}
-          setCheckState={setCheckState}
-          sort={checkerSort}
-          setSort={setCheckerSort}
-          ufoDifficulties={GAME_NAMES_PARTIAL_PASTA}
-        />
-      )}
-      {metadata.type === "GameNames" && showFilters && hasLessThan25Games && (
-        <Alert
-          variant="light"
-          color="red"
-          title="Error: You must select at least 25 games"
-        />
-      )}
-      {metadata.type === "UFO" &&
-        metadata.isGeneric !== true &&
-        showFilters && (
           <UFODifficultySelectors
             goals={metadata.pasta.goals}
-            checkState={checkState}
+            uncheckedGames={uncheckedGames}
             counts={difficultyCounts[metadata.name]}
             setCounts={(newCounts) => {
               setDifficultyCounts({
@@ -275,7 +222,8 @@ export default function NonLeagueMatch() {
               });
             }}
           />
-        )}
+        </>
+      )}
       {metadata.type === "UFODraft" && (
         <UFODraftCreator
           draftCheckState={draftCheckState}
@@ -406,9 +354,6 @@ export default function NonLeagueMatch() {
           isCreationInProgress ||
           roomName === "" ||
           password === "" ||
-          (metadata.type === "GameNames" &&
-            showFilters &&
-            hasLessThan25Games) ||
           (metadata.type === "Custom" && custom === "") ||
           (metadata.type === "Custom" &&
             customType === "ufo" &&
@@ -424,9 +369,6 @@ export default function NonLeagueMatch() {
               case "UFO":
               case "UFODraft":
                 bingosyncVariant = "18";
-                break;
-              case "GameNames":
-                bingosyncVariant = "172";
                 break;
               case "Custom":
                 switch (customType) {
@@ -449,9 +391,7 @@ export default function NonLeagueMatch() {
               isPublic,
               variant,
               bingosyncVariant,
-              isCustom:
-                showFilters &&
-                (metadata.type === "GameNames" || metadata.type === "UFO"),
+              isCustom: showFilters && metadata.type === "UFO",
               isLockout,
               pasta: getSerializedPasta(false),
               leagueInfo: null,
@@ -523,8 +463,3 @@ export default function NonLeagueMatch() {
     </Stack>
   );
 }
-
-const GAME_NAMES_PARTIAL_PASTA: UFODifficulties = { all: {} };
-ORDERED_PROPER_GAMES.forEach(
-  (g) => (GAME_NAMES_PARTIAL_PASTA.all[g] = ["fake"]),
-);

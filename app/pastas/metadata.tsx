@@ -12,6 +12,7 @@ import { PROTOTYPE_UFO } from "./prototypeUfo";
 import { SEASON_1_UFO } from "./season1Ufo";
 import { SEASON_2_UFO } from "./season2Ufo";
 import { COMBO_UFO } from "./comboUfo";
+import { GAME_NAMES_UFO } from "./gameNamesUfo";
 
 const RAW_METADATA = [
   {
@@ -193,8 +194,9 @@ const RAW_METADATA = [
     ),
   },
   {
-    type: "GameNames",
+    type: "UFO",
     name: "Game Names",
+    pasta: GAME_NAMES_UFO,
     isMenu: true,
     hovercard: (
       <Stack>
@@ -319,7 +321,6 @@ const RAW_METADATA = [
     name: "Campanella 3",
     pasta: CAMPANELLA3_UFO,
     isMenu: true,
-    isGeneric: true,
     hovercard: (
       <Stack>
         <span>Mostly involves the “secret” minigames in Campanella 3.</span>
@@ -365,10 +366,6 @@ interface MetadataBase {
   isMenu: boolean;
 }
 
-interface GameNames extends MetadataBase {
-  type: "GameNames";
-}
-
 interface Custom extends MetadataBase {
   type: "Custom";
 }
@@ -376,7 +373,6 @@ interface Custom extends MetadataBase {
 interface UFO extends MetadataBase {
   type: "UFO";
   pasta: UFOPasta;
-  isGeneric?: boolean;
 }
 
 interface UFODraft extends MetadataBase {
@@ -384,6 +380,6 @@ interface UFODraft extends MetadataBase {
   pasta: UFODraftPasta;
 }
 
-export type VariantMetadata = GameNames | Custom | UFO | UFODraft;
+export type VariantMetadata = Custom | UFO | UFODraft;
 
 export const METADATA: ReadonlyArray<VariantMetadata> = RAW_METADATA;

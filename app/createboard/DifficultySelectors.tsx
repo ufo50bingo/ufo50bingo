@@ -17,35 +17,39 @@ export default function DifficultySelectors({
 }: Props) {
   const sum = Object.keys(counts).reduce((acc, key) => acc + counts[key], 0);
   const hasEnoughGoals = Object.keys(counts).every(
-    (key) => (availableCounts[key] ?? 0) >= counts[key]
+    (key) => (availableCounts[key] ?? 0) >= counts[key],
   );
-
+  const hasOnlyOneDifficulty = Object.keys(counts).length === 1;
   return (
     <Stack>
-      <Text>
-        <strong>Choose difficulty distribution</strong>
-      </Text>
-      <Group wrap="nowrap">
-        {Array.from(
-          Object.keys(counts).map((difficulty) => (
-            <NumberInput
-              key={difficulty}
-              label={NAMES[difficulty] ?? difficulty}
-              description={`${availableCounts[difficulty] ?? 0} available`}
-              clampBehavior="strict"
-              min={0}
-              value={counts[difficulty]}
-              onChange={(newCount) => {
-                if (typeof newCount === "number") {
-                  const newCounts = { ...counts };
-                  newCounts[difficulty] = newCount;
-                  setCounts(newCounts);
-                }
-              }}
-            />
-          ))
-        )}
-      </Group>
+      {!hasOnlyOneDifficulty && (
+        <>
+          <Text>
+            <strong>Choose difficulty distribution</strong>
+          </Text>
+          <Group wrap="nowrap">
+            {Array.from(
+              Object.keys(counts).map((difficulty) => (
+                <NumberInput
+                  key={difficulty}
+                  label={NAMES[difficulty] ?? difficulty}
+                  description={`${availableCounts[difficulty] ?? 0} available`}
+                  clampBehavior="strict"
+                  min={0}
+                  value={counts[difficulty]}
+                  onChange={(newCount) => {
+                    if (typeof newCount === "number") {
+                      const newCounts = { ...counts };
+                      newCounts[difficulty] = newCount;
+                      setCounts(newCounts);
+                    }
+                  }}
+                />
+              )),
+            )}
+          </Group>
+        </>
+      )}
       {sum !== 25 && (
         <Alert
           variant="light"
@@ -57,7 +61,11 @@ export default function DifficultySelectors({
         <Alert
           variant="light"
           color="red"
-          title="Error: One of your difficulties has a higher count than the number of available goals"
+          title={
+            hasOnlyOneDifficulty
+              ? "Error: Fewer than 25 goals are available for your selection"
+              : "Error: One of your difficulties has a higher count than the number of available goals"
+          }
         />
       )}
     </Stack>

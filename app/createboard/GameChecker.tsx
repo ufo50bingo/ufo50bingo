@@ -1,5 +1,4 @@
 import { Checkbox, Group, SimpleGrid, Text } from "@mantine/core";
-import { Game, ProperGame } from "../goals";
 import CheckerSortSelector, { CheckerSort } from "./CheckerSortSelector";
 import useCheckerSortInfo from "./useCheckerSortInfo";
 import { UFODifficulties } from "../generator/ufoGenerator";
@@ -7,27 +6,32 @@ import getSubcategoryName from "../generator/getSubcategoryName";
 
 type Props = {
   ufoDifficulties: UFODifficulties;
-  checkState: Map<Game, boolean>;
-  setCheckState: (newCheckState: Map<Game, boolean>) => void;
+  uncheckedGames: Set<string>;
+  setUncheckedGames: (newUncheckedGames: Set<string>) => void;
   sort: CheckerSort;
   setSort: (newSort: CheckerSort) => unknown;
 };
 
 export default function GameChecker({
   ufoDifficulties,
-  checkState,
-  setCheckState,
+  uncheckedGames,
+  setUncheckedGames,
   sort,
   setSort,
 }: Props) {
-  const isAllChecked = checkState.values().every((isChecked) => isChecked);
-  const isNoneChecked = checkState.values().every((isChecked) => !isChecked);
-
   const [hasChronological, sortedSubcategories] = useCheckerSortInfo({
     ufoDifficulties,
     categories: Object.keys(ufoDifficulties).filter((cat) => cat !== "general"),
     sort,
   });
+
+  const isAllChecked = sortedSubcategories.every(
+    (sc) => !uncheckedGames.has(sc),
+  );
+  const isNoneChecked = sortedSubcategories.every((sc) =>
+    uncheckedGames.has(sc),
+  );
+
   return (
     <>
       <Group>
@@ -48,24 +52,25 @@ export default function GameChecker({
           indeterminate={!isAllChecked && !isNoneChecked}
           checked={isAllChecked}
           onChange={() => {
-            const newState = new Map(
-              checkState.keys().map((key) => [key, !isAllChecked]),
-            );
-            setCheckState(newState);
+            const newState = isAllChecked
+              ? uncheckedGames.union(new Set(sortedSubcategories))
+              : uncheckedGames.difference(new Set(sortedSubcategories));
+            setUncheckedGames(newState);
           }}
         />
         {sortedSubcategories.map((subcategory) => (
           <Checkbox
             key={subcategory}
             label={getSubcategoryName(subcategory)}
-            checked={checkState.get(subcategory as ProperGame) !== false}
+            checked={!uncheckedGames.has(subcategory)}
             onChange={(event) => {
-              const newState = new Map(checkState);
-              newState.set(
-                subcategory as ProperGame,
-                event.currentTarget.checked,
-              );
-              setCheckState(newState);
+              const newState = new Set(uncheckedGames);
+              if (event.currentTarget.checked) {
+                newState.delete(subcategory);
+              } else {
+                newState.add(subcategory);
+              }
+              setUncheckedGames(newState);
             }}
           />
         ))}

@@ -1,6 +1,6 @@
 export const NOZZLO_UFO = {
   goals: {
-    medium: {
+    Normal: {
       barbuta: [
         "BARBUTA: Buy 7 eggs in one run",
         "BARBUTA: Cherry the game without praying at the altar",
@@ -351,6 +351,8 @@ export const NOZZLO_UFO = {
         "CYBER OWLS: Clear 30 Rescue Missions in a row using GETM-EOUT",
         "CYBER OWLS: Using HAWK-BASE, clear Antarctica without taking any damage",
       ],
+    },
+    general: {
       general: [
         "100% Vainger, Golfaria, Warptank, or Porgy",
         "Be the best score on 5 arcade leaderboards",
@@ -382,6 +384,7 @@ export const NOZZLO_UFO = {
   },
   tokens: {},
   category_counts: {
-    medium: 25,
+    Normal: 20,
+    general: 5,
   },
 } as const;

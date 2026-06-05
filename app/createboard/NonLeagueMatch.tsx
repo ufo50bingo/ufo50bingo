@@ -152,6 +152,7 @@ export default function NonLeagueMatch() {
       <Group gap="sm">
         <SegmentedControl
           style={{ flexGrow: 1 }}
+          styles={{ root: { flexWrap: "wrap", display: "flex" } }}
           data={options.map((option) => ({
             value: option.name,
             label: <VariantHoverCard metadata={option} />,
@@ -169,6 +170,7 @@ export default function NonLeagueMatch() {
       {showAll && (
         <SegmentedControl
           style={{ flexGrow: 1 }}
+          styles={{ root: { flexWrap: "wrap", display: "flex" } }}
           data={menuOptions.map((option) => ({
             value: option.name,
             label: <VariantHoverCard metadata={option} />,

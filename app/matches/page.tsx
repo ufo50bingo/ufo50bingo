@@ -20,6 +20,7 @@ type FilterParams = {
   admin?: string;
 };
 
+// dummy update for new push
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type SQL = NeonQueryPromise<false, false, Record<string, any>[]>;
 

@@ -83,7 +83,7 @@ export const SPICY_UFO = {
       "waldorfsjourney": [
         "WALDORF’S JOURNEY: Have 40+ shells outside the castle, without opening chests",
         "WALDORF’S JOURNEY: Cherry disk 2 runs in a row",
-        "WALDORF’S JOURNEY: Enter the castle with your max stamina"
+        "WALDORF’S JOURNEY: Enter the castle with maximum stamina"
       ],
       "porgy": [
         "PORGY: Destroy 5 rock blockades using Missile System or Depth Charges",
@@ -241,7 +241,7 @@ export const SPICY_UFO = {
         "DEVILITION: Have 8 villagers at once"
       ],
       "kickclub": [
-        "KICK CLUB: Reach Ice World without picking up any food items",
+        "KICK CLUB: Reach Ice World with max of 3 non-dessert foods collected",
         "KICK CLUB: Reach Ice World without taking any damage",
         "KICK CLUB: Reach Ice World with 38,000 points or less"
       ],

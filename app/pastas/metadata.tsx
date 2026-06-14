@@ -130,6 +130,17 @@ const RAW_METADATA = [
     ),
   },
   {
+    type: "UFO",
+    name: "Combo",
+    pasta: COMBO_UFO,
+    isMenu: false,
+    hovercard: (
+      <Stack>
+        <span>Create a game with both Standard and Spicy goals!</span>
+      </Stack>
+    ),
+  },
+  {
     type: "UFODraft",
     name: "Combo Draft",
     pasta: COMBO_UFO,

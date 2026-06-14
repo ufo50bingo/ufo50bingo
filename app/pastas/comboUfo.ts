@@ -10,6 +10,18 @@ const COMBINED = combinePastas([
 
 export const COMBO_UFO: UFODraftPasta = {
   ...COMBINED,
+  category_counts: {
+    "Std Easy": 3,
+    "Std Medium": 3,
+    "Std Hard": 3,
+    "Std Very Hard": 3,
+    "Spc Easy": 2,
+    "Spc Medium": 2,
+    "Spc Hard": 2,
+    "Spc Very Hard": 2,
+    "Std General": 5,
+    "Spc General": 0,
+  },
   draft: {
     excluded_categories: ["Std General", "Spc General"],
     category_counts: [

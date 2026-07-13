@@ -239,7 +239,7 @@ function generateCandidate(
     finalBoardWithTokens[i] = replaceTokens(finalGoal, pasta, sortTokens);
     for (const onCard of findGamesForResult(finalBoardWithTokens[i], {
       subcategory: game,
-    })) {
+    }, true)) {
       gamesOnCard.add(onCard);
     }
   };
@@ -262,7 +262,7 @@ function generateCandidate(
     const mayHaveNewGame = goals.some((goal) => {
       const goalAndFallback = getGoalAndFallback(goal);
       for (const g of goalAndFallback) {
-        for (const testGame of findGamesForResult(g, { subcategory: game })) {
+        for (const testGame of findGamesForResult(g, { subcategory: game }, true)) {
           if (!gamesOnCard.has(testGame)) {
             return true;
           }
@@ -270,7 +270,7 @@ function generateCandidate(
         const tokens = splitAtTokens(g).filter((item) => item.type === "token");
         for (const token of tokens) {
           for (const option of pasta.tokens[token.token]) {
-            for (const testGame of findGamesForResult(option, null)) {
+            for (const testGame of findGamesForResult(option, null, true)) {
               if (!gamesOnCard.has(testGame)) {
                 return true;
               }

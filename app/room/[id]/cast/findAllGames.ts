@@ -31,6 +31,7 @@ interface WithSubcategory {
 export function findGamesForResult(
   goal: string,
   result: WithSubcategory | null,
+  isGenerator: boolean = false,
 ): Game[] {
   // this is an old goal, or from a non-standard variant
   if (result == null) {
@@ -70,6 +71,11 @@ export function findGamesForResult(
       games.push(name);
     }
   });
+  // HACK: NES 50 bingo uses restrictions but has their own set of games which aren't in
+  // ORDERED_PROPER_GAMES
+  if (isGenerator && !games.includes(game as ProperGame)) {
+    games.push(game as ProperGame);
+  }
   return games;
 }
 

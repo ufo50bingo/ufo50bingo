@@ -387,4 +387,17 @@ export const BLITZ_UFO = {
     medium: 20,
     general: 5,
   },
+  "draft": {
+    "excluded_categories": [
+      "general"
+    ],
+    "category_counts": [
+      {
+        "medium": 13,
+      },
+      {
+        "medium": 12,
+      }
+    ]
+  }
 } as const;

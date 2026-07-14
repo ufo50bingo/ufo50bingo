@@ -1,4 +1,3 @@
-import { Stack } from "@mantine/core";
 import { ReactNode } from "react";
 import { UFOPasta } from "../generator/ufoGenerator";
 import { STANDARD_UFO } from "./standardUfo";
@@ -45,9 +44,7 @@ const RAW_METADATA = [
     name: "Combo",
     pasta: COMBO_UFO,
     info: (
-      <Stack>
-        <span>A goal set that combines Standard and Spicy goals.</span>
-      </Stack>
+      <span>A goal set that combines Standard and Spicy goals.</span>
     ),
   },
   {

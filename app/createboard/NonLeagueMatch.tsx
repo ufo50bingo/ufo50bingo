@@ -8,6 +8,7 @@ import {
   Anchor,
   Button,
   Checkbox,
+  Chip,
   Group,
   JsonInput,
   SegmentedControl,
@@ -19,7 +20,7 @@ import {
   Tooltip,
 } from "@mantine/core";
 import GameChecker from "./GameChecker";
-import { METADATA, Variant, VariantMetadata } from "../pastas/metadata";
+import { METADATA, SELECTOR_DATA, Variant, VariantMetadata } from "../pastas/metadata";
 import VariantHoverCard from "./VariantHoverCard";
 import createMatch from "./createMatch";
 import { db } from "../db";
@@ -45,6 +46,9 @@ const menuOptions: ReadonlyArray<VariantMetadata> = METADATA.filter(
 
 type CustomType = "srl_v5" | "ufo" | "fixed_board" | "randomized";
 
+const FORMAT_OPTIONS = ["Normal", "Draft", "Custom"] as const;
+type Format = (typeof FORMAT_OPTIONS)[number];
+
 export default function NonLeagueMatch() {
   const [showAll, setShowAll] = useState(false);
   const [checkerSort, setCheckerSort] = useLocalEnum({
@@ -61,6 +65,7 @@ export default function NonLeagueMatch() {
   );
 
   const [draftPasta, setDraftPasta] = useState<null | UFODraftPasta>(null);
+  const [format, setFormat] = useState<Format>("Normal");
   const [showFilters, setShowFilters] = useState(false);
 
   const [roomName, setRoomName] = useState("");
@@ -156,44 +161,21 @@ export default function NonLeagueMatch() {
       <Text>
         <strong>Choose variant</strong>
       </Text>
-      <Group gap="sm">
-        <SegmentedControl
-          style={{ flexGrow: 1 }}
-          styles={{ root: { flexWrap: "wrap", display: "flex" } }}
-          data={options.map((option) => ({
-            value: option.name,
-            label: <VariantHoverCard metadata={option} />,
-          }))}
-          fullWidth={true}
-          onChange={setVariant as unknown as (value: string) => void}
-          value={variant}
-        />
-        {!showAll && (
-          <ActionIcon onClick={() => setShowAll(true)} variant="default">
-            <IconDots size={16} />
-          </ActionIcon>
-        )}
-      </Group>
-      {showAll && (
-        <SegmentedControl
-          style={{ flexGrow: 1 }}
-          styles={{ root: { flexWrap: "wrap", display: "flex" } }}
-          data={menuOptions.map((option) => ({
-            value: option.name,
-            label: <VariantHoverCard metadata={option} />,
-          }))}
-          fullWidth={true}
-          onChange={setVariant as unknown as (value: string) => void}
-          value={variant}
-        />
-      )}
+      <Select
+        value={variant}
+        onChange={(newVariant: string | null) => setVariant(newVariant as Variant)}
+        data={SELECTOR_DATA}
+        allowDeselect={false}
+        searchable={true}
+        clearable={false}
+      />
       <Group justify="space-between">
-        {metadata.type === "UFO" && (
-          <Checkbox
-            checked={showFilters}
-            label="Customize"
-            onChange={(event) => setShowFilters(event.currentTarget.checked)}
-          />
+        {(metadata.type === "UFO" || (metadata.type === "Custom" && customUfo != null)) && (
+          <Chip.Group multiple={false} value={format} onChange={(newFormat: string) => setFormat(newFormat as Format)}>
+            <Group gap={8}>
+              {FORMAT_OPTIONS.map(f => <Chip key={f} value={f}>{f}</Chip>)}
+            </Group>
+          </Chip.Group>
         )}
         {metadata.type === "UFO" && (
           <Tooltip label="Copy the source in the new “UFO” format.">
@@ -211,6 +193,7 @@ export default function NonLeagueMatch() {
           </Tooltip>
         )}
       </Group>
+      <Alert>{metadata.hovercard}</Alert>
       {metadata.type === "Custom" && (
         <Stack>
           <Stack gap={4}>

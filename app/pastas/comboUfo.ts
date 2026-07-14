@@ -1,5 +1,5 @@
 import combinePastas from "../generator/combinePastas";
-import { UFODraftPasta } from "../generator/ufoGenerator";
+import { UFOPasta } from "../generator/ufoGenerator";
 import { SPICY_UFO } from "./spicyUfo";
 import { STANDARD_UFO } from "./standardUfo";
 
@@ -8,7 +8,7 @@ const COMBINED = combinePastas([
   { pasta: SPICY_UFO, prefix: "Spc" },
 ]);
 
-export const COMBO_UFO: UFODraftPasta = {
+export const COMBO_UFO: UFOPasta = {
   ...COMBINED,
   category_counts: {
     "Std Easy": 3,

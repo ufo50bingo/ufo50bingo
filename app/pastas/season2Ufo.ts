@@ -701,4 +701,23 @@ export const SEASON_2_UFO = {
     veryhard: 2,
     general: 5,
   },
+  "draft": {
+    "excluded_categories": [
+      "general"
+    ],
+    "category_counts": [
+      {
+        "easy": 3,
+        "medium": 3,
+        "hard": 3,
+        "veryhard": 3
+      },
+      {
+        "easy": 2,
+        "medium": 4,
+        "hard": 5,
+        "veryhard": 2
+      }
+    ]
+  }
 } as const;

@@ -1,6 +1,6 @@
-import { List, Stack, Text } from "@mantine/core";
+import { Stack } from "@mantine/core";
 import { ReactNode } from "react";
-import { UFODraftPasta, UFOPasta } from "../generator/ufoGenerator";
+import { UFOPasta } from "../generator/ufoGenerator";
 import { STANDARD_UFO } from "./standardUfo";
 import { SPICY_UFO } from "./spicyUfo";
 import { BLITZ_UFO } from "./blitzUfo";
@@ -19,135 +19,34 @@ const RAW_METADATA = [
     type: "UFO",
     name: "Standard",
     pasta: STANDARD_UFO,
-    isMenu: false,
-    hovercard: (
-      <Stack>
-        <span>
-          This is the default goal set and format for bingo, and the one used in
-          Bingo League play.
-        </span>
-        <a
-          target="_blank"
-          href="https://docs.google.com/document/d/1XyEh20vdf7jtfYW94iIRHmf5YOQ0B-lZ2yh9lJjMMbM/edit?usp=sharing"
-        >
-          View the bingo overview document, including full goal list and
-          changelog, here.
-        </a>
-        <a
-          target="_blank"
-          href="https://docs.google.com/document/d/1VRHljWeJ3lHuN3ou-9R0kMgwoZeCcaEPBsRCI1nWEig/edit?usp=sharing"
-        >
-          View the full rules here.
-        </a>
-        <List>
-          <List.Item>Balanced goal list and difficulty structure</List.Item>
-          <List.Item>
-            Accessible to most players familiar with the collection
-          </List.Item>
-          <List.Item>
-            Tested and revised for fairness and goal quality
-          </List.Item>
-          <List.Item>Overseen by bingo admins</List.Item>
-        </List>
-      </Stack>
-    ),
-  },
-  {
-    type: "UFODraft",
-    name: "Standard Draft",
-    pasta: STANDARD_UFO,
-    isMenu: false,
-    hovercard: (
-      <Stack>
-        <span>
-          A new way to play the Standard variant, and the default format for the
-          Underground league.
-          <br />
-          Players draft/ban games, and then a custom board is created where each
-          player's picks are represented equally.
-        </span>
-      </Stack>
+    info: (
+      <span>
+        The default goal set for bingo, and the one used in League play. <a target="_blank" href="https://docs.google.com/document/d/11kIVxD6NOsoXXXdv22owLPM_nj5oKiCpY53K418muW8/edit?tab=t.0#heading=h.us0d6jom1jp">View the full rules here.</a>
+      </span>
     ),
   },
   {
     type: "UFO",
     name: "Spicy",
     pasta: SPICY_UFO,
-    isMenu: false,
-    hovercard: (
-      <Stack>
-        <span>
-          A more challenging variant. Can be played 1v1, 2v2, and with or
-          without instant win conditions. Also has restrictions which do not
-          appear directly on Bingo squares.
-        </span>
-        <a
+    info: (
+      <span>
+        A more challenging goal set, often played 2v2. <a
           target="_blank"
           href="https://docs.google.com/document/d/1Snf0qAm68dRROjoh8hb3Rn0OV-THyD2PcLJeuN-209U/edit?tab=t.0#heading=h.mkzjcutr4nw7"
         >
-          View additional restrictions here.
-        </a>
-        <List>
-          <List.Item>
-            Longer, more challenging goals, often with more elaborate
-            restrictions
-          </List.Item>
-          <List.Item>
-            Higher and more specific requirements in general goals
-          </List.Item>
-          <List.Item>No collectathon goals</List.Item>
-          <List.Item>
-            Tailored to players very familiar with the mechanics of most games;
-            not for newcomers
-          </List.Item>
-          <List.Item>
-            Goal list is not as balanced with regards to specific difficulty
-            assignments or game representation
-          </List.Item>
-          <List.Item>Different default difficulty tier structure</List.Item>
-          <List.Item>90 second review period instead of 60 seconds</List.Item>
-        </List>
-        <Text size="xs">
-          <em>Created by Matt</em>
-        </Text>
-      </Stack>
-    ),
-  },
-  {
-    type: "UFODraft",
-    name: "Spicy Draft",
-    pasta: SPICY_UFO,
-    isMenu: false,
-    hovercard: (
-      <Stack>
-        <span>
-          A new way to play the Spicy variant.
-          <br />
-          Players draft/ban games, and then a custom board is created where each
-          player's picks are represented equally.
-        </span>
-      </Stack>
+          Also has restrictions which players are expected to follow at all times.
+        </a> Recommended 90 second review period instead of the standard 60 seconds.
+      </span>
     ),
   },
   {
     type: "UFO",
     name: "Combo",
     pasta: COMBO_UFO,
-    isMenu: false,
-    hovercard: (
+    info: (
       <Stack>
-        <span>Create a game with both Standard and Spicy goals!</span>
-      </Stack>
-    ),
-  },
-  {
-    type: "UFODraft",
-    name: "Combo Draft",
-    pasta: COMBO_UFO,
-    isMenu: false,
-    hovercard: (
-      <Stack>
-        <span>Create a Draft game with both Standard and Spicy goals!</span>
+        <span>A goal set that combines Standard and Spicy goals.</span>
       </Stack>
     ),
   },
@@ -155,217 +54,127 @@ const RAW_METADATA = [
     type: "UFO",
     name: "Blitz",
     pasta: BLITZ_UFO,
-    isMenu: false,
-    hovercard: (
-      <Stack>
-        <span>A faster, generally easier variant.</span>
-        <List>
-          <List.Item>Goals are shorter overall</List.Item>
-          <List.Item>No review time for the board</List.Item>
-          <List.Item>
-            No difficulty tiers; all goals are roughly equal in length/challenge
-          </List.Item>
-        </List>
-        <Text size="xs">
-          <em>Created by Peter Peladon</em>
-        </Text>
-      </Stack>
+    info: (
+      <span>A faster, generally easier variant. Recommended to have no board review time instead of the standard 60 seconds.</span>
     ),
   },
   {
     type: "Custom",
     name: "Custom",
-    isMenu: false,
-    hovercard: (
-      <Stack>
-        <span>
-          Create a board from a custom goal list. For advanced users only.
-        </span>
-        <Text size="xs">
-          <em>Created by you!</em>
-        </Text>
-      </Stack>
-    ),
   },
   {
     type: "UFO",
     name: "Choco",
     pasta: CHOCO_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>
-          Similar to Blitz bingo, goals are easier/faster than normal. But,
-          pushes the “blitz” aspect further - most goals are <em>very</em> fast.
-        </span>
-        <Text size="xs">
-          <em>Created by chocolatecake5000</em>
-        </Text>
-      </Stack>
+    info: (
+      <span>
+        Similar to Blitz, but games are even faster. Recommended to have no board review time instead of the standard 60 seconds.
+      </span>
     ),
   },
   {
     type: "UFO",
     name: "Game Names",
     pasta: GAME_NAMES_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>
-          Create a board containing only names of games. Useful if you want to
-          race for Gifts, Gold Disks, or Cherry Disks across the collection.
-        </span>
-        <Text size="xs">
-          <em>Created by UFOSoft</em>
-        </Text>
-      </Stack>
+    info: (
+      <span>
+        Create a board containing only names of games. Useful if you want to
+        race for Gifts, Gold Disks, or Cherry Disks across the collection.
+      </span>
     ),
   },
   {
     type: "UFO",
     name: "Prototype",
     pasta: PROTOTYPE_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>
-          The goals used for{" "}
-          <a
-            target="blank"
-            href="https://www.youtube.com/watch?v=AVvqYWGPX8U&list=PLknPYaq85B6TPX6Pkkm52EuG5OpRCZe8R"
-          >
-            the very first tournament!
-          </a>{" "}
-          See how it all started!
-        </span>
-        <Text size="xs">
-          <em>Created by the bingo admins</em>
-        </Text>
-      </Stack>
+    info: (
+      <span>
+        The goal set used for{" "}
+        <a
+          target="blank"
+          href="https://www.youtube.com/watch?v=AVvqYWGPX8U&list=PLknPYaq85B6TPX6Pkkm52EuG5OpRCZe8R"
+        >
+          the very first tournament!
+        </a>{" "}
+        See how it all started!
+      </span>
     ),
   },
   {
     type: "UFO",
     name: "Season 1",
     pasta: SEASON_1_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>
-          The goals used for{" "}
-          <a
-            target="blank"
-            href="https://docs.google.com/spreadsheets/d/1aYcmIA1KoviLQvQHDNTfzkIyG_BwHrO1cTtgimZtWZw/edit?gid=521253915#gid=521253915"
-          >
-            Season 1 of Bingo League.
-          </a>
-        </span>
-        <Text size="xs">
-          <em>Created by the bingo admins</em>
-        </Text>
-      </Stack>
+    info: (
+      <span>
+        The goal set used for{" "}
+        <a
+          target="blank"
+          href="https://docs.google.com/spreadsheets/d/1aYcmIA1KoviLQvQHDNTfzkIyG_BwHrO1cTtgimZtWZw/edit?gid=521253915#gid=521253915"
+        >
+          Season 1 of Bingo League.
+        </a>
+      </span>
     ),
   },
   {
     type: "UFO",
     name: "Season 2",
     pasta: SEASON_2_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>
-          The goals used for{" "}
-          <a
-            target="blank"
-            href="https://docs.google.com/spreadsheets/d/1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA/edit?gid=521253915#gid=521253915"
-          >
-            Season 2 of Bingo League.
-          </a>
-        </span>
-        <Text size="xs">
-          <em>Created by the bingo admins</em>
-        </Text>
-      </Stack>
+    info: (
+      <span>
+        The goal set used for{" "}
+        <a
+          target="blank"
+          href="https://docs.google.com/spreadsheets/d/1FwNEMlF1KPdVADiPP539y2a2mDiyHpmoQclALHK9nCA/edit?gid=521253915#gid=521253915"
+        >
+          Season 2 of Bingo League.
+        </a>
+      </span>
     ),
   },
   {
     type: "UFO",
     name: "Nozzlo (Deprecated)",
     pasta: NOZZLO_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>
-          An absurdly difficult variant with very long, deliberately
-          unbalanced/unfair goals. Nozzlo is usually played as a cooperative
-          "raid boss" event approximately once every quarter.
-        </span>
-        <span>
-          Nozzlo community events use a newer goal set which is{" "}
-          <strong>intentionally non-public</strong>. This variant uses the
-          original, unbalanced goal set.
-        </span>
+    info: (
+      <span>
+        An absurdly difficult variant with very long, deliberately
+        unbalanced/unfair goals. Nozzlo is usually played as a cooperative
+        "raid boss" event approximately once every quarter.
+        <br />
+        Nozzlo community events use a newer goal set which is{" "}
+        <strong>intentionally non-public</strong>. This variant uses the
+        original, unbalanced goal set.
+        <br />
         <a
           target="_blank"
           href="https://docs.google.com/document/d/1CLCDLDH4F0ufhGAcnDuKTtcZISrfwBonuPnbTQldh4Y/edit?tab=t.0"
         >
           View the official rules here.
         </a>
-        <List>
-          <List.Item>Review period optional</List.Item>
-          <List.Item>No reviewing the goal list at all in advance</List.Item>
-          <List.Item>No time limit</List.Item>
-          <List.Item>
-            No resources, generally speaking (other players may assist you)
-          </List.Item>
-          <List.Item>
-            No difficulty tiers; all goals roughly equal in length and challenge
-          </List.Item>
-        </List>
-        <Text size="xs">
-          <em>Created by Peter Peladon</em>
-        </Text>
-      </Stack>
+      </span>
     ),
   },
   {
     type: "UFO",
     name: "Campanella 3",
     pasta: CAMPANELLA3_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>Mostly involves the “secret” minigames in Campanella 3.</span>
-        <List>
-          <List.Item>
-            Access minigames by holding button 2 on the P2 controller during
-            regular gameplay
-          </List.Item>
-          <List.Item>
-            Minigames can still be played after a regular game over
-          </List.Item>
-        </List>
-        <Text size="xs">
-          <em>Created by RedRobot</em>
-        </Text>
-      </Stack>
+    info: (
+      <span>
+        A goal set using the “secret” minigames in Campanella 3. Access minigames by holding button 2 on the P2 controller during
+        regular gameplay.
+      </span>
     ),
   },
   {
     type: "UFO",
     name: "Clarity",
     pasta: CLARITY_UFO,
-    isMenu: true,
-    hovercard: (
-      <Stack>
-        <span>
-          This goal set’s obtuse and wordy nature is a nod to an infamous bingo
-          goal of the past.
-        </span>
-        <Text size="xs">
-          <em>Created by Guri</em>
-        </Text>
-      </Stack>
+    info: (
+      <span>
+        This goal set’s obtuse and wordy nature is a nod to an infamous bingo
+        goal of the past.
+      </span>
     ),
   },
 ] as const;
@@ -380,8 +189,7 @@ export type Variant = (typeof RAW_METADATA)[number]["name"];
 
 interface MetadataBase {
   name: Variant;
-  hovercard: ReactNode;
-  isMenu: boolean;
+  info?: ReactNode;
 }
 
 interface Custom extends MetadataBase {

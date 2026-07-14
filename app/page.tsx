@@ -66,21 +66,10 @@ export default function CreateBoard() {
             </Stack>
           </Card.Section>
           {matchType != null && (
-            <Card.Section withBorder={true} inheritPadding={true} py="xs">
-              {/* Using divs with display style to state doesn't get cleared if you change to the other type */}
-              <div
-                style={{ display: matchType === "league" ? undefined : "none" }}
-              >
-                <LeagueMatch />
-              </div>
-              <div
-                style={{
-                  display: matchType === "non-league" ? undefined : "none",
-                }}
-              >
-                <NonLeagueMatch />
-              </div>
-            </Card.Section>
+            <>
+              <LeagueMatch visible={matchType === "league"} />
+              <NonLeagueMatch visible={matchType === "non-league"} />
+            </>
           )}
         </Card>
       </Stack>

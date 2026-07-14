@@ -5,13 +5,13 @@ export function getWinType(match: Match): null | string {
     return match.hasBingo
       ? "Bingo"
       : match.winner.score > match.opponent.score
-      ? "Majority"
-      : "Tiebreak";
+        ? "Majority"
+        : "Tiebreak";
   } else {
     return null;
   }
 }
 
 export function getVariantText(match: Match): string {
-  return match.variant + (match.isCustom ? " (Custom)" : "");
+  return match.variant + (match.isCustom ? " (Custom)" : "") + (match.isDraft ? " Draft" : "");
 }

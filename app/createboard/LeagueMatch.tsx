@@ -180,6 +180,7 @@ export default function LeagueMatch({ visible }: Props) {
                 variant: "Standard",
                 bingosyncVariant: "18",
                 isCustom: false,
+                isDraft: false,
                 isLockout: true,
                 pasta: JSON.stringify(
                   ufoGenerator(STANDARD_UFO).map((goal) => ({ name: goal })),

@@ -8,6 +8,7 @@ export const MATCH_FIELDS = getSql()`
   EXTRACT(EPOCH FROM date_created)::INTEGER as date_created,
   variant,
   is_custom,
+  is_draft,
   winner_name,
   winner_color,
   winner_score,
@@ -42,17 +43,17 @@ export function getMatchFromRaw(rawMatch: Record<string, any>): Match {
 
   const winner =
     winner_name != null &&
-    winner_score != null &&
-    winner_color != null &&
-    winner_color.length > 0
+      winner_score != null &&
+      winner_color != null &&
+      winner_color.length > 0
       ? { name: winner_name, score: winner_score, color: winner_color }
       : null;
 
   const opponent =
     opponent_name != null &&
-    opponent_score != null &&
-    opponent_color != null &&
-    opponent_color.length > 0
+      opponent_score != null &&
+      opponent_color != null &&
+      opponent_color.length > 0
       ? { name: opponent_name, score: opponent_score, color: opponent_color }
       : null;
 
@@ -87,6 +88,7 @@ export function getMatchFromRaw(rawMatch: Record<string, any>): Match {
     dateCreated: rawMatch.date_created,
     variant: rawMatch.variant,
     isCustom: rawMatch.is_custom,
+    isDraft: rawMatch.is_draft,
     winner,
     opponent,
     hasBingo: rawMatch.winner_bingo === true,

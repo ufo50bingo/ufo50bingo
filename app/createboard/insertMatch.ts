@@ -49,6 +49,7 @@ export async function insertMatch({
     is_public,
     variant,
     is_custom,
+    is_draft,
     is_lockout,
     league_season,
     league_week,

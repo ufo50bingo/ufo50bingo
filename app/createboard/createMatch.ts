@@ -27,6 +27,7 @@ export interface CommonMatchProps {
   isPublic: boolean;
   variant: Variant;
   isCustom: boolean;
+  isDraft: boolean;
   isLockout: boolean;
 }
 
@@ -42,6 +43,7 @@ export default async function createMatch({
   variant,
   bingosyncVariant,
   isCustom,
+  isDraft,
   isLockout,
   pasta,
   leagueInfo,
@@ -106,6 +108,7 @@ export default async function createMatch({
     isPublic,
     variant,
     isCustom,
+    isDraft,
     isLockout,
     leagueInfo,
     cookie: sessionCookie,

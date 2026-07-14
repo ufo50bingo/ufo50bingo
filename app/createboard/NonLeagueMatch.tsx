@@ -112,9 +112,20 @@ export default function NonLeagueMatch({ visible }: Props) {
     };
     switch (metadata.type) {
       case "Custom":
-        return customType === "ufo" && customUfo != null
-          ? getUFOPastaWithCustomSelectors(customUfo)
-          : custom;
+        if (customType !== "ufo" || customUfo == null) {
+          return custom;
+        }
+        if (format === "Draft") {
+          if (draftPasta != null) {
+            return stringify(
+              ufoGenerator(draftPasta).map((goal) => ({ name: goal })),
+            );
+          } else {
+            throw new Error("draftPasta expected to be nonnull");
+          }
+        }
+        return getUFOPastaWithCustomSelectors(customUfo);
+
       case "UFO":
         if (format === "Draft") {
           if (draftPasta != null) {

@@ -165,27 +165,6 @@ export default function UFODraftCreator({
   ]);
   return (
     <Stack>
-      <Alert>
-        To construct a Draft game, one player should share their view of this
-        page, and then players should alternate drafting games up to the agreed
-        upon limit. If desired, players can then protect/ban games.
-        <br />
-        <br />
-        For each game, the first checkbox indicates whether the first player has
-        drafted the game, and so on.
-        <br />
-        Each game can be drafted by only one player.
-        <br />
-        <br />
-        If you want to play with more than 2 players,{" "}
-        <u>
-          <strong>
-            you must also manually update the difficulty counts below the game
-            selector
-          </strong>
-        </u>
-        .
-      </Alert>
       <NumberInput
         label="Number of players (2-5)"
         clampBehavior="strict"

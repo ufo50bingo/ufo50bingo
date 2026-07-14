@@ -393,11 +393,6 @@ interface UFO extends MetadataBase {
   pasta: UFOPasta;
 }
 
-interface UFODraft extends MetadataBase {
-  type: "UFODraft";
-  pasta: UFODraftPasta;
-}
-
-export type VariantMetadata = Custom | UFO | UFODraft;
+export type VariantMetadata = Custom | UFO;
 
 export const METADATA: ReadonlyArray<VariantMetadata> = RAW_METADATA;

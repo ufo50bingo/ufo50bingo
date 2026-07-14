@@ -43,10 +43,6 @@ export interface UFOPasta {
   };
 }
 
-export interface UFODraftPasta extends UFOPasta {
-  draft: NonNullable<UFOPasta["draft"]>;
-}
-
 const SAME_LINE_INDICES = [
   [1, 2, 3, 4, 5, 10, 15, 20, 6, 12, 18, 24],
   [0, 2, 3, 4, 6, 11, 16, 21],

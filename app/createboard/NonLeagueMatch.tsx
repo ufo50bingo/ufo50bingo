@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import { IconCheck, IconDots, IconExclamationMark } from "@tabler/icons-react";
 import {
-  ActionIcon,
   Alert,
   Anchor,
   Button,
@@ -11,7 +10,6 @@ import {
   Chip,
   Group,
   JsonInput,
-  SegmentedControl,
   Select,
   Stack,
   Text,
@@ -21,7 +19,6 @@ import {
 } from "@mantine/core";
 import GameChecker from "./GameChecker";
 import { METADATA, SELECTOR_DATA, Variant, VariantMetadata } from "../pastas/metadata";
-import VariantHoverCard from "./VariantHoverCard";
 import createMatch from "./createMatch";
 import { db } from "../db";
 import Link from "next/link";
@@ -50,7 +47,6 @@ const FORMAT_OPTIONS = ["Normal", "Draft", "Custom"] as const;
 type Format = (typeof FORMAT_OPTIONS)[number];
 
 export default function NonLeagueMatch() {
-  const [showAll, setShowAll] = useState(false);
   const [checkerSort, setCheckerSort] = useLocalEnum({
     key: "checker-sort",
     defaultValue: "chronological",
@@ -66,7 +62,6 @@ export default function NonLeagueMatch() {
 
   const [draftPasta, setDraftPasta] = useState<null | UFODraftPasta>(null);
   const [format, setFormat] = useState<Format>("Normal");
-  const [showFilters, setShowFilters] = useState(false);
 
   const [roomName, setRoomName] = useState("");
   const [password, setPassword] = useState("");
@@ -89,7 +84,7 @@ export default function NonLeagueMatch() {
     const stringify = (structured: ReadonlyArray<{ name: string }>) =>
       pretty ? JSON.stringify(structured, null, 2) : JSON.stringify(structured);
     const getUFOPastaWithCustomSelectors = (pasta: UFOPasta): string => {
-      if (!showFilters) {
+      if (format !== "Custom") {
         return stringify(ufoGenerator(pasta).map((goal) => ({ name: goal })));
       }
       // we check for excluded games instead of included
@@ -169,33 +164,9 @@ export default function NonLeagueMatch() {
         searchable={true}
         clearable={false}
       />
-      <Group justify="space-between">
-        {(metadata.type === "UFO" || (metadata.type === "Custom" && customUfo != null)) && (
-          <Chip.Group multiple={false} value={format} onChange={(newFormat: string) => setFormat(newFormat as Format)}>
-            <Group gap={8}>
-              {FORMAT_OPTIONS.map(f => <Chip key={f} value={f}>{f}</Chip>)}
-            </Group>
-          </Chip.Group>
-        )}
-        {metadata.type === "UFO" && (
-          <Tooltip label="Copy the source in the new “UFO” format.">
-            <Button
-              variant="light"
-              size="xs"
-              onClick={() => {
-                navigator.clipboard.writeText(
-                  JSON.stringify(metadata.pasta, null, 2),
-                );
-              }}
-            >
-              Copy source
-            </Button>
-          </Tooltip>
-        )}
-      </Group>
       <Alert>{metadata.hovercard}</Alert>
       {metadata.type === "Custom" && (
-        <Stack>
+        <>
           <Stack gap={4}>
             <Select
               data={[
@@ -252,15 +223,6 @@ export default function NonLeagueMatch() {
                   {customUfoWarnings.join("\n")}
                 </Alert>
               )}
-              {customUfo != null && (
-                <Checkbox
-                  checked={showFilters}
-                  label="Customize"
-                  onChange={(event) =>
-                    setShowFilters(event.currentTarget.checked)
-                  }
-                />
-              )}
             </>
           ) : (
             <JsonInput
@@ -277,11 +239,35 @@ export default function NonLeagueMatch() {
               value={custom}
             />
           )}
-        </Stack>
+        </>
       )}
+      <Group justify="space-between">
+        {(metadata.type === "UFO" || (metadata.type === "Custom" && customUfo != null)) && (
+          <Chip.Group multiple={false} value={format} onChange={(newFormat: string) => setFormat(newFormat as Format)}>
+            <Group gap={8}>
+              {FORMAT_OPTIONS.map(f => <Chip key={f} value={f}>{f}</Chip>)}
+            </Group>
+          </Chip.Group>
+        )}
+        {metadata.type === "UFO" && (
+          <Tooltip label="Copy the source in the new “UFO” format.">
+            <Button
+              variant="light"
+              size="xs"
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  JSON.stringify(metadata.pasta, null, 2),
+                );
+              }}
+            >
+              Copy source
+            </Button>
+          </Tooltip>
+        )}
+      </Group>
       {(metadata.type === "UFO" ||
         (metadata.type === "Custom" && customUfo != null)) &&
-        showFilters && (
+        format === "Custom" && (
           <>
             <GameChecker
               uncheckedGames={uncheckedGames}
@@ -316,7 +302,7 @@ export default function NonLeagueMatch() {
             />
           </>
         )}
-      {metadata.type === "UFODraft" && (
+      {metadata.type === "UFO" && format === "Draft" && (
         <UFODraftCreator
           draftCheckState={draftCheckState}
           setDraftCheckState={setDraftCheckState}
@@ -413,7 +399,7 @@ export default function NonLeagueMatch() {
               isPublic,
               variant,
               bingosyncVariant,
-              isCustom: showFilters && metadata.type === "UFO",
+              isCustom: format === "Custom" && metadata.type === "UFO",
               isLockout,
               pasta: getSerializedPasta(false),
               leagueInfo: null,

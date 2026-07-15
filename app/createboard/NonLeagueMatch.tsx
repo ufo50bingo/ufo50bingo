@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { IconCheck, IconDots, IconExclamationMark } from "@tabler/icons-react";
+import { IconCheck, IconExclamationMark } from "@tabler/icons-react";
 import {
   Alert,
   Anchor,
@@ -19,7 +19,7 @@ import {
   Tooltip,
 } from "@mantine/core";
 import GameChecker from "./GameChecker";
-import { METADATA, SELECTOR_DATA, Variant, VariantMetadata } from "../pastas/metadata";
+import { METADATA, SELECTOR_DATA, Variant } from "../pastas/metadata";
 import createMatch from "./createMatch";
 import { db } from "../db";
 import Link from "next/link";
@@ -173,7 +173,9 @@ export default function NonLeagueMatch({ visible }: Props) {
           </Text>
           <Select
             value={variant}
-            onChange={(newVariant: string | null) => setVariant(newVariant as Variant)}
+            onChange={(newVariant: string | null) =>
+              setVariant(newVariant as Variant)
+            }
             data={SELECTOR_DATA}
             allowDeselect={false}
             searchable={true}
@@ -257,10 +259,19 @@ export default function NonLeagueMatch({ visible }: Props) {
             </>
           )}
           <Group justify="space-between">
-            {(metadata.type === "UFO" || (metadata.type === "Custom" && customUfo != null)) && (
-              <Chip.Group multiple={false} value={format} onChange={(newFormat: string) => setFormat(newFormat as Format)}>
+            {(metadata.type === "UFO" ||
+              (metadata.type === "Custom" && customUfo != null)) && (
+              <Chip.Group
+                multiple={false}
+                value={format}
+                onChange={(newFormat: string) => setFormat(newFormat as Format)}
+              >
                 <Group gap={8}>
-                  {FORMAT_OPTIONS.map(f => <Chip key={f} value={f}>{f}</Chip>)}
+                  {FORMAT_OPTIONS.map((f) => (
+                    <Chip key={f} value={f}>
+                      {f}
+                    </Chip>
+                  ))}
                 </Group>
               </Chip.Group>
             )}
@@ -328,9 +339,9 @@ export default function NonLeagueMatch({ visible }: Props) {
                   setDraftCheckState={setDraftCheckState}
                   numPlayers={numPlayers}
                   setNumPlayers={setNumPlayers}
-                  pasta={metadata.type === "Custom"
-                    ? customUfo!
-                    : metadata.pasta}
+                  pasta={
+                    metadata.type === "Custom" ? customUfo! : metadata.pasta
+                  }
                   onChangePasta={setDraftPasta}
                   sort={checkerSort}
                   setSort={setCheckerSort}
@@ -367,7 +378,8 @@ export default function NonLeagueMatch({ visible }: Props) {
                     Stats about public games will be visible to all users on the
                     Matches tab.
                     <br />
-                    Users will still need the password to join the Bingosync room.
+                    Users will still need the password to join the Bingosync
+                    room.
                   </span>
                 ) : (
                   <span>Only Lockout games can be made Public.</span>
@@ -379,7 +391,9 @@ export default function NonLeagueMatch({ visible }: Props) {
                   checked={isPublic}
                   disabled={!isLockout}
                   label="Public"
-                  onChange={(event) => setIsPublicRaw(event.currentTarget.checked)}
+                  onChange={(event) =>
+                    setIsPublicRaw(event.currentTarget.checked)
+                  }
                 />
               </div>
             </Tooltip>
@@ -397,7 +411,9 @@ export default function NonLeagueMatch({ visible }: Props) {
               (metadata.type === "Custom" &&
                 customType === "ufo" &&
                 customUfo == null) ||
-              (metadata.type === "UFO" && format === "Draft" && draftPasta == null)
+              (metadata.type === "UFO" &&
+                format === "Draft" &&
+                draftPasta == null)
             }
             onClick={async () => {
               setIsCreationInProgress(true);
@@ -429,8 +445,14 @@ export default function NonLeagueMatch({ visible }: Props) {
                   isPublic,
                   variant,
                   bingosyncVariant,
-                  isCustom: format === "Custom" && (metadata.type === "UFO" || (metadata.type === "Custom" && customUfo != null)),
-                  isDraft: format === "Draft" && (metadata.type === "UFO" || (metadata.type === "Custom" && customUfo != null)),
+                  isCustom:
+                    format === "Custom" &&
+                    (metadata.type === "UFO" ||
+                      (metadata.type === "Custom" && customUfo != null)),
+                  isDraft:
+                    format === "Draft" &&
+                    (metadata.type === "UFO" ||
+                      (metadata.type === "Custom" && customUfo != null)),
                   isLockout,
                   pasta: getSerializedPasta(false),
                   leagueInfo: null,
@@ -465,7 +487,9 @@ export default function NonLeagueMatch({ visible }: Props) {
               (metadata.type === "Custom" &&
                 customType === "ufo" &&
                 customUfo == null) ||
-              (metadata.type === "UFO" && format === "Draft" && draftPasta == null)
+              (metadata.type === "UFO" &&
+                format === "Draft" &&
+                draftPasta == null)
             }
             onClick={() => {
               navigator.clipboard.writeText(getSerializedPasta(true));
@@ -473,36 +497,32 @@ export default function NonLeagueMatch({ visible }: Props) {
           >
             Copy Pasta to Clipboard
           </Button>
-          {
-            url !== "" && (
-              <Alert
-                variant="light"
-                color="green"
-                title="Success!"
-                icon={<IconCheck />}
-              >
-                <a href={url} target="_blank">
-                  Your new room is available at here.
-                </a>
-                <br />
-                <Link prefetch={false} href={`/match/${id}`} target="_blank">
-                  Your Match results can be viewed here.
-                </Link>
-              </Alert>
-            )
-          }
-          {
-            error != null && (
-              <Alert
-                variant="light"
-                color="red"
-                title="Failed to create bingo board"
-                icon={<IconExclamationMark />}
-              >
-                {error.message}
-              </Alert>
-            )
-          }
+          {url !== "" && (
+            <Alert
+              variant="light"
+              color="green"
+              title="Success!"
+              icon={<IconCheck />}
+            >
+              <a href={url} target="_blank">
+                Your new room is available at here.
+              </a>
+              <br />
+              <Link prefetch={false} href={`/match/${id}`} target="_blank">
+                Your Match results can be viewed here.
+              </Link>
+            </Alert>
+          )}
+          {error != null && (
+            <Alert
+              variant="light"
+              color="red"
+              title="Failed to create bingo board"
+              icon={<IconExclamationMark />}
+            >
+              {error.message}
+            </Alert>
+          )}
         </Stack>
       </Card.Section>
     </>

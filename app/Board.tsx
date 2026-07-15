@@ -134,9 +134,11 @@ export default function Board({
   boardCover,
   isCast = false,
 }: Props) {
-  const { rightClickBehavior, customColor } = useRightClickBehaviorContext();
+  const { rightClickBehavior } = useRightClickBehaviorContext();
   const { shouldShortenPlay, shouldShortenCast } = useShouldShortenContext();
-  const [starred, setStarred] = useState<ReadonlyArray<number>>([]);
+  const [rightClickCounts, setRightClickCounts] = useState<
+    ReadonlyArray<number | null>
+  >(board.map((_) => null));
 
   const shouldShorten = isCast ? shouldShortenCast : shouldShortenPlay;
 
@@ -144,19 +146,28 @@ export default function Board({
     if (
       highlights != null ||
       viewerColor == null ||
-      rightClickBehavior === "star"
+      rightClickBehavior.length < 1
     ) {
       return null;
     }
-    const highlightColor =
-      rightClickBehavior === "my_color" ? viewerColor : customColor;
     const newHighlights: null | Array<null | ReadonlyArray<string>> =
       Array(25).fill(null);
-    starred.forEach((squareIndex) => {
-      newHighlights[squareIndex] = [highlightColor];
+    rightClickCounts.forEach((behaviorIndex, squareIndex) => {
+      if (behaviorIndex == null) {
+        return;
+      }
+      const behavior =
+        rightClickBehavior[
+          Math.min(rightClickBehavior.length - 1, behaviorIndex)
+        ];
+      if (behavior.type === "custom_color") {
+        newHighlights[squareIndex] = [behavior.color];
+      } else if (behavior.type === "my_color") {
+        newHighlights[squareIndex] = [viewerColor];
+      }
     });
     return newHighlights;
-  }, [customColor, highlights, rightClickBehavior, starred, viewerColor]);
+  }, [highlights, rightClickBehavior, rightClickCounts, viewerColor]);
   const resolvedHighlights = highlights ?? rightClickHighlights;
   return (
     <div className={classes.boardContainer}>
@@ -167,6 +178,15 @@ export default function Board({
         const displayGoal = shouldShorten
           ? (foundGoal?.short?.resolved ?? square.name)
           : square.name;
+        const rightClickCount = rightClickCounts[squareIndex];
+        const isStarred =
+          rightClickCount == null
+            ? false
+            : viewerColor == null
+              ? true
+              : rightClickBehavior[
+                  Math.min(rightClickBehavior.length - 1, rightClickCount)
+                ].type === "star";
         return (
           <div
             key={squareIndex}
@@ -176,11 +196,17 @@ export default function Board({
             onClick={() => onClickSquare != null && onClickSquare(squareIndex)}
             onContextMenu={(event) => {
               event.preventDefault();
-              if (starred.includes(squareIndex)) {
-                setStarred(starred.filter((idx) => idx !== squareIndex));
-              } else {
-                setStarred([...starred, squareIndex]);
-              }
+              const oldCount = rightClickCounts[squareIndex];
+              const newRightClickCounts = [...rightClickCounts];
+              const maxCount =
+                viewerColor == null ? 0 : rightClickBehavior.length - 1;
+              newRightClickCounts[squareIndex] =
+                oldCount == null
+                  ? 0
+                  : oldCount >= maxCount
+                    ? null
+                    : oldCount + 1;
+              setRightClickCounts(newRightClickCounts);
             }}
             style={
               resolvedHighlights == null || board[squareIndex].color !== "blank"
@@ -188,9 +214,7 @@ export default function Board({
                 : getBorderStyles(resolvedHighlights[squareIndex])
             }
           >
-            {rightClickHighlights == null && starred.includes(squareIndex) && (
-              <div className={classes.starred} />
-            )}
+            {isStarred && <div className={classes.starred} />}
             {shownDifficulties.length > 0 &&
               foundGoal != null &&
               getDifficulty(foundGoal, shownDifficulties)}

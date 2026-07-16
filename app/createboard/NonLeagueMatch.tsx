@@ -11,6 +11,7 @@ import {
   Chip,
   Group,
   JsonInput,
+  List,
   Select,
   Stack,
   Text,
@@ -33,10 +34,13 @@ import UFODifficultySelectors from "./UFODifficultySelectors";
 import UFODraftCreator from "./UFODraftCreator";
 import useLocalEnum from "../localStorage/useLocalEnum";
 import validateStr from "../generator/validateStr";
+import getFilteredDifficulties from "./getFilteredDifficulties";
+import shuffle from "./shuffle";
+import getAllSubcategories from "./getAllSubcategories";
 
 type CustomType = "srl_v5" | "ufo" | "fixed_board" | "randomized";
 
-const FORMAT_OPTIONS = ["Normal", "Draft", "Custom"] as const;
+const FORMAT_OPTIONS = ["Normal", "Draft", "Custom", "Double"] as const;
 type Format = (typeof FORMAT_OPTIONS)[number];
 
 type Props = {
@@ -65,8 +69,8 @@ export default function NonLeagueMatch({ visible }: Props) {
   const [isLockout, setIsLockout] = useState(true);
   const [isPublicRaw, setIsPublicRaw] = useState(true);
   const [isCreationInProgress, setIsCreationInProgress] = useState(false);
-  const [url, setUrl] = useState("");
-  const [id, setId] = useState<null | string>(null);
+  const [createdPassword, setCreatedPassword] = useState("");
+  const [createdIds, setCreatedIds] = useState<ReadonlyArray<string>>([]);
   const [error, setError] = useState<Error | null>(null);
   const [customType, setCustomType] = useState<CustomType>("ufo");
 
@@ -84,24 +88,10 @@ export default function NonLeagueMatch({ visible }: Props) {
       if (format !== "Custom") {
         return stringify(ufoGenerator(pasta).map((goal) => ({ name: goal })));
       }
-      // we check for excluded games instead of included
-      // so we don't accidentally remove generals
-      const difficultyToGameToGoals = pasta.goals;
-      const filtered: UFODifficulties = {};
-      Object.keys(difficultyToGameToGoals).forEach((difficulty) => {
-        const gameToGoals = difficultyToGameToGoals[difficulty];
-        const newGameToGoals: UFOGameGoals = {};
-        Object.keys(gameToGoals).forEach((game) => {
-          if (!uncheckedGames.has(game)) {
-            newGameToGoals[game] = gameToGoals[game];
-          }
-        });
-        filtered[difficulty] = newGameToGoals;
-      });
       return stringify(
         ufoGenerator({
           ...pasta,
-          goals: filtered,
+          goals: getFilteredDifficulties(pasta.goals, uncheckedGames),
           category_counts:
             difficultyCounts[metadata.name] ??
             (metadata.type === "Custom"
@@ -261,20 +251,20 @@ export default function NonLeagueMatch({ visible }: Props) {
           <Group justify="space-between">
             {(metadata.type === "UFO" ||
               (metadata.type === "Custom" && customUfo != null)) && (
-              <Chip.Group
-                multiple={false}
-                value={format}
-                onChange={(newFormat: string) => setFormat(newFormat as Format)}
-              >
-                <Group gap={8}>
-                  {FORMAT_OPTIONS.map((f) => (
-                    <Chip key={f} value={f}>
-                      {f}
-                    </Chip>
-                  ))}
-                </Group>
-              </Chip.Group>
-            )}
+                <Chip.Group
+                  multiple={false}
+                  value={format}
+                  onChange={(newFormat: string) => setFormat(newFormat as Format)}
+                >
+                  <Group gap={8}>
+                    {FORMAT_OPTIONS.map((f) => (
+                      <Chip key={f} value={f}>
+                        {f}
+                      </Chip>
+                    ))}
+                  </Group>
+                </Chip.Group>
+              )}
             {metadata.type === "UFO" && (
               <Tooltip label="Copy the source in the new “UFO” format.">
                 <Button
@@ -439,38 +429,79 @@ export default function NonLeagueMatch({ visible }: Props) {
                     }
                     break;
                 }
-                const id = await createMatch({
-                  roomName,
-                  password,
-                  isPublic,
-                  variant,
-                  bingosyncVariant,
-                  isCustom:
-                    format === "Custom" &&
-                    (metadata.type === "UFO" ||
-                      (metadata.type === "Custom" && customUfo != null)),
-                  isDraft:
-                    format === "Draft" &&
-                    (metadata.type === "UFO" ||
-                      (metadata.type === "Custom" && customUfo != null)),
-                  isLockout,
-                  pasta: getSerializedPasta(false),
-                  leagueInfo: null,
-                });
-                const passwordParams = new URLSearchParams({
-                  p: password,
-                }).toString();
-                const url = `/room/${id}?${passwordParams}`;
-                db.createdMatches.add({ id });
+
+                const pasta = metadata.type === "Custom"
+                  ? customUfo!
+                  : metadata.pasta;
+
+                const promises: Array<Promise<string>> = [];
+                if (format === "Double" && (metadata.type === "UFO" ||
+                  (metadata.type === "Custom" && customUfo != null))) {
+                  const common = {
+                    password,
+                    isPublic,
+                    variant,
+                    bingosyncVariant,
+                    isCustom: true,
+                    isDraft: false,
+                    isLockout,
+                    leagueInfo: null,
+                  };
+                  const allGames = [...getAllSubcategories(pasta.goals, Object.keys(pasta.goals).filter((cat) => cat !== "general"))];
+                  shuffle(allGames);
+                  const partitionIndex = Math.floor(allGames.length / 2);
+                  promises.push(createMatch({
+                    ...common,
+                    roomName: roomName + ' — Card 1',
+                    pasta: JSON.stringify(ufoGenerator({
+                      ...pasta,
+                      goals: getFilteredDifficulties(pasta.goals, new Set(allGames.slice(0, partitionIndex))),
+                    }).map((goal) => ({ name: goal }))),
+                  }));
+                  promises.push(createMatch({
+                    ...common,
+                    roomName: roomName + ' — Card 2',
+                    pasta: JSON.stringify(ufoGenerator({
+                      ...pasta,
+                      goals: getFilteredDifficulties(pasta.goals, new Set(allGames.slice(partitionIndex))),
+                    }).map((goal) => ({ name: goal }))),
+                  }));
+                } else {
+                  promises.push(
+                    createMatch({
+                      roomName,
+                      password,
+                      isPublic,
+                      variant,
+                      bingosyncVariant,
+                      isCustom:
+                        format === "Custom" &&
+                        (metadata.type === "UFO" ||
+                          (metadata.type === "Custom" && customUfo != null)),
+                      isDraft:
+                        format === "Draft" &&
+                        (metadata.type === "UFO" ||
+                          (metadata.type === "Custom" && customUfo != null)),
+                      isLockout,
+                      pasta: getSerializedPasta(false),
+                      leagueInfo: null,
+                    }));
+                }
+
+                const ids = await Promise.all(promises);
+                db.createdMatches.bulkAdd(ids.map(id => ({ id })));
                 setError(null);
-                setUrl(url);
-                setId(id);
+                setCreatedIds(ids);
                 setIsCreationInProgress(false);
-                window.open(url, "_blank");
+                setCreatedPassword(password);
+
+                if (format !== "Double") {
+                  window.open(getRoomLink(ids[0], password), "_blank");
+                }
               } catch (err: unknown) {
                 setIsCreationInProgress(false);
-                setUrl("");
-                setId(null);
+                setCreatedIds([]);
+                setCreatedPassword("");
                 if (err instanceof Error) {
                   setError(err);
                 } else {
@@ -480,7 +511,7 @@ export default function NonLeagueMatch({ visible }: Props) {
             }}
             color="green"
           >
-            Create Bingosync Board
+            Create Bingosync Board{format === "Double" && (metadata.type === "UFO" || (metadata.type === "Custom" && customUfo != null)) ? "s" : ""}
           </Button>
           <Button
             disabled={
@@ -489,7 +520,8 @@ export default function NonLeagueMatch({ visible }: Props) {
                 customUfo == null) ||
               (metadata.type === "UFO" &&
                 format === "Draft" &&
-                draftPasta == null)
+                draftPasta == null) ||
+              format === "Double"
             }
             onClick={() => {
               navigator.clipboard.writeText(getSerializedPasta(true));
@@ -497,20 +529,53 @@ export default function NonLeagueMatch({ visible }: Props) {
           >
             Copy Pasta to Clipboard
           </Button>
-          {url !== "" && (
+          {createdIds.length > 0 && (
             <Alert
               variant="light"
               color="green"
               title="Success!"
               icon={<IconCheck />}
             >
-              <a href={url} target="_blank">
-                Your new room is available at here.
-              </a>
-              <br />
-              <Link prefetch={false} href={`/match/${id}`} target="_blank">
-                Your Match results can be viewed here.
-              </Link>
+              {createdIds.length === 1 && (
+                <>
+                  <a href={getRoomLink(createdIds[0], createdPassword)} target="_blank">
+                    Your new room is available at here.
+                  </a>
+                  <br />
+                  <Link prefetch={false} href={`/match/${createdIds[0]}`} target="_blank">
+                    Your Match results can be viewed here.
+                  </Link>
+                </>
+              )}
+              {createdIds.length > 1 && (
+                <>
+                  Your new rooms are available here:
+                  <List>
+                    {createdIds.map((createdId, idx) => (
+                      <List.Item key={createdId}>
+                        <a href={getRoomLink(createdId, createdPassword)}>
+                          <Text size="sm">
+                            Room {idx + 1}
+                          </Text>
+                        </a>
+                      </List.Item>
+                    ))}
+                  </List>
+                  <br />
+                  Your Match results can be viewed here:
+                  <List>
+                    {createdIds.map((createdId, idx) => (
+                      <List.Item key={createdId}>
+                        <a href={`/match/${createdId}`}>
+                          <Text size="sm">
+                            Match results {idx + 1}
+                          </Text>
+                        </a>
+                      </List.Item>
+                    ))}
+                  </List>
+                </>
+              )}
             </Alert>
           )}
           {error != null && (
@@ -524,7 +589,14 @@ export default function NonLeagueMatch({ visible }: Props) {
             </Alert>
           )}
         </Stack>
-      </Card.Section>
+      </Card.Section >
     </>
   );
+}
+
+function getRoomLink(id: string, password: string): string {
+  const passwordParams = new URLSearchParams({
+    p: password,
+  }).toString();
+  return `/room/${id}?${passwordParams}`;
 }

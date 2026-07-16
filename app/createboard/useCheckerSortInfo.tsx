@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { UFODifficulties } from "../generator/ufoGenerator";
 import { ORDERED_PROPER_GAMES } from "../goals";
 import { CheckerSort } from "./CheckerSortSelector";
+import getAllSubcategories from "./getAllSubcategories";
 
 type Props = {
   ufoDifficulties: UFODifficulties;
@@ -14,15 +15,7 @@ export default function useCheckerSortInfo({
   categories,
   sort,
 }: Props): [boolean, ReadonlyArray<string>] {
-  const allSubcategories = useMemo(() => {
-    const subcategories: Set<string> = new Set();
-    for (const category of categories) {
-      for (const subcategory of Object.keys(ufoDifficulties[category])) {
-        subcategories.add(subcategory);
-      }
-    }
-    return subcategories;
-  }, [categories, ufoDifficulties]);
+  const allSubcategories = useMemo(() => getAllSubcategories(ufoDifficulties, categories), [categories, ufoDifficulties]);
   const hasChronological = useMemo(() => {
     return allSubcategories.isSubsetOf(new Set(ORDERED_PROPER_GAMES));
   }, [allSubcategories]);

@@ -24,12 +24,7 @@ import { METADATA, SELECTOR_DATA, Variant } from "../pastas/metadata";
 import createMatch from "./createMatch";
 import { db } from "../db";
 import Link from "next/link";
-import ufoGenerator, {
-  Counts,
-  UFODifficulties,
-  UFOGameGoals,
-  UFOPasta,
-} from "../generator/ufoGenerator";
+import ufoGenerator, { Counts, UFOPasta } from "../generator/ufoGenerator";
 import UFODifficultySelectors from "./UFODifficultySelectors";
 import UFODraftCreator from "./UFODraftCreator";
 import useLocalEnum from "../localStorage/useLocalEnum";
@@ -251,20 +246,20 @@ export default function NonLeagueMatch({ visible }: Props) {
           <Group justify="space-between">
             {(metadata.type === "UFO" ||
               (metadata.type === "Custom" && customUfo != null)) && (
-                <Chip.Group
-                  multiple={false}
-                  value={format}
-                  onChange={(newFormat: string) => setFormat(newFormat as Format)}
-                >
-                  <Group gap={8}>
-                    {FORMAT_OPTIONS.map((f) => (
-                      <Chip key={f} value={f}>
-                        {f}
-                      </Chip>
-                    ))}
-                  </Group>
-                </Chip.Group>
-              )}
+              <Chip.Group
+                multiple={false}
+                value={format}
+                onChange={(newFormat: string) => setFormat(newFormat as Format)}
+              >
+                <Group gap={8}>
+                  {FORMAT_OPTIONS.map((f) => (
+                    <Chip key={f} value={f}>
+                      {f}
+                    </Chip>
+                  ))}
+                </Group>
+              </Chip.Group>
+            )}
             {metadata.type === "UFO" && (
               <Tooltip label="Copy the source in the new “UFO” format.">
                 <Button
@@ -430,13 +425,15 @@ export default function NonLeagueMatch({ visible }: Props) {
                     break;
                 }
 
-                const pasta = metadata.type === "Custom"
-                  ? customUfo!
-                  : metadata.pasta;
+                const pasta =
+                  metadata.type === "Custom" ? customUfo! : metadata.pasta;
 
                 const promises: Array<Promise<string>> = [];
-                if (format === "Double" && (metadata.type === "UFO" ||
-                  (metadata.type === "Custom" && customUfo != null))) {
+                if (
+                  format === "Double" &&
+                  (metadata.type === "UFO" ||
+                    (metadata.type === "Custom" && customUfo != null))
+                ) {
                   const common = {
                     password,
                     isPublic,
@@ -447,25 +444,46 @@ export default function NonLeagueMatch({ visible }: Props) {
                     isLockout,
                     leagueInfo: null,
                   };
-                  const allGames = [...getAllSubcategories(pasta.goals, Object.keys(pasta.goals).filter((cat) => cat !== "general"))];
+                  const allGames = [
+                    ...getAllSubcategories(
+                      pasta.goals,
+                      Object.keys(pasta.goals).filter(
+                        (cat) => cat !== "general",
+                      ),
+                    ),
+                  ];
                   shuffle(allGames);
                   const partitionIndex = Math.floor(allGames.length / 2);
-                  promises.push(createMatch({
-                    ...common,
-                    roomName: roomName + ' — Card 1',
-                    pasta: JSON.stringify(ufoGenerator({
-                      ...pasta,
-                      goals: getFilteredDifficulties(pasta.goals, new Set(allGames.slice(0, partitionIndex))),
-                    }).map((goal) => ({ name: goal }))),
-                  }));
-                  promises.push(createMatch({
-                    ...common,
-                    roomName: roomName + ' — Card 2',
-                    pasta: JSON.stringify(ufoGenerator({
-                      ...pasta,
-                      goals: getFilteredDifficulties(pasta.goals, new Set(allGames.slice(partitionIndex))),
-                    }).map((goal) => ({ name: goal }))),
-                  }));
+                  promises.push(
+                    createMatch({
+                      ...common,
+                      roomName: roomName + " — Card 1",
+                      pasta: JSON.stringify(
+                        ufoGenerator({
+                          ...pasta,
+                          goals: getFilteredDifficulties(
+                            pasta.goals,
+                            new Set(allGames.slice(0, partitionIndex)),
+                          ),
+                        }).map((goal) => ({ name: goal })),
+                      ),
+                    }),
+                  );
+                  promises.push(
+                    createMatch({
+                      ...common,
+                      roomName: roomName + " — Card 2",
+                      pasta: JSON.stringify(
+                        ufoGenerator({
+                          ...pasta,
+                          goals: getFilteredDifficulties(
+                            pasta.goals,
+                            new Set(allGames.slice(partitionIndex)),
+                          ),
+                        }).map((goal) => ({ name: goal })),
+                      ),
+                    }),
+                  );
                 } else {
                   promises.push(
                     createMatch({
@@ -485,11 +503,12 @@ export default function NonLeagueMatch({ visible }: Props) {
                       isLockout,
                       pasta: getSerializedPasta(false),
                       leagueInfo: null,
-                    }));
+                    }),
+                  );
                 }
 
                 const ids = await Promise.all(promises);
-                db.createdMatches.bulkAdd(ids.map(id => ({ id })));
+                db.createdMatches.bulkAdd(ids.map((id) => ({ id })));
                 setError(null);
                 setCreatedIds(ids);
                 setIsCreationInProgress(false);
@@ -511,7 +530,12 @@ export default function NonLeagueMatch({ visible }: Props) {
             }}
             color="green"
           >
-            Create Bingosync Board{format === "Double" && (metadata.type === "UFO" || (metadata.type === "Custom" && customUfo != null)) ? "s" : ""}
+            Create Bingosync Board
+            {format === "Double" &&
+            (metadata.type === "UFO" ||
+              (metadata.type === "Custom" && customUfo != null))
+              ? "s"
+              : ""}
           </Button>
           <Button
             disabled={
@@ -538,11 +562,18 @@ export default function NonLeagueMatch({ visible }: Props) {
             >
               {createdIds.length === 1 && (
                 <>
-                  <a href={getRoomLink(createdIds[0], createdPassword)} target="_blank">
+                  <a
+                    href={getRoomLink(createdIds[0], createdPassword)}
+                    target="_blank"
+                  >
                     Your new room is available at here.
                   </a>
                   <br />
-                  <Link prefetch={false} href={`/match/${createdIds[0]}`} target="_blank">
+                  <Link
+                    prefetch={false}
+                    href={`/match/${createdIds[0]}`}
+                    target="_blank"
+                  >
                     Your Match results can be viewed here.
                   </Link>
                 </>
@@ -554,9 +585,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                     {createdIds.map((createdId, idx) => (
                       <List.Item key={createdId}>
                         <a href={getRoomLink(createdId, createdPassword)}>
-                          <Text size="sm">
-                            Room {idx + 1}
-                          </Text>
+                          <Text size="sm">Room {idx + 1}</Text>
                         </a>
                       </List.Item>
                     ))}
@@ -567,9 +596,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                     {createdIds.map((createdId, idx) => (
                       <List.Item key={createdId}>
                         <a href={`/match/${createdId}`}>
-                          <Text size="sm">
-                            Match results {idx + 1}
-                          </Text>
+                          <Text size="sm">Match results {idx + 1}</Text>
                         </a>
                       </List.Item>
                     ))}
@@ -589,7 +616,7 @@ export default function NonLeagueMatch({ visible }: Props) {
             </Alert>
           )}
         </Stack>
-      </Card.Section >
+      </Card.Section>
     </>
   );
 }

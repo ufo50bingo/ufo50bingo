@@ -26,7 +26,6 @@ export default function useRightClickBehavior(): [
     () => parseRightClickBehavior(rawValue, customColor),
     [customColor, rawValue],
   );
-  console.log("raw", rawValue, "rcb", rightClickBehavior);
   return [rightClickBehavior, setRightClickBehavior];
 }
 

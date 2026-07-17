@@ -12,6 +12,7 @@ import { SEASON_1_UFO } from "./season1Ufo";
 import { SEASON_2_UFO } from "./season2Ufo";
 import { COMBO_UFO } from "./comboUfo";
 import { GAME_NAMES_UFO } from "./gameNamesUfo";
+import { CHERRY_RACE_UFO } from "./cherryRaceUfo";
 
 const RAW_METADATA = [
   {
@@ -20,7 +21,13 @@ const RAW_METADATA = [
     pasta: STANDARD_UFO,
     info: (
       <span>
-        The default goal set for bingo, and the one used in League play. <a target="_blank" href="https://docs.google.com/document/d/11kIVxD6NOsoXXXdv22owLPM_nj5oKiCpY53K418muW8/edit?tab=t.0#heading=h.us0d6jom1jp">View the full rules here.</a>
+        The default goal set for bingo, and the one used in League play.{" "}
+        <a
+          target="_blank"
+          href="https://docs.google.com/document/d/11kIVxD6NOsoXXXdv22owLPM_nj5oKiCpY53K418muW8/edit?tab=t.0#heading=h.us0d6jom1jp"
+        >
+          View the full rules here.
+        </a>
       </span>
     ),
   },
@@ -30,12 +37,15 @@ const RAW_METADATA = [
     pasta: SPICY_UFO,
     info: (
       <span>
-        A more challenging goal set, often played 2v2. <a
+        A more challenging goal set, often played 2v2.{" "}
+        <a
           target="_blank"
           href="https://docs.google.com/document/d/1Snf0qAm68dRROjoh8hb3Rn0OV-THyD2PcLJeuN-209U/edit?tab=t.0#heading=h.mkzjcutr4nw7"
         >
-          Also has restrictions which players are expected to follow at all times.
-        </a> Recommended 90 second review period instead of the standard 60 seconds.
+          Also has restrictions which players are expected to follow at all
+          times.
+        </a>{" "}
+        Recommended 90 second review period instead of the standard 60 seconds.
       </span>
     ),
   },
@@ -43,16 +53,17 @@ const RAW_METADATA = [
     type: "UFO",
     name: "Combo",
     pasta: COMBO_UFO,
-    info: (
-      <span>A goal set that combines Standard and Spicy goals.</span>
-    ),
+    info: <span>A goal set that combines Standard and Spicy goals.</span>,
   },
   {
     type: "UFO",
     name: "Blitz",
     pasta: BLITZ_UFO,
     info: (
-      <span>A faster, generally easier variant. Recommended to have no board review time instead of the standard 60 seconds.</span>
+      <span>
+        A faster, generally easier variant. Recommended to have no board review
+        time instead of the standard 60 seconds.
+      </span>
     ),
   },
   {
@@ -65,7 +76,25 @@ const RAW_METADATA = [
     pasta: CHOCO_UFO,
     info: (
       <span>
-        Similar to Blitz, but games are even faster. Recommended to have no board review time instead of the standard 60 seconds.
+        Similar to Blitz, but games are even faster. Recommended to have no
+        board review time instead of the standard 60 seconds.
+      </span>
+    ),
+  },
+  {
+    type: "UFO",
+    name: "10 Cherry Race",
+    pasta: CHERRY_RACE_UFO,
+    info: (
+      <span>
+        Create a board for drafting games in a 10 cherry race.
+        <br />
+        <a
+          href="https://docs.google.com/document/d/1g3XyARTXyPh64fX4wk41yergDv7YsuZEkYKZeZnTB4g/edit?tab=t.0"
+          target="_blank"
+        >
+          See the official drafting rules here.
+        </a>
       </span>
     ),
   },
@@ -136,8 +165,8 @@ const RAW_METADATA = [
     info: (
       <span>
         An absurdly difficult variant with very long, deliberately
-        unbalanced/unfair goals. Nozzlo is usually played as a cooperative
-        "raid boss" event approximately once every quarter.
+        unbalanced/unfair goals. Nozzlo is usually played as a cooperative "raid
+        boss" event approximately once every quarter.
         <br />
         Nozzlo community events use a newer goal set which is{" "}
         <strong>intentionally non-public</strong>. This variant uses the
@@ -158,8 +187,9 @@ const RAW_METADATA = [
     pasta: CAMPANELLA3_UFO,
     info: (
       <span>
-        A goal set using the “secret” minigames in Campanella 3. Access minigames by holding button 2 on the P2 controller during
-        regular gameplay.
+        A goal set using the “secret” minigames in Campanella 3. Access
+        minigames by holding button 2 on the P2 controller during regular
+        gameplay.
       </span>
     ),
   },
@@ -177,9 +207,19 @@ const RAW_METADATA = [
 ] as const;
 
 export const SELECTOR_DATA = [
-  { group: 'Main', items: ['Standard', 'Spicy', 'Blitz', 'Combo', 'Custom'] },
-  { group: 'Past versions', items: ['Prototype', 'Season 1', 'Season 2'] },
-  { group: 'Other', items: ['Choco', 'Game Names', 'Nozzlo (Deprecated)', 'Campanella 3', 'Clarity'] },
+  { group: "Main", items: ["Standard", "Spicy", "Blitz", "Combo", "Custom"] },
+  { group: "Past versions", items: ["Prototype", "Season 1", "Season 2"] },
+  {
+    group: "Other",
+    items: [
+      "10 Cherry Race",
+      "Choco",
+      "Game Names",
+      "Nozzlo (Deprecated)",
+      "Campanella 3",
+      "Clarity",
+    ],
+  },
 ];
 
 export type Variant = (typeof RAW_METADATA)[number]["name"];

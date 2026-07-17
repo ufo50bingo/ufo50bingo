@@ -57,7 +57,7 @@ export default function NonLeagueMatch({ visible }: Props) {
   );
 
   const [draftPasta, setDraftPasta] = useState<null | UFOPasta>(null);
-  const [format, setFormat] = useState<Format>("Normal");
+  const [rawFormat, setFormat] = useState<Format>("Normal");
 
   const [roomName, setRoomName] = useState("");
   const [password, setPassword] = useState("");
@@ -76,6 +76,8 @@ export default function NonLeagueMatch({ visible }: Props) {
   const isPublic = isPublicRaw && isLockout;
   const metadata = METADATA.find((d) => d.name === variant)!;
 
+  const format = metadata.name === "10 Cherry Race" ? "Custom" : rawFormat;
+
   const getSerializedPasta = (pretty: boolean): string => {
     const stringify = (structured: ReadonlyArray<{ name: string }>) =>
       pretty ? JSON.stringify(structured, null, 2) : JSON.stringify(structured);
@@ -83,17 +85,19 @@ export default function NonLeagueMatch({ visible }: Props) {
       if (format !== "Custom") {
         return stringify(ufoGenerator(pasta).map((goal) => ({ name: goal })));
       }
-      return stringify(
-        ufoGenerator({
-          ...pasta,
-          goals: getFilteredDifficulties(pasta.goals, uncheckedGames),
-          category_counts:
-            difficultyCounts[metadata.name] ??
-            (metadata.type === "Custom"
-              ? customUfo!.category_counts
-              : metadata.pasta.category_counts),
-        }).map((goal) => ({ name: goal })),
-      );
+      let goals = ufoGenerator({
+        ...pasta,
+        goals: getFilteredDifficulties(pasta.goals, uncheckedGames),
+        category_counts:
+          difficultyCounts[metadata.name] ??
+          (metadata.type === "Custom"
+            ? customUfo!.category_counts
+            : metadata.pasta.category_counts),
+      });
+      if (metadata.name === "10 Cherry Race") {
+        goals = goals.toSorted();
+      }
+      return stringify(goals.map((goal) => ({ name: goal })));
     };
     switch (metadata.type) {
       case "Custom":
@@ -245,21 +249,24 @@ export default function NonLeagueMatch({ visible }: Props) {
           )}
           <Group justify="space-between">
             {(metadata.type === "UFO" ||
-              (metadata.type === "Custom" && customUfo != null)) && (
-              <Chip.Group
-                multiple={false}
-                value={format}
-                onChange={(newFormat: string) => setFormat(newFormat as Format)}
-              >
-                <Group gap={8}>
-                  {FORMAT_OPTIONS.map((f) => (
-                    <Chip key={f} value={f}>
-                      {f}
-                    </Chip>
-                  ))}
-                </Group>
-              </Chip.Group>
-            )}
+              (metadata.type === "Custom" && customUfo != null)) &&
+              metadata.name !== "10 Cherry Race" && (
+                <Chip.Group
+                  multiple={false}
+                  value={format}
+                  onChange={(newFormat: string) =>
+                    setFormat(newFormat as Format)
+                  }
+                >
+                  <Group gap={8}>
+                    {FORMAT_OPTIONS.map((f) => (
+                      <Chip key={f} value={f}>
+                        {f}
+                      </Chip>
+                    ))}
+                  </Group>
+                </Chip.Group>
+              )}
             {metadata.type === "UFO" && (
               <Tooltip label="Copy the source in the new “UFO” format.">
                 <Button

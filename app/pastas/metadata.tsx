@@ -208,7 +208,6 @@ const RAW_METADATA = [
 
 export const SELECTOR_DATA = [
   { group: "Main", items: ["Standard", "Spicy", "Blitz", "Combo", "Custom"] },
-  { group: "Past versions", items: ["Prototype", "Season 1", "Season 2"] },
   {
     group: "Other",
     items: [
@@ -220,6 +219,7 @@ export const SELECTOR_DATA = [
       "Clarity",
     ],
   },
+  { group: "Past versions", items: ["Prototype", "Season 1", "Season 2"] },
 ];
 
 export type Variant = (typeof RAW_METADATA)[number]["name"];

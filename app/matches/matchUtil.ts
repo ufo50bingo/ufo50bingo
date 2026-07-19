@@ -13,5 +13,5 @@ export function getWinType(match: Match): null | string {
 }
 
 export function getVariantText(match: Match): string {
-  return match.variant + (match.isCustom ? " (Custom)" : "") + (match.isDraft ? " Draft" : "");
+  return match.variant + (match.isCustom && match.variant !== "10 Cherry Race" ? " (Custom)" : "") + (match.isDraft ? " Draft" : "");
 }

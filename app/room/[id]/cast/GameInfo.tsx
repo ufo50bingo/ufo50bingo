@@ -1,14 +1,18 @@
-import { Game, GAME_NAMES } from "@/app/goals";
+import { GAME_NAMES, ProperGame } from "@/app/goals";
 import { Text, Tooltip } from "@mantine/core";
 import React from "react";
 
 type Props = {
-  game: Game;
+  game: string;
   description: null | string;
   goals: null | ReadonlyArray<[string, number]>;
 };
 
 export default function GameInfo({ game, description, goals }: Props) {
+  const name =
+    GAME_NAMES[game as ProperGame] != null
+      ? GAME_NAMES[game as ProperGame]
+      : game;
   const gameName =
     goals != null ? (
       <Tooltip
@@ -27,11 +31,11 @@ export default function GameInfo({ game, description, goals }: Props) {
         })}
       >
         <u>
-          <strong>{GAME_NAMES[game]}</strong>
+          <strong>{name}</strong>
         </u>
       </Tooltip>
     ) : (
-      GAME_NAMES[game]
+      name
     );
   const descriptionText = description != null ? ` (${description})` : "";
   return (

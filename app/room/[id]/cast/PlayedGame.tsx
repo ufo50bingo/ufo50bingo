@@ -1,13 +1,13 @@
-import { ProperGame } from "@/app/goals";
 import classes from "./PlayedGame.module.css";
 import RunningDuration from "@/app/practice/RunningDuration";
 import Duration from "@/app/practice/Duration";
 import { Font } from "@/app/font/useFont";
 import getFontClassname from "@/app/font/getFontClassname";
 import { useServerOffsetContext } from "../ServerOffsetContext";
+import { ORDERED_PROPER_GAMES, ProperGame } from "@/app/goals";
 
 type Props = {
-  game: ProperGame;
+  game: string;
   startTime: number;
   endTime: null | undefined | number;
   font: Font;
@@ -15,10 +15,13 @@ type Props = {
 
 export default function PlayedGame({ game, startTime, endTime, font }: Props) {
   const { getClientMsFromServerMs } = useServerOffsetContext();
+  const href = ORDERED_PROPER_GAMES.includes(game as ProperGame)
+    ? `/games/${game}.png`
+    : `/cobwebs/cobwebs0.png`;
   return (
     <div className={classes.container}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img alt={game} src={`/games/${game}.png`} className={classes.gameIcon} />
+      <img alt={game} src={href} className={classes.gameIcon} />
       <div className={classes.tag}>
         <span className={getFontClassname(font)}>
           {endTime == null ? (

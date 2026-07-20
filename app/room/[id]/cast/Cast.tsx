@@ -10,7 +10,12 @@ import {
 import { Group, Stack, Text } from "@mantine/core";
 import { useCallback, useMemo, useState } from "react";
 import Feed from "../common/Feed";
-import { Game, ORDERED_GAMES, ProperGame } from "@/app/goals";
+import {
+  Game,
+  ORDERED_GAMES,
+  ORDERED_PROPER_GAMES,
+  ProperGame,
+} from "@/app/goals";
 import { getAllTerminalCodes, getGameToGoals } from "./findAllGames";
 import GeneralGoal from "./GeneralGoal";
 import InfoCard from "./InfoCard";
@@ -40,6 +45,9 @@ import useSyncedTimer, { FullSyncedTimerEvent } from "../common/useSyncedTimer";
 import SyncedTimerBoardCover from "../common/SyncedTimerBoardCover";
 import SyncedTimer from "../common/SyncedTimer";
 import StartPauseButton from "../common/StartPauseButton";
+import { NES_50_UFO } from "@/app/generator/nes50Ufo";
+import getNonGeneralCategories from "@/app/createboard/getNonGeneralCategories";
+import getAllSubcategories from "@/app/createboard/getAllSubcategories";
 
 export type FoundStandardGeneral = FoundGoal<
   StandardGeneral,
@@ -143,6 +151,32 @@ export default function Cast({
     setShowRecentGames,
   } = useLocalState(id, seed);
 
+  const isNes50 = useMemo(() => {
+    let foundCount = 0;
+    for (const square of board) {
+      if (findGoal(square.name, NES_50_UFO) != null) {
+        foundCount += 1;
+      }
+      if (foundCount >= 10) {
+        return true;
+      }
+    }
+    return false;
+  }, [board]);
+
+  const gameList = useMemo(
+    () =>
+      isNes50
+        ? [
+            ...getAllSubcategories(
+              NES_50_UFO.goals,
+              getNonGeneralCategories(NES_50_UFO),
+            ),
+          ]
+        : ORDERED_PROPER_GAMES,
+    [isNes50],
+  );
+
   const { addEvent, timerState, forceReveal } = useSyncedTimer({
     id,
     seed,
@@ -231,17 +265,16 @@ export default function Cast({
   const multiGoalGames = Object.keys(gameToGoals).filter(
     (game) => gameToGoals[game].length > 1,
   );
-  switch (sortType) {
-    case "fast":
-    case "alphabetical":
-      multiGoalGames.sort((a, b) => a.localeCompare(b));
-      break;
-    case "chronological":
-      multiGoalGames.sort(
-        (a, b) =>
-          ORDERED_GAMES.indexOf(a as Game) - ORDERED_GAMES.indexOf(b as Game),
-      );
-      break;
+  const canChronoLogicalSort = multiGoalGames.every((game) =>
+    ORDERED_GAMES.includes(game as ProperGame),
+  );
+  if (canChronoLogicalSort && sortType === "chronological") {
+    multiGoalGames.sort(
+      (a, b) =>
+        ORDERED_GAMES.indexOf(a as Game) - ORDERED_GAMES.indexOf(b as Game),
+    );
+  } else {
+    multiGoalGames.sort((a, b) => a.localeCompare(b));
   }
   const multiGoalGameElements = multiGoalGames.map((game) => (
     <GameInfo
@@ -422,7 +455,13 @@ export default function Cast({
             >
               <SyncedTimer timerState={timerState} />
             </Text>
-            <StartPauseButton timerState={timerState} isCast={true} addEvent={addEvent} seed={seed} playerName={playerName} />
+            <StartPauseButton
+              timerState={timerState}
+              isCast={true}
+              addEvent={addEvent}
+              seed={seed}
+              playerName={playerName}
+            />
           </Group>
           <Feed height={`${475 - 44}px`} rawFeed={rawFeed} />
         </Stack>
@@ -441,6 +480,7 @@ export default function Cast({
                     addGame(newGame, playerNum)
                   }
                   terminalCodes={terminalCodes}
+                  gameList={gameList}
                 />
               ))}
             </Group>

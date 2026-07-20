@@ -6,7 +6,7 @@ import {
 } from "@/app/goals";
 import { TBoard } from "@/app/matches/parseBingosyncData";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
-import findGoal from "@/app/findGoal";
+import findGoal, { FoundGoal } from "@/app/findGoal";
 import { SPICY_UFO } from "@/app/pastas/spicyUfo";
 import { NES_50_UFO } from "@/app/generator/nes50Ufo";
 
@@ -51,7 +51,11 @@ export function findGamesForResult(
   if (game == null) {
     return [];
   }
-  if (ORDERED_PROPER_GAMES.includes(game as ProperGame)) {
+  const maybeAsResult = result as FoundGoal<string, string, string>;
+  if (
+    maybeAsResult.isGeneral === false &&
+    maybeAsResult.category !== "general"
+  ) {
     return [game as ProperGame];
   }
   const games: Game[] = [];

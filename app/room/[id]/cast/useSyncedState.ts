@@ -1,4 +1,4 @@
-import { Game, ProperGame } from "@/app/goals";
+import { Game } from "@/app/goals";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { useEffect, useMemo, useRef, useState } from "react";
 import getSupabaseClient from "./getSupabaseClient";
@@ -45,7 +45,7 @@ export interface CountChangeRow extends CountChangeSync {
 }
 
 export interface CurrentGame {
-  game: null | ProperGame;
+  game: null | string;
   start_time: number;
 }
 
@@ -69,7 +69,7 @@ export type SyncedState = {
   rightColor: BingosyncColor;
   generals: GeneralCounts;
   allPlayerGames: AllPlayerGames;
-  addGame: (newGame: null | ProperGame, playerNum: number) => unknown;
+  addGame: (newGame: null | string, playerNum: number) => unknown;
   setLeftColor: (newColor: BingosyncColor) => unknown;
   setRightColor: (newColor: BingosyncColor) => unknown;
   setGeneralGameCount: (change: CountChange) => unknown;
@@ -184,7 +184,7 @@ export default function useSyncedState({
       setRightColorRaw(newColor);
       await syncColor(newColor, false);
     };
-    const addGame = async (newGame: null | ProperGame, playerNum: number) => {
+    const addGame = async (newGame: null | string, playerNum: number) => {
       const newEntry: CurrentGame = {
         game: newGame,
         start_time: getServerMsFromClientMs(Date.now()),

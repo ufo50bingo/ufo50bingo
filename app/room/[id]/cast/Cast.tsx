@@ -45,7 +45,7 @@ import useSyncedTimer, { FullSyncedTimerEvent } from "../common/useSyncedTimer";
 import SyncedTimerBoardCover from "../common/SyncedTimerBoardCover";
 import SyncedTimer from "../common/SyncedTimer";
 import StartPauseButton from "../common/StartPauseButton";
-import { NES_50_UFO } from "@/app/generator/nes50Ufo";
+import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
 import getNonGeneralCategories from "@/app/createboard/getNonGeneralCategories";
 import getAllSubcategories from "@/app/createboard/getAllSubcategories";
 

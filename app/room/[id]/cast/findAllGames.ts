@@ -8,7 +8,7 @@ import { TBoard } from "@/app/matches/parseBingosyncData";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import findGoal, { FoundGoal } from "@/app/findGoal";
 import { SPICY_UFO } from "@/app/pastas/spicyUfo";
-import { NES_50_UFO } from "@/app/generator/nes50Ufo";
+import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
 
 function stripText(text: string): string {
   return text.toLowerCase().replace(/[^a-z0-9]/g, "");

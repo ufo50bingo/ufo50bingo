@@ -10,7 +10,7 @@ import { SPICY_UFO } from "./pastas/spicyUfo";
 import { useRightClickBehaviorContext } from "./settings/RightClickBehaviorContext";
 import { COLORS } from "./room/[id]/common/ColorSelector";
 import { useShouldShortenContext } from "./settings/ShouldShortenContext";
-import { NES_50_UFO } from "./generator/nes50Ufo";
+import { NES_50_UFO } from "./pastas/nes50Ufo";
 
 type Props = {
   board: TBoard;

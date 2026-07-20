@@ -13,7 +13,7 @@ import { SEASON_2_UFO } from "./season2Ufo";
 import { COMBO_UFO } from "./comboUfo";
 import { GAME_NAMES_UFO } from "./gameNamesUfo";
 import { CHERRY_RACE_UFO } from "./cherryRaceUfo";
-import { NES_50_UFO } from "../generator/nes50Ufo";
+import { NES_50_UFO } from "./nes50Ufo";
 
 const RAW_METADATA = [
   {

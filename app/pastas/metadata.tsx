@@ -90,7 +90,7 @@ const RAW_METADATA = [
         <br />
         Join{" "}
         <a href="https://discord.gg/R75MwqfJ5s" target="_blank">
-          jthe Discord server
+          the Discord server
         </a>{" "}
         and reach out to Aha to get started!
       </span>

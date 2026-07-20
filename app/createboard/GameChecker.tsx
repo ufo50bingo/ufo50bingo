@@ -1,11 +1,12 @@
 import { Checkbox, Group, SimpleGrid, Text } from "@mantine/core";
 import CheckerSortSelector, { CheckerSort } from "./CheckerSortSelector";
 import useCheckerSortInfo from "./useCheckerSortInfo";
-import { UFODifficulties } from "../generator/ufoGenerator";
+import { UFOPasta } from "../generator/ufoGenerator";
 import getSubcategoryName from "../generator/getSubcategoryName";
+import getNonGeneralCategories from "./getNonGeneralCategories";
 
 type Props = {
-  ufoDifficulties: UFODifficulties;
+  pasta: UFOPasta;
   uncheckedGames: Set<string>;
   setUncheckedGames: (newUncheckedGames: Set<string>) => void;
   sort: CheckerSort;
@@ -13,15 +14,15 @@ type Props = {
 };
 
 export default function GameChecker({
-  ufoDifficulties,
+  pasta,
   uncheckedGames,
   setUncheckedGames,
   sort,
   setSort,
 }: Props) {
   const [hasChronological, sortedSubcategories] = useCheckerSortInfo({
-    ufoDifficulties,
-    categories: Object.keys(ufoDifficulties).filter((cat) => cat !== "general"),
+    ufoDifficulties: pasta.goals,
+    categories: getNonGeneralCategories(pasta),
     sort,
   });
 

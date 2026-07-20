@@ -32,6 +32,7 @@ import validateStr from "../generator/validateStr";
 import getFilteredDifficulties from "./getFilteredDifficulties";
 import shuffle from "./shuffle";
 import getAllSubcategories from "./getAllSubcategories";
+import getNonGeneralCategories from "./getNonGeneralCategories";
 
 type CustomType = "srl_v5" | "ufo" | "fixed_board" | "randomized";
 
@@ -297,10 +298,8 @@ export default function NonLeagueMatch({ visible }: Props) {
                     setUncheckedGames={setUncheckedGames}
                     sort={checkerSort}
                     setSort={setCheckerSort}
-                    ufoDifficulties={
-                      metadata.type === "Custom"
-                        ? customUfo!.goals
-                        : metadata.pasta.goals
+                    pasta={
+                      metadata.type === "Custom" ? customUfo! : metadata.pasta
                     }
                   />
                   <UFODifficultySelectors
@@ -451,13 +450,9 @@ export default function NonLeagueMatch({ visible }: Props) {
                     isLockout,
                     leagueInfo: null,
                   };
+                  const nonGeneralCategories = getNonGeneralCategories(pasta);
                   const allGames = [
-                    ...getAllSubcategories(
-                      pasta.goals,
-                      Object.keys(pasta.goals).filter(
-                        (cat) => cat !== "general",
-                      ),
-                    ),
+                    ...getAllSubcategories(pasta.goals, nonGeneralCategories),
                   ];
                   shuffle(allGames);
                   const partitionIndex = Math.floor(allGames.length / 2);

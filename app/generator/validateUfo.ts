@@ -64,6 +64,18 @@ export default function validateUfo(pasta: UFOPasta): Return {
         );
       }
     });
+    // are any categories present in general_categories but not category_counts
+    if (pasta.general_categories != null) {
+      pasta.general_categories.forEach((category) => {
+        const goals = pasta.goals[category];
+        if (goals == null) {
+          errors.push(
+            `✖ Category "${category}" is in "general_categories" but does not appear in the "goals" object`,
+          );
+          return;
+        }
+      });
+    }
     // are any categories missing from category_counts?
     Object.keys(pasta.goals).forEach((category) => {
       if (pasta.category_counts[category] == null) {

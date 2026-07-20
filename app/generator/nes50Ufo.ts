@@ -1597,6 +1597,7 @@ export const NES_50_UFO = {
     ["veryhard"],
     ["general", "theme"],
   ],
+  general_categories: ["general", "theme"],
   sort_orders: {
     kirby_order: [
       "1-1",

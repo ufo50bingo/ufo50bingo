@@ -8,6 +8,7 @@ import { TBoard } from "@/app/matches/parseBingosyncData";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import findGoal from "@/app/findGoal";
 import { SPICY_UFO } from "@/app/pastas/spicyUfo";
+import { NES_50_UFO } from "@/app/generator/nes50Ufo";
 
 function stripText(text: string): string {
   return text.toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -21,7 +22,10 @@ Object.entries(GAME_NAMES).forEach(([game, name]) => {
 export type GameToGoals = { [game: string]: ReadonlyArray<[string, number]> };
 
 export function findGamesForGoal(goal: string): Game[] {
-  const result = findGoal(goal, STANDARD_UFO) ?? findGoal(goal, SPICY_UFO);
+  const result =
+    findGoal(goal, STANDARD_UFO) ??
+    findGoal(goal, SPICY_UFO) ??
+    findGoal(goal, NES_50_UFO);
   return findGamesForResult(goal, result);
 }
 

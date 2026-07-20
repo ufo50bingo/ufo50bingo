@@ -10,6 +10,7 @@ import { SPICY_UFO } from "./pastas/spicyUfo";
 import { useRightClickBehaviorContext } from "./settings/RightClickBehaviorContext";
 import { COLORS } from "./room/[id]/common/ColorSelector";
 import { useShouldShortenContext } from "./settings/ShouldShortenContext";
+import { NES_50_UFO } from "./generator/nes50Ufo";
 
 type Props = {
   board: TBoard;
@@ -55,7 +56,7 @@ function getDifficulty(
   foundGoal: FoundGoal<string, string, string>,
   shownDifficulties: ReadonlyArray<Difficulty>,
 ): null | ReactNode {
-  const difficulty = foundGoal.category;
+  const difficulty = foundGoal.isGeneral ? "general" : foundGoal.category;
   if (!shownDifficulties.includes(difficulty as Difficulty)) {
     return null;
   }
@@ -174,7 +175,8 @@ export default function Board({
       {board.map((square, squareIndex) => {
         const foundGoal =
           findGoal(square.name, STANDARD_UFO) ??
-          findGoal(square.name, SPICY_UFO);
+          findGoal(square.name, SPICY_UFO) ??
+          findGoal(square.name, NES_50_UFO);
         const displayGoal = shouldShorten
           ? (foundGoal?.short?.resolved ?? square.name)
           : square.name;

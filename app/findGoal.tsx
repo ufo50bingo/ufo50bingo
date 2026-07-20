@@ -16,6 +16,7 @@ export type FoundGoal<G extends string, C extends string, S extends string> = {
   short: null | Short;
   sortTokens?: string | ReadonlyArray<string>;
   category: C;
+  isGeneral: boolean;
   subcategory: S;
   tokens: ReadonlyArray<string>;
   goalParts: ReadonlyArray<Plain | ResolvedToken>;
@@ -72,6 +73,9 @@ export default function findGoal(
       short,
       resolvedGoal: goal,
       category: plainResult.category,
+      isGeneral:
+        pasta.general_categories != null &&
+        pasta.general_categories.includes(plainResult.category),
       subcategory: plainResult.subcategory,
       tokens: [],
       goalParts: [part],
@@ -101,6 +105,9 @@ export default function findGoal(
               },
         resolvedGoal: goal,
         category: option.tags.category,
+        isGeneral:
+          pasta.general_categories != null &&
+          pasta.general_categories.includes(option.tags.category),
         subcategory: option.tags.subcategory,
         tokens: resolvedTokens.map((p) => p.text),
         goalParts,

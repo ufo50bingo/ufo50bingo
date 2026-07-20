@@ -29,6 +29,7 @@ export const PRACTICE_VARIANTS = {
   spicy: "Spicy",
   blitz: "Blitz",
   choco: "Choco",
+  nes50: "NES 50",
 } as const;
 
 export type PracticeVariant = keyof typeof PRACTICE_VARIANTS;
@@ -37,7 +38,7 @@ export function usePracticeVariantFull(): PracticeVariantContextValue {
   const ctx = useContext(PracticeVariantContext);
   if (ctx == null) {
     throw new Error(
-      "usePracticeVariant must be used within PracticeVariantContextProvider"
+      "usePracticeVariant must be used within PracticeVariantContextProvider",
     );
   }
   return ctx;
@@ -66,6 +67,9 @@ export function PracticeVariantInit() {
         break;
       case "choco":
         setPracticeVariant("choco");
+        break;
+      case "nes50":
+        setPracticeVariant("nes50");
         break;
       case "standard":
       default:

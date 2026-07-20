@@ -1,6 +1,7 @@
 import { UFOPasta } from "./generator/ufoGenerator";
 import { BLITZ_UFO } from "./pastas/blitzUfo";
 import { CHOCO_UFO } from "./pastas/chocoUfo";
+import { NES_50_UFO } from "./pastas/nes50Ufo";
 import { SPICY_UFO } from "./pastas/spicyUfo";
 import { STANDARD_UFO } from "./pastas/standardUfo";
 import { usePracticeVariant } from "./PracticeVariantContext";
@@ -10,6 +11,7 @@ export const ALL_PRACTICE_PASTAS: ReadonlyArray<UFOPasta> = [
   SPICY_UFO,
   BLITZ_UFO,
   CHOCO_UFO,
+  NES_50_UFO,
 ];
 
 export default function usePracticePasta(): UFOPasta {
@@ -21,6 +23,8 @@ export default function usePracticePasta(): UFOPasta {
       return BLITZ_UFO;
     case "choco":
       return CHOCO_UFO;
+    case "nes50":
+      return NES_50_UFO;
     case "standard":
     // not sure why default is required here
     default:

@@ -13,6 +13,7 @@ import { SEASON_2_UFO } from "./season2Ufo";
 import { COMBO_UFO } from "./comboUfo";
 import { GAME_NAMES_UFO } from "./gameNamesUfo";
 import { CHERRY_RACE_UFO } from "./cherryRaceUfo";
+import { NES_50_UFO } from "../generator/nes50Ufo";
 
 const RAW_METADATA = [
   {
@@ -69,6 +70,31 @@ const RAW_METADATA = [
   {
     type: "Custom",
     name: "Custom",
+  },
+  {
+    type: "UFO",
+    name: "NES 50",
+    pasta: NES_50_UFO,
+    info: (
+      <span>
+        A new bingo goal set using 50 classic NES games!
+        <br />
+        Read the{" "}
+        <a
+          href="https://docs.google.com/spreadsheets/d/1ItphMvsXO4ev3NR1YMrs-x3eTEIxYBJF/edit?gid=1685175412#gid=1685175412"
+          target="_blank"
+        >
+          official setup instructions and rules
+        </a>{" "}
+        here.
+        <br />
+        Join{" "}
+        <a href="https://discord.gg/R75MwqfJ5s" target="_blank">
+          jthe Discord server
+        </a>{" "}
+        and reach out to Aha to get started!
+      </span>
+    ),
   },
   {
     type: "UFO",
@@ -212,6 +238,7 @@ export const SELECTOR_DATA = [
     group: "Other",
     items: [
       "10 Cherry Race",
+      "NES 50",
       "Choco",
       "Game Names",
       "Nozzlo (Deprecated)",

@@ -44,7 +44,7 @@ export const NES_50_UFO = {
       ],
       "Chip 'n Dale": [
         {
-          "name": "CHIP 'N DALE: Beat a level without picking up flowers"
+          "name": "CHIP 'N DALE: Beat a level without picking up more than 3 flowers"
         }
       ],
       "Cocoron": [
@@ -89,7 +89,7 @@ export const NES_50_UFO = {
       ],
       "Gradius 2": [
         {
-          "name": "GRADIUS 2: Have 4 blank upgrade slots"
+          "name": "GRADIUS 2: Have 3 blank upgrade slots"
         }
       ],
       "Gremlins 2": [
@@ -104,7 +104,7 @@ export const NES_50_UFO = {
       ],
       "Isolated Warrior": [
         {
-          "name": "ISOLATED WARRIOR: Upgrade your {{IW_weapon}} to level 5"
+          "name": "ISOLATED WARRIOR: Upgrade your {{IW_weapon}} to level 4"
         }
       ],
       "Jaws": [
@@ -344,7 +344,7 @@ export const NES_50_UFO = {
       ],
       "Fire 'n Ice": [
         {
-          "name": "FIRE 'N ICE: Beat 10 levels across worlds {{FNI_medium}} and {{FNI_medium}}",
+          "name": "FIRE 'N ICE: Beat 9 levels across worlds {{FNI_medium}} and {{FNI_medium}}",
           "sort_tokens": "$numeric"
         }
       ],
@@ -355,7 +355,7 @@ export const NES_50_UFO = {
       ],
       "Gradius 2": [
         {
-          "name": "GRADIUS 2: 💾 1; Reach the Crystal boss"
+          "name": "GRADIUS 2: 💾 1; Reach the blue moving crystal platforms"
         }
       ],
       "Gremlins 2": [
@@ -389,7 +389,7 @@ export const NES_50_UFO = {
       ],
       "Mappy": [
         {
-          "name": "MAPPY: Drop a bell on 6+ enemies"
+          "name": "MAPPY: Drop a bell on 3+ enemies total"
         }
       ],
       "Mega Man 6": [
@@ -452,7 +452,7 @@ export const NES_50_UFO = {
       ],
       "Snow Bros": [
         {
-          "name": "SNOW BROS: Reach a boss with 130,000+ points"
+          "name": "SNOW BROS: Reach a boss with 120,000+ points"
         }
       ],
       "Solar Jetman": [
@@ -592,7 +592,7 @@ export const NES_50_UFO = {
       ],
       "Contra": [
         {
-          "name": "CONTRA: Reach stage 4 with 3+ medals on your HUD"
+          "name": "CONTRA: Reach stage 4 with 2+ medals on your HUD"
         }
       ],
       "Crystalis": [
@@ -617,7 +617,7 @@ export const NES_50_UFO = {
       ],
       "Fire 'n Ice": [
         {
-          "name": "FIRE 'N ICE: Beat 12 levels across worlds {{FNI_hard}} and {{FNI_hard}}",
+          "name": "FIRE 'N ICE: Beat 10 levels across worlds {{FNI_hard}} and {{FNI_hard}}",
           "sort_tokens": "$numeric"
         }
       ],
@@ -628,12 +628,12 @@ export const NES_50_UFO = {
       ],
       "Gradius 2": [
         {
-          "name": "GRADIUS 2: Defeat the Eye boss without using “options”"
+          "name": "GRADIUS 2: Defeat the Eye boss without using “option” powerups"
         }
       ],
       "Gremlins 2": [
         {
-          "name": "GREMLINS 2: 💾 1; Collect the bow"
+          "name": "GREMLINS 2: 💾 1; Enter the shop on stage 3-2"
         }
       ],
       "Ice Climber": [
@@ -644,7 +644,7 @@ export const NES_50_UFO = {
       ],
       "Isolated Warrior": [
         {
-          "name": "ISOLATED WARRIOR: 💾 1; Without jumping on stage 2, have 200,000+ points on stage 3"
+          "name": "ISOLATED WARRIOR: 💾 1; Without jumping on stage 2, have 150,000+ points on stage 3"
         }
       ],
       "Jaws": [
@@ -720,7 +720,7 @@ export const NES_50_UFO = {
       ],
       "Snow Bros": [
         {
-          "name": "SNOW BROS: 💾 2; Defeat 3 sumo wrestlers and a boss"
+          "name": "SNOW BROS: 💾 2; Defeat 2 sumo wrestlers and the Floor 30 boss"
         }
       ],
       "Solar Jetman": [
@@ -758,7 +758,7 @@ export const NES_50_UFO = {
       ],
       "The Goonies 2": [
         {
-          "name": "THE GOONIES 2: 💾 1; Get the boomerang and reach the right edge of the 'back' side of the map"
+          "name": "THE GOONIES 2: 💾 1; Get the boomerang and reach the right edge of the ”back” side of the map"
         }
       ],
       "The Guardian Legend": [
@@ -914,7 +914,7 @@ export const NES_50_UFO = {
       ],
       "Kirby's Adventure": [
         {
-          "name": "KIRBY'S ADVENTURE: 💾 1; Beat 'Vs. Boss' mode"
+          "name": "KIRBY'S ADVENTURE: 💾 1; Beat ”Vs. Boss” mode"
         }
       ],
       "Mappy": [
@@ -949,7 +949,7 @@ export const NES_50_UFO = {
       ],
       "Ninja Gaiden 2": [
         {
-          "name": "NINJA GAIDEN 2: 💾 4; Beat two phases of the final boss"
+          "name": "NINJA GAIDEN 2: 💾 4; Beat one phase of the final boss"
         }
       ],
       "Punch-Out": [
@@ -974,7 +974,7 @@ export const NES_50_UFO = {
       ],
       "Snake Rattle 'n Roll": [
         {
-          "name": "SNAKE RATTLE 'N ROLL: 💾 2; Ring the bell on level 10 with 4+ extra lives"
+          "name": "SNAKE RATTLE 'N ROLL: 💾 2; Ring the bell on level 10 with 2+ extra lives"
         }
       ],
       "Snow Bros": [
@@ -1344,7 +1344,7 @@ export const NES_50_UFO = {
           }
         },
         {
-          "name": "ARMAMENT: Collect 6 weapons / weapon upgrades across Metroid, The Goonies 2, Mega Man 6",
+          "name": "ARMAMENT: Collect 5 weapons / weapon upgrades across Metroid, The Goonies 2, Mega Man 6",
           "restriction": {
             "count": 1,
             "options": [
@@ -1352,11 +1352,11 @@ export const NES_50_UFO = {
               "The Goonies 2",
               "Mega Man 6"
             ],
-            "fallback": "ARMAMENT: Collect 6 weapons / weapon upgrades across Metroid, The Goonies 2, Mega Man 6"
+            "fallback": "ARMAMENT: Collect 5 weapons / weapon upgrades across Metroid, The Goonies 2, Mega Man 6"
           }
         },
         {
-          "name": "SPORTS: Beat 8 levels across Punch-Out, Excitebike, Super Dodgeball",
+          "name": "SPORTS: Beat 7 levels across Punch-Out, Excitebike, Super Dodgeball",
           "restriction": {
             "count": 1,
             "options": [
@@ -1364,11 +1364,11 @@ export const NES_50_UFO = {
               "Excitebike",
               "Super Dodge Ball"
             ],
-            "fallback": "SPORTS: Beat 8 levels across Punch-Out, Excitebike, Super Dodgeball"
+            "fallback": "SPORTS: Beat 7 levels across Punch-Out, Excitebike, Super Dodgeball"
           }
         },
         {
-          "name": "EXXTRA CREDIT: Perfect 7 bonus games across Snake Rattle 'n Roll, Ice Climber, Balloon Fight",
+          "name": "EXXTRA CREDIT: Perfect 6 bonus games across Snake Rattle 'n Roll, Ice Climber, Balloon Fight",
           "restriction": {
             "count": 1,
             "options": [
@@ -1376,11 +1376,11 @@ export const NES_50_UFO = {
               "Ice Climber",
               "Balloon Fight"
             ],
-            "fallback": "EXXTRA CREDIT: Perfect 7 bonus games across Snake Rattle 'n Roll, Ice Climber, Balloon Fight"
+            "fallback": "EXXTRA CREDIT: Perfect 6 bonus games across Snake Rattle 'n Roll, Ice Climber, Balloon Fight"
           }
         },
         {
-          "name": "EXTRA CREDIT: Perfect 6 bonus games across Adventure Island 3, DuckTales, Mappy",
+          "name": "EXTRA CREDIT: Perfect 5 bonus games across Adventure Island 3, DuckTales, Mappy",
           "restriction": {
             "count": 1,
             "options": [
@@ -1388,7 +1388,7 @@ export const NES_50_UFO = {
               "DuckTales",
               "Mappy"
             ],
-            "fallback": "EXTRA CREDIT: Perfect 6 bonus games across Adventure Island 3, DuckTales, Mappy"
+            "fallback": "EXTRA CREDIT: Perfect 5 bonus games across Adventure Island 3, DuckTales, Mappy"
           }
         },
         {
@@ -1404,7 +1404,7 @@ export const NES_50_UFO = {
           }
         },
         {
-          "name": "POWER PLAY: Fully upgrade a weapon in Isolated Warrior, Cocoron, Blaster Master",
+          "name": "POWER PLAY: Fully upgrade a weapon in 2 of Isolated Warrior, Cocoron, Blaster Master",
           "restriction": {
             "count": 1,
             "options": [
@@ -1412,7 +1412,7 @@ export const NES_50_UFO = {
               "Cocoron",
               "Blaster Master"
             ],
-            "fallback": "POWER PLAY: Fully upgrade a weapon in Isolated Warrior, Cocoron, Blaster Master"
+            "fallback": "POWER PLAY: Fully upgrade a weapon in 2 of Isolated Warrior, Cocoron, Blaster Master"
           }
         },
         {
@@ -1428,7 +1428,7 @@ export const NES_50_UFO = {
           }
         },
         {
-          "name": "GET ME IN: Collect 8 keys across Solstice, The immortal, Uninvited",
+          "name": "GET ME IN: Collect 7 keys across Solstice, The immortal, Uninvited",
           "restriction": {
             "count": 1,
             "options": [
@@ -1436,7 +1436,7 @@ export const NES_50_UFO = {
               "The Immortal",
               "Uninvited"
             ],
-            "fallback": "GET ME IN: Collect 8 keys across Solstice, The immortal, Uninvited"
+            "fallback": "GET ME IN: Collect 7 keys across Solstice, The immortal, Uninvited"
           }
         },
         {
@@ -1464,7 +1464,7 @@ export const NES_50_UFO = {
           }
         },
         {
-          "name": "CARTOONS: Defeat 7 bosses (with 1+ in each) across TMNT 3, DuckTales, Chip 'n Dale",
+          "name": "CARTOONS: Defeat 5 bosses (with 1+ in each) across TMNT 3, DuckTales, Chip 'n Dale",
           "restriction": {
             "count": 1,
             "options": [
@@ -1472,7 +1472,7 @@ export const NES_50_UFO = {
               "DuckTales",
               "Chip 'n Dale"
             ],
-            "fallback": "CARTOONS: Defeat 7 bosses (with 1+ in each) across TMNT 3, DuckTales, Chip 'n Dale"
+            "fallback": "CARTOONS: Defeat 5 bosses (with 1+ in each) across TMNT 3, DuckTales, Chip 'n Dale"
           }
         },
         {
@@ -1556,7 +1556,6 @@ export const NES_50_UFO = {
       "Melody"
     ],
     "Contra_weapon": [
-      "Machine gun (M)",
       "Laser gun (L)",
       "Fireball gun (F)",
       "Spread gun (S)"

@@ -1,16 +1,9 @@
+import { Descriptions, OptionList } from "@/app/generator/ufoGenerator";
 import { Game } from "@/app/goals";
 
-export type Recommendations = {
-  always: ReadonlyArray<Game>;
-  synergy: ReadonlyArray<Game>;
-  never: ReadonlyArray<Game>;
-};
-
-export type Descriptions = { [game: string]: string };
-
-export const GOLDS: Recommendations = {
-  always: [],
-  synergy: [
+export const GOLDS: OptionList = {
+  shown: [],
+  shown_if_on_card: [
     "nightmanor",
     "mortolii",
     "waldorfsjourney",
@@ -43,7 +36,7 @@ export const GOLDS: Recommendations = {
     "bughunter",
     "devilition",
   ],
-  never: [
+  hidden: [
     "partyhouse",
     "cyberowls",
     "miniandmax",
@@ -66,9 +59,9 @@ export const GOLDS: Recommendations = {
   ],
 };
 
-export const CHERRIES: Recommendations = {
-  always: [],
-  synergy: [
+export const CHERRIES: OptionList = {
+  shown: [],
+  shown_if_on_card: [
     "mortolii",
     "bushidoball",
     "waldorfsjourney",
@@ -99,7 +92,7 @@ export const CHERRIES: Recommendations = {
     "devilition",
     "ninpek",
   ],
-  never: [
+  hidden: [
     "bughunter",
     "valbrace",
     "paintchase",
@@ -179,9 +172,9 @@ const GIFT_DESCRIPTION_ENTRIES: ReadonlyArray<[Game, string]> = [
 export const GIFT_DESCRIPTIONS: Descriptions = Object.fromEntries(
   GIFT_DESCRIPTION_ENTRIES,
 );
-export const GIFTS: Recommendations = {
-  always: [],
-  synergy: [
+export const GIFTS: OptionList = {
+  shown: [],
+  shown_if_on_card: [
     "magicgarden",
     "blockkoala",
     "pingolf",
@@ -229,7 +222,7 @@ export const GIFTS: Recommendations = {
     "mortol",
     "attactics",
   ],
-  never: ["grimstone", "warptank", "rockonisland", "lordsofdiskonia"],
+  hidden: ["grimstone", "warptank", "rockonisland", "lordsofdiskonia"],
 };
 
 // const TOP_5_ENTRIES: ReadonlyArray<[Game, string]> = [
@@ -244,8 +237,8 @@ export const GIFTS: Recommendations = {
 //   ["paintchase", "240"],
 // ];
 // export const TOP_5_SCORES: Descriptions = Object.fromEntries(TOP_5_ENTRIES);
-// export const TOP_5: Recommendations = {
-//   always: [
+// export const TOP_5: OptionList = {
+//   shown: [
 //     "campanella",
 //     "magicgarden",
 //     "ninpek",
@@ -253,12 +246,12 @@ export const GIFTS: Recommendations = {
 //     "starwaspir",
 //     "caramelcaramel",
 //   ],
-//   synergy: ["rakshasa", "seasidedrive", "paintchase"],
-//   never: [],
+//   shown_if_on_card: ["rakshasa", "seasidedrive", "paintchase"],
+//   hidden: [],
 // };
 
-export const TWO_LEVELS: Recommendations = {
-  always: [
+export const TWO_LEVELS: OptionList = {
+  shown: [
     "campanella",
     "pingolf",
     "kickclub",
@@ -278,7 +271,7 @@ export const TWO_LEVELS: Recommendations = {
     "devilition",
     "hotfoot",
   ],
-  synergy: [
+  shown_if_on_card: [
     "valbrace",
     "starwaspir",
     "campanella2",
@@ -297,11 +290,11 @@ export const TWO_LEVELS: Recommendations = {
     "rockonisland",
     "lordsofdiskonia",
   ],
-  never: [],
+  hidden: [],
 };
 
-export const FOUR_LEVELS: Recommendations = {
-  always: [
+export const FOUR_LEVELS: OptionList = {
+  shown: [
     "campanella",
     "pingolf",
     "kickclub",
@@ -309,7 +302,7 @@ export const FOUR_LEVELS: Recommendations = {
     "overbold",
     "campanella3",
   ],
-  synergy: [
+  shown_if_on_card: [
     "devilition",
     "camouflage",
     "warptank",
@@ -335,12 +328,12 @@ export const FOUR_LEVELS: Recommendations = {
     "mortol",
     "caramelcaramel",
   ],
-  never: ["rockonisland", "lordsofdiskonia", "valbrace", "partyhouse"],
+  hidden: ["rockonisland", "lordsofdiskonia", "valbrace", "partyhouse"],
 };
 
-export const EIGHT_LEVELS: Recommendations = {
-  always: ["campanella", "pingolf", "kickclub", "mooncat"],
-  synergy: [
+export const EIGHT_LEVELS: OptionList = {
+  shown: ["campanella", "pingolf", "kickclub", "mooncat"],
+  shown_if_on_card: [
     "overbold",
     "devilition",
     "camouflage",
@@ -353,7 +346,7 @@ export const EIGHT_LEVELS: Recommendations = {
     "paintchase",
     "thebigbellrace",
   ],
-  never: [
+  hidden: [
     "campanella2",
     "combatants",
     "bughunter",
@@ -365,8 +358,8 @@ export const EIGHT_LEVELS: Recommendations = {
   ],
 };
 
-// export const TWO_KEYS: Recommendations = {
-//   always: [
+// export const TWO_KEYS: OptionList = {
+//   shown: [
 //     "mortolii",
 //     "waldorfsjourney",
 //     "velgress",
@@ -374,12 +367,12 @@ export const EIGHT_LEVELS: Recommendations = {
 //     "valbrace",
 //     "nightmanor",
 //   ],
-//   synergy: ["vainger"],
-//   never: [],
+//   shown_if_on_card: ["vainger"],
+//   hidden: [],
 // };
 
-// export const TWO_CHESTS: Recommendations = {
-//   always: [
+// export const TWO_CHESTS: OptionList = {
+//   shown: [
 //     "valbrace",
 //     "divers",
 //     "nightmanor",
@@ -387,19 +380,19 @@ export const EIGHT_LEVELS: Recommendations = {
 //     "grimstone",
 //     "waldorfsjourney",
 //   ],
-//   synergy: ["campanella2", "pilotquest", "elfazarshat"],
-//   never: [],
+//   shown_if_on_card: ["campanella2", "pilotquest", "elfazarshat"],
+//   hidden: [],
 // };
 
-// export const TWO_SHOPS: Recommendations = {
-//   always: [
+// export const TWO_SHOPS: OptionList = {
+//   shown: [
 //     "quibblerace",
 //     "rockonisland",
 //     "avianos",
 //     "waldorfsjourney",
 //     "lordsofdiskonia",
 //   ],
-//   synergy: [
+//   shown_if_on_card: [
 //     "pilotquest",
 //     "velgress",
 //     "grimstone",
@@ -410,11 +403,11 @@ export const EIGHT_LEVELS: Recommendations = {
 //     "planetzoldath",
 //     "valbrace",
 //   ],
-//   never: [],
+//   hidden: [],
 // };
 
-// export const TWO_LIVES: Recommendations = {
-//   always: [
+// export const TWO_LIVES: OptionList = {
+//   shown: [
 //     "campanella",
 //     "waldorfsjourney",
 //     "mortol",
@@ -427,12 +420,12 @@ export const EIGHT_LEVELS: Recommendations = {
 //     "starwaspir",
 //     "caramelcaramel",
 //   ],
-//   synergy: ["barbuta", "vainger", "campanella3", "paintchase"],
-//   never: [],
+//   shown_if_on_card: ["barbuta", "vainger", "campanella3", "paintchase"],
+//   hidden: [],
 // };
 
-// export const TWO_HP: Recommendations = {
-//   always: [
+// export const TWO_HP: OptionList = {
+//   shown: [
 //     "porgy",
 //     "golfaria",
 //     "overbold",
@@ -444,23 +437,15 @@ export const EIGHT_LEVELS: Recommendations = {
 //     "campanella2",
 //     "grimstone",
 //   ],
-//   synergy: [],
-//   never: [],
+//   shown_if_on_card: [],
+//   hidden: [],
 // };
 
-export type TerminalEntry =
-  | Game
-  | { type: "include" | "exclude"; code: string; game: Game };
-export type RecommendationsWithTerminal = {
-  always: ReadonlyArray<TerminalEntry>;
-  synergy: ReadonlyArray<TerminalEntry>;
-  never: ReadonlyArray<TerminalEntry>;
-};
-export const BOSSES: RecommendationsWithTerminal = {
-  always: [
-    { type: "include", code: "OPEN-TOMB", game: "mortol" },
-    { type: "include", code: "EVEN-COAT", game: "paintchase" },
-    { type: "include", code: "WORM-1234", game: "blockkoala" },
+export const BOSSES: OptionList = {
+  shown: [
+    { type: "include", has_extra: "OPEN-TOMB", option: "mortol" },
+    { type: "include", has_extra: "EVEN-COAT", option: "paintchase" },
+    { type: "include", has_extra: "WORM-1234", option: "blockkoala" },
     "campanella",
     "rakshasa",
     "mortolii",
@@ -473,11 +458,11 @@ export const BOSSES: RecommendationsWithTerminal = {
     "kickclub",
     "campanella2",
   ],
-  synergy: [
+  shown_if_on_card: [
     "caramelcaramel",
     "pilotquest",
-    { type: "include", code: "LAZY-COPS", game: "railheist" },
-    { type: "include", code: "ANTS-ANTS", game: "combatants" },
+    { type: "include", has_extra: "LAZY-COPS", option: "railheist" },
+    { type: "include", has_extra: "ANTS-ANTS", option: "combatants" },
     "vainger",
     "campanella3",
     "velgress",
@@ -491,23 +476,23 @@ export const BOSSES: RecommendationsWithTerminal = {
     "valbrace",
     "nightmanor",
   ],
-  never: [
+  hidden: [
     "grimstone",
     "devilition",
-    { type: "exclude", code: "EVEN-COAT", game: "paintchase" },
+    { type: "exclude", has_extra: "EVEN-COAT", option: "paintchase" },
     "divers",
     "golfaria",
-    { type: "exclude", code: "OPEN-TOMB", game: "mortol" },
+    { type: "exclude", has_extra: "OPEN-TOMB", option: "mortol" },
     "warptank",
-    { type: "exclude", code: "LAZY-COPS", game: "railheist" },
-    { type: "exclude", code: "ANTS-ANTS", game: "combatants" },
-    { type: "exclude", code: "WORM-1234", game: "blockkoala" },
+    { type: "exclude", has_extra: "LAZY-COPS", option: "railheist" },
+    { type: "exclude", has_extra: "ANTS-ANTS", option: "combatants" },
+    { type: "exclude", has_extra: "WORM-1234", option: "blockkoala" },
     "lordsofdiskonia",
   ],
 };
 
-export const TWO_BOSSES: Recommendations = {
-  always: [
+export const TWO_BOSSES: OptionList = {
+  shown: [
     "mortolii",
     "rakshasa",
     "elfazarshat",
@@ -518,7 +503,7 @@ export const TWO_BOSSES: Recommendations = {
     "cyberowls",
     "campanella2",
   ],
-  synergy: [
+  shown_if_on_card: [
     "seasidedrive",
     "campanella3",
     "kickclub",
@@ -530,7 +515,7 @@ export const TWO_BOSSES: Recommendations = {
     "pilotquest",
     "porgy",
   ],
-  never: [
+  hidden: [
     "rockonisland",
     "ninpek",
     "valbrace",
@@ -540,9 +525,9 @@ export const TWO_BOSSES: Recommendations = {
   ],
 };
 
-// export const SIX_ENEMIES: RecommendationsWithTerminal = {
-//   always: [
-//     { type: "include", code: "EVEN-COAT", game: "paintchase" },
+// export const SIX_ENEMIES: OptionList = {
+//   shown: [
+//     { type: "include", has_extra: "EVEN-COAT", option: "paintchase" },
 //     "cyberowls",
 //     "bughunter",
 //     "caramelcaramel",
@@ -550,7 +535,7 @@ export const TWO_BOSSES: Recommendations = {
 //     "elfazarshat",
 //     "attactics",
 //     "campanella2",
-//     { type: "include", code: "OPEN-TOMB", game: "mortol" },
+//     { type: "include", has_extra: "OPEN-TOMB", option: "mortol" },
 //     "porgy",
 //     "overbold",
 //     "rakshasa",
@@ -563,7 +548,7 @@ export const TWO_BOSSES: Recommendations = {
 //     "campanella",
 //     "vainger",
 //   ],
-//   synergy: [
+//   shown_if_on_card: [
 //     "campanella3",
 //     "kickclub",
 //     "starwaspir",
@@ -580,11 +565,11 @@ export const TWO_BOSSES: Recommendations = {
 //     "planetzoldath",
 //     "lordsofdiskonia",
 //     "pilotquest",
-//     { type: "exclude", code: "EVEN-COAT", game: "paintchase" },
-//     { type: "exclude", code: "OPEN-TOMB", game: "mortol" },
+//     { type: "exclude", has_extra: "EVEN-COAT", option: "paintchase" },
+//     { type: "exclude", has_extra: "OPEN-TOMB", option: "mortol" },
 //     "rockonisland",
 //   ],
-//   never: [],
+//   hidden: [],
 // };
 
 // GIFT ESTIMATES

@@ -14,6 +14,16 @@ export type OptionList = {
   hidden: ReadonlyArray<OptionListEntry>;
 };
 export type Descriptions = { [subcategory: string]: string };
+export type CastConfig = {
+  type: "check" | "counter";
+  options: string | OptionList;
+  on_card_only: boolean;
+  image?: {
+    src: string;
+    is_pixel?: boolean;
+  };
+  descriptions?: string | Descriptions;
+};
 
 export type UFOGoalConfig<T extends string = string> = {
   name: T;
@@ -24,12 +34,7 @@ export type UFOGoalConfig<T extends string = string> = {
     options: string | ReadonlyArray<string>;
   };
   sort_tokens?: string | ReadonlyArray<string>;
-  cast?: {
-    type: "check" | "counter";
-    optionList: string | OptionList;
-    image: string;
-    descriptions?: string | Descriptions;
-  };
+  cast?: CastConfig;
 };
 
 export type UFOGameGoals = {

@@ -34,8 +34,7 @@ import RecentGames from "./RecentGames";
 import ScoreSquare from "../common/ScoreSquare";
 import SideCell from "./SideCell";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
-import findGoal, { FoundGoal } from "@/app/findGoal";
-import { StandardGeneral } from "@/app/pastas/pastaTypes";
+import findGoal, { FoundGoalWithCast } from "@/app/findGoal";
 import getGamesForPlayer from "./getGamesForPlayer";
 import useLocalNumber from "@/app/localStorage/useLocalNumber";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
@@ -48,15 +47,13 @@ import StartPauseButton from "../common/StartPauseButton";
 import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
 import getNonGeneralCategories from "@/app/createboard/getNonGeneralCategories";
 import getAllSubcategories from "@/app/createboard/getAllSubcategories";
+import { UFOPasta } from "@/app/generator/ufoGenerator";
 
-export type FoundStandardGeneral = FoundGoal<
-  StandardGeneral,
-  "general",
-  string
->;
+export type FoundStandardGeneral = FoundGoalWithCast<string, string, string>;
 export type GeneralItem = {
   color: BingosyncColor;
   foundGoal: FoundStandardGeneral;
+  pasta: UFOPasta;
 };
 
 export type CastProps = {
@@ -242,17 +239,19 @@ export default function Cast({
     return board
       .map((square) => {
         const foundGoal = findGoal(square.name, STANDARD_UFO);
-        if (foundGoal == null || foundGoal.category !== "general") {
+        if (foundGoal == null || foundGoal.cast == null) {
           return null;
         }
         return {
           color: square.color,
           foundGoal: foundGoal as FoundStandardGeneral,
+          pasta: STANDARD_UFO,
         };
       })
       .filter((item) => item != null);
   }, [board]);
 
+  // TODO: Fix this
   const sortedGenerals = useMemo<ReadonlyArray<GeneralItem>>(() => {
     const correctOrder = Object.keys(STANDARD_UFO.goals.general);
     return generalGoals.toSorted((a, b) => {
@@ -300,6 +299,7 @@ export default function Cast({
       rightColor={rightColor}
       height={h}
       sortType={sortType}
+      pasta={g.pasta}
     />
   );
 

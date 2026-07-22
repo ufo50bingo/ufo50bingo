@@ -1,6 +1,11 @@
 import getGoalAndFallback from "./generator/getGoalAndFallback";
 import splitAtTokens, { Plain, ResolvedToken } from "./generator/splitAtTokens";
-import { Tokens, UFOGoalConfig, UFOPasta } from "./generator/ufoGenerator";
+import {
+  CastConfig,
+  Tokens,
+  UFOGoalConfig,
+  UFOPasta,
+} from "./generator/ufoGenerator";
 import regexpEscape from "regexp.escape";
 
 const CACHE: Array<
@@ -9,6 +14,14 @@ const CACHE: Array<
     [ProcessedPasta, Map<string, null | FoundGoal<string, string, string>>],
   ]
 > = [];
+
+export type FoundGoalWithCast<
+  G extends string,
+  C extends string,
+  S extends string,
+> = Omit<FoundGoal<G, C, S>, "cast"> & {
+  cast: NonNullable<FoundGoal<G, C, S>["cast"]>;
+};
 
 export type FoundGoal<G extends string, C extends string, S extends string> = {
   goal: G;
@@ -20,12 +33,18 @@ export type FoundGoal<G extends string, C extends string, S extends string> = {
   subcategory: S;
   tokens: ReadonlyArray<string>;
   goalParts: ReadonlyArray<Plain | ResolvedToken>;
+  cast: null | CastConfig;
 };
 type Short = {
   resolved: string;
   parts: ReadonlyArray<Plain | ResolvedToken>;
 };
-type Tags = { short: string | null; category: string; subcategory: string };
+type Tags = {
+  short: string | null;
+  category: string;
+  subcategory: string;
+  cast: null | CastConfig;
+};
 type PlainText = { [goal: string]: Tags };
 interface WithTokenNoTags {
   regex: RegExp;
@@ -79,6 +98,7 @@ export default function findGoal(
       subcategory: plainResult.subcategory,
       tokens: [],
       goalParts: [part],
+      cast: plainResult.cast,
     };
     goalCache.set(goal, res);
     return res;
@@ -106,12 +126,14 @@ export default function findGoal(
         resolvedGoal: goal,
         category: option.tags.category,
         isGeneral:
-          pasta.general_categories != null &&
-          pasta.general_categories.includes(option.tags.category),
+          option.tags.category === "general" ||
+          (pasta.general_categories != null &&
+            pasta.general_categories.includes(option.tags.category)),
         subcategory: option.tags.subcategory,
         tokens: resolvedTokens.map((p) => p.text),
         goalParts,
         sortTokens: option.sortTokens,
+        cast: option.tags.cast,
       };
       goalCache.set(goal, res);
       return res;
@@ -177,10 +199,13 @@ function preprocess(pasta: UFOPasta): ProcessedPasta {
           const tags = {
             category,
             subcategory,
+            // TODO: support adding more complex stuff for fallbacks
             short:
               typeof goal !== "string" && goal.short != null
                 ? goal.short
                 : null,
+            cast:
+              typeof goal !== "string" && goal.cast != null ? goal.cast : null,
           };
           if (goalName.includes("{{")) {
             const output = preprocessGoalWithToken(goal, pasta);

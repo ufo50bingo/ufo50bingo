@@ -1,19 +1,5 @@
-import { Game, ORDERED_GAMES } from "@/app/goals";
+import { ORDERED_PROPER_GAMES, ProperGame } from "@/app/goals";
 import { Anchor, Button, Checkbox, Group, Stack } from "@mantine/core";
-import {
-  RecommendationsWithTerminal,
-  Descriptions,
-  CHERRIES,
-  GIFTS,
-  GIFT_DESCRIPTIONS,
-  TerminalEntry,
-  GOLDS,
-  TWO_LEVELS,
-  FOUR_LEVELS,
-  EIGHT_LEVELS,
-  TWO_BOSSES,
-  BOSSES,
-} from "./timeEstimates";
 import { findGamesForGoal, GameToGoals } from "./findAllGames";
 import InfoCard from "./InfoCard";
 import GameInfo from "./GameInfo";
@@ -22,14 +8,31 @@ import getColorHex from "./getColorHex";
 import BingosyncColored from "@/app/matches/BingosyncColored";
 import { CountChange, CountState } from "./useSyncedState";
 import { SortType } from "./useLocalState";
-import { StandardGeneral } from "@/app/pastas/pastaTypes";
-import { FoundGoal } from "@/app/findGoal";
+import {
+  Descriptions,
+  OptionList,
+  OptionListEntry,
+  UFOPasta,
+} from "@/app/generator/ufoGenerator";
+import { useMemo } from "react";
+import { FoundStandardGeneral } from "./Cast";
+import {
+  CHERRIES,
+  GIFTS,
+  GIFT_DESCRIPTIONS,
+  GOLDS,
+  TWO_LEVELS,
+  FOUR_LEVELS,
+  EIGHT_LEVELS,
+  TWO_BOSSES,
+  BOSSES,
+} from "./timeEstimates";
 
 type Props = {
   showAll: boolean;
   isFinished: boolean;
   gameToGoals: GameToGoals;
-  foundGoal: FoundGoal<StandardGeneral, "general", string>;
+  foundGoal: FoundStandardGeneral;
   terminalCodes: Set<string>;
   countState: null | undefined | CountState;
   setGeneralGameCount: (change: CountChange) => unknown;
@@ -38,14 +41,15 @@ type Props = {
   rightColor: BingosyncColor;
   height: null | undefined | number;
   sortType: SortType;
+  pasta: UFOPasta;
 };
 
 function getOtherGoals(
-  entry: TerminalEntry,
+  entry: OptionListEntry,
   gameToGoals: GameToGoals,
   resolvedGoal: string,
 ): null | ReadonlyArray<[string, number]> {
-  const game = typeof entry === "string" ? entry : entry.game;
+  const game = typeof entry === "string" ? entry : entry.option;
   const goals = gameToGoals[game];
   if (goals == null || goals.length === 0) {
     return null;
@@ -67,106 +71,59 @@ export default function GeneralGoal({
   rightColor,
   height,
   sortType,
+  pasta: _pasta,
 }: Props) {
   const leftCounts = countState?.leftCounts ?? {};
   const rightCounts = countState?.rightCounts ?? {};
+  const cast = foundGoal.cast;
 
-  let recommendations: RecommendationsWithTerminal;
-  let onCardOnly = false;
-  let descriptions: null | Descriptions = null;
-  let isChecks = true;
-  switch (foundGoal.goal) {
-    // GIFT
-    case "Collect {{gift_count}} gifts from games on this card":
-      recommendations = GIFTS;
-      onCardOnly = true;
-      descriptions = GIFT_DESCRIPTIONS;
-      break;
-    // GOLD/CHERRY
-    case "Cherry disk {{cherry_count}} games on this card":
-      recommendations = CHERRIES;
-      onCardOnly = true;
-      break;
-    case "Gold disk {{gold_count}} games on this card":
-      recommendations = GOLDS;
-      onCardOnly = true;
-      break;
-    // LEVELS
-    case "Beat 2 levels in 6 games on this card":
-      recommendations = TWO_LEVELS;
-      onCardOnly = true;
-      break;
-    case "Beat 2 levels in 6 games":
-      recommendations = TWO_LEVELS;
-      break;
-    case "Beat 4 levels in 5 games on this card":
-      recommendations = FOUR_LEVELS;
-      onCardOnly = true;
-      break;
-    case "Beat 4 levels in 5 games":
-      recommendations = FOUR_LEVELS;
-      break;
-    case "Beat 8 levels in 3 games on this card":
-      recommendations = EIGHT_LEVELS;
-      onCardOnly = true;
-      break;
-    case "Beat 8 levels in 3 games":
-      recommendations = EIGHT_LEVELS;
-      break;
-    // BOSS/ENEMY
-    case "Defeat 2 bosses in 4 games on this card":
-      recommendations = TWO_BOSSES;
-      onCardOnly = true;
-      break;
-    case "Defeat 2 bosses in 4 games":
-      recommendations = TWO_BOSSES;
-      break;
-    case "Defeat 8 bosses from games on this card":
-      recommendations = BOSSES;
-      isChecks = false;
-      onCardOnly = true;
-      break;
-    case "Defeat a boss in 6 games on this card":
-      recommendations = BOSSES;
-      onCardOnly = true;
-      break;
-    case "Defeat a boss in 6 games":
-      recommendations = BOSSES;
-      break;
-    // THEME
-    case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
-    case "SHOOTER: Beat 5 levels across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
-    case "DAY JOB: Beat 9 levels across Rail Heist, Onion Delivery, and Bug Hunter":
-    case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
-    case "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank":
-    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
-    case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
-    case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
-    case "ROLE PLAYER: Level up your highest-level character 5 total times across Grimstone, Divers, Valbrace":
-    case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
-      recommendations = {
-        always: findGamesForGoal(foundGoal.resolvedGoal),
-        synergy: [],
-        never: [],
-      };
-      isChecks = false;
-      break;
-    default:
-      foundGoal.goal satisfies never;
-      return (
-        <InfoCard
-          title={
-            isFinished ? (
-              <s>{foundGoal.resolvedGoal}</s>
-            ) : (
-              foundGoal.resolvedGoal
-            )
-          }
-        >
-          No info for this goal yet!
-        </InfoCard>
-      );
-  }
+  const descriptions: null | Descriptions = useMemo(() => {
+    const rawDescriptions = cast.descriptions;
+    if (rawDescriptions == null) {
+      return null;
+    } else if (typeof rawDescriptions === "string") {
+      if (rawDescriptions === "$gift_desc") {
+        return GIFT_DESCRIPTIONS;
+      }
+      return null;
+    } else {
+      return rawDescriptions;
+    }
+  }, [cast.descriptions]);
+
+  const options: OptionList = useMemo(() => {
+    const options = cast.options;
+    if (typeof options === "string") {
+      switch (options) {
+        case "$gift":
+          return GIFTS;
+        case "$gold":
+          return GOLDS;
+        case "$cherry":
+          return CHERRIES;
+        case "$two_levels":
+          return TWO_LEVELS;
+        case "$four_levels":
+          return FOUR_LEVELS;
+        case "$eight_levels":
+          return EIGHT_LEVELS;
+        case "$two_bosses":
+          return TWO_BOSSES;
+        case "$bosses":
+          return BOSSES;
+        case "$infer":
+          return {
+            shown: findGamesForGoal(foundGoal.resolvedGoal),
+            shown_if_on_card: [],
+            hidden: [],
+          };
+        default:
+          return { shown: [], shown_if_on_card: [], hidden: [] };
+      }
+    } else {
+      return options;
+    }
+  }, [cast.options, foundGoal.resolvedGoal]);
 
   const titleEl = (
     <>
@@ -189,20 +146,20 @@ export default function GeneralGoal({
   const title = isFinished ? <s>{titleEl}</s> : titleEl;
 
   const alwaysWithOnCard: ReadonlyArray<
-    [TerminalEntry, null | ReadonlyArray<[string, number]>]
-  > = recommendations.always.map((e) => [
+    [OptionListEntry, null | ReadonlyArray<[string, number]>]
+  > = options.shown.map((e) => [
     e,
     getOtherGoals(e, gameToGoals, foundGoal.resolvedGoal),
   ]);
   const synergyWithOnCard: ReadonlyArray<
-    [TerminalEntry, null | ReadonlyArray<[string, number]>]
-  > = recommendations.synergy.map((e) => [
+    [OptionListEntry, null | ReadonlyArray<[string, number]>]
+  > = options.shown_if_on_card.map((e) => [
     e,
     getOtherGoals(e, gameToGoals, foundGoal.resolvedGoal),
   ]);
   const neverWithOnCard: ReadonlyArray<
-    [TerminalEntry, null | ReadonlyArray<[string, number]>]
-  > = recommendations.never.map((e) => [
+    [OptionListEntry, null | ReadonlyArray<[string, number]>]
+  > = options.hidden.map((e) => [
     e,
     getOtherGoals(e, gameToGoals, foundGoal.resolvedGoal),
   ]);
@@ -219,33 +176,38 @@ export default function GeneralGoal({
   const hasMore = allEntries.length > entries.length;
 
   const nullableEntries: ReadonlyArray<
-    null | [Game, null | ReadonlyArray<[string, number]>]
+    null | [string, null | ReadonlyArray<[string, number]>]
   > = entries.map((pair) => {
     const e = pair[0];
     if (typeof e === "string") {
       return [e, pair[1]];
     }
-    return terminalCodes.has(e.code) === (e.type === "include")
-      ? [e.game, pair[1]]
+    return terminalCodes.has(e.has_extra) === (e.type === "include")
+      ? [e.option, pair[1]]
       : null;
   });
 
   const nonNullEntries = nullableEntries.filter((e) => e != null);
-  const finalEntries = onCardOnly
+  const finalEntries = cast.on_card_only
     ? nonNullEntries.filter((e) => e[1] != null)
     : nonNullEntries;
 
-  switch (sortType) {
-    case "fast":
-      break;
-    case "alphabetical":
-      finalEntries.sort((a, b) => a[0].localeCompare(b[0]));
-      break;
-    case "chronological":
-      finalEntries.sort(
-        (a, b) => ORDERED_GAMES.indexOf(a[0]) - ORDERED_GAMES.indexOf(b[0]),
-      );
-      break;
+  const isUfo50 = allEntries.every((entry) =>
+    ORDERED_PROPER_GAMES.includes(entry[0] as ProperGame),
+  );
+  if (sortType === "chronological" && isUfo50) {
+    finalEntries.sort(
+      (a, b) =>
+        ORDERED_PROPER_GAMES.indexOf(a[0] as ProperGame) -
+        ORDERED_PROPER_GAMES.indexOf(b[0] as ProperGame),
+    );
+  } else if (
+    sortType === "alphabetical" ||
+    (sortType === "chronological" && !isUfo50)
+  ) {
+    finalEntries.sort((a, b) => a[0].localeCompare(b[0]));
+  } else {
+    // no sorting for fast
   }
 
   return (
@@ -253,7 +215,9 @@ export default function GeneralGoal({
       height={height}
       title={title}
       description={
-        isChecks ? undefined : "Left click increases, right click decreases"
+        cast.type === "check"
+          ? undefined
+          : "Left click increases, right click decreases"
       }
     >
       <Stack gap={4}>
@@ -262,7 +226,7 @@ export default function GeneralGoal({
           const description = descriptions != null ? descriptions[game] : null;
           return (
             <Group key={game} gap={6}>
-              {isChecks ? (
+              {cast.type === "check" ? (
                 <>
                   <Checkbox
                     color={getColorHex(leftColor)}

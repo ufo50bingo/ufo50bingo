@@ -1,7 +1,7 @@
 import InfoCard from "../cast/InfoCard";
 import { Button, Group, Stack, Text, Tooltip } from "@mantine/core";
 import useSimpleGeneralState from "./useSimpleGeneralState";
-import { FoundStandardGeneral, GeneralItem } from "../cast/Cast";
+import { GeneralItem } from "../cast/Cast";
 
 type Props = {
   generalGoals: ReadonlyArray<GeneralItem>;
@@ -20,127 +20,75 @@ export default function SimpleGeneralTracker({
   return (
     <InfoCard maxWidth={525} height={148}>
       <Stack gap={4}>
-        {generalGoals.map((item) => (
-          <Group
-            key={item.foundGoal.resolvedGoal}
-            gap={6}
-            justify="space-between"
-          >
-            <Tooltip
-              label={isHidden ? "<Hidden>" : item.foundGoal.resolvedGoal}
+        {generalGoals.map((item) => {
+          const displayGoal =
+            item.foundGoal.short?.resolved ?? item.foundGoal.resolvedGoal;
+          return (
+            <Group
+              key={item.foundGoal.resolvedGoal}
+              gap={6}
+              justify="space-between"
             >
-              <Text size="sm">
-                {item.color !== "blank" ? (
-                  isHidden ? (
+              <Tooltip
+                label={isHidden ? "<Hidden>" : item.foundGoal.resolvedGoal}
+              >
+                <Text size="sm">
+                  {item.color !== "blank" ? (
+                    isHidden ? (
+                      "<Hidden>"
+                    ) : (
+                      <s>{displayGoal}</s>
+                    )
+                  ) : isHidden ? (
                     "<Hidden>"
                   ) : (
-                    <s>{getAbbreviatedName(item.foundGoal)}</s>
-                  )
-                ) : isHidden ? (
-                  "<Hidden>"
-                ) : (
-                  getAbbreviatedName(item.foundGoal)
-                )}
-              </Text>
-            </Tooltip>
-            <Group gap={4}>
-              <Button
-                variant="subtle"
-                h={18}
-                w={18}
-                p={0}
-                size="compact-xs"
-                onClick={() => {
-                  setState({
-                    ...state,
-                    [item.foundGoal.resolvedGoal]: Math.max(
-                      (state[item.foundGoal.resolvedGoal] ?? 0) - 1,
-                      0,
-                    ),
-                  });
-                }}
-              >
-                -
-              </Button>
-              <Text w={14} ta="center" size="sm">
-                {state[item.foundGoal.resolvedGoal] ?? 0}
-              </Text>
-              <Button
-                variant="subtle"
-                h={18}
-                w={18}
-                p={0}
-                size="compact-xs"
-                onClick={() => {
-                  setState({
-                    ...state,
-                    [item.foundGoal.resolvedGoal]:
-                      (state[item.foundGoal.resolvedGoal] ?? 0) + 1,
-                  });
-                }}
-              >
-                +
-              </Button>
+                    displayGoal
+                  )}
+                </Text>
+              </Tooltip>
+              <Group gap={4}>
+                <Button
+                  variant="subtle"
+                  h={18}
+                  w={18}
+                  p={0}
+                  size="compact-xs"
+                  onClick={() => {
+                    setState({
+                      ...state,
+                      [item.foundGoal.resolvedGoal]: Math.max(
+                        (state[item.foundGoal.resolvedGoal] ?? 0) - 1,
+                        0,
+                      ),
+                    });
+                  }}
+                >
+                  -
+                </Button>
+                <Text w={14} ta="center" size="sm">
+                  {state[item.foundGoal.resolvedGoal] ?? 0}
+                </Text>
+                <Button
+                  variant="subtle"
+                  h={18}
+                  w={18}
+                  p={0}
+                  size="compact-xs"
+                  onClick={() => {
+                    setState({
+                      ...state,
+                      [item.foundGoal.resolvedGoal]:
+                        (state[item.foundGoal.resolvedGoal] ?? 0) + 1,
+                    });
+                  }}
+                >
+                  +
+                </Button>
+              </Group>
             </Group>
-          </Group>
-        ))}
+          );
+        })}
       </Stack>
     </InfoCard>
   );
-}
-
-function getAbbreviatedName(goal: FoundStandardGeneral): string {
-  switch (goal.goal) {
-    // GIFT
-    case "Collect {{gift_count}} gifts from games on this card":
-      return `Gifts (${goal.tokens[0]})`;
-    // GOLD/CHERRY
-    case "Cherry disk {{cherry_count}} games on this card":
-      return `Cherry (${goal.tokens[0]})`;
-    case "Gold disk {{gold_count}} games on this card":
-      return `Gold (${goal.tokens[0]})`;
-    // LEVELS
-    case "Beat 2 levels in 6 games on this card":
-    case "Beat 2 levels in 6 games":
-      return "2 levels (6)";
-    case "Beat 4 levels in 5 games on this card":
-    case "Beat 4 levels in 5 games":
-      return "4 levels (5)";
-    case "Beat 8 levels in 3 games on this card":
-    case "Beat 8 levels in 3 games":
-      return "8 levels (3)";
-    // BOSS/ENEMY
-    case "Defeat 2 bosses in 4 games on this card":
-    case "Defeat 2 bosses in 4 games":
-      return "2 bosses (4)";
-    case "Defeat 8 bosses from games on this card":
-      return "Bosses (8)";
-    case "Defeat a boss in 6 games on this card":
-    case "Defeat a boss in 6 games":
-      return "Boss (6)";
-    // THEME
-    case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
-      return "Camp Trilogy (5 worlds)";
-    case "SHOOTER: Beat 5 levels across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
-      return "Shooter (5 levels)";
-    case "DAY JOB: Beat 9 levels across Rail Heist, Onion Delivery, and Bug Hunter":
-      return "Day Job (9 levels)";
-    case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
-      return "Racer (12 races)";
-    case "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank":
-      return "Puzzler (15 levels)";
-    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
-      return "Amy (5 levels, 1+ each)";
-    case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
-      return "War Is Bad (9 battles)";
-    case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
-      return "Metroidvania (6 abilities)";
-    case "ROLE PLAYER: Level up your highest-level character 5 total times across Grimstone, Divers, Valbrace":
-      return "Role Player (5 level ups)";
-    case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
-      return "Revolutionary (5 levels)";
-    default:
-      goal.goal satisfies never;
-      return goal.resolvedGoal;
-  }
 }

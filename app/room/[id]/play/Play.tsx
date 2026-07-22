@@ -96,6 +96,7 @@ export default function Play({
           return {
             color: square.color,
             foundGoal: foundGoal as FoundStandardGeneral,
+            pasta: STANDARD_UFO,
           };
         })
         .filter((item) => item != null),
@@ -162,7 +163,7 @@ export default function Play({
               const isClearing = board[squareIndex].color === selectedColor;
               try {
                 await changeColor(id, squareIndex, selectedColor, isClearing);
-              } catch { }
+              } catch {}
             }}
             shownDifficulties={shownDifficulties}
             viewerColor={selectedColor}
@@ -208,7 +209,13 @@ export default function Play({
                 <SyncedTimer timerState={timerState} />
               </Text>
             </div>
-            <StartPauseButton timerState={timerState} isCast={false} addEvent={addEvent} seed={seed} playerName={playerName} />
+            <StartPauseButton
+              timerState={timerState}
+              isCast={false}
+              addEvent={addEvent}
+              seed={seed}
+              playerName={playerName}
+            />
           </Group>
           {showGeneralTracker && (
             <SimpleGeneralTracker

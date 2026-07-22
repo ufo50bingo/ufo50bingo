@@ -17,9 +17,9 @@ type IconProps = {
   squareColor: BingosyncColor;
   src: string;
   count: number;
-  iconType: IconType;
   countPosition: TCountPosition;
   font: Font;
+  isPixel: boolean;
 };
 
 function Icon({
@@ -28,15 +28,14 @@ function Icon({
   count,
   color,
   squareColor,
-  iconType,
   countPosition,
   isLeft,
   font,
+  isPixel,
 }: IconProps) {
-  const iconClass =
-    iconType === "winnerbit"
-      ? classes.icon
-      : `${classes.icon} ${classes.spritesIcon}`;
+  const iconClass = isPixel
+    ? `${classes.icon} ${classes.spritesIcon}`
+    : classes.icon;
   const imgClass =
     squareColor !== "blank" ? `${iconClass} ${classes.grayscale}` : iconClass;
 
@@ -138,6 +137,7 @@ export default function GeneralIcons({
     const countState = isLeft
       ? generalState[resolvedGoal]?.leftCounts
       : generalState[resolvedGoal]?.rightCounts;
+    const explicitImg = item.foundGoal.cast?.image;
     return (
       <Icon
         key={resolvedGoal}
@@ -148,17 +148,22 @@ export default function GeneralIcons({
           countState == null
             ? 0
             : Object.keys(countState).reduce(
-              (acc, game) => acc + countState[game],
-              0,
-            )
+                (acc, game) => acc + countState[game],
+                0,
+              )
         }
-        iconType={iconType}
+        isPixel={
+          explicitImg != null
+            ? explicitImg.is_pixel !== false
+            : iconType !== "winnerbit"
+        }
         src={
-          iconType === "sprites"
-            ? getSpritesSrc(goal, isHidden)
+          explicitImg?.src ??
+          (iconType === "sprites"
+            ? getSpritesSrc(goal as StandardGeneral, isHidden)
             : iconType === "winnerbit"
-              ? getWinnerBitSrc(goal, isHidden)
-              : getClassicSrc(goal, isHidden)
+              ? getWinnerBitSrc(goal as StandardGeneral, isHidden)
+              : getClassicSrc(goal as StandardGeneral, isHidden))
         }
         countPosition={countPosition}
         isLeft={isLeft}

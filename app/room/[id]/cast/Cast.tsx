@@ -34,7 +34,7 @@ import RecentGames from "./RecentGames";
 import ScoreSquare from "../common/ScoreSquare";
 import SideCell from "./SideCell";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
-import findGoal, { FoundGoalWithCast } from "@/app/findGoal";
+import findGoal, { FoundGoal, FoundGoalWithCast } from "@/app/findGoal";
 import getGamesForPlayer from "./getGamesForPlayer";
 import useLocalNumber from "@/app/localStorage/useLocalNumber";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
@@ -165,11 +165,11 @@ export default function Cast({
     () =>
       isNes50
         ? [
-            ...getAllSubcategories(
-              NES_50_UFO.goals,
-              getNonGeneralCategories(NES_50_UFO),
-            ),
-          ]
+          ...getAllSubcategories(
+            NES_50_UFO.goals,
+            getNonGeneralCategories(NES_50_UFO),
+          ),
+        ]
         : ORDERED_PROPER_GAMES,
     [isNes50],
   );
@@ -238,14 +238,20 @@ export default function Cast({
   const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(() => {
     return board
       .map((square) => {
-        const foundGoal = findGoal(square.name, STANDARD_UFO);
+        let foundGoal: null | FoundGoal<string, string, string> = null;
+        foundGoal = findGoal(square.name, STANDARD_UFO);
+        let pasta: UFOPasta = STANDARD_UFO;
+        if (foundGoal == null) {
+          foundGoal = findGoal(square.name, NES_50_UFO);
+          pasta = NES_50_UFO;
+        }
         if (foundGoal == null || foundGoal.cast == null) {
           return null;
         }
         return {
           color: square.color,
           foundGoal: foundGoal as FoundStandardGeneral,
-          pasta: STANDARD_UFO,
+          pasta,
         };
       })
       .filter((item) => item != null);

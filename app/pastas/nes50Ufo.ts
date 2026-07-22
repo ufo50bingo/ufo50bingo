@@ -1057,6 +1057,62 @@ export const NES_50_UFO = {
       "level": [
         {
           "name": "Beat 2 levels in 6 games on this card.",
+          "cast": {
+            "type": "check",
+            "on_card_only": true,
+            "image": {
+              "src": "/nes50general/level.png",
+              "is_pixel": true
+            },
+            "options": {
+              "shown": [
+                "Adventure Island 3",
+                "Balloon Fight",
+                "Battle City",
+                "Battletoads",
+                "Bugs Bunny CC",
+                "Cabal",
+                "Castlevania 3",
+                "Chip 'n Dale",
+                "Contra",
+                "Dr. Mario",
+                "DuckTales",
+                "Excitebike",
+                "Fire 'n Ice",
+                "Gimmick!",
+                "Gremlins 2",
+                "Ice Climber",
+                "Kirby's Adventure",
+                "Mappy",
+                "Mega Man 6",
+                "Mendel Palace",
+                "Metal Storm",
+                "Punch-Out",
+                "Smash TV",
+                "Snake Rattle 'n Roll",
+                "Snow Bros",
+                "Super Dodge Ball",
+                "Super Mario Bros. 3"
+              ],
+              "shown_if_on_card": [],
+              "hidden": [
+                "Blaster Master",
+                "Cocoron",
+                "Gradius 2",
+                "Isolated Warrior",
+                "Monster Party",
+                "Ninja Gaiden 2",
+                "Recca",
+                "Solar Jetman",
+                "Super Mario Bros. 2",
+                "Super Spy Hunter",
+                "TMNT 3",
+                "The Guardian Legend",
+                "The Immortal",
+                "The Legend of Zelda"
+              ]
+            }
+          },
           "restriction": {
             "count": 6,
             "options": [
@@ -1093,6 +1149,62 @@ export const NES_50_UFO = {
         },
         {
           "name": "Beat 4 levels in 5 games on this card.",
+          "cast": {
+            "type": "check",
+            "on_card_only": true,
+            "image": {
+              "src": "/nes50general/level.png",
+              "is_pixel": true
+            },
+            "options": {
+              "shown": [
+                "Adventure Island 3",
+                "Balloon Fight",
+                "Battle City",
+                "Bugs Bunny CC",
+                "Cabal",
+                "Fire 'n Ice",
+                "Gremlins 2",
+                "Ice Climber",
+                "Kirby's Adventure",
+                "Mappy",
+                "Mendel Palace",
+                "Snake Rattle 'n Roll",
+                "Snow Bros",
+                "Super Mario Bros. 3"
+              ],
+              "shown_if_on_card": [],
+              "hidden": [
+                "Battletoads",
+                "Blaster Master",
+                "Castlevania 3",
+                "Chip 'n Dale",
+                "Cocoron",
+                "Contra",
+                "Dr. Mario",
+                "DuckTales",
+                "Excitebike",
+                "Gimmick!",
+                "Gradius 2",
+                "Isolated Warrior",
+                "Mega Man 6",
+                "Metal Storm",
+                "Punch-Out",
+                "Monster Party",
+                "Ninja Gaiden 2",
+                "Recca",
+                "Smash TV",
+                "Solar Jetman",
+                "Super Dodge Ball",
+                "Super Mario Bros. 2",
+                "Super Spy Hunter",
+                "TMNT 3",
+                "The Guardian Legend",
+                "The Immortal",
+                "The Legend of Zelda"
+              ]
+            }
+          },
           "restriction": {
             "count": 6,
             "options": [
@@ -1116,6 +1228,60 @@ export const NES_50_UFO = {
         },
         {
           "name": "Beat 7 levels in 3 games on this card.",
+          "cast": {
+            "type": "check",
+            "on_card_only": true,
+            "image": {
+              "src": "/nes50general/level.png",
+              "is_pixel": true
+            },
+            "options": {
+              "shown": [
+                "Adventure Island 3",
+                "Balloon Fight",
+                "Bugs Bunny CC",
+                "Cabal",
+                "Fire 'n Ice",
+                "Ice Climber",
+                "Kirby's Adventure",
+                "Mappy",
+                "Mendel Palace",
+                "Snow Bros",
+                "Super Mario Bros. 3"
+              ],
+              "shown_if_on_card": [],
+              "hidden": [
+                "Battle City",
+                "Battletoads",
+                "Blaster Master",
+                "Castlevania 3",
+                "Chip 'n Dale",
+                "Cocoron",
+                "Contra",
+                "Dr. Mario",
+                "Excitebike",
+                "Gimmick!",
+                "Gradius 2",
+                "Gremlins 2",
+                "Isolated Warrior",
+                "Mega Man 6",
+                "Metal Storm",
+                "Punch-Out",
+                "Monster Party",
+                "Ninja Gaiden 2",
+                "Recca",
+                "Smash TV",
+                "Snake Rattle 'n Roll",
+                "Solar Jetman",
+                "Super Dodge Ball",
+                "Super Mario Bros. 2",
+                "TMNT 3",
+                "The Guardian Legend",
+                "The Immortal",
+                "The Legend of Zelda"
+              ]
+            }
+          },
           "restriction": {
             "count": 4,
             "options": [
@@ -1138,6 +1304,57 @@ export const NES_50_UFO = {
       "boss": [
         {
           "name": "Defeat a boss in 6 games on this card.",
+          "cast": {
+            "type": "check",
+            "on_card_only": true,
+            "image": {
+              "src": "/nes50general/boss.png",
+              "is_pixel": true
+            },
+            "options": {
+              "shown": [
+                "Adventure Island 3",
+                "Battletoads",
+                "Blaster Master",
+                "Cabal",
+                "Castlevania 3",
+                "Chip 'n Dale",
+                "Cocoron",
+                "Contra",
+                "DuckTales",
+                "Fire 'n Ice",
+                "Gimmick!",
+                "Gradius 2",
+                "Isolated Warrior",
+                "Kirby's Adventure",
+                "Mega Man 6",
+                "Metal Storm",
+                "Monster Party",
+                "Ninja Gaiden 2",
+                "Recca",
+                "River City Ransom",
+                "Snow Bros",
+                "Super Mario Bros. 2",
+                "Super Mario Bros. 3",
+                "Super Spy Hunter",
+                "The Guardian Legend",
+                "TMNT 3",
+                "Ufouria"
+              ],
+              "shown_if_on_card": [],
+              "hidden": [
+                "Crystalis",
+                "Gremlins 2",
+                "Jaws",
+                "Metroid",
+                "Smash TV",
+                "Snake Rattle 'n Roll",
+                "The Immortal",
+                "The Legend of Zelda",
+                "Zelda 2"
+              ]
+            }
+          },
           "restriction": {
             "count": 7,
             "options": [
@@ -1174,6 +1391,54 @@ export const NES_50_UFO = {
         },
         {
           "name": "Defeat 2 bosses in 4 games on this card.",
+          "cast": {
+            "type": "check",
+            "on_card_only": true,
+            "image": {
+              "src": "/nes50general/boss.png",
+              "is_pixel": true
+            },
+            "options": {
+              "shown": [
+                "Chip 'n Dale",
+                "Cocoron",
+                "Contra",
+                "DuckTales",
+                "Gimmick!",
+                "Kirby's Adventure",
+                "Mega Man 6",
+                "Metal Storm",
+                "Monster Party",
+                "Ninja Gaiden 2",
+                "Recca",
+                "River City Ransom",
+                "Super Mario Bros. 3",
+                "The Guardian Legend",
+                "Ufouria"
+              ],
+              "shown_if_on_card": [],
+              "hidden": [
+                "Adventure Island 3",
+                "Battletoads",
+                "Blaster Master",
+                "Cabal",
+                "Castlevania 3",
+                "Crystalis",
+                "Fire 'n Ice",
+                "Gradius 2",
+                "Gremlins 2",
+                "Isolated Warrior",
+                "Metroid",
+                "Smash TV",
+                "Snow Bros",
+                "Super Mario Bros. 2",
+                "Super Spy Hunter",
+                "TMNT 3",
+                "The Legend of Zelda",
+                "Zelda 2"
+              ]
+            }
+          },
           "restriction": {
             "count": 5,
             "options": [
@@ -1198,6 +1463,54 @@ export const NES_50_UFO = {
         },
         {
           "name": "Defeat 3 bosses in 3 games on this card.",
+          "cast": {
+            "type": "check",
+            "on_card_only": true,
+            "image": {
+              "src": "/nes50general/boss.png",
+              "is_pixel": true
+            },
+            "options": {
+              "shown": [
+                "Chip 'n Dale",
+                "Cocoron",
+                "Contra",
+                "DuckTales",
+                "Gradius 2",
+                "Kirby's Adventure",
+                "Metal Storm",
+                "Monster Party",
+                "Recca",
+                "River City Ransom",
+                "Super Mario Bros. 3",
+                "The Guardian Legend"
+              ],
+              "shown_if_on_card": [],
+              "hidden": [
+                "Adventure Island 3",
+                "Battletoads",
+                "Blaster Master",
+                "Cabal",
+                "Castlevania 3",
+                "Crystalis",
+                "Fire 'n Ice",
+                "Gimmick!",
+                "Gremlins 2",
+                "Isolated Warrior",
+                "Mega Man 6",
+                "Metroid",
+                "Ninja Gaiden 2",
+                "Smash TV",
+                "Snow Bros",
+                "Super Mario Bros. 2",
+                "Super Spy Hunter",
+                "TMNT 3",
+                "The Legend of Zelda",
+                "Ufouria",
+                "Zelda 2"
+              ]
+            }
+          },
           "restriction": {
             "count": 3,
             "options": [
@@ -1221,6 +1534,54 @@ export const NES_50_UFO = {
       "1up": [
         {
           "name": "Earn a 1UP in 6 games on this card.",
+          "cast": {
+            "type": "check",
+            "on_card_only": true,
+            "image": {
+              "src": "/nes50general/1up.png",
+              "is_pixel": true
+            },
+            "options": {
+              "shown": [
+                "Adventure Island 3",
+                "Battle City",
+                "Battletoads",
+                "Bugs Bunny CC",
+                "Cabal",
+                "Chip 'n Dale",
+                "Cocoron",
+                "Contra",
+                "DuckTales",
+                "Gimmick!",
+                "Gradius 2",
+                "Gremlins 2",
+                "Isolated Warrior",
+                "Kirby's Adventure",
+                "Mega Man 6",
+                "Mendel Palace",
+                "Metal Storm",
+                "Ninja Gaiden 2",
+                "Recca",
+                "Smash TV",
+                "Snake Rattle 'n Roll",
+                "Solstice",
+                "Super Mario Bros. 2",
+                "Super Mario Bros. 3",
+                "Super Spy Hunter",
+                "TMNT 3"
+              ],
+              "shown_if_on_card": [],
+              "hidden": [
+                "Castlevania 3",
+                "Ice Climber",
+                "Mappy",
+                "Snow Bros",
+                "Solar Jetman",
+                "The Goonies 2",
+                "Zelda 2"
+              ]
+            }
+          },
           "restriction": {
             "count": 6,
             "options": [
@@ -1256,6 +1617,54 @@ export const NES_50_UFO = {
         },
         {
           "name": "Earn 2 1UPs in 5 games on this card.",
+          "cast": {
+            "type": "check",
+            "on_card_only": true,
+            "image": {
+              "src": "/nes50general/1up.png",
+              "is_pixel": true
+            },
+            "options": {
+              "shown": [
+                "Adventure Island 3",
+                "Battletoads",
+                "Bugs Bunny CC",
+                "Chip 'n Dale",
+                "Contra",
+                "DuckTales",
+                "Gimmick!",
+                "Gremlins 2",
+                "Kirby's Adventure",
+                "Mega Man 6",
+                "Mendel Palace",
+                "Recca",
+                "Smash TV",
+                "Snake Rattle 'n Roll",
+                "Solstice",
+                "Super Mario Bros. 2",
+                "Super Mario Bros. 3",
+                "Super Spy Hunter"
+              ],
+              "shown_if_on_card": [],
+              "hidden": [
+                "Battle City",
+                "Cabal",
+                "Castlevania 3",
+                "Cocoron",
+                "Gradius 2",
+                "Ice Climber",
+                "Isolated Warrior",
+                "Mappy",
+                "Metal Storm",
+                "Ninja Gaiden 2",
+                "Snow Bros",
+                "Solar Jetman",
+                "TMNT 3",
+                "The Goonies 2",
+                "Zelda 2"
+              ]
+            }
+          },
           "restriction": {
             "count": 6,
             "options": [
@@ -1283,6 +1692,54 @@ export const NES_50_UFO = {
         },
         {
           "name": "Earn 3 1UPs in 3 games on this card.",
+          "cast": {
+            "type": "check",
+            "on_card_only": true,
+            "image": {
+              "src": "/nes50general/1up.png",
+              "is_pixel": true
+            },
+            "options": {
+              "shown": [
+                "Adventure Island 3",
+                "Battletoads",
+                "Bugs Bunny CC",
+                "Chip 'n Dale",
+                "Gimmick!",
+                "Kirby's Adventure",
+                "Mega Man 6",
+                "Mendel Palace",
+                "Snake Rattle 'n Roll",
+                "Solstice",
+                "Super Mario Bros. 2",
+                "Super Mario Bros. 3",
+                "Super Spy Hunter"
+              ],
+              "shown_if_on_card": [],
+              "hidden": [
+                "Battle City",
+                "Cabal",
+                "Castlevania 3",
+                "Cocoron",
+                "Contra",
+                "DuckTales",
+                "Gradius 2",
+                "Gremlins 2",
+                "Ice Climber",
+                "Isolated Warrior",
+                "Mappy",
+                "Metal Storm",
+                "Ninja Gaiden 2",
+                "Recca",
+                "Smash TV",
+                "Snow Bros",
+                "Solar Jetman",
+                "TMNT 3",
+                "The Goonies 2",
+                "Zelda 2"
+              ]
+            }
+          },
           "restriction": {
             "count": 3,
             "options": [
@@ -1309,6 +1766,15 @@ export const NES_50_UFO = {
       "theme": [
         {
           "name": "CROWD CONTROL: Pick up 5 items that clear the screen across Battle City, Castlevania 3, Gremlins 2",
+          "cast": {
+            "options": "$infer",
+            "type": "counter",
+            "on_card_only": false,
+            "image": {
+              "src": "/nes50general/crowdcontrol.png",
+              "is_pixel": true
+            }
+          },
           "restriction": {
             "count": 1,
             "options": [
@@ -1321,6 +1787,15 @@ export const NES_50_UFO = {
         },
         {
           "name": "PLATFORMER: Beat a World in Super Mario Bros 2, Super Mario Bros 3, Kirby's Adventure",
+          "cast": {
+            "options": "$infer",
+            "type": "counter",
+            "on_card_only": false,
+            "image": {
+              "src": "/nes50general/platformer.png",
+              "is_pixel": true
+            }
+          },
           "restriction": {
             "count": 1,
             "options": [
@@ -1345,6 +1820,15 @@ export const NES_50_UFO = {
         },
         {
           "name": "ARMAMENT: Collect 5 weapons / weapon upgrades across Metroid, The Goonies 2, Mega Man 6",
+          "cast": {
+            "options": "$infer",
+            "type": "counter",
+            "on_card_only": false,
+            "image": {
+              "src": "/nes50general/armament.png",
+              "is_pixel": true
+            }
+          },
           "restriction": {
             "count": 1,
             "options": [
@@ -1357,6 +1841,15 @@ export const NES_50_UFO = {
         },
         {
           "name": "SPORTS: Beat 7 levels across Punch-Out, Excitebike, Super Dodgeball",
+          "cast": {
+            "options": "$infer",
+            "type": "counter",
+            "on_card_only": false,
+            "image": {
+              "src": "/nes50general/sports.png",
+              "is_pixel": true
+            }
+          },
           "restriction": {
             "count": 1,
             "options": [
@@ -1369,6 +1862,15 @@ export const NES_50_UFO = {
         },
         {
           "name": "EXXTRA CREDIT: Perfect 6 bonus games across Snake Rattle 'n Roll, Ice Climber, Balloon Fight",
+          "cast": {
+            "options": "$infer",
+            "type": "counter",
+            "on_card_only": false,
+            "image": {
+              "src": "/nes50general/exxtracredit.png",
+              "is_pixel": true
+            }
+          },
           "restriction": {
             "count": 1,
             "options": [
@@ -1381,6 +1883,15 @@ export const NES_50_UFO = {
         },
         {
           "name": "EXTRA CREDIT: Perfect 5 bonus games across Adventure Island 3, DuckTales, Mappy",
+          "cast": {
+            "options": "$infer",
+            "type": "counter",
+            "on_card_only": false,
+            "image": {
+              "src": "/nes50general/extracredit.png",
+              "is_pixel": true
+            }
+          },
           "restriction": {
             "count": 1,
             "options": [
@@ -1393,6 +1904,15 @@ export const NES_50_UFO = {
         },
         {
           "name": "LOOKING SHARP: Upgrade your sword in 2 of The Legend of Zelda, Zelda 2, Crystalis",
+          "cast": {
+            "options": "$infer",
+            "type": "counter",
+            "on_card_only": false,
+            "image": {
+              "src": "/nes50general/lookingsharp.png",
+              "is_pixel": true
+            }
+          },
           "restriction": {
             "count": 1,
             "options": [
@@ -1405,6 +1925,15 @@ export const NES_50_UFO = {
         },
         {
           "name": "POWER PLAY: Fully upgrade a weapon in 2 of Isolated Warrior, Cocoron, Blaster Master",
+          "cast": {
+            "options": "$infer",
+            "type": "counter",
+            "on_card_only": false,
+            "image": {
+              "src": "/nes50general/powerplay.png",
+              "is_pixel": true
+            }
+          },
           "restriction": {
             "count": 1,
             "options": [
@@ -1417,6 +1946,15 @@ export const NES_50_UFO = {
         },
         {
           "name": "TRADER: Buy 6 types of items across Gremlins 2, Solar Jetman, The Legend of Zelda",
+          "cast": {
+            "options": "$infer",
+            "type": "counter",
+            "on_card_only": false,
+            "image": {
+              "src": "/nes50general/trader.png",
+              "is_pixel": true
+            }
+          },
           "restriction": {
             "count": 1,
             "options": [
@@ -1429,6 +1967,15 @@ export const NES_50_UFO = {
         },
         {
           "name": "GET ME IN: Collect 7 keys across Solstice, The immortal, Uninvited",
+          "cast": {
+            "options": "$infer",
+            "type": "counter",
+            "on_card_only": false,
+            "image": {
+              "src": "/nes50general/getmein.png",
+              "is_pixel": true
+            }
+          },
           "restriction": {
             "count": 1,
             "options": [
@@ -1441,6 +1988,15 @@ export const NES_50_UFO = {
         },
         {
           "name": "SAFETY NET: Earn 4 1UPs across Ninja Gaiden 2, Snow Bros, Cocoron",
+          "cast": {
+            "options": "$infer",
+            "type": "counter",
+            "on_card_only": false,
+            "image": {
+              "src": "/nes50general/safetynet.png",
+              "is_pixel": true
+            }
+          },
           "restriction": {
             "count": 1,
             "options": [
@@ -1453,6 +2009,15 @@ export const NES_50_UFO = {
         },
         {
           "name": "CHATTER: Have 2 characters talk to you in Ufouria, Uninvited, Adventure Island 3",
+          "cast": {
+            "options": "$infer",
+            "type": "counter",
+            "on_card_only": false,
+            "image": {
+              "src": "/nes50general/chatter.png",
+              "is_pixel": true
+            }
+          },
           "restriction": {
             "count": 1,
             "options": [
@@ -1465,6 +2030,15 @@ export const NES_50_UFO = {
         },
         {
           "name": "CARTOONS: Defeat 5 bosses (with 1+ in each) across TMNT 3, DuckTales, Chip 'n Dale",
+          "cast": {
+            "options": "$infer",
+            "type": "counter",
+            "on_card_only": false,
+            "image": {
+              "src": "/nes50general/cartoons.gif",
+              "is_pixel": true
+            }
+          },
           "restriction": {
             "count": 1,
             "options": [
@@ -1477,6 +2051,15 @@ export const NES_50_UFO = {
         },
         {
           "name": "BOOSTED: Increase your stats 2 times in Jaws, River City Ransom, Crystalis",
+          "cast": {
+            "options": "$infer",
+            "type": "counter",
+            "on_card_only": false,
+            "image": {
+              "src": "/nes50general/boosted.png",
+              "is_pixel": true
+            }
+          },
           "restriction": {
             "count": 1,
             "options": [

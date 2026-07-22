@@ -5,6 +5,16 @@ import getMagicSquare from "./getMagicSquare";
 import replaceTokens from "./replaceTokens";
 import splitAtTokens from "./splitAtTokens";
 
+export type OptionListEntry =
+  | string
+  | { type: "include" | "exclude"; has_extra: string; option: string };
+export type OptionList = {
+  shown: ReadonlyArray<OptionListEntry>;
+  shown_if_on_card: ReadonlyArray<OptionListEntry>;
+  hidden: ReadonlyArray<OptionListEntry>;
+};
+export type Descriptions = { [subcategory: string]: string };
+
 export type UFOGoalConfig<T extends string = string> = {
   name: T;
   short?: string;
@@ -14,6 +24,12 @@ export type UFOGoalConfig<T extends string = string> = {
     options: string | ReadonlyArray<string>;
   };
   sort_tokens?: string | ReadonlyArray<string>;
+  cast?: {
+    type: "check" | "counter";
+    optionList: string | OptionList;
+    image: string;
+    descriptions?: string | Descriptions;
+  };
 };
 
 export type UFOGameGoals = {

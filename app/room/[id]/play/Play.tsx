@@ -21,7 +21,7 @@ import { getResult } from "@/app/matches/computeResult";
 import ScoreSquare from "../common/ScoreSquare";
 import { useMediaQuery } from "@mantine/hooks";
 import SimpleGeneralTracker from "./SimpleGeneralTracker";
-import findGoal from "@/app/findGoal";
+import findGoal, { FoundGoal } from "@/app/findGoal";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import { FoundStandardGeneral, GeneralItem } from "../cast/Cast";
 import useLocalBool from "@/app/localStorage/useLocalBool";
@@ -30,6 +30,8 @@ import useSyncedTimer, { FullSyncedTimerEvent } from "../common/useSyncedTimer";
 import SyncedTimerBoardCover from "../common/SyncedTimerBoardCover";
 import SyncedTimer from "../common/SyncedTimer";
 import StartPauseButton from "../common/StartPauseButton";
+import { UFOPasta } from "@/app/generator/ufoGenerator";
+import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
 
 export type Props = {
   id: string;
@@ -86,20 +88,27 @@ export default function Play({
   });
 
   const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(
-    () =>
-      board
+    () => {
+      return board
         .map((square) => {
-          const foundGoal = findGoal(square.name, STANDARD_UFO);
-          if (foundGoal == null || foundGoal.category !== "general") {
+          let foundGoal: null | FoundGoal<string, string, string> = null;
+          foundGoal = findGoal(square.name, STANDARD_UFO);
+          let pasta: UFOPasta = STANDARD_UFO;
+          if (foundGoal == null) {
+            foundGoal = findGoal(square.name, NES_50_UFO);
+            pasta = NES_50_UFO;
+          }
+          if (foundGoal == null || foundGoal.cast == null) {
             return null;
           }
           return {
             color: square.color,
             foundGoal: foundGoal as FoundStandardGeneral,
-            pasta: STANDARD_UFO,
+            pasta,
           };
         })
-        .filter((item) => item != null),
+        .filter((item) => item != null);
+    },
     [board],
   );
 
@@ -163,7 +172,7 @@ export default function Play({
               const isClearing = board[squareIndex].color === selectedColor;
               try {
                 await changeColor(id, squareIndex, selectedColor, isClearing);
-              } catch {}
+              } catch { }
             }}
             shownDifficulties={shownDifficulties}
             viewerColor={selectedColor}

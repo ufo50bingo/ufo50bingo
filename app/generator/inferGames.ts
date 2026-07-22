@@ -16,7 +16,7 @@ export function inferGames(resolvedGoal: string, allGames: ReadonlyArray<string>
   if (
     allGames.includes("miniandmax") && remaining.includes("Mini & Max")
   ) {
-    matches.push("minimax");
+    matches.push("miniandmax");
     remaining = remaining.replaceAll("Mini & Max", " ");
   }
   remaining = stripText(remaining);
@@ -27,11 +27,10 @@ export function inferGames(resolvedGoal: string, allGames: ReadonlyArray<string>
     if (regex.test(remaining)) {
       matches.push(candidate);
       remaining = remaining.replace(regex, " ");
-    } else {
-      console.log('failed candidate', candidate, "on", remaining);
     }
   }
 
+  matches.sort((a, b) => a.localeCompare(b));
   return matches;
 }
 

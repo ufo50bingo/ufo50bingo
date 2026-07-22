@@ -8,6 +8,15 @@ export type Return = {
   warnings: ReadonlyArray<string>;
 };
 
+const getOptionList = () => zod.array(zod.union([
+  zod.string(),
+  zod.strictObject({
+    type: zod.enum(["include", "exclude"]),
+    has_extra: zod.string(),
+    option: zod.string(),
+  }),
+]));
+
 const UfoPasta = zod.strictObject({
   goals: zod.record(
     zod.string(),
@@ -29,6 +38,26 @@ const UfoPasta = zod.strictObject({
               .union([zod.string(), zod.array(zod.string())])
               .optional(),
             short: zod.string().optional(),
+            cast: zod.strictObject({
+              type: zod.enum(["check", "counter"]),
+              options: zod.union([
+                zod.string(),
+                zod.strictObject({
+                  shown: getOptionList(),
+                  shown_if_on_card: getOptionList(),
+                  hidden: getOptionList(),
+                }),
+              ]),
+              on_card_only: zod.boolean(),
+              image: zod.strictObject({
+                src: zod.string(),
+                is_pixel: zod.boolean(),
+              }).optional(),
+              descriptions: zod.union([
+                zod.string(),
+                zod.record(zod.string(), zod.string()),
+              ]).optional(),
+            }).optional(),
           }),
         ]),
       ),

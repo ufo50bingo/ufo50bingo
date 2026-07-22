@@ -174,6 +174,7 @@ export default function validateUfo(pasta: UFOPasta): Return {
         continue;
       }
     }
+    // TODO: Add more validations for casting stuff
     return errors.length > 0
       ? { pasta: null, errors, warnings }
       : { pasta, errors, warnings };

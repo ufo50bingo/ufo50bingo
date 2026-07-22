@@ -305,6 +305,7 @@ export const CHOCO_UFO = {
     veryhard: 5,
     general: 5,
   },
+  "general_categories": ["general"],
   "draft": {
     "excluded_categories": [
       "general"

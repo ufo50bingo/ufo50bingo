@@ -27,7 +27,7 @@ export default function addPrefixToPasta(
         if (goal.sort_tokens != null) {
           sort_tokens =
             typeof goal.sort_tokens === "string" &&
-            goal.sort_tokens !== "$numeric"
+              goal.sort_tokens !== "$numeric"
               ? addPrefixToIdent(goal.sort_tokens, prefix)
               : goal.sort_tokens;
         }
@@ -68,57 +68,64 @@ export default function addPrefixToPasta(
   const category_difficulty_tiers =
     pasta.category_difficulty_tiers != null
       ? pasta.category_difficulty_tiers.map((tier) =>
-          tier.map((category) => getNewCategory(category, prefix)),
-        )
+        tier.map((category) => getNewCategory(category, prefix)),
+      )
       : undefined;
+
+  const general_categories = pasta.general_categories != null
+    ? pasta.general_categories.map(category => getNewCategory(category, prefix))
+    : undefined;
 
   const restriction_option_lists =
     pasta.restriction_option_lists != null
       ? Object.fromEntries(
-          Object.entries(pasta.restriction_option_lists).map(
-            ([listName, options]) => [
-              addPrefixToIdent(listName, prefix),
-              options,
-            ],
-          ),
-        )
+        Object.entries(pasta.restriction_option_lists).map(
+          ([listName, options]) => [
+            addPrefixToIdent(listName, prefix),
+            options,
+          ],
+        ),
+      )
       : undefined;
 
   const sort_orders =
     pasta.sort_orders != null
       ? Object.fromEntries(
-          Object.entries(pasta.sort_orders).map(([listName, options]) => [
-            addPrefixToIdent(listName, prefix),
-            options,
-          ]),
-        )
+        Object.entries(pasta.sort_orders).map(([listName, options]) => [
+          addPrefixToIdent(listName, prefix),
+          options,
+        ]),
+      )
       : undefined;
 
   const draft =
     pasta.draft != null
       ? {
-          excluded_categories: pasta.draft.excluded_categories.map((category) =>
-            getNewCategory(category, prefix),
-          ),
-          category_counts: pasta.draft.category_counts.map(
-            (categoryCountsForPlayer) =>
-              Object.fromEntries(
-                Object.entries(categoryCountsForPlayer).map(
-                  ([category, count]) => [
-                    getNewCategory(category, prefix),
-                    count,
-                  ],
-                ),
+        excluded_categories: pasta.draft.excluded_categories.map((category) =>
+          getNewCategory(category, prefix),
+        ),
+        category_counts: pasta.draft.category_counts.map(
+          (categoryCountsForPlayer) =>
+            Object.fromEntries(
+              Object.entries(categoryCountsForPlayer).map(
+                ([category, count]) => [
+                  getNewCategory(category, prefix),
+                  count,
+                ],
               ),
-          ),
-        }
+            ),
+        ),
+      }
       : undefined;
+
+
 
   return {
     goals,
     tokens,
     category_counts,
     category_difficulty_tiers,
+    general_categories,
     restriction_option_lists,
     sort_orders,
     draft,

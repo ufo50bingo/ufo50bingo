@@ -532,6 +532,7 @@ export const SEASON_1_UFO = {
   },
   tokens: {},
   category_counts: { easy: 5, medium: 7, hard: 6, veryhard: 2, general: 5 },
+  "general_categories": ["general"],
   "draft": {
     "excluded_categories": [
       "general"

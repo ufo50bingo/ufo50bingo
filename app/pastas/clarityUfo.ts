@@ -684,6 +684,7 @@ export const CLARITY_UFO = {
     veryhard: 2,
     general: 5,
   },
+  "general_categories": ["general"],
   "draft": {
     "excluded_categories": [
       "general"

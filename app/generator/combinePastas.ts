@@ -20,6 +20,7 @@ export default function combinePastas(inputs: ReadonlyArray<Input>): UFOPasta {
     sort_orders: Object.assign({}, ...prefixed.map((p) => p.sort_orders ?? {})),
     category_counts: prefixed[0].category_counts,
     draft: prefixed[0].draft,
+    general_categories: prefixed.flatMap((p) => p.general_categories ?? []),
   };
   return combined;
 }

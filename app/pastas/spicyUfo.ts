@@ -838,10 +838,10 @@ export const SPICY_UFO = {
         "Collect 10 gifts - 1 from each column ({{chrono_alpha}})",
         "Collect 12 gifts - 6 from the first 25, 6 from the second 25 in {{chrono_alpha}}",
         "Collect {{gifts_card}} gifts from games on this card",
-		"Collect {{gifts_card}} gifts from games on this card",
+        "Collect {{gifts_card}} gifts from games on this card",
         "Defeat {{gen_boss}}",
         "Defeat {{gen_boss}}",
-		"Defeat {{gen_boss}}",
+        "Defeat {{gen_boss}}",
         "Beat {{gen_board}}"
       ],
       "misc": [
@@ -906,8 +906,8 @@ export const SPICY_UFO = {
       "Cyber Owls",
       "Fist Hell",
       "Mortol",
-	  "Elfazar's Hat",
-	  "Seaside Drive",
+      "Elfazar's Hat",
+      "Seaside Drive",
       "Warptank"
     ],
     "gold_option": [
@@ -916,14 +916,14 @@ export const SPICY_UFO = {
       "Valbrace",
       "Vainger",
       "Mini & Max",
-	  "Attactics",
-	  "Devilition",
+      "Attactics",
+      "Devilition",
       "Cyber Owls",
       "Combatants"
     ],
     "levels_special": [
       "3 levels in 5 games from 5 different rows (chronology)",
-	  "3 levels in 5 games from 5 different rows (ALPHABETICAL)",
+      "3 levels in 5 games from 5 different rows (ALPHABETICAL)",
       "5 levels in 5 Epic Play games",
       "4 levels in 6 different Thinky Play games"
     ],
@@ -949,7 +949,7 @@ export const SPICY_UFO = {
       "Cherry Disk Ninpek",
       "Collect all clubs in Golfaria (have 80 total strokes)",
       "Beat 4 levels in Rock On! Island",
-	  "Show 60+ completion in Vainger",
+      "Show 60+ completion in Vainger",
       "Show 50%+ completion in Porgy"
     ],
     "cons_games": [
@@ -1389,6 +1389,7 @@ export const SPICY_UFO = {
     "veryhard": 4,
     "general": 5
   },
+  "general_categories": ["general"],
   "draft": {
     "excluded_categories": [
       "general"

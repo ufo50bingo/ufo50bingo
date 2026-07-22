@@ -387,6 +387,7 @@ export const NOZZLO_UFO = {
     Normal: 20,
     general: 5,
   },
+  "general_categories": ["general"],
   "draft": {
     "excluded_categories": [
       "general"

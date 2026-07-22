@@ -325,6 +325,7 @@ export const PROTOTYPE_UFO = {
   },
   tokens: {},
   category_counts: { easy: 7, medium: 7, hard: 5, veryhard: 1, general: 5 },
+  "general_categories": ["general"],
   "draft": {
     "excluded_categories": [
       "general"

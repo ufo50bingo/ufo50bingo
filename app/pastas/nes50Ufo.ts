@@ -1789,7 +1789,7 @@ export const NES_50_UFO = {
           "name": "PLATFORMER: Beat a World in Super Mario Bros 2, Super Mario Bros 3, Kirby's Adventure",
           "cast": {
             "options": "$infer",
-            "type": "counter",
+            "type": "check",
             "on_card_only": false,
             "image": {
               "src": "/nes50general/platformer.png",
@@ -1808,6 +1808,15 @@ export const NES_50_UFO = {
         },
         {
           "name": "PUZZLER: Beat level 10 in 2 of Bugs Bunny CC, Fire 'n Ice, Dr. Mario",
+          "cast": {
+            "options": "$infer",
+            "type": "check",
+            "on_card_only": false,
+            "image": {
+              "src": "/nes50general/platformer.png",
+              "is_pixel": true
+            }
+          },
           "restriction": {
             "count": 1,
             "options": [
@@ -1906,7 +1915,7 @@ export const NES_50_UFO = {
           "name": "LOOKING SHARP: Upgrade your sword in 2 of The Legend of Zelda, Zelda 2, Crystalis",
           "cast": {
             "options": "$infer",
-            "type": "counter",
+            "type": "check",
             "on_card_only": false,
             "image": {
               "src": "/nes50general/lookingsharp.png",
@@ -1927,7 +1936,7 @@ export const NES_50_UFO = {
           "name": "POWER PLAY: Fully upgrade a weapon in 2 of Isolated Warrior, Cocoron, Blaster Master",
           "cast": {
             "options": "$infer",
-            "type": "counter",
+            "type": "check",
             "on_card_only": false,
             "image": {
               "src": "/nes50general/powerplay.png",

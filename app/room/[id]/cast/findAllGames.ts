@@ -6,9 +6,8 @@ import {
 } from "@/app/goals";
 import { TBoard } from "@/app/matches/parseBingosyncData";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
-import findGoal, { FoundGoal } from "@/app/findGoal";
+import findGoal from "@/app/findGoal";
 import { SPICY_UFO } from "@/app/pastas/spicyUfo";
-import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
 
 function stripText(text: string): string {
   return text.toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -22,10 +21,7 @@ Object.entries(GAME_NAMES).forEach(([game, name]) => {
 export type GameToGoals = { [game: string]: ReadonlyArray<[string, number]> };
 
 export function findGamesForGoal(goal: string): Game[] {
-  const result =
-    findGoal(goal, STANDARD_UFO) ??
-    findGoal(goal, SPICY_UFO) ??
-    findGoal(goal, NES_50_UFO);
+  const result = findGoal(goal, STANDARD_UFO) ?? findGoal(goal, SPICY_UFO);
   return findGamesForResult(goal, result);
 }
 
@@ -51,11 +47,7 @@ export function findGamesForResult(
   if (game == null) {
     return [];
   }
-  const maybeAsResult = result as FoundGoal<string, string, string>;
-  if (
-    maybeAsResult.isGeneral === false &&
-    maybeAsResult.category !== "general"
-  ) {
+  if (ORDERED_PROPER_GAMES.includes(game as ProperGame)) {
     return [game as ProperGame];
   }
   const games: Game[] = [];

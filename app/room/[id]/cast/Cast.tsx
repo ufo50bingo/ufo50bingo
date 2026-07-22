@@ -373,7 +373,7 @@ export default function Cast({
         <Group gap={0}>
           {showRecentGames && generalGoals.length > 0 && (
             <SideColumn isDouble={false}>
-              <RecentGames limit={6} recentGames={leftGames} font={font} />
+              <RecentGames limit={6} recentGames={leftGames} font={font} isNes50={isNes50} />
             </SideColumn>
           )}
           <SideColumn isDouble={isDouble}>
@@ -399,7 +399,7 @@ export default function Cast({
               font={font}
             />
             {showRecentGames && generalGoals.length === 0 && (
-              <RecentGames limit={5} recentGames={leftGames} font={font} />
+              <RecentGames limit={5} recentGames={leftGames} font={font} isNes50={isNes50} />
             )}
           </SideColumn>
           <Board
@@ -441,12 +441,12 @@ export default function Cast({
               font={font}
             />
             {showRecentGames && generalGoals.length === 0 && (
-              <RecentGames limit={5} recentGames={rightGames} font={font} />
+              <RecentGames limit={5} recentGames={rightGames} font={font} isNes50={isNes50} />
             )}
           </SideColumn>
           {showRecentGames && generalGoals.length > 0 && (
             <SideColumn isDouble={false}>
-              <RecentGames limit={6} recentGames={rightGames} font={font} />
+              <RecentGames limit={6} recentGames={rightGames} font={font} isNes50={isNes50} />
             </SideColumn>
           )}
         </Group>

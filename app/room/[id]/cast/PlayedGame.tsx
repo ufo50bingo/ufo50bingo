@@ -11,11 +11,12 @@ type Props = {
   startTime: number;
   endTime: null | undefined | number;
   font: Font;
+  isNes50: boolean;
 };
 
-export default function PlayedGame({ game, startTime, endTime, font }: Props) {
+export default function PlayedGame({ game, startTime, endTime, font, isNes50 }: Props) {
   const { getClientMsFromServerMs } = useServerOffsetContext();
-  const href = ORDERED_PROPER_GAMES.includes(game as ProperGame)
+  const href = isNes50 ? `/nes50boxart/${encodeURIComponent(game)}.png` : ORDERED_PROPER_GAMES.includes(game as ProperGame)
     ? `/games/${game}.png`
     : `/cobwebs/cobwebs0.png`;
   return (

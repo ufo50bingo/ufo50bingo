@@ -1,4 +1,7 @@
+import getAllSubcategories from "./createboard/getAllSubcategories";
+import getNonGeneralCategories from "./createboard/getNonGeneralCategories";
 import getGoalAndFallback from "./generator/getGoalAndFallback";
+import { inferGames } from "./generator/inferGames";
 import splitAtTokens, { Plain, ResolvedToken } from "./generator/splitAtTokens";
 import {
   CastConfig,
@@ -34,6 +37,7 @@ export type FoundGoal<G extends string, C extends string, S extends string> = {
   tokens: ReadonlyArray<string>;
   goalParts: ReadonlyArray<Plain | ResolvedToken>;
   cast: null | CastConfig;
+  inferredGames: ReadonlyArray<string>;
 };
 type Short = {
   resolved: string;
@@ -59,6 +63,7 @@ type WithTokens = Array<WithToken>;
 type ProcessedPasta = {
   plain: PlainText;
   withTokens: WithTokens;
+  allGames: ReadonlyArray<string>;
 };
 
 export default function findGoal(
@@ -84,21 +89,23 @@ export default function findGoal(
       plainResult.short == null
         ? null
         : {
-            resolved: plainResult.short,
-            parts: [{ type: "plain", text: plainResult.short }],
-          };
+          resolved: plainResult.short,
+          parts: [{ type: "plain", text: plainResult.short }],
+        };
+    const isGeneral = plainResult.category === "general" || (
+      pasta.general_categories != null &&
+      pasta.general_categories.includes(plainResult.category));
     const res = {
       goal,
       short,
       resolvedGoal: goal,
       category: plainResult.category,
-      isGeneral:
-        pasta.general_categories != null &&
-        pasta.general_categories.includes(plainResult.category),
+      isGeneral,
       subcategory: plainResult.subcategory,
       tokens: [],
       goalParts: [part],
       cast: plainResult.cast,
+      inferredGames: isGeneral ? inferGames(goal, processed.allGames) : [plainResult.subcategory],
     };
     goalCache.set(goal, res);
     return res;
@@ -114,26 +121,27 @@ export default function findGoal(
           part.type === "plain" ? part : resolvedTokens[tokenIdx++],
         );
       }
+      const isGeneral = option.tags.category === "general" ||
+        (pasta.general_categories != null &&
+          pasta.general_categories.includes(option.tags.category));
       const res = {
         goal: option.goal,
         short:
           shortParts == null
             ? null
             : {
-                resolved: shortParts.map((p) => p.text).join(""),
-                parts: shortParts,
-              },
+              resolved: shortParts.map((p) => p.text).join(""),
+              parts: shortParts,
+            },
         resolvedGoal: goal,
         category: option.tags.category,
-        isGeneral:
-          option.tags.category === "general" ||
-          (pasta.general_categories != null &&
-            pasta.general_categories.includes(option.tags.category)),
+        isGeneral,
         subcategory: option.tags.subcategory,
         tokens: resolvedTokens.map((p) => p.text),
         goalParts,
         sortTokens: option.sortTokens,
         cast: option.tags.cast,
+        inferredGames: isGeneral ? inferGames(goal, processed.allGames) : [option.tags.subcategory],
       };
       goalCache.set(goal, res);
       return res;
@@ -216,7 +224,13 @@ function preprocess(pasta: UFOPasta): ProcessedPasta {
       });
     });
   });
-  return { plain, withTokens };
+  const nonGeneralCategories = getNonGeneralCategories(pasta);
+  const allGames = [
+    ...getAllSubcategories(pasta.goals, nonGeneralCategories),
+  ];
+  // longest first, so we make sure to handle 
+  allGames.sort((a, b) => b.length - a.length)
+  return { plain, withTokens, allGames };
 }
 
 function getGoalPartsFromToken(

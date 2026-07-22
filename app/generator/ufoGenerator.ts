@@ -1,7 +1,9 @@
+import getAllSubcategories from "../createboard/getAllSubcategories";
+import getNonGeneralCategories from "../createboard/getNonGeneralCategories";
 import shuffle from "../createboard/shuffle";
-import { findGamesForResult } from "../room/[id]/cast/findAllGames";
 import getGoalAndFallback from "./getGoalAndFallback";
 import getMagicSquare from "./getMagicSquare";
+import { inferGames } from "./inferGames";
 import replaceTokens from "./replaceTokens";
 import splitAtTokens from "./splitAtTokens";
 
@@ -112,6 +114,10 @@ function generateCandidate(
   pasta: UFOPasta,
   bestFallbacks: number,
 ): null | [ReadonlyArray<string>, number] {
+  const nonGeneralCategories = getNonGeneralCategories(pasta);
+  const allGames = [
+    ...getAllSubcategories(pasta.goals, nonGeneralCategories),
+  ];
   // fill squares in order of how many bingo lines they're on
   // this helps prevent having two goals from the same game on one line
   const centerIndex = 12;
@@ -255,14 +261,15 @@ function generateCandidate(
 
     finalBoard[i] = finalGoal;
     finalBoardWithTokens[i] = replaceTokens(finalGoal, pasta, sortTokens);
-    for (const onCard of findGamesForResult(
-      finalBoardWithTokens[i],
-      {
-        subcategory: game,
-      },
-      true,
-    )) {
-      gamesOnCard.add(onCard);
+    const isGeneral = difficulty === "general" || (
+      pasta.general_categories != null &&
+      pasta.general_categories.includes(difficulty));
+    if (!isGeneral) {
+      gamesOnCard.add(game);
+    } else {
+      for (const onCard of inferGames(finalBoardWithTokens[i], allGames)) {
+        gamesOnCard.add(onCard);
+      }
     }
   };
 
@@ -282,13 +289,16 @@ function generateCandidate(
     const goals = pasta.goals[difficulty][game];
 
     const mayHaveNewGame = goals.some((goal) => {
+      const isGeneral = difficulty === "general" || (
+        pasta.general_categories != null &&
+        pasta.general_categories.includes(difficulty));
+      if (!isGeneral) {
+        return !gamesOnCard.has(game);
+      }
+
       const goalAndFallback = getGoalAndFallback(goal);
       for (const g of goalAndFallback) {
-        for (const testGame of findGamesForResult(
-          g,
-          { subcategory: game },
-          true,
-        )) {
+        for (const testGame of inferGames(g, allGames)) {
           if (!gamesOnCard.has(testGame)) {
             return true;
           }
@@ -296,7 +306,7 @@ function generateCandidate(
         const tokens = splitAtTokens(g).filter((item) => item.type === "token");
         for (const token of tokens) {
           for (const option of pasta.tokens[token.token]) {
-            for (const testGame of findGamesForResult(option, null, true)) {
+            for (const testGame of inferGames(option, allGames)) {
               if (!gamesOnCard.has(testGame)) {
                 return true;
               }

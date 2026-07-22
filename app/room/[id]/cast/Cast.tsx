@@ -87,17 +87,16 @@ export default function Cast({
   playerName,
 }: CastProps) {
   const [gameToGoals, setGameToGoals] = useState(() =>
-    getGameToGoals(initialBoard),
+    getGameToGoals(initialBoard, getGameList(getIsNes50(initialBoard))),
   );
+  const onNewCard = useCallback((newBoard: TBoard) => {
+    setGameToGoals(getGameToGoals(newBoard, getGameList(getIsNes50(newBoard))));
+    setTerminalCodes(getAllTerminalCodes(newBoard));
+  }, []);
   const [terminalCodes, setTerminalCodes] = useState(() =>
     getAllTerminalCodes(initialBoard),
   );
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
-
-  const onNewCard = useCallback((newBoard: TBoard) => {
-    setGameToGoals(getGameToGoals(newBoard));
-    setTerminalCodes(getAllTerminalCodes(newBoard));
-  }, []);
 
   const [soundChoices, setSoundChoices, playAudio] = useSounds("cast");
 
@@ -148,29 +147,10 @@ export default function Cast({
     setShowRecentGames,
   } = useLocalState(id, seed);
 
-  const isNes50 = useMemo(() => {
-    let foundCount = 0;
-    for (const square of board) {
-      if (findGoal(square.name, NES_50_UFO) != null) {
-        foundCount += 1;
-      }
-      if (foundCount >= 10) {
-        return true;
-      }
-    }
-    return false;
-  }, [board]);
+  const isNes50 = useMemo(() => getIsNes50(board), [board]);
 
   const gameList = useMemo(
-    () =>
-      isNes50
-        ? [
-          ...getAllSubcategories(
-            NES_50_UFO.goals,
-            getNonGeneralCategories(NES_50_UFO),
-          ),
-        ]
-        : ORDERED_PROPER_GAMES,
+    () => getGameList(isNes50),
     [isNes50],
   );
 
@@ -580,4 +560,28 @@ export default function Cast({
       {reconnectModal}
     </>
   );
+}
+
+function getIsNes50(board: TBoard): boolean {
+  let foundCount = 0;
+  for (const square of board) {
+    if (findGoal(square.name, NES_50_UFO) != null) {
+      foundCount += 1;
+    }
+    if (foundCount >= 10) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function getGameList(isNes50: boolean): ReadonlyArray<string> {
+  return isNes50
+    ? [
+      ...getAllSubcategories(
+        NES_50_UFO.goals,
+        getNonGeneralCategories(NES_50_UFO),
+      ),
+    ]
+    : ORDERED_PROPER_GAMES;
 }

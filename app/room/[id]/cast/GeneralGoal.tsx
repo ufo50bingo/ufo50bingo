@@ -1,6 +1,6 @@
 import { ORDERED_PROPER_GAMES, ProperGame } from "@/app/goals";
 import { Anchor, Button, Checkbox, Group, Stack } from "@mantine/core";
-import { findGamesForGoal, GameToGoals } from "./findAllGames";
+import { GameToGoals } from "./findAllGames";
 import InfoCard from "./InfoCard";
 import GameInfo from "./GameInfo";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
@@ -113,7 +113,7 @@ export default function GeneralGoal({
           return BOSSES;
         case "$infer":
           return {
-            shown: findGamesForGoal(foundGoal.resolvedGoal),
+            shown: foundGoal.inferredGames,
             shown_if_on_card: [],
             hidden: [],
           };

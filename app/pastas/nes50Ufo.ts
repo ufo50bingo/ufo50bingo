@@ -321,12 +321,12 @@ export const NES_50_UFO = {
       ],
       "Crystalis": [
         {
-          "name": "CRYSTALIS: Have a Sword, Shield, Armor, and Power equipped"
+          "name": "CRYSTALIS: Have a Sword, Shield, Power and Magic equipped"
         }
       ],
       "Dr. Mario": [
         {
-          "name": "DR. MARIO: Have 13,000+ points"
+          "name": "DR. MARIO: Beat 2 levels and have 13,000+ points"
         }
       ],
       "DuckTales": [
@@ -394,7 +394,7 @@ export const NES_50_UFO = {
       ],
       "Mega Man 6": [
         {
-          "name": "MEGA MAN 6: Collect {{MM6_collectable}}"
+          "name": "MEGA MAN 6: Detonate every bomb platform in Blizzard Man's Stage"
         }
       ],
       "Mendel Palace": [
@@ -666,6 +666,9 @@ export const NES_50_UFO = {
       "Mega Man 6": [
         {
           "name": "MEGA MAN 6: Defeat {{MM6_hardcondition}}"
+        },
+		{
+          "name": "MEGA MAN 6: Receive the Energy Balancer from Protoman"
         }
       ],
       "Mendel Palace": [
@@ -2243,11 +2246,6 @@ export const NES_50_UFO = {
       "6-6",
       "7-2",
       "7-6"
-    ],
-    "MM6_collectable": [
-      "Energy Balancer",
-      "Rush Power Adapter",
-      "Rush Jet Adapter"
     ],
     "MM6_hardcondition": [
       "Blizzard Man with Flame Blast",

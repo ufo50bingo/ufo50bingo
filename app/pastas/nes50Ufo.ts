@@ -2023,7 +2023,7 @@ export const NES_50_UFO = {
           "name": "CHATTER: Have 2 characters talk to you in Ufouria, Uninvited, AND Adventure Island 3",
           "cast": {
             "options": "$infer",
-            "type": "counter",
+            "type": "check",
             "on_card_only": false,
             "image": {
               "src": "/nes50general/chatter.png",
@@ -2065,7 +2065,7 @@ export const NES_50_UFO = {
           "name": "BOOSTED: Increase your stats 2 times in Jaws, River City Ransom, AND Crystalis",
           "cast": {
             "options": "$infer",
-            "type": "counter",
+            "type": "check",
             "on_card_only": false,
             "image": {
               "src": "/nes50general/boosted.png",

@@ -8,7 +8,7 @@ export const NES_50_UFO = {
       ],
       "Balloon Fight": [
         {
-          "name": "BALLOON FIGHT: Reach phase 5 with 50,000+ points"
+          "name": "BALLOON FIGHT: Reach phase 5 with 38,000+ points"
         }
       ],
       "Battle City": [
@@ -135,7 +135,7 @@ export const NES_50_UFO = {
       ],
       "Metal Storm": [
         {
-          "name": "METAL STORM: Get 16,000+ points time bonus at the end of a level"
+          "name": "METAL STORM: Beat a level"
         }
       ],
       "Metroid": [
@@ -271,7 +271,7 @@ export const NES_50_UFO = {
       ],
       "Balloon Fight": [
         {
-          "name": "BALLOON FIGHT: Have 18,000+ points in Balloon Trip mode"
+          "name": "BALLOON FIGHT: Have 15,000+ points in Balloon Trip mode"
         }
       ],
       "Battle City": [
@@ -306,7 +306,7 @@ export const NES_50_UFO = {
       ],
       "Chip 'n Dale": [
         {
-          "name": "CHIP 'N DALE: Beat 2 levels and show 10+ stars (S) in your pause menu"
+          "name": "CHIP 'N DALE: Beat level B"
         }
       ],
       "Cocoron": [
@@ -316,7 +316,7 @@ export const NES_50_UFO = {
       ],
       "Contra": [
         {
-          "name": "CONTRA: 💾 1; Collect all 7 powerups on stage 4"
+          "name": "CONTRA: 💾 1; Collect 6 powerups on stage 4"
         }
       ],
       "Crystalis": [
@@ -360,7 +360,7 @@ export const NES_50_UFO = {
       ],
       "Gremlins 2": [
         {
-          "name": "GREMLINS 2: Finish stage 2-1 with 600+ crystals"
+          "name": "GREMLINS 2: Beat stage 2-1"
         }
       ],
       "Ice Climber": [
@@ -404,7 +404,7 @@ export const NES_50_UFO = {
       ],
       "Metal Storm": [
         {
-          "name": "METAL STORM: Get no more than 6000 points area score at the end of 2 levels"
+          "name": "METAL STORM: Beat 2 levels"
         }
       ],
       "Metroid": [
@@ -432,7 +432,7 @@ export const NES_50_UFO = {
       ],
       "Recca": [
         {
-          "name": "RECCA: 💾 1; Reach the stage 2 boss"
+          "name": "RECCA: 💾 1; Defeat 2 snake enemies on stage 2"
         }
       ],
       "River City Ransom": [
@@ -644,7 +644,7 @@ export const NES_50_UFO = {
       ],
       "Isolated Warrior": [
         {
-          "name": "ISOLATED WARRIOR: 💾 1; Without jumping on stage 2, have 150,000+ points on stage 3"
+          "name": "ISOLATED WARRIOR: 💾 1; Beat stage 2 without jumping"
         }
       ],
       "Jaws": [
@@ -660,7 +660,7 @@ export const NES_50_UFO = {
       ],
       "Mappy": [
         {
-          "name": "MAPPY: Have 55,000+ points before the second bonus level"
+          "name": "MAPPY: Have 55,000+ points"
         }
       ],
       "Mega Man 6": [
@@ -846,7 +846,7 @@ export const NES_50_UFO = {
       ],
       "Chip 'n Dale": [
         {
-          "name": "CHIP 'N DALE: 💾 2; Beat the game, only defeating bosses"
+          "name": "CHIP 'N DALE: 💾 2; Beat the game"
         }
       ],
       "Cocoron": [
@@ -922,7 +922,7 @@ export const NES_50_UFO = {
       ],
       "Mappy": [
         {
-          "name": "MAPPY: Make Gosenzo (coin enemy) fall through a trapdoor"
+          "name": "MAPPY: Make Gosenzo (coin enemy) appear after on level 12"
         }
       ],
       "Mega Man 6": [
@@ -1012,7 +1012,7 @@ export const NES_50_UFO = {
       ],
       "Super Spy Hunter": [
         {
-          "name": "SUPER SPY HUNTER: 💾 1; Do a jump on stage 4 without shooting before the boss on each stage"
+          "name": "SUPER SPY HUNTER: 💾 1; Beat stage 3 without shooting before the boss"
         }
       ],
       "The Goonies 2": [
@@ -2023,7 +2023,7 @@ export const NES_50_UFO = {
           "name": "CHATTER: Have 2 characters talk to you in Ufouria, Uninvited, AND Adventure Island 3",
           "cast": {
             "options": "$infer",
-            "type": "check",
+            "type": "counter",
             "on_card_only": false,
             "image": {
               "src": "/nes50general/chatter.png",
@@ -2065,7 +2065,7 @@ export const NES_50_UFO = {
           "name": "BOOSTED: Increase your stats 2 times in Jaws, River City Ransom, AND Crystalis",
           "cast": {
             "options": "$infer",
-            "type": "check",
+            "type": "counter",
             "on_card_only": false,
             "image": {
               "src": "/nes50general/boosted.png",

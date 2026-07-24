@@ -244,7 +244,7 @@ export const NES_50_UFO = {
       ],
       "TMNT 3": [
         {
-          "name": "TMNT 3: 💾 1; Reach the Submarine without taking damage from any Mines"
+          "name": "TMNT 3: 💾 1; Reach the submarine on the Ocean level without taking damage from any Mines"
         }
       ],
       "Ufouria": [
@@ -266,7 +266,7 @@ export const NES_50_UFO = {
     "medium": {
       "Adventure Island 3": [
         {
-          "name": "ADVENTURE ISLAND 3: Finish 3 levels on a skateboard"
+          "name": "ADVENTURE ISLAND 3: Finish 4 levels on a dino"
         }
       ],
       "Balloon Fight": [
@@ -667,7 +667,7 @@ export const NES_50_UFO = {
         {
           "name": "MEGA MAN 6: Defeat {{MM6_hardcondition}}"
         },
-		{
+        {
           "name": "MEGA MAN 6: Receive the Energy Balancer from Protoman"
         }
       ],
@@ -1789,7 +1789,7 @@ export const NES_50_UFO = {
           }
         },
         {
-          "name": "PLATFORMER: Beat a World in Super Mario Bros 2, Super Mario Bros 3, Kirby's Adventure",
+          "name": "PLATFORMER: Beat a World in Super Mario Bros 2, Super Mario Bros 3, AND Kirby's Adventure",
           "cast": {
             "options": "$infer",
             "type": "check",
@@ -1806,7 +1806,7 @@ export const NES_50_UFO = {
               "Super Mario Bros. 3",
               "Kirby's Adventure"
             ],
-            "fallback": "PLATFORMER: Beat a World in Super Mario Bros 2, Super Mario Bros 3, Kirby's Adventure"
+            "fallback": "PLATFORMER: Beat a World in Super Mario Bros 2, Super Mario Bros 3, AND Kirby's Adventure"
           }
         },
         {
@@ -2020,7 +2020,7 @@ export const NES_50_UFO = {
           }
         },
         {
-          "name": "CHATTER: Have 2 characters talk to you in Ufouria, Uninvited, Adventure Island 3",
+          "name": "CHATTER: Have 2 characters talk to you in Ufouria, Uninvited, AND Adventure Island 3",
           "cast": {
             "options": "$infer",
             "type": "counter",
@@ -2037,7 +2037,7 @@ export const NES_50_UFO = {
               "Uninvited",
               "Adventure Island 3"
             ],
-            "fallback": "CHATTER: Have 2 characters talk to you in Ufouria, Uninvited, Adventure Island 3"
+            "fallback": "CHATTER: Have 2 characters talk to you in Ufouria, Uninvited, AND Adventure Island 3"
           }
         },
         {
@@ -2062,7 +2062,7 @@ export const NES_50_UFO = {
           }
         },
         {
-          "name": "BOOSTED: Increase your stats 2 times in Jaws, River City Ransom, Crystalis",
+          "name": "BOOSTED: Increase your stats 2 times in Jaws, River City Ransom, AND Crystalis",
           "cast": {
             "options": "$infer",
             "type": "counter",
@@ -2079,7 +2079,7 @@ export const NES_50_UFO = {
               "River City Ransom",
               "Crystalis"
             ],
-            "fallback": "BOOSTED: Increase your stats 2 times in Jaws, River City Ransom, Crystalis"
+            "fallback": "BOOSTED: Increase your stats 2 times in Jaws, River City Ransom, AND Crystalis"
           }
         }
       ]

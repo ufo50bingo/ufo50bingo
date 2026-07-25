@@ -554,7 +554,7 @@ export const NES_50_UFO = {
       ],
       "Battletoads": [
         {
-          "name": "BATTLETOADS: 💾 3; Defuse 3 bombs and reach level 11"
+          "name": "BATTLETOADS: 💾 3; Defuse 3 bombs"
         }
       ],
       "Blaster Master": [
@@ -1789,7 +1789,7 @@ export const NES_50_UFO = {
           }
         },
         {
-          "name": "PLATFORMER: Beat a World in Super Mario Bros 2, Super Mario Bros 3, AND Kirby's Adventure",
+          "name": "PLATFORMER: Beat 3 worlds across Super Mario Bros 2, Super Mario Bros 3, Kirby's Adventure",
           "cast": {
             "options": "$infer",
             "type": "check",
@@ -1806,7 +1806,7 @@ export const NES_50_UFO = {
               "Super Mario Bros. 3",
               "Kirby's Adventure"
             ],
-            "fallback": "PLATFORMER: Beat a World in Super Mario Bros 2, Super Mario Bros 3, AND Kirby's Adventure"
+            "fallback": "PLATFORMER: Beat 3 worlds across Super Mario Bros 2, Super Mario Bros 3, Kirby's Adventure"
           }
         },
         {

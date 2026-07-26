@@ -150,7 +150,7 @@ export const NES_50_UFO = {
       ],
       "Ninja Gaiden 2": [
         {
-          "name": "NINJA GAIDEN 2: Increase your max power by collecting a scroll"
+          "name": "NINJA GAIDEN 2: Beat 2 levels"
         }
       ],
       "Punch-Out": [

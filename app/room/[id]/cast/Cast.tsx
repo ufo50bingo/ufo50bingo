@@ -89,13 +89,13 @@ export default function Cast({
   const [gameToGoals, setGameToGoals] = useState(() =>
     getGameToGoals(initialBoard, getGameList(getIsNes50(initialBoard))),
   );
+  const [terminalCodes, setTerminalCodes] = useState(() =>
+    getAllTerminalCodes(initialBoard),
+  );
   const onNewCard = useCallback((newBoard: TBoard) => {
     setGameToGoals(getGameToGoals(newBoard, getGameList(getIsNes50(newBoard))));
     setTerminalCodes(getAllTerminalCodes(newBoard));
   }, []);
-  const [terminalCodes, setTerminalCodes] = useState(() =>
-    getAllTerminalCodes(initialBoard),
-  );
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
 
   const [soundChoices, setSoundChoices, playAudio] = useSounds("cast");

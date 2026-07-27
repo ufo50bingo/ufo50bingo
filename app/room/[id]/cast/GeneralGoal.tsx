@@ -123,7 +123,7 @@ export default function GeneralGoal({
     } else {
       return options;
     }
-  }, [cast.options, foundGoal.resolvedGoal]);
+  }, [cast.options, foundGoal.inferredGames]);
 
   const titleEl = (
     <>

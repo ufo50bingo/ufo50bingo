@@ -1,6 +1,9 @@
 import { UFODifficulties, UFOGameGoals } from "../generator/ufoGenerator";
 
-export default function getFilteredDifficulties(difficultyToGameToGoals: UFODifficulties, excludedGames: Set<string>): UFODifficulties {
+export default function getFilteredDifficulties(
+  difficultyToGameToGoals: UFODifficulties,
+  excludedGames: ReadonlySet<string>,
+): UFODifficulties {
   // we check for excluded games instead of included
   // so we don't accidentally remove generals
   const filtered: UFODifficulties = {};

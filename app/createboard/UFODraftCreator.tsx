@@ -15,6 +15,7 @@ type Props = {
   onChangePasta: (newPasta: null | UFOPasta) => void;
   sort: CheckerSort;
   setSort: (newSort: CheckerSort) => unknown;
+  excludedGames?: ReadonlySet<string>;
 };
 
 export default function UFODraftCreator({
@@ -26,16 +27,19 @@ export default function UFODraftCreator({
   setNumPlayers,
   sort,
   setSort,
+  excludedGames,
 }: Props) {
   // TODO: Maybe order these based on category_counts
   const draftCategories = useMemo(() => {
     return Object.keys(pasta.goals).filter(
-      (cat) => pasta.draft == null || !pasta.draft.excluded_categories.includes(cat),
+      (cat) =>
+        pasta.draft == null || !pasta.draft.excluded_categories.includes(cat),
     );
   }, [pasta]);
   const excludedCategories = useMemo(() => {
-    return Object.keys(pasta.goals).filter((cat) =>
-      pasta.draft != null && pasta.draft.excluded_categories.includes(cat),
+    return Object.keys(pasta.goals).filter(
+      (cat) =>
+        pasta.draft != null && pasta.draft.excluded_categories.includes(cat),
     );
   }, [pasta]);
   const [excludedCounts, setExcludedCounts] = useState<Map<string, number>>(
@@ -45,8 +49,12 @@ export default function UFODraftCreator({
     ReadonlyArray<Map<string, number>>
   >(
     pasta.draft != null
-      ? pasta.draft.category_counts.map((counts) => new Map(Object.entries(counts)))
-      : [pasta.category_counts, pasta.category_counts].map((counts => new Map(Object.entries(counts)))),
+      ? pasta.draft.category_counts.map(
+          (counts) => new Map(Object.entries(counts)),
+        )
+      : [pasta.category_counts, pasta.category_counts].map(
+          (counts) => new Map(Object.entries(counts)),
+        ),
   );
   const difficultyCountsByPlayer = useMemo(
     () => rawDifficultyCountsByPlayer.slice(0, numPlayers),
@@ -75,7 +83,10 @@ export default function UFODraftCreator({
     draftCategories.forEach((category) => {
       Object.keys(pasta.goals[category]).map((group) => {
         const checkedPlayer = draftCheckState.get(group);
-        if (checkedPlayer == null) {
+        if (
+          checkedPlayer == null ||
+          (excludedGames != null && excludedGames.has(group))
+        ) {
           return;
         }
         const categoryName = getCategoryKey(checkedPlayer, category);
@@ -116,6 +127,7 @@ export default function UFODraftCreator({
     draftCheckState,
     excludedCategories,
     excludedCounts,
+    excludedGames,
     numPlayers,
     pasta,
   ]);
@@ -187,6 +199,7 @@ export default function UFODraftCreator({
         pasta={pasta}
         sort={sort}
         setSort={setSort}
+        excludedGames={excludedGames}
       />
       <Text>
         <strong>Choose difficulty distribution</strong>

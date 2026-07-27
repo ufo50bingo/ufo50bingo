@@ -149,10 +149,7 @@ export default function Cast({
 
   const isNes50 = useMemo(() => getIsNes50(board), [board]);
 
-  const gameList = useMemo(
-    () => getGameList(isNes50),
-    [isNes50],
-  );
+  const gameList = useMemo(() => getGameList(isNes50), [isNes50]);
 
   const { addEvent, timerState, forceReveal } = useSyncedTimer({
     id,
@@ -353,7 +350,12 @@ export default function Cast({
         <Group gap={0}>
           {showRecentGames && generalGoals.length > 0 && (
             <SideColumn isDouble={false}>
-              <RecentGames limit={6} recentGames={leftGames} font={font} isNes50={isNes50} />
+              <RecentGames
+                limit={6}
+                recentGames={leftGames}
+                font={font}
+                isNes50={isNes50}
+              />
             </SideColumn>
           )}
           <SideColumn isDouble={isDouble}>
@@ -379,7 +381,12 @@ export default function Cast({
               font={font}
             />
             {showRecentGames && generalGoals.length === 0 && (
-              <RecentGames limit={5} recentGames={leftGames} font={font} isNes50={isNes50} />
+              <RecentGames
+                limit={5}
+                recentGames={leftGames}
+                font={font}
+                isNes50={isNes50}
+              />
             )}
           </SideColumn>
           <Board
@@ -421,12 +428,22 @@ export default function Cast({
               font={font}
             />
             {showRecentGames && generalGoals.length === 0 && (
-              <RecentGames limit={5} recentGames={rightGames} font={font} isNes50={isNes50} />
+              <RecentGames
+                limit={5}
+                recentGames={rightGames}
+                font={font}
+                isNes50={isNes50}
+              />
             )}
           </SideColumn>
           {showRecentGames && generalGoals.length > 0 && (
             <SideColumn isDouble={false}>
-              <RecentGames limit={6} recentGames={rightGames} font={font} isNes50={isNes50} />
+              <RecentGames
+                limit={6}
+                recentGames={rightGames}
+                font={font}
+                isNes50={isNes50}
+              />
             </SideColumn>
           )}
         </Group>
@@ -578,10 +595,10 @@ function getIsNes50(board: TBoard): boolean {
 function getGameList(isNes50: boolean): ReadonlyArray<string> {
   return isNes50
     ? [
-      ...getAllSubcategories(
-        NES_50_UFO.goals,
-        getNonGeneralCategories(NES_50_UFO),
-      ),
-    ]
+        ...getAllSubcategories(
+          NES_50_UFO.goals,
+          getNonGeneralCategories(NES_50_UFO),
+        ),
+      ]
     : ORDERED_PROPER_GAMES;
 }

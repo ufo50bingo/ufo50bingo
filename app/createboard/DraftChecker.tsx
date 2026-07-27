@@ -5,6 +5,7 @@ import CheckerSortSelector, { CheckerSort } from "./CheckerSortSelector";
 import { UFOPasta } from "../generator/ufoGenerator";
 import getSubcategoryName from "../generator/getSubcategoryName";
 import useCheckerSortInfo from "./useCheckerSortInfo";
+import { useMemo } from "react";
 
 const COLORS: ReadonlyArray<BingosyncColor> = [
   "red",
@@ -22,6 +23,7 @@ type Props = {
   setDraftCheckState: (newCheckState: Map<string, number>) => void;
   sort: CheckerSort;
   setSort: (newSort: CheckerSort) => unknown;
+  excludedGames?: ReadonlySet<string>;
 };
 
 export default function DraftChecker({
@@ -32,8 +34,20 @@ export default function DraftChecker({
   pasta,
   sort,
   setSort,
+  excludedGames,
 }: Props) {
-  const [hasChronological, sortedSubcategories] = useCheckerSortInfo({ ufoDifficulties: pasta.goals, categories: draftCategories, sort });
+  const [hasChronological, rawSortedSubcategories] = useCheckerSortInfo({
+    ufoDifficulties: pasta.goals,
+    categories: draftCategories,
+    sort,
+  });
+  const sortedSubcategories = useMemo(
+    () =>
+      rawSortedSubcategories.filter(
+        (sc) => excludedGames == null || !excludedGames.has(sc),
+      ),
+    [excludedGames, rawSortedSubcategories],
+  );
   return (
     <>
       <Group>

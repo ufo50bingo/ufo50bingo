@@ -42,6 +42,14 @@ export interface DailyFeedRow {
   squareIndex: number | null;
 }
 
+export interface GameFilterRow {
+  id: number;
+  name: string;
+  time: number;
+  variant: string;
+  filterJson: string;
+}
+
 const db = new Dexie("UFO50BingoDatabase") as Dexie & {
   attempts: EntityTable<AttemptRow, "id">;
   unselectedGoals: EntityTable<GoalSelectionRow, "goal">;
@@ -50,6 +58,7 @@ const db = new Dexie("UFO50BingoDatabase") as Dexie & {
   revealedMatches: EntityTable<RevealedMatchRow, "id">;
   directory: EntityTable<DirectoryRow, "id">;
   dailyFeed: EntityTable<DailyFeedRow, "id">;
+  gameFilters: EntityTable<GameFilterRow, "id">;
 };
 
 db.version(1).stores({
@@ -60,6 +69,7 @@ db.version(1).stores({
   revealedMatches: "id",
   directory: "++id",
   dailyFeed: "++id, [date+attempt]",
+  gameFilters: "++id, variant",
 });
 
 export type { Attempt, AttemptRow, PlaylistRow };

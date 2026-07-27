@@ -33,6 +33,7 @@ import getFilteredDifficulties from "./getFilteredDifficulties";
 import shuffle from "./shuffle";
 import getAllSubcategories from "./getAllSubcategories";
 import getNonGeneralCategories from "./getNonGeneralCategories";
+import FiltersModal, { FilterInfo } from "./FiltersModal";
 
 type CustomType = "srl_v5" | "ufo" | "fixed_board" | "randomized";
 
@@ -43,7 +44,13 @@ type Props = {
   visible: boolean;
 };
 
+const DEFAULT_FILTER_INFO: FilterInfo = {
+  selectedIds: new Set(),
+  excludedGames: new Set(),
+};
+
 export default function NonLeagueMatch({ visible }: Props) {
+  const [isFilterModalShown, setIsFilterModalShown] = useState(false);
   const [checkerSort, setCheckerSort] = useLocalEnum({
     key: "checker-sort",
     defaultValue: "chronological",
@@ -59,6 +66,7 @@ export default function NonLeagueMatch({ visible }: Props) {
 
   const [draftPasta, setDraftPasta] = useState<null | UFOPasta>(null);
   const [rawFormat, setFormat] = useState<Format>("Normal");
+  const [filterInfo, setFilterInfo] = useState<FilterInfo>(DEFAULT_FILTER_INFO);
 
   const [roomName, setRoomName] = useState("");
   const [password, setPassword] = useState("");
@@ -83,17 +91,22 @@ export default function NonLeagueMatch({ visible }: Props) {
     const stringify = (structured: ReadonlyArray<{ name: string }>) =>
       pretty ? JSON.stringify(structured, null, 2) : JSON.stringify(structured);
     const getUFOPastaWithCustomSelectors = (pasta: UFOPasta): string => {
-      if (format !== "Custom") {
+      if (format !== "Custom" && metadata.type !== "Custom") {
         return stringify(ufoGenerator(pasta).map((goal) => ({ name: goal })));
       }
+      const finalUncheckedGames =
+        metadata.type === "Custom" && format === "Custom"
+          ? uncheckedGames.union(filterInfo.excludedGames)
+          : format === "Custom"
+            ? uncheckedGames
+            : filterInfo.excludedGames;
       let goals = ufoGenerator({
         ...pasta,
-        goals: getFilteredDifficulties(pasta.goals, uncheckedGames),
+        goals: getFilteredDifficulties(pasta.goals, finalUncheckedGames),
         category_counts:
-          difficultyCounts[metadata.name] ??
-          (metadata.type === "Custom"
-            ? customUfo!.category_counts
-            : metadata.pasta.category_counts),
+          format === "Custom"
+            ? (difficultyCounts[metadata.name] ?? pasta.category_counts)
+            : pasta.category_counts,
       });
       if (metadata.name === "10 Cherry Race") {
         goals = goals.toSorted();
@@ -206,6 +219,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                     minRows={2}
                     onChange={(event) => {
                       resetCustomDifficultyCounts();
+                      setFilterInfo(DEFAULT_FILTER_INFO);
                       setCustom(event.currentTarget.value);
                     }}
                     spellCheck={false}
@@ -268,6 +282,15 @@ export default function NonLeagueMatch({ visible }: Props) {
                   </Group>
                 </Chip.Group>
               )}
+            {metadata.type === "Custom" && customUfo != null && (
+              <Button
+                variant="light"
+                size="xs"
+                onClick={() => setIsFilterModalShown(true)}
+              >
+                Filters
+              </Button>
+            )}
             {metadata.type === "UFO" && (
               <Tooltip label="Copy the source in the new “UFO” format.">
                 <Button
@@ -294,12 +317,18 @@ export default function NonLeagueMatch({ visible }: Props) {
               {format === "Custom" && (
                 <>
                   <GameChecker
+                    canSort={true}
                     uncheckedGames={uncheckedGames}
                     setUncheckedGames={setUncheckedGames}
                     sort={checkerSort}
                     setSort={setCheckerSort}
                     pasta={
                       metadata.type === "Custom" ? customUfo! : metadata.pasta
+                    }
+                    excludedGames={
+                      metadata.type === "Custom"
+                        ? filterInfo.excludedGames
+                        : undefined
                     }
                   />
                   <UFODifficultySelectors
@@ -309,6 +338,11 @@ export default function NonLeagueMatch({ visible }: Props) {
                         : metadata.pasta.goals
                     }
                     uncheckedGames={uncheckedGames}
+                    excludedGames={
+                      metadata.type === "Custom"
+                        ? filterInfo.excludedGames
+                        : undefined
+                    }
                     counts={
                       difficultyCounts[metadata.name] ??
                       (metadata.type === "Custom"
@@ -336,6 +370,11 @@ export default function NonLeagueMatch({ visible }: Props) {
                   onChangePasta={setDraftPasta}
                   sort={checkerSort}
                   setSort={setCheckerSort}
+                  excludedGames={
+                    metadata.type === "Custom"
+                      ? filterInfo.excludedGames
+                      : undefined
+                  }
                 />
               )}
             </Stack>
@@ -619,6 +658,14 @@ export default function NonLeagueMatch({ visible }: Props) {
           )}
         </Stack>
       </Card.Section>
+      {isFilterModalShown && (
+        <FiltersModal
+          pasta={metadata.type === "Custom" ? customUfo! : metadata.pasta}
+          onClose={() => setIsFilterModalShown(false)}
+          filterInfo={filterInfo}
+          setFilterInfo={setFilterInfo}
+        />
+      )}
     </>
   );
 }

@@ -4,6 +4,7 @@ import useCheckerSortInfo from "./useCheckerSortInfo";
 import { UFOPasta } from "../generator/ufoGenerator";
 import getSubcategoryName from "../generator/getSubcategoryName";
 import getNonGeneralCategories from "./getNonGeneralCategories";
+import { useMemo } from "react";
 
 type Props = {
   pasta: UFOPasta;
@@ -11,6 +12,8 @@ type Props = {
   setUncheckedGames: (newUncheckedGames: Set<string>) => void;
   sort: CheckerSort;
   setSort: (newSort: CheckerSort) => unknown;
+  canSort: boolean;
+  excludedGames?: ReadonlySet<string>;
 };
 
 export default function GameChecker({
@@ -19,12 +22,21 @@ export default function GameChecker({
   setUncheckedGames,
   sort,
   setSort,
+  canSort,
+  excludedGames,
 }: Props) {
-  const [hasChronological, sortedSubcategories] = useCheckerSortInfo({
+  const [hasChronological, rawSortedSubcategories] = useCheckerSortInfo({
     ufoDifficulties: pasta.goals,
     categories: getNonGeneralCategories(pasta),
     sort,
   });
+  const sortedSubcategories = useMemo(
+    () =>
+      rawSortedSubcategories.filter(
+        (sc) => excludedGames == null || !excludedGames.has(sc),
+      ),
+    [excludedGames, rawSortedSubcategories],
+  );
 
   const isAllChecked = sortedSubcategories.every(
     (sc) => !uncheckedGames.has(sc),
@@ -39,7 +51,7 @@ export default function GameChecker({
         <Text>
           <strong>Select included games</strong>
         </Text>
-        {hasChronological && (
+        {canSort && hasChronological && (
           <CheckerSortSelector sort={sort} setSort={setSort} />
         )}
       </Group>

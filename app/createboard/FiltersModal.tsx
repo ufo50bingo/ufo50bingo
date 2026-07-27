@@ -96,7 +96,15 @@ export default function FiltersModal({
               <IconArrowLeft size={18} />
             </ActionIcon>
           )}
-          <Title order={4}>Select Filters</Title>
+          <Title order={4}>
+            {mode.type === "select"
+              ? "Select Filters"
+              : mode.type === "create"
+                ? "Create Filters"
+                : mode.type === "edit"
+                  ? "Edit Filters"
+                  : "Import Filters"}
+          </Title>
         </Group>
       }
     >

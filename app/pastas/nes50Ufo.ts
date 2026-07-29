@@ -231,10 +231,10 @@ export const NES_50_UFO = {
       ],
       "The Immortal": [
         {
-          "name": "THE IMMORTAL: Beat stage 1"
+          "name": "THE IMMORTAL: Beat level 1"
         },
         {
-          "name": "THE IMMORTAL: 💾 1; Beat stage 2"
+          "name": "THE IMMORTAL: 💾 1; Beat level 2"
         }
       ],
       "The Legend of Zelda": [
@@ -503,7 +503,7 @@ export const NES_50_UFO = {
       ],
       "The Immortal": [
         {
-          "name": "THE IMMORTAL: 💾 2; Beat stages 6 and 7"
+          "name": "THE IMMORTAL: 💾 2; Beat levels 6 and 7"
         }
       ],
       "The Legend of Zelda": [
@@ -774,7 +774,7 @@ export const NES_50_UFO = {
       ],
       "The Immortal": [
         {
-          "name": "THE IMMORTAL: 💾 3; Beat stage 5 with the spell of infinite body odor"
+          "name": "THE IMMORTAL: 💾 3; Beat levels 4 and 5"
         }
       ],
       "The Legend of Zelda": [
@@ -1027,7 +1027,7 @@ export const NES_50_UFO = {
       ],
       "The Immortal": [
         {
-          "name": "THE IMMORTAL: Give Ana her ring in stage 4"
+          "name": "THE IMMORTAL: Give Ana her ring in level 4"
         }
       ],
       "The Legend of Zelda": [
@@ -1978,7 +1978,7 @@ export const NES_50_UFO = {
           }
         },
         {
-          "name": "GET ME IN: Collect 7 keys across Solstice, The immortal, Uninvited",
+          "name": "GET ME IN: Collect 5 keys across Solstice, The immortal, Uninvited",
           "cast": {
             "options": "$infer",
             "type": "counter",
@@ -2333,8 +2333,8 @@ export const NES_50_UFO = {
       "Platform"
     ],
     "TMNT3_boss": [
-      "Shredder (Technodrome)",
-      "Krang (Spaceship)"
+      "Shredder (Technodrome 1)",
+      "Krang (Spaceship 2)"
     ],
     "Ufouria_vh": [
       "Power Rings",

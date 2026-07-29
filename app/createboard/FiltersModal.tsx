@@ -86,6 +86,7 @@ export default function FiltersModal({
       centered={true}
       onClose={onClose}
       opened={true}
+      size={800}
       title={
         <Group gap="sm" p="sm">
           {mode.type !== "select" && (

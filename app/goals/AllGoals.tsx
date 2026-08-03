@@ -31,7 +31,7 @@ import getResolvedGoalText from "../generator/getResolvedGoalText";
 import compareByDefault from "./compareByDefault";
 import getSplitGoals, { SplitGoal } from "../generator/getSplitGoals";
 import getFlatGoals from "../generator/getFlatGoals";
-import usePracticePasta from "../usePracticePasta";
+import { usePracticePasta } from "../usePracticePasta";
 import getSubcategoryName from "../generator/getSubcategoryName";
 import getCategoryName from "../generator/getCategoryName";
 import { PracticeVariant, usePracticeVariant } from "../PracticeVariantContext";

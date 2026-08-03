@@ -9,7 +9,7 @@ import Goal from "./Goal";
 import splitAtTokens, { ResolvedToken } from "../generator/splitAtTokens";
 import getResolvedGoalText from "../generator/getResolvedGoalText";
 import findGoalFromAny from "../findGoalFromAny";
-import usePracticePasta, { ALL_PRACTICE_PASTAS } from "../usePracticePasta";
+import { usePracticePasta, ALL_PRACTICE_PASTAS } from "../usePracticePasta";
 
 export default function Practice() {
   const {

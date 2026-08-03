@@ -76,7 +76,7 @@ function getEasternDate(): LocalDate {
 
 async function constructBoard(
   date: LocalDate,
-  isSunday: boolean
+  isSunday: boolean,
 ): Promise<ReadonlyArray<string>> {
   const prevIsoDates = getPrevISODates(date, 7);
   const sqlResult = await getSql(false)`

@@ -13,7 +13,7 @@ import { AttemptRow, db, PlaylistRow } from "./db";
 import useGoalStats, { GoalStats } from "./useGoalStats";
 import splitAtTokens, { Plain, ResolvedToken } from "./generator/splitAtTokens";
 import resolveTokens from "./generator/resolveTokens";
-import usePracticePasta from "./usePracticePasta";
+import { usePracticePasta } from "./usePracticePasta";
 import { UFOPasta } from "./generator/ufoGenerator";
 import { STANDARD_UFO } from "./pastas/standardUfo";
 import getFlatGoals, { UFOGoal } from "./generator/getFlatGoals";
@@ -59,7 +59,7 @@ export function AppContextProvider({
   const [nextGoalChoice, setNextGoalChoiceRaw] = useState(
     global.window != undefined &&
       localStorage?.getItem("nextGoalChoice") ===
-        NextGoalChoice.PREFER_FEWER_ATTEMPTS
+      NextGoalChoice.PREFER_FEWER_ATTEMPTS
       ? NextGoalChoice.PREFER_FEWER_ATTEMPTS
       : NextGoalChoice.RANDOM,
   );
@@ -139,7 +139,7 @@ export function AppContextProvider({
   useEffect(() => {
     setHideByDefaultRaw(
       global.window != undefined &&
-        localStorage?.getItem("hideByDefault") === "true",
+      localStorage?.getItem("hideByDefault") === "true",
     );
   }, []);
   const setHideByDefault = useCallback(

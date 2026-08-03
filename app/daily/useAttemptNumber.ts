@@ -1,7 +1,12 @@
 import useLocalNumber from "../localStorage/useLocalNumber";
+import { PracticeVariant } from "../PracticeVariantContext";
 
 export default function useAttemptNumber(
-  date: string
+  date: string,
+  variant: PracticeVariant,
 ): [number, (newAttempt: number) => unknown] {
-  return useLocalNumber({ key: `daily-attempt-${date}`, defaultValue: 0 });
+  const key = variant === "standard"
+    ? `daily-attempt-${date}`
+    : `daily-attempt-${variant}-${date}`;
+  return useLocalNumber({ key, defaultValue: 0 });
 }

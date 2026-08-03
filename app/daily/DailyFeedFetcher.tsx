@@ -6,19 +6,21 @@ import useAttemptNumber from "./useAttemptNumber";
 import { db } from "../db";
 import Daily from "./Daily";
 import { DailyData } from "./page";
+import { PracticeVariant } from "../PracticeVariantContext";
 
 type Props = {
   date: LocalDate;
   dailyData: DailyData;
+  variant: PracticeVariant;
 };
 
-export default function DailyFeedFetcher({ date, dailyData }: Props) {
+export default function DailyFeedFetcher({ date, dailyData, variant }: Props) {
   const isoDate = toISODate(date);
-  const [attempt, setAttempt] = useAttemptNumber(isoDate);
+  const [attempt, setAttempt] = useAttemptNumber(isoDate, variant);
 
   const feed = useLiveQuery(
-    () => db.dailyFeed.where({ date: isoDate, attempt }).sortBy("time"),
-    [attempt, isoDate]
+    () => db.dailyFeed.where({ date: isoDate, attempt, variant }).sortBy("time"),
+    [attempt, isoDate, variant]
   );
 
   if (feed == null) {
@@ -31,6 +33,7 @@ export default function DailyFeedFetcher({ date, dailyData }: Props) {
       attempt={attempt}
       setAttempt={setAttempt}
       feed={feed}
+      variant={variant}
     />
   );
 }

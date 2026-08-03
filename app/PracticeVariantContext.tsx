@@ -34,6 +34,8 @@ export const PRACTICE_VARIANTS = {
 
 export type PracticeVariant = keyof typeof PRACTICE_VARIANTS;
 
+export type NonStandardPracticeVariant = Exclude<PracticeVariant, "standard"> | null;
+
 export function usePracticeVariantFull(): PracticeVariantContextValue {
   const ctx = useContext(PracticeVariantContext);
   if (ctx == null) {
@@ -51,6 +53,7 @@ export function usePracticeVariant(): null | PracticeVariant {
 
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { getPracticeVariant } from "./usePracticePasta";
 
 export function PracticeVariantInit() {
   const searchParams = useSearchParams();
@@ -58,24 +61,7 @@ export function PracticeVariantInit() {
   const { setPracticeVariant } = usePracticeVariantFull();
 
   useEffect(() => {
-    switch (practiceVariant) {
-      case "spicy":
-        setPracticeVariant("spicy");
-        break;
-      case "blitz":
-        setPracticeVariant("blitz");
-        break;
-      case "choco":
-        setPracticeVariant("choco");
-        break;
-      case "nes50":
-        setPracticeVariant("nes50");
-        break;
-      case "standard":
-      default:
-        setPracticeVariant("standard");
-        break;
-    }
+    setPracticeVariant(getPracticeVariant(practiceVariant));
   }, [practiceVariant, setPracticeVariant]);
 
   return null;

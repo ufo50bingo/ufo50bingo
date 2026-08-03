@@ -47,6 +47,7 @@ import RTView from "./RTView";
 import LinkWithVariant from "../links/LinkWithVariant";
 import useSession from "../session/useSession";
 import StandardBoardCover from "../StandardBoardCover";
+import { PRACTICE_VARIANTS, PracticeVariant } from "../PracticeVariantContext";
 
 const EditDaily = dynamic(() => import("./EditDaily"), { ssr: false });
 
@@ -56,6 +57,7 @@ type Props = {
   attempt: number;
   setAttempt: (newAttempt: number) => unknown;
   feed: ReadonlyArray<DailyFeedRow>;
+  variant: PracticeVariant;
 };
 
 export default function Daily({
@@ -64,6 +66,7 @@ export default function Daily({
   attempt,
   setAttempt,
   feed: feedWithMistakes,
+  variant,
 }: Props) {
   const plainBoard = dailyData.board;
   const isoDate = toISODate(date);
@@ -129,6 +132,7 @@ export default function Daily({
     feed,
     isoDate,
     attempt,
+    variant,
   );
 
   const isMobile = useMediaQuery("(max-width: 525px)");
@@ -168,7 +172,7 @@ export default function Daily({
                   </ActionIcon>
                 </Tooltip>
                 <Title order={1}>
-                  Daily Bingo {date.month}/{date.day}
+                  Daily {variant !== "standard" ? PRACTICE_VARIANTS[variant] + " " : ""}Bingo {date.month}/{date.day}
                   {dailyData.title != null && dailyData.title != ""
                     ? ` — ${dailyData.title}`
                     : null}
@@ -233,6 +237,7 @@ export default function Daily({
                         squareIndex,
                         date: isoDate,
                         attempt,
+                        variant,
                       });
                     } else {
                       await db.dailyFeed.add({
@@ -241,6 +246,7 @@ export default function Daily({
                         squareIndex,
                         date: isoDate,
                         attempt,
+                        variant,
                       });
                     }
                   }}
@@ -254,6 +260,7 @@ export default function Daily({
                             date: isoDate,
                             attempt,
                             squareIndex: null,
+                            variant,
                           });
                         }}
                         content={
@@ -380,7 +387,10 @@ export default function Daily({
               }
               leftSection={<IconClipboard size={16} />}
               onClick={() => {
-                let summary = `[Daily Bingo ${date.month}/${date.day}](<https://ufo50.bingo/daily?date=${isoDate}>) — `;
+                const href = variant === "standard"
+                  ? `https://ufo50.bingo/daily?date=${isoDate}`
+                  : `https://ufo50.bingo/daily?date=${isoDate}&v=${variant}`;
+                let summary = `[Daily ${variant !== "standard" ? PRACTICE_VARIANTS[variant] + " " : ""}Bingo ${date.month}/${date.day}](<${href}>) — `;
                 let isFirst = true;
                 if (bingo != null) {
                   if (isFirst) {

@@ -2,6 +2,7 @@ import { ReactNode, useMemo } from "react";
 import { DailyFeedRow, db } from "../db";
 import RunningDuration from "../practice/RunningDuration";
 import Duration from "../practice/Duration";
+import { PracticeVariant } from "../PracticeVariantContext";
 
 type Return = {
   isRunning: boolean;
@@ -26,7 +27,8 @@ type TimerState = Running | Paused;
 export default function useFeedTimer(
   feed: ReadonlyArray<DailyFeedRow>,
   date: string,
-  attempt: number
+  attempt: number,
+  variant: PracticeVariant,
 ): Return {
   const timerState = useMemo<TimerState>(() => {
     let accumulatedDuration = attempt > 0 ? 0 : -60000;
@@ -64,6 +66,7 @@ export default function useFeedTimer(
         date,
         attempt,
         squareIndex: null,
+        variant,
       });
     }
   };
@@ -76,6 +79,7 @@ export default function useFeedTimer(
         date,
         attempt,
         squareIndex: null,
+        variant,
       });
     }
   };

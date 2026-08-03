@@ -14,6 +14,9 @@ import { StandardGeneral } from "../pastas/pastaTypes";
 import { readSession } from "../session/sessionUtil";
 import { redirect, RedirectType } from "next/navigation";
 import { Metadata } from "next";
+import { getNonStandardPracticeVariant, getPracticePasta, getPracticeVariant } from "../usePracticePasta";
+import { PracticeVariant } from "../PracticeVariantContext";
+import { SQL } from "../matches/page";
 
 export const metadata: Metadata = {
   title: "UFO 50 Daily Bingo",
@@ -35,6 +38,7 @@ const SPICY_WITHOUT_GENERAL: UFOPasta = {
 
 type FilterParams = {
   date?: string;
+  v?: string;
 };
 
 export type DailyData = {
@@ -76,28 +80,29 @@ function getEasternDate(): LocalDate {
 
 async function constructBoard(
   date: LocalDate,
-  isSunday: boolean,
+  variant: PracticeVariant,
+  isSpicySunday: boolean,
 ): Promise<ReadonlyArray<string>> {
   const prevIsoDates = getPrevISODates(date, 7);
   const sqlResult = await getSql(false)`
     SELECT board
     FROM daily
     WHERE date = ANY (${prevIsoDates})
+    AND variant = ${variant}
     ORDER BY date DESC;`;
   const recentBoards =
     sqlResult?.map((raw) => {
       const parsed: ReadonlyArray<string> = JSON.parse(raw.board);
       return parsed;
     }) ?? [];
-  let bestBoard = ufoGenerator(isSunday ? SPICY_WITHOUT_GENERAL : STANDARD_UFO);
+  const pasta = isSpicySunday ? SPICY_WITHOUT_GENERAL : getPracticePasta(variant);
+  let bestBoard = ufoGenerator(pasta);
   let bestScore = getSimilarityScore(bestBoard, recentBoards);
   for (let i = 0; i < 100; i++) {
     if (bestScore === 0) {
       return bestBoard;
     }
-    const candidate = ufoGenerator(
-      isSunday ? SPICY_WITHOUT_GENERAL : STANDARD_UFO
-    );
+    const candidate = ufoGenerator(pasta);
     const score = getSimilarityScore(candidate, recentBoards);
     if (score < bestScore) {
       bestBoard = candidate;
@@ -130,7 +135,7 @@ function getSimilarityScore(
   return score;
 }
 
-async function getDailyBoard(date: LocalDate): Promise<DailyData> {
+async function getDailyBoard(date: LocalDate, variant: PracticeVariant): Promise<DailyData> {
   const isoDate = toISODate(date);
   const sql = getSql(false);
   const sqlResult = await sql`
@@ -141,7 +146,9 @@ async function getDailyBoard(date: LocalDate): Promise<DailyData> {
         creator,
         seed
       FROM daily
-      WHERE date = ${isoDate}`;
+      WHERE
+        date = ${isoDate}
+        AND variant = ${variant}`;
   const board: null | undefined | string = sqlResult?.[0]?.board;
   const title: null | undefined | string = sqlResult?.[0]?.title;
   const description: null | undefined | string = sqlResult?.[0]?.description;
@@ -151,10 +158,10 @@ async function getDailyBoard(date: LocalDate): Promise<DailyData> {
     const parsed = JSON.parse(board);
     return { board: parsed, title, description, creator, seed };
   }
-  const isSunday = isDateSunday(date);
-  const newBoard = await constructBoard(date, isSunday);
-  const newTitle = isSunday ? "Spicy Sunday" : null;
-  const newDescription = isSunday
+  const isSpicySunday = variant == "standard" && isDateSunday(date);
+  const newBoard = await constructBoard(date, variant, isSpicySunday);
+  const newTitle = isSpicySunday ? "Spicy Sunday" : null;
+  const newDescription = isSpicySunday
     ? JSON.stringify({
       type: "doc",
       content: [
@@ -187,13 +194,15 @@ async function getDailyBoard(date: LocalDate): Promise<DailyData> {
     board,
     title,
     description,
-    seed
+    seed,
+    variant
   ) VALUES (
     ${isoDate},
     ${JSON.stringify(newBoard)},
     ${newTitle},
     ${newDescription},
-    ${newSeed}
+    ${newSeed},
+    ${variant}
   );`;
   return {
     board: newBoard,
@@ -210,12 +219,21 @@ export default async function DailyPage(props: {
   const [params, session] = await Promise.all([props.searchParams, readSession()]);
 
   const dateParam = params?.date;
+  const variant = params?.v;
   // only allow admins to look into the future
   if (dateParam != null && dateParam > toISODate(getEasternDate()) && session?.admin !== true) {
-    redirect("/daily", RedirectType.replace);
+    if (variant == null) {
+      redirect("/daily", RedirectType.replace);
+    } else {
+      const newParams = new URLSearchParams();
+      newParams.append("v", variant);
+      redirect(`/daily?{newParams}`);
+    }
   }
 
+  const typedVariant = getPracticeVariant(variant);
+
   const date = dateParam == null ? getEasternDate() : fromISODate(dateParam);
-  const dailyData = await getDailyBoard(date);
-  return <DailyFeedFetcher date={date} dailyData={dailyData} />;
+  const dailyData = await getDailyBoard(date, typedVariant);
+  return <DailyFeedFetcher date={date} dailyData={dailyData} variant={typedVariant} />;
 }

@@ -47,6 +47,7 @@ export type DailyData = {
   title: string | null | undefined;
   description: string | null | undefined;
   creator: string | null | undefined;
+  variant: PracticeVariant;
 };
 
 function isDateSunday(localDate: LocalDate): boolean {
@@ -156,7 +157,7 @@ async function getDailyBoard(date: LocalDate, variant: PracticeVariant): Promise
   const seed: null | undefined | number = sqlResult?.[0]?.seed;
   if (board != null && seed != null) {
     const parsed = JSON.parse(board);
-    return { board: parsed, title, description, creator, seed };
+    return { board: parsed, title, description, creator, seed, variant };
   }
   const isSpicySunday = variant == "standard" && isDateSunday(date);
   const newBoard = await constructBoard(date, variant, isSpicySunday);
@@ -210,6 +211,7 @@ async function getDailyBoard(date: LocalDate, variant: PracticeVariant): Promise
     description: newDescription,
     creator: null,
     seed: newSeed,
+    variant,
   };
 }
 

@@ -14,12 +14,14 @@ import { fetchBoard } from "../fetchMatchInfo";
 import saveDailyBoard from "./saveDailyBoard";
 import { RTE } from "./RTE";
 import { JSONContent } from "@tiptap/react";
+import { PracticeVariant } from "../PracticeVariantContext";
 
 type Props = {
   date: LocalDate;
   dailyData: DailyData;
   description: null | JSONContent;
   onClose: () => unknown;
+  variant: PracticeVariant;
 };
 
 export default function EditDailyBody({
@@ -27,6 +29,7 @@ export default function EditDailyBody({
   dailyData,
   description: initialDescription,
   onClose,
+  variant,
 }: Props) {
   const [title, setTitle] = useState(dailyData.title ?? "");
   const [description, setDescription] = useState<JSONContent>(
@@ -129,6 +132,7 @@ export default function EditDailyBody({
                   creator,
                   description: JSON.stringify(description),
                   seed: newSeed,
+                  variant,
                 },
                 date
               );

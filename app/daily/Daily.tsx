@@ -531,6 +531,7 @@ export default function Daily({
           description={description}
           date={date}
           onClose={() => setIsEditing(false)}
+          variant={variant}
         />
       )}
     </Container>

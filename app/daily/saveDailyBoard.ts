@@ -6,7 +6,7 @@ import { LocalDate, toISODate } from "./localDate";
 import { DailyData } from "./page";
 
 export default async function saveDailyBoard(
-  { board, title, creator, description, seed }: DailyData,
+  { board, title, creator, description, seed, variant }: DailyData,
   date: LocalDate
 ): Promise<void> {
   const session = await readSession();
@@ -26,7 +26,9 @@ export default async function saveDailyBoard(
         creator = ${creator},
         description = ${description},
         seed = ${seed}
-      WHERE date = ${toISODate(date)}`;
+      WHERE
+        date = ${toISODate(date)}
+        AND variant = ${variant}`;
 
   await writeSession(session);
 }

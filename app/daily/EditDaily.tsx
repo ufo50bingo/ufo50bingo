@@ -4,12 +4,14 @@ import { DailyData } from "./page";
 import { useMediaQuery } from "@mantine/hooks";
 import EditDailyBody from "./EditDailyBody";
 import { JSONContent } from "@tiptap/react";
+import { PracticeVariant } from "../PracticeVariantContext";
 
 type Props = {
   dailyData: DailyData;
   date: LocalDate;
   description: null | JSONContent;
   onClose: () => unknown;
+  variant: PracticeVariant;
 };
 
 export default function EditDaily({
@@ -17,6 +19,7 @@ export default function EditDaily({
   date,
   description,
   onClose,
+  variant,
 }: Props) {
   const isMobile = useMediaQuery("(max-width: 525px)");
   return (
@@ -34,6 +37,7 @@ export default function EditDaily({
         dailyData={dailyData}
         description={description}
         onClose={onClose}
+        variant={variant}
       />
     </Modal>
   );

@@ -26,6 +26,7 @@ import Link from "next/link";
 import { STANDARD_UFO } from "../pastas/standardUfo";
 import ufoGenerator from "../generator/ufoGenerator";
 import { getRoomLink, RoomBackend } from "../roomApi";
+import ExtraOptions from "./ExtraOptions";
 
 type Props = {
   visible: boolean;
@@ -41,6 +42,8 @@ export default function LeagueMatch({ visible }: Props) {
   const [id, setId] = useState<null | string>(null);
   const [error, setError] = useState<Error | null>(null);
   const [gameNumber, setGameNumber] = useState<null | number>(null);
+  const [roomBackend, setRoomBackend] = useState<RoomBackend>("bingosync");
+  const [isExtraShown, setIsExtraShown] = useState<boolean>(false);
 
   const p1Tier = p1 != null ? PLAYER_TO_TIER[p1] : null;
   const p2Tier = p2 != null ? PLAYER_TO_TIER[p2] : null;
@@ -73,10 +76,6 @@ export default function LeagueMatch({ visible }: Props) {
   };
 
   const tierMismatch = p1 != null && p2 != null && p1Tier != p2Tier;
-
-  // TOOD: Add selector
-  const roomBackend: RoomBackend = "bingosync";
-
 
   if (!visible) {
     return null;
@@ -154,6 +153,12 @@ export default function LeagueMatch({ visible }: Props) {
           value={password}
           onChange={(event) => setPassword(event.currentTarget.value)}
         />
+        <ExtraOptions
+          isExtraShown={isExtraShown}
+          setIsExtraShown={setIsExtraShown}
+          roomBackend={roomBackend}
+          setRoomBackend={setRoomBackend}
+        />
         <Button
           mt="md"
           disabled={
@@ -208,6 +213,7 @@ export default function LeagueMatch({ visible }: Props) {
               setIsCreationInProgress(false);
               window.open(url, "_blank");
             } catch (err: unknown) {
+              setIsExtraShown(true);
               setIsCreationInProgress(false);
               setUrl("");
               setId(null);
@@ -269,7 +275,10 @@ export default function LeagueMatch({ visible }: Props) {
             title="Failed to create bingo board"
             icon={<IconExclamationMark />}
           >
-            {error.message}
+            <Stack gap={8}>
+              <span>You can select a different backend, then try to create the match again.</span>
+              <span>{error.message}</span>
+            </Stack>
           </Alert>
         )}
       </Stack>

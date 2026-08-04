@@ -12,6 +12,7 @@ import {
   Group,
   JsonInput,
   List,
+  SegmentedControl,
   Select,
   Stack,
   Text,
@@ -35,6 +36,7 @@ import getAllSubcategories from "./getAllSubcategories";
 import getNonGeneralCategories from "./getNonGeneralCategories";
 import FiltersModal, { FilterInfo } from "./FiltersModal";
 import { getRoomLink, RoomBackend } from "../roomApi";
+import ExtraOptions from "./ExtraOptions";
 
 type CustomType = "srl_v5" | "ufo" | "fixed_board" | "randomized";
 
@@ -68,6 +70,8 @@ export default function NonLeagueMatch({ visible }: Props) {
   const [draftPasta, setDraftPasta] = useState<null | UFOPasta>(null);
   const [rawFormat, setFormat] = useState<Format>("Normal");
   const [allFilterInfo, setAllFilterInfo] = useState<ReadonlyMap<string, FilterInfo>>(new Map());
+  const [roomBackend, setRoomBackend] = useState<RoomBackend>("bingosync");
+  const [isExtraShown, setIsExtraShown] = useState<boolean>(false);
 
   const filterInfo = allFilterInfo.get(variant) ?? DEFAULT_FILTER_INFO;
   const setFilterInfo = useCallback((newFilterInfo: FilterInfo) => {
@@ -172,9 +176,6 @@ export default function NonLeagueMatch({ visible }: Props) {
       return newDifficultyCounts;
     });
   };
-
-  // TOOD: Add selector
-  const roomBackend: RoomBackend = "bingosync";
 
   if (!visible) {
     return null;
@@ -443,6 +444,12 @@ export default function NonLeagueMatch({ visible }: Props) {
               </div>
             </Tooltip>
           </Group>
+          <ExtraOptions
+            isExtraShown={isExtraShown}
+            setIsExtraShown={setIsExtraShown}
+            roomBackend={roomBackend}
+            setRoomBackend={setRoomBackend}
+          />
         </Stack>
       </Card.Section>
       <Card.Section withBorder={true} inheritPadding={true} py="xs">
@@ -576,6 +583,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                   window.open(getRoomLink(ids[0], password, roomBackend), "_blank");
                 }
               } catch (err: unknown) {
+                setIsExtraShown(true);
                 setIsCreationInProgress(false);
                 setCreatedIds([]);
                 setCreatedPassword("");
@@ -670,7 +678,10 @@ export default function NonLeagueMatch({ visible }: Props) {
               title="Failed to create bingo board"
               icon={<IconExclamationMark />}
             >
-              {error.message}
+              <Stack gap={8}>
+                <span>You can select a different backend, then try to create the match again.</span>
+                <span>{error.message}</span>
+              </Stack>
             </Alert>
           )}
         </Stack>

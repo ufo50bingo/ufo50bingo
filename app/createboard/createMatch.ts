@@ -56,14 +56,18 @@ export default async function createMatch({
 
   const userSession = userSessionRead ?? { id: createUserID(), admin: false };
 
+  const commonHeaders = {
+    "Content-Type": "application/x-www-form-urlencoded",
+    Cookie: cookie,
+  };
+  const headers = roomBackend === "celeste"
+    ? { ...commonHeaders, Referer: "https://celestebingo.rhelmot.io/" }
+    : commonHeaders;
   const createResponse = await fetch(getBaseUrl(roomBackend), {
     method: "POST",
     redirect: "manual",
     credentials: "include",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Cookie: cookie,
-    },
+    headers,
     body: new URLSearchParams({
       csrfmiddlewaretoken: token,
       room_name: roomName,

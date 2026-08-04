@@ -1,11 +1,12 @@
+import { getBaseUrl } from "./roomApi";
+
 const CSRF_REGEX = /name="csrfmiddlewaretoken" value="([a-zA-Z0-9]+)"/;
-const BINGOSYNC_BASE_URL = "https://www.bingosync.com/";
 
 export default async function getCsrfData(): Promise<{
   cookie: string;
   token: string;
 }> {
-  const initialResponse = await fetch(BINGOSYNC_BASE_URL, {
+  const initialResponse = await fetch(getBaseUrl("bingosync"), {
     method: "GET",
     credentials: "include",
   });

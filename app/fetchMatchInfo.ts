@@ -2,6 +2,7 @@
 
 import getSql from "./getSql";
 import { RawBoard, RawFeed } from "./matches/parseBingosyncData";
+import { getBoardUrl, getFeedUrl, getSocketKeyUrl } from "./roomApi";
 
 export async function getSessionCookie(id: string): Promise<string> {
   const sql = getSql();
@@ -17,7 +18,7 @@ export async function getSessionCookie(id: string): Promise<string> {
 
 export async function fetchBoard(id: string): Promise<RawBoard> {
   const boardResult = await fetch(
-    `https://www.bingosync.com/room/${id}/board`,
+    getBoardUrl(id, "bingosync"),
     {
       method: "GET",
       credentials: "include",
@@ -30,7 +31,7 @@ export async function fetchBoard(id: string): Promise<RawBoard> {
 }
 
 export async function fetchFeed(id: string, cookie: string): Promise<RawFeed> {
-  const url = new URL(`https://www.bingosync.com/room/${id}/feed`);
+  const url = new URL(getFeedUrl(id, "bingosync"));
   url.search = new URLSearchParams({
     full: "true",
   }).toString();
@@ -50,7 +51,7 @@ export async function getSocketKey(
   id: string,
   cookie: string
 ): Promise<string> {
-  const socketKeyUrl = `https://www.bingosync.com/api/get-socket-key/${id}`;
+  const socketKeyUrl = getSocketKeyUrl(id, "bingosync");
   const socketKeyResponse = await fetch(socketKeyUrl, {
     method: "GET",
     headers: {

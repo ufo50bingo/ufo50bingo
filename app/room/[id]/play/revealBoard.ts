@@ -1,5 +1,6 @@
 "use server";
 
+import { getRevealUrl } from "@/app/roomApi";
 import { readBingosyncCookie } from "../roomCookie";
 
 export default async function revealBoard(id: string) {
@@ -10,7 +11,7 @@ export default async function revealBoard(id: string) {
     );
   }
 
-  await fetch("https://www.bingosync.com/api/revealed", {
+  await fetch(getRevealUrl("bingosync"), {
     method: "PUT",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",

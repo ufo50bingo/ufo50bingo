@@ -8,6 +8,7 @@ import {
 import { useState, useEffect, useRef, ReactNode, useCallback } from "react";
 import { Modal, Stack, Group, Button } from "@mantine/core";
 import { SoundChoices } from "./NotificationsSection";
+import { getSocketUrl } from "@/app/roomApi";
 
 type Props = {
   id: string;
@@ -62,7 +63,7 @@ export default function useBingosyncSocket({
   );
 
   useEffect(() => {
-    const socket = new WebSocket("wss://sockets.bingosync.com/broadcast");
+    const socket = new WebSocket(getSocketUrl("bingosync"));
 
     socket.onopen = () => {
       socket.send(JSON.stringify({ socket_key: socketKey }));

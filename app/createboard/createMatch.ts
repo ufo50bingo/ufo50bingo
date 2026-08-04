@@ -8,8 +8,7 @@ import {
   readSession,
   writeSession,
 } from "../session/sessionUtil";
-
-const BINGOSYNC_BASE_URL = "https://www.bingosync.com/";
+import { getBaseUrl } from "../roomApi";
 
 export interface LeagueInfo {
   season: number;
@@ -55,7 +54,7 @@ export default async function createMatch({
 
   const userSession = userSessionRead ?? { id: createUserID(), admin: false };
 
-  const createResponse = await fetch(BINGOSYNC_BASE_URL, {
+  const createResponse = await fetch(getBaseUrl("bingosync"), {
     method: "POST",
     redirect: "manual",
     credentials: "include",
@@ -89,7 +88,10 @@ export default async function createMatch({
     throw new Error(`Bingosync redirected to ${location}. Expected /room/<id>`);
   }
   // strip off /room/ prefix
-  const id = location.slice(6);
+  const withoutRoom = location.slice(6);
+  // remove any query data, if present
+  const split = withoutRoom.split('?');
+  const id = split[0];
 
   const sessionCookie = createResponse.headers.get("Set-Cookie");
   if (sessionCookie == null) {

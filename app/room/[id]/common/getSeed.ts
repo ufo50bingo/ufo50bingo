@@ -1,5 +1,7 @@
+import { getRoomSettingsUrl } from "@/app/roomApi";
+
 export default async function getSeed(id: string): Promise<number> {
-  const settingsUrl = `https://www.bingosync.com/room/${id}/room-settings`;
+  const settingsUrl = getRoomSettingsUrl(id, "bingosync");
   const settingsResponse = await fetch(settingsUrl, {
     method: "GET",
     headers: {

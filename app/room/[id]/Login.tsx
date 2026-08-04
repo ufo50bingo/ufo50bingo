@@ -17,6 +17,7 @@ import { RoomView } from "./roomCookie";
 import createRoomCookie from "./createRoomCookie";
 import { useSearchParams } from "next/navigation";
 import useLocalString from "@/app/localStorage/useLocalString";
+import { getRoomUrl } from "@/app/roomApi";
 
 type Props = {
   id: string;
@@ -49,7 +50,7 @@ export default function Login({ id }: Props) {
               Please copy this URL and send it to all players and casters!
               <br />
               If you prefer to use the standard Bingosync page,{" "}
-              <a href={`https://www.bingosync.com/room/${id}`} target="_blank">
+              <a href={getRoomUrl(id, "bingosync")} target="_blank">
                 click here
               </a>
               .
@@ -57,7 +58,7 @@ export default function Login({ id }: Props) {
             <Alert>
               Please note that the Playing and Casting pages currently support
               only <strong>Lockout</strong> games.{" "}
-              <a href={`https://www.bingosync.com/room/${id}`} target="_blank">
+              <a href={getRoomUrl(id, "bingosync")} target="_blank">
                 For non-Lockout games, use the old Bingosync page.
               </a>
             </Alert>

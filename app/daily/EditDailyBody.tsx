@@ -15,6 +15,7 @@ import saveDailyBoard from "./saveDailyBoard";
 import { RTE } from "./RTE";
 import { JSONContent } from "@tiptap/react";
 import { PracticeVariant } from "../PracticeVariantContext";
+import { RoomBackend } from "../roomApi";
 
 type Props = {
   date: LocalDate;
@@ -68,7 +69,8 @@ export default function EditDailyBody({
         <Button
           onClick={async () => {
             try {
-              const rawBoard = await fetchBoard(bingosyncId);
+              const roomBackend: RoomBackend = "bingosync";
+              const rawBoard = await fetchBoard(bingosyncId, roomBackend);
               setTextBoard(rawBoard.map((square) => square.name).join("\n"));
             } catch (err) {
               console.error(err);

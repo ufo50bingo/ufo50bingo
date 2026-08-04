@@ -4,21 +4,23 @@ import PlayWrapper from "./PlayWrapper";
 import { RoomCookie, toBingosyncCookie } from "../roomCookie";
 import getSeed from "../common/getSeed";
 import fetchTimerEvents from "../common/fetchTimerEvents";
+import { RoomBackend } from "@/app/roomApi";
 
 type Props = {
   id: string;
   roomCookie: RoomCookie;
+  roomBackend: RoomBackend;
 };
 
-export default async function PlayPage({ id, roomCookie }: Props) {
+export default async function PlayPage({ id, roomCookie, roomBackend }: Props) {
   const bingosyncCookie = toBingosyncCookie(roomCookie);
   const [rawBoard, rawFeed, rawTimerEvents, socketKey, seed] =
     await Promise.all([
-      fetchBoard(id),
-      fetchFeed(id, bingosyncCookie),
+      fetchBoard(id, roomBackend),
+      fetchFeed(id, bingosyncCookie, roomBackend),
       fetchTimerEvents(id),
-      getSocketKey(id, bingosyncCookie),
-      getSeed(id),
+      getSocketKey(id, bingosyncCookie, roomBackend),
+      getSeed(id, roomBackend),
     ]);
   const timerEvents = rawTimerEvents.filter((e) => e.seed === seed);
   const board = getBoard(rawBoard);
@@ -31,6 +33,7 @@ export default async function PlayPage({ id, roomCookie }: Props) {
       initialSeed={seed}
       playerName={roomCookie.name}
       initialTimerEvents={timerEvents}
+      roomBackend={roomBackend}
     />
   );
 }

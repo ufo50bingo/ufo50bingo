@@ -34,6 +34,7 @@ import classes from "./CastSettings.module.css";
 import { FullSyncedTimerEvent, SyncedTimerState } from "../common/useSyncedTimer";
 import TimerSection from "../common/TimerSection";
 import { useShouldShortenContext } from "@/app/settings/ShouldShortenContext";
+import { RoomBackend } from "@/app/roomApi";
 
 type Props = {
   id: string;
@@ -72,6 +73,7 @@ type Props = {
   setFont: (newFont: Font) => unknown;
   addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
   timerState: SyncedTimerState;
+  roomBackend: RoomBackend;
 };
 
 export default function CastSettings({
@@ -111,6 +113,7 @@ export default function CastSettings({
   setFont,
   addEvent,
   timerState,
+  roomBackend,
 }: Props) {
   const [isShown, setIsShown] = useState(leftColor === rightColor);
   const { shouldShortenCast, setShouldShortenCast } = useShouldShortenContext();
@@ -317,9 +320,9 @@ export default function CastSettings({
                 generalCounts={generalCounts}
                 generalGoals={generalGoals}
               />
-              <CreateBoardSection id={id} isMobile={false} />
+              <CreateBoardSection id={id} isMobile={false} roomBackend={roomBackend} />
             </Accordion>
-            <BottomSection id={id} isMobile={false} />
+            <BottomSection id={id} isMobile={false} roomBackend={roomBackend} />
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>

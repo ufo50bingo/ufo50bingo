@@ -1,6 +1,6 @@
 "use server";
 
-import { getJoinRoomUrl } from "@/app/roomApi";
+import { getJoinRoomUrl, RoomBackend } from "@/app/roomApi";
 import { RoomView, setRoomCookie } from "./roomCookie";
 
 const SESSIONID_REGEX = /sessionid=([^;]+);/;
@@ -9,10 +9,11 @@ export default async function createRoomCookie(
   id: string,
   name: string,
   password: string,
-  view: RoomView
+  view: RoomView,
+  roomBackend: RoomBackend,
 ) {
   const fullName = name + (view === "cast" ? " (admin)" : "");
-  const joinResponse = await fetch(getJoinRoomUrl("bingosync"), {
+  const joinResponse = await fetch(getJoinRoomUrl(roomBackend), {
     method: "POST",
     redirect: "manual",
     headers: {

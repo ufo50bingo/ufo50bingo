@@ -1,11 +1,12 @@
 "use server";
 
-import { getChatUrl } from "@/app/roomApi";
+import { getChatUrl, RoomBackend } from "@/app/roomApi";
 import { readBingosyncCookie } from "../roomCookie";
 
 export default async function sendChat(
   id: string,
-  text: string
+  text: string,
+  roomBackend: RoomBackend,
 ): Promise<void> {
   const cookie = await readBingosyncCookie();
   if (cookie == null) {
@@ -14,7 +15,7 @@ export default async function sendChat(
     );
   }
 
-  await fetch(getChatUrl("bingosync"), {
+  await fetch(getChatUrl(roomBackend), {
     method: "PUT",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",

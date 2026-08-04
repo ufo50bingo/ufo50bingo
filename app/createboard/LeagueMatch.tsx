@@ -25,6 +25,7 @@ import {
 import Link from "next/link";
 import { STANDARD_UFO } from "../pastas/standardUfo";
 import ufoGenerator from "../generator/ufoGenerator";
+import { getRoomLink, RoomBackend } from "../roomApi";
 
 type Props = {
   visible: boolean;
@@ -72,6 +73,10 @@ export default function LeagueMatch({ visible }: Props) {
   };
 
   const tierMismatch = p1 != null && p2 != null && p1Tier != p2Tier;
+
+  // TOOD: Add selector
+  const roomBackend: RoomBackend = "bingosync";
+
 
   if (!visible) {
     return null;
@@ -193,11 +198,9 @@ export default function LeagueMatch({ visible }: Props) {
                   tier: p1Tier,
                   game: gameNumber,
                 },
+                roomBackend,
               });
-              const passwordParams = new URLSearchParams({
-                p: password,
-              }).toString();
-              const url = `/room/${id}?${passwordParams}`;
+              const url = getRoomLink(id, password, roomBackend);
               db.createdMatches.add({ id });
               setError(null);
               setUrl(url);
@@ -251,7 +254,7 @@ export default function LeagueMatch({ visible }: Props) {
             icon={<IconCheck />}
           >
             <a href={url} target="_blank">
-              Your new room is available at here.
+              Your new room is available here.
             </a>
             <br />
             <Link prefetch={false} href={`/match/${id}`} target="_blank">

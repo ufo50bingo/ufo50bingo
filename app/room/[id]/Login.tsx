@@ -17,13 +17,14 @@ import { RoomView } from "./roomCookie";
 import createRoomCookie from "./createRoomCookie";
 import { useSearchParams } from "next/navigation";
 import useLocalString from "@/app/localStorage/useLocalString";
-import { getRoomUrl } from "@/app/roomApi";
+import { getRoomUrl, parseRoomBackend, RoomBackend } from "@/app/roomApi";
 
 type Props = {
   id: string;
+  roomBackend: RoomBackend;
 };
 
-export default function Login({ id }: Props) {
+export default function Login({ id, roomBackend }: Props) {
   const searchParams = useSearchParams();
   const [defaultName, setDefaultName] = useLocalString({
     key: "default_name",
@@ -37,7 +38,7 @@ export default function Login({ id }: Props) {
   const submit = async () => {
     if (name !== "" && password !== "" && view != null) {
       setDefaultName(name);
-      await createRoomCookie(id, name, password, view);
+      await createRoomCookie(id, name, password, view, roomBackend);
     }
   };
   return (
@@ -50,7 +51,7 @@ export default function Login({ id }: Props) {
               Please copy this URL and send it to all players and casters!
               <br />
               If you prefer to use the standard Bingosync page,{" "}
-              <a href={getRoomUrl(id, "bingosync")} target="_blank">
+              <a href={getRoomUrl(id, roomBackend)} target="_blank">
                 click here
               </a>
               .
@@ -58,7 +59,7 @@ export default function Login({ id }: Props) {
             <Alert>
               Please note that the Playing and Casting pages currently support
               only <strong>Lockout</strong> games.{" "}
-              <a href={getRoomUrl(id, "bingosync")} target="_blank">
+              <a href={getRoomUrl(id, roomBackend)} target="_blank">
                 For non-Lockout games, use the old Bingosync page.
               </a>
             </Alert>

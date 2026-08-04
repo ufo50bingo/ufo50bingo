@@ -8,7 +8,7 @@ import {
 import { useState, useEffect, useRef, ReactNode, useCallback } from "react";
 import { Modal, Stack, Group, Button } from "@mantine/core";
 import { SoundChoices } from "./NotificationsSection";
-import { getSocketUrl } from "@/app/roomApi";
+import { getSocketUrl, RoomBackend } from "@/app/roomApi";
 
 type Props = {
   id: string;
@@ -19,6 +19,7 @@ type Props = {
   onNewCard?: (newBoard: TBoard) => unknown;
   playerName: string;
   playAudio: (soundType: keyof SoundChoices) => void;
+  roomBackend: RoomBackend;
 };
 
 type Response = {
@@ -37,6 +38,7 @@ export default function useBingosyncSocket({
   onNewCard,
   playerName,
   playAudio,
+  roomBackend,
 }: Props): Response {
   const [seed, setSeed] = useState(initialSeed);
   const [board, setBoard] = useState(initialBoard);
@@ -63,7 +65,7 @@ export default function useBingosyncSocket({
   );
 
   useEffect(() => {
-    const socket = new WebSocket(getSocketUrl("bingosync"));
+    const socket = new WebSocket(getSocketUrl(roomBackend));
 
     socket.onopen = () => {
       socket.send(JSON.stringify({ socket_key: socketKey }));
@@ -102,7 +104,7 @@ export default function useBingosyncSocket({
         });
       } else if (rawItem.type === "new-card") {
         setSeed(rawItem.seed);
-        const rawBoard = await fetchBoard(id);
+        const rawBoard = await fetchBoard(id, roomBackend);
         const newBoard = getBoard(rawBoard);
         if (onNewCard != null) {
           onNewCard(newBoard);

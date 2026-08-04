@@ -1,9 +1,9 @@
 "use server";
 
-import { getRevealUrl } from "@/app/roomApi";
+import { getRevealUrl, RoomBackend } from "@/app/roomApi";
 import { readBingosyncCookie } from "../roomCookie";
 
-export default async function revealBoard(id: string) {
+export default async function revealBoard(id: string, roomBackend: RoomBackend) {
   const cookie = await readBingosyncCookie();
   if (cookie == null) {
     throw new Error(
@@ -11,7 +11,7 @@ export default async function revealBoard(id: string) {
     );
   }
 
-  await fetch(getRevealUrl("bingosync"), {
+  await fetch(getRevealUrl(roomBackend), {
     method: "PUT",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",

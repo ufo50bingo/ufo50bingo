@@ -34,6 +34,7 @@ import shuffle from "./shuffle";
 import getAllSubcategories from "./getAllSubcategories";
 import getNonGeneralCategories from "./getNonGeneralCategories";
 import FiltersModal, { FilterInfo } from "./FiltersModal";
+import { getRoomLink, RoomBackend } from "../roomApi";
 
 type CustomType = "srl_v5" | "ufo" | "fixed_board" | "randomized";
 
@@ -171,6 +172,9 @@ export default function NonLeagueMatch({ visible }: Props) {
       return newDifficultyCounts;
     });
   };
+
+  // TOOD: Add selector
+  const roomBackend: RoomBackend = "bingosync";
 
   if (!visible) {
     return null;
@@ -499,6 +503,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                     isDraft: false,
                     isLockout,
                     leagueInfo: null,
+                    roomBackend,
                   };
                   const nonGeneralCategories = getNonGeneralCategories(pasta);
                   const allGames = [
@@ -555,6 +560,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                       isLockout,
                       pasta: getSerializedPasta(false),
                       leagueInfo: null,
+                      roomBackend,
                     }),
                   );
                 }
@@ -567,7 +573,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                 setCreatedPassword(password);
 
                 if (format !== "Double") {
-                  window.open(getRoomLink(ids[0], password), "_blank");
+                  window.open(getRoomLink(ids[0], password, roomBackend), "_blank");
                 }
               } catch (err: unknown) {
                 setIsCreationInProgress(false);
@@ -615,7 +621,7 @@ export default function NonLeagueMatch({ visible }: Props) {
               {createdIds.length === 1 && (
                 <>
                   <a
-                    href={getRoomLink(createdIds[0], createdPassword)}
+                    href={getRoomLink(createdIds[0], createdPassword, roomBackend)}
                     target="_blank"
                   >
                     Your new room is available at here.
@@ -636,7 +642,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                   <List>
                     {createdIds.map((createdId, idx) => (
                       <List.Item key={createdId}>
-                        <a href={getRoomLink(createdId, createdPassword)}>
+                        <a href={getRoomLink(createdId, createdPassword, roomBackend)}>
                           <Text size="sm">Room {idx + 1}</Text>
                         </a>
                       </List.Item>
@@ -680,11 +686,4 @@ export default function NonLeagueMatch({ visible }: Props) {
       )}
     </>
   );
-}
-
-function getRoomLink(id: string, password: string): string {
-  const passwordParams = new URLSearchParams({
-    p: password,
-  }).toString();
-  return `/room/${id}?${passwordParams}`;
 }

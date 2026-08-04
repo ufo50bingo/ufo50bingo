@@ -48,6 +48,7 @@ import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
 import getNonGeneralCategories from "@/app/createboard/getNonGeneralCategories";
 import getAllSubcategories from "@/app/createboard/getAllSubcategories";
 import { UFOPasta } from "@/app/generator/ufoGenerator";
+import { RoomBackend } from "@/app/roomApi";
 
 export type FoundStandardGeneral = FoundGoalWithCast<string, string, string>;
 export type GeneralItem = {
@@ -68,6 +69,7 @@ export type CastProps = {
   initialAllPlayerGames: AllPlayerGames;
   initialTimerEvents: ReadonlyArray<FullSyncedTimerEvent>;
   playerName: string;
+  roomBackend: RoomBackend;
 };
 
 const COUNT_POSITION = ["side_by_side", "inset"] as const;
@@ -85,6 +87,7 @@ export default function Cast({
   initialAllPlayerGames,
   initialTimerEvents,
   playerName,
+  roomBackend,
 }: CastProps) {
   const [gameToGoals, setGameToGoals] = useState(() =>
     getGameToGoals(initialBoard, getGameList(getIsNes50(initialBoard))),
@@ -109,6 +112,7 @@ export default function Cast({
     onNewCard,
     playerName,
     playAudio,
+    roomBackend,
   });
 
   const {
@@ -157,6 +161,7 @@ export default function Cast({
     initialEvents: initialTimerEvents,
     playAudio,
     isCast: true,
+    roomBackend,
   });
 
   const [generalOrder, setGeneralOrder] = useLocalEnum({
@@ -466,7 +471,7 @@ export default function Cast({
               playerName={playerName}
             />
           </Group>
-          <Feed height={`${475 - 44}px`} rawFeed={rawFeed} />
+          <Feed height={`${475 - 44}px`} rawFeed={rawFeed} roomBackend={roomBackend} />
         </Stack>
         {showGameSelector ? (
           <Stack gap={8}>
@@ -565,6 +570,7 @@ export default function Cast({
         setFont={setFont}
         addEvent={addEvent}
         timerState={timerState}
+        roomBackend={roomBackend}
       />
       {editingIndex != null && (
         <EditSquare
@@ -572,6 +578,7 @@ export default function Cast({
           board={board}
           editingIndex={editingIndex}
           setEditingIndex={setEditingIndex}
+          roomBackend={roomBackend}
         />
       )}
       {reconnectModal}
@@ -595,10 +602,10 @@ function getIsNes50(board: TBoard): boolean {
 function getGameList(isNes50: boolean): ReadonlyArray<string> {
   return isNes50
     ? [
-        ...getAllSubcategories(
-          NES_50_UFO.goals,
-          getNonGeneralCategories(NES_50_UFO),
-        ),
-      ]
+      ...getAllSubcategories(
+        NES_50_UFO.goals,
+        getNonGeneralCategories(NES_50_UFO),
+      ),
+    ]
     : ORDERED_PROPER_GAMES;
 }

@@ -3,9 +3,11 @@ import { useCallback } from "react";
 import chooseColor from "./chooseColor";
 import { COLORS } from "../common/ColorSelector";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
+import { RoomBackend } from "@/app/roomApi";
 
 export default function useColor(
-  id: string
+  id: string,
+  roomBackend: RoomBackend,
 ): [null | BingosyncColor, (newColor: BingosyncColor) => unknown] {
   const [color, setColorRaw] = useLocalEnum({
     key: `${id}-color`,
@@ -16,7 +18,7 @@ export default function useColor(
   const setColor = useCallback(
     async (newColor: BingosyncColor) => {
       setColorRaw(newColor);
-      await chooseColor(id, newColor);
+      await chooseColor(id, newColor, roomBackend);
     },
     [id, setColorRaw]
   );

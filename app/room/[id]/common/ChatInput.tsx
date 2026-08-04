@@ -2,8 +2,13 @@ import { Button, Group, TextInput } from "@mantine/core";
 import { useState } from "react";
 import sendChat from "./sendChat";
 import { useParams } from "next/navigation";
+import { RoomBackend } from "@/app/roomApi";
 
-export default function ChatInput() {
+type Props = {
+  roomBackend: RoomBackend;
+};
+
+export default function ChatInput({ roomBackend }: Props) {
   const [text, setText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -13,7 +18,7 @@ export default function ChatInput() {
     if (text !== "" && !isSubmitting) {
       setIsSubmitting(true);
       try {
-        await sendChat(id, text);
+        await sendChat(id, text, roomBackend);
       } finally {
         setIsSubmitting(false);
       }

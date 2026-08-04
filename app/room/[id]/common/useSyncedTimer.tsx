@@ -4,6 +4,7 @@ import { useServerOffsetContext } from "../ServerOffsetContext";
 import { SoundChoices } from "./NotificationsSection";
 import useLocalNumber from "@/app/localStorage/useLocalNumber";
 import revealBoard from "../play/revealBoard";
+import { RoomBackend } from "@/app/roomApi";
 
 type SyncedTimerEventName = "set_duration" | "pause" | "start";
 
@@ -28,6 +29,7 @@ type Input = {
   initialEvents: ReadonlyArray<SyncedTimerEvent>;
   playAudio: (soundType: keyof SoundChoices) => void;
   isCast: boolean;
+  roomBackend: RoomBackend;
 };
 
 interface TimerStateBase {
@@ -72,6 +74,7 @@ export default function useSyncedTimer({
   initialEvents,
   playAudio,
   isCast,
+  roomBackend,
 }: Input): Return {
   const [events, setEvents] =
     useState<ReadonlyArray<SyncedTimerEvent>>(initialEvents);
@@ -85,8 +88,8 @@ export default function useSyncedTimer({
 
   const forceReveal = useCallback(async () => {
     setLastForceReveal(Date.now());
-    await revealBoard(id);
-  }, [id, setLastForceReveal]);
+    await revealBoard(id, roomBackend);
+  }, [id, roomBackend, setLastForceReveal]);
 
   const { getClientMsFromServerMs } = useServerOffsetContext();
 
@@ -132,25 +135,25 @@ export default function useSyncedTimer({
         getClientMsFromServerMs(lastPauseTime) < lastForceReveal);
     return curStartTime == null
       ? {
-          type: hasStarted ? "paused" : "not_started",
-          accumulatedDuration,
-          pauseRequester: hasStarted ? pauseRequester : undefined,
-          isForceRevealed,
-        }
+        type: hasStarted ? "paused" : "not_started",
+        accumulatedDuration,
+        pauseRequester: hasStarted ? pauseRequester : undefined,
+        isForceRevealed,
+      }
       : getClientMsFromServerMs(curStartTime) < Date.now()
         ? {
-            type: "running",
-            startTime: getClientMsFromServerMs(curStartTime),
-            accumulatedDuration,
-            isForceRevealed,
-          }
+          type: "running",
+          startTime: getClientMsFromServerMs(curStartTime),
+          accumulatedDuration,
+          isForceRevealed,
+        }
         : {
-            type: "countdown",
-            endTime: getClientMsFromServerMs(curStartTime),
-            accumulatedDuration,
-            isForceRevealed,
-            wasPaused: lastPauseTime != null,
-          };
+          type: "countdown",
+          endTime: getClientMsFromServerMs(curStartTime),
+          accumulatedDuration,
+          isForceRevealed,
+          wasPaused: lastPauseTime != null,
+        };
     // including `now` to force it to re-run to change from countdown to running
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [events, getClientMsFromServerMs, lastForceReveal, now]);
@@ -179,7 +182,7 @@ export default function useSyncedTimer({
   useEffect(() => {
     const prevIsBeforeReveal = prevIsBeforeRevealRef.current;
     if (!isCast && prevIsBeforeReveal && !isBeforeReveal) {
-      revealBoard(id);
+      revealBoard(id, roomBackend);
     }
     prevIsBeforeRevealRef.current = isBeforeReveal;
   }, [id, isBeforeReveal, isCast]);

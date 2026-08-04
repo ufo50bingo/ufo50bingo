@@ -56,6 +56,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { db } from "../db";
 import EditLeagueModal from "./EditLeagueModal";
 import useSession from "../session/useSession";
+import { RoomBackend } from "../roomApi";
 
 const ADMIN_FILTERS = [
   {
@@ -97,6 +98,7 @@ export interface Match {
   analysisSeconds: number;
   leagueInfo: null | LeagueInfo;
   creatorID: null | string;
+  roomBackend: RoomBackend;
 }
 
 type Props = {
@@ -457,6 +459,7 @@ export default function Matches({ matches, totalPages }: Props) {
                             match.id,
                             getBoard(match.boardJson),
                             getChangelog(match.changelogJson),
+                            match.roomBackend,
                           );
                         } finally {
                           setRefreshingIDs((prev) =>

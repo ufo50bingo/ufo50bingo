@@ -8,7 +8,7 @@ import {
   readSession,
   writeSession,
 } from "../session/sessionUtil";
-import { getBaseUrl } from "../roomApi";
+import { getBaseUrl, RoomBackend } from "../roomApi";
 
 export interface LeagueInfo {
   season: number;
@@ -28,6 +28,7 @@ export interface CommonMatchProps {
   isCustom: boolean;
   isDraft: boolean;
   isLockout: boolean;
+  roomBackend: RoomBackend;
 }
 
 interface Props extends CommonMatchProps {
@@ -46,15 +47,16 @@ export default async function createMatch({
   isLockout,
   pasta,
   leagueInfo,
+  roomBackend,
 }: Props): Promise<string> {
   const [{ cookie, token }, userSessionRead] = await Promise.all([
-    getCsrfData(),
+    getCsrfData(roomBackend),
     readSession(),
   ]);
 
   const userSession = userSessionRead ?? { id: createUserID(), admin: false };
 
-  const createResponse = await fetch(getBaseUrl("bingosync"), {
+  const createResponse = await fetch(getBaseUrl(roomBackend), {
     method: "POST",
     redirect: "manual",
     credentials: "include",
@@ -115,6 +117,7 @@ export default async function createMatch({
     leagueInfo,
     cookie: sessionCookie,
     creatorID: userSession.id,
+    roomBackend,
   });
 
   return id;

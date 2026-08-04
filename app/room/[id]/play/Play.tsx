@@ -32,6 +32,7 @@ import SyncedTimer from "../common/SyncedTimer";
 import StartPauseButton from "../common/StartPauseButton";
 import { UFOPasta } from "@/app/generator/ufoGenerator";
 import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
+import { RoomBackend } from "@/app/roomApi";
 
 export type Props = {
   id: string;
@@ -41,6 +42,7 @@ export type Props = {
   initialSeed: number;
   initialTimerEvents: ReadonlyArray<FullSyncedTimerEvent>;
   playerName: string;
+  roomBackend: RoomBackend;
 };
 
 export default function Play({
@@ -51,6 +53,7 @@ export default function Play({
   initialSeed,
   playerName,
   initialTimerEvents,
+  roomBackend,
 }: Props) {
   const [shownDifficulties, setShownDifficulties] = useShownDifficulties();
   const [showGeneralTracker, setShowGeneralTracker] = useLocalBool({
@@ -58,7 +61,7 @@ export default function Play({
     defaultValue: true,
   });
   const [soundChoices, setSoundChoices, playAudio] = useSounds("play");
-  const [color, setColor] = useColor(id);
+  const [color, setColor] = useColor(id, roomBackend);
   const [font, setFont] = useFont();
 
   const selectedColor = color ?? "red";
@@ -77,6 +80,7 @@ export default function Play({
     playerName,
     onNewCard: empty,
     playAudio,
+    roomBackend,
   });
 
   const { addEvent, timerState, forceReveal } = useSyncedTimer({
@@ -85,6 +89,7 @@ export default function Play({
     initialEvents: initialTimerEvents,
     playAudio,
     isCast: false,
+    roomBackend,
   });
 
   const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(
@@ -171,7 +176,7 @@ export default function Play({
             onClickSquare={async (squareIndex) => {
               const isClearing = board[squareIndex].color === selectedColor;
               try {
-                await changeColor(id, squareIndex, selectedColor, isClearing);
+                await changeColor(id, squareIndex, selectedColor, isClearing, roomBackend);
               } catch { }
             }}
             shownDifficulties={shownDifficulties}
@@ -257,11 +262,13 @@ export default function Play({
             seed={seed}
             timerState={timerState}
             forceReveal={forceReveal}
+            roomBackend={roomBackend}
           />
         </Stack>
         <Feed
           rawFeed={rawFeed}
           height={showGeneralTracker ? "748px" : "592px"}
+          roomBackend={roomBackend}
         />
       </Group>
       {reconnectModal}

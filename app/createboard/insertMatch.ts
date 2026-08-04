@@ -40,6 +40,7 @@ export async function insertMatch({
   leagueInfo,
   cookie,
   creatorID,
+  roomBackend,
 }: Props): Promise<void> {
   const sql = getSql(false);
 
@@ -60,7 +61,8 @@ export async function insertMatch({
     league_game,
     sessionid_cookie,
     analysis_seconds,
-    creator_id
+    creator_id,
+    backend
   ) VALUES (
     ${id},
     ${roomName},
@@ -78,7 +80,8 @@ export async function insertMatch({
     ${leagueInfo?.game},
     ${cookie},
     ${getDefaultAnalysisSeconds(variant)},
-    ${creatorID}
+    ${creatorID},
+    ${roomBackend}
   );`;
   revalidatePath("/matches");
 }

@@ -132,7 +132,7 @@ export default function MatchView({ match, matchesUrl }: Props) {
         await runWithMaybeRefresh(
           router,
           matchesUrl,
-          async () => await refreshMatch(match.id, board, changelog),
+          async () => await refreshMatch(match.id, board, changelog, match.roomBackend),
           () => setIsRefreshing(false),
         );
       }}

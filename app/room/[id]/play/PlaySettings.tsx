@@ -17,6 +17,7 @@ import { FullSyncedTimerEvent, SyncedTimerState } from "../common/useSyncedTimer
 import TimerSection from "../common/TimerSection";
 import RevealSection from "./RevealSection";
 import { useShouldShortenContext } from "@/app/settings/ShouldShortenContext";
+import { RoomBackend } from "@/app/roomApi";
 
 type Props = {
   id: string;
@@ -35,6 +36,7 @@ type Props = {
   addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
   seed: number;
   forceReveal: () => unknown;
+  roomBackend: RoomBackend;
 };
 
 export default function PlaySettings({
@@ -54,6 +56,7 @@ export default function PlaySettings({
   seed,
   timerState,
   forceReveal,
+  roomBackend,
 }: Props) {
   const [isShown, setIsShown] = useState(color == null);
   const { shouldShortenPlay, setShouldShortenPlay } = useShouldShortenContext();
@@ -143,9 +146,9 @@ export default function PlaySettings({
                   </Stack>
                 </Accordion.Panel>
               </Accordion.Item>
-              <CreateBoardSection id={id} isMobile={isMobile} />
+              <CreateBoardSection id={id} isMobile={isMobile} roomBackend={roomBackend} />
             </Accordion>
-            <BottomSection id={id} isMobile={isMobile} />
+            <BottomSection id={id} isMobile={isMobile} roomBackend={roomBackend} />
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>

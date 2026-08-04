@@ -1,12 +1,12 @@
-import { getBaseUrl } from "./roomApi";
+import { getBaseUrl, RoomBackend } from "./roomApi";
 
 const CSRF_REGEX = /name="csrfmiddlewaretoken" value="([a-zA-Z0-9]+)"/;
 
-export default async function getCsrfData(): Promise<{
+export default async function getCsrfData(roomBackend: RoomBackend): Promise<{
   cookie: string;
   token: string;
 }> {
-  const initialResponse = await fetch(getBaseUrl("bingosync"), {
+  const initialResponse = await fetch(getBaseUrl(roomBackend), {
     method: "GET",
     credentials: "include",
   });

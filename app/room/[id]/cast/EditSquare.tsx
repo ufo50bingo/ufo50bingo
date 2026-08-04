@@ -3,12 +3,14 @@ import ColorSelector from "../common/ColorSelector";
 import { useState } from "react";
 import { BingosyncColor, TBoard } from "@/app/matches/parseBingosyncData";
 import changeColor from "./changeColor";
+import { RoomBackend } from "@/app/roomApi";
 
 type Props = {
   id: string;
   board: TBoard;
   editingIndex: number;
   setEditingIndex: (newEditingIndex: null | number) => unknown;
+  roomBackend: RoomBackend;
 };
 
 export default function EditSquare({
@@ -16,6 +18,7 @@ export default function EditSquare({
   board,
   editingIndex,
   setEditingIndex,
+  roomBackend,
 }: Props) {
   const square = board[editingIndex];
   const [newColor, setNewColor] = useState<null | BingosyncColor>(null);
@@ -58,7 +61,7 @@ export default function EditSquare({
                 setIsSaving(true);
                 const color = isClearing ? square.color : nullthrows(newColor);
                 try {
-                  await changeColor(id, editingIndex, color, isClearing);
+                  await changeColor(id, editingIndex, color, isClearing, roomBackend);
                   setEditingIndex(null);
                 } finally {
                   setIsSaving(false);

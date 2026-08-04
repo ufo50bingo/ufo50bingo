@@ -2,9 +2,9 @@
 
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { readBingosyncCookie } from "../roomCookie";
-import { getColorUrl } from "@/app/roomApi";
+import { getColorUrl, RoomBackend } from "@/app/roomApi";
 
-export default async function chooseColor(id: string, color: BingosyncColor) {
+export default async function chooseColor(id: string, color: BingosyncColor, roomBackend: RoomBackend) {
   const cookie = await readBingosyncCookie();
   if (cookie == null) {
     throw new Error(
@@ -12,7 +12,7 @@ export default async function chooseColor(id: string, color: BingosyncColor) {
     );
   }
 
-  await fetch(getColorUrl("bingosync"), {
+  await fetch(getColorUrl(roomBackend), {
     method: "PUT",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",

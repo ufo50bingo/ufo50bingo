@@ -10,13 +10,15 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 import createNewCard from "../cast/createNewCard";
+import { RoomBackend } from "@/app/roomApi";
 
 type Props = {
   id: string;
   isMobile: boolean;
+  roomBackend: RoomBackend;
 };
 
-export default function CreateBoardSection({ id, isMobile }: Props) {
+export default function CreateBoardSection({ id, isMobile, roomBackend }: Props) {
   const [isCreating, setIsCreating] = useState(false);
   const [isSavingNewCard, setIsSavingNewCard] = useState(false);
   return (
@@ -77,7 +79,7 @@ export default function CreateBoardSection({ id, isMobile }: Props) {
                 onClick={async () => {
                   setIsSavingNewCard(true);
                   try {
-                    await createNewCard(id);
+                    await createNewCard(id, roomBackend);
                     setIsCreating(false);
                   } finally {
                     setIsSavingNewCard(false);

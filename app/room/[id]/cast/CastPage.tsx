@@ -11,15 +11,17 @@ import {
 import { RoomCookie, toBingosyncCookie } from "../roomCookie";
 import getSeed from "../common/getSeed";
 import fetchTimerEvents from "../common/fetchTimerEvents";
+import { RoomBackend } from "@/app/roomApi";
 
 type Props = {
   id: string;
   roomCookie: RoomCookie;
+  roomBackend: RoomBackend;
 };
 
 export type GeneralCounts = { [goal: string]: CountState };
 
-export default async function CastPage({ id, roomCookie }: Props) {
+export default async function CastPage({ id, roomCookie, roomBackend }: Props) {
   const bingosyncCookie = toBingosyncCookie(roomCookie);
   const [
     rawBoard,
@@ -31,11 +33,11 @@ export default async function CastPage({ id, roomCookie }: Props) {
     colors,
     rawCurrentGames,
   ] = await Promise.all([
-    fetchBoard(id),
-    fetchFeed(id, bingosyncCookie),
+    fetchBoard(id, roomBackend),
+    fetchFeed(id, bingosyncCookie, roomBackend),
     fetchTimerEvents(id),
-    getSocketKey(id, bingosyncCookie),
-    getSeed(id),
+    getSocketKey(id, bingosyncCookie, roomBackend),
+    getSeed(id, roomBackend),
     getGeneralCounts(id),
     getColors(id),
     getCurrentGames(id),
@@ -66,6 +68,7 @@ export default async function CastPage({ id, roomCookie }: Props) {
       initialAllPlayerGames={allPlayerGames}
       initialTimerEvents={timerEventsForSeed}
       playerName={roomCookie.name}
+      roomBackend={roomBackend}
     />
   );
 }

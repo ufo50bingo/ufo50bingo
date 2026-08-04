@@ -1,4 +1,5 @@
 import getSql from "../getSql";
+import { parseRoomBackend } from "../roomApi";
 import { Match } from "./Matches";
 import { BingosyncColor } from "./parseBingosyncData";
 
@@ -28,7 +29,8 @@ export const MATCH_FIELDS = getSql()`
   league_p1,
   league_p2,
   league_game,
-  creator_id`;
+  creator_id,
+  backend`;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getMatchFromRaw(rawMatch: Record<string, any>): Match {
@@ -99,5 +101,6 @@ export function getMatchFromRaw(rawMatch: Record<string, any>): Match {
     vod,
     leagueInfo,
     creatorID: rawMatch.creator_id ?? null,
+    roomBackend: parseRoomBackend(rawMatch.backend),
   };
 }

@@ -12,6 +12,7 @@ import syncToGSheet from "./syncToGSheet";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 import { getResult, getResultSql } from "./computeResult";
 import { fetchBoard, fetchFeed, getSessionCookie } from "../fetchMatchInfo";
+import { RoomBackend } from "../roomApi";
 
 export type PlayerScores = { [name: string]: number };
 
@@ -100,6 +101,7 @@ export async function refreshMatch(
   id: string,
   currentBoard: TBoard,
   currentChangelog: Changelog | null,
+  roomBackend: RoomBackend,
 ): Promise<boolean> {
   const cookie = await getSessionCookie(id);
   const [
@@ -107,8 +109,8 @@ export async function refreshMatch(
     feedJson,
     { leagueP1, leagueP2, board: existingBoard, changelog: existingChangelog },
   ] = await Promise.all([
-    fetchBoard(id),
-    fetchFeed(id, cookie),
+    fetchBoard(id, roomBackend),
+    fetchFeed(id, cookie, roomBackend),
     fetchExistingMatch(id),
   ]);
   const board = getBoard(boardJson);
@@ -157,6 +159,6 @@ export async function refreshMatch(
     const rawMatch = sqlResult[0];
     const match = getMatchFromRaw(rawMatch);
     await syncToGSheet(match);
-  } catch {}
+  } catch { }
   return false;
 }

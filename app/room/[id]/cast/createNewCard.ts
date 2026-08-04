@@ -3,9 +3,9 @@
 import { readBingosyncCookie } from "../roomCookie";
 import ufoGenerator from "@/app/generator/ufoGenerator";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
-import { getNewCardUrl } from "@/app/roomApi";
+import { getNewCardUrl, RoomBackend } from "@/app/roomApi";
 
-export default async function createNewCard(id: string): Promise<void> {
+export default async function createNewCard(id: string, roomBackend: RoomBackend): Promise<void> {
   const cookie = await readBingosyncCookie();
   if (cookie == null) {
     throw new Error(
@@ -13,7 +13,7 @@ export default async function createNewCard(id: string): Promise<void> {
     );
   }
 
-  await fetch(getNewCardUrl("bingosync"), {
+  await fetch(getNewCardUrl(roomBackend), {
     method: "PUT",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",

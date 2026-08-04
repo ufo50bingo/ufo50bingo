@@ -1,4 +1,4 @@
-import { Anchor, Input, SegmentedControl } from "@mantine/core";
+import { Button, Input, SegmentedControl } from "@mantine/core";
 import { RoomBackend } from "../roomApi";
 
 type Props = {
@@ -10,11 +10,10 @@ type Props = {
 
 export default function ExtraOptions({ isExtraShown, setIsExtraShown, roomBackend, setRoomBackend }: Props) {
     return isExtraShown
-        ? <Anchor size="xs" href="#" onClick={() => setIsExtraShown(true)}>Show uncommon options</Anchor>
-        : (
+        ? (
             <Input.Wrapper
                 label="Select backend"
-                description="Choose how items are displayed"
+                labelProps={{ style: { display: "block" } }}
                 size="xs">
                 <SegmentedControl
                     size="xs"
@@ -29,5 +28,14 @@ export default function ExtraOptions({ isExtraShown, setIsExtraShown, roomBacken
                     onChange={setRoomBackend as (newBackend: string) => unknown}
                 />
             </Input.Wrapper>
-        )
+        ) : (
+            <Button
+                variant="transparent"
+                size="compact-xs"
+                p={0}
+                onClick={() => setIsExtraShown(true)}
+                style={{ alignSelf: "flex-start" }}>
+                Show uncommon options
+            </Button>
+        );
 }

@@ -3,12 +3,14 @@ import { FiltersMode, GameFilter } from "./FiltersModal";
 import { Button, Group, JsonInput, Stack, TextInput } from "@mantine/core";
 import ModalLayout from "./ModalLayout";
 import { db } from "../db";
+import { Variant } from "../pastas/metadata";
 
 type Props = {
   setMode: (newMode: FiltersMode) => unknown;
+  variant: Variant;
 };
 
-export default function FiltersImport({ setMode }: Props) {
+export default function FiltersImport({ setMode, variant }: Props) {
   const [name, setName] = useState("");
   const [json, setJson] = useState("");
   const [parsed, setParsed] = useState<null | GameFilter>(null);
@@ -48,7 +50,7 @@ export default function FiltersImport({ setMode }: Props) {
             disabled={parsed == null || name === ""}
             onClick={async () => {
               await db.gameFilters.add({
-                variant: "Custom",
+                variant,
                 name,
                 time: Date.now(),
                 filterJson: JSON.stringify(parsed),

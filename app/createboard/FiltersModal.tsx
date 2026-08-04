@@ -10,6 +10,7 @@ import FiltersImport from "./FiltersImport";
 import getNonGeneralCategories from "./getNonGeneralCategories";
 import getAllSubcategories from "./getAllSubcategories";
 import FiltersEdit from "./FitlersEdit";
+import { Variant } from "../pastas/metadata";
 
 export type FiltersMode =
   | { type: "select" }
@@ -40,6 +41,7 @@ type Props = {
   onClose: () => unknown;
   filterInfo: FilterInfo;
   setFilterInfo: (newSelectedInfo: FilterInfo) => unknown;
+  variant: Variant;
 };
 
 export default function FiltersModal({
@@ -47,11 +49,12 @@ export default function FiltersModal({
   onClose,
   filterInfo,
   setFilterInfo,
+  variant,
 }: Props) {
   const [checkedIds, setCheckedIds] = useState(filterInfo.selectedIds);
   const [mode, setMode] = useState<FiltersMode>({ type: "select" });
   const dbFilters = useLiveQuery(
-    () => db.gameFilters.where({ variant: "Custom" }).reverse().sortBy("time"),
+    () => db.gameFilters.where({ variant }).reverse().sortBy("time"),
     [],
   );
   const allGames = useMemo(() => {
@@ -121,15 +124,16 @@ export default function FiltersModal({
         />
       )}
       {mode.type === "create" && (
-        <FiltersCreate pasta={pasta} setMode={setMode} allGames={allGames} />
+        <FiltersCreate pasta={pasta} setMode={setMode} allGames={allGames} variant={variant} />
       )}
-      {mode.type === "import" && <FiltersImport setMode={setMode} />}
+      {mode.type === "import" && <FiltersImport setMode={setMode} variant={variant} />}
       {mode.type === "edit" && (
         <FiltersEdit
           setMode={setMode}
           filter={mode.filter}
           pasta={pasta}
           allGames={allGames}
+          variant={variant}
         />
       )}
     </Modal>

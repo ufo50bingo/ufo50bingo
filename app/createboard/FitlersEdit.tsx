@@ -14,12 +14,14 @@ import {
 import ModalLayout from "./ModalLayout";
 import { db } from "../db";
 import { IconAlertSquareRounded } from "@tabler/icons-react";
+import { Variant } from "../pastas/metadata";
 
 type Props = {
   pasta: UFOPasta;
   setMode: (newMode: FiltersMode) => unknown;
   allGames: ReadonlySet<string>;
   filter: ParsedFilter;
+  variant: Variant;
 };
 
 export default function FiltersEdit({
@@ -27,6 +29,7 @@ export default function FiltersEdit({
   setMode,
   allGames,
   filter,
+  variant,
 }: Props) {
   const [name, setName] = useState(filter.name);
   const [uncheckedGames, setUncheckedGames] = useState<Set<string>>(() =>
@@ -60,7 +63,7 @@ export default function FiltersEdit({
             uncheckedGames={uncheckedGames}
             setUncheckedGames={setUncheckedGames}
             sort="alphabetical"
-            setSort={() => {}}
+            setSort={() => { }}
             pasta={pasta}
             canSort={false}
           />
@@ -79,7 +82,7 @@ export default function FiltersEdit({
                 excluded: [...uncheckedGames],
               };
               await db.gameFilters.update(filter.id, {
-                variant: "Custom",
+                variant,
                 name,
                 time: Date.now(),
                 filterJson: JSON.stringify(typedFilters),

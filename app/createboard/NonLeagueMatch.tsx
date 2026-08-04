@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { IconCheck, IconExclamationMark } from "@tabler/icons-react";
 import {
   Alert,
@@ -66,7 +66,16 @@ export default function NonLeagueMatch({ visible }: Props) {
 
   const [draftPasta, setDraftPasta] = useState<null | UFOPasta>(null);
   const [rawFormat, setFormat] = useState<Format>("Normal");
-  const [filterInfo, setFilterInfo] = useState<FilterInfo>(DEFAULT_FILTER_INFO);
+  const [allFilterInfo, setAllFilterInfo] = useState<ReadonlyMap<string, FilterInfo>>(new Map());
+
+  const filterInfo = allFilterInfo.get(variant) ?? DEFAULT_FILTER_INFO;
+  const setFilterInfo = useCallback((newFilterInfo: FilterInfo) => {
+    setAllFilterInfo(prevAllFilterInfo => {
+      const newMap = new Map(prevAllFilterInfo.entries());
+      newMap.set(variant, newFilterInfo);
+      return newMap;
+    });
+  }, [variant]);
 
   const [roomName, setRoomName] = useState("");
   const [password, setPassword] = useState("");
@@ -91,11 +100,11 @@ export default function NonLeagueMatch({ visible }: Props) {
     const stringify = (structured: ReadonlyArray<{ name: string }>) =>
       pretty ? JSON.stringify(structured, null, 2) : JSON.stringify(structured);
     const getUFOPastaWithCustomSelectors = (pasta: UFOPasta): string => {
-      if (format !== "Custom" && metadata.type !== "Custom") {
+      if (format !== "Custom" && !metadata.hasFilters) {
         return stringify(ufoGenerator(pasta).map((goal) => ({ name: goal })));
       }
       const finalUncheckedGames =
-        metadata.type === "Custom" && format === "Custom"
+        metadata.hasFilters && format === "Custom"
           ? uncheckedGames.union(filterInfo.excludedGames)
           : format === "Custom"
             ? uncheckedGames
@@ -282,30 +291,32 @@ export default function NonLeagueMatch({ visible }: Props) {
                   </Group>
                 </Chip.Group>
               )}
-            {metadata.type === "Custom" && customUfo != null && (
-              <Button
-                variant="light"
-                size="xs"
-                onClick={() => setIsFilterModalShown(true)}
-              >
-                Filters
-              </Button>
-            )}
-            {metadata.type === "UFO" && (
-              <Tooltip label="Copy the source in the new “UFO” format.">
+            <Group gap={8}>
+              {(metadata.type === "UFO" || (metadata.type === "Custom" && customUfo != null)) && metadata.hasFilters && (
                 <Button
                   variant="light"
                   size="xs"
-                  onClick={() => {
-                    navigator.clipboard.writeText(
-                      JSON.stringify(metadata.pasta, null, 2),
-                    );
-                  }}
+                  onClick={() => setIsFilterModalShown(true)}
                 >
-                  Copy source
+                  Filters
                 </Button>
-              </Tooltip>
-            )}
+              )}
+              {metadata.type === "UFO" && (
+                <Tooltip label="Copy the source in the new “UFO” format.">
+                  <Button
+                    variant="light"
+                    size="xs"
+                    onClick={() => {
+                      navigator.clipboard.writeText(
+                        JSON.stringify(metadata.pasta, null, 2),
+                      );
+                    }}
+                  >
+                    Copy source
+                  </Button>
+                </Tooltip>
+              )}
+            </Group>
           </Group>
         </Stack>
       </Card.Section>
@@ -326,7 +337,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                       metadata.type === "Custom" ? customUfo! : metadata.pasta
                     }
                     excludedGames={
-                      metadata.type === "Custom"
+                      metadata.hasFilters
                         ? filterInfo.excludedGames
                         : undefined
                     }
@@ -339,7 +350,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                     }
                     uncheckedGames={uncheckedGames}
                     excludedGames={
-                      metadata.type === "Custom"
+                      metadata.hasFilters
                         ? filterInfo.excludedGames
                         : undefined
                     }
@@ -371,7 +382,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                   sort={checkerSort}
                   setSort={setCheckerSort}
                   excludedGames={
-                    metadata.type === "Custom"
+                    metadata.hasFilters
                       ? filterInfo.excludedGames
                       : undefined
                   }
@@ -573,8 +584,8 @@ export default function NonLeagueMatch({ visible }: Props) {
           >
             Create Bingosync Board
             {format === "Double" &&
-            (metadata.type === "UFO" ||
-              (metadata.type === "Custom" && customUfo != null))
+              (metadata.type === "UFO" ||
+                (metadata.type === "Custom" && customUfo != null))
               ? "s"
               : ""}
           </Button>
@@ -664,6 +675,7 @@ export default function NonLeagueMatch({ visible }: Props) {
           onClose={() => setIsFilterModalShown(false)}
           filterInfo={filterInfo}
           setFilterInfo={setFilterInfo}
+          variant={variant}
         />
       )}
     </>

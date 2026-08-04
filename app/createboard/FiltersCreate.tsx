@@ -5,14 +5,16 @@ import { FiltersMode, GameFilter } from "./FiltersModal";
 import { Button, Group, Stack, TextInput } from "@mantine/core";
 import ModalLayout from "./ModalLayout";
 import { db } from "../db";
+import { Variant } from "../pastas/metadata";
 
 type Props = {
   pasta: UFOPasta;
   setMode: (newMode: FiltersMode) => unknown;
   allGames: ReadonlySet<string>;
+  variant: Variant;
 };
 
-export default function FiltersCreate({ pasta, setMode, allGames }: Props) {
+export default function FiltersCreate({ pasta, setMode, allGames, variant }: Props) {
   const [name, setName] = useState("");
   const [uncheckedGames, setUncheckedGames] = useState<Set<string>>(new Set());
   return (
@@ -29,7 +31,7 @@ export default function FiltersCreate({ pasta, setMode, allGames }: Props) {
             uncheckedGames={uncheckedGames}
             setUncheckedGames={setUncheckedGames}
             sort="alphabetical"
-            setSort={() => {}}
+            setSort={() => { }}
             pasta={pasta}
           />
         </Stack>
@@ -47,7 +49,7 @@ export default function FiltersCreate({ pasta, setMode, allGames }: Props) {
                 excluded: [...uncheckedGames],
               };
               await db.gameFilters.add({
-                variant: "Custom",
+                variant,
                 name,
                 time: Date.now(),
                 filterJson: JSON.stringify(typedFilters),

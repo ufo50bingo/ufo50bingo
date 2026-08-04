@@ -14,6 +14,7 @@ import { COMBO_UFO } from "./comboUfo";
 import { GAME_NAMES_UFO } from "./gameNamesUfo";
 import { CHERRY_RACE_UFO } from "./cherryRaceUfo";
 import { NES_50_UFO } from "./nes50Ufo";
+import { EVERY_GAME_UFO } from "./everyGameUfo";
 
 const RAW_METADATA = [
   {
@@ -70,6 +71,7 @@ const RAW_METADATA = [
   {
     type: "Custom",
     name: "Custom",
+    hasFilters: true,
   },
   {
     type: "UFO",
@@ -95,6 +97,23 @@ const RAW_METADATA = [
         and reach out to Aha to get started!
       </span>
     ),
+  },
+  {
+    type: "UFO",
+    name: "Every Game",
+    pasta: EVERY_GAME_UFO,
+    info: (
+      <span>
+        A bingo goal set that can include every game!
+        <br />
+        Use the Filters button to select games you are able to play, and import filters from your opponent!
+        <br />
+        You can also <a target="_blank" href="https://docs.google.com/spreadsheets/d/1kg8h-gcZZc1fLciNrxSLuS-Zncuz68Bj67ZaX4e1z9w/edit?gid=1675976300#gid=1675976300">add your game list here</a> to see how many games you have in common with other players.
+        <br />
+        If you'd like to contribute to the goal set, <a target="_blank" href="https://docs.google.com/spreadsheets/d/1cS_eRLcP7NnvZQ-VdmCl1pcIKGHglfgNtSTVqs1_0Zo/edit?gid=0#gid=0">add your goals here</a>, and the admins will add them to the official pasta.
+      </span>
+    ),
+    hasFilters: true,
   },
   {
     type: "UFO",
@@ -239,6 +258,7 @@ export const SELECTOR_DATA = [
     items: [
       "10 Cherry Race",
       "NES 50",
+      "Every Game",
       "Choco",
       "Game Names",
       "Nozzlo (Deprecated)",
@@ -254,6 +274,7 @@ export type Variant = (typeof RAW_METADATA)[number]["name"];
 interface MetadataBase {
   name: Variant;
   info?: ReactNode;
+  hasFilters?: boolean;
 }
 
 interface Custom extends MetadataBase {

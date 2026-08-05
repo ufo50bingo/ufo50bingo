@@ -203,7 +203,7 @@ export const NES_50_UFO = {
       ],
       "Super Mario Bros. 2": [
         {
-          "name": "SUPER MARIO BROS 2: Have 7+ coins in the slot machine"
+          "name": "SUPER MARIO BROS 2: Show 6+ coins in the slot machine"
         }
       ],
       "Super Mario Bros. 3": [

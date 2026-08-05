@@ -5,7 +5,7 @@ import { GeneralCounts } from "./CastPage";
 import getGamesForPlayer from "./getGamesForPlayer";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 
-
+// IMPORTANT: Must update useFullGeneralState parser if this changes
 export type CountState = ReadonlyArray<{ [game: string]: number }>;
 
 type Props = {

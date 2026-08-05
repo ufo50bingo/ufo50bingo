@@ -18,6 +18,7 @@ import TimerSection from "../common/TimerSection";
 import RevealSection from "./RevealSection";
 import { useShouldShortenContext } from "@/app/settings/ShouldShortenContext";
 import { RoomBackend } from "@/app/roomApi";
+import GeneralSection, { GeneralSettings, GeneralRestrictions, GeneralSetters } from "./GeneralSection";
 
 type Props = {
   id: string;
@@ -37,6 +38,9 @@ type Props = {
   seed: number;
   forceReveal: () => unknown;
   roomBackend: RoomBackend;
+  generalSettings: GeneralSettings;
+  generalRestrictions: GeneralRestrictions;
+  generalSetters: GeneralSetters;
 };
 
 export default function PlaySettings({
@@ -57,6 +61,9 @@ export default function PlaySettings({
   timerState,
   forceReveal,
   roomBackend,
+  generalRestrictions,
+  generalSetters,
+  generalSettings,
 }: Props) {
   const [isShown, setIsShown] = useState(color == null);
   const { shouldShortenPlay, setShouldShortenPlay } = useShouldShortenContext();
@@ -146,6 +153,11 @@ export default function PlaySettings({
                   </Stack>
                 </Accordion.Panel>
               </Accordion.Item>
+              <GeneralSection
+                generalSettings={generalSettings}
+                generalSetters={generalSetters}
+                generalRestrictions={generalRestrictions}
+              />
               <CreateBoardSection id={id} isMobile={isMobile} roomBackend={roomBackend} />
             </Accordion>
             <BottomSection id={id} isMobile={isMobile} roomBackend={roomBackend} />

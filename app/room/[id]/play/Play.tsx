@@ -8,7 +8,7 @@ import {
   TBoard,
 } from "@/app/matches/parseBingosyncData";
 import { Group, Stack, Text } from "@mantine/core";
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import PlaySettings from "./PlaySettings";
 import useColor from "./useColor";
 import useShownDifficulties from "./useShownDifficulties";
@@ -33,6 +33,14 @@ import StartPauseButton from "../common/StartPauseButton";
 import { UFOPasta } from "@/app/generator/ufoGenerator";
 import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
 import { RoomBackend } from "@/app/roomApi";
+import { GeneralRestrictions } from "./GeneralSection";
+import useGeneralSettings from "./useGeneralSettings";
+import useFullGeneralState from "./useFullGeneralState";
+import GeneralGoal from "../cast/GeneralGoal";
+import useShowAll from "../common/useShowAll";
+import { getAllTerminalCodes, getGameToGoals } from "../cast/findAllGames";
+import getGameList from "../common/getGameList";
+import getIsNes50 from "../common/getIsNes50";
 
 export type Props = {
   id: string;
@@ -71,6 +79,18 @@ export default function Play({
 
   useWakeLock();
 
+  const [gameToGoals, setGameToGoals] = useState(() =>
+    getGameToGoals(initialBoard, getGameList(getIsNes50(initialBoard))),
+  );
+  const [terminalCodes, setTerminalCodes] = useState(() =>
+    getAllTerminalCodes(initialBoard),
+  );
+
+  const onNewCard = useCallback((newBoard: TBoard) => {
+    setGameToGoals(getGameToGoals(newBoard, getGameList(getIsNes50(newBoard))));
+    setTerminalCodes(getAllTerminalCodes(newBoard));
+  }, []);
+
   const { board, rawFeed, seed, reconnectModal } = useBingosyncSocket({
     id,
     initialBoard,
@@ -78,7 +98,7 @@ export default function Play({
     initialSeed,
     socketKey,
     playerName,
-    onNewCard: empty,
+    onNewCard,
     playAudio,
     roomBackend,
   });
@@ -116,6 +136,43 @@ export default function Play({
     },
     [board],
   );
+
+  const generalRestrictions: GeneralRestrictions = useMemo(() => {
+    const isUfo50 = generalGoals.every(item => item.pasta === STANDARD_UFO);
+    if (isUfo50) {
+      return {
+        canUseFull: false,
+        canFilterOnCard: false,
+        canShowOnCardTooltips: false,
+        canFastSort: false,
+        canSegment: false,
+        canUseTerminalCodes: false,
+      };
+    }
+    const isNes50 = generalGoals.every(item => item.pasta === NES_50_UFO);
+    if (isNes50) {
+      return {
+        canUseFull: true,
+        canFilterOnCard: true,
+        canShowOnCardTooltips: false,
+        canFastSort: false,
+        canSegment: true,
+        canUseTerminalCodes: false,
+      };
+    }
+    return {
+      canUseFull: true,
+      canFilterOnCard: true,
+      canShowOnCardTooltips: true,
+      canFastSort: true,
+      canSegment: true,
+      canUseTerminalCodes: true,
+    };
+  }, [generalGoals]);
+
+  const [generalSettings, generalSetters] = useGeneralSettings(generalRestrictions);
+  const [fullGeneralState, setGeneralGameCount] = useFullGeneralState(id, seed);
+  const [showAll, addShowAll] = useShowAll(`player-showall-${id}-${seed}`);
 
   const [myScore, opponent] = useMemo(() => {
     const scores: { [color: string]: number } = {};
@@ -231,7 +288,7 @@ export default function Play({
               playerName={playerName}
             />
           </Group>
-          {showGeneralTracker && (
+          {showGeneralTracker && generalSettings.type === "simple" && (
             <SimpleGeneralTracker
               isHidden={
                 (timerState.type === "not_started" &&
@@ -263,6 +320,9 @@ export default function Play({
             timerState={timerState}
             forceReveal={forceReveal}
             roomBackend={roomBackend}
+            generalSettings={generalSettings}
+            generalSetters={generalSetters}
+            generalRestrictions={generalRestrictions}
           />
         </Stack>
         <Feed
@@ -270,12 +330,26 @@ export default function Play({
           height={showGeneralTracker ? "748px" : "592px"}
           roomBackend={roomBackend}
         />
+        {showGeneralTracker && generalSettings.type === "full" && generalGoals.map(g => (
+          <GeneralGoal
+            key={g.foundGoal.resolvedGoal}
+            gameToGoals={gameToGoals}
+            foundGoal={g.foundGoal}
+            isFinished={g.color !== "blank"}
+            terminalCodes={terminalCodes}
+            countState={fullGeneralState[g.foundGoal.resolvedGoal]}
+            showAll={showAll.includes(g.foundGoal.resolvedGoal)}
+            setGeneralGameCount={setGeneralGameCount}
+            addShowAll={addShowAll}
+            playerColors={[selectedColor]}
+            height={400}
+            sortType={generalSettings.sort}
+            pasta={g.pasta}
+            restrictions={generalRestrictions}
+          />
+        ))}
       </Group>
       {reconnectModal}
     </>
   );
-}
-
-function empty(): void {
-  return;
 }

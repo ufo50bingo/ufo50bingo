@@ -6,15 +6,16 @@ type Props = {
   game: string;
   description: null | string;
   goals: null | ReadonlyArray<[string, number]>;
+  canShowTooltip: boolean;
 };
 
-export default function GameInfo({ game, description, goals }: Props) {
+export default function GameInfo({ game, description, goals, canShowTooltip }: Props) {
   const name =
     GAME_NAMES[game as ProperGame] != null
       ? GAME_NAMES[game as ProperGame]
       : game;
   const gameName =
-    goals != null ? (
+    goals != null && canShowTooltip ? (
       <Tooltip
         label={goals.map((g, index) => {
           const coordinates = `[${Math.floor(g[1] / 5) + 1},${(g[1] % 5) + 1}]`;

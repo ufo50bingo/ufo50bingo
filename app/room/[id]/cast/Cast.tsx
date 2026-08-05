@@ -49,6 +49,18 @@ import getNonGeneralCategories from "@/app/createboard/getNonGeneralCategories";
 import getAllSubcategories from "@/app/createboard/getAllSubcategories";
 import { UFOPasta } from "@/app/generator/ufoGenerator";
 import { RoomBackend } from "@/app/roomApi";
+import getGameList from "../common/getGameList";
+import getIsNes50 from "../common/getIsNes50";
+import { GeneralRestrictions } from "../play/GeneralSection";
+
+const GENERAL_RESTRICTIONS: GeneralRestrictions = {
+  canUseFull: true,
+  canFilterOnCard: true,
+  canShowOnCardTooltips: true,
+  canFastSort: true,
+  canSegment: true,
+  canUseTerminalCodes: true,
+}
 
 export type FoundStandardGeneral = FoundGoalWithCast<string, string, string>;
 export type GeneralItem = {
@@ -269,6 +281,7 @@ export default function Cast({
       game={game as Game}
       goals={gameToGoals[game]}
       description={null}
+      canShowTooltip={true}
     />
   ));
 
@@ -287,6 +300,7 @@ export default function Cast({
       height={h}
       sortType={sortType}
       pasta={g.pasta}
+      restrictions={GENERAL_RESTRICTIONS}
     />
   );
 
@@ -583,28 +597,4 @@ export default function Cast({
       {reconnectModal}
     </>
   );
-}
-
-function getIsNes50(board: TBoard): boolean {
-  let foundCount = 0;
-  for (const square of board) {
-    if (findGoal(square.name, NES_50_UFO) != null) {
-      foundCount += 1;
-    }
-    if (foundCount >= 10) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function getGameList(isNes50: boolean): ReadonlyArray<string> {
-  return isNes50
-    ? [
-      ...getAllSubcategories(
-        NES_50_UFO.goals,
-        getNonGeneralCategories(NES_50_UFO),
-      ),
-    ]
-    : ORDERED_PROPER_GAMES;
 }

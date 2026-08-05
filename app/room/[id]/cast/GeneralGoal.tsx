@@ -27,6 +27,7 @@ import {
   TWO_BOSSES,
   BOSSES,
 } from "./timeEstimates";
+import { GeneralRestrictions } from "../play/GeneralSection";
 
 type Props = {
   showAll: boolean;
@@ -41,6 +42,7 @@ type Props = {
   height: null | undefined | number;
   sortType: SortType;
   pasta: UFOPasta;
+  restrictions: GeneralRestrictions;
 };
 
 function getOtherGoals(
@@ -62,7 +64,7 @@ export default function GeneralGoal({
   gameToGoals,
   foundGoal,
   isFinished,
-  terminalCodes,
+  terminalCodes: rawTerminalCodes,
   countState,
   setGeneralGameCount,
   addShowAll,
@@ -70,7 +72,9 @@ export default function GeneralGoal({
   height,
   sortType,
   pasta: _pasta,
+  restrictions,
 }: Props) {
+  const terminalCodes = restrictions.canUseTerminalCodes ? rawTerminalCodes : new Set();
   const cast = foundGoal.cast;
 
   const descriptions: null | Descriptions = useMemo(() => {
@@ -167,9 +171,9 @@ export default function GeneralGoal({
     ...synergyWithOnCard,
     ...neverWithOnCard,
   ];
-  const entries = showAll
+  const entries = showAll || !restrictions.canSegment
     ? allEntries
-    : [...alwaysWithOnCard, ...synergyWithOnCard.filter((e) => e[1])];
+    : [...alwaysWithOnCard, ...synergyWithOnCard.filter((e) => e[1] != null || !restrictions.canFilterOnCard)];
 
   const hasMore = allEntries.length > entries.length;
 
@@ -186,7 +190,7 @@ export default function GeneralGoal({
   });
 
   const nonNullEntries = nullableEntries.filter((e) => e != null);
-  const finalEntries = cast.on_card_only
+  const finalEntries = cast.on_card_only && restrictions.canFilterOnCard
     ? nonNullEntries.filter((e) => e[1] != null)
     : nonNullEntries;
 
@@ -278,6 +282,7 @@ export default function GeneralGoal({
                 game={game}
                 goals={otherGoals}
                 description={description}
+                canShowTooltip={restrictions.canShowOnCardTooltips}
               />
             </Group>
           );

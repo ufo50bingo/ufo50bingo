@@ -1,22 +1,22 @@
 import { Card, Title } from "@mantine/core";
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 
 type Props = {
   title?: ReactNode;
   description?: ReactNode;
   children: ReactNode;
-  height?: null | undefined | number;
   width?: null | undefined | number;
   maxWidth?: null | undefined | number;
+  style?: CSSProperties,
 };
 
 export default function InfoCard({
   title,
   description,
   children,
-  height,
   width = 268,
   maxWidth,
+  style = {},
 }: Props) {
   return (
     <Card
@@ -25,10 +25,10 @@ export default function InfoCard({
       radius="md"
       withBorder={true}
       style={{
-        height: `${height ?? 300}px`,
         width: maxWidth == null ? `${width}px` : undefined,
         maxWidth: maxWidth == null ? undefined : `${maxWidth}px`,
         resize: "both",
+        ...style,
       }}
     >
       {title != null && (

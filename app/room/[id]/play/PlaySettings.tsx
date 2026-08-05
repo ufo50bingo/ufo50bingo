@@ -18,6 +18,7 @@ import TimerSection from "../common/TimerSection";
 import RevealSection from "./RevealSection";
 import { useShouldShortenContext } from "@/app/settings/ShouldShortenContext";
 import { RoomBackend } from "@/app/roomApi";
+import GeneralSection, { GeneralSettings, GeneralRestrictions, GeneralSetters } from "./GeneralSection";
 
 type Props = {
   id: string;
@@ -37,6 +38,9 @@ type Props = {
   seed: number;
   forceReveal: () => unknown;
   roomBackend: RoomBackend;
+  generalSettings: GeneralSettings;
+  generalRestrictions: GeneralRestrictions;
+  generalSetters: GeneralSetters;
 };
 
 export default function PlaySettings({
@@ -57,6 +61,9 @@ export default function PlaySettings({
   timerState,
   forceReveal,
   roomBackend,
+  generalRestrictions,
+  generalSetters,
+  generalSettings,
 }: Props) {
   const [isShown, setIsShown] = useState(color == null);
   const { shouldShortenPlay, setShouldShortenPlay } = useShouldShortenContext();
@@ -134,18 +141,18 @@ export default function PlaySettings({
                       }
                       label="Label general goals"
                     />
-                    <Checkbox
-                      checked={showGeneralTracker}
-                      onChange={(event) =>
-                        setShowGeneralTracker(event.target.checked)
-                      }
-                      label="Show general goal tracker"
-                    />
                     <FontSelector font={font} setFont={setFont} />
                     <SelectRightClickBehavior label="Square right click behavior" />
                   </Stack>
                 </Accordion.Panel>
               </Accordion.Item>
+              <GeneralSection
+                generalSettings={generalSettings}
+                generalSetters={generalSetters}
+                generalRestrictions={generalRestrictions}
+                showGeneralTracker={showGeneralTracker}
+                setShowGeneralTracker={setShowGeneralTracker}
+              />
               <CreateBoardSection id={id} isMobile={isMobile} roomBackend={roomBackend} />
             </Accordion>
             <BottomSection id={id} isMobile={isMobile} roomBackend={roomBackend} />

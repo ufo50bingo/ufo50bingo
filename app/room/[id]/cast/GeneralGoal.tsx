@@ -7,14 +7,13 @@ import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import getColorHex from "./getColorHex";
 import BingosyncColored from "@/app/matches/BingosyncColored";
 import { CountChange, CountState } from "./useSyncedState";
-import { SortType } from "./useLocalState";
 import {
   Descriptions,
   OptionList,
   OptionListEntry,
   UFOPasta,
 } from "@/app/generator/ufoGenerator";
-import React, { useMemo } from "react";
+import React, { CSSProperties, useMemo } from "react";
 import { FoundStandardGeneral } from "./Cast";
 import {
   CHERRIES,
@@ -27,6 +26,7 @@ import {
   TWO_BOSSES,
   BOSSES,
 } from "./timeEstimates";
+import { GeneralRestrictions, GeneralSettings } from "../play/GeneralSection";
 
 type Props = {
   showAll: boolean;
@@ -38,9 +38,10 @@ type Props = {
   setGeneralGameCount: (change: CountChange) => unknown;
   addShowAll: (goal: string) => unknown;
   playerColors: ReadonlyArray<BingosyncColor>;
-  height: null | undefined | number;
-  sortType: SortType;
   pasta: UFOPasta;
+  restrictions: GeneralRestrictions;
+  settings: GeneralSettings;
+  style?: CSSProperties,
 };
 
 function getOtherGoals(
@@ -62,15 +63,17 @@ export default function GeneralGoal({
   gameToGoals,
   foundGoal,
   isFinished,
-  terminalCodes,
+  terminalCodes: rawTerminalCodes,
   countState,
   setGeneralGameCount,
   addShowAll,
   playerColors,
-  height,
-  sortType,
   pasta: _pasta,
+  restrictions,
+  settings,
+  style = {},
 }: Props) {
+  const terminalCodes = restrictions.canUseTerminalCodes ? rawTerminalCodes : new Set();
   const cast = foundGoal.cast;
 
   const descriptions: null | Descriptions = useMemo(() => {
@@ -167,9 +170,9 @@ export default function GeneralGoal({
     ...synergyWithOnCard,
     ...neverWithOnCard,
   ];
-  const entries = showAll
+  const entries = showAll || !settings.shouldSegment
     ? allEntries
-    : [...alwaysWithOnCard, ...synergyWithOnCard.filter((e) => e[1])];
+    : [...alwaysWithOnCard, ...synergyWithOnCard.filter((e) => e[1] != null || !restrictions.canFilterOnCard)];
 
   const hasMore = allEntries.length > entries.length;
 
@@ -186,22 +189,22 @@ export default function GeneralGoal({
   });
 
   const nonNullEntries = nullableEntries.filter((e) => e != null);
-  const finalEntries = cast.on_card_only
+  const finalEntries = cast.on_card_only && restrictions.canFilterOnCard
     ? nonNullEntries.filter((e) => e[1] != null)
     : nonNullEntries;
 
   const isUfo50 = allEntries.every((entry) =>
     ORDERED_PROPER_GAMES.includes(entry[0] as ProperGame),
   );
-  if (sortType === "chronological" && isUfo50) {
+  if (settings.sort === "chronological" && isUfo50) {
     finalEntries.sort(
       (a, b) =>
         ORDERED_PROPER_GAMES.indexOf(a[0] as ProperGame) -
         ORDERED_PROPER_GAMES.indexOf(b[0] as ProperGame),
     );
   } else if (
-    sortType === "alphabetical" ||
-    (sortType === "chronological" && !isUfo50)
+    settings.sort === "alphabetical" ||
+    (settings.sort === "chronological" && !isUfo50)
   ) {
     finalEntries.sort((a, b) => a[0].localeCompare(b[0]));
   } else {
@@ -210,7 +213,7 @@ export default function GeneralGoal({
 
   return (
     <InfoCard
-      height={height}
+      style={style}
       title={title}
       description={
         cast.type === "check"
@@ -278,6 +281,7 @@ export default function GeneralGoal({
                 game={game}
                 goals={otherGoals}
                 description={description}
+                canShowTooltip={restrictions.canShowOnCardTooltips}
               />
             </Group>
           );

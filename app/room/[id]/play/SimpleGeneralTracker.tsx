@@ -18,7 +18,7 @@ export default function SimpleGeneralTracker({
 }: Props) {
   const [state, setState] = useSimpleGeneralState(id, seed);
   return (
-    <InfoCard maxWidth={525} height={148}>
+    <InfoCard maxWidth={525} style={{ height: `148px` }}>
       <Stack gap={4}>
         {generalGoals.map((item) => {
           const displayGoal =

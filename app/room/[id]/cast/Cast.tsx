@@ -49,6 +49,18 @@ import getNonGeneralCategories from "@/app/createboard/getNonGeneralCategories";
 import getAllSubcategories from "@/app/createboard/getAllSubcategories";
 import { UFOPasta } from "@/app/generator/ufoGenerator";
 import { RoomBackend } from "@/app/roomApi";
+import getGameList from "../common/getGameList";
+import getIsNes50 from "../common/getIsNes50";
+import { GeneralRestrictions, GeneralSettings } from "../play/GeneralSection";
+
+const GENERAL_RESTRICTIONS: GeneralRestrictions = {
+  canUseFull: true,
+  canFilterOnCard: true,
+  canShowOnCardTooltips: true,
+  canFastSort: true,
+  canSegment: true,
+  canUseTerminalCodes: true,
+}
 
 export type FoundStandardGeneral = FoundGoalWithCast<string, string, string>;
 export type GeneralItem = {
@@ -249,6 +261,12 @@ export default function Cast({
     });
   }, [generalGoals]);
 
+  const generalSettings: GeneralSettings = useMemo(() => ({
+    sort: sortType,
+    shouldSegment: true,
+    type: "full",
+  }), [sortType]);
+
   const multiGoalGames = Object.keys(gameToGoals).filter(
     (game) => gameToGoals[game].length > 1,
   );
@@ -269,6 +287,7 @@ export default function Cast({
       game={game as Game}
       goals={gameToGoals[game]}
       description={null}
+      canShowTooltip={true}
     />
   ));
 
@@ -284,9 +303,10 @@ export default function Cast({
       setGeneralGameCount={setGeneralGameCount}
       addShowAll={addShowAll}
       playerColors={[leftColor, rightColor]}
-      height={h}
-      sortType={sortType}
+      style={{ height: `${h ?? 300}px` }}
+      settings={generalSettings}
       pasta={g.pasta}
+      restrictions={GENERAL_RESTRICTIONS}
     />
   );
 
@@ -470,7 +490,7 @@ export default function Cast({
               playerName={playerName}
             />
           </Group>
-          <Feed height={`${475 - 44}px`} rawFeed={rawFeed} roomBackend={roomBackend} />
+          <Feed style={{ height: `${475 - 44}px` }} rawFeed={rawFeed} roomBackend={roomBackend} />
         </Stack>
         {showGameSelector ? (
           <Stack gap={8}>
@@ -496,7 +516,7 @@ export default function Cast({
             ) : (
               <InfoCard
                 title="Multi-goal games"
-                height={475 - gameSelectorHeight}
+                style={{ height: `${475 - gameSelectorHeight}px` }}
               >
                 <Stack gap={4}>
                   {multiGoalGameElements.length > 0
@@ -509,7 +529,7 @@ export default function Cast({
         ) : generalGoals.length > 0 ? (
           getCard(sortedGenerals[0], 475)
         ) : (
-          <InfoCard title="Multi-goal games" height={475}>
+          <InfoCard title="Multi-goal games" style={{ height: `475px` }}>
             <Stack gap={4}>
               {multiGoalGameElements.length > 0
                 ? multiGoalGameElements
@@ -520,7 +540,7 @@ export default function Cast({
         {generalGoals.length > 0 && (
           <Group w="100%">
             {sortedGenerals.slice(1).map((g) => getCard(g, null))}
-            <InfoCard title="Multi-goal games" height={null} width={205}>
+            <InfoCard title="Multi-goal games" style={{ height: `300px` }} width={205}>
               <Stack gap={4}>
                 {multiGoalGameElements.length > 0
                   ? multiGoalGameElements
@@ -583,28 +603,4 @@ export default function Cast({
       {reconnectModal}
     </>
   );
-}
-
-function getIsNes50(board: TBoard): boolean {
-  let foundCount = 0;
-  for (const square of board) {
-    if (findGoal(square.name, NES_50_UFO) != null) {
-      foundCount += 1;
-    }
-    if (foundCount >= 10) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function getGameList(isNes50: boolean): ReadonlyArray<string> {
-  return isNes50
-    ? [
-      ...getAllSubcategories(
-        NES_50_UFO.goals,
-        getNonGeneralCategories(NES_50_UFO),
-      ),
-    ]
-    : ORDERED_PROPER_GAMES;
 }

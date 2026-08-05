@@ -8,7 +8,7 @@ import {
   TBoard,
 } from "@/app/matches/parseBingosyncData";
 import { Group, Stack, Text } from "@mantine/core";
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import PlaySettings from "./PlaySettings";
 import useColor from "./useColor";
 import useShownDifficulties from "./useShownDifficulties";
@@ -33,6 +33,17 @@ import StartPauseButton from "../common/StartPauseButton";
 import { UFOPasta } from "@/app/generator/ufoGenerator";
 import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
 import { RoomBackend } from "@/app/roomApi";
+import { GeneralRestrictions } from "./GeneralSection";
+import useGeneralSettings from "./useGeneralSettings";
+import useFullGeneralState from "./useFullGeneralState";
+import GeneralGoal from "../cast/GeneralGoal";
+import useShowAll from "../common/useShowAll";
+import { getAllTerminalCodes, getGameToGoals } from "../cast/findAllGames";
+import getGameList from "../common/getGameList";
+import getIsNes50 from "../common/getIsNes50";
+import { Game, ORDERED_GAMES } from "@/app/goals";
+import GameInfo from "../cast/GameInfo";
+import InfoCard from "../cast/InfoCard";
 
 export type Props = {
   id: string;
@@ -56,7 +67,7 @@ export default function Play({
   roomBackend,
 }: Props) {
   const [shownDifficulties, setShownDifficulties] = useShownDifficulties();
-  const [showGeneralTracker, setShowGeneralTracker] = useLocalBool({
+  const [showGeneralTrackerRaw, setShowGeneralTracker] = useLocalBool({
     key: "show_general_tracker",
     defaultValue: true,
   });
@@ -71,6 +82,18 @@ export default function Play({
 
   useWakeLock();
 
+  const [gameToGoals, setGameToGoals] = useState(() =>
+    getGameToGoals(initialBoard, getGameList(getIsNes50(initialBoard))),
+  );
+  const [terminalCodes, setTerminalCodes] = useState(() =>
+    getAllTerminalCodes(initialBoard),
+  );
+
+  const onNewCard = useCallback((newBoard: TBoard) => {
+    setGameToGoals(getGameToGoals(newBoard, getGameList(getIsNes50(newBoard))));
+    setTerminalCodes(getAllTerminalCodes(newBoard));
+  }, []);
+
   const { board, rawFeed, seed, reconnectModal } = useBingosyncSocket({
     id,
     initialBoard,
@@ -78,7 +101,7 @@ export default function Play({
     initialSeed,
     socketKey,
     playerName,
-    onNewCard: empty,
+    onNewCard,
     playAudio,
     roomBackend,
   });
@@ -116,6 +139,67 @@ export default function Play({
     },
     [board],
   );
+
+  const showGeneralTracker = showGeneralTrackerRaw && generalGoals.length > 0;
+
+  const generalRestrictions = useMemo(() => {
+    const isUfo50 = generalGoals.every(item => item.pasta === STANDARD_UFO);
+    // TODO: Need something when no generals are detected?
+    if (isUfo50) {
+      return {
+        canUseFull: false,
+        canFilterOnCard: false,
+        canShowOnCardTooltips: false,
+        canFastSort: false,
+        canSegment: false,
+        canUseTerminalCodes: false,
+        canShowMultiGoalGames: false,
+      };
+    }
+    const isNes50 = generalGoals.every(item => item.pasta === NES_50_UFO);
+    if (isNes50) {
+      return {
+        canUseFull: true,
+        canFilterOnCard: true,
+        canShowOnCardTooltips: false,
+        canFastSort: false,
+        canSegment: true,
+        canUseTerminalCodes: false,
+        canShowMultiGoalGames: true,
+      };
+    }
+    return {
+      canUseFull: true,
+      canFilterOnCard: true,
+      canShowOnCardTooltips: true,
+      canFastSort: true,
+      canSegment: true,
+      canUseTerminalCodes: true,
+      canShowMultiGoalGames: true,
+    };
+  }, [generalGoals]);
+
+  const [generalSettings, generalSetters] = useGeneralSettings(generalRestrictions);
+  const [fullGeneralState, setGeneralGameCount] = useFullGeneralState(id, seed);
+  const [showAll, addShowAll] = useShowAll(`player-showall-${id}-${seed}`);
+
+  const multiGoalGames = useMemo(() => {
+    const multiGoalGames = Object.keys(gameToGoals).filter(
+      (game) => gameToGoals[game].length > 1,
+    );
+    const canChronoLogicalSort = multiGoalGames.every((game) =>
+      ORDERED_GAMES.includes(game as Game),
+    );
+    if (canChronoLogicalSort && generalSettings.sort === "chronological") {
+      multiGoalGames.sort(
+        (a, b) =>
+          ORDERED_GAMES.indexOf(a as Game) - ORDERED_GAMES.indexOf(b as Game),
+      );
+    } else {
+      multiGoalGames.sort((a, b) => a.localeCompare(b));
+    }
+    return multiGoalGames;
+  }, [gameToGoals, generalSettings.sort]);
 
   const [myScore, opponent] = useMemo(() => {
     const scores: { [color: string]: number } = {};
@@ -167,9 +251,15 @@ export default function Play({
       return null;
     }
   }, [opponent, myScore, selectedColor, rawFeed, board]);
+
+  const isHidden = (timerState.type === "not_started" &&
+    !timerState.isForceRevealed) ||
+    (timerState.type === "countdown" &&
+      !timerState.wasPaused &&
+      !timerState.isForceRevealed);
   return (
     <>
-      <Group align="start">
+      <Group align="stretch">
         <Stack gap={8}>
           <Board
             board={board}
@@ -231,7 +321,7 @@ export default function Play({
               playerName={playerName}
             />
           </Group>
-          {showGeneralTracker && (
+          {showGeneralTracker && generalSettings.type === "simple" && (
             <SimpleGeneralTracker
               isHidden={
                 (timerState.type === "not_started" &&
@@ -263,19 +353,55 @@ export default function Play({
             timerState={timerState}
             forceReveal={forceReveal}
             roomBackend={roomBackend}
+            generalSettings={generalSettings}
+            generalSetters={generalSetters}
+            generalRestrictions={generalRestrictions}
           />
         </Stack>
         <Feed
           rawFeed={rawFeed}
-          height={showGeneralTracker ? "748px" : "592px"}
+          style={{ height: showGeneralTracker && generalSettings.type === "simple" ? "748px" : "592px" }}
           roomBackend={roomBackend}
         />
+        {!isHidden && showGeneralTracker && generalSettings.type === "full" && generalGoals.map(g => (
+          <GeneralGoal
+            key={g.foundGoal.resolvedGoal}
+            gameToGoals={gameToGoals}
+            foundGoal={g.foundGoal}
+            isFinished={g.color !== "blank"}
+            terminalCodes={terminalCodes}
+            countState={fullGeneralState[g.foundGoal.resolvedGoal]}
+            showAll={showAll.includes(g.foundGoal.resolvedGoal)}
+            setGeneralGameCount={setGeneralGameCount}
+            addShowAll={addShowAll}
+            playerColors={[selectedColor]}
+            style={{ minHeight: "300px", maxHeight: "592px", flex: "1 1 auto" }}
+            settings={generalSettings}
+            pasta={g.pasta}
+            restrictions={generalRestrictions}
+          />
+        ))}
+        {
+          !isHidden && showGeneralTracker && generalSettings.type === "full" && generalRestrictions.canShowMultiGoalGames && (
+            <InfoCard title="Multi-goal games" style={{ minHeight: "300px", maxHeight: "592px", flex: "1 1 auto" }}>
+              <Stack gap={4}>
+                {multiGoalGames.length > 0
+                  ? multiGoalGames.map((game) => (
+                    <GameInfo
+                      key={game}
+                      game={game as Game}
+                      goals={gameToGoals[game]}
+                      description={null}
+                      canShowTooltip={generalRestrictions.canShowOnCardTooltips}
+                    />
+                  ))
+                  : "No multi-goal games on this card!"}
+              </Stack>
+            </InfoCard>
+          )
+        }
       </Group>
       {reconnectModal}
     </>
   );
-}
-
-function empty(): void {
-  return;
 }

@@ -1,17 +1,17 @@
 import { RawFeed } from "@/app/matches/parseBingosyncData";
 import { Card, Stack } from "@mantine/core";
 import ChatInput from "./ChatInput";
-import { useLayoutEffect, useRef } from "react";
+import { CSSProperties, useLayoutEffect, useRef } from "react";
 import FeedEntry from "./FeedEntry";
 import { RoomBackend } from "@/app/roomApi";
 
 type Props = {
   rawFeed: RawFeed;
-  height?: string;
   roomBackend: RoomBackend;
+  style?: CSSProperties,
 };
 
-export default function Feed({ rawFeed, height = "475px", roomBackend }: Props) {
+export default function Feed({ rawFeed, style = {}, roomBackend }: Props) {
   const feedRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     if (feedRef.current != null) {
@@ -24,7 +24,7 @@ export default function Feed({ rawFeed, height = "475px", roomBackend }: Props) 
       padding="sm"
       radius="md"
       withBorder={true}
-      style={{ width: "356px", height, resize: "both" }}
+      style={{ width: "356px", resize: "both", ...style }}
     >
       <Card.Section
         ref={feedRef}

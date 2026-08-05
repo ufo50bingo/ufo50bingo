@@ -110,16 +110,13 @@ function structureCounts(
 ): GeneralCounts {
   const generals: GeneralCounts = {};
   rawCounts.forEach((rawCount) => {
-    const goalState: CountState = generals[rawCount.goal] ?? {
-      leftCounts: {},
-      rightCounts: {},
-    };
-    const toUpdate = rawCount.is_left
-      ? goalState.leftCounts
-      : goalState.rightCounts;
+    const goalState: CountState = generals[rawCount.goal] ?? [];
+    const toUpdate = goalState[rawCount.player_num] ?? {};
     toUpdate[rawCount.game] = rawCount.count;
-    goalState[rawCount.is_left ? "leftCounts" : "rightCounts"] = toUpdate;
-    generals[rawCount.goal] = goalState;
+
+    const newGoalState = [...goalState];
+    newGoalState[rawCount.player_num] = toUpdate;
+    generals[rawCount.goal] = newGoalState;
   });
   return generals;
 }

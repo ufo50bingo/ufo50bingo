@@ -283,8 +283,7 @@ export default function Cast({
       showAll={showAll.includes(g.foundGoal.resolvedGoal)}
       setGeneralGameCount={setGeneralGameCount}
       addShowAll={addShowAll}
-      leftColor={leftColor}
-      rightColor={rightColor}
+      playerColors={[leftColor, rightColor]}
       height={h}
       sortType={sortType}
       pasta={g.pasta}
@@ -374,7 +373,7 @@ export default function Cast({
               />
             </SideCell>
             <GeneralIcons
-              isLeft={true}
+              playerNum={0}
               color={leftColor}
               generalGoals={
                 generalOrder === "reading" ? generalGoals : sortedGenerals
@@ -421,7 +420,7 @@ export default function Cast({
               />
             </SideCell>
             <GeneralIcons
-              isLeft={false}
+              playerNum={1}
               color={rightColor}
               generalGoals={
                 generalOrder === "reading" ? generalGoals : sortedGenerals

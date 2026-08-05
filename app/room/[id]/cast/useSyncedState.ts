@@ -5,10 +5,8 @@ import { GeneralCounts } from "./CastPage";
 import getGamesForPlayer from "./getGamesForPlayer";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 
-export interface CountState {
-  leftCounts: { [game: string]: number };
-  rightCounts: { [game: string]: number };
-}
+
+export type CountState = ReadonlyArray<{ [game: string]: number }>;
 
 type Props = {
   id: string;
@@ -30,7 +28,7 @@ interface ColorChangeRow extends ColorChangeSync {
 
 export interface CountChange {
   goal: string;
-  is_left: boolean;
+  player_num: number;
   game: string;
   count: number;
 }
@@ -210,19 +208,12 @@ export default function useSyncedState({
       change: CountChange,
       shouldBroadcast: boolean = true,
     ) => {
-      const leftCounts = generals[change.goal]?.leftCounts ?? {};
-      const rightCounts = generals[change.goal]?.rightCounts ?? {};
-      const newCounts = change.is_left ? { ...leftCounts } : { ...rightCounts };
+      const oldGeneralState: CountState = generals[change.goal] ?? [];
+      const oldCounts = oldGeneralState?.[change.player_num] ?? {};
+      const newCounts = { ...oldCounts };
       newCounts[change.game] = change.count;
-      const newGeneralState = change.is_left
-        ? {
-            leftCounts: newCounts,
-            rightCounts,
-          }
-        : {
-            leftCounts,
-            rightCounts: newCounts,
-          };
+      const newGeneralState = [...oldGeneralState];
+      newGeneralState[change.player_num] = newCounts;
       const newGenerals = {
         ...generals,
         [change.goal]: newGeneralState,

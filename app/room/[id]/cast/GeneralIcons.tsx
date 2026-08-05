@@ -11,7 +11,7 @@ import { Font } from "@/app/font/useFont";
 import getFontClassname from "@/app/font/getFontClassname";
 
 type IconProps = {
-  isLeft: boolean;
+  playerNum: number;
   goal: string;
   color: BingosyncColor;
   squareColor: BingosyncColor;
@@ -29,7 +29,7 @@ function Icon({
   color,
   squareColor,
   countPosition,
-  isLeft,
+  playerNum,
   font,
   isPixel,
 }: IconProps) {
@@ -93,7 +93,7 @@ function Icon({
     return (
       <SideCell>
         <Group gap={8}>
-          {isLeft ? (
+          {playerNum === 0 ? (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img className={imgClass} src={src} alt={goal} />
@@ -115,7 +115,7 @@ type Props = {
   color: BingosyncColor;
   generalGoals: ReadonlyArray<GeneralItem>;
   generalState: GeneralCounts;
-  isLeft: boolean;
+  playerNum: number;
   iconType: IconType;
   isHidden: boolean;
   countPosition: TCountPosition;
@@ -126,7 +126,7 @@ export default function GeneralIcons({
   color,
   generalGoals,
   generalState,
-  isLeft,
+  playerNum,
   iconType,
   isHidden,
   countPosition,
@@ -134,9 +134,7 @@ export default function GeneralIcons({
 }: Props) {
   return generalGoals.map((item) => {
     const { goal, resolvedGoal } = item.foundGoal;
-    const countState = isLeft
-      ? generalState[resolvedGoal]?.leftCounts
-      : generalState[resolvedGoal]?.rightCounts;
+    const countState = generalState[resolvedGoal]?.[playerNum];
     const explicitImg = item.foundGoal.cast?.image;
     return (
       <Icon
@@ -148,9 +146,9 @@ export default function GeneralIcons({
           countState == null
             ? 0
             : Object.keys(countState).reduce(
-                (acc, game) => acc + countState[game],
-                0,
-              )
+              (acc, game) => acc + countState[game],
+              0,
+            )
         }
         isPixel={
           explicitImg != null
@@ -166,7 +164,7 @@ export default function GeneralIcons({
               : getClassicSrc(goal as StandardGeneral, isHidden))
         }
         countPosition={countPosition}
-        isLeft={isLeft}
+        playerNum={playerNum}
         font={font}
       />
     );

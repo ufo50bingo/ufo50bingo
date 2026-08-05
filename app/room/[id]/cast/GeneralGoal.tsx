@@ -14,7 +14,7 @@ import {
   OptionListEntry,
   UFOPasta,
 } from "@/app/generator/ufoGenerator";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { FoundStandardGeneral } from "./Cast";
 import {
   CHERRIES,
@@ -37,8 +37,7 @@ type Props = {
   countState: null | undefined | CountState;
   setGeneralGameCount: (change: CountChange) => unknown;
   addShowAll: (goal: string) => unknown;
-  leftColor: BingosyncColor;
-  rightColor: BingosyncColor;
+  playerColors: ReadonlyArray<BingosyncColor>;
   height: null | undefined | number;
   sortType: SortType;
   pasta: UFOPasta;
@@ -67,14 +66,11 @@ export default function GeneralGoal({
   countState,
   setGeneralGameCount,
   addShowAll,
-  leftColor,
-  rightColor,
+  playerColors,
   height,
   sortType,
   pasta: _pasta,
 }: Props) {
-  const leftCounts = countState?.leftCounts ?? {};
-  const rightCounts = countState?.rightCounts ?? {};
   const cast = foundGoal.cast;
 
   const descriptions: null | Descriptions = useMemo(() => {
@@ -128,18 +124,20 @@ export default function GeneralGoal({
   const titleEl = (
     <>
       {foundGoal.resolvedGoal} (
-      <BingosyncColored color={leftColor}>
-        {Object.keys(leftCounts).reduce(
-          (acc, game) => acc + leftCounts[game],
-          0,
-        )}
-      </BingosyncColored>{" "}
-      <BingosyncColored color={rightColor}>
-        {Object.keys(rightCounts).reduce(
-          (acc, game) => acc + rightCounts[game],
-          0,
-        )}
-      </BingosyncColored>
+      {playerColors.map((color, playerNum) => {
+        const counts = countState?.[playerNum] ?? {};
+        return (
+          <React.Fragment key={playerNum}>
+            {playerNum > 0 ? " " : ""}
+            <BingosyncColored color={color}>
+              {Object.keys(counts).reduce(
+                (acc, game) => acc + counts[game],
+                0,
+              )}
+            </BingosyncColored>
+          </React.Fragment>
+        );
+      })}
       )
     </>
   );
@@ -226,90 +224,56 @@ export default function GeneralGoal({
           const description = descriptions != null ? descriptions[game] : null;
           return (
             <Group key={game} gap={6}>
-              {cast.type === "check" ? (
-                <>
-                  <Checkbox
-                    color={getColorHex(leftColor)}
-                    checked={(leftCounts[game] ?? 0) > 0}
-                    onChange={(event) =>
-                      setGeneralGameCount({
-                        goal: foundGoal.resolvedGoal,
-                        is_left: true,
-                        game,
-                        count: event.currentTarget.checked ? 1 : 0,
-                      })
-                    }
-                  />
-                  <Checkbox
-                    color={getColorHex(rightColor)}
-                    checked={(rightCounts[game] ?? 0) > 0}
-                    onChange={(event) =>
-                      setGeneralGameCount({
-                        goal: foundGoal.resolvedGoal,
-                        is_left: false,
-                        game,
-                        count: event.currentTarget.checked ? 1 : 0,
-                      })
-                    }
-                  />
-                </>
-              ) : (
-                <>
-                  <Button
-                    color={getColorHex(leftColor)}
-                    h={18}
-                    w={18}
-                    p={0}
-                    size="compact-xs"
-                    onClick={() => {
-                      setGeneralGameCount({
-                        goal: foundGoal.resolvedGoal,
-                        is_left: true,
-                        game,
-                        count: (leftCounts[game] ?? 0) + 1,
-                      });
-                    }}
-                    onContextMenu={(e) => {
-                      e.preventDefault();
-                      setGeneralGameCount({
-                        goal: foundGoal.resolvedGoal,
-                        is_left: true,
-                        game,
-                        count: Math.max(0, (leftCounts[game] ?? 0) - 1),
-                      });
-                    }}
-                  >
-                    {leftCounts[game] ?? 0}
-                  </Button>
-                  <Button
-                    color={getColorHex(rightColor)}
-                    h={18}
-                    w={18}
-                    p={0}
-                    size="compact-xs"
-                    onClick={() => {
-                      setGeneralGameCount({
-                        goal: foundGoal.resolvedGoal,
-                        is_left: false,
-                        game,
-                        count: (rightCounts[game] ?? 0) + 1,
-                      });
-                    }}
-                    onContextMenu={(e) => {
-                      e.preventDefault();
-                      setGeneralGameCount({
-                        goal: foundGoal.resolvedGoal,
-                        is_left: false,
-                        game,
-                        count: Math.max(0, (rightCounts[game] ?? 0) - 1),
-                      });
-                    }}
-                  >
-                    {rightCounts[game] ?? 0}
-                  </Button>
-                </>
-              )}
-
+              {playerColors.map((color, playerNum) => {
+                const counts = countState?.[playerNum] ?? {};
+                return (
+                  cast.type === "check"
+                    ? (
+                      <Checkbox
+                        key={playerNum}
+                        color={getColorHex(color)}
+                        checked={(counts[game] ?? 0) > 0}
+                        onChange={(event) =>
+                          setGeneralGameCount({
+                            goal: foundGoal.resolvedGoal,
+                            player_num: playerNum,
+                            game,
+                            count: event.currentTarget.checked ? 1 : 0,
+                          })
+                        }
+                      />
+                    )
+                    : (
+                      <Button
+                        key={playerNum}
+                        color={getColorHex(color)}
+                        h={18}
+                        w={18}
+                        p={0}
+                        size="compact-xs"
+                        onClick={() => {
+                          setGeneralGameCount({
+                            goal: foundGoal.resolvedGoal,
+                            player_num: playerNum,
+                            game,
+                            count: (counts[game] ?? 0) + 1,
+                          });
+                        }}
+                        onContextMenu={(e) => {
+                          e.preventDefault();
+                          setGeneralGameCount({
+                            goal: foundGoal.resolvedGoal,
+                            player_num: playerNum,
+                            game,
+                            count: Math.max(0, (counts[game] ?? 0) - 1),
+                          });
+                        }}
+                      >
+                        {counts[game] ?? 0}
+                      </Button>
+                    )
+                );
+              })}
               <GameInfo
                 game={game}
                 goals={otherGoals}

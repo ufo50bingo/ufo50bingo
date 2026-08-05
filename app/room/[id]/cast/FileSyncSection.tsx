@@ -26,7 +26,7 @@ export default function FileSyncSection({
         if (dirs.length > 0) {
           setDirHandle(dirs[0].handle);
         }
-      } catch {}
+      } catch { }
     };
     fetchHandle();
   }, []);
@@ -70,7 +70,7 @@ export default function FileSyncSection({
                     generalGoals
                   );
                   await db.directory.add({ handle: dirHandle });
-                } catch {}
+                } catch { }
               }}
             >
               Select sync folder
@@ -86,7 +86,7 @@ export default function FileSyncSection({
                   try {
                     setDirHandle(null);
                     await db.directory.clear();
-                  } catch {}
+                  } catch { }
                 }}
               >
                 Stop syncing
@@ -115,12 +115,12 @@ async function writeScore(
 
 async function writeGeneral(
   dirHandle: FileSystemDirectoryHandle,
-  isLeft: boolean,
+  playerNum: number,
   index: number,
   count: number
 ): Promise<void> {
   const handle = await dirHandle.getFileHandle(
-    `${isLeft ? "left" : "right"}_general_${index + 1}.txt`,
+    `player${playerNum}_general_${index + 1}.txt`,
     { create: true }
   );
   const writable = await handle.createWritable();
@@ -130,23 +130,21 @@ async function writeGeneral(
 
 async function writeAllGenerals(
   dirHandle: FileSystemDirectoryHandle,
-  isLeft: boolean,
+  playerNum: number,
   generalCounts: GeneralCounts,
   generalGoals: ReadonlyArray<GeneralItem>
 ): Promise<void> {
   await Promise.all(
     generalGoals.map(async (item, index) => {
-      const countState = isLeft
-        ? generalCounts[item.foundGoal.resolvedGoal]?.leftCounts
-        : generalCounts[item.foundGoal.resolvedGoal]?.rightCounts;
+      const countState = generalCounts[item.foundGoal.resolvedGoal]?.[playerNum];
       const count =
         countState == null
           ? 0
           : Object.keys(countState).reduce(
-              (acc, game) => acc + countState[game],
-              0
-            );
-      return await writeGeneral(dirHandle, isLeft, index, count);
+            (acc, game) => acc + countState[game],
+            0
+          );
+      return await writeGeneral(dirHandle, playerNum, index, count);
     })
   );
 }
@@ -161,7 +159,7 @@ async function writeToFile(
   await Promise.all([
     writeScore(dirHandle, true, leftScore),
     writeScore(dirHandle, false, rightScore),
-    writeAllGenerals(dirHandle, true, generalCounts, generalGoals),
-    writeAllGenerals(dirHandle, false, generalCounts, generalGoals),
+    writeAllGenerals(dirHandle, 0, generalCounts, generalGoals),
+    writeAllGenerals(dirHandle, 1, generalCounts, generalGoals),
   ]);
 }

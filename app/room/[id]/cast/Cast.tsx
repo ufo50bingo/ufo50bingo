@@ -45,13 +45,12 @@ import SyncedTimerBoardCover from "../common/SyncedTimerBoardCover";
 import SyncedTimer from "../common/SyncedTimer";
 import StartPauseButton from "../common/StartPauseButton";
 import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
-import getNonGeneralCategories from "@/app/createboard/getNonGeneralCategories";
-import getAllSubcategories from "@/app/createboard/getAllSubcategories";
 import { UFOPasta } from "@/app/generator/ufoGenerator";
 import { RoomBackend } from "@/app/roomApi";
 import getGameList from "../common/getGameList";
 import getIsNes50 from "../common/getIsNes50";
 import { GeneralRestrictions, GeneralSettings } from "../play/GeneralSection";
+import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
 
 const GENERAL_RESTRICTIONS: GeneralRestrictions = {
   canUseFull: true,
@@ -101,6 +100,7 @@ export default function Cast({
   playerName,
   roomBackend,
 }: CastProps) {
+  // TODO: Update getGameList to handle other pastas as well
   const [gameToGoals, setGameToGoals] = useState(() =>
     getGameToGoals(initialBoard, getGameList(getIsNes50(initialBoard))),
   );
@@ -238,6 +238,10 @@ export default function Cast({
         if (foundGoal == null) {
           foundGoal = findGoal(square.name, NES_50_UFO);
           pasta = NES_50_UFO;
+        }
+        if (foundGoal == null) {
+          foundGoal = findGoal(square.name, EVERY_GAME_UFO);
+          pasta = EVERY_GAME_UFO;
         }
         if (foundGoal == null || foundGoal.cast == null) {
           return null;

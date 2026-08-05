@@ -11,6 +11,7 @@ import { useRightClickBehaviorContext } from "./settings/RightClickBehaviorConte
 import { COLORS } from "./room/[id]/common/ColorSelector";
 import { useShouldShortenContext } from "./settings/ShouldShortenContext";
 import { NES_50_UFO } from "./pastas/nes50Ufo";
+import { EVERY_GAME_UFO } from "./pastas/everyGameUfo";
 
 type Props = {
   board: TBoard;
@@ -159,7 +160,7 @@ export default function Board({
       }
       const behavior =
         rightClickBehavior[
-          Math.min(rightClickBehavior.length - 1, behaviorIndex)
+        Math.min(rightClickBehavior.length - 1, behaviorIndex)
         ];
       if (behavior.type === "custom_color") {
         newHighlights[squareIndex] = [behavior.color];
@@ -176,7 +177,8 @@ export default function Board({
         const foundGoal =
           findGoal(square.name, STANDARD_UFO) ??
           findGoal(square.name, SPICY_UFO) ??
-          findGoal(square.name, NES_50_UFO);
+          findGoal(square.name, NES_50_UFO) ??
+          findGoal(square.name, EVERY_GAME_UFO);
         const displayGoal = shouldShorten
           ? (foundGoal?.short?.resolved ?? square.name)
           : square.name;
@@ -187,8 +189,8 @@ export default function Board({
             : viewerColor == null
               ? true
               : rightClickBehavior[
-                  Math.min(rightClickBehavior.length - 1, rightClickCount)
-                ].type === "star";
+                Math.min(rightClickBehavior.length - 1, rightClickCount)
+              ].type === "star";
         return (
           <div
             key={squareIndex}

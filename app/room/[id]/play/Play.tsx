@@ -44,6 +44,7 @@ import getIsNes50 from "../common/getIsNes50";
 import { Game, ORDERED_GAMES } from "@/app/goals";
 import GameInfo from "../cast/GameInfo";
 import InfoCard from "../cast/InfoCard";
+import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
 
 export type Props = {
   id: string;
@@ -125,6 +126,10 @@ export default function Play({
           if (foundGoal == null) {
             foundGoal = findGoal(square.name, NES_50_UFO);
             pasta = NES_50_UFO;
+          }
+          if (foundGoal == null) {
+            foundGoal = findGoal(square.name, EVERY_GAME_UFO);
+            pasta = EVERY_GAME_UFO;
           }
           if (foundGoal == null || foundGoal.cast == null) {
             return null;

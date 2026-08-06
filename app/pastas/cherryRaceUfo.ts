@@ -25,6 +25,7 @@ export const CHERRY_RACE_UFO = {
       "(B) Fist Hell": ["(B) Fist Hell"],
       "(B) Camouflage": ["(B) Camouflage"],
       "(B) Caramel Caramel": ["(B) Caramel Caramel"],
+      "(B) Cyber Owls": ["(B) Cyber Owls"],
     },
     C: {
       "(C) Bug Hunter": ["(C) Bug Hunter"],
@@ -41,7 +42,6 @@ export const CHERRY_RACE_UFO = {
       "(C) Party House": ["(C) Party House"],
       "(C) Rail Heist": ["(C) Rail Heist"],
       "(C) Mini & Max": ["(C) Mini & Max"],
-      "(C) Cyber Owls": ["(C) Cyber Owls"],
     },
   },
   tokens: {},

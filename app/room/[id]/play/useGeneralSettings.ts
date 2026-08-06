@@ -10,7 +10,7 @@ export default function useGeneralSettings(restrictions: GeneralRestrictions): [
   });
   const [rawSort, setSort] = useLocalEnum({
     key: "player_general_sort",
-    defaultValue: "chronological",
+    defaultValue: "fast",
     options: ["fast", "alphabetical", "chronological"],
   });
   const [rawShouldSegment, setShouldSegment] = useLocalBool({

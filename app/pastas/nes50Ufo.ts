@@ -713,7 +713,7 @@ export const NES_50_UFO = {
       ],
       "Smash TV": [
         {
-          "name": "SMASH TV: 💾 2; Defeat the Cobra Boss"
+          "name": "SMASH TV: 💾 1; In circuit 3, have 500,000+ points"
         }
       ],
       "Snake Rattle 'n Roll": [
@@ -972,7 +972,7 @@ export const NES_50_UFO = {
       ],
       "Smash TV": [
         {
-          "name": "SMASH TV: 💾 1; In circuit 3, clear 3 rooms without ever going below 4 extra lives"
+          "name": "SMASH TV: 💾 2; Defeat the Cobra Boss"
         }
       ],
       "Snake Rattle 'n Roll": [

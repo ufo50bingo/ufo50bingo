@@ -113,8 +113,8 @@ export const STANDARD_UFO = {
       ],
       avianos: [
         {
-          name: "AVIANOS: Control 15+ tiles at once",
-          short: "AVIANOS: 15+ tiles",
+          name: "AVIANOS: Control 4 flags at once",
+          short: "AVIANOS: 4 flags",
         },
         {
           name: "AVIANOS: Capture 3 enemy tiles in one campaign war",
@@ -312,15 +312,11 @@ export const STANDARD_UFO = {
           name: "PINGOLF: Destroy 10 orange obstacles",
           short: "PINGOLF: 10 orange obstacles",
         },
-        {
-          name: "PINGOLF: Under par on 5 courses",
-          short: "PINGOLF: Under par on 5 courses",
-        },
       ],
       mortolii: [
         {
-          name: "MORTOL II: Activate all 3 switches",
-          short: "MORTOL II: All 3 switches",
+          name: "MORTOL II: Activate 2 switches",
+          short: "MORTOL II: 2 switches",
         },
         {
           name: "MORTOL II: In one run, kill 6 chickens without damaging them as Bomber",
@@ -363,8 +359,8 @@ export const STANDARD_UFO = {
           short: "HYPER CONTENDER: PAST-RULE; Draft Mode 2x",
         },
         {
-          name: "HYPER CONTENDER: Win 4 fights in one run (default ring settings)",
-          short: "HYPER CONTENDER: 4 fights in one run (default rings)",
+          name: "HYPER CONTENDER: Win 3 fights in one run (default ring settings)",
+          short: "HYPER CONTENDER: 3 fights (default rings)",
         },
       ],
       valbrace: [
@@ -389,8 +385,8 @@ export const STANDARD_UFO = {
       ],
       starwaspir: [
         {
-          name: "STAR WASPIR: Score 20,000+ points using the {{waspir_ship}} ship",
-          short: "STAR WASPIR: 20,000+ points using {{waspir_ship}}",
+          name: "STAR WASPIR: Reach a 10x multiplier with two different ships",
+          short: "STAR WASPIR: 10x with 2 ships",
         },
         {
           name: "STAR WASPIR: Beat Wave 1 without defeating either boss enemy",
@@ -399,8 +395,8 @@ export const STANDARD_UFO = {
       ],
       grimstone: [
         {
-          name: "GRIMSTONE: Defeat 15 enemies",
-          short: "GRIMSTONE: 15 enemies",
+          name: "GRIMSTONE: Defeat 12 enemies",
+          short: "GRIMSTONE: 12 enemies",
         },
         {
           name: "GRIMSTONE: Get Rufus to level 2 and feed him a Dog Treat",
@@ -473,9 +469,9 @@ export const STANDARD_UFO = {
           short: "QUIBBLE RACE: Bet against your sponsored Quibble and win",
         },
         {
-          name: "QUIBBLE RACE: Have your sponsored Quibble win the race, while boosting a different one",
+          name: "QUIBBLE RACE: Have $3,000+",
           short:
-            "QUIBBLE RACE: Your sponsored Quibble wins w/ different one boosted",
+            "QUIBBLE RACE: $3,000+",
         },
       ],
       seasidedrive: [
@@ -543,8 +539,8 @@ export const STANDARD_UFO = {
           short: "PAINT CHASE: 5 courses no enemies remaining",
         },
         {
-          name: "PAINT CHASE: Beat 6 courses",
-          short: "PAINT CHASE: 6 courses",
+          name: "PAINT CHASE: EVEN-COAT allowed; Pass courses 10-15",
+          short: "PAINT CHASE: EVEN-COAT; Courses 10-15",
         },
       ],
       magicgarden: [
@@ -623,8 +619,8 @@ export const STANDARD_UFO = {
           short: "AVIANOS: Fledgling w/ 0 mountains (P2 first, others default)",
         },
         {
-          name: "AVIANOS: BLUE-BEAK allowed; Win the campaign Fledgling game. You must always select {{ancestor}} when available",
-          short: "AVIANOS: BLUE-BEAK; Fledgling & always pick {{ancestor}}",
+          name: "AVIANOS: Win a game with 3+ blessings from {{ancestor}}",
+          short: "AVIANOS: Win w/ 3+ blessings from {{ancestor}}",
         },
       ],
       mooncat: [
@@ -765,9 +761,9 @@ export const STANDARD_UFO = {
           short: "HOT FOOT: 2 games w/o jumping as {{hf_char}} & {{hf_char}}",
         },
         {
-          name: "HOT FOOT: Win 3 games in a tournament without jump specials, using {{hf_char}} & {{hf_char}}",
+          name: "HOT FOOT: Beat round 4",
           short:
-            "HOT FOOT: 3 games w/o jump specials as {{hf_char}} & {{hf_char}}",
+            "HOT FOOT: Beat round 4",
         },
       ],
       divers: [
@@ -812,10 +808,6 @@ export const STANDARD_UFO = {
         },
       ],
       pingolf: [
-        {
-          name: "PINGOLF: Finish hole 9 in first place",
-          short: "PINGOLF: Finish hole 9 in first",
-        },
         {
           name: "PINGOLF: Par or better on 6 courses without dunking",
           short: "PINGOLF: 6 courses par or better, no dunking",
@@ -1122,8 +1114,8 @@ export const STANDARD_UFO = {
       ],
       avianos: [
         {
-          name: "AVIANOS: BLUE-BEAK allowed; Win the Adult campaign game with a Blessing from each Ancestor",
-          short: "AVIANOS: BLUE-BEAK; Adult w/ each Ancestor's Blessing",
+          name: "AVIANOS: BLUE-BEAK allowed; Beat Trial 2",
+          short: "AVIANOS: BLUE-BEAK; Trial 2",
         },
         {
           name: "AVIANOS: BLUE-BEAK allowed; Beat Trial 4",
@@ -1593,8 +1585,8 @@ export const STANDARD_UFO = {
       ],
       avianos: [
         {
-          name: "AVIANOS: Gold disk",
-          short: "AVIANOS: Gold disk",
+          name: "AVIANOS: BLUE-BEAK allowed; Beat Trial 5",
+          short: "AVIANOS: BLUE-BEAK; Trial 5",
         },
       ],
       mooncat: [
@@ -2049,21 +2041,6 @@ export const STANDARD_UFO = {
       ],
       theme: [
         {
-          name: "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3",
-          restriction: {
-            count: 1,
-            options: ["campanella", "campanella2", "campanella3"],
-            fallback:
-              "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3",
-          },
-          short: "CAMPANELLA TRILOGY: 5 worlds across Campanella 1/2/3",
-          cast: {
-            options: "$infer",
-            type: "counter",
-            on_card_only: false,
-          },
-        },
-        {
           name: "SHOOTER: Beat 5 levels across Elfazar's Hat, Seaside Drive, and Caramel Caramel",
           restriction: {
             count: 1,
@@ -2112,14 +2089,14 @@ export const STANDARD_UFO = {
           },
         },
         {
-          name: "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank",
+          name: "PUZZLER: Beat 12 levels across Block Koala, Devilition, and Warptank",
           restriction: {
             count: 1,
             options: ["blockkoala", "devilition", "warptank"],
             fallback:
               "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank",
           },
-          short: "PUZZLER: 15 levels across Block Koala, Devilition, Warptank",
+          short: "PUZZLER: 12 levels across Block Koala, Devilition, Warptank",
           cast: {
             options: "$infer",
             type: "counter",
@@ -2212,7 +2189,7 @@ export const STANDARD_UFO = {
     cherry_count: ["2", "3"],
     gold_count: ["3", "4"],
     bughunterjob: ["7", "8", "9"],
-    ancestor: ["Stegnar", "Brontor", "Trilock", "Quetzal", "Rexadon"],
+    ancestor: ["Stegnar", "Trilock", "Quetzal", "Rexadon"],
     bushido_all: ["Kotaro", "Raizo", "Yamada", "Ayumi", "Tomoe", "Chiyome"],
     bushido_gold: ["Kotaro", "Yamada", "Ayumi", "Tomoe", "Chiyome"],
     bk_easy: ["7", "17", "34", "38", "42", "46", "49"],

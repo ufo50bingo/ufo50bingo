@@ -1365,8 +1365,8 @@ export const STANDARD_UFO = {
       ],
       hypercontender: [
         {
-          name: "HYPER CONTENDER: Gold disk as {{hc_char}} or {{hc_char}}",
-          short: "HYPER CONTENDER: Gold disk as {{hc_char}} or {{hc_char}}",
+          name: "HYPER CONTENDER: Beat round 6 as {{hc_char}} or {{hc_char}}",
+          short: "HYPER CONTENDER: Beat round 6 as {{hc_char}} or {{hc_char}}",
         },
         {
           name: "HYPER CONTENDER: Win 3 fights in one run on Hyper difficulty (default ring settings)",
@@ -2329,8 +2329,6 @@ export const STANDARD_UFO = {
     roi_vh: ["Wasteland", "Jungle Rush", "Terror Overhead", "Crossroads"],
     fh_char: ["Jay", "Victor", "Cat", "Amy"],
     hc_char: [
-      "Elka",
-      "Sephy",
       "Reck",
       "Voltana",
       "Brazz",

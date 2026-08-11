@@ -152,12 +152,12 @@ export default function Play({
     // TODO: Need something when no generals are detected?
     if (isUfo50) {
       return {
-        canUseFull: false,
-        canFilterOnCard: false,
+        canUseFull: true,
+        canFilterOnCard: true,
         canShowOnCardTooltips: false,
         canFastSort: false,
-        canSegment: false,
-        canUseTerminalCodes: false,
+        canSegment: true,
+        canUseTerminalCodes: true,
         canShowMultiGoalGames: false,
       };
     }

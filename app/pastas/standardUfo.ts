@@ -2094,7 +2094,7 @@ export const STANDARD_UFO = {
             count: 1,
             options: ["blockkoala", "devilition", "warptank"],
             fallback:
-              "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank",
+              "PUZZLER: Beat 12 levels across Block Koala, Devilition, and Warptank",
           },
           short: "PUZZLER: 12 levels across Block Koala, Devilition, Warptank",
           cast: {

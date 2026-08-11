@@ -200,11 +200,10 @@ function getWinnerBitSrc(goal: StandardGeneral, isHidden: boolean): string {
     case "Defeat a boss in 6 games":
       return "/general/winnerbit/Icon_Boss.png";
     // THEME
-    case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
     case "SHOOTER: Beat 5 levels across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
     case "DAY JOB: Beat 9 levels across Rail Heist, Onion Delivery, and Bug Hunter":
     case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
-    case "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank":
+    case "PUZZLER: Beat 12 levels across Block Koala, Devilition, and Warptank":
     case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
     case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
@@ -246,15 +245,13 @@ function getClassicSrc(goal: StandardGeneral, isHidden: boolean): string {
     case "Defeat a boss in 6 games":
       return "/general/sprites/IconBoss.png";
     // THEME
-    case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
-      return "/general/sprites/IconCampTrilogy.png";
     case "SHOOTER: Beat 5 levels across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
       return "/general/sprites/IconShooter.png";
     case "DAY JOB: Beat 9 levels across Rail Heist, Onion Delivery, and Bug Hunter":
       return "/general/sprites/IconDayJob.png";
     case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
       return "/general/sprites/IconRacer.png";
-    case "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank":
+    case "PUZZLER: Beat 12 levels across Block Koala, Devilition, and Warptank":
       return "/general/sprites/IconPuzzler.png";
     case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
       return "/general/sprites/IconAmy.png";
@@ -301,15 +298,13 @@ function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
     case "Defeat a boss in 6 games":
       return "/general/matt/BOSS.png";
     // THEME
-    case "CAMPANELLA TRILOGY: Beat 5 total worlds across Campanella 1, 2, and 3":
-      return "/general/matt/CAMPTRILOGY.png";
     case "SHOOTER: Beat 5 levels across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
       return "/general/matt/SHOOTER.png";
     case "DAY JOB: Beat 9 levels across Rail Heist, Onion Delivery, and Bug Hunter":
       return "/general/matt/DAYJOB.png";
     case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
       return "/general/matt/RACER.png";
-    case "PUZZLER: Beat 15 levels across Block Koala, Devilition, and Warptank":
+    case "PUZZLER: Beat 12 levels across Block Koala, Devilition, and Warptank":
       return "/general/matt/PUZZLER.png";
     case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
       return "/general/matt/AMY.png";

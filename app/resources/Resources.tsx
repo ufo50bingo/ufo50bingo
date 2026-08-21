@@ -21,6 +21,14 @@ export default function Resources() {
               href="https://docs.google.com/spreadsheets/d/1ptNQfJw39CCtHBrGldZ8ln0OrTUUSjAw8QVQHQI1LBU/edit?gid=521253915#gid=521253915"
               target="_blank"
             >
+              Bingo League Season 4 (September 7 - November 22, 2026)
+            </a>. Sign up by September 4!
+          </List.Item>
+          <List.Item>
+            <a
+              href="https://docs.google.com/spreadsheets/d/1ptNQfJw39CCtHBrGldZ8ln0OrTUUSjAw8QVQHQI1LBU/edit?gid=521253915#gid=521253915"
+              target="_blank"
+            >
               Bingo League Season 3 (March 2 - May 17, 2026)
             </a>
           </List.Item>

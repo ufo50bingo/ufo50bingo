@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
       {
         source: "/league",
         destination:
-          "https://docs.google.com/spreadsheets/d/1ptNQfJw39CCtHBrGldZ8ln0OrTUUSjAw8QVQHQI1LBU/edit?usp=sharing",
+          "https://docs.google.com/spreadsheets/d/1Vt8MZdfhG30km1kq04wChGYgJHCo3o-tXxkHpBUoZiw/edit",
         permanent: true,
       },
       {

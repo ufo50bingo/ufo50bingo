@@ -22,6 +22,12 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/nesdoc",
+        destination:
+          "https://docs.google.com/document/d/1q3ZqgB6p_EopUyfA2jW-VUIHuFFUKYZBD2QJ5a9Ee4Q/edit",
+        permanent: true,
+      },
+      {
         source: "/signup",
         destination:
           "https://docs.google.com/forms/d/e/1FAIpQLSfXdceuQF1_5mh-mBmwLp6uhk_S0GlMHzjvs0aiP-v3fbumFA/viewform",

@@ -85,6 +85,11 @@ export const EVERY_GAME_UFO = {
           "name": "CAULDRON: Obtain 5 skill points"
         }
       ],
+      "(FTD) CAVE STORY": [
+        {
+          "name": "CAVE STORY: Obtain the Silver Locket"
+        }
+      ],
       "CELESTE": [
         {
           "name": "CELESTE: Collect 5 Berries "
@@ -188,7 +193,12 @@ export const EVERY_GAME_UFO = {
       ],
       "(FTD) EVIL EGG": [
         {
-          "name": "EVIL EGG: Get the Twin Egg"
+          "name": "EVIL EGG: Get x20 Greenoid Multiplier"
+        }
+      ],
+      "FLIP OF LIGHT": [
+        {
+          "name": "FLIP OF LIGHT: Restore the Blue Segment"
         }
       ],
       "FTL": [
@@ -209,6 +219,11 @@ export const EVERY_GAME_UFO = {
       "GRAVITY CIRCUIT": [
         {
           "name": "GRAVITY CIRCUIT: (Speedrun Mode Allowed) Beat Central Station"
+        }
+      ],
+      "(FTP) GUNBALL 2: EMPEROR REVENGE": [
+        {
+          "name": "GUNBALL 2: EMPEROR REVENGE: Buy an Auto Gun"
         }
       ],
       "HADES": [
@@ -258,6 +273,14 @@ export const EVERY_GAME_UFO = {
       "I WANNA BE THE CAT": [
         {
           "name": "I WANNA BE THE CAT: Complete World 1"
+        }
+      ],
+      "(FTD) I WANNA BE THE GUY": [
+        {
+          "name": "I WANNA BE THE GUY: Defeat Mike Tyson"
+        },
+        {
+          "name": "I WANNA BE THE GUY: Reach the Game Over Room"
         }
       ],
       "(FTD) IGTAP": [
@@ -316,6 +339,17 @@ export const EVERY_GAME_UFO = {
           "name": "LETHAL COMPANY: Assurance - Drop a beehive inside the ship"
         }
       ],
+      "LETHAL LEAGUE BLAZE": [
+        {
+          "name": "LETHAL LEAGUE BLAZE: Win a match against a Lvl 4 CPU or more"
+        },
+        {
+          "name": "LETHAL LEAGUE BLAZE: Win a match in Lethal Volley (Lvl 4 CPU)"
+        },
+        {
+          "name": "LETHAL LEAGUE BLAZE: Win a match in Strikers (Lvl 4 CPU)"
+        }
+      ],
       "LINELITH": [
         {
           "name": "LINELITH: Have your entire screen be solved area"
@@ -331,9 +365,19 @@ export const EVERY_GAME_UFO = {
           "name": "LOOP HERO: Create a Mountain Peak"
         }
       ],
+      "MAGICAT": [
+        {
+          "name": "MAGICAT: Clear a level"
+        }
+      ],
       "(FTD) MAHJONG SOUL": [
         {
           "name": "MAHJONG SOUL: Declare Riichi"
+        }
+      ],
+      "MAIDEN & SPELL": [
+        {
+          "name": "MAIDEN & SPELL: Complete Stage 1"
         }
       ],
       "(Retro) MARIO KART 64": [
@@ -526,6 +570,11 @@ export const EVERY_GAME_UFO = {
           "name": "ROGUE LEGACY: Gather 500 coins"
         }
       ],
+      "ROGUE LEGACY 2": [
+        {
+          "name": "ROGUE LEGACY 2: Gather 500 coins"
+        }
+      ],
       "SALAMANDER COUNTY PUBLIC TELEVISION": [
         {
           "name": "SALAMANDER COUNTY PUBLIC TELEVISION: Complete 2 days"
@@ -695,6 +744,11 @@ export const EVERY_GAME_UFO = {
           "name": "THE END IS NIGH: Reach the Arid Flats"
         }
       ],
+      "THE VOID RAINS UPON HER HEART": [
+        {
+          "name": "THE VOID RAINS UPON HER HEART: Defeat Unit Lulu"
+        }
+      ],
       "TITAN SOULS": [
         {
           "name": "TITAN SOULS: Defeat a Boss"
@@ -708,6 +762,9 @@ export const EVERY_GAME_UFO = {
       "UFO 50": [
         {
           "name": "UFO 50: Collect a Gold Disk"
+        },
+        {
+          "name": "UFO 50: Roll a goal of the Easy difficulty on ufo50.bingo, then clear it (no rerolls)"
         }
       ],
       "UFO 50 BINGOMOD": [
@@ -756,6 +813,14 @@ export const EVERY_GAME_UFO = {
           "name": "WHITE KNUCKLE: Complete the Tutorial"
         }
       ],
+      "WILL YOU SNAIL?": [
+        {
+          "name": "WILL YOU SNAIL?: Reach Level 10 in the Frustration room (quit the game)"
+        },
+        {
+          "name": "WILL YOU SNAIL?: Reach Squid's presentation room"
+        }
+      ],
       "YOKU'S ISLAND EXPRESS": [
         {
           "name": "YOKU'S ISLAND EXPRESS: Give a mushroom to an eel"
@@ -764,6 +829,11 @@ export const EVERY_GAME_UFO = {
       "(Retro) YOSHI'S ISLAND": [
         {
           "name": "YOSHI'S ISLAND: Beat 1-1"
+        }
+      ],
+      "(FTD) YOU HAVE 10 SECONDS (2023)": [
+        {
+          "name": "YOU HAVE 10 SECONDS (2023): Beat Area 2"
         }
       ]
     },
@@ -839,6 +909,11 @@ export const EVERY_GAME_UFO = {
       "(FTD) CAULDRON": [
         {
           "name": "CAULDRON: Obtain 300 of 1 resource"
+        }
+      ],
+      "(FTD) CAVE STORY": [
+        {
+          "name": "CAVE STORY: Defeat Balrog"
         }
       ],
       "CELESTE": [
@@ -929,7 +1004,12 @@ export const EVERY_GAME_UFO = {
       ],
       "(FTD) EVIL EGG": [
         {
-          "name": "EVIL EGG: Get x20 Greenoid Multiplier"
+          "name": "EVIL EGG: Get the Twin Egg"
+        }
+      ],
+      "FLIP OF LIGHT": [
+        {
+          "name": "FLIP OF LIGHT: Restore the Green Segment"
         }
       ],
       "FTL": [
@@ -945,6 +1025,11 @@ export const EVERY_GAME_UFO = {
       "GEOMETRY DASH": [
         {
           "name": "GEOMETRY DASH: Collect 5 Coins"
+        }
+      ],
+      "(FTP) GUNBALL 2: EMPEROR REVENGE": [
+        {
+          "name": "GUNBALL 2: EMPEROR REVENGE: Buy a Double Gun"
         }
       ],
       "HE IS COMING": [
@@ -981,6 +1066,11 @@ export const EVERY_GAME_UFO = {
       "I WANNA BE THE CAT": [
         {
           "name": "I WANNA BE THE CAT: Complete World 1 in Impossible difficulty"
+        }
+      ],
+      "(FTD) I WANNA BE THE GUY": [
+        {
+          "name": "I WANNA BE THE GUY: Escape Tetris"
         }
       ],
       "(FTD) IGTAP": [
@@ -1049,9 +1139,19 @@ export const EVERY_GAME_UFO = {
           "name": "LOOP HERO: Summon the Lich"
         }
       ],
+      "MAGICAT": [
+        {
+          "name": "MAGICAT: Collect 7 gems"
+        }
+      ],
       "(FTD) MAHJONG SOUL": [
         {
           "name": "MAHJONG SOUL: Win a hand"
+        }
+      ],
+      "MAIDEN & SPELL": [
+        {
+          "name": "MAIDEN & SPELL: Complete Stage 2"
         }
       ],
       "(Retro) MARIO KART 64": [
@@ -1072,6 +1172,11 @@ export const EVERY_GAME_UFO = {
       "(FTD) MEGA MAN UNLIMITED": [
         {
           "name": "MEGA MAN UNLIMITED: Defeat a Robot Master"
+        }
+      ],
+      "MEWGENICS": [
+        {
+          "name": "MEWGENICS: Finish a level while only killing enemies with a Hunter"
         }
       ],
       "(Retro) MIKE TYSON'S PUNCH-OUT!!": [
@@ -1413,6 +1518,11 @@ export const EVERY_GAME_UFO = {
           "name": "THE END IS NIGH: Collect 30 tumors"
         }
       ],
+      "THE VOID RAINS UPON HER HEART": [
+        {
+          "name": "THE VOID RAINS UPON HER HEART: Defeat a boss by breaking all their parts"
+        }
+      ],
       "TITAN SOULS": [
         {
           "name": "TITAN SOULS: Defeat the Laser Cube while retracting your shot"
@@ -1426,6 +1536,9 @@ export const EVERY_GAME_UFO = {
       "UFO 50": [
         {
           "name": "UFO 50: See the exact number '50' in 10 games "
+        },
+        {
+          "name": "UFO 50: Roll a goal of the Medium difficulty on ufo50.bingo, then clear it (no rerolls)"
         }
       ],
       "UFO 50 BINGOMOD": [
@@ -1474,6 +1587,11 @@ export const EVERY_GAME_UFO = {
           "name": "WHITE KNUCKLE: Reach Pipeworks"
         }
       ],
+      "WILL YOU SNAIL?": [
+        {
+          "name": "WILL YOU SNAIL?: Defeat the first boss in any difficulty"
+        }
+      ],
       "YOKU'S ISLAND EXPRESS": [
         {
           "name": "YOKU'S ISLAND EXPRESS: Open a Scarab"
@@ -1487,6 +1605,11 @@ export const EVERY_GAME_UFO = {
       "(Retro) YOSHI'S ISLAND": [
         {
           "name": "YOSHI'S ISLAND: Beat 1-1 with all red coins and flowers"
+        }
+      ],
+      "(FTD) YOU HAVE 10 SECONDS (2023)": [
+        {
+          "name": "YOU HAVE 10 SECONDS (2023): Beat Area 3"
         }
       ]
     },
@@ -1557,6 +1680,11 @@ export const EVERY_GAME_UFO = {
       "(FTD) CAULDRON": [
         {
           "name": "CAULDRON: have an average of 10 of each resources for the bulletin board"
+        }
+      ],
+      "(FTD) CAVE STORY": [
+        {
+          "name": "CAVE STORY: Reach 13 Max HP"
         }
       ],
       "CELESTE": [
@@ -1639,6 +1767,11 @@ export const EVERY_GAME_UFO = {
           "name": "EVIL EGG: Get 5 Artifacts"
         }
       ],
+      "FLIP OF LIGHT": [
+        {
+          "name": "FLIP OF LIGHT: Restore the Aqua Segment (practice allowed)"
+        }
+      ],
       "FTL": [
         {
           "name": "FTL: Defeat a ship on a beacon with an ASB (Normal/Hard difficulty)"
@@ -1657,6 +1790,11 @@ export const EVERY_GAME_UFO = {
       "GRAVITY CIRCUIT": [
         {
           "name": "GRAVITY CIRCUIT: (Speedrun Mode Allowed) Beat {{circuit_mission}} with all robots saved"
+        }
+      ],
+      "(FTP) GUNBALL 2: EMPEROR REVENGE": [
+        {
+          "name": "GUNBALL 2: EMPEROR REVENGE: Defeat Gunner Joe"
         }
       ],
       "HE IS COMING": [
@@ -1692,6 +1830,11 @@ export const EVERY_GAME_UFO = {
       "I WANNA BE THE CAT": [
         {
           "name": "I WANNA BE THE CAT: Defeat The Cat"
+        }
+      ],
+      "(FTD) I WANNA BE THE GUY": [
+        {
+          "name": "I WANNA BE THE GUY: Defeat Kraidgief"
         }
       ],
       "(FTD) IGTAP": [
@@ -1742,6 +1885,11 @@ export const EVERY_GAME_UFO = {
           "name": "LETHAL COMPANY: Kill an indoor monster with a shovel"
         }
       ],
+      "LETHAL LEAGUE BLAZE": [
+        {
+          "name": "LETHAL LEAGUE BLAZE: Defeat 4 opponents in Arcade Mode"
+        }
+      ],
       "LINELITH": [
         {
           "name": "LINELITH: Solve 100 Puzzles"
@@ -1757,9 +1905,19 @@ export const EVERY_GAME_UFO = {
           "name": "LOOP HERO: Build 3 Camp Structures"
         }
       ],
+      "MAGICAT": [
+        {
+          "name": "MAGICAT: Defeat 3 bosses"
+        }
+      ],
       "(FTD) MAHJONG SOUL": [
         {
           "name": "MAHJONG SOUL: Win a hand worth 7,700+ points"
+        }
+      ],
+      "MAIDEN & SPELL": [
+        {
+          "name": "MAIDEN & SPELL: Complete Stage 3 "
         }
       ],
       "(Retro) MARIO KART 64": [
@@ -1770,6 +1928,11 @@ export const EVERY_GAME_UFO = {
       "MARIO KART WORLD": [
         {
           "name": "MARIO KART WORLD: Complete the first two tracks in a Grand Prix"
+        }
+      ],
+      "MEWGENICS": [
+        {
+          "name": "MEWGENICS: Defeat an Alley miniboss"
         }
       ],
       "(Retro) MIKE TYSON'S PUNCH-OUT!!": [
@@ -1804,7 +1967,7 @@ export const EVERY_GAME_UFO = {
       ],
       "NIDHOGG": [
         {
-          "name": "NIDHOGG: Win 4 campaign matches in a row"
+          "name": "NIDHOGG: Win 4 campaign matches"
         }
       ],
       "NUCLEAR THRONE": [
@@ -1913,6 +2076,14 @@ export const EVERY_GAME_UFO = {
       "ROCKET LEAGUE": [
         {
           "name": "ROCKET LEAGUE: Get 5 Assists"
+        }
+      ],
+      "ROGUE LEGACY 2": [
+        {
+          "name": "ROGUE LEGACY 2: Gather 2 Heirlooms"
+        },
+        {
+          "name": "ROGUE LEGACY 2: Defeat a boss in True Rogue Mode"
         }
       ],
       "SALAMANDER COUNTY PUBLIC TELEVISION": [
@@ -2072,6 +2243,11 @@ export const EVERY_GAME_UFO = {
           "name": "THE END IS NIGH: Complete Morta Man with all rings"
         }
       ],
+      "THE VOID RAINS UPON HER HEART": [
+        {
+          "name": "THE VOID RAINS UPON HER HEART: Finish Chapter 1"
+        }
+      ],
       "TITAN SOULS": [
         {
           "name": "TITAN SOULS: Defeat the Slime only damaging it from retracting your shot"
@@ -2085,6 +2261,9 @@ export const EVERY_GAME_UFO = {
       "UFO 50": [
         {
           "name": "UFO 50: Defeat 7 bosses (terminal codes ok)"
+        },
+        {
+          "name": "UFO 50: Roll a goal of the Hard difficulty on ufo50.bingo, then clear it (no rerolls)"
         }
       ],
       "UFO 50 BINGOMOD": [
@@ -2113,7 +2292,7 @@ export const EVERY_GAME_UFO = {
           "name": "UTOPIA MUST FALL: Get the Cold War Reward"
         },
         {
-          "name": "UTOPIA MUST FALL: Defeat Colossoteuthis"
+          "name": "UTOPIA MUST FALL: Get Either Lock the Gates or Attenborough Reward"
         }
       ],
       "(FTP) VGM-QUIZ.COM": [
@@ -2136,6 +2315,11 @@ export const EVERY_GAME_UFO = {
           "name": "WHITE KNUCKLE: Gold Medal Advanced Course"
         }
       ],
+      "WILL YOU SNAIL?": [
+        {
+          "name": "WILL YOU SNAIL?: Defeat the second boss in any difficulty"
+        }
+      ],
       "YOKU'S ISLAND EXPRESS": [
         {
           "name": "YOKU'S ISLAND EXPRESS: Spend fruit to open 2 launchers"
@@ -2147,6 +2331,11 @@ export const EVERY_GAME_UFO = {
         },
         {
           "name": "YOSHI'S ISLAND: Unlock the door in 1-3"
+        }
+      ],
+      "(FTD) YOU HAVE 10 SECONDS (2023)": [
+        {
+          "name": "YOU HAVE 10 SECONDS (2023): Beat Area 4"
         }
       ]
     },
@@ -2219,6 +2408,11 @@ export const EVERY_GAME_UFO = {
       "(FTD) CAULDRON": [
         {
           "name": "CAULDRON: Clear 15 Darkness"
+        }
+      ],
+      "(FTD) CAVE STORY": [
+        {
+          "name": "CAVE STORY: Defeat Igor"
         }
       ],
       "CELESTE": [
@@ -2317,6 +2511,11 @@ export const EVERY_GAME_UFO = {
           "name": "EVIL EGG: Defeat a boss"
         }
       ],
+      "FLIP OF LIGHT": [
+        {
+          "name": "FLIP OF LIGHT: Restore the Yellow Segment"
+        }
+      ],
       "FTL": [
         {
           "name": "FTL: Reach Sector 8"
@@ -2335,6 +2534,11 @@ export const EVERY_GAME_UFO = {
       "GRAVITY CIRCUIT": [
         {
           "name": "GRAVITY CIRCUIT: (Speedrun Mode Required) Beat two circuit missions on Master Mode"
+        }
+      ],
+      "(FTP) GUNBALL 2: EMPEROR REVENGE": [
+        {
+          "name": "GUNBALL 2: EMPEROR REVENGE: Reach Lvl 7"
         }
       ],
       "HADES": [
@@ -2375,6 +2579,11 @@ export const EVERY_GAME_UFO = {
       "I WANNA BE THE CAT": [
         {
           "name": "I WANNA BE THE CAT: Complete World 3 in Hard difficulty"
+        }
+      ],
+      "(FTD) I WANNA BE THE GUY": [
+        {
+          "name": "I WANNA BE THE GUY: Defeat Mecha Birdo"
         }
       ],
       "(FTD) IGTAP": [
@@ -2432,9 +2641,22 @@ export const EVERY_GAME_UFO = {
           "name": "LOOP HERO: Unlock Rogue"
         }
       ],
+      "MAGICAT": [
+        {
+          "name": "MAGICAT: Defeat the Bee Boss"
+        }
+      ],
       "(FTD) MAHJONG SOUL": [
         {
           "name": "MAHJONG SOUL: Win an East Round (any settings)"
+        }
+      ],
+      "MAIDEN & SPELL": [
+        {
+          "name": "MAIDEN & SPELL: Complete Stage 4 in Hard mode "
+        },
+        {
+          "name": "MAIDEN & SPELL: Complete Stage 3 in Very Hard mode"
         }
       ],
       "(Retro) MARIO KART 64": [
@@ -2453,6 +2675,11 @@ export const EVERY_GAME_UFO = {
       "(Retro) MARIO KART: DOUBLE DASH": [
         {
           "name": "MARIO KART: DOUBLE DASH: Win three races"
+        }
+      ],
+      "MEWGENICS": [
+        {
+          "name": "MEWGENICS: Defeat Radical Rat"
         }
       ],
       "(Retro) MIKE TYSON'S PUNCH-OUT!!": [
@@ -2527,7 +2754,7 @@ export const EVERY_GAME_UFO = {
       ],
       "PEAK": [
         {
-          "name": "PEAK: Eat a marshmallow or hotdog"
+          "name": "PEAK: Light a campfire"
         }
       ],
       "PETAL CRASH": [
@@ -2603,6 +2830,11 @@ export const EVERY_GAME_UFO = {
       "ROGUE LEGACY": [
         {
           "name": "ROGUE LEGACY: Defeat Khidr"
+        }
+      ],
+      "ROGUE LEGACY 2": [
+        {
+          "name": "ROGUE LEGACY 2: Defeat Estuary Lamech"
         }
       ],
       "SALAMANDER COUNTY PUBLIC TELEVISION": [
@@ -2768,6 +3000,11 @@ export const EVERY_GAME_UFO = {
           "name": "THE BINDING OF ISAAC: REBIRTH: Defeat Mom"
         }
       ],
+      "THE VOID RAINS UPON HER HEART": [
+        {
+          "name": "THE VOID RAINS UPON HER HEART: Finish Chapter 2 with at least a Lv 6 Encounter"
+        }
+      ],
       "TITAN SOULS": [
         {
           "name": "TITAN SOULS: Defeat 4 bosses"
@@ -2781,6 +3018,9 @@ export const EVERY_GAME_UFO = {
       "UFO 50": [
         {
           "name": "UFO 50: Show 10 Gifts"
+        },
+        {
+          "name": "UFO 50: Roll a goal of the Very Hard difficulty on ufo50.bingo, then clear it (no rerolls)"
         }
       ],
       "UFO 50 BINGOMOD": [
@@ -2826,6 +3066,11 @@ export const EVERY_GAME_UFO = {
           "name": "WHITE KNUCKLE: Reach Habitation"
         }
       ],
+      "WILL YOU SNAIL?": [
+        {
+          "name": "WILL YOU SNAIL?: Defeat the first boss in constant Easy difficulty"
+        }
+      ],
       "YOKU'S ISLAND EXPRESS": [
         {
           "name": "YOKU'S ISLAND EXPRESS: Acquire the Slug Vaccum"
@@ -2839,6 +3084,11 @@ export const EVERY_GAME_UFO = {
       "(Retro) YOSHI'S ISLAND": [
         {
           "name": "YOSHI'S ISLAND: Defeat Burt the Bashful"
+        }
+      ],
+      "(FTD) YOU HAVE 10 SECONDS (2023)": [
+        {
+          "name": "YOU HAVE 10 SECONDS (2023): Beat Area 7"
         }
       ]
     },
@@ -2855,6 +3105,7 @@ export const EVERY_GAME_UFO = {
               "BALATRO",
               "BROOMSWEEPER",
               "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT",
+              "(FTD) CAVE STORY",
               "CORGISPACE",
               "CRYPT OF THE NECRODANCER",
               "CUPHEAD",
@@ -2863,14 +3114,19 @@ export const EVERY_GAME_UFO = {
               "DISC ROOM",
               "ENTER THE GUNGEON",
               "ENVIRONMENTAL STATION ALPHA",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE",
               "HE IS COMING",
               "HOLLOW KNIGHT",
               "HOLLOW KNIGHT SILKSONG",
               "I WANNA BE THE CAT",
+              "(FTD) I WANNA BE THE GUY",
               "KERO BLASTER",
               "KING OF THE BRIDGE",
               "(Retro) KIRBY 64: THE CRYSTAL SHARDS",
               "(Retro) KIRBY SUPER STAR",
+              "MAGICAT",
+              "MAIDEN & SPELL",
+              "MEWGENICS",
               "(Retro) MIKE TYSON'S PUNCH-OUT!!",
               "MINA THE HOLLOWER",
               "(FTD) MINESWEEPER PLUS",
@@ -2900,9 +3156,11 @@ export const EVERY_GAME_UFO = {
               "(Retro) SUPER SMASH BROS. BRAWL",
               "(Retro) SUPER SMASH BROS. MELEE",
               "THE BINDING OF ISAAC: REBIRTH",
+              "THE VOID RAINS UPON HER HEART",
               "UFO 50",
               "UFO 50 BINGOMOD",
               "ULTRAKILL",
+              "WILL YOU SNAIL?",
               "(Retro) YOSHI'S ISLAND"
             ],
             "fallback": "Defeat a boss in [6] games(ANY games) [Fallback]"
@@ -2924,8 +3182,11 @@ export const EVERY_GAME_UFO = {
                 "HE IS COMING",
                 "HOLLOW KNIGHT SILKSONG",
                 "I WANNA BE THE CAT",
+                "(FTD) I WANNA BE THE GUY",
                 "(Retro) KIRBY 64: THE CRYSTAL SHARDS",
                 "(Retro) KIRBY SUPER STAR",
+                "MAGICAT",
+                "MAIDEN & SPELL",
                 "(Retro) MIKE TYSON'S PUNCH-OUT!!",
                 "NUCLEAR THRONE",
                 "RISK OF RAIN 2",
@@ -2934,11 +3195,13 @@ export const EVERY_GAME_UFO = {
                 "SUPER MARIO MAKER 2",
                 "(Retro) SUPER MARIO SUNSHINE",
                 "THE BINDING OF ISAAC: REBIRTH",
+                "THE VOID RAINS UPON HER HEART",
                 "UFO 50",
                 "UFO 50 BINGOMOD",
                 "ULTRAKILL",
                 "(Retro) ACTRAISER",
                 "BACKPACK HERO",
+                "(FTD) CAVE STORY",
                 "CRYPT OF THE NECRODANCER",
                 "HOLLOW KNIGHT",
                 "KERO BLASTER",
@@ -2952,9 +3215,12 @@ export const EVERY_GAME_UFO = {
                 "(Retro) SUPER MARIO SUNBURN",
                 "(Retro) SUPER MARIO WORLD",
                 "(Retro) SUPER SMASH BROS. BRAWL",
+                "WILL YOU SNAIL?",
                 "CORGISPACE",
                 "ENTER THE GUNGEON",
+                "(FTP) GUNBALL 2: EMPEROR REVENGE",
                 "KING OF THE BRIDGE",
+                "MEWGENICS",
                 "(Retro) MONSTER HUNTER TRI (WII)",
                 "PIZZA TOWER",
                 "SLAY THE SPIRE",
@@ -2982,13 +3248,14 @@ export const EVERY_GAME_UFO = {
                 "PETAL CRASH",
                 "POMPOM",
                 "ROGUE LEGACY",
+                "ROGUE LEGACY 2",
                 "(FTD) SKORPULAC",
                 "SOL CESTO",
                 "(Retro) SUPER METROID",
-                "UTOPIA MUST FALL",
                 "CELESTE",
                 "(FTP) DUCK LIFE",
                 "FTL",
+                "LETHAL LEAGUE BLAZE",
                 "MINECRAFT",
                 "(FTP) NETHACK",
                 "PLANTS VS ZOMBIES",
@@ -2996,7 +3263,9 @@ export const EVERY_GAME_UFO = {
                 "SALAMANDER COUNTY PUBLIC TELEVISION",
                 "STAR OF PROVIDENCE",
                 "STREETS OF ROGUE",
-                "TERRARIA"
+                "TERRARIA",
+                "UTOPIA MUST FALL",
+                "YOKU'S ISLAND EXPRESS"
               ],
               "shown_if_on_card": [],
               "hidden": []
@@ -3014,8 +3283,11 @@ export const EVERY_GAME_UFO = {
               "HE IS COMING": "Act 1 Boss",
               "HOLLOW KNIGHT SILKSONG": "Moss Mother",
               "I WANNA BE THE CAT": "First miniboss",
+              "(FTD) I WANNA BE THE GUY": "Mike Tyson",
               "(Retro) KIRBY 64: THE CRYSTAL SHARDS": "Big N-Z (in the cabin)",
               "(Retro) KIRBY SUPER STAR": "Whispy Woods (Spring Breeze Stage 1)",
+              "MAGICAT": "First Level",
+              "MAIDEN & SPELL": "Stage 1",
               "(Retro) MIKE TYSON'S PUNCH-OUT!!": "Glass Joe",
               "NUCLEAR THRONE": "Big Bandit (1-3)",
               "RISK OF RAIN 2": "Stage 1 Teleporter Boss",
@@ -3024,11 +3296,13 @@ export const EVERY_GAME_UFO = {
               "SUPER MARIO MAKER 2": "boss enemies",
               "(Retro) SUPER MARIO SUNSHINE": "Proto Piranha",
               "THE BINDING OF ISAAC: REBIRTH": "Basement I boss",
+              "THE VOID RAINS UPON HER HEART": "Unit Lulu",
               "UFO 50": "Elfazar's Hat Tree",
               "UFO 50 BINGOMOD": "Elfazar's Hat Tree",
               "ULTRAKILL": "Malicious Face",
               "(Retro) ACTRAISER": "Centaur",
               "BACKPACK HERO": "Floor 3 boss",
+              "(FTD) CAVE STORY": "Balrog",
               "CRYPT OF THE NECRODANCER": "1-4",
               "HOLLOW KNIGHT": "Gruz Mother",
               "KERO BLASTER": "",
@@ -3042,9 +3316,12 @@ export const EVERY_GAME_UFO = {
               "(Retro) SUPER MARIO SUNBURN": "Proto Piranha",
               "(Retro) SUPER MARIO WORLD": "Iggy",
               "(Retro) SUPER SMASH BROS. BRAWL": "Petey Piranha",
+              "WILL YOU SNAIL?": "Stage 1",
               "CORGISPACE": "1, 6, 10",
               "ENTER THE GUNGEON": "Chamber 1 Boss",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE": "Gunner Joe",
               "KING OF THE BRIDGE": "Defeat the Troll",
+              "MEWGENICS": "Alley Miniboss",
               "(Retro) MONSTER HUNTER TRI (WII)": "Great Jaggi",
               "PIZZA TOWER": "Pepperman",
               "SLAY THE SPIRE": "Act 1 Boss",
@@ -3072,13 +3349,14 @@ export const EVERY_GAME_UFO = {
               "PETAL CRASH": "Hyper Lilibri",
               "POMPOM": "Catterline (1-8)",
               "ROGUE LEGACY": "Khidr (Castle Boss)",
+              "ROGUE LEGACY 2": "Estuary Lamech",
               "(FTD) SKORPULAC": "Level 3 boss",
               "SOL CESTO": "Green Dragon",
               "(Retro) SUPER METROID": "Bomb Torizo",
-              "UTOPIA MUST FALL": "Defeat Colossoteuthis, Technosphere",
               "CELESTE": "Badeline (Ch.6)",
               "(FTP) DUCK LIFE": "Beat the Game",
               "FTL": "Rebel Flagship",
+              "LETHAL LEAGUE BLAZE": "Story Mode Doombox",
               "MINECRAFT": "Ender Dragon",
               "(FTP) NETHACK": "",
               "PLANTS VS ZOMBIES": "Dr. Zomboss 5-1",
@@ -3086,7 +3364,9 @@ export const EVERY_GAME_UFO = {
               "SALAMANDER COUNTY PUBLIC TELEVISION": "Defeat the Boss",
               "STAR OF PROVIDENCE": "Overlord",
               "STREETS OF ROGUE": "Mayor in Mayor's Village",
-              "TERRARIA": "Eye of Cthulhu"
+              "TERRARIA": "Eye of Cthulhu",
+              "UTOPIA MUST FALL": "Defeat Colossoteuthis, Technosphere",
+              "YOKU'S ISLAND EXPRESS": ""
             }
           }
         },
@@ -3111,10 +3391,12 @@ export const EVERY_GAME_UFO = {
               "(FTD) EVIL EGG",
               "FTL",
               "GEOMETRY DASH",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE",
               "HADES",
               "(FTD) KILLER QUEEN BLACK",
               "(Retro) KIRBY AIR RIDE",
               "(Retro) KIRBY SUPER STAR",
+              "LETHAL LEAGUE BLAZE",
               "(FTP) MEAT BOY",
               "(FTD) MINESWEEPER PLUS",
               "MOSA LINA",
@@ -3147,7 +3429,8 @@ export const EVERY_GAME_UFO = {
               "UFO 50 BINGOMOD",
               "(FTP) VGM-QUIZ.COM",
               "VIVIDLOPE",
-              "WHITE KNUCKLE"
+              "WHITE KNUCKLE",
+              "(FTD) YOU HAVE 10 SECONDS (2023)"
             ],
             "fallback": "Beat 5 levels in [5] games(ANY games) [Fallback]"
           },
@@ -3172,6 +3455,7 @@ export const EVERY_GAME_UFO = {
                 "SPELUNKY HD",
                 "UFO 50",
                 "UFO 50 BINGOMOD",
+                "(FTD) YOU HAVE 10 SECONDS (2023)",
                 "BACKPACK HERO",
                 "BROOMSWEEPER",
                 "CRYPT OF THE NECRODANCER",
@@ -3198,8 +3482,10 @@ export const EVERY_GAME_UFO = {
                 "(FTD) DOG WITCH",
                 "FTL",
                 "GEOMETRY DASH",
+                "(FTP) GUNBALL 2: EMPEROR REVENGE",
                 "HADES",
                 "(Retro) KIRBY SUPER STAR",
+                "LETHAL LEAGUE BLAZE",
                 "POMPOM",
                 "(FTP) SPACEVENTURE 2 - MINT CONDITION",
                 "SPEEDRUNNERS",
@@ -3214,10 +3500,14 @@ export const EVERY_GAME_UFO = {
                 "(Retro) MARIO KART 64",
                 "CELESTE",
                 "CELESTE: STRAWBERRY JAM COLLAB",
+                "FLIP OF LIGHT",
                 "KATANA ZERO",
                 "(Retro) KID ICARUS",
                 "(Retro) KIRBY 64: THE CRYSTAL SHARDS",
+                "MAGICAT",
+                "MAIDEN & SPELL",
                 "MARIO KART WORLD",
+                "MEWGENICS",
                 "PIZZA TOWER",
                 "PLANTS VS ZOMBIES",
                 "(Retro) PUYO PUYO",
@@ -3226,6 +3516,8 @@ export const EVERY_GAME_UFO = {
                 "STAR OF PROVIDENCE",
                 "(FTP) SUDOKU.COM",
                 "SUPER HEXAGON",
+                "(Retro) SUPER MARIO 64",
+                "THE VOID RAINS UPON HER HEART",
                 "ULTRAKILL",
                 "VVVVVV",
                 "(Retro) YOSHI'S ISLAND",
@@ -3259,6 +3551,7 @@ export const EVERY_GAME_UFO = {
               "SPELUNKY HD": "Beat 2-1",
               "UFO 50": "Campanella ",
               "UFO 50 BINGOMOD": "Campanella ",
+              "(FTD) YOU HAVE 10 SECONDS (2023)": "1-5",
               "BACKPACK HERO": "floors",
               "BROOMSWEEPER": "Combat Offices",
               "CRYPT OF THE NECRODANCER": "Floors + Codex Levels",
@@ -3285,13 +3578,15 @@ export const EVERY_GAME_UFO = {
               "(FTD) DOG WITCH": "Combats",
               "FTL": "Sectors",
               "GEOMETRY DASH": "Levels (practice mode ok)",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE": "Levels",
               "HADES": "Combat Rooms",
               "(Retro) KIRBY SUPER STAR": "Spring Breeze + 1 Dynablade level",
+              "LETHAL LEAGUE BLAZE": "Win 5 Matches",
               "POMPOM": "house rules if tutorial level counts",
               "(FTP) SPACEVENTURE 2 - MINT CONDITION": "Beat wave 5",
               "SPEEDRUNNERS": "5 story mode levels",
               "STREETS OF ROGUE": "Beat 5 levels",
-              "SUPER MARIO MAKER 2": "courses",
+              "SUPER MARIO MAKER 2": "Courses",
               "(Retro) SUPER MARIO SUNBURN": "Level Shine Sprites",
               "THE BINDING OF ISAAC: REBIRTH": "Reach Depths II",
               "WHITE KNUCKLE": "Named Subregions (Air Exchange, Deep Storage, etc.)",
@@ -3301,10 +3596,14 @@ export const EVERY_GAME_UFO = {
               "(Retro) MARIO KART 64": "Any Course",
               "CELESTE": "Prologue 1a 1b 2a 2b",
               "CELESTE: STRAWBERRY JAM COLLAB": "Any lobbies' levels",
+              "FLIP OF LIGHT": "5 Segments",
               "KATANA ZERO": "Studio",
               "(Retro) KID ICARUS": "Beat 2-1",
               "(Retro) KIRBY 64: THE CRYSTAL SHARDS": "Beat 2-1",
+              "MAGICAT": "5 levels",
+              "MAIDEN & SPELL": "Stage 5",
               "MARIO KART WORLD": "5 Races",
+              "MEWGENICS": "Battles ",
               "PIZZA TOWER": "All of Floor 1",
               "PLANTS VS ZOMBIES": "Beat 1-5",
               "(Retro) PUYO PUYO": "",
@@ -3313,6 +3612,8 @@ export const EVERY_GAME_UFO = {
               "STAR OF PROVIDENCE": "Floors",
               "(FTP) SUDOKU.COM": "Boards",
               "SUPER HEXAGON": "Beat 5 levels",
+              "(Retro) SUPER MARIO 64": "Stars",
+              "THE VOID RAINS UPON HER HEART": "Love 5 Monsters",
               "ULTRAKILL": "Beat 0-5",
               "VVVVVV": "Rescues + Intermissions",
               "(Retro) YOSHI'S ISLAND": "Beat 1-5",
@@ -3379,6 +3680,7 @@ export const EVERY_GAME_UFO = {
                 "HE IS COMING",
                 "(Retro) YOSHI'S HIGHLAND",
                 "(Retro) AVENGING SPIRIT",
+                "(Retro) SUPER MARIO 64",
                 "ANIMAL WELL",
                 "BLUE PRINCE",
                 "CRYPT OF THE NECRODANCER",
@@ -3387,8 +3689,11 @@ export const EVERY_GAME_UFO = {
                 "(FTD) DOG WITCH",
                 "(FTD) ERASER",
                 "(FTD) EVIL EGG",
+                "FLIP OF LIGHT",
                 "I WANNA BE THE CAT",
+                "LETHAL LEAGUE BLAZE",
                 "LINELITH",
+                "MAIDEN & SPELL",
                 "NIDHOGG",
                 "NUCLEAR THRONE",
                 "(FTD) SKORPULAC",
@@ -3401,10 +3706,13 @@ export const EVERY_GAME_UFO = {
                 "(Retro) SUPER MARIO WORLD",
                 "(Retro) SUPER SMASH BROS. BRAWL",
                 "THE BINDING OF ISAAC: REBIRTH",
+                "THE VOID RAINS UPON HER HEART",
+                "WILL YOU SNAIL?",
                 "(Retro) ACTRAISER",
                 "BACKPACK HERO",
                 "BUG FABLES",
                 "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT",
+                "(FTD) CAVE STORY",
                 "CELESTE",
                 "CELESTE: STRAWBERRY JAM COLLAB",
                 "CUPHEAD",
@@ -3416,17 +3724,21 @@ export const EVERY_GAME_UFO = {
                 "ENTER THE GUNGEON",
                 "ENVIRONMENTAL STATION ALPHA",
                 "FTL",
+                "(FTP) GUNBALL 2: EMPEROR REVENGE",
                 "HADES",
                 "HITMAN 3",
                 "HOLLOW KNIGHT",
                 "HOLLOW KNIGHT SILKSONG",
+                "(FTD) I WANNA BE THE GUY",
                 "KATANA ZERO",
                 "KERO BLASTER",
                 "(Retro) KID ICARUS",
                 "(Retro) KIRBY 64: THE CRYSTAL SHARDS",
                 "(Retro) KIRBY SUPER STAR",
+                "MAGICAT",
                 "MARIO KART WORLD",
                 "(FTP) MEAT BOY",
+                "MEWGENICS",
                 "(Retro) MIKE TYSON'S PUNCH-OUT!!",
                 "MINA THE HOLLOWER",
                 "MINECRAFT",
@@ -3442,6 +3754,7 @@ export const EVERY_GAME_UFO = {
                 "RAIN WORLD: DOWNPOUR",
                 "RISK OF RAIN 2",
                 "ROGUE LEGACY",
+                "ROGUE LEGACY 2",
                 "SALAMANDER COUNTY PUBLIC TELEVISION",
                 "SNKRX",
                 "SOL CESTO",
@@ -3461,7 +3774,8 @@ export const EVERY_GAME_UFO = {
                 "UNFAIR FLIPS",
                 "VIVIDLOPE",
                 "VVVVVV",
-                "WHITE KNUCKLE"
+                "WHITE KNUCKLE",
+                "(FTD) YOU HAVE 10 SECONDS (2023)"
               ],
               "shown_if_on_card": [],
               "hidden": []
@@ -3489,6 +3803,7 @@ export const EVERY_GAME_UFO = {
               "HE IS COMING": "Beat Woodland Abomination",
               "(Retro) YOSHI'S HIGHLAND": "Bowser's Castle Warp",
               "(Retro) AVENGING SPIRIT": "Beat Stage 6",
+              "(Retro) SUPER MARIO 64": "Defeat Bowser in the Sky",
               "ANIMAL WELL": "Fireworks",
               "BLUE PRINCE": "Enter Room 46",
               "CRYPT OF THE NECRODANCER": "Beat Zone 5",
@@ -3497,8 +3812,11 @@ export const EVERY_GAME_UFO = {
               "(FTD) DOG WITCH": "Beat the Wizard",
               "(FTD) ERASER": "Reach the top",
               "(FTD) EVIL EGG": "Defeat Evil egg",
+              "FLIP OF LIGHT": "Restore the Violet Segment",
               "I WANNA BE THE CAT": "Defeat the Cat and play the credits",
+              "LETHAL LEAGUE BLAZE": "Finish Arcade Mode",
               "LINELITH": "100%",
+              "MAIDEN & SPELL": "Stage 6",
               "NIDHOGG": "Beat the 16 solo mode fights",
               "NUCLEAR THRONE": "Beat the Throne",
               "(FTD) SKORPULAC": "Beat stage 5",
@@ -3511,10 +3829,13 @@ export const EVERY_GAME_UFO = {
               "(Retro) SUPER MARIO WORLD": "Defeat Bowser",
               "(Retro) SUPER SMASH BROS. BRAWL": "Beat Classic Mode",
               "THE BINDING OF ISAAC: REBIRTH": "Defeat Mom",
+              "THE VOID RAINS UPON HER HEART": "Defeat The Void",
+              "WILL YOU SNAIL?": "Defeat Squid",
               "(Retro) ACTRAISER": "Beat Death Heim",
               "BACKPACK HERO": "",
               "BUG FABLES": "Finish Chapter 7",
               "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT": "Dracula 2",
+              "(FTD) CAVE STORY": "Escape the Island",
               "CELESTE": "Finish Chapter 7",
               "CELESTE: STRAWBERRY JAM COLLAB": "Beat grandmaster",
               "CUPHEAD": "Defeat the Devil",
@@ -3526,17 +3847,21 @@ export const EVERY_GAME_UFO = {
               "ENTER THE GUNGEON": "Defeat High Dragun (Ch.5)",
               "ENVIRONMENTAL STATION ALPHA": "Virus Ending",
               "FTL": "Beat the Rebel Flagship",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE": "Defeat the Emperor",
               "HADES": "Beat Hades",
               "HITMAN 3": "",
               "HOLLOW KNIGHT": "Defeat the Hollow Knight",
               "HOLLOW KNIGHT SILKSONG": "Defeat GMS",
+              "(FTD) I WANNA BE THE GUY": "Defeat The Guy",
               "KATANA ZERO": "Complete Bunker pt.2",
               "KERO BLASTER": "",
               "(Retro) KID ICARUS": "Beat Medusa in 4-1",
               "(Retro) KIRBY 64: THE CRYSTAL SHARDS": "Beat Ripple Star / Dark Star",
               "(Retro) KIRBY SUPER STAR": "N/A",
+              "MAGICAT": "Defeat the MagiMonkey",
               "MARIO KART WORLD": "???",
               "(FTP) MEAT BOY": "",
+              "MEWGENICS": "Down on your knees",
               "(Retro) MIKE TYSON'S PUNCH-OUT!!": "Beat Mike Tyson",
               "MINA THE HOLLOWER": "Defeat Lionel",
               "MINECRAFT": "Beat Ender Dragon",
@@ -3549,9 +3874,10 @@ export const EVERY_GAME_UFO = {
               "RABBIT AND STEEL": "Complete the Moonlit Pinnacle",
               "RABI-RIBI": "Noah",
               "RAIN WORLD": "Getting Karma 10 and Ascending",
-              "RAIN WORLD: DOWNPOUR": "Karma 10 & Ascending or campaign specific ending (usually longer)",
+              "RAIN WORLD: DOWNPOUR": "Karma 10 & Ascending or campaign specific ending",
               "RISK OF RAIN 2": "Defeat Mithrix",
               "ROGUE LEGACY": "Defeat the Traitor",
+              "ROGUE LEGACY 2": "Defeat Cain",
               "SALAMANDER COUNTY PUBLIC TELEVISION": "Defeat the Boss",
               "SNKRX": "Beat Level 25",
               "SOL CESTO": "Beat All Acts",
@@ -3571,7 +3897,8 @@ export const EVERY_GAME_UFO = {
               "UNFAIR FLIPS": "10 Heads in-a-row",
               "VIVIDLOPE": "???",
               "VVVVVV": "Beat the Final Levl",
-              "WHITE KNUCKLE": "Reach the Core"
+              "WHITE KNUCKLE": "Reach the Core",
+              "(FTD) YOU HAVE 10 SECONDS (2023)": "Beat Area 25"
             }
           }
         },
@@ -3585,6 +3912,7 @@ export const EVERY_GAME_UFO = {
               "BROOMSWEEPER",
               "BUG FABLES",
               "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT",
+              "(FTD) CAVE STORY",
               "CORGISPACE",
               "CRYPT OF THE NECRODANCER",
               "CUPHEAD",
@@ -3594,17 +3922,20 @@ export const EVERY_GAME_UFO = {
               "(FTP) DUCK LIFE",
               "ENTER THE GUNGEON",
               "ENVIRONMENTAL STATION ALPHA",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE",
               "HADES",
               "HE IS COMING",
               "I WANNA BE THE CAT",
               "KERO BLASTER",
               "(Retro) KIRBY AIR RIDE",
               "MARIO KART WORLD",
+              "MEWGENICS",
               "MINA THE HOLLOWER",
               "(FTP) NETHACK",
               "RABI-RIBI",
               "RISK OF RAIN 2",
               "ROGUE LEGACY",
+              "ROGUE LEGACY 2",
               "SLAY THE SPIRE",
               "SLAY THE SPIRE 2",
               "(FTP) SPACEVENTURE 2 - MINT CONDITION",
@@ -3628,19 +3959,23 @@ export const EVERY_GAME_UFO = {
             "options": {
               "shown": [
                 "BLUE PRINCE",
+                "(FTD) CAVE STORY",
                 "CORGISPACE",
                 "CRYPT OF THE NECRODANCER",
                 "DARK SOULS 3",
                 "(Retro) DEMON'S CREST",
                 "DICEY DUNGEONS",
                 "(FTP) DUCK LIFE",
+                "(FTP) GUNBALL 2: EMPEROR REVENGE",
                 "HE IS COMING",
                 "I WANNA BE THE CAT",
                 "KERO BLASTER",
                 "MARIO KART WORLD",
+                "MEWGENICS",
                 "(FTP) NETHACK",
                 "RISK OF RAIN 2",
                 "ROGUE LEGACY",
+                "ROGUE LEGACY 2",
                 "(FTP) SPACEVENTURE 2 - MINT CONDITION",
                 "STAR OF PROVIDENCE",
                 "(Retro) SUPER METROID MAP RANDO",
@@ -3672,6 +4007,7 @@ export const EVERY_GAME_UFO = {
                 "BACKPACK HERO",
                 "SOL CESTO",
                 "STAR VADERS",
+                "THE VOID RAINS UPON HER HEART",
                 "(Retro) KID ICARUS",
                 "HOLLOW KNIGHT",
                 "HOLLOW KNIGHT SILKSONG",
@@ -3687,19 +4023,23 @@ export const EVERY_GAME_UFO = {
             },
             "descriptions": {
               "BLUE PRINCE": "Orchard Gate",
+              "(FTD) CAVE STORY": "Life Capsule",
               "CORGISPACE": "06 VAMPIRE VS POPE ARMY",
               "CRYPT OF THE NECRODANCER": "Heart Container",
               "DARK SOULS 3": "Level Up Vitality",
               "(Retro) DEMON'S CREST": "After first boss",
               "DICEY DUNGEONS": "level up",
               "(FTP) DUCK LIFE": "Level up stamina",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE": "Skill upgrade",
               "HE IS COMING": "Various Items",
               "I WANNA BE THE CAT": "Health shop",
               "KERO BLASTER": "Heart Boost for 12 coins",
               "MARIO KART WORLD": "Balloon battles",
+              "MEWGENICS": "Equip a Tank Collar",
               "(FTP) NETHACK": "Any level up",
               "RISK OF RAIN 2": "Level up or find a relevant item",
               "ROGUE LEGACY": "Buy an Health Upgrade at the castle",
+              "ROGUE LEGACY 2": "Castle upgrade",
               "(FTP) SPACEVENTURE 2 - MINT CONDITION": "heart locket, milk, etc",
               "STAR OF PROVIDENCE": "",
               "(Retro) SUPER METROID MAP RANDO": "E-Tank/Reserve",
@@ -3731,6 +4071,7 @@ export const EVERY_GAME_UFO = {
               "BACKPACK HERO": "various items",
               "SOL CESTO": "Golden Berry",
               "STAR VADERS": "Certain Artifacts",
+              "THE VOID RAINS UPON HER HEART": "Some gifts",
               "(Retro) KID ICARUS": "Obtain 20,000 pts total on a level transition",
               "HOLLOW KNIGHT": "Find 4 Mask Shards",
               "HOLLOW KNIGHT SILKSONG": "Find 4 Mask Shards",
@@ -3755,6 +4096,7 @@ export const EVERY_GAME_UFO = {
               "I WANNA BE THE CAT",
               "(Retro) KIRBY 64: THE CRYSTAL SHARDS",
               "(Retro) KIRBY SUPER STAR",
+              "MAIDEN & SPELL",
               "(FTD) MINESWEEPER PLUS",
               "PEAK",
               "POMPOM",
@@ -3783,6 +4125,7 @@ export const EVERY_GAME_UFO = {
                 "(FTD) EVIL EGG",
                 "I WANNA BE THE CAT",
                 "(Retro) KIRBY SUPER STAR",
+                "MAIDEN & SPELL",
                 "(FTD) MINESWEEPER PLUS",
                 "POMPOM",
                 "(FTD) SKORPULAC",
@@ -3812,8 +4155,10 @@ export const EVERY_GAME_UFO = {
                 "CRYPT OF THE NECRODANCER",
                 "DEMONCRAWL",
                 "KERO BLASTER",
+                "MEWGENICS",
                 "RISK OF RAIN 2",
                 "ROGUE LEGACY",
+                "ROGUE LEGACY 2",
                 "SLAY THE SPIRE 2",
                 "SOL CESTO",
                 "STREETS OF ROGUE",
@@ -3832,6 +4177,7 @@ export const EVERY_GAME_UFO = {
               "(FTD) EVIL EGG": "Hearts",
               "I WANNA BE THE CAT": "Health shop",
               "(Retro) KIRBY SUPER STAR": "Stage 1 in the tree",
+              "MAIDEN & SPELL": "Lose a card, then win a round",
               "(FTD) MINESWEEPER PLUS": "Die and buy a continue",
               "POMPOM": "Reaching a checkpoint with 0 extra lives gives 1",
               "(FTD) SKORPULAC": "Collect a 3-up atom",
@@ -3861,8 +4207,10 @@ export const EVERY_GAME_UFO = {
               "CRYPT OF THE NECRODANCER": "Potion",
               "DEMONCRAWL": "",
               "KERO BLASTER": "Rare drop from grass",
+              "MEWGENICS": "Smelling Salts / similar items",
               "RISK OF RAIN 2": "Find Dio's Best Friend",
               "ROGUE LEGACY": "Pray at a statue and find Hyperion's ring",
+              "ROGUE LEGACY 2": "Hyperion's Ring",
               "SLAY THE SPIRE 2": "Fairy in a Bottle",
               "SOL CESTO": "Fairy",
               "STREETS OF ROGUE": "Acquire Resurrection status",
@@ -3899,6 +4247,7 @@ export const EVERY_GAME_UFO = {
               "(FTP) DUCK LIFE",
               "ENTER THE GUNGEON",
               "FTL",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE",
               "HADES",
               "HE IS COMING",
               "HITMAN 3",
@@ -3909,12 +4258,12 @@ export const EVERY_GAME_UFO = {
               "(Retro) KID ICARUS",
               "LETHAL COMPANY",
               "MINA THE HOLLOWER",
-              "MINECRAFT",
               "(FTD) MINESWEEPER PLUS",
               "(FTP) NETHACK",
               "PIZZA TOWER",
               "RISK OF RAIN 2",
               "ROGUE LEGACY",
+              "ROGUE LEGACY 2",
               "SHEEPO",
               "SLAY THE SPIRE",
               "SLAY THE SPIRE 2",
@@ -3955,6 +4304,7 @@ export const EVERY_GAME_UFO = {
                 "DEMONCRAWL",
                 "DICEY DUNGEONS",
                 "(FTP) DUCK LIFE",
+                "(FTP) GUNBALL 2: EMPEROR REVENGE",
                 "I WANNA BE THE CAT",
                 "KERO BLASTER",
                 "LETHAL COMPANY",
@@ -3962,6 +4312,7 @@ export const EVERY_GAME_UFO = {
                 "(FTP) NETHACK",
                 "RISK OF RAIN 2",
                 "ROGUE LEGACY",
+                "ROGUE LEGACY 2",
                 "SLAY THE SPIRE",
                 "SNKRX",
                 "(FTP) SPACEVENTURE 2 - MINT CONDITION",
@@ -3996,10 +4347,11 @@ export const EVERY_GAME_UFO = {
                 "(Retro) DONKEY KONG 64",
                 "HADES",
                 "MINA THE HOLLOWER",
-                "MINECRAFT",
                 "SHEEPO",
                 "(Retro) SUPER MARIO SUNBURN",
                 "TERRARIA",
+                "MINECRAFT",
+                "MEWGENICS",
                 "RABI-RIBI",
                 "RAIN WORLD: DOWNPOUR",
                 "BUG FABLES",
@@ -4007,7 +4359,8 @@ export const EVERY_GAME_UFO = {
                 "(Retro) MONSTER HUNTER TRI (WII)",
                 "PLANTS VS ZOMBIES",
                 "RAIN WORLD",
-                "(Retro) SUPER MARIO SUNSHINE"
+                "(Retro) SUPER MARIO SUNSHINE",
+                "THE VOID RAINS UPON HER HEART"
               ],
               "shown_if_on_card": [],
               "hidden": []
@@ -4024,6 +4377,7 @@ export const EVERY_GAME_UFO = {
               "DEMONCRAWL": "",
               "DICEY DUNGEONS": "",
               "(FTP) DUCK LIFE": "seed",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE": "Guns",
               "I WANNA BE THE CAT": "Any shop",
               "KERO BLASTER": "CF shop or hospital",
               "LETHAL COMPANY": "Store",
@@ -4031,6 +4385,7 @@ export const EVERY_GAME_UFO = {
               "(FTP) NETHACK": "Shop spawns on level 2",
               "RISK OF RAIN 2": "Open a chest",
               "ROGUE LEGACY": "Anything at the Castle",
+              "ROGUE LEGACY 2": "Castle Upgrades",
               "SLAY THE SPIRE": "",
               "SNKRX": "",
               "(FTP) SPACEVENTURE 2 - MINT CONDITION": "Buy upgrade",
@@ -4065,18 +4420,20 @@ export const EVERY_GAME_UFO = {
               "(Retro) DONKEY KONG 64": "Gun",
               "HADES": "Charon Shop",
               "MINA THE HOLLOWER": "Ossex shops",
-              "MINECRAFT": "Villager Trade",
               "SHEEPO": "Shop above fountains",
               "(Retro) SUPER MARIO SUNBURN": "Blue Coin Exchange",
               "TERRARIA": "Merchant",
+              "MINECRAFT": "Villager Trade",
+              "MEWGENICS": "Tracy's Shop",
               "RABI-RIBI": "Food Shop",
-              "RAIN WORLD: DOWNPOUR": "Windswept Spires (Sky Islands) merchant in Saint Campaign",
+              "RAIN WORLD: DOWNPOUR": "Windswept Spires (Sky Islands) merchant as Saint",
               "BUG FABLES": "Bugaria's Outskirts (chap2)",
               "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT": "Library",
               "(Retro) MONSTER HUNTER TRI (WII)": "Moga Shops",
               "PLANTS VS ZOMBIES": "Crazy Dave's Twiddydinkies 3-4",
               "RAIN WORLD": "Garbage Wastes merchant",
-              "(Retro) SUPER MARIO SUNSHINE": "Blue Coin Exchange"
+              "(Retro) SUPER MARIO SUNSHINE": "Blue Coin Exchange",
+              "THE VOID RAINS UPON HER HEART": "Needs to unlock events"
             }
           }
         },
@@ -4117,6 +4474,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) KIRBY SUPER STAR",
               "(Retro) MARIO KART 64",
               "MARIO KART WORLD",
+              "MEWGENICS",
               "MINECRAFT",
               "(Retro) MONSTER HUNTER TRI (WII)",
               "MOSA LINA",
@@ -4129,6 +4487,7 @@ export const EVERY_GAME_UFO = {
               "RAIN WORLD: DOWNPOUR",
               "RISK OF RAIN 2",
               "ROGUE LEGACY",
+              "ROGUE LEGACY 2",
               "SALAMANDER COUNTY PUBLIC TELEVISION",
               "SHEEPO",
               "SOL CESTO",
@@ -4149,6 +4508,7 @@ export const EVERY_GAME_UFO = {
               "UFO 50",
               "UFO 50 BINGOMOD",
               "WHITE KNUCKLE",
+              "YOKU'S ISLAND EXPRESS",
               "(Retro) YOSHI'S HIGHLAND",
               "(Retro) YOSHI'S ISLAND"
             ],
@@ -4194,6 +4554,7 @@ export const EVERY_GAME_UFO = {
                 "RAIN WORLD",
                 "RAIN WORLD: DOWNPOUR",
                 "ROGUE LEGACY",
+                "ROGUE LEGACY 2",
                 "SOL CESTO",
                 "(FTP) SPACEVENTURE 2 - MINT CONDITION",
                 "SPELUNKY 2",
@@ -4211,6 +4572,7 @@ export const EVERY_GAME_UFO = {
                 "UFO 50",
                 "UFO 50 BINGOMOD",
                 "WHITE KNUCKLE",
+                "YOKU'S ISLAND EXPRESS",
                 "(Retro) YOSHI'S HIGHLAND",
                 "(Retro) YOSHI'S ISLAND",
                 "BALATRO",
@@ -4219,6 +4581,7 @@ export const EVERY_GAME_UFO = {
                 "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT",
                 "CUPHEAD",
                 "(Retro) DONKEY KONG 64",
+                "MEWGENICS",
                 "PLANTS VS ZOMBIES",
                 "RISK OF RAIN 2",
                 "SALAMANDER COUNTY PUBLIC TELEVISION",
@@ -4233,6 +4596,7 @@ export const EVERY_GAME_UFO = {
                 "SPELUNKY HD",
                 "STAR OF PROVIDENCE",
                 "STAR VADERS",
+                "THE VOID RAINS UPON HER HEART",
                 "RABI-RIBI"
               ],
               "shown_if_on_card": [],
@@ -4271,9 +4635,10 @@ export const EVERY_GAME_UFO = {
               "PEAK": "various",
               "PIZZA TOWER": "Tutorial's first topping",
               "POMPOM": "carrot",
-              "RAIN WORLD": "Blue fruit in Monk's and Survivor's tutorial",
-              "RAIN WORLD: DOWNPOUR": "Scavengers in Artificer's Campaign",
+              "RAIN WORLD": "Blue fruit",
+              "RAIN WORLD: DOWNPOUR": "Scavengers as Artificer",
               "ROGUE LEGACY": "Chicken",
+              "ROGUE LEGACY 2": "Chicken",
               "SOL CESTO": "Strawberry",
               "(FTP) SPACEVENTURE 2 - MINT CONDITION": "cookie, cherry, grape etc",
               "SPELUNKY 2": "Cooked Turkey in 1-2 or 1-3",
@@ -4291,6 +4656,7 @@ export const EVERY_GAME_UFO = {
               "UFO 50": "Waldorf Fish",
               "UFO 50 BINGOMOD": "Waldorf Fish",
               "WHITE KNUCKLE": "Beans can",
+              "YOKU'S ISLAND EXPRESS": "Fruit",
               "(Retro) YOSHI'S HIGHLAND": "Eggs",
               "(Retro) YOSHI'S ISLAND": "Eggs",
               "BALATRO": "Any Food Joker",
@@ -4299,6 +4665,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT": "Turkey before Death",
               "CUPHEAD": "Sugar charm",
               "(Retro) DONKEY KONG 64": "Watermelon",
+              "MEWGENICS": "Meat on the floor",
               "PLANTS VS ZOMBIES": "cherry bomb?",
               "RISK OF RAIN 2": "Bison Steak / Bustling Fungus",
               "SALAMANDER COUNTY PUBLIC TELEVISION": "Cheese Eater",
@@ -4313,6 +4680,7 @@ export const EVERY_GAME_UFO = {
               "SPELUNKY HD": "Royal Jelly, Eggplant",
               "STAR OF PROVIDENCE": "Flan, Meat, Candy",
               "STAR VADERS": "Certain Artifacts",
+              "THE VOID RAINS UPON HER HEART": "Some gifts",
               "RABI-RIBI": "Food Shop"
             }
           }
@@ -4340,6 +4708,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) KIRBY 64: THE CRYSTAL SHARDS",
               "(Retro) KIRBY AIR RIDE",
               "(Retro) KIRBY SUPER STAR",
+              "MAGICAT",
               "MARIO KART WORLD",
               "MINA THE HOLLOWER",
               "MINECRAFT",
@@ -4350,6 +4719,7 @@ export const EVERY_GAME_UFO = {
               "RABI-RIBI",
               "RISK OF RAIN 2",
               "ROGUE LEGACY",
+              "ROGUE LEGACY 2",
               "SLAY THE SPIRE",
               "SLAY THE SPIRE 2",
               "SOL CESTO",
@@ -4386,6 +4756,7 @@ export const EVERY_GAME_UFO = {
                 "I WANNA BE THE CAT",
                 "(Retro) KID ICARUS",
                 "(Retro) KIRBY SUPER STAR",
+                "MAGICAT",
                 "MARIO KART WORLD",
                 "MINA THE HOLLOWER",
                 "(Retro) MONSTER HUNTER TRI (WII)",
@@ -4393,6 +4764,7 @@ export const EVERY_GAME_UFO = {
                 "OPUS MAGNUM",
                 "PEAK",
                 "ROGUE LEGACY",
+                "ROGUE LEGACY 2",
                 "SLAY THE SPIRE",
                 "SLAY THE SPIRE 2",
                 "SOL CESTO",
@@ -4418,11 +4790,13 @@ export const EVERY_GAME_UFO = {
                 "TERRARIA",
                 "HADES",
                 "(Retro) SUPER MARIO SUNSHINE",
+                "MEWGENICS",
                 "MOSA LINA",
                 "BALATRO",
                 "CRYPT OF THE NECRODANCER",
                 "ENTER THE GUNGEON",
                 "THE BINDING OF ISAAC: REBIRTH",
+                "THE VOID RAINS UPON HER HEART",
                 "(Retro) DEMON'S CREST",
                 "ANIMAL WELL",
                 "BUG FABLES",
@@ -4445,6 +4819,7 @@ export const EVERY_GAME_UFO = {
               "I WANNA BE THE CAT": "Potion",
               "(Retro) KID ICARUS": "Chalice",
               "(Retro) KIRBY SUPER STAR": "Gourmet Race",
+              "MAGICAT": "Potion",
               "MARIO KART WORLD": "Moo Moo Milk, Yoshi Soda, Yoshi mugged drink",
               "MINA THE HOLLOWER": "Vial",
               "(Retro) MONSTER HUNTER TRI (WII)": "Potion",
@@ -4452,6 +4827,7 @@ export const EVERY_GAME_UFO = {
               "OPUS MAGNUM": "Solve Stabilised Water",
               "PEAK": "various",
               "ROGUE LEGACY": "Mana Potion",
+              "ROGUE LEGACY 2": "Mana Potion",
               "SLAY THE SPIRE": "Any Potion",
               "SLAY THE SPIRE 2": "Any Potion",
               "SOL CESTO": "Potion",
@@ -4477,11 +4853,13 @@ export const EVERY_GAME_UFO = {
               "TERRARIA": "Potion",
               "HADES": "Nectar or some well items",
               "(Retro) SUPER MARIO SUNSHINE": "Water Bottle",
+              "MEWGENICS": "Many items",
               "MOSA LINA": "Bottle",
               "BALATRO": "Diet Cola",
               "CRYPT OF THE NECRODANCER": "Potion",
               "ENTER THE GUNGEON": "don't actually remember if there's any drinks in gungeon",
               "THE BINDING OF ISAAC: REBIRTH": "",
+              "THE VOID RAINS UPON HER HEART": "Some gifts",
               "(Retro) DEMON'S CREST": "Potion (Post Ovununu)",
               "ANIMAL WELL": "Golden Elixir",
               "BUG FABLES": "Clear Water",
@@ -4510,6 +4888,8 @@ export const EVERY_GAME_UFO = {
               "DUCK GAME",
               "ENVIRONMENTAL STATION ALPHA",
               "(FTD) EVIL EGG",
+              "FLIP OF LIGHT",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE",
               "HOLLOW KNIGHT",
               "(FTP) HR. B",
               "I WANNA BE THE CAT",
@@ -4520,6 +4900,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) KIRBY SUPER STAR",
               "LETHAL COMPANY",
               "(FTP) LONELY SOUL",
+              "MAGICAT",
               "(Retro) MARIO KART 64",
               "MARIO KART WORLD",
               "MINA THE HOLLOWER",
@@ -4535,6 +4916,7 @@ export const EVERY_GAME_UFO = {
               "RISK OF RAIN 2",
               "ROCKET LEAGUE",
               "ROGUE LEGACY",
+              "ROGUE LEGACY 2",
               "SHEEPO",
               "SPEEDRUNNERS",
               "SPELUNKY 2",
@@ -4575,6 +4957,7 @@ export const EVERY_GAME_UFO = {
                 "DISC ROOM",
                 "(Retro) DONKEY KONG 64",
                 "DUCK GAME",
+                "FLIP OF LIGHT",
                 "(FTP) HR. B",
                 "I WANNA BE THE CAT",
                 "(FTD) KILLER QUEEN BLACK",
@@ -4583,6 +4966,7 @@ export const EVERY_GAME_UFO = {
                 "(Retro) KIRBY SUPER STAR",
                 "LETHAL COMPANY",
                 "(FTP) LONELY SOUL",
+                "MAGICAT",
                 "(Retro) MARIO KART 64",
                 "MARIO KART WORLD",
                 "MINECRAFT",
@@ -4607,6 +4991,7 @@ export const EVERY_GAME_UFO = {
                 "DARK SOULS 3",
                 "ENVIRONMENTAL STATION ALPHA",
                 "(FTD) EVIL EGG",
+                "(FTP) GUNBALL 2: EMPEROR REVENGE",
                 "MINA THE HOLLOWER",
                 "NUCLEAR THRONE",
                 "PIZZA TOWER",
@@ -4614,6 +4999,7 @@ export const EVERY_GAME_UFO = {
                 "RAIN WORLD",
                 "RISK OF RAIN 2",
                 "ROGUE LEGACY",
+                "ROGUE LEGACY 2",
                 "SHEEPO",
                 "SPELUNKY HD",
                 "STREETS OF ROGUE",
@@ -4629,6 +5015,7 @@ export const EVERY_GAME_UFO = {
                 "(Retro) YOSHI'S ISLAND",
                 "(FTP) NETHACK",
                 "BLUE PRINCE",
+                "MEWGENICS",
                 "SNKRX",
                 "STAR OF PROVIDENCE",
                 "CRYPT OF THE NECRODANCER",
@@ -4637,8 +5024,11 @@ export const EVERY_GAME_UFO = {
                 "THE BINDING OF ISAAC: REBIRTH",
                 "HOLLOW KNIGHT SILKSONG",
                 "(FTD) SKORPULAC",
+                "YOKU'S ISLAND EXPRESS",
+                "(FTD) YOU HAVE 10 SECONDS (2023)",
                 "BUG FABLES",
                 "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT",
+                "(FTD) CAVE STORY",
                 "KERO BLASTER",
                 "RABI-RIBI",
                 "ULTRAKILL"
@@ -4657,6 +5047,7 @@ export const EVERY_GAME_UFO = {
               "DISC ROOM": "Dash",
               "(Retro) DONKEY KONG 64": "Simian Slam",
               "DUCK GAME": "Movement Item (Custom Level)",
+              "FLIP OF LIGHT": "Flip Power",
               "(FTP) HR. B": "Cookie Jar",
               "I WANNA BE THE CAT": "Extra Jump Item",
               "(FTD) KILLER QUEEN BLACK": "Speed Boost powerup",
@@ -4665,12 +5056,13 @@ export const EVERY_GAME_UFO = {
               "(Retro) KIRBY SUPER STAR": "Gourmet Race 3",
               "LETHAL COMPANY": "Extension Ladder",
               "(FTP) LONELY SOUL": "Grab mushroom or arrow",
+              "MAGICAT": "Potion's Dash",
               "(Retro) MARIO KART 64": "Mushroom or Star",
               "MARIO KART WORLD": "Mushrooms",
               "MINECRAFT": "Craft ladder",
               "(FTP) NYAMO'S ADVENTURE": "Powerup 2",
               "PEAK": "rope, balloons, etc",
-              "RAIN WORLD: DOWNPOUR": "Mushrooms in Rivulet's and Saint's Campaigns",
+              "RAIN WORLD: DOWNPOUR": "Mushroom as Rivulet/Saint",
               "ROCKET LEAGUE": "Various Rumble Powerups",
               "SPEEDRUNNERS": "Almost every item",
               "SPELUNKY 2": "ropes, boots, gloves, back items",
@@ -4689,13 +5081,15 @@ export const EVERY_GAME_UFO = {
               "DARK SOULS 3": "Any Weapon with movement art",
               "ENVIRONMENTAL STATION ALPHA": "Double Jump",
               "(FTD) EVIL EGG": "Pyro Tank",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE": "Buy a Thruster",
               "MINA THE HOLLOWER": "Parasol",
               "NUCLEAR THRONE": "various",
               "PIZZA TOWER": "Knight armor in Pizzascape",
               "POMPOM": "Balloons in 1-4",
-              "RAIN WORLD": "Mushrooms",
+              "RAIN WORLD": "Mushroom",
               "RISK OF RAIN 2": "Paul's Goat Hoof / Energy Drink / Mocha / Hopoo Feather ...",
               "ROGUE LEGACY": "Dash or Double jump rune at the Enchantress",
+              "ROGUE LEGACY 2": "Ananke's Shawl",
               "SHEEPO": "Bird",
               "SPELUNKY HD": "ropes, boots, gloves, back items",
               "STREETS OF ROGUE": "Various random item drops",
@@ -4711,6 +5105,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) YOSHI'S ISLAND": "Helicopter",
               "(FTP) NETHACK": "",
               "BLUE PRINCE": "Running Shoes",
+              "MEWGENICS": "Many options",
               "SNKRX": "Various classes",
               "STAR OF PROVIDENCE": "Blink and Scrap Runner (Terminal Upgrades), Battery Cartridge",
               "CRYPT OF THE NECRODANCER": "Dash Spell, Boots of leaping",
@@ -4719,8 +5114,11 @@ export const EVERY_GAME_UFO = {
               "THE BINDING OF ISAAC: REBIRTH": "",
               "HOLLOW KNIGHT SILKSONG": "Swift Step",
               "(FTD) SKORPULAC": "Stage 5 thing",
+              "YOKU'S ISLAND EXPRESS": "Kickback",
+              "(FTD) YOU HAVE 10 SECONDS (2023)": "Gravity Ball (Area 7)",
               "BUG FABLES": "Kabbu's Dash Through (chap3)",
               "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT": "Form of Wolf",
+              "(FTD) CAVE STORY": "Lv3 Machine Gun",
               "KERO BLASTER": "Jetpack",
               "RABI-RIBI": "High Jump",
               "ULTRAKILL": "Whiplash (4-4)"
@@ -4733,6 +5131,7 @@ export const EVERY_GAME_UFO = {
             "count": 4,
             "options": [
               "ANIMAL WELL",
+              "(FTD) CAVE STORY",
               "HOLLOW KNIGHT",
               "HOLLOW KNIGHT SILKSONG",
               "(Retro) KID ICARUS",
@@ -4752,6 +5151,7 @@ export const EVERY_GAME_UFO = {
             "options": {
               "shown": [
                 "ANIMAL WELL",
+                "(FTD) CAVE STORY",
                 "VVVVVV",
                 "HOLLOW KNIGHT",
                 "HOLLOW KNIGHT SILKSONG",
@@ -4769,13 +5169,15 @@ export const EVERY_GAME_UFO = {
                 "FTL",
                 "(Retro) SUPER METROID",
                 "(Retro) MONSTER HUNTER TRI (WII)",
-                "(FTP) NETHACK"
+                "(FTP) NETHACK",
+                "YOKU'S ISLAND EXPRESS"
               ],
               "shown_if_on_card": [],
               "hidden": []
             },
             "descriptions": {
               "ANIMAL WELL": "Chest after first ghost",
+              "(FTD) CAVE STORY": "Mimiga's Village",
               "VVVVVV": "Talk to Violet",
               "HOLLOW KNIGHT": "Cornifer's map",
               "HOLLOW KNIGHT SILKSONG": "Shakra's map",
@@ -4793,7 +5195,8 @@ export const EVERY_GAME_UFO = {
               "FTL": "Download automated drone output maps",
               "(Retro) SUPER METROID": "Map Station",
               "(Retro) MONSTER HUNTER TRI (WII)": "Quests",
-              "(FTP) NETHACK": ""
+              "(FTP) NETHACK": "",
+              "YOKU'S ISLAND EXPRESS": "Treasure or Tracker Map"
             }
           }
         },
@@ -4804,6 +5207,7 @@ export const EVERY_GAME_UFO = {
             "options": [
               "(Retro) ACTRAISER",
               "BUG FABLES",
+              "(FTD) CAVE STORY",
               "CRYPT OF THE NECRODANCER",
               "CUPHEAD",
               "DARK SOULS 3",
@@ -4813,6 +5217,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) KID ICARUS",
               "(Retro) KIRBY 64: THE CRYSTAL SHARDS",
               "(FTP) MEAT BOY",
+              "MEWGENICS",
               "MINA THE HOLLOWER",
               "PIZZA TOWER",
               "SPELUNKY 2",
@@ -4839,6 +5244,7 @@ export const EVERY_GAME_UFO = {
                 "(FTD) EVIL EGG",
                 "(Retro) KIRBY 64: THE CRYSTAL SHARDS",
                 "(FTP) MEAT BOY",
+                "MEWGENICS",
                 "PIZZA TOWER",
                 "SPELUNKY 2",
                 "SPELUNKY HD",
@@ -4856,6 +5262,7 @@ export const EVERY_GAME_UFO = {
                 "(Retro) SUPER MARIO SUNSHINE",
                 "(Retro) SUPER MARIO WORLD",
                 "(Retro) SUPER SMASH BROS. BRAWL",
+                "(FTD) CAVE STORY",
                 "DARK SOULS 3",
                 "(Retro) KID ICARUS",
                 "MINA THE HOLLOWER",
@@ -4875,6 +5282,7 @@ export const EVERY_GAME_UFO = {
                 "BACKPACK HERO",
                 "CELESTE",
                 "KERO BLASTER",
+                "MAIDEN & SPELL",
                 "(Retro) MONSTER HUNTER TRI (WII)",
                 "(FTP) NETHACK",
                 "PLANTS VS ZOMBIES",
@@ -4896,6 +5304,7 @@ export const EVERY_GAME_UFO = {
               "(FTD) EVIL EGG": "Greenoids",
               "(Retro) KIRBY 64: THE CRYSTAL SHARDS": "Beat waddle doo",
               "(FTP) MEAT BOY": "Beat a level",
+              "MEWGENICS": "Take in a stray cat",
               "PIZZA TOWER": "Tutorial's first topping",
               "SPELUNKY 2": "Damsel (pet)",
               "SPELUNKY HD": "Damsel",
@@ -4913,6 +5322,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) SUPER MARIO SUNSHINE": "NPCs under goop",
               "(Retro) SUPER MARIO WORLD": "Yoshi Egg from castle",
               "(Retro) SUPER SMASH BROS. BRAWL": "Beat Petey Piranha",
+              "(FTD) CAVE STORY": "Rescue Sue from Igor",
               "DARK SOULS 3": "Greirat",
               "(Retro) KID ICARUS": "Mallet on centurian statues in 1-4",
               "MINA THE HOLLOWER": "Rhene",
@@ -4932,6 +5342,7 @@ export const EVERY_GAME_UFO = {
               "BACKPACK HERO": "dad",
               "CELESTE": "Theo (Ch.5)",
               "KERO BLASTER": "Semi-final boss",
+              "MAIDEN & SPELL": "Defeat the Collector of Stars",
               "(Retro) MONSTER HUNTER TRI (WII)": "Cha-Cha",
               "(FTP) NETHACK": "",
               "PLANTS VS ZOMBIES": "Rescue Crazy Dave",
@@ -4954,11 +5365,14 @@ export const EVERY_GAME_UFO = {
             "options": [
               "BACKPACK HERO",
               "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT",
+              "(FTD) CAVE STORY",
               "CORGISPACE",
               "DARK SOULS 3",
               "DICEY DUNGEONS",
               "(FTP) DUCK LIFE",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE",
               "(FTP) LONELY SOUL",
+              "MEWGENICS",
               "MINA THE HOLLOWER",
               "MINECRAFT",
               "(FTP) NETHACK",
@@ -4966,11 +5380,13 @@ export const EVERY_GAME_UFO = {
               "RABI-RIBI",
               "RISK OF RAIN 2",
               "ROGUE LEGACY",
+              "ROGUE LEGACY 2",
               "SNKRX",
               "UFO 50",
               "UFO 50 BINGOMOD",
               "UNFAIR FLIPS",
-              "UTOPIA MUST FALL"
+              "UTOPIA MUST FALL",
+              "WILL YOU SNAIL?"
             ],
             "fallback": "Level up 4 times in [3] games(ANY games) [Fallback]"
           },
@@ -4981,7 +5397,9 @@ export const EVERY_GAME_UFO = {
               "shown": [
                 "(FTP) NETHACK",
                 "ROGUE LEGACY",
+                "ROGUE LEGACY 2",
                 "UNFAIR FLIPS",
+                "WILL YOU SNAIL?",
                 "BACKPACK HERO",
                 "CORGISPACE",
                 "DARK SOULS 3",
@@ -4993,7 +5411,10 @@ export const EVERY_GAME_UFO = {
                 "SNKRX",
                 "UTOPIA MUST FALL",
                 "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT",
+                "(FTD) CAVE STORY",
                 "DICEY DUNGEONS",
+                "(FTP) GUNBALL 2: EMPEROR REVENGE",
+                "MEWGENICS",
                 "MINA THE HOLLOWER",
                 "UFO 50",
                 "UFO 50 BINGOMOD",
@@ -5002,7 +5423,8 @@ export const EVERY_GAME_UFO = {
                 "STREETS OF ROGUE",
                 "(Retro) ACTRAISER",
                 "(Retro) KID ICARUS",
-                "SPEEDRUNNERS"
+                "SPEEDRUNNERS",
+                "THE VOID RAINS UPON HER HEART"
               ],
               "shown_if_on_card": [],
               "hidden": []
@@ -5010,7 +5432,9 @@ export const EVERY_GAME_UFO = {
             "descriptions": {
               "(FTP) NETHACK": "Experience",
               "ROGUE LEGACY": "1 upgrade at the castle == 1 level",
+              "ROGUE LEGACY 2": "1 upgrade at the castle == 1 level",
               "UNFAIR FLIPS": "Shop Upgrades",
+              "WILL YOU SNAIL?": "Smiley Minigame",
               "BACKPACK HERO": "char levelups",
               "CORGISPACE": "01 RAT DREAMS",
               "DARK SOULS 3": "~3000 Souls",
@@ -5022,7 +5446,10 @@ export const EVERY_GAME_UFO = {
               "SNKRX": "various sources",
               "UTOPIA MUST FALL": "",
               "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT": "1000 XP",
+              "(FTD) CAVE STORY": "Get 2 weapons at Lv3",
               "DICEY DUNGEONS": "char levelups",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE": "",
+              "MEWGENICS": "Beat 4 battles",
               "MINA THE HOLLOWER": "Bone Up",
               "UFO 50": "Divers & Grimstone level",
               "UFO 50 BINGOMOD": "Divers & Grimstone level",
@@ -5031,7 +5458,8 @@ export const EVERY_GAME_UFO = {
               "STREETS OF ROGUE": "Reaching level 5, quite slow",
               "(Retro) ACTRAISER": "~600 Population",
               "(Retro) KID ICARUS": "both strength and endurance ups probably count",
-              "SPEEDRUNNERS": "Level XP"
+              "SPEEDRUNNERS": "Level XP",
+              "THE VOID RAINS UPON HER HEART": "Quickplay levels"
             }
           }
         },
@@ -5092,11 +5520,16 @@ export const EVERY_GAME_UFO = {
               "CELESTE: STRAWBERRY JAM COLLAB",
               "CRYPT OF THE NECRODANCER",
               "CUPHEAD",
+              "FLIP OF LIGHT",
               "FTL",
               "HITMAN 3",
               "I WANNA BE THE CAT",
               "(FTD) KILLER QUEEN BLACK",
               "(Retro) KIRBY SUPER STAR",
+              "LETHAL LEAGUE BLAZE",
+              "MAGICAT",
+              "MAIDEN & SPELL",
+              "MEWGENICS",
               "NIDHOGG",
               "OPUS MAGNUM",
               "PETAL CRASH",
@@ -5106,6 +5539,7 @@ export const EVERY_GAME_UFO = {
               "RAIN WORLD: DOWNPOUR",
               "ROCKET LEAGUE",
               "ROGUE LEGACY",
+              "ROGUE LEGACY 2",
               "SHEEPO",
               "SLAY THE SPIRE",
               "SLAY THE SPIRE 2",
@@ -5117,10 +5551,12 @@ export const EVERY_GAME_UFO = {
               "STAR VADERS",
               "(FTP) STRATEGEMS",
               "STREETS OF ROGUE",
+              "THE VOID RAINS UPON HER HEART",
               "ULTRAKILL",
               "WHITE KNUCKLE",
               "(Retro) YOSHI'S HIGHLAND",
-              "(Retro) YOSHI'S ISLAND"
+              "(Retro) YOSHI'S ISLAND",
+              "(FTD) YOU HAVE 10 SECONDS (2023)"
             ],
             "fallback": "Complete a playable tutorial in [5] games(ANY games) [Fallback] (no skipping)"
           },
@@ -5134,7 +5570,11 @@ export const EVERY_GAME_UFO = {
                 "CELESTE: STRAWBERRY JAM COLLAB",
                 "CRYPT OF THE NECRODANCER",
                 "CUPHEAD",
+                "FLIP OF LIGHT",
                 "I WANNA BE THE CAT",
+                "LETHAL LEAGUE BLAZE",
+                "MAGICAT",
+                "MAIDEN & SPELL",
                 "NIDHOGG",
                 "OPUS MAGNUM",
                 "PETAL CRASH",
@@ -5143,6 +5583,7 @@ export const EVERY_GAME_UFO = {
                 "RAIN WORLD",
                 "RAIN WORLD: DOWNPOUR",
                 "ROGUE LEGACY",
+                "ROGUE LEGACY 2",
                 "SHEEPO",
                 "SLAY THE SPIRE",
                 "SLAY THE SPIRE 2",
@@ -5151,13 +5592,16 @@ export const EVERY_GAME_UFO = {
                 "(FTD) SPELUNKY CLASSIC",
                 "SPELUNKY HD",
                 "(FTP) STRATEGEMS",
+                "THE VOID RAINS UPON HER HEART",
                 "ULTRAKILL",
                 "WHITE KNUCKLE",
                 "(Retro) YOSHI'S HIGHLAND",
                 "(Retro) YOSHI'S ISLAND",
+                "(FTD) YOU HAVE 10 SECONDS (2023)",
                 "FTL",
                 "HITMAN 3",
                 "(Retro) KIRBY SUPER STAR",
+                "MEWGENICS",
                 "ROCKET LEAGUE",
                 "STAR OF PROVIDENCE",
                 "STREETS OF ROGUE",
@@ -5173,15 +5617,20 @@ export const EVERY_GAME_UFO = {
               "CELESTE: STRAWBERRY JAM COLLAB": "Any Gym",
               "CRYPT OF THE NECRODANCER": "Tutorial Stairs",
               "CUPHEAD": "IGN",
+              "FLIP OF LIGHT": "Blue Segment beggining",
               "I WANNA BE THE CAT": "Tutorial",
+              "LETHAL LEAGUE BLAZE": "How to Play ",
+              "MAGICAT": "First Level",
+              "MAIDEN & SPELL": "Stage 1 Medium mode",
               "NIDHOGG": "Tutorial",
               "OPUS MAGNUM": "Beat all tutorial levels",
               "PETAL CRASH": "How to Play - The Basics",
               "PIZZA TOWER": "Tutorial",
               "POMPOM": "",
-              "RAIN WORLD": "Monk and Survivor Campaigns",
-              "RAIN WORLD: DOWNPOUR": "Monk and Survivor Campaigns",
+              "RAIN WORLD": "Monk/Survivor first cycle",
+              "RAIN WORLD: DOWNPOUR": "Monk/Survivor first cycle",
               "ROGUE LEGACY": "yea",
+              "ROGUE LEGACY 2": "Tutorial",
               "SHEEPO": "Spaceship",
               "SLAY THE SPIRE": "",
               "SLAY THE SPIRE 2": "",
@@ -5190,13 +5639,16 @@ export const EVERY_GAME_UFO = {
               "(FTD) SPELUNKY CLASSIC": "",
               "SPELUNKY HD": "All 3 tutorial levels",
               "(FTP) STRATEGEMS": "",
+              "THE VOID RAINS UPON HER HEART": "Unit Lulu",
               "ULTRAKILL": "Tutorial",
               "WHITE KNUCKLE": "Tutorial",
               "(Retro) YOSHI'S HIGHLAND": "Demo Stage",
               "(Retro) YOSHI'S ISLAND": "Demo Stage",
+              "(FTD) YOU HAVE 10 SECONDS (2023)": "Area 1",
               "FTL": "Tutorial",
               "HITMAN 3": "ICA Facility",
               "(Retro) KIRBY SUPER STAR": "Tutorial",
+              "MEWGENICS": "The Path",
               "ROCKET LEAGUE": "",
               "STAR OF PROVIDENCE": "in Mirror",
               "STREETS OF ROGUE": "(needs clarification)",
@@ -5215,6 +5667,7 @@ export const EVERY_GAME_UFO = {
               "(FTP) ASTEROID MISSION",
               "(Retro) AVENGING SPIRIT",
               "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT",
+              "(FTD) CAVE STORY",
               "CELESTE: STRAWBERRY JAM COLLAB",
               "CORGISPACE",
               "CRYPT OF THE NECRODANCER",
@@ -5228,17 +5681,20 @@ export const EVERY_GAME_UFO = {
               "(FTD) EVIL EGG",
               "FTL",
               "GEOMETRY DASH",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE",
               "HE IS COMING",
               "HITMAN 3",
               "HOLLOW KNIGHT",
               "HOLLOW KNIGHT SILKSONG",
               "(FTP) HR. B",
               "I WANNA BE THE CAT",
+              "(FTD) I WANNA BE THE GUY",
               "KERO BLASTER",
               "(Retro) KIRBY 64: THE CRYSTAL SHARDS",
               "(Retro) KIRBY AIR RIDE",
               "(Retro) KIRBY SUPER STAR",
               "LETHAL COMPANY",
+              "MAGICAT",
               "MARIO KART WORLD",
               "MINECRAFT",
               "(FTD) MINESWEEPER PLUS",
@@ -5274,10 +5730,14 @@ export const EVERY_GAME_UFO = {
               "(Retro) SUPER SMASH BROS. MELEE",
               "TERRARIA",
               "THE BINDING OF ISAAC: REBIRTH",
+              "THE VOID RAINS UPON HER HEART",
               "UFO 50",
               "UFO 50 BINGOMOD",
               "ULTRAKILL",
-              "UTOPIA MUST FALL"
+              "UTOPIA MUST FALL",
+              "WILL YOU SNAIL?",
+              "YOKU'S ISLAND EXPRESS",
+              "(FTD) YOU HAVE 10 SECONDS (2023)"
             ],
             "fallback": "See an explosion in [6] games(ANY games) [Fallback]"
           },
@@ -5299,14 +5759,17 @@ export const EVERY_GAME_UFO = {
                 "ENVIRONMENTAL STATION ALPHA",
                 "FTL",
                 "GEOMETRY DASH",
+                "(FTP) GUNBALL 2: EMPEROR REVENGE",
                 "HITMAN 3",
                 "HOLLOW KNIGHT SILKSONG",
                 "(FTP) HR. B",
                 "I WANNA BE THE CAT",
+                "(FTD) I WANNA BE THE GUY",
                 "(Retro) KIRBY 64: THE CRYSTAL SHARDS",
                 "(Retro) KIRBY AIR RIDE",
                 "(Retro) KIRBY SUPER STAR",
                 "LETHAL COMPANY",
+                "MAGICAT",
                 "(FTD) MINESWEEPER PLUS",
                 "(Retro) MONSTER HUNTER TRI (WII)",
                 "MOSA LINA",
@@ -5328,10 +5791,13 @@ export const EVERY_GAME_UFO = {
                 "(Retro) SUPER SMASH BROS. BRAWL",
                 "(Retro) SUPER SMASH BROS. MELEE",
                 "THE BINDING OF ISAAC: REBIRTH",
+                "THE VOID RAINS UPON HER HEART",
                 "UFO 50",
                 "UFO 50 BINGOMOD",
                 "ULTRAKILL",
                 "UTOPIA MUST FALL",
+                "WILL YOU SNAIL?",
+                "(FTD) YOU HAVE 10 SECONDS (2023)",
                 "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT",
                 "CELESTE: STRAWBERRY JAM COLLAB",
                 "CUPHEAD",
@@ -5347,7 +5813,9 @@ export const EVERY_GAME_UFO = {
                 "SOL CESTO",
                 "(Retro) SUPER MARIO SUNBURN",
                 "TERRARIA",
+                "YOKU'S ISLAND EXPRESS",
                 "(Retro) ACTRAISER",
+                "(FTD) CAVE STORY",
                 "MINECRAFT",
                 "RAIN WORLD",
                 "SALAMANDER COUNTY PUBLIC TELEVISION",
@@ -5363,6 +5831,7 @@ export const EVERY_GAME_UFO = {
                 "HADES",
                 "WHITE KNUCKLE",
                 "(Retro) KID ICARUS",
+                "MEWGENICS",
                 "MINA THE HOLLOWER",
                 "POMPOM",
                 "BUG FABLES",
@@ -5388,14 +5857,17 @@ export const EVERY_GAME_UFO = {
               "ENVIRONMENTAL STATION ALPHA": "Class C Guardian",
               "FTL": "Missle",
               "GEOMETRY DASH": "Player death/clicking players on title screen",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE": "Kill an enemy",
               "HITMAN 3": "Various",
               "HOLLOW KNIGHT SILKSONG": "Kill Moss Mother",
               "(FTP) HR. B": "Killing an enemy",
               "I WANNA BE THE CAT": "Beat a boss",
+              "(FTD) I WANNA BE THE GUY": "Die",
               "(Retro) KIRBY 64: THE CRYSTAL SHARDS": "Delete a save file",
               "(Retro) KIRBY AIR RIDE": "Bombs or Vehicles",
               "(Retro) KIRBY SUPER STAR": "Use Bomb Copy Ability in Green Greens (Spring Breeze)",
               "LETHAL COMPANY": "grenade / landmine",
+              "MAGICAT": "Defeat a boss",
               "(FTD) MINESWEEPER PLUS": "Click a mine",
               "(Retro) MONSTER HUNTER TRI (WII)": "Barrel Bombs",
               "MOSA LINA": "Items or Cannons",
@@ -5417,10 +5889,13 @@ export const EVERY_GAME_UFO = {
               "(Retro) SUPER SMASH BROS. BRAWL": "Link's Bombs",
               "(Retro) SUPER SMASH BROS. MELEE": "Link's Bombs",
               "THE BINDING OF ISAAC: REBIRTH": "Use your starting bomb",
+              "THE VOID RAINS UPON HER HEART": "Defeat a boss",
               "UFO 50": "Mortol 2 Bomber",
               "UFO 50 BINGOMOD": "Mortol 2 Bomber",
               "ULTRAKILL": "Yes",
-              "UTOPIA MUST FALL": "Either deflect Enemy projectiles or use your nukes",
+              "UTOPIA MUST FALL": "Enemy projectiles or your nukes",
+              "WILL YOU SNAIL?": "Die",
+              "(FTD) YOU HAVE 10 SECONDS (2023)": "Die",
               "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT": "Nuetron Bomb",
               "CELESTE: STRAWBERRY JAM COLLAB": "Midnight Monsoon (Advanced)",
               "CUPHEAD": "Plane Super Bomb",
@@ -5436,7 +5911,9 @@ export const EVERY_GAME_UFO = {
               "SOL CESTO": "Bomb Item",
               "(Retro) SUPER MARIO SUNBURN": "Monty Mole fight",
               "TERRARIA": "Bomb",
+              "YOKU'S ISLAND EXPRESS": "Slug ",
               "(Retro) ACTRAISER": "Bomb Offering",
+              "(FTD) CAVE STORY": "Missile Launcher",
               "MINECRAFT": "Creepers",
               "RAIN WORLD": "Cherrybomb",
               "SALAMANDER COUNTY PUBLIC TELEVISION": "Balloon animal (July 8th)",
@@ -5452,6 +5929,7 @@ export const EVERY_GAME_UFO = {
               "HADES": "Inferno-Bomber",
               "WHITE KNUCKLE": "Explosive Rebar",
               "(Retro) KID ICARUS": "Defeat 1-4 boss",
+              "MEWGENICS": "Radical Rat Bombs",
               "MINA THE HOLLOWER": "Sandfalls Explosive Barrel",
               "POMPOM": "Beat a boss i think is fastest? (1-8)",
               "BUG FABLES": "Bomb items",
@@ -5469,6 +5947,7 @@ export const EVERY_GAME_UFO = {
             "options": [
               "ANIMAL WELL",
               "BLUE PRINCE",
+              "(FTD) CAVE STORY",
               "CELESTE: STRAWBERRY JAM COLLAB",
               "CORGISPACE",
               "CRYPT OF THE NECRODANCER",
@@ -5490,7 +5969,8 @@ export const EVERY_GAME_UFO = {
               "UFO 50",
               "UFO 50 BINGOMOD",
               "ULTRAKILL",
-              "(Retro) YOSHI'S ISLAND"
+              "(Retro) YOSHI'S ISLAND",
+              "(FTD) YOU HAVE 10 SECONDS (2023)"
             ],
             "fallback": "Use a key in [6] games(ANY games) [Fallback]"
           },
@@ -5510,6 +5990,7 @@ export const EVERY_GAME_UFO = {
                 "UFO 50",
                 "UFO 50 BINGOMOD",
                 "ANIMAL WELL",
+                "(FTD) CAVE STORY",
                 "CELESTE: STRAWBERRY JAM COLLAB",
                 "CRYPT OF THE NECRODANCER",
                 "ENTER THE GUNGEON",
@@ -5521,12 +6002,14 @@ export const EVERY_GAME_UFO = {
                 "STREETS OF ROGUE",
                 "(Retro) SUPER MARIO WORLD",
                 "ULTRAKILL",
+                "(FTD) YOU HAVE 10 SECONDS (2023)",
                 "DARK SOULS 3",
                 "(Retro) YOSHI'S ISLAND",
                 "BACKPACK HERO",
                 "DEMONCRAWL",
                 "(FTP) NETHACK",
                 "RISK OF RAIN 2",
+                "ROGUE LEGACY 2",
                 "STAR OF PROVIDENCE",
                 "(Retro) YOSHI'S HIGHLAND",
                 "(Retro) AVENGING SPIRIT",
@@ -5542,7 +6025,8 @@ export const EVERY_GAME_UFO = {
                 "SHEEPO",
                 "SLAY THE SPIRE",
                 "SLAY THE SPIRE 2",
-                "TERRARIA"
+                "TERRARIA",
+                "WILL YOU SNAIL?"
               ],
               "shown_if_on_card": [],
               "hidden": []
@@ -5559,6 +6043,7 @@ export const EVERY_GAME_UFO = {
               "UFO 50": "Mortol 2 Tree Lock",
               "UFO 50 BINGOMOD": "Mortol 2 Tree Lock",
               "ANIMAL WELL": "Towards Slinky",
+              "(FTD) CAVE STORY": "Arthur's Key",
               "CELESTE: STRAWBERRY JAM COLLAB": "Cassette Cliffs (Beginner)",
               "CRYPT OF THE NECRODANCER": "Zone 1 Cage",
               "ENTER THE GUNGEON": "Open a chest",
@@ -5570,12 +6055,14 @@ export const EVERY_GAME_UFO = {
               "STREETS OF ROGUE": "Random key drops. RNG dependent but common",
               "(Retro) SUPER MARIO WORLD": "Donut Plains 1",
               "ULTRAKILL": "Blue skull (0-2)",
+              "(FTD) YOU HAVE 10 SECONDS (2023)": "3-1",
               "DARK SOULS 3": "Cell Key",
               "(Retro) YOSHI'S ISLAND": "1-3",
               "BACKPACK HERO": "open a locked chest",
               "DEMONCRAWL": "various",
               "(FTP) NETHACK": "",
               "RISK OF RAIN 2": "Rusted Key on Rusty Lockbox",
+              "ROGUE LEGACY 2": "Skeleton Key Relic",
               "STAR OF PROVIDENCE": "",
               "(Retro) YOSHI'S HIGHLAND": "1-3",
               "(Retro) AVENGING SPIRIT": "Level 2",
@@ -5591,7 +6078,8 @@ export const EVERY_GAME_UFO = {
               "SHEEPO": "Elevator Key",
               "SLAY THE SPIRE": "Unlock the Heart",
               "SLAY THE SPIRE 2": "Unlock the Heart",
-              "TERRARIA": "Golden Key"
+              "TERRARIA": "Golden Key",
+              "WILL YOU SNAIL?": "Heart key"
             }
           }
         },
@@ -5603,6 +6091,7 @@ export const EVERY_GAME_UFO = {
               "ANIMAL WELL",
               "BACKPACK HERO",
               "BLUE PRINCE",
+              "(FTD) CAVE STORY",
               "CORGISPACE",
               "CRYPT OF THE NECRODANCER",
               "DARK SOULS 3",
@@ -5614,11 +6103,13 @@ export const EVERY_GAME_UFO = {
               "I WANNA BE THE CAT",
               "KERO BLASTER",
               "(Retro) KIRBY SUPER STAR",
+              "MEWGENICS",
               "MINA THE HOLLOWER",
               "MINECRAFT",
               "(FTP) NETHACK",
               "RISK OF RAIN 2",
               "ROGUE LEGACY",
+              "ROGUE LEGACY 2",
               "SLAY THE SPIRE",
               "SLAY THE SPIRE 2",
               "SOL CESTO",
@@ -5632,7 +6123,8 @@ export const EVERY_GAME_UFO = {
               "TERRARIA",
               "THE BINDING OF ISAAC: REBIRTH",
               "UFO 50",
-              "UFO 50 BINGOMOD"
+              "UFO 50 BINGOMOD",
+              "YOKU'S ISLAND EXPRESS"
             ],
             "fallback": "Open a chest in [5] games(ANY games) [Fallback]"
           },
@@ -5644,6 +6136,7 @@ export const EVERY_GAME_UFO = {
                 "ANIMAL WELL",
                 "BACKPACK HERO",
                 "BLUE PRINCE",
+                "(FTD) CAVE STORY",
                 "CORGISPACE",
                 "CRYPT OF THE NECRODANCER",
                 "DEMONCRAWL",
@@ -5657,6 +6150,7 @@ export const EVERY_GAME_UFO = {
                 "(FTP) NETHACK",
                 "RISK OF RAIN 2",
                 "ROGUE LEGACY",
+                "ROGUE LEGACY 2",
                 "SOL CESTO",
                 "SPELUNKY 2",
                 "(FTD) SPELUNKY CLASSIC",
@@ -5667,8 +6161,10 @@ export const EVERY_GAME_UFO = {
                 "THE BINDING OF ISAAC: REBIRTH",
                 "UFO 50",
                 "UFO 50 BINGOMOD",
+                "YOKU'S ISLAND EXPRESS",
                 "DARK SOULS 3",
                 "ENTER THE GUNGEON",
+                "MEWGENICS",
                 "SLAY THE SPIRE",
                 "SLAY THE SPIRE 2",
                 "TERRARIA",
@@ -5685,6 +6181,7 @@ export const EVERY_GAME_UFO = {
               "ANIMAL WELL": "Chest left of start",
               "BACKPACK HERO": "",
               "BLUE PRINCE": "",
+              "(FTD) CAVE STORY": "Polar Star's chest",
               "CORGISPACE": "01 RAT DREAMS",
               "CRYPT OF THE NECRODANCER": "",
               "DEMONCRAWL": "",
@@ -5698,6 +6195,7 @@ export const EVERY_GAME_UFO = {
               "(FTP) NETHACK": "If a chest spawns early",
               "RISK OF RAIN 2": "yeah",
               "ROGUE LEGACY": "Find one",
+              "ROGUE LEGACY 2": "Chest",
               "SOL CESTO": "Chest Square",
               "SPELUNKY 2": "Chests",
               "(FTD) SPELUNKY CLASSIC": "Chests",
@@ -5708,8 +6206,10 @@ export const EVERY_GAME_UFO = {
               "THE BINDING OF ISAAC: REBIRTH": "FInd a chest",
               "UFO 50": "Valbrace Chest",
               "UFO 50 BINGOMOD": "Valbrace Chest",
+              "YOKU'S ISLAND EXPRESS": "Chest on the way to toadstool",
               "DARK SOULS 3": "Firelink Shrine or Lothric",
               "ENTER THE GUNGEON": "",
+              "MEWGENICS": "Chest Event",
               "SLAY THE SPIRE": "",
               "SLAY THE SPIRE 2": "",
               "TERRARIA": "Crafted counts",
@@ -5731,6 +6231,7 @@ export const EVERY_GAME_UFO = {
               "BUG FABLES",
               "CRYPT OF THE NECRODANCER",
               "MARIO KART WORLD",
+              "ROGUE LEGACY 2",
               "SLAY THE SPIRE",
               "SLAY THE SPIRE 2",
               "SOL CESTO",
@@ -5752,6 +6253,7 @@ export const EVERY_GAME_UFO = {
             "on_card_only": true,
             "options": {
               "shown": [
+                "ROGUE LEGACY 2",
                 "SLAY THE SPIRE",
                 "SLAY THE SPIRE 2",
                 "SOL CESTO",
@@ -5775,8 +6277,13 @@ export const EVERY_GAME_UFO = {
                 "CUPHEAD",
                 "DICEY DUNGEONS",
                 "(Retro) DONKEY KONG 64",
+                "MAIDEN & SPELL",
+                "MEWGENICS",
                 "RISK OF RAIN 2",
+                "ROGUE LEGACY",
                 "STAR VADERS",
+                "THE VOID RAINS UPON HER HEART",
+                "(FTD) CAVE STORY",
                 "ENTER THE GUNGEON",
                 "KATANA ZERO",
                 "RAIN WORLD",
@@ -5787,6 +6294,7 @@ export const EVERY_GAME_UFO = {
               "hidden": []
             },
             "descriptions": {
+              "ROGUE LEGACY 2": "New classes",
               "SLAY THE SPIRE": "Silent (Die)",
               "SLAY THE SPIRE 2": "",
               "SOL CESTO": "Lose as Peasant",
@@ -5810,8 +6318,13 @@ export const EVERY_GAME_UFO = {
               "CUPHEAD": "Ms. Chalice",
               "DICEY DUNGEONS": "idk how fast but its possible",
               "(Retro) DONKEY KONG 64": "Diddy Kong",
+              "MAIDEN & SPELL": "Beat any Story Mode",
+              "MEWGENICS": "Cleric Collar",
               "RISK OF RAIN 2": "Bandit : Complete Stage 3",
+              "ROGUE LEGACY": "New classes",
               "STAR VADERS": "Burn 20 cards",
+              "THE VOID RAINS UPON HER HEART": "Defect",
+              "(FTD) CAVE STORY": "Curly ",
               "ENTER THE GUNGEON": "Robot",
               "KATANA ZERO": "Fifteen (level 8)",
               "RAIN WORLD": "Beating the game as Monk or Survivor",
@@ -5829,6 +6342,7 @@ export const EVERY_GAME_UFO = {
               "DICEY DUNGEONS",
               "ENVIRONMENTAL STATION ALPHA",
               "HITMAN 3",
+              "MAIDEN & SPELL",
               "(FTP) NETHACK",
               "PEAK",
               "SPELUNKY 2",
@@ -5845,6 +6359,7 @@ export const EVERY_GAME_UFO = {
             "options": {
               "shown": [
                 "BACKPACK HERO",
+                "MAIDEN & SPELL",
                 "(FTP) NETHACK",
                 "PEAK",
                 "UFO 50",
@@ -5855,12 +6370,15 @@ export const EVERY_GAME_UFO = {
                 "SPELUNKY 2",
                 "STREETS OF ROGUE",
                 "TERRARIA",
+                "ROGUE LEGACY 2",
                 "SLAY THE SPIRE",
                 "SLAY THE SPIRE 2",
                 "SNKRX",
                 "(FTD) DOG WITCH",
+                "MEWGENICS",
                 "MINECRAFT",
                 "THE BINDING OF ISAAC: REBIRTH",
+                "THE VOID RAINS UPON HER HEART",
                 "BUG FABLES",
                 "ENTER THE GUNGEON",
                 "HE IS COMING",
@@ -5876,6 +6394,7 @@ export const EVERY_GAME_UFO = {
             },
             "descriptions": {
               "BACKPACK HERO": "various sources",
+              "MAIDEN & SPELL": "Royal Arcanist's Defensive Special",
               "(FTP) NETHACK": "A specific character class starts with poison",
               "PEAK": "various",
               "UFO 50": "Quibble Race Poison",
@@ -5886,12 +6405,15 @@ export const EVERY_GAME_UFO = {
               "SPELUNKY 2": "Pots/Tun",
               "STREETS OF ROGUE": "A bit RNG dependent but various poison hazards",
               "TERRARIA": "Dart Trap",
+              "ROGUE LEGACY 2": "Poison Bomb spell",
               "SLAY THE SPIRE": "",
               "SLAY THE SPIRE 2": "",
               "SNKRX": "various classes",
               "(FTD) DOG WITCH": "Poison Snake",
-              "MINECRAFT": "eat spider eye",
+              "MEWGENICS": "Some items",
+              "MINECRAFT": "Eat spider eye / Find a Witch",
               "THE BINDING OF ISAAC: REBIRTH": "",
+              "THE VOID RAINS UPON HER HEART": "Some gifts",
               "BUG FABLES": "Spuder Poison Attack",
               "ENTER THE GUNGEON": "Anything that poisons the ground",
               "HE IS COMING": "Swamplands",
@@ -5914,6 +6436,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) AVENGING SPIRIT",
               "BACKPACK HERO",
               "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT",
+              "(FTD) CAVE STORY",
               "CORGISPACE",
               "CRYPT OF THE NECRODANCER",
               "CUPHEAD",
@@ -5926,9 +6449,11 @@ export const EVERY_GAME_UFO = {
               "ENTER THE GUNGEON",
               "(FTD) EVIL EGG",
               "FTL",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE",
               "HADES",
               "HE IS COMING",
               "HITMAN 3",
+              "(FTD) I WANNA BE THE GUY",
               "KERO BLASTER",
               "(Retro) KID ICARUS",
               "(FTD) KILLER QUEEN BLACK",
@@ -5948,6 +6473,7 @@ export const EVERY_GAME_UFO = {
               "RAIN WORLD: DOWNPOUR",
               "RISK OF RAIN 2",
               "ROGUE LEGACY",
+              "ROGUE LEGACY 2",
               "SOL CESTO",
               "(FTP) SPACEVENTURE 2 - MINT CONDITION",
               "SPELUNKY 2",
@@ -5967,7 +6493,9 @@ export const EVERY_GAME_UFO = {
               "UFO 50 BINGOMOD",
               "ULTRAKILL",
               "UTOPIA MUST FALL",
-              "WHITE KNUCKLE"
+              "WHITE KNUCKLE",
+              "WILL YOU SNAIL?",
+              "YOKU'S ISLAND EXPRESS"
             ],
             "fallback": "Obtain a weapon in [6] games(ANY games) [Fallback]"
           },
@@ -5979,13 +6507,17 @@ export const EVERY_GAME_UFO = {
                 "ANIMAL WELL",
                 "(Retro) AVENGING SPIRIT",
                 "BACKPACK HERO",
+                "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT",
+                "(FTD) CAVE STORY",
                 "CORGISPACE",
                 "CRYPT OF THE NECRODANCER",
                 "DICEY DUNGEONS",
                 "DUCK GAME",
                 "(FTD) EVIL EGG",
+                "(FTP) GUNBALL 2: EMPEROR REVENGE",
                 "HE IS COMING",
                 "HITMAN 3",
+                "(FTD) I WANNA BE THE GUY",
                 "(Retro) KID ICARUS",
                 "(FTD) KILLER QUEEN BLACK",
                 "(Retro) KIRBY 64: THE CRYSTAL SHARDS",
@@ -6017,8 +6549,8 @@ export const EVERY_GAME_UFO = {
                 "UFO 50 BINGOMOD",
                 "ULTRAKILL",
                 "WHITE KNUCKLE",
+                "YOKU'S ISLAND EXPRESS",
                 "(Retro) ACTRAISER",
-                "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT",
                 "CUPHEAD",
                 "DARK SOULS 3",
                 "DEMONCRAWL",
@@ -6030,12 +6562,15 @@ export const EVERY_GAME_UFO = {
                 "PIZZA TOWER",
                 "RISK OF RAIN 2",
                 "ROGUE LEGACY",
+                "ROGUE LEGACY 2",
                 "UTOPIA MUST FALL",
+                "WILL YOU SNAIL?",
                 "(Retro) DONKEY KONG 64",
                 "MOSA LINA",
                 "SOL CESTO",
                 "(Retro) SUPER METROID",
                 "BLUE PRINCE",
+                "MEWGENICS",
                 "SLAY THE SPIRE",
                 "SLAY THE SPIRE 2",
                 "PEAK",
@@ -6055,13 +6590,17 @@ export const EVERY_GAME_UFO = {
               "ANIMAL WELL": "Firecrackers",
               "(Retro) AVENGING SPIRIT": "Possess Character with Weapon",
               "BACKPACK HERO": "various",
+              "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT": "Holy Symbol (opening)",
+              "(FTD) CAVE STORY": "Polar Star",
               "CORGISPACE": "08 CAVE OF CARDS increase sword counter",
               "CRYPT OF THE NECRODANCER": "",
               "DICEY DUNGEONS": "",
               "DUCK GAME": "Grab a gun",
               "(FTD) EVIL EGG": "Plasma cannon, Rail gun, Executioner's sword",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE": "New gun in shop",
               "HE IS COMING": "Sword Upgrade",
               "HITMAN 3": "Various",
+              "(FTD) I WANNA BE THE GUY": "Collect a Secret",
               "(Retro) KID ICARUS": "Mallet",
               "(FTD) KILLER QUEEN BLACK": "powerup with berry",
               "(Retro) KIRBY 64: THE CRYSTAL SHARDS": "fire+cutter (green crescent) sword or bomb",
@@ -6074,8 +6613,8 @@ export const EVERY_GAME_UFO = {
               "(FTP) NETHACK": "There are weapons everywhere",
               "NIDHOGG": "The enemy's rapier",
               "RABI-RIBI": "Hammer",
-              "RAIN WORLD": "Spears",
-              "RAIN WORLD: DOWNPOUR": "Spears",
+              "RAIN WORLD": "Spear",
+              "RAIN WORLD: DOWNPOUR": "Spear",
               "(FTP) SPACEVENTURE 2 - MINT CONDITION": "bomb, gun, missile, drone, staff etc",
               "SPELUNKY 2": "arrows & various",
               "SPELUNKY HD": "arrows & various",
@@ -6093,8 +6632,8 @@ export const EVERY_GAME_UFO = {
               "UFO 50 BINGOMOD": "Divers Stick",
               "ULTRAKILL": "Revolver",
               "WHITE KNUCKLE": "Rebar",
+              "YOKU'S ISLAND EXPRESS": "Noisemaker",
               "(Retro) ACTRAISER": "Offering",
-              "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT": "Rusty Sword",
               "CUPHEAD": "Any weapon in the shop",
               "DARK SOULS 3": "Broken Straight Sword",
               "DEMONCRAWL": "various",
@@ -6106,12 +6645,15 @@ export const EVERY_GAME_UFO = {
               "PIZZA TOWER": "Knight sword in Pizzascape (not that you can use it..)",
               "RISK OF RAIN 2": "Crowbar / Tri-tip Dagger / Sticky Bomb .....",
               "ROGUE LEGACY": "Blacksmith's first sword",
+              "ROGUE LEGACY 2": "Blacksmith First Sword",
               "UTOPIA MUST FALL": "Approve Offensive Innovation Center Upgrade and then select any weapon",
+              "WILL YOU SNAIL?": "Shelly Gun",
               "(Retro) DONKEY KONG 64": "Gun",
               "MOSA LINA": "Grab item in 9th level",
               "SOL CESTO": "Peasant's Slingshot",
               "(Retro) SUPER METROID": "Missles",
               "BLUE PRINCE": "Sledgehammer",
+              "MEWGENICS": "Anything on the weapon slot",
               "SLAY THE SPIRE": "Shuriken, Kunai, etc",
               "SLAY THE SPIRE 2": "Shuriken, Kunai, etc",
               "PEAK": "Blowdart, TNT (mesa)",
@@ -6135,6 +6677,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) AVENGING SPIRIT",
               "BACKPACK HERO",
               "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT",
+              "(FTD) CAVE STORY",
               "CORGISPACE",
               "CRYPT OF THE NECRODANCER",
               "CUPHEAD",
@@ -6146,6 +6689,7 @@ export const EVERY_GAME_UFO = {
               "ENVIRONMENTAL STATION ALPHA",
               "(FTD) ERASER",
               "(FTD) EVIL EGG",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE",
               "HADES",
               "HITMAN 3",
               "HOLLOW KNIGHT",
@@ -6156,6 +6700,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) KIRBY 64: THE CRYSTAL SHARDS",
               "(Retro) KIRBY AIR RIDE",
               "(Retro) KIRBY SUPER STAR",
+              "LETHAL LEAGUE BLAZE",
               "(Retro) MONSTER HUNTER TRI (WII)",
               "PIZZA TOWER",
               "PLANTS VS ZOMBIES",
@@ -6163,6 +6708,7 @@ export const EVERY_GAME_UFO = {
               "RAIN WORLD: DOWNPOUR",
               "RISK OF RAIN 2",
               "ROGUE LEGACY",
+              "ROGUE LEGACY 2",
               "(FTD) SKORPULAC",
               "SLAY THE SPIRE",
               "SLAY THE SPIRE 2",
@@ -6217,12 +6763,14 @@ export const EVERY_GAME_UFO = {
                 "(Retro) KIRBY 64: THE CRYSTAL SHARDS",
                 "(Retro) KIRBY AIR RIDE",
                 "(Retro) KIRBY SUPER STAR",
+                "LETHAL LEAGUE BLAZE",
                 "(Retro) MONSTER HUNTER TRI (WII)",
                 "PIZZA TOWER",
                 "RABI-RIBI",
                 "RAIN WORLD: DOWNPOUR",
                 "RISK OF RAIN 2",
                 "ROGUE LEGACY",
+                "ROGUE LEGACY 2",
                 "(FTD) SKORPULAC",
                 "(FTP) SPACEVENTURE 2 - MINT CONDITION",
                 "SPELUNKY 2",
@@ -6253,15 +6801,18 @@ export const EVERY_GAME_UFO = {
                 "(Retro) SUPER SMASH BROS.",
                 "(Retro) SUPER SMASH BROS. MELEE",
                 "TERRARIA",
+                "(FTD) CAVE STORY",
                 "(Retro) DEMON'S CREST",
                 "(FTD) DOG WITCH",
                 "(Retro) DONKEY KONG 64",
+                "(FTP) GUNBALL 2: EMPEROR REVENGE",
                 "SOL CESTO",
                 "(Retro) SUPER MARIO SUNSHINE",
                 "(Retro) SUPER METROID MAP RANDO",
                 "KING OF THE BRIDGE",
                 "MINA THE HOLLOWER",
                 "ROCKET LEAGUE",
+                "MEWGENICS",
                 "(FTP) AGAR.IO",
                 "DEMONCRAWL",
                 "ENTER THE GUNGEON",
@@ -6299,12 +6850,14 @@ export const EVERY_GAME_UFO = {
               "(Retro) KIRBY 64: THE CRYSTAL SHARDS": "Most abilities (green crescent is good)",
               "(Retro) KIRBY AIR RIDE": "Air Ride Enemies",
               "(Retro) KIRBY SUPER STAR": "Many abilities",
+              "LETHAL LEAGUE BLAZE": "FFA or Teams battle",
               "(Retro) MONSTER HUNTER TRI (WII)": "Jaggis",
               "PIZZA TOWER": "Kill.",
               "RABI-RIBI": "Hammer strikes",
               "RAIN WORLD: DOWNPOUR": "Artificer",
               "RISK OF RAIN 2": "Huntress' Laser Glaive or Arrow Rain",
               "ROGUE LEGACY": "Swing your sword nicely",
+              "ROGUE LEGACY 2": "Swing nicely",
               "(FTD) SKORPULAC": "",
               "(FTP) SPACEVENTURE 2 - MINT CONDITION": "charged weapon explosion (blue enemies)",
               "SPELUNKY 2": "whip or bomb",
@@ -6335,20 +6888,23 @@ export const EVERY_GAME_UFO = {
               "(Retro) SUPER SMASH BROS.": "KO two opponents",
               "(Retro) SUPER SMASH BROS. MELEE": "KO two opponents",
               "TERRARIA": "",
+              "(FTD) CAVE STORY": "Missile Launcher",
               "(Retro) DEMON'S CREST": "Ground Gargoyle",
               "(FTD) DOG WITCH": "AoE",
               "(Retro) DONKEY KONG 64": "Jungle Japes Lobby",
+              "(FTP) GUNBALL 2: EMPEROR REVENGE": "Rocket Tube",
               "SOL CESTO": "Bomb Items",
               "(Retro) SUPER MARIO SUNSHINE": "Goobles",
               "(Retro) SUPER METROID MAP RANDO": "PB, Shinespark",
               "KING OF THE BRIDGE": "check note",
               "MINA THE HOLLOWER": "easiest with Hammer",
               "ROCKET LEAGUE": "Rumble powerups",
+              "MEWGENICS": "Various ways",
               "(FTP) AGAR.IO": "split",
               "DEMONCRAWL": "any aoe attack",
               "ENTER THE GUNGEON": "AoE gun",
               "FTL": "likely requires either a teleporter or a bomb",
-              "RAIN WORLD": "Finding a Grenade on a Scavenger, then blasting multiple creatures with it",
+              "RAIN WORLD": "Grenades on Scavengers",
               "MINECRAFT": "Sword or spear",
               "POMPOM": "I think you can crush 2 enemies in toy world?",
               "BUG FABLES": "Leif Special Attack",
@@ -6370,6 +6926,7 @@ export const EVERY_GAME_UFO = {
               "(FTD) DOG WITCH",
               "HADES",
               "KATANA ZERO",
+              "MEWGENICS",
               "SPELUNKY 2",
               "UFO 50",
               "UFO 50 BINGOMOD"
@@ -6385,12 +6942,14 @@ export const EVERY_GAME_UFO = {
                 "(FTD) DOG WITCH",
                 "HADES",
                 "KATANA ZERO",
+                "MEWGENICS",
                 "SPELUNKY 2",
                 "UFO 50",
                 "UFO 50 BINGOMOD",
                 "WHITE KNUCKLE",
                 "MINA THE HOLLOWER",
-                "(Retro) MONSTER HUNTER TRI (WII)"
+                "(Retro) MONSTER HUNTER TRI (WII)",
+                "ROGUE LEGACY 2"
               ],
               "shown_if_on_card": [],
               "hidden": []
@@ -6400,12 +6959,14 @@ export const EVERY_GAME_UFO = {
               "(FTD) DOG WITCH": "Right Click Dog",
               "HADES": "Cerberus",
               "KATANA ZERO": "Kitty cat",
+              "MEWGENICS": "Backpack Menu",
               "SPELUNKY 2": "campsite Monty",
               "UFO 50": "Grimstone Santonio",
               "UFO 50 BINGOMOD": "Grimstone Santonio",
               "WHITE KNUCKLE": "Pet a Strider??",
               "MINA THE HOLLOWER": "Mite (in Sandfalls)",
-              "(Retro) MONSTER HUNTER TRI (WII)": "Poogy"
+              "(Retro) MONSTER HUNTER TRI (WII)": "Poogy",
+              "ROGUE LEGACY 2": "Dragon"
             }
           }
         },
@@ -6419,6 +6980,7 @@ export const EVERY_GAME_UFO = {
               "CRYPT OF THE NECRODANCER",
               "DARK SOULS 3",
               "HITMAN 3",
+              "MEWGENICS",
               "MINECRAFT",
               "(FTP) NETHACK",
               "PLANTS VS ZOMBIES",
@@ -6455,6 +7017,7 @@ export const EVERY_GAME_UFO = {
                 "UFO 50 BINGOMOD",
                 "(Retro) ACTRAISER",
                 "DARK SOULS 3",
+                "MEWGENICS",
                 "RAIN WORLD",
                 "RAIN WORLD: DOWNPOUR",
                 "(Retro) SUPER MARIO WORLD",
@@ -6488,8 +7051,9 @@ export const EVERY_GAME_UFO = {
               "UFO 50 BINGOMOD": "Fist Hell Intro Civilian",
               "(Retro) ACTRAISER": "Spell on town houses",
               "DARK SOULS 3": "Shrine Maiden",
+              "MEWGENICS": "Kill your own cats",
               "RAIN WORLD": "Squidcadas, Infant Noodleflies, Scavengers",
-              "RAIN WORLD: DOWNPOUR": "There are too many non-hostile creatures to list",
+              "RAIN WORLD: DOWNPOUR": "Any non-hostile creature",
               "(Retro) SUPER MARIO WORLD": "Drop Yoshi into a pit",
               "TERRARIA": "Drown guide",
               "UTOPIA MUST FALL": "Purple Cruiser",

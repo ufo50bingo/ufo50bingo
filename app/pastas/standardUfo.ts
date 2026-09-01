@@ -694,7 +694,7 @@ export const STANDARD_UFO = {
       ],
       warptank: [
         {
-          name: "WARPTANK: Beat Healing Sector with your tank color changed",
+          name: "WARPTANK: Beat Healing Sector as pink tank",
           short: "WARPTANK: Healing Sector as pink tank",
         },
         {
@@ -1286,10 +1286,10 @@ export const STANDARD_UFO = {
             "RAIL HEIST: LAZY-COPS; Intact crate: {{rail_easy}}, {{rail_crate}}, {{rail_crate}}, {{rail_crate}}",
         },
         {
-          name: "RAIL HEIST: LAZY-COPS allowed; Beat levels with 3/3 stars: {{rail_easy}}, {{rail_stars}}, {{rail_stars}}",
+          name: "RAIL HEIST: LAZY-COPS allowed; Beat levels with Angel & Devil stars: {{rail_easy}}, {{rail_stars}}, {{rail_stars}}",
           sort_tokens: "railheist_order",
           short:
-            "RAIL HEIST: LAZY-COPS; 3/3 stars: {{rail_easy}}, {{rail_stars}}, {{rail_stars}}",
+            "RAIL HEIST: LAZY-COPS; Angel & Devil stars: {{rail_easy}}, {{rail_stars}}, {{rail_stars}}",
         },
       ],
       vainger: [
@@ -1335,8 +1335,8 @@ export const STANDARD_UFO = {
       ],
       fisthell: [
         {
-          name: "FIST HELL: Beat the 3rd Scare",
-          short: "FIST HELL: Beat the 3rd Scare",
+          name: "FIST HELL: Beat the 3rd scare",
+          short: "FIST HELL: Beat the 3rd scare",
         },
         {
           name: "FIST HELL: Reach wave 10 in the gym using {{fh_char}}",

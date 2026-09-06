@@ -29,13 +29,13 @@ type Props = {
   onClose: () => void;
 };
 
-const SEASONS = ["Season 3", "Non-League"] as const;
+const SEASONS = ["Season 4", "Non-League"] as const;
 type Season = (typeof SEASONS)[number];
 
 function getSeason(num: null | number): null | Season {
   switch (num) {
-    case 3:
-      return "Season 3";
+    case 4:
+      return "Season 4";
     case null:
       return "Non-League";
     default:
@@ -171,7 +171,7 @@ export default function EditLeagueModal({
             <Button
               disabled={
                 isSaving ||
-                (season === "Season 3" && tierMismatch) ||
+                (season === "Season 4" && tierMismatch) ||
                 week == null ||
                 p1 == null ||
                 p2 == null ||

@@ -118,10 +118,10 @@ export default function Schedule({ schedule }: Props) {
             <List.Item>
               <Anchor
                 size="sm"
-                href="https://docs.google.com/spreadsheets/d/1ptNQfJw39CCtHBrGldZ8ln0OrTUUSjAw8QVQHQI1LBU/edit?gid=0#gid=0"
+                href="https://docs.google.com/spreadsheets/d/1Vt8MZdfhG30km1kq04wChGYgJHCo3o-tXxkHpBUoZiw/edit?usp=sharing"
                 target="_blank"
               >
-                Season 3 schedule
+                Season 4 schedule
               </Anchor>
             </List.Item>
             <List.Item>

@@ -2181,6 +2181,22 @@ export const STANDARD_UFO = {
             on_card_only: false,
           },
         },
+        {
+          name: "TRADER: Buy or Trade in 6 places across Barbuta, Planet Zoldath, Pilot Quest",
+          restriction: {
+            count: 1,
+            options: ["barbuta", "planetzoldath", "pilotquest"],
+            fallback:
+              "TRADER: Buy or Trade in 6 places across Barbuta, Planet Zoldath, Pilot Quest",
+          },
+          short:
+            "TRADER: Buy or Trade in 6 places across Barbuta, Planet Zoldath, Pilot Quest",
+          cast: {
+            options: "$infer",
+            type: "counter",
+            on_card_only: false,
+          },
+        },
       ],
     },
   },

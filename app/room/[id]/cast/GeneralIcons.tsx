@@ -209,6 +209,7 @@ function getWinnerBitSrc(goal: StandardGeneral, isHidden: boolean): string {
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
     case "ROLE PLAYER: Level up your highest-level character 5 total times across Grimstone, Divers, Valbrace":
     case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
+    case "TRADER: Buy or Trade in 6 places across Barbuta, Planet Zoldath, Pilot Quest":
       return "/general/winnerbit/Icon_Multi-Game_Generic.png";
     default:
       goal satisfies never;
@@ -263,6 +264,9 @@ function getClassicSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/sprites/IconRoleplayer.png";
     case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
       return "/general/sprites/IconRevolutionary.png";
+    // TODO: Add sprite for TRADER
+    case "TRADER: Buy or Trade in 6 places across Barbuta, Planet Zoldath, Pilot Quest":
+      return "/general/sprites/IconUnknown.png";
     default:
       goal satisfies never;
       return "/general/sprites/IconUnknown.png";
@@ -316,6 +320,8 @@ function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/matt/ROLEPLAYER.png";
     case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
       return "/general/matt/REVOLUTIONARY.png";
+    case "TRADER: Buy or Trade in 6 places across Barbuta, Planet Zoldath, Pilot Quest":
+      return "/general/matt/TRADER.png";
     default:
       goal satisfies never;
       return "/general/sprites/IconUnknown.png";

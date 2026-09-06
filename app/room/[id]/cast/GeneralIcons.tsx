@@ -264,9 +264,8 @@ function getClassicSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/sprites/IconRoleplayer.png";
     case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
       return "/general/sprites/IconRevolutionary.png";
-    // TODO: Add sprite for TRADER
     case "TRADER: Buy or Trade in 6 places across Barbuta, Planet Zoldath, Pilot Quest":
-      return "/general/sprites/IconUnknown.png";
+      return "/general/sprites/IconTrader.png";
     default:
       goal satisfies never;
       return "/general/sprites/IconUnknown.png";

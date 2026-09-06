@@ -56,9 +56,9 @@ export default function LeagueMatch({ visible }: Props) {
       const newP1Tier = PLAYER_TO_TIER[newP1];
       const newP2Tier = PLAYER_TO_TIER[newP2];
       if (newP1Tier === newP2Tier) {
-        if (newP1Tier === "A" && gameNumber == null) {
+        if ((newP1Tier === "A1" || newP1Tier === "A2") && gameNumber == null) {
           setGameNumber(1);
-        } else if (newP1Tier !== "A" && gameNumber != null) {
+        } else if ((newP1Tier !== "A1" && newP1Tier !== "A2") && gameNumber != null) {
           setGameNumber(null);
         }
       }
@@ -118,7 +118,7 @@ export default function LeagueMatch({ visible }: Props) {
           }
           label="Is part of multi-game series"
         />
-        {gameNumber == null && p1Tier === "A" && p2Tier === "A" && (
+        {gameNumber == null && ((p1Tier === "A1" && p2Tier === "A1") || (p1Tier === "A2" && p2Tier === "A2")) && (
           <Alert variant="light" color="yellow">
             A tier players are expected to play a 2-game series every week. Please
             select "Is part of multi-game series" unless you have special
@@ -126,8 +126,10 @@ export default function LeagueMatch({ visible }: Props) {
           </Alert>
         )}
         {gameNumber != null &&
-          p1Tier !== "A" &&
-          p2Tier !== "A" &&
+          p1Tier !== "A1" &&
+          p1Tier !== "A2" &&
+          p2Tier !== "A1" &&
+          p2Tier !== "A2" &&
           p1Tier != null &&
           p2Tier != null && (
             <Alert variant="light" color="yellow">

@@ -2190,7 +2190,7 @@ export const STANDARD_UFO = {
               "TRADER: Buy or Trade in 6 places across Barbuta, Planet Zoldath, Pilot Quest",
           },
           short:
-            "TRADER: Buy or Trade in 6 places across Barbuta, Planet Zoldath, Pilot Quest",
+            "TRADER: 6 trades across Barbuta, Planet Zoldath, Pilot Quest",
           cast: {
             options: "$infer",
             type: "counter",

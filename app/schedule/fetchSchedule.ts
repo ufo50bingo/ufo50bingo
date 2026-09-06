@@ -1,7 +1,7 @@
 import { google } from "googleapis";
 import { DateTime } from "luxon";
 
-export const LEAGUE_SHEET_ID = "1ptNQfJw39CCtHBrGldZ8ln0OrTUUSjAw8QVQHQI1LBU";
+export const LEAGUE_SHEET_ID = "1Vt8MZdfhG30km1kq04wChGYgJHCo3o-tXxkHpBUoZiw";
 const UNDERGROUND_SHEET_ID = "170o3g2g9144Bel6StX64BOyZET2mXZyAnYFpv6jSb9E";
 const OFFSEASON_SHEET_ID = "1FuvQLFIM38sZKXF4hnMtLWjWBo1jOokM659N-BRu2uk";
 // const SPICY_SHEET_ID = "1oQktL5q8eVWrI_Zbacjv-supFhuQI4h63tiVcMkan4E";

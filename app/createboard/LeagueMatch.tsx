@@ -56,9 +56,9 @@ export default function LeagueMatch({ visible }: Props) {
       const newP1Tier = PLAYER_TO_TIER[newP1];
       const newP2Tier = PLAYER_TO_TIER[newP2];
       if (newP1Tier === newP2Tier) {
-        if ((newP1Tier === "A1" || newP1Tier === "A2") && gameNumber == null) {
+        if (newP1Tier === "A1" && gameNumber == null) {
           setGameNumber(1);
-        } else if ((newP1Tier !== "A1" && newP1Tier !== "A2") && gameNumber != null) {
+        } else if (newP1Tier !== "A1" && gameNumber != null) {
           setGameNumber(null);
         }
       }
@@ -118,24 +118,22 @@ export default function LeagueMatch({ visible }: Props) {
           }
           label="Is part of multi-game series"
         />
-        {gameNumber == null && ((p1Tier === "A1" && p2Tier === "A1") || (p1Tier === "A2" && p2Tier === "A2")) && (
+        {gameNumber == null && p1Tier === "A1" && p2Tier === "A1" && (
           <Alert variant="light" color="yellow">
-            A tier players are expected to play a 2-game series every week. Please
-            select "Is part of multi-game series" unless you have special
+            A1 tier players are expected to play a 2-game series every week.
+            Please select "Is part of multi-game series" unless you have special
             circumstances.
           </Alert>
         )}
         {gameNumber != null &&
           p1Tier !== "A1" &&
-          p1Tier !== "A2" &&
           p2Tier !== "A1" &&
-          p2Tier !== "A2" &&
           p1Tier != null &&
           p2Tier != null && (
             <Alert variant="light" color="yellow">
-              Only A tier players are expected to play a multi-game series. Please
-              deselect "Is part of multi-game series" unless you have special
-              circumstances.
+              Only A1 tier players are expected to play a multi-game series.
+              Please deselect "Is part of multi-game series" unless you have
+              special circumstances.
             </Alert>
           )}
         {gameNumber != null && (
@@ -184,7 +182,8 @@ export default function LeagueMatch({ visible }: Props) {
               ) {
                 throw new Error("Unexpected null when creating match");
               }
-              const gameSuffix = gameNumber == null ? "" : `, Game ${gameNumber}`;
+              const gameSuffix =
+                gameNumber == null ? "" : `, Game ${gameNumber}`;
               const id = await createMatch({
                 roomName: `${p1} vs ${p2}${gameSuffix}`,
                 password,
@@ -278,7 +277,10 @@ export default function LeagueMatch({ visible }: Props) {
             icon={<IconExclamationMark />}
           >
             <Stack gap={8}>
-              <span>You can select a different backend, then try to create the match again.</span>
+              <span>
+                You can select a different backend, then try to create the match
+                again.
+              </span>
               <span>{error.message}</span>
             </Stack>
           </Alert>

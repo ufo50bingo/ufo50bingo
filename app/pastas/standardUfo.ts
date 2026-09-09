@@ -1400,7 +1400,7 @@ export const STANDARD_UFO = {
         },
         {
           name: "STAR WASPIR: Clear waves 1 and 2 without using powerups (EEE, GGG, GEE)",
-          short: "STAR WASPIR: Reach wave 3, no power-ups (EEE, GGG, GEE)",
+          short: "STAR WASPIR: Beat waves 1 & 2, no power-ups (EEE, GGG, GEE)",
         },
       ],
       grimstone: [

@@ -419,10 +419,10 @@ export const NES_50_UFO = {
       ],
       "Ninja Gaiden 2": [
         {
-          "name": "NINJA GAIDEN 2: 💾 1; Beat Act 3, opening every item orb"
+          "name": "NINJA GAIDEN 2: 💾 1; Beat Act 3"
         },
         {
-          "name": "NINJA GAIDEN 2: 💾 2; Beat Act 4, opening every item orb"
+          "name": "NINJA GAIDEN 2: 💾 2; Beat Act 4"
         }
       ],
       "Punch-Out": [

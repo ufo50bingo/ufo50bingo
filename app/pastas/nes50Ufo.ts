@@ -617,8 +617,7 @@ export const NES_50_UFO = {
       ],
       "Fire 'n Ice": [
         {
-          "name": "FIRE 'N ICE: Beat 10 levels across worlds {{FNI_hard}} and {{FNI_hard}}",
-          "sort_tokens": "$numeric"
+          "name": "FIRE 'N ICE: Beat 10 levels across worlds 6 and 7"
         }
       ],
       "Gimmick!": [
@@ -881,7 +880,7 @@ export const NES_50_UFO = {
       ],
       "Fire 'n Ice": [
         {
-          "name": "FIRE 'N ICE: Beat 7 levels in world 10"
+          "name": "FIRE 'N ICE: Beat 9 levels in world 9"
         }
       ],
       "Gimmick!": [
@@ -2170,11 +2169,6 @@ export const NES_50_UFO = {
       "4",
       "5",
       "8"
-    ],
-    "FNI_hard": [
-      "6",
-      "7",
-      "9"
     ],
     "IC_hard": [
       "12",

@@ -470,8 +470,7 @@ export const STANDARD_UFO = {
         },
         {
           name: "QUIBBLE RACE: Have $3,000+",
-          short:
-            "QUIBBLE RACE: $3,000+",
+          short: "QUIBBLE RACE: $3,000+",
         },
       ],
       seasidedrive: [
@@ -762,8 +761,7 @@ export const STANDARD_UFO = {
         },
         {
           name: "HOT FOOT: Beat round 4",
-          short:
-            "HOT FOOT: Beat round 4",
+          short: "HOT FOOT: Beat round 4",
         },
       ],
       divers: [
@@ -876,7 +874,7 @@ export const STANDARD_UFO = {
       rakshasa: [
         {
           name: "RAKSHASA: Beat the first stage",
-          short: "RAKSHASA: Beat the Stage 1",
+          short: "RAKSHASA: Beat Stage 1",
         },
         {
           name: "RAKSHASA: Beat the green bridge mini-boss by arriving w/ 4+ skulls",
@@ -2189,8 +2187,7 @@ export const STANDARD_UFO = {
             fallback:
               "TRADER: Buy or Trade in 6 places across Barbuta, Planet Zoldath, Pilot Quest",
           },
-          short:
-            "TRADER: 6 trades across Barbuta, Planet Zoldath, Pilot Quest",
+          short: "TRADER: 6 trades across Barbuta, Planet Zoldath, Pilot Quest",
           cast: {
             options: "$infer",
             type: "counter",
@@ -2344,14 +2341,7 @@ export const STANDARD_UFO = {
     ],
     roi_vh: ["Wasteland", "Jungle Rush", "Terror Overhead", "Crossroads"],
     fh_char: ["Jay", "Victor", "Cat", "Amy"],
-    hc_char: [
-      "Reck",
-      "Voltana",
-      "Brazz",
-      "Gilroy",
-      "Yogo",
-      "Donkus",
-    ],
+    hc_char: ["Reck", "Voltana", "Brazz", "Gilroy", "Yogo", "Donkus"],
     waspir_ship: ["Gray", "Yellow", "Red"],
     gemstone: [
       "Emerald from the fountain",

@@ -18,11 +18,11 @@ export default function Resources() {
         <List>
           <List.Item>
             <a
-              href="https://docs.google.com/spreadsheets/d/1ptNQfJw39CCtHBrGldZ8ln0OrTUUSjAw8QVQHQI1LBU/edit?gid=521253915#gid=521253915"
+              href="https://docs.google.com/spreadsheets/d/1Vt8MZdfhG30km1kq04wChGYgJHCo3o-tXxkHpBUoZiw/edit?gid=521253915#gid=521253915"
               target="_blank"
             >
               Bingo League Season 4 (September 7 - November 22, 2026)
-            </a>. Sign up by September 4!
+            </a>
           </List.Item>
           <List.Item>
             <a

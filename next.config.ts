@@ -16,6 +16,30 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/rules",
+        destination:
+          "https://docs.google.com/document/d/11kIVxD6NOsoXXXdv22owLPM_nj5oKiCpY53K418muW8/edit?tab=t.0#heading=h.us0d6jom1jp",
+        permanent: true,
+      },
+      {
+        source: "/stats",
+        destination:
+          "https://docs.google.com/document/d/1iGmlFIqfsjOsWMqG6GcIiBaOujKH7kmeq8HTZ8gisO8/edit?tab=t.0#heading=h.oc0hsbxi9ont",
+        permanent: true,
+      },
+      {
+        source: "/bosses",
+        destination:
+          "https://docs.google.com/document/d/11kIVxD6NOsoXXXdv22owLPM_nj5oKiCpY53K418muW8/edit?tab=t.0#heading=h.3iyiv7od9r7t",
+        permanent: true,
+      },
+      {
+        source: "/levels",
+        destination:
+          "https://docs.google.com/spreadsheets/d/1Ee2MAlDuu4jxOSkVIGfg0rtrBbwIOp14M-aAEVz1Znc/edit?gid=0#gid=0",
+        permanent: true,
+      },
+      {
         source: "/doc",
         destination:
           "https://docs.google.com/document/d/1RK6UH8mte79lF7yobr9yvkdpMHINBRBRV3hjJVb4MIk/edit?tab=t.0",

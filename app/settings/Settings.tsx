@@ -27,6 +27,7 @@ import useSession from "../session/useSession";
 import { Metadata } from "next";
 import SelectRightClickBehavior from "./SelectRightClickBehavior";
 import { useShouldShortenContext } from "./ShouldShortenContext";
+import { signIn } from "next-auth/react";
 
 export const metadata: Metadata = {
   title: "UFO 50 Bingo Settings",
@@ -123,16 +124,18 @@ export default function Settings() {
                 <Checkbox
                   checked={shouldShortenPlay}
                   onChange={(event) =>
-                    setShouldShortenPlay(
-                      event.target.checked,
-                    )
+                    setShouldShortenPlay(event.target.checked)
                   }
                   label="Show shortened goal text when possible"
                 />
-                {shouldShortenPlay && <Alert color="yellow" icon={<IconAlertSquareRounded />}>
-                  Shortened goals may leave out important information.<br />
-                  You should only use shortened goal text if you are comfortable with the entire goal set.
-                </Alert>}
+                {shouldShortenPlay && (
+                  <Alert color="yellow" icon={<IconAlertSquareRounded />}>
+                    Shortened goals may leave out important information.
+                    <br />
+                    You should only use shortened goal text if you are
+                    comfortable with the entire goal set.
+                  </Alert>
+                )}
               </Stack>
             </Table.Td>
           </Table.Tr>
@@ -186,6 +189,12 @@ export default function Settings() {
                   </Modal>
                 </>
               )}
+            </Table.Td>
+          </Table.Tr>
+          <Table.Tr>
+            <Table.Th>Discord</Table.Th>
+            <Table.Td>
+              <Button onClick={() => signIn("discord")}>Sign in</Button>
             </Table.Td>
           </Table.Tr>
         </Table.Tbody>

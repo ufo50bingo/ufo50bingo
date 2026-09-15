@@ -18,6 +18,7 @@ import {
 } from "./PracticeVariantContext";
 import { RightClickBehaviorContextProvider } from "./settings/RightClickBehaviorContext";
 import { ShouldShortenContextProvider } from "./settings/ShouldShortenContext";
+import { SessionProvider } from "next-auth/react";
 
 export const metadata: Metadata = {
   title: "UFO 50 Bingo",
@@ -38,18 +39,20 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <MantineProvider defaultColorScheme="dark" theme={theme}>
-          <PracticeVariantProvider>
-            <RightClickBehaviorContextProvider>
-              <ShouldShortenContextProvider>
-                <AppContextProvider>
-                  <Shell>{children}</Shell>
-                </AppContextProvider>
-              </ShouldShortenContextProvider>
-            </RightClickBehaviorContextProvider>
-            <Suspense>
-              <PracticeVariantInit />
-            </Suspense>
-          </PracticeVariantProvider>
+          <SessionProvider>
+            <PracticeVariantProvider>
+              <RightClickBehaviorContextProvider>
+                <ShouldShortenContextProvider>
+                  <AppContextProvider>
+                    <Shell>{children}</Shell>
+                  </AppContextProvider>
+                </ShouldShortenContextProvider>
+              </RightClickBehaviorContextProvider>
+              <Suspense>
+                <PracticeVariantInit />
+              </Suspense>
+            </PracticeVariantProvider>
+          </SessionProvider>
         </MantineProvider>
       </body>
       <GoogleAnalytics gaId="G-FP1JEFSLS3" />

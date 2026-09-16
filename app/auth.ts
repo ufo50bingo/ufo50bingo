@@ -41,7 +41,12 @@ export const auth = betterAuth({
   },
   advanced: {
     database: {
-      generateId: "serial",
+      generateId: (options) => {
+        if (options.model === "user") {
+          return false; // Let PostgreSQL serial generate it
+        }
+        return crypto.randomUUID(); // UUIDs for session, account, verification
+      },
     },
   },
 });

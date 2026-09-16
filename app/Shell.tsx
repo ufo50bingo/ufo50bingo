@@ -1,7 +1,15 @@
 "use client";
 
 import { ReactNode, useState } from "react";
-import { AppShell, Burger, Group, Image, NavLink, Text } from "@mantine/core";
+import {
+  AppShell,
+  Burger,
+  Button,
+  Group,
+  Image,
+  NavLink,
+  Text,
+} from "@mantine/core";
 import {
   IconBrandDiscord,
   IconBuildingTunnel,
@@ -21,6 +29,7 @@ import {
 import { usePathname } from "next/navigation";
 import LinkWithVariant from "./links/LinkWithVariant";
 import PVSelector from "./PVSelector";
+import { authClient } from "./authClient";
 
 const LINKS = [
   {
@@ -158,6 +167,14 @@ export default function Shell({ children }: Props) {
           />
         ))}
         <PVSelector />
+        <Button
+          onClick={() =>
+            authClient.signIn.social({
+              provider: "discord",
+              callbackURL: window.location.href,
+            })
+          }
+        />
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>
       <AppShell.Footer>

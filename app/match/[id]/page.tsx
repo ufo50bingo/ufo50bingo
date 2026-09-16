@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import SingleMatchWrapper from "./SingleMatchWrapper";
 import fetchMatch from "@/app/matches/fetchMatch";
 
@@ -17,7 +18,7 @@ export async function generateMetadata({
   return {
     title: match.name,
     description: `View results for UFO 50 Bingo match "${match.name}"`,
-  }
+  };
 }
 
 export default async function MatchPage({
@@ -27,6 +28,8 @@ export default async function MatchPage({
 }) {
   const { id } = await params;
   const match = await fetchMatch(id);
+  const session = await auth();
+  console.log(session);
   if (match == null) {
     return `Failed to find match with ID ${id}`;
   }

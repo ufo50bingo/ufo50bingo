@@ -45,6 +45,7 @@ import { Game, ORDERED_GAMES } from "@/app/goals";
 import GameInfo from "../cast/GameInfo";
 import InfoCard from "../cast/InfoCard";
 import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
+import { useSearchParams } from "next/navigation";
 
 export type Props = {
   id: string;
@@ -67,6 +68,9 @@ export default function Play({
   initialTimerEvents,
   roomBackend,
 }: Props) {
+  const searchParams = useSearchParams();
+  const override = searchParams.get('override');
+
   const [shownDifficulties, setShownDifficulties] = useShownDifficulties();
   const [showGeneralTrackerRaw, setShowGeneralTracker] = useLocalBool({
     key: "show_general_tracker",
@@ -148,6 +152,17 @@ export default function Play({
   const showGeneralTracker = showGeneralTrackerRaw && generalGoals.length > 0;
 
   const generalRestrictions = useMemo(() => {
+    if (override === "all") {
+      return {
+        canUseFull: true,
+        canFilterOnCard: true,
+        canShowOnCardTooltips: true,
+        canFastSort: true,
+        canSegment: true,
+        canUseTerminalCodes: true,
+        canShowMultiGoalGames: true,
+      };
+    }
     const isUfo50 = generalGoals.every(item => item.pasta === STANDARD_UFO);
     // TODO: Need something when no generals are detected?
     if (isUfo50) {
@@ -182,7 +197,7 @@ export default function Play({
       canUseTerminalCodes: true,
       canShowMultiGoalGames: true,
     };
-  }, [generalGoals]);
+  }, [generalGoals, override]);
 
   const [generalSettings, generalSetters] = useGeneralSettings(generalRestrictions);
   const [fullGeneralState, setGeneralGameCount] = useFullGeneralState(id, seed);

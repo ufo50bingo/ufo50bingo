@@ -144,7 +144,7 @@ export default function About({ initialBoard }: Props) {
         <Title order={2}>Variants and Customization</Title>
         <p>
           Most players use the Standard variant (goal list), but UFO 50 Bingo
-          supports other variants as well. Hover over the names of variants on
+          supports other variants as well. Select other variants on
           the Non-League section of the{" "}
           <LinkWithVariant prefetch={false} href="/">
             Create Match
@@ -152,8 +152,7 @@ export default function About({ initialBoard }: Props) {
           tab to explore them!
         </p>
         <p>
-          In addition to selecting alternate goal lists, the "Customize game and
-          difficulty counts" checkbox on the Non-League section of the{" "}
+          In addition to selecting alternate goal lists, the "Custom" button on the Non-League section of the{" "}
           <LinkWithVariant prefetch={false} href="/">
             Create Match
           </LinkWithVariant>{" "}

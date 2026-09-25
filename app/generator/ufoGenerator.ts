@@ -1,6 +1,7 @@
 import getAllSubcategories from "../createboard/getAllSubcategories";
 import getNonGeneralCategories from "../createboard/getNonGeneralCategories";
 import shuffle from "../createboard/shuffle";
+import { getTerminalCode } from "../room/[id]/cast/findAllGames";
 import getGoalAndFallback from "./getGoalAndFallback";
 import getMagicSquare from "./getMagicSquare";
 import { inferGames } from "./inferGames";
@@ -33,7 +34,7 @@ export type UFOGoalConfig<T extends string = string> = {
   restriction?: {
     count: number;
     fallback: string;
-    options: string | ReadonlyArray<string>;
+    options: string | ReadonlyArray<RestrictionOption>;
   };
   sort_tokens?: string | ReadonlyArray<string>;
   cast?: CastConfig;
@@ -49,6 +50,8 @@ export type Tokens = { [token: string]: ReadonlyArray<string> };
 
 export type Counts = { [difficulty: string]: number };
 
+export type RestrictionOption = string | { option: string; if: string };
+
 export interface UFOPasta {
   goals: UFODifficulties;
   tokens: Tokens;
@@ -56,7 +59,7 @@ export interface UFOPasta {
   general_categories?: ReadonlyArray<string>;
   category_difficulty_tiers?: ReadonlyArray<ReadonlyArray<string>>;
   restriction_option_lists?: {
-    [listName: string]: ReadonlyArray<string>;
+    [listName: string]: ReadonlyArray<RestrictionOption>;
   };
   sort_orders?: {
     [sortName: string]: ReadonlyArray<string>;
@@ -115,9 +118,7 @@ function generateCandidate(
   bestFallbacks: number,
 ): null | [ReadonlyArray<string>, number] {
   const nonGeneralCategories = getNonGeneralCategories(pasta);
-  const allGames = [
-    ...getAllSubcategories(pasta.goals, nonGeneralCategories),
-  ];
+  const allGames = [...getAllSubcategories(pasta.goals, nonGeneralCategories)];
   // fill squares in order of how many bingo lines they're on
   // this helps prevent having two goals from the same game on one line
   const centerIndex = 12;
@@ -199,6 +200,7 @@ function generateCandidate(
   });
 
   const gamesOnCard = new Set<string>();
+  const codesOnCard = new Set<string>();
 
   const unrestricted: Array<number> = [];
   const restricted: Array<number> = [];
@@ -237,9 +239,13 @@ function generateCandidate(
           typeof optionsRaw === "string"
             ? pasta.restriction_option_lists![optionsRaw]
             : optionsRaw;
-        const onCardCount = options.filter((option) =>
-          gamesOnCard.has(option),
-        ).length;
+        const onCardCount = options.filter((option) => {
+          if (typeof option === "object") {
+            return codesOnCard.has(option.if) && gamesOnCard.has(option.option);
+          } else {
+            return gamesOnCard.has(option);
+          }
+        }).length;
         if (onCardCount < goal.restriction.count) {
           if (fallback == null) {
             fallback = goalAndFallback[1];
@@ -261,15 +267,20 @@ function generateCandidate(
 
     finalBoard[i] = finalGoal;
     finalBoardWithTokens[i] = replaceTokens(finalGoal, pasta, sortTokens);
-    const isGeneral = difficulty === "general" || (
-      pasta.general_categories != null &&
-      pasta.general_categories.includes(difficulty));
+    const isGeneral =
+      difficulty === "general" ||
+      (pasta.general_categories != null &&
+        pasta.general_categories.includes(difficulty));
     if (!isGeneral) {
       gamesOnCard.add(game);
     } else {
       for (const onCard of inferGames(finalBoardWithTokens[i], allGames)) {
         gamesOnCard.add(onCard);
       }
+    }
+    const code = getTerminalCode(finalBoardWithTokens[i]);
+    if (code != null) {
+      codesOnCard.add(code);
     }
   };
 
@@ -289,9 +300,10 @@ function generateCandidate(
     const goals = pasta.goals[difficulty][game];
 
     const mayHaveNewGame = goals.some((goal) => {
-      const isGeneral = difficulty === "general" || (
-        pasta.general_categories != null &&
-        pasta.general_categories.includes(difficulty));
+      const isGeneral =
+        difficulty === "general" ||
+        (pasta.general_categories != null &&
+          pasta.general_categories.includes(difficulty));
       if (!isGeneral) {
         return !gamesOnCard.has(game);
       }

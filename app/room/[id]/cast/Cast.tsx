@@ -10,12 +10,7 @@ import {
 import { Group, Stack, Text } from "@mantine/core";
 import { useCallback, useMemo, useState } from "react";
 import Feed from "../common/Feed";
-import {
-  Game,
-  ORDERED_GAMES,
-  ORDERED_PROPER_GAMES,
-  ProperGame,
-} from "@/app/goals";
+import { Game, ORDERED_GAMES, ProperGame } from "@/app/goals";
 import { getAllTerminalCodes, getGameToGoals } from "./findAllGames";
 import GeneralGoal from "./GeneralGoal";
 import InfoCard from "./InfoCard";
@@ -59,7 +54,7 @@ const GENERAL_RESTRICTIONS: GeneralRestrictions = {
   canFastSort: true,
   canSegment: true,
   canUseTerminalCodes: true,
-}
+};
 
 export type FoundStandardGeneral = FoundGoalWithCast<string, string, string>;
 export type GeneralItem = {
@@ -265,11 +260,14 @@ export default function Cast({
     });
   }, [generalGoals]);
 
-  const generalSettings: GeneralSettings = useMemo(() => ({
-    sort: sortType,
-    shouldSegment: true,
-    type: "full",
-  }), [sortType]);
+  const generalSettings: GeneralSettings = useMemo(
+    () => ({
+      sort: sortType,
+      shouldSegment: true,
+      type: "full",
+    }),
+    [sortType],
+  );
 
   const multiGoalGames = Object.keys(gameToGoals).filter(
     (game) => gameToGoals[game].length > 1,
@@ -494,7 +492,11 @@ export default function Cast({
               playerName={playerName}
             />
           </Group>
-          <Feed style={{ height: `${475 - 44}px` }} rawFeed={rawFeed} roomBackend={roomBackend} />
+          <Feed
+            style={{ height: `${475 - 44}px` }}
+            rawFeed={rawFeed}
+            roomBackend={roomBackend}
+          />
         </Stack>
         {showGameSelector ? (
           <Stack gap={8}>
@@ -544,7 +546,11 @@ export default function Cast({
         {generalGoals.length > 0 && (
           <Group w="100%">
             {sortedGenerals.slice(1).map((g) => getCard(g, null))}
-            <InfoCard title="Multi-goal games" style={{ height: `300px` }} width={205}>
+            <InfoCard
+              title="Multi-goal games"
+              style={{ height: `300px` }}
+              width={205}
+            >
               <Stack gap={4}>
                 {multiGoalGameElements.length > 0
                   ? multiGoalGameElements

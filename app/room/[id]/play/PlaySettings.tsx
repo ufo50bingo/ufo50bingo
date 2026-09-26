@@ -1,5 +1,12 @@
 import { Difficulty } from "@/app/goals";
-import { Accordion, Alert, Button, Checkbox, Drawer, Stack } from "@mantine/core";
+import {
+  Accordion,
+  Alert,
+  Button,
+  Checkbox,
+  Drawer,
+  Stack,
+} from "@mantine/core";
 import { IconAlertSquareRounded, IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
@@ -13,12 +20,20 @@ import BottomSection from "../common/BottomSection";
 import { Font } from "@/app/font/useFont";
 import FontSelector from "@/app/font/FontSelector";
 import SelectRightClickBehavior from "@/app/settings/SelectRightClickBehavior";
-import { FullSyncedTimerEvent, SyncedTimerState } from "../common/useSyncedTimer";
+import {
+  FullSyncedTimerEvent,
+  SyncedTimerState,
+} from "../common/useSyncedTimer";
 import TimerSection from "../common/TimerSection";
 import RevealSection from "./RevealSection";
 import { useShouldShortenContext } from "@/app/settings/ShouldShortenContext";
 import { RoomBackend } from "@/app/roomApi";
-import GeneralSection, { GeneralSettings, GeneralRestrictions, GeneralSetters } from "./GeneralSection";
+import GeneralSection, {
+  GeneralSettings,
+  GeneralRestrictions,
+  GeneralSetters,
+} from "./GeneralSection";
+import { useShouldShowRecentContext } from "@/app/settings/ShouldShowRecentContext";
 
 type Props = {
   id: string;
@@ -67,6 +82,8 @@ export default function PlaySettings({
 }: Props) {
   const [isShown, setIsShown] = useState(color == null);
   const { shouldShortenPlay, setShouldShortenPlay } = useShouldShortenContext();
+  const { shouldShowRecentPlay, setShouldShowRecentPlay } =
+    useShouldShowRecentContext();
   return (
     <>
       <Button
@@ -122,16 +139,25 @@ export default function PlaySettings({
                     <Checkbox
                       checked={shouldShortenPlay}
                       onChange={(event) =>
-                        setShouldShortenPlay(
-                          event.target.checked,
-                        )
+                        setShouldShortenPlay(event.target.checked)
                       }
                       label="Show shortened goal text when possible"
                     />
-                    {shouldShortenPlay && <Alert color="yellow" icon={<IconAlertSquareRounded />}>
-                      Shortened goals may leave out important information.<br />
-                      You should only use shortened goal text if you are comfortable with the entire goal set.
-                    </Alert>}
+                    {shouldShortenPlay && (
+                      <Alert color="yellow" icon={<IconAlertSquareRounded />}>
+                        Shortened goals may leave out important information.
+                        <br />
+                        You should only use shortened goal text if you are
+                        comfortable with the entire goal set.
+                      </Alert>
+                    )}
+                    <Checkbox
+                      checked={shouldShowRecentPlay}
+                      onChange={(event) =>
+                        setShouldShowRecentPlay(event.target.checked)
+                      }
+                      label="Highlight opponent's recently-claimed squares"
+                    />
                     <Checkbox
                       checked={shownDifficulties.includes("general")}
                       onChange={(event) =>
@@ -153,9 +179,17 @@ export default function PlaySettings({
                 showGeneralTracker={showGeneralTracker}
                 setShowGeneralTracker={setShowGeneralTracker}
               />
-              <CreateBoardSection id={id} isMobile={isMobile} roomBackend={roomBackend} />
+              <CreateBoardSection
+                id={id}
+                isMobile={isMobile}
+                roomBackend={roomBackend}
+              />
             </Accordion>
-            <BottomSection id={id} isMobile={isMobile} roomBackend={roomBackend} />
+            <BottomSection
+              id={id}
+              isMobile={isMobile}
+              roomBackend={roomBackend}
+            />
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>

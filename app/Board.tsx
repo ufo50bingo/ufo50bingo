@@ -1,6 +1,13 @@
 import SquareText from "./SquareText";
 import classes from "./Board.module.css";
-import { CSSProperties, ReactNode, useMemo, useState } from "react";
+import {
+  CSSProperties,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { BingosyncColor, TBoard } from "./matches/parseBingosyncData";
 import { Difficulty } from "./goals";
 import getColorHex from "./room/[id]/cast/getColorHex";
@@ -12,6 +19,7 @@ import { COLORS } from "./room/[id]/common/ColorSelector";
 import { useShouldShortenContext } from "./settings/ShouldShortenContext";
 import { NES_50_UFO } from "./pastas/nes50Ufo";
 import { EVERY_GAME_UFO } from "./pastas/everyGameUfo";
+import { useShouldShowRecentContext } from "./settings/ShouldShowRecentContext";
 
 type Props = {
   board: TBoard;
@@ -136,12 +144,31 @@ export default function Board({
   boardCover,
   isCast = false,
 }: Props) {
-  const [initialBoard] = useState(board);
   const { rightClickBehavior } = useRightClickBehaviorContext();
   const { shouldShortenPlay, shouldShortenCast } = useShouldShortenContext();
+  const { shouldShowRecentPlay, shouldShowRecentCast } =
+    useShouldShowRecentContext();
   const [rightClickCounts, setRightClickCounts] = useState<
     ReadonlyArray<number | null>
   >(board.map((_) => null));
+
+  const prevBoard = useRef(board);
+  const [isRecent, setIsRecent] = useState(() => board.map((_) => false));
+  useEffect(() => {
+    const newlyColored = board.map(
+      (square, squareIndex) =>
+        square.color !== prevBoard.current[squareIndex].color &&
+        square.color !== viewerColor,
+    );
+
+    if (newlyColored.some(Boolean)) {
+      setIsRecent((prev) =>
+        prev.map((val, squareIndex) => val || newlyColored[squareIndex]),
+      );
+    }
+
+    prevBoard.current = board;
+  }, [board, viewerColor]);
 
   const shouldShorten = isCast ? shouldShortenCast : shouldShortenPlay;
 
@@ -161,7 +188,7 @@ export default function Board({
       }
       const behavior =
         rightClickBehavior[
-        Math.min(rightClickBehavior.length - 1, behaviorIndex)
+          Math.min(rightClickBehavior.length - 1, behaviorIndex)
         ];
       if (behavior.type === "custom_color") {
         newHighlights[squareIndex] = [behavior.color];
@@ -190,11 +217,13 @@ export default function Board({
             : viewerColor == null
               ? true
               : rightClickBehavior[
-                Math.min(rightClickBehavior.length - 1, rightClickCount)
-              ].type === "star";
-        const recentClass = board[squareIndex].color !== "blank" && initialBoard[squareIndex].color === "blank"
-          ? classes.recent
-          : "";
+                  Math.min(rightClickBehavior.length - 1, rightClickCount)
+                ].type === "star";
+        const recentClass =
+          isRecent[squareIndex] &&
+          (isCast ? shouldShowRecentCast : shouldShowRecentPlay)
+            ? classes.recent
+            : "";
         return (
           <div
             key={squareIndex}
@@ -202,6 +231,13 @@ export default function Board({
               board[squareIndex].color,
             )}`}
             onClick={() => onClickSquare != null && onClickSquare(squareIndex)}
+            onAnimationEnd={() => {
+              setIsRecent((prev) => {
+                const next = [...prev];
+                next[squareIndex] = false;
+                return next;
+              });
+            }}
             onContextMenu={(event) => {
               event.preventDefault();
               const oldCount = rightClickCounts[squareIndex];

@@ -18,6 +18,7 @@ import {
 } from "./PracticeVariantContext";
 import { RightClickBehaviorContextProvider } from "./settings/RightClickBehaviorContext";
 import { ShouldShortenContextProvider } from "./settings/ShouldShortenContext";
+import { ShouldShowRecentContextProvider } from "./settings/ShouldShowRecentContext";
 
 export const metadata: Metadata = {
   title: "UFO 50 Bingo",
@@ -41,9 +42,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <PracticeVariantProvider>
             <RightClickBehaviorContextProvider>
               <ShouldShortenContextProvider>
-                <AppContextProvider>
-                  <Shell>{children}</Shell>
-                </AppContextProvider>
+                <ShouldShowRecentContextProvider>
+                  <AppContextProvider>
+                    <Shell>{children}</Shell>
+                  </AppContextProvider>
+                </ShouldShowRecentContextProvider>
               </ShouldShortenContextProvider>
             </RightClickBehaviorContextProvider>
             <Suspense>

@@ -233,6 +233,38 @@
     background-image: linear-gradient(#d8d014, #c1ba0b);
 }
 
+.square.recent::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    box-sizing: border-box;
+    pointer-events: none;
+
+    /* background-image: repeating-linear-gradient(45deg,
+            rgba(255, 255, 255, .20) 0px,
+            rgba(255, 255, 255, .20) 5px,
+            transparent 5px,
+            transparent 13px);
+    mix-blend-mode: overlay; */
+    border: 3px solid rgba(255, 255, 255, .95);
+    /* box-shadow: 0 0 8px 1px rgba(255, 255, 255, .55) inset; */
+    animation: recentFade 30s linear 1 forwards;
+}
+
+@keyframes recentFade {
+    0% {
+        opacity: 1;
+    }
+
+    30% {
+        opacity: .7;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
 .overlay {
     box-sizing: border-box;
     border: 1px solid white;

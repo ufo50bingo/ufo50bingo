@@ -136,6 +136,7 @@ export default function Board({
   boardCover,
   isCast = false,
 }: Props) {
+  const [initialBoard] = useState(board);
   const { rightClickBehavior } = useRightClickBehaviorContext();
   const { shouldShortenPlay, shouldShortenCast } = useShouldShortenContext();
   const [rightClickCounts, setRightClickCounts] = useState<
@@ -191,10 +192,13 @@ export default function Board({
               : rightClickBehavior[
                 Math.min(rightClickBehavior.length - 1, rightClickCount)
               ].type === "star";
+        const recentClass = board[squareIndex].color !== "blank" && initialBoard[squareIndex].color === "blank"
+          ? classes.recent
+          : "";
         return (
           <div
             key={squareIndex}
-            className={`${classes.unselectable} ${classes.square} ${getColorClass(
+            className={`${classes.unselectable} ${classes.square} ${recentClass} ${getColorClass(
               board[squareIndex].color,
             )}`}
             onClick={() => onClickSquare != null && onClickSquare(squareIndex)}

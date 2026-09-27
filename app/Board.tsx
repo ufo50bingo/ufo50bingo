@@ -162,7 +162,8 @@ export default function Board({
     const newlyColored = board.map(
       (square, squareIndex) =>
         square.color !== prevBoard.current[squareIndex].color &&
-        square.color !== viewerColor,
+        square.color !== viewerColor &&
+        prevBoard.current[squareIndex].color !== viewerColor
     );
 
     if (newlyColored.some(Boolean)) {

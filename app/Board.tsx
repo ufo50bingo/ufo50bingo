@@ -148,6 +148,7 @@ export default function Board({
   const { shouldShortenPlay, shouldShortenCast } = useShouldShortenContext();
   const { shouldShowRecentPlay, shouldShowRecentCast } =
     useShouldShowRecentContext();
+  const shouldShowRecent = isCast ? shouldShowRecentCast : shouldShowRecentPlay;
   const [rightClickCounts, setRightClickCounts] = useState<
     ReadonlyArray<number | null>
   >(board.map((_) => null));
@@ -155,6 +156,9 @@ export default function Board({
   const prevBoard = useRef(board);
   const [isRecent, setIsRecent] = useState(() => board.map((_) => false));
   useEffect(() => {
+    if (!shouldShowRecent) {
+      return;
+    }
     const newlyColored = board.map(
       (square, squareIndex) =>
         square.color !== prevBoard.current[squareIndex].color &&
@@ -168,7 +172,7 @@ export default function Board({
     }
 
     prevBoard.current = board;
-  }, [board, viewerColor]);
+  }, [board, viewerColor, shouldShowRecent]);
 
   const shouldShorten = isCast ? shouldShortenCast : shouldShortenPlay;
 
@@ -188,7 +192,7 @@ export default function Board({
       }
       const behavior =
         rightClickBehavior[
-          Math.min(rightClickBehavior.length - 1, behaviorIndex)
+        Math.min(rightClickBehavior.length - 1, behaviorIndex)
         ];
       if (behavior.type === "custom_color") {
         newHighlights[squareIndex] = [behavior.color];
@@ -217,11 +221,11 @@ export default function Board({
             : viewerColor == null
               ? true
               : rightClickBehavior[
-                  Math.min(rightClickBehavior.length - 1, rightClickCount)
-                ].type === "star";
+                Math.min(rightClickBehavior.length - 1, rightClickCount)
+              ].type === "star";
         const recentClass =
           isRecent[squareIndex] &&
-          (isCast ? shouldShowRecentCast : shouldShowRecentPlay)
+            shouldShowRecent
             ? classes.recent
             : "";
         return (

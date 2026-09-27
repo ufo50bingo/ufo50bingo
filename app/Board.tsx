@@ -30,6 +30,7 @@ type Props = {
   viewerColor: BingosyncColor | null;
   boardCover: ReactNode;
   isCast?: boolean;
+  isPlay?: boolean;
 };
 
 function getColorClass(color: string): string {
@@ -143,12 +144,13 @@ export default function Board({
   viewerColor,
   boardCover,
   isCast = false,
+  isPlay = false,
 }: Props) {
   const { rightClickBehavior } = useRightClickBehaviorContext();
   const { shouldShortenPlay, shouldShortenCast } = useShouldShortenContext();
   const { shouldShowRecentPlay, shouldShowRecentCast } =
     useShouldShowRecentContext();
-  const shouldShowRecent = isCast ? shouldShowRecentCast : shouldShowRecentPlay;
+  const shouldShowRecent = isCast ? shouldShowRecentCast : isPlay ? shouldShowRecentPlay : false;
   const [rightClickCounts, setRightClickCounts] = useState<
     ReadonlyArray<number | null>
   >(board.map((_) => null));

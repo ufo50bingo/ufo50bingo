@@ -299,6 +299,7 @@ export default function Play({
                 forceReveal={forceReveal}
               />
             }
+            isPlay={true}
           />
           <Group justify="space-between">
             <div style={{ display: "flex" }}>

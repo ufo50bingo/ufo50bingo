@@ -106,7 +106,9 @@ export default function MatchView({ match, matchesUrl }: Props) {
   const playbackId = `playback_${match.id}`;
 
   const leagueInfo = match.leagueInfo;
-  const date = new Date(match.dateCreated * 1000).toLocaleString(undefined, {
+  const matchDate = new Date(match.dateCreated * 1000);
+  const date = matchDate.toLocaleString(undefined, {
+    year: matchDate.getFullYear() === (new Date()).getFullYear() ? undefined : "2-digit",
     month: "numeric",
     day: "numeric",
     hour: "numeric",

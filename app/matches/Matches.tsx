@@ -519,6 +519,8 @@ export default function Matches({ matches, totalPages }: Props) {
                   const isRevealed =
                     !hideByDefault || revealedMatchIDs?.has(match.id);
 
+                  const matchDate = new Date(match.dateCreated * 1000);
+
                   return (
                     <Table.Tr key={match.id}>
                       <Table.Td>
@@ -570,9 +572,10 @@ export default function Matches({ matches, totalPages }: Props) {
                       <Table.Td>{match.leagueInfo?.tier}</Table.Td>
                       <Table.Td>{match.leagueInfo?.week}</Table.Td>
                       <Table.Td>
-                        {new Date(match.dateCreated * 1000).toLocaleString(
+                        {matchDate.toLocaleString(
                           undefined,
                           {
+                            year: matchDate.getFullYear() === (new Date()).getFullYear() ? undefined : "2-digit",
                             month: "numeric",
                             day: "numeric",
                             hour: "numeric",

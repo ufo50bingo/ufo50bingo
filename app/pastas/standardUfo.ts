@@ -2126,7 +2126,7 @@ export const STANDARD_UFO = {
           name: "WAR IS BAD: Win 7 battles across Avianos, Combatants, and Lords of Diskonia",
           restriction: {
             count: 1,
-            options: ["lordsofdiskonia", "avianos", "combatants"],
+            options: ["avianos", "combatants", "lordsofdiskonia"],
             fallback:
               "WAR IS BAD: Win 7 battles across Avianos, Combatants, and Lords of Diskonia",
           },
@@ -2190,9 +2190,9 @@ export const STANDARD_UFO = {
             count: 1,
             options: ["barbuta", "planetzoldath", "pilotquest"],
             fallback:
-              "TRADER: Buy or Trade in 6 places across Barbuta, Planet Zoldath, Pilot Quest",
+              "TRADER: Buy or Trade in 7 places across Barbuta, Planet Zoldath, Pilot Quest",
           },
-          short: "TRADER: 6 trades across Barbuta, Planet Zoldath, Pilot Quest",
+          short: "TRADER: 7 trades across Barbuta, Planet Zoldath, Pilot Quest",
           cast: {
             options: "$infer",
             type: "counter",

@@ -205,11 +205,11 @@ function getWinnerBitSrc(goal: StandardGeneral, isHidden: boolean): string {
     case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
     case "PUZZLER: Beat 12 levels across Block Koala, Devilition, and Warptank":
     case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
-    case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
+    case "WAR IS BAD: Win 7 battles across Avianos, Combatants, and Lords of Diskonia":
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
     case "ROLE PLAYER: Level up your highest-level character 5 total times across Grimstone, Divers, Valbrace":
     case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
-    case "TRADER: Buy or Trade in 6 places across Barbuta, Planet Zoldath, Pilot Quest":
+    case "TRADER: Buy or Trade in 7 places across Barbuta, Planet Zoldath, Pilot Quest":
       return "/general/winnerbit/Icon_Multi-Game_Generic.png";
     default:
       goal satisfies never;
@@ -256,7 +256,7 @@ function getClassicSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/sprites/IconPuzzler.png";
     case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
       return "/general/sprites/IconAmy.png";
-    case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
+    case "WAR IS BAD: Win 7 battles across Avianos, Combatants, and Lords of Diskonia":
       return "/general/sprites/IconWarIsBad.png";
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
       return "/general/sprites/IconMetroidvania.png";
@@ -264,7 +264,7 @@ function getClassicSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/sprites/IconRoleplayer.png";
     case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
       return "/general/sprites/IconRevolutionary.png";
-    case "TRADER: Buy or Trade in 6 places across Barbuta, Planet Zoldath, Pilot Quest":
+    case "TRADER: Buy or Trade in 7 places across Barbuta, Planet Zoldath, Pilot Quest":
       return "/general/sprites/IconTrader.png";
     default:
       goal satisfies never;
@@ -311,7 +311,7 @@ function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/matt/PUZZLER.png";
     case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
       return "/general/matt/AMY.png";
-    case "WAR IS BAD: Win 9 battles across Attactics, Avianos, and Combatants":
+    case "WAR IS BAD: Win 7 battles across Avianos, Combatants, and Lords of Diskonia":
       return "/general/matt/WARISBAD.png";
     case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
       return "/general/matt/METROIDVANIA.png";
@@ -319,7 +319,7 @@ function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
       return "/general/matt/ROLEPLAYER.png";
     case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
       return "/general/matt/REVOLUTIONARY.png";
-    case "TRADER: Buy or Trade in 6 places across Barbuta, Planet Zoldath, Pilot Quest":
+    case "TRADER: Buy or Trade in 7 places across Barbuta, Planet Zoldath, Pilot Quest":
       return "/general/matt/TRADER.png";
     default:
       goal satisfies never;

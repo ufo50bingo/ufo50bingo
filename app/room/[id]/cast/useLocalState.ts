@@ -118,7 +118,7 @@ export default function useLocalState(id: string, seed: number): CasterState {
 }
 
 const DEFAULT_STATE: BaseState = {
-  shownDifficulties: ["veryhard", "general"],
+  shownDifficulties: ["easy", "veryhard", "general"],
   showAll: [],
 };
 

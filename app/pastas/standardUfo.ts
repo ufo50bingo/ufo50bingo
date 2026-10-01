@@ -1363,8 +1363,8 @@ export const STANDARD_UFO = {
       ],
       hypercontender: [
         {
-          name: "HYPER CONTENDER: Beat round 6 as {{hc_char}} or {{hc_char}}",
-          short: "HYPER CONTENDER: Beat round 6 as {{hc_char}} or {{hc_char}}",
+          name: "HYPER CONTENDER: Beat round 6 as {{hc_char}} or {{hc_char}} (default ring settings)",
+          short: "HYPER CONTENDER: Beat round 6 as {{hc_char}} or {{hc_char}} (default rings)",
         },
         {
           name: "HYPER CONTENDER: Win 3 fights in one run on Hyper difficulty (default ring settings)",

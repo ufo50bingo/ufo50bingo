@@ -2279,7 +2279,7 @@ export const NES_50_UFO = {
     "Metroid_powerup": [
       "Varia",
       "Hi-Jump",
-      "Screw Attackt"
+      "Screw Attack"
     ],
     "SDB_condition": [
       "jumping",

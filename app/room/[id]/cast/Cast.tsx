@@ -591,6 +591,8 @@ export default function Cast({
         setShowRecentGames={setShowRecentGames}
         numPlayers={numPlayers}
         setNumPlayers={setNumPlayers}
+        allPlayerGames={allPlayerGames}
+        addGame={addGame}
         countPosition={countPosition}
         setCountPosition={setCountPosition}
         generalOrder={generalOrder}

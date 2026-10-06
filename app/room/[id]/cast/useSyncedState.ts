@@ -186,8 +186,8 @@ export default function useSyncedState({
         game: newGame,
         start_time: getServerMsFromClientMs(Date.now()),
       };
-      setAllPlayerGames(
-        updateAllPlayerGames(allPlayerGames, newEntry, playerNum),
+      setAllPlayerGames((oldAllPlayerGames) =>
+        updateAllPlayerGames(oldAllPlayerGames, newEntry, playerNum),
       );
       const syncChange: CurrentGameSync = {
         ...newEntry,

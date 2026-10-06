@@ -40,6 +40,7 @@ import { useShouldShortenContext } from "@/app/settings/ShouldShortenContext";
 import { RoomBackend } from "@/app/roomApi";
 import { useShouldShowRecentContext } from "@/app/settings/ShouldShowRecentContext";
 import AutoGameSection from "./AutoGameSection";
+import { AllPlayerGames } from "./useSyncedState";
 
 type Props = {
   id: string;
@@ -70,6 +71,8 @@ type Props = {
   setShowRecentGames: (newShowRecentGames: boolean) => unknown;
   numPlayers: number;
   setNumPlayers: (numPlayers: number) => unknown;
+  allPlayerGames: AllPlayerGames;
+  addGame: (newGame: null | string, playerNum: number) => unknown;
   countPosition: TCountPosition;
   setCountPosition: (newCountPosition: TCountPosition) => unknown;
   generalOrder: TGeneralOrder;
@@ -110,6 +113,8 @@ export default function CastSettings({
   setShowRecentGames,
   numPlayers,
   setNumPlayers,
+  allPlayerGames,
+  addGame,
   countPosition,
   setCountPosition,
   generalOrder,
@@ -336,6 +341,8 @@ export default function CastSettings({
                 numPlayers={numPlayers}
                 leftColor={leftColor}
                 rightColor={rightColor}
+                allPlayerGames={allPlayerGames}
+                addGame={addGame}
               />
               <FileSyncSection
                 leftScore={leftScore}

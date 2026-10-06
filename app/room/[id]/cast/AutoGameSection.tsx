@@ -11,18 +11,20 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { IconCamera, IconPlus, IconX } from "@tabler/icons-react";
-import { useEffect, useEffectEvent, useState } from "react";
+import { useEffect, useEffectEvent, useRef, useState } from "react";
 import CaptureRegionSelectionModal, {
   CaptureRegion,
   CropRect,
   createRegion,
   getPlayerLabel,
 } from "./CaptureRegionSelectionModal";
-import { GAME_NAMES } from "@/app/goals";
+import { GAME_NAMES, ProperGame } from "@/app/goals";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { startGameDetection } from "./gamedetector/browser";
 import { GameDetection } from "./gamedetector/detector";
 import { FrameResult } from "./gamedetector/types";
+import getGamesForPlayer from "./getGamesForPlayer";
+import { AllPlayerGames } from "./useSyncedState";
 
 const AUTO_GAME_DEBUG = false;
 
@@ -43,12 +45,16 @@ type Props = {
   numPlayers: number;
   leftColor: BingosyncColor;
   rightColor: BingosyncColor;
+  allPlayerGames: AllPlayerGames;
+  addGame: (newGame: null | string, playerNum: number) => unknown;
 };
 
 export default function AutoGameSection({
   numPlayers,
   leftColor,
   rightColor,
+  allPlayerGames,
+  addGame,
 }: Props) {
   const [captures, setCaptures] = useState<ReadonlyArray<Capture>>([]);
   const [editing, setEditing] = useState<null | {
@@ -60,6 +66,9 @@ export default function AutoGameSection({
     [regionId: string]: null | GameDetection;
   }>({});
   const [statuses, setStatuses] = useState<{ [regionId: string]: string }>({});
+  const sentGamesRef = useRef(
+    new Map<number, { game: null | string; allPlayerGames: AllPlayerGames }>(),
+  );
 
   const allRegions = captures.flatMap((capture) => capture.regions);
   const nextPlayerNum = getNextPlayerNum(allRegions);
@@ -80,6 +89,19 @@ export default function AutoGameSection({
         capture.id === captureId ? { ...capture, regions: newRegions } : capture,
       ),
     );
+
+  const updateCurrentGame = (game: null | ProperGame, playerNum: number) => {
+    const sent = sentGamesRef.current.get(playerNum);
+    const currentGame =
+      sent != null && sent.allPlayerGames === allPlayerGames
+        ? sent.game
+        : (getGamesForPlayer(allPlayerGames, playerNum)[0]?.game ?? null);
+    if (game === currentGame) {
+      return;
+    }
+    sentGamesRef.current.set(playerNum, { game, allPlayerGames });
+    addGame(game, playerNum);
+  };
 
   const removeCapture = (capture: Capture) => {
     capture.stream.getTracks().forEach((track) => track.stop());
@@ -139,6 +161,7 @@ export default function AutoGameSection({
                       ? oldDetections
                       : { ...oldDetections, [region.id]: null },
                   );
+                  updateCurrentGame(null, region.playerNum);
                 }
                 if (AUTO_GAME_DEBUG) {
                   setStatuses((oldStatuses) => ({
@@ -152,6 +175,7 @@ export default function AutoGameSection({
                   ...oldDetections,
                   [region.id]: detection,
                 }));
+                updateCurrentGame(detection.game, region.playerNum);
               }}
             />
           )),

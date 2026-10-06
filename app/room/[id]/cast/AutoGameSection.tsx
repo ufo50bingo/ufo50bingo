@@ -11,14 +11,20 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { IconCamera, IconPlus, IconX } from "@tabler/icons-react";
-import { useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import CaptureRegionSelectionModal, {
   CaptureRegion,
   CropRect,
   createRegion,
   getPlayerLabel,
 } from "./CaptureRegionSelectionModal";
+import { GAME_NAMES } from "@/app/goals";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
+import { startGameDetection } from "./gamedetector/browser";
+import { GameDetection } from "./gamedetector/detector";
+import { FrameResult } from "./gamedetector/types";
+
+const AUTO_GAME_DEBUG = false;
 
 export type SnapshotInfo = {
   url: string;
@@ -49,6 +55,11 @@ export default function AutoGameSection({
     captureId: string;
     snapshotInfo: SnapshotInfo;
   }>(null);
+  const [isDetecting, setIsDetecting] = useState(false);
+  const [detections, setDetections] = useState<{
+    [regionId: string]: null | GameDetection;
+  }>({});
+  const [statuses, setStatuses] = useState<{ [regionId: string]: string }>({});
 
   const allRegions = captures.flatMap((capture) => capture.regions);
   const nextPlayerNum = getNextPlayerNum(allRegions);
@@ -114,6 +125,37 @@ export default function AutoGameSection({
   return (
     <Accordion.Item value="autogame">
       <Accordion.Control>Auto Game Detection</Accordion.Control>
+      {isDetecting &&
+        captures.flatMap((capture) =>
+          capture.regions.map((region) => (
+            <RegionDetector
+              key={region.id}
+              video={capture.video}
+              cropRect={region.cropRect}
+              onFrame={(result, ms) => {
+                if (result.kind === "library") {
+                  setDetections((oldDetections) =>
+                    oldDetections[region.id] == null
+                      ? oldDetections
+                      : { ...oldDetections, [region.id]: null },
+                  );
+                }
+                if (AUTO_GAME_DEBUG) {
+                  setStatuses((oldStatuses) => ({
+                    ...oldStatuses,
+                    [region.id]: `${describe(result)} (${ms.toFixed(0)} ms)`,
+                  }));
+                }
+              }}
+              onDetection={(detection) => {
+                setDetections((oldDetections) => ({
+                  ...oldDetections,
+                  [region.id]: detection,
+                }));
+              }}
+            />
+          )),
+        )}
       <Accordion.Panel>
         <Stack>
           <Alert>
@@ -144,25 +186,40 @@ export default function AutoGameSection({
                     No regions chosen
                   </Text>
                 )}
-                {capture.regions.map((region) => (
-                  <Group key={region.id} justify="space-between" wrap="nowrap">
-                    <Text size="sm" fw={500}>
-                      {getPlayerLabel(region.playerNum, playerCount)}
-                    </Text>
-                    <Tooltip label="Copy screenshot of region">
-                      <ActionIcon
-                        variant="subtle"
-                        color="gray"
-                        aria-label="Copy screenshot of region"
-                        onClick={() =>
-                          copyScreenshot(capture.video, region.cropRect)
-                        }
-                      >
-                        <IconCamera size={16} />
-                      </ActionIcon>
-                    </Tooltip>
-                  </Group>
-                ))}
+                {capture.regions.map((region) => {
+                  const detected = detections[region.id];
+                  const status = statuses[region.id];
+                  return (
+                    <div key={region.id}>
+                      <Group justify="space-between" wrap="nowrap">
+                        <Text size="sm" fw={500}>
+                          {getPlayerLabel(region.playerNum, playerCount)}
+                          {detected != null &&
+                            ` - ${GAME_NAMES[detected.game]}`}
+                        </Text>
+                        {AUTO_GAME_DEBUG && (
+                          <Tooltip label="Copy screenshot of region">
+                            <ActionIcon
+                              variant="subtle"
+                              color="gray"
+                              aria-label="Copy screenshot of region"
+                              onClick={() =>
+                                copyScreenshot(capture.video, region.cropRect)
+                              }
+                            >
+                              <IconCamera size={16} />
+                            </ActionIcon>
+                          </Tooltip>
+                        )}
+                      </Group>
+                      {AUTO_GAME_DEBUG && isDetecting && status != null && (
+                        <Text size="xs" c="dimmed">
+                          {status}
+                        </Text>
+                      )}
+                    </div>
+                  );
+                })}
                 <Button
                   size="xs"
                   variant="light"
@@ -180,6 +237,12 @@ export default function AutoGameSection({
           ))}
           <Button leftSection={<IconPlus size={16} />} onClick={addCapture}>
             Add capture
+          </Button>
+          <Button
+            disabled={!isDetecting && allRegions.length === 0}
+            onClick={() => setIsDetecting(!isDetecting)}
+          >
+            {isDetecting ? "Stop detection" : "Start detection"}
           </Button>
         </Stack>
         {editing != null && editingCapture != null && (
@@ -201,12 +264,62 @@ export default function AutoGameSection({
   );
 }
 
+type RegionDetectorProps = {
+  video: HTMLVideoElement;
+  cropRect: CropRect;
+  onFrame: (result: FrameResult, elapsedMs: number) => void;
+  onDetection: (detection: GameDetection) => void;
+};
+
+// runs the detector on one region of a capture for as long as it's mounted
+function RegionDetector({
+  video,
+  cropRect,
+  onFrame,
+  onDetection,
+}: RegionDetectorProps) {
+  const { x, y, width, height } = cropRect;
+  const onFrameEvent = useEffectEvent(onFrame);
+  const onDetectionEvent = useEffectEvent(onDetection);
+
+  useEffect(
+    () =>
+      startGameDetection(
+        video,
+        () => ({
+          x: x * video.videoWidth,
+          y: y * video.videoHeight,
+          width: width * video.videoWidth,
+          height: height * video.videoHeight,
+        }),
+        (detection) => onDetectionEvent(detection),
+        { onFrame: (result, ms) => onFrameEvent(result, ms) },
+      ),
+    [video, x, y, width, height],
+  );
+
+  return null;
+}
+
 function getNextPlayerNum(regions: ReadonlyArray<CaptureRegion>): number {
   let playerNum = 0;
   while (regions.some((region) => region.playerNum === playerNum)) {
     playerNum++;
   }
   return playerNum;
+}
+
+function describe(result: FrameResult): string {
+  if (result.kind === "terminal") {
+    return `terminal: ${result.text}${result.game != null ? ` -> ${GAME_NAMES[result.game]}` : ""}`;
+  }
+  if (result.kind !== "cart") {
+    return result.kind;
+  }
+  if (result.game != null) {
+    return `cartridge: ${GAME_NAMES[result.game]}`;
+  }
+  return result.cobwebbed ? "cartridge (cobwebbed)" : "cartridge (unsure)";
 }
 
 function drawFrame(video: HTMLVideoElement): HTMLCanvasElement {

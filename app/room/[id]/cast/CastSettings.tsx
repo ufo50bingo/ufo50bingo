@@ -39,6 +39,7 @@ import TimerSection from "../common/TimerSection";
 import { useShouldShortenContext } from "@/app/settings/ShouldShortenContext";
 import { RoomBackend } from "@/app/roomApi";
 import { useShouldShowRecentContext } from "@/app/settings/ShouldShowRecentContext";
+import AutoGameSection from "./AutoGameSection";
 
 type Props = {
   id: string;
@@ -330,6 +331,11 @@ export default function CastSettings({
               <NotificationsSection
                 soundChoices={soundChoices}
                 setSoundChoices={setSoundChoices}
+              />
+              <AutoGameSection
+                numPlayers={numPlayers}
+                leftColor={leftColor}
+                rightColor={rightColor}
               />
               <FileSyncSection
                 leftScore={leftScore}

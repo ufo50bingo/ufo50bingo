@@ -16,6 +16,8 @@ import CaptureRegionSelectionModal, {
   CaptureRegion,
   CropRect,
   createRegion,
+  getNextPlayerNum,
+  getPlayerCount,
   getPlayerLabel,
 } from "./CaptureRegionSelectionModal";
 import { GAME_NAMES, ProperGame } from "@/app/goals";
@@ -64,6 +66,7 @@ export default function AutoGameSection({
   const [editing, setEditing] = useState<null | {
     captureId: string;
     snapshotInfo: SnapshotInfo;
+    initialRegions: ReadonlyArray<CaptureRegion>;
   }>(null);
   const [detections, setDetections] = useState<{
     [regionId: string]: null | GameDetection;
@@ -75,10 +78,7 @@ export default function AutoGameSection({
 
   const allRegions = captures.flatMap((capture) => capture.regions);
   const nextPlayerNum = getNextPlayerNum(allRegions);
-  const playerCount = Math.max(
-    numPlayers,
-    ...allRegions.map((region) => region.playerNum + 1),
-  );
+  const playerCount = getPlayerCount(numPlayers, allRegions);
   const editingCapture = captures.find(
     (capture) => capture.id === editing?.captureId,
   );
@@ -108,6 +108,20 @@ export default function AutoGameSection({
     addGame(game, playerNum);
   };
 
+  // Starts with a pending region to place when the capture doesn't have any
+  const openEditor = (capture: Capture) => {
+    const snapshotInfo = takeSnapshot(capture.video);
+    const aspectRatio = snapshotInfo.width / snapshotInfo.height;
+    setEditing({
+      captureId: capture.id,
+      snapshotInfo,
+      initialRegions:
+        capture.regions.length > 0
+          ? capture.regions
+          : [createRegion(nextPlayerNum, 0, aspectRatio)],
+    });
+  };
+
   const removeCapture = (capture: Capture) => {
     capture.stream.getTracks().forEach((track) => track.stop());
     setCaptures((oldCaptures) =>
@@ -133,9 +147,7 @@ export default function AutoGameSection({
         id: crypto.randomUUID(),
         stream,
         video,
-        regions: [
-          createRegion(nextPlayerNum, 0, video.videoWidth / video.videoHeight),
-        ],
+        regions: [],
       };
       stream
         .getVideoTracks()
@@ -143,7 +155,7 @@ export default function AutoGameSection({
           track.addEventListener("ended", () => removeCapture(capture)),
         );
       setCaptures((oldCaptures) => [...oldCaptures, capture]);
-      setEditing({ captureId: capture.id, snapshotInfo: takeSnapshot(video) });
+      openEditor(capture);
     } catch (err) {
       console.error(`Error: ${err}`);
     }
@@ -252,12 +264,7 @@ export default function AutoGameSection({
                 <Button
                   size="xs"
                   variant="light"
-                  onClick={() =>
-                    setEditing({
-                      captureId: capture.id,
-                      snapshotInfo: takeSnapshot(capture.video),
-                    })
-                  }
+                  onClick={() => openEditor(capture)}
                 >
                   Choose regions
                 </Button>
@@ -283,14 +290,17 @@ export default function AutoGameSection({
         {editing != null && editingCapture != null && (
           <CaptureRegionSelectionModal
             snapshotInfo={editing.snapshotInfo}
-            regions={editingCapture.regions}
-            setRegions={(newRegions) =>
-              setRegions(editingCapture.id, newRegions)
-            }
-            nextPlayerNum={nextPlayerNum}
-            playerCount={playerCount}
+            initialRegions={editing.initialRegions}
+            otherRegions={captures
+              .filter((capture) => capture.id !== editingCapture.id)
+              .flatMap((capture) => capture.regions)}
+            numPlayers={numPlayers}
             leftColor={leftColor}
             rightColor={rightColor}
+            onConfirm={(newRegions) => {
+              setRegions(editingCapture.id, newRegions);
+              setEditing(null);
+            }}
             onClose={() => setEditing(null)}
           />
         )}
@@ -334,14 +344,6 @@ function RegionDetector({
   );
 
   return null;
-}
-
-function getNextPlayerNum(regions: ReadonlyArray<CaptureRegion>): number {
-  let playerNum = 0;
-  while (regions.some((region) => region.playerNum === playerNum)) {
-    playerNum++;
-  }
-  return playerNum;
 }
 
 function describe(result: FrameResult): string {

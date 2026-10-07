@@ -36,6 +36,21 @@ export function getPlayerLabel(playerNum: number, playerCount: number): string {
     : `${side} player ${Math.floor(playerNum / 2) + 1}`;
 }
 
+export function getNextPlayerNum(regions: ReadonlyArray<CaptureRegion>): number {
+  let playerNum = 0;
+  while (regions.some((region) => region.playerNum === playerNum)) {
+    playerNum++;
+  }
+  return playerNum;
+}
+
+export function getPlayerCount(
+  numPlayers: number,
+  regions: ReadonlyArray<CaptureRegion>,
+): number {
+  return Math.max(numPlayers, ...regions.map((region) => region.playerNum + 1));
+}
+
 export function createRegion(
   playerNum: number,
   index: number,
@@ -56,25 +71,29 @@ export function createRegion(
 
 type Props = {
   snapshotInfo: SnapshotInfo;
-  regions: ReadonlyArray<CaptureRegion>;
-  setRegions: (newRegions: ReadonlyArray<CaptureRegion>) => unknown;
-  nextPlayerNum: number;
-  playerCount: number;
+  initialRegions: ReadonlyArray<CaptureRegion>;
+  // Regions of the other captures, for picking players
+  otherRegions: ReadonlyArray<CaptureRegion>;
+  numPlayers: number;
   leftColor: BingosyncColor;
   rightColor: BingosyncColor;
+  onConfirm: (newRegions: ReadonlyArray<CaptureRegion>) => unknown;
   onClose: () => unknown;
 };
 
 export default function CaptureRegionSelectionModal({
   snapshotInfo,
-  regions,
-  setRegions,
-  nextPlayerNum,
-  playerCount,
+  initialRegions,
+  otherRegions,
+  numPlayers,
   leftColor,
   rightColor,
+  onConfirm,
   onClose,
 }: Props) {
+  const [regions, setRegions] = useState(initialRegions);
+  const nextPlayerNum = getNextPlayerNum([...otherRegions, ...regions]);
+  const playerCount = getPlayerCount(numPlayers, [...otherRegions, ...regions]);
   const [imgSize, setImgSize] = useState<{
     width: number;
     height: number;
@@ -175,9 +194,10 @@ export default function CaptureRegionSelectionModal({
         >
           Add region
         </Button>
-        <Button ml="auto" onClick={onClose}>
-          Done
+        <Button ml="auto" variant="default" onClick={onClose}>
+          Cancel
         </Button>
+        <Button onClick={() => onConfirm(regions)}>Done</Button>
       </Group>
       <div style={{ position: "relative", display: "inline-block" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}

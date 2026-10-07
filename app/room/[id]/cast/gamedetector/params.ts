@@ -16,8 +16,12 @@ export const PARAMS = {
   /** Brightest dark region may be at most this fraction of the darkest bright region. */
   coarseMaxDarkRatio: 0.7,
   maxVerify: 8,
-  /** This many separate coarse hits triggers an early library check. */
-  libraryHits: 8,
+  /**
+   * Separate coarse hits needed at one scale before a frame can be the
+   * library, which shows a whole grid of cartridges. Gameplay can have a few
+   * cartridge-like spots, but rarely this many at one scale.
+   */
+  libraryHits: 20,
   /** Seeds whose best 5x5-scan frame score is below this are dropped before refinement. */
   seedMinScore: 0.3,
   frameMinScore: 0.5,

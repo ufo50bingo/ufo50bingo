@@ -337,6 +337,9 @@ function describe(result: FrameResult): string {
   if (result.kind === "terminal") {
     return `terminal: ${result.text}${result.game != null ? ` -> ${GAME_NAMES[result.game]}` : ""}`;
   }
+  if (result.kind === "library") {
+    return `library: ${result.carts} carts`;
+  }
   if (result.kind !== "cart") {
     return result.kind;
   }

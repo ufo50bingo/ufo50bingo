@@ -56,15 +56,16 @@ function setBox(k: number, rect: number[], dx: number, dy: number, s: number, W1
 }
 
 /**
- * Seeds (in input pixels) for cartridges, several per cartridge. `stopEarly`
- * gets the best few hits once there are many, and can end the search when
- * they confirm the library.
+ * Seeds (in input pixels) for cartridges, several per cartridge. Once a single
+ * scale has PARAMS.libraryHits separate hits, `stopEarly` gets the best few of
+ * them and can end the search when they confirm the library. `libraryLike`
+ * says whether any scale had that many.
  */
 export function coarseCandidates(
   integ: Integral,
   stopEarly?: (top: Candidate[]) => boolean,
   scaleHint?: number,
-): { seeds: Candidate[]; stopped: boolean } {
+): { seeds: Candidate[]; stopped: boolean; libraryLike: boolean } {
   const { S, W, H, f } = integ;
   const W1 = W + 1;
   const s0 = screenScale(W, H);
@@ -96,8 +97,10 @@ export function coarseCandidates(
   const seedRadius = 3.5 * s0;
   const clusterRadius = 14 * s0;
   let earlyChecks = 0;
+  let libraryLike = false;
   for (const r of scales) {
     const s = s0 * r;
+    const scaleStart = hits.length;
     setBox(0, PRETEST, 0, 0, s, W1);
     setBox(1, PRETEST_LOWER, 0, 0, s, W1);
     for (let k = 0; k < nD; k++) {
@@ -160,19 +163,20 @@ export function coarseCandidates(
         hits.push({ x, y, s, score: (minB - 0.5 * (maxD + maxD2)) / (minB + 1) });
       }
     }
-    // Many separate hits at the most likely scales usually means the library
-    // grid; let the caller confirm with a few fine checks and stop early.
-    if (
-      stopEarly != null &&
-      earlyChecks < 2 &&
-      suppress(hits.slice(), clusterRadius, PARAMS.libraryHits + 1).length > PARAMS.libraryHits
-    ) {
-      earlyChecks++;
-      if (stopEarly(toInput(suppress(hits.slice(), clusterRadius, 3), f))) return { seeds: [], stopped: true };
+    // The library grid puts dozens of cartridges at one scale, so only this
+    // scale's hits count. Let the caller confirm with a few fine checks and
+    // stop early.
+    const scaleHits = suppress(hits.slice(scaleStart), clusterRadius, PARAMS.libraryHits);
+    if (scaleHits.length >= PARAMS.libraryHits) {
+      libraryLike = true;
+      if (stopEarly != null && earlyChecks < 2) {
+        earlyChecks++;
+        if (stopEarly(toInput(scaleHits.slice(0, 3), f))) return { seeds: [], stopped: true, libraryLike };
+      }
     }
   }
   // Several seeds per cartridge: a false seed can outscore the true one.
-  return { seeds: toInput(suppress(hits, seedRadius, 4 * PARAMS.maxVerify), f), stopped: false };
+  return { seeds: toInput(suppress(hits, seedRadius, 4 * PARAMS.maxVerify), f), stopped: false, libraryLike };
 }
 
 function toInput(hits: Candidate[], f: number): Candidate[] {

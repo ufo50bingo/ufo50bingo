@@ -78,8 +78,10 @@ export function detectCartridge(img: ImageDataLike, integ: Integral, scaleHint?:
     libraryCarts.push(a);
     return true;
   };
-  const { seeds, stopped } = coarseCandidates(integ, (top) => top.filter(isCart).length >= 2, scaleHint);
-  if (stopped) return { kind: "library", carts: libraryCarts.length, scale: libraryCarts[0].s / nominal };
+  const { seeds, stopped, libraryLike } = coarseCandidates(integ, (top) => top.filter(isCart).length >= 2, scaleHint);
+  if (stopped) {
+    return { kind: "library", carts: libraryCarts.length, scale: libraryCarts[0].s / nominal };
+  }
 
   // Verify seeds best-first. Seeds near a cartridge that passed the full frame
   // check are skipped; one that only passed under the LIVE badge may still be
@@ -105,9 +107,13 @@ export function detectCartridge(img: ImageDataLike, integ: Integral, scaleHint?:
   pool.sort((a, b) => b.score - a.score);
   const cart = pool[0];
   const scale = cart.s / nominal;
-  if (strictCarts.length > 1) return { kind: "library", carts: strictCarts.length, scale };
+  // More than one cartridge, or a cartridge with a grid neighbor, is never a
+  // selection, but it's only the library if one scale had enough coarse hits.
+  if (strictCarts.length > 1) {
+    return libraryLike ? { kind: "library", carts: strictCarts.length, scale } : { kind: "none" };
+  }
   if (pool.length > 1) return { kind: "none" };
-  if (hasNeighbor(img, m, cart)) return { kind: "library", carts: 2, scale };
+  if (hasNeighbor(img, m, cart)) return libraryLike ? { kind: "library", carts: 2, scale } : { kind: "none" };
 
   const cobwebbed = isUnplayedColor(img, cart);
   // Only the LIVE badge has been seen to cover enough art to fake another

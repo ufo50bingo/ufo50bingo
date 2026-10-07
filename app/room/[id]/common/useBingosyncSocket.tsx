@@ -65,10 +65,12 @@ export default function useBingosyncSocket({
   );
 
   useEffect(() => {
-    const socket = new WebSocket(getSocketUrl(roomBackend));
+    const socket = new WebSocket(getSocketUrl(roomBackend, id));
 
     socket.onopen = () => {
-      socket.send(JSON.stringify({ socket_key: socketKey }));
+      if (roomBackend !== "ufo50bingo") {
+        socket.send(JSON.stringify({ socket_key: socketKey }));
+      }
       setShouldReconnect(false);
     };
 
@@ -121,7 +123,7 @@ export default function useBingosyncSocket({
       socket.close();
       socketRef.current = null;
     };
-  }, [socketKey, id, onNewCard, onMessage]);
+  }, [socketKey, id, onNewCard, onMessage, roomBackend]);
 
   return {
     board,

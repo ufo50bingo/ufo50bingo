@@ -33,7 +33,7 @@ export default async function PlayPage({ id, roomCookie, roomBackend }: Props) {
       initialSeed={seed}
       playerName={roomCookie.name}
       initialTimerEvents={timerEvents}
-      roomBackend={roomBackend}
+      roomBackend="ufo50bingo"
     />
   );
 }

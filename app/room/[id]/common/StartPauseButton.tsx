@@ -10,9 +10,10 @@ type Props = {
     addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
     playerName: string;
     seed: number;
+    onCountdownStart?: () => void;
 }
 
-export default function StartPauseButton({ timerState, isCast, addEvent, playerName, seed }: Props) {
+export default function StartPauseButton({ timerState, isCast, addEvent, playerName, seed, onCountdownStart }: Props) {
     const { id } = useParams<{ id: string }>();
     const { getServerMsFromClientMs } = useServerOffsetContext();
 
@@ -37,13 +38,16 @@ export default function StartPauseButton({ timerState, isCast, addEvent, playerN
                                 Are you sure you want to start the match?
                                 {!isCast && <><br /><br />If your match has a caster, <strong>let them start the match instead!</strong></>}
                             </Text>
-                            <Button color="green" onClick={async () => await addEvent({
-                                room_id: id,
-                                seed,
-                                time: getServerMsFromClientMs(Date.now() + 6000),
-                                event: "start",
-                                duration: null,
-                            })}>Confirm Start</Button>
+                            <Button color="green" onClick={async () => {
+                                onCountdownStart?.();
+                                await addEvent({
+                                    room_id: id,
+                                    seed,
+                                    time: getServerMsFromClientMs(Date.now() + 6000),
+                                    event: "start",
+                                    duration: null,
+                                });
+                            }}>Confirm Start</Button>
                         </Stack>
                     </Popover.Dropdown>
                 </Popover>
@@ -65,13 +69,16 @@ export default function StartPauseButton({ timerState, isCast, addEvent, playerN
                                 Are you sure you want to resume the match?
                                 {!isCast && <><br /><br />If your match has a caster, <strong>let them resume the match instead!</strong></>}
                             </Text>
-                            <Button color="green" onClick={async () => await addEvent({
-                                room_id: id,
-                                seed,
-                                time: getServerMsFromClientMs(Date.now() + 6000),
-                                event: "start",
-                                duration: null,
-                            })}>Confirm Resume</Button>
+                            <Button color="green" onClick={async () => {
+                                onCountdownStart?.();
+                                await addEvent({
+                                    room_id: id,
+                                    seed,
+                                    time: getServerMsFromClientMs(Date.now() + 6000),
+                                    event: "start",
+                                    duration: null,
+                                });
+                            }}>Confirm Resume</Button>
                         </Stack>
                     </Popover.Dropdown>
                 </Popover>

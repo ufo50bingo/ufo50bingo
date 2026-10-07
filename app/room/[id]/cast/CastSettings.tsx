@@ -73,6 +73,8 @@ type Props = {
   setNumPlayers: (numPlayers: number) => unknown;
   allPlayerGames: AllPlayerGames;
   addGame: (newGame: null | string, playerNum: number) => unknown;
+  isDetecting: boolean;
+  setIsDetecting: (newIsDetecting: boolean) => unknown;
   countPosition: TCountPosition;
   setCountPosition: (newCountPosition: TCountPosition) => unknown;
   generalOrder: TGeneralOrder;
@@ -115,6 +117,8 @@ export default function CastSettings({
   setNumPlayers,
   allPlayerGames,
   addGame,
+  isDetecting,
+  setIsDetecting,
   countPosition,
   setCountPosition,
   generalOrder,
@@ -343,6 +347,8 @@ export default function CastSettings({
                 rightColor={rightColor}
                 allPlayerGames={allPlayerGames}
                 addGame={addGame}
+                isDetecting={isDetecting}
+                setIsDetecting={setIsDetecting}
               />
               <FileSyncSection
                 leftScore={leftScore}

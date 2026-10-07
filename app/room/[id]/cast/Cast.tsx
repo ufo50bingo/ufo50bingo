@@ -107,6 +107,7 @@ export default function Cast({
     setTerminalCodes(getAllTerminalCodes(newBoard));
   }, []);
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
+  const [isDetecting, setIsDetecting] = useState(false);
 
   const [soundChoices, setSoundChoices, playAudio] = useSounds("cast");
 
@@ -490,6 +491,7 @@ export default function Cast({
               addEvent={addEvent}
               seed={seed}
               playerName={playerName}
+              onCountdownStart={() => setIsDetecting(true)}
             />
           </Group>
           <Feed
@@ -593,6 +595,8 @@ export default function Cast({
         setNumPlayers={setNumPlayers}
         allPlayerGames={allPlayerGames}
         addGame={addGame}
+        isDetecting={isDetecting}
+        setIsDetecting={setIsDetecting}
         countPosition={countPosition}
         setCountPosition={setCountPosition}
         generalOrder={generalOrder}

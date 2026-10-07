@@ -47,6 +47,8 @@ type Props = {
   rightColor: BingosyncColor;
   allPlayerGames: AllPlayerGames;
   addGame: (newGame: null | string, playerNum: number) => unknown;
+  isDetecting: boolean;
+  setIsDetecting: (newIsDetecting: boolean) => unknown;
 };
 
 export default function AutoGameSection({
@@ -55,13 +57,14 @@ export default function AutoGameSection({
   rightColor,
   allPlayerGames,
   addGame,
+  isDetecting,
+  setIsDetecting,
 }: Props) {
   const [captures, setCaptures] = useState<ReadonlyArray<Capture>>([]);
   const [editing, setEditing] = useState<null | {
     captureId: string;
     snapshotInfo: SnapshotInfo;
   }>(null);
-  const [isDetecting, setIsDetecting] = useState(false);
   const [detections, setDetections] = useState<{
     [regionId: string]: null | GameDetection;
   }>({});
@@ -79,6 +82,8 @@ export default function AutoGameSection({
   const editingCapture = captures.find(
     (capture) => capture.id === editing?.captureId,
   );
+  const isDetectionButtonDisabled = !isDetecting && allRegions.length === 0;
+
 
   const setRegions = (
     captureId: string,
@@ -262,12 +267,18 @@ export default function AutoGameSection({
           <Button leftSection={<IconPlus size={16} />} onClick={addCapture}>
             Add capture
           </Button>
-          <Button
-            disabled={!isDetecting && allRegions.length === 0}
-            onClick={() => setIsDetecting(!isDetecting)}
+          <Tooltip
+            label="Detection will also be enabled automatically when starting the match if at least one region is selected"
           >
-            {isDetecting ? "Stop detection" : "Start detection"}
-          </Button>
+            <Button
+              disabled={isDetectionButtonDisabled}
+              onClick={() => {
+                setIsDetecting(!isDetecting);
+              }}
+            >
+              {isDetecting ? "Stop detection" : "Start detection"}
+            </Button>
+          </Tooltip>
         </Stack>
         {editing != null && editingCapture != null && (
           <CaptureRegionSelectionModal

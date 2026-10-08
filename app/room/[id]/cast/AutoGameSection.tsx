@@ -28,7 +28,10 @@ import { RewardIconResult } from "./gamedetector/rewardIcon/detect";
 import { RewardIcon } from "./gamedetector/rewardIcon/model";
 import { FrameResult } from "./gamedetector/types";
 import getGamesForPlayer from "./getGamesForPlayer";
-import { AllPlayerGames } from "./useSyncedState";
+import { AllPlayerGames, CountChange } from "./useSyncedState";
+import { GeneralItem } from "./Cast";
+import { GeneralCounts } from "./CastPage";
+import { GameToGoals } from "./findAllGames";
 
 const AUTO_GAME_DEBUG = false;
 
@@ -53,6 +56,10 @@ type Props = {
   addGame: (newGame: null | string, playerNum: number) => unknown;
   isDetecting: boolean;
   setIsDetecting: (newIsDetecting: boolean) => unknown;
+  generalGoals: ReadonlyArray<GeneralItem>;
+  generalCounts: GeneralCounts;
+  gameToGoals: GameToGoals;
+  setGeneralGameCount: (change: CountChange) => unknown;
 };
 
 export default function AutoGameSection({
@@ -63,6 +70,10 @@ export default function AutoGameSection({
   addGame,
   isDetecting,
   setIsDetecting,
+  generalGoals,
+  generalCounts,
+  gameToGoals,
+  setGeneralGameCount,
 }: Props) {
   const [captures, setCaptures] = useState<ReadonlyArray<Capture>>([]);
   const [editing, setEditing] = useState<null | {
@@ -117,6 +128,55 @@ export default function AutoGameSection({
     setIcons((oldIcons) =>
       oldIcons[regionId] == null ? oldIcons : { ...oldIcons, [regionId]: null },
     );
+
+  const checkGeneralGoals = (icon: RewardIcon, playerNum: number) => {
+    // only the first two players are tracked in general goals for now
+    if (playerNum > 1) {
+      return;
+    }
+    const game = getGamesForPlayer(allPlayerGames, playerNum).find(
+      (entry) => entry.game != null,
+    )?.game;
+    if (game == null) {
+      return;
+    }
+    // using the special $gift/$gold/$cherry option lists because
+    // they will be reused across all pastas that have gifts/golds/cherries.
+    // it's a bit of an abuse of the value
+    const relevantGenerals =
+      icon === "gift"
+        ? ["$gift"]
+        : icon === "gold"
+          ? ["$gold"]
+          : ["$cherry", "$gold"];
+    for (const { foundGoal } of generalGoals) {
+      const { cast, resolvedGoal } = foundGoal;
+      if (
+        typeof cast.options !== "string" ||
+        !relevantGenerals.includes(cast.options)
+      ) {
+        continue;
+      }
+      if (cast.on_card_only) {
+        const isOnCard = (gameToGoals[game] ?? []).some(
+          ([goal]) => goal !== resolvedGoal,
+        );
+        if (!isOnCard) {
+          continue;
+        }
+      }
+      const isChecked =
+        (generalCounts[resolvedGoal]?.[playerNum]?.[game] ?? 0) > 0;
+      if (!isChecked) {
+        setGeneralGameCount({
+          goal: resolvedGoal,
+          player_num: playerNum,
+          game,
+          count: 1,
+        });
+      }
+    }
+  };
 
   // Starts with a pending region to place when the capture doesn't have any
   const openEditor = (capture: Capture) => {
@@ -206,12 +266,13 @@ export default function AutoGameSection({
                 clearIcon(region.id);
                 updateCurrentGame(detection.game, region.playerNum);
               }}
-              onRewardIcon={(detection) =>
+              onRewardIcon={(detection) => {
                 setIcons((oldIcons) => ({
                   ...oldIcons,
                   [region.id]: detection.icon,
-                }))
-              }
+                }));
+                checkGeneralGoals(detection.icon, region.playerNum);
+              }}
             />
           )),
         )}

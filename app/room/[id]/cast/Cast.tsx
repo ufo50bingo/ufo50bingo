@@ -597,6 +597,8 @@ export default function Cast({
         addGame={addGame}
         isDetecting={isDetecting}
         setIsDetecting={setIsDetecting}
+        gameToGoals={gameToGoals}
+        setGeneralGameCount={setGeneralGameCount}
         countPosition={countPosition}
         setCountPosition={setCountPosition}
         generalOrder={generalOrder}

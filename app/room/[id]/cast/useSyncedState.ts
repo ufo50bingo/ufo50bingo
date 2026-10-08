@@ -208,17 +208,18 @@ export default function useSyncedState({
       change: CountChange,
       shouldBroadcast: boolean = true,
     ) => {
-      const oldGeneralState: CountState = generals[change.goal] ?? [];
-      const oldCounts = oldGeneralState?.[change.player_num] ?? {};
-      const newCounts = { ...oldCounts };
-      newCounts[change.game] = change.count;
-      const newGeneralState = [...oldGeneralState];
-      newGeneralState[change.player_num] = newCounts;
-      const newGenerals = {
-        ...generals,
-        [change.goal]: newGeneralState,
-      };
-      setGeneralsRaw(newGenerals);
+      setGeneralsRaw((oldGenerals) => {
+        const oldGeneralState: CountState = oldGenerals[change.goal] ?? [];
+        const oldCounts = oldGeneralState?.[change.player_num] ?? {};
+        const newCounts = { ...oldCounts };
+        newCounts[change.game] = change.count;
+        const newGeneralState = [...oldGeneralState];
+        newGeneralState[change.player_num] = newCounts;
+        return {
+          ...oldGenerals,
+          [change.goal]: newGeneralState,
+        };
+      });
 
       if (shouldBroadcast === true) {
         const syncChange: CountChangeSync = { ...change, seed };

@@ -40,7 +40,8 @@ import { useShouldShortenContext } from "@/app/settings/ShouldShortenContext";
 import { RoomBackend } from "@/app/roomApi";
 import { useShouldShowRecentContext } from "@/app/settings/ShouldShowRecentContext";
 import AutoGameSection from "./AutoGameSection";
-import { AllPlayerGames } from "./useSyncedState";
+import { AllPlayerGames, CountChange } from "./useSyncedState";
+import { GameToGoals } from "./findAllGames";
 
 type Props = {
   id: string;
@@ -75,6 +76,8 @@ type Props = {
   addGame: (newGame: null | string, playerNum: number) => unknown;
   isDetecting: boolean;
   setIsDetecting: (newIsDetecting: boolean) => unknown;
+  gameToGoals: GameToGoals;
+  setGeneralGameCount: (change: CountChange) => unknown;
   countPosition: TCountPosition;
   setCountPosition: (newCountPosition: TCountPosition) => unknown;
   generalOrder: TGeneralOrder;
@@ -119,6 +122,8 @@ export default function CastSettings({
   addGame,
   isDetecting,
   setIsDetecting,
+  gameToGoals,
+  setGeneralGameCount,
   countPosition,
   setCountPosition,
   generalOrder,
@@ -349,6 +354,10 @@ export default function CastSettings({
                 addGame={addGame}
                 isDetecting={isDetecting}
                 setIsDetecting={setIsDetecting}
+                generalGoals={generalGoals}
+                generalCounts={generalCounts}
+                gameToGoals={gameToGoals}
+                setGeneralGameCount={setGeneralGameCount}
               />
               <FileSyncSection
                 leftScore={leftScore}

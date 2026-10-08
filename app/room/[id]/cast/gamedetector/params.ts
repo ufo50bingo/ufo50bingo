@@ -57,5 +57,11 @@ export const PARAMS = {
   glyphMaxError: 0.06,
   /** Panel correlation that counts as the game's "CODE ACCEPTED!" message. */
   acceptedMinScore: 0.7,
+  // Reward icon search distance in game px, for imperfect crops
+  iconSearch: 10,
+  // Score the best reward icon frame must reach
+  iconMinScore: 0.55,
+  // How much it must beat the other icons by
+  iconMinMargin: 0.3,
   ...(TUNED as Record<string, number>),
 };

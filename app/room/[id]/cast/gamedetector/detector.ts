@@ -1,5 +1,8 @@
 import { ProperGame } from "@/app/goals";
 import { classifyFrame } from "./classifyFrame";
+import { detectRewardIcon } from "./rewardIcon/detect";
+import type { RewardIconResult } from "./rewardIcon/detect";
+import type { RewardIcon } from "./rewardIcon/model";
 import type { FrameResult, ImageDataLike } from "./types";
 
 export type GameDetection = {
@@ -105,5 +108,47 @@ export class GameTransitionDetector {
     this.lastSeenTime = -Infinity;
     this.scaleHint = null;
     this.frames = 0;
+  }
+}
+
+export type RewardIconDetection = {
+  icon: RewardIcon;
+  timestamp: number;
+};
+
+// Reports each reward icon appearance once, after it is found in minFrames
+// frames within windowMs. It can report again after resetMs without an icon.
+export class RewardIconDetector {
+  private readonly minFrames: number;
+  private readonly windowMs: number;
+  private readonly resetMs: number;
+  private recent: { icon: RewardIcon; t: number }[] = [];
+  private lastSeenTime = -Infinity;
+  private emitted: RewardIcon | null = null;
+  lastResult: RewardIconResult | null = null;
+
+  constructor(opts: DetectorOptions = {}) {
+    this.minFrames = opts.minFrames ?? 2;
+    this.windowMs = opts.windowMs ?? 2500;
+    this.resetMs = opts.resetMs ?? 5000;
+  }
+
+  update(img: ImageDataLike, timestamp: number = performance.now()): RewardIconDetection | null {
+    const r = detectRewardIcon(img);
+    this.lastResult = r;
+    if (r == null || !r.found) {
+      if (timestamp - this.lastSeenTime > this.resetMs) {
+        this.emitted = null;
+        this.recent = [];
+      }
+      return null;
+    }
+    this.lastSeenTime = timestamp;
+    this.recent.push({ icon: r.icon, t: timestamp });
+    this.recent = this.recent.filter((d) => timestamp - d.t <= this.windowMs).slice(-this.minFrames);
+    if (this.recent.length < this.minFrames || this.recent.some((d) => d.icon !== r.icon)) return null;
+    if (this.emitted === r.icon) return null;
+    this.emitted = r.icon;
+    return { icon: r.icon, timestamp };
   }
 }

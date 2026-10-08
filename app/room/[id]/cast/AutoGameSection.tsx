@@ -23,7 +23,9 @@ import CaptureRegionSelectionModal, {
 import { GAME_NAMES, ProperGame } from "@/app/goals";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { startGameDetection } from "./gamedetector/browser";
-import { GameDetection } from "./gamedetector/detector";
+import { GameDetection, RewardIconDetection } from "./gamedetector/detector";
+import { RewardIconResult } from "./gamedetector/rewardIcon/detect";
+import { RewardIcon } from "./gamedetector/rewardIcon/model";
 import { FrameResult } from "./gamedetector/types";
 import getGamesForPlayer from "./getGamesForPlayer";
 import { AllPlayerGames } from "./useSyncedState";
@@ -72,6 +74,9 @@ export default function AutoGameSection({
     [regionId: string]: null | GameDetection;
   }>({});
   const [statuses, setStatuses] = useState<{ [regionId: string]: string }>({});
+  const [icons, setIcons] = useState<{ [regionId: string]: null | RewardIcon }>(
+    {},
+  );
   const sentGamesRef = useRef(
     new Map<number, { game: null | string; allPlayerGames: AllPlayerGames }>(),
   );
@@ -107,6 +112,11 @@ export default function AutoGameSection({
     sentGamesRef.current.set(playerNum, { game, allPlayerGames });
     addGame(game, playerNum);
   };
+
+  const clearIcon = (regionId: string) =>
+    setIcons((oldIcons) =>
+      oldIcons[regionId] == null ? oldIcons : { ...oldIcons, [regionId]: null },
+    );
 
   // Starts with a pending region to place when the capture doesn't have any
   const openEditor = (capture: Capture) => {
@@ -171,19 +181,20 @@ export default function AutoGameSection({
               key={region.id}
               video={capture.video}
               cropRect={region.cropRect}
-              onFrame={(result, ms) => {
+              onFrame={(result, ms, icon) => {
                 if (result.kind === "library") {
                   setDetections((oldDetections) =>
                     oldDetections[region.id] == null
                       ? oldDetections
                       : { ...oldDetections, [region.id]: null },
                   );
+                  clearIcon(region.id);
                   updateCurrentGame(null, region.playerNum);
                 }
                 if (AUTO_GAME_DEBUG) {
                   setStatuses((oldStatuses) => ({
                     ...oldStatuses,
-                    [region.id]: `${describe(result)} (${ms.toFixed(0)} ms)`,
+                    [region.id]: `${describe(result)}${describeIcon(icon)} (${ms.toFixed(0)} ms)`,
                   }));
                 }
               }}
@@ -192,8 +203,15 @@ export default function AutoGameSection({
                   ...oldDetections,
                   [region.id]: detection,
                 }));
+                clearIcon(region.id);
                 updateCurrentGame(detection.game, region.playerNum);
               }}
+              onRewardIcon={(detection) =>
+                setIcons((oldIcons) => ({
+                  ...oldIcons,
+                  [region.id]: detection.icon,
+                }))
+              }
             />
           )),
         )}
@@ -230,6 +248,7 @@ export default function AutoGameSection({
                 {capture.regions.map((region) => {
                   const detected = detections[region.id];
                   const status = statuses[region.id];
+                  const icon = icons[region.id];
                   return (
                     <div key={region.id}>
                       <Group justify="space-between" wrap="nowrap">
@@ -237,6 +256,7 @@ export default function AutoGameSection({
                           {getPlayerLabel(region.playerNum, playerCount)}
                           {detected != null &&
                             ` - ${GAME_NAMES[detected.game]}`}
+                          {icon != null && ` (${icon})`}
                         </Text>
                         {AUTO_GAME_DEBUG && (
                           <Tooltip label="Copy screenshot of region">
@@ -312,8 +332,13 @@ export default function AutoGameSection({
 type RegionDetectorProps = {
   video: HTMLVideoElement;
   cropRect: CropRect;
-  onFrame: (result: FrameResult, elapsedMs: number) => void;
+  onFrame: (
+    result: FrameResult,
+    elapsedMs: number,
+    icon: RewardIconResult | null,
+  ) => void;
   onDetection: (detection: GameDetection) => void;
+  onRewardIcon: (detection: RewardIconDetection) => void;
 };
 
 // runs the detector on one region of a capture for as long as it's mounted
@@ -322,10 +347,12 @@ function RegionDetector({
   cropRect,
   onFrame,
   onDetection,
+  onRewardIcon,
 }: RegionDetectorProps) {
   const { x, y, width, height } = cropRect;
   const onFrameEvent = useEffectEvent(onFrame);
   const onDetectionEvent = useEffectEvent(onDetection);
+  const onRewardIconEvent = useEffectEvent(onRewardIcon);
 
   useEffect(
     () =>
@@ -338,7 +365,10 @@ function RegionDetector({
           height: height * video.videoHeight,
         }),
         (detection) => onDetectionEvent(detection),
-        { onFrame: (result, ms) => onFrameEvent(result, ms) },
+        {
+          onFrame: (result, ms, icon) => onFrameEvent(result, ms, icon),
+          onRewardIcon: (detection) => onRewardIconEvent(detection),
+        },
       ),
     [video, x, y, width, height],
   );
@@ -360,6 +390,14 @@ function describe(result: FrameResult): string {
     return `cartridge: ${GAME_NAMES[result.game]}`;
   }
   return result.cobwebbed ? "cartridge (cobwebbed)" : "cartridge (unsure)";
+}
+
+function describeIcon(icon: RewardIconResult | null): string {
+  if (icon == null) {
+    return "";
+  }
+  const match = `${icon.icon} ${icon.score.toFixed(2)}`;
+  return icon.found ? `, ${match}` : `, no icon (${match})`;
 }
 
 function drawFrame(video: HTMLVideoElement): HTMLCanvasElement {

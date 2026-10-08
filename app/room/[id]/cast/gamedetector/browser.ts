@@ -1,7 +1,8 @@
 // Browser helpers: capture a region of a video and run the detector on it.
 
-import { GameTransitionDetector } from "./detector";
-import type { DetectorOptions, GameDetection } from "./detector";
+import { GameTransitionDetector, RewardIconDetector } from "./detector";
+import type { DetectorOptions, GameDetection, RewardIconDetection } from "./detector";
+import type { RewardIconResult } from "./rewardIcon/detect";
 import type { FrameResult } from "./types";
 
 export type Region = { x: number; y: number; width: number; height: number };
@@ -38,7 +39,9 @@ export type DetectionLoopOptions = DetectorOptions & {
   /** Captures wider than this are downscaled first. Default 1152 px. */
   maxWidth?: number;
   /** Called after every analyzed frame, e.g. for a debug readout. */
-  onFrame?: (result: FrameResult, elapsedMs: number) => void;
+  onFrame?: (result: FrameResult, elapsedMs: number, icon: RewardIconResult | null) => void;
+  // Called once each time a reward icon appears
+  onRewardIcon?: (detection: RewardIconDetection) => void;
 };
 
 /**
@@ -53,6 +56,7 @@ export function startGameDetection(
   opts: DetectionLoopOptions = {},
 ): () => void {
   const detector = new GameTransitionDetector(opts);
+  const iconDetector = new RewardIconDetector(opts);
   const canvas = document.createElement("canvas");
   let timer = 0;
   let stopped = false;
@@ -61,9 +65,12 @@ export function startGameDetection(
     const region = getRegion();
     if (region != null && region.width >= 1 && region.height >= 1 && video.readyState >= 2) {
       const t0 = performance.now();
-      const detection = detector.update(captureRegion(video, region, canvas, opts.maxWidth), t0);
-      opts.onFrame?.(detector.lastResult, performance.now() - t0);
+      const img = captureRegion(video, region, canvas, opts.maxWidth);
+      const detection = detector.update(img, t0);
+      const icon = iconDetector.update(img, t0);
+      opts.onFrame?.(detector.lastResult, performance.now() - t0, iconDetector.lastResult);
       if (detection != null) onGame(detection);
+      if (icon != null) opts.onRewardIcon?.(icon);
     }
     // Chained timeouts never pile up if a frame takes longer than the interval.
     timer = window.setTimeout(tick, opts.intervalMs ?? 250);

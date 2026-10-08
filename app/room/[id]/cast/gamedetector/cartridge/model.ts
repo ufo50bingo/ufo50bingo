@@ -32,7 +32,7 @@ let model: CartridgeModel | null = null;
 /** Digits of the generated palette indices (base64 order), as in tools/build_model.py. */
 const DIGITS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-function decode(chars: string, offset: number, count: number): Int32Array {
+export function decode(chars: string, offset: number, count: number): Int32Array {
   const lut = new Int32Array(128).fill(-1);
   for (let i = 0; i < DIGITS.length; i++) lut[DIGITS.charCodeAt(i)] = i;
   const out = new Int32Array(count);
@@ -41,7 +41,7 @@ function decode(chars: string, offset: number, count: number): Int32Array {
 }
 
 /** Separable Gaussian blur of a w*h single-channel image, ignoring pixels with weight 0. */
-function blurMasked(
+export function blurMasked(
   src: Float32Array,
   weight: Float32Array,
   w: number,

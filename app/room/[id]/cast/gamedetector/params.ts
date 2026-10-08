@@ -22,6 +22,9 @@ export const PARAMS = {
    * cartridge-like spots, but rarely this many at one scale.
    */
   libraryHits: 20,
+  // Frame score that cartridges need to count as the library. Real ones score
+  // about 0.8 and up, but gameplay tiles can look like rough cartridges.
+  libraryMinScore: 0.7,
   /** Seeds whose best 5x5-scan frame score is below this are dropped before refinement. */
   seedMinScore: 0.3,
   frameMinScore: 0.5,

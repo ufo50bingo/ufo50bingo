@@ -74,7 +74,7 @@ export function detectCartridge(img: ImageDataLike, integ: Integral, scaleHint?:
   const libraryCarts: Aligned[] = [];
   const isCart = (h: Candidate) => {
     const a = refine(img, m, h);
-    if (a.score < PARAMS.frameMinScore) return false;
+    if (a.score < PARAMS.libraryMinScore) return false;
     libraryCarts.push(a);
     return true;
   };
@@ -108,12 +108,16 @@ export function detectCartridge(img: ImageDataLike, integ: Integral, scaleHint?:
   const cart = pool[0];
   const scale = cart.s / nominal;
   // More than one cartridge, or a cartridge with a grid neighbor, is never a
-  // selection, but it's only the library if one scale had enough coarse hits.
+  // selection, but it's only the library if one scale had enough coarse hits
+  // and the cartridges match clearly, since some gameplay tiles look similar.
+  const clearCarts = pool.filter((c) => c.score >= PARAMS.libraryMinScore).length;
   if (strictCarts.length > 1) {
-    return libraryLike ? { kind: "library", carts: strictCarts.length, scale } : { kind: "none" };
+    return libraryLike && clearCarts > 1 ? { kind: "library", carts: strictCarts.length, scale } : { kind: "none" };
   }
   if (pool.length > 1) return { kind: "none" };
-  if (hasNeighbor(img, m, cart)) return libraryLike ? { kind: "library", carts: 2, scale } : { kind: "none" };
+  if (hasNeighbor(img, m, cart)) {
+    return libraryLike && clearCarts > 0 ? { kind: "library", carts: 2, scale } : { kind: "none" };
+  }
 
   const cobwebbed = isUnplayedColor(img, cart);
   // Only the LIVE badge has been seen to cover enough art to fake another

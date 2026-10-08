@@ -82,6 +82,14 @@ export default function Resources() {
               Stats and VOD links for every goal from every match
             </a>
           </List.Item>
+          <List.Item>
+            <a
+              href="https://docs.google.com/spreadsheets/d/1f-otPvnoyOmEIgh-otvszsjbK4KXd0dz2lmnSASyJLo/edit?gid=0#gid=0"
+              target="_blank"
+            >
+              Videos and times of optimal strategies for every goal (WIP)
+            </a>
+          </List.Item>
         </List>
         <p>Details</p>
         <List>

@@ -3,6 +3,7 @@ import {
   ActionIcon,
   Alert,
   Button,
+  Checkbox,
   Group,
   List,
   Paper,
@@ -12,6 +13,7 @@ import {
 } from "@mantine/core";
 import { IconCamera, IconPlus, IconX } from "@tabler/icons-react";
 import { useEffect, useEffectEvent, useRef, useState } from "react";
+import useLocalBool from "@/app/localStorage/useLocalBool";
 import CaptureRegionSelectionModal, {
   CaptureRegion,
   CropRect,
@@ -88,6 +90,10 @@ export default function AutoGameSection({
   const [icons, setIcons] = useState<{ [regionId: string]: null | RewardIcon }>(
     {},
   );
+  const [shouldAutoTrack, setShouldAutoTrack] = useLocalBool({
+    key: "auto-track-rewards",
+    defaultValue: true,
+  });
   const sentGamesRef = useRef(
     new Map<number, { game: null | string; allPlayerGames: AllPlayerGames }>(),
   );
@@ -130,6 +136,9 @@ export default function AutoGameSection({
     );
 
   const checkGeneralGoals = (icon: RewardIcon, playerNum: number) => {
+    if (!shouldAutoTrack) {
+      return;
+    }
     // only the first two players are tracked in general goals for now
     if (playerNum > 1) {
       return;
@@ -233,7 +242,7 @@ export default function AutoGameSection({
 
   return (
     <Accordion.Item value="autogame">
-      <Accordion.Control>Auto Game Detection</Accordion.Control>
+      <Accordion.Control>Auto Detection</Accordion.Control>
       {isDetecting &&
         captures.flatMap((capture) =>
           capture.regions.map((region) => (
@@ -367,6 +376,11 @@ export default function AutoGameSection({
               {isDetecting ? "Stop detection" : "Start detection"}
             </Button>
           </Tooltip>
+          <Checkbox
+            label="Automatically track gift/gold/cherry checkboxes"
+            checked={shouldAutoTrack}
+            onChange={(event) => setShouldAutoTrack(event.target.checked)}
+          />
         </Stack>
         {editing != null && editingCapture != null && (
           <CaptureRegionSelectionModal

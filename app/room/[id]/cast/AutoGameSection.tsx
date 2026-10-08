@@ -35,7 +35,7 @@ import { GeneralItem } from "./Cast";
 import { GeneralCounts } from "./CastPage";
 import { GameToGoals } from "./findAllGames";
 
-const AUTO_GAME_DEBUG = true;
+const AUTO_GAME_DEBUG = false;
 
 export type SnapshotInfo = {
   url: string;

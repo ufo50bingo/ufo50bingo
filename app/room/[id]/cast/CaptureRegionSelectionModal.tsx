@@ -10,7 +10,7 @@ import {
   Select,
   Tooltip,
 } from "@mantine/core";
-import { IconPlus, IconTrash } from "@tabler/icons-react";
+import { IconArrowsLeftRight, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useState, useCallback } from "react";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { SnapshotInfo } from "./AutoGameSection";
@@ -208,6 +208,20 @@ export default function CaptureRegionSelectionModal({
             </Tooltip>
           </Group>
         ))}
+        {regions.length === 2 && (
+          <Button
+            variant="light"
+            leftSection={<IconArrowsLeftRight size={16} />}
+            onClick={() =>
+              setRegions([
+                { ...regions[0], playerNum: regions[1].playerNum },
+                { ...regions[1], playerNum: regions[0].playerNum },
+              ])
+            }
+          >
+            Swap players
+          </Button>
+        )}
         <Button
           variant="light"
           leftSection={<IconPlus size={16} />}

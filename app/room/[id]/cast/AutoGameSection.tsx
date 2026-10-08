@@ -17,11 +17,11 @@ import useLocalBool from "@/app/localStorage/useLocalBool";
 import CaptureRegionSelectionModal, {
   CaptureRegion,
   CropRect,
-  createRegion,
-  getNextPlayerNum,
+  addRegion,
   getPlayerCount,
   getPlayerLabel,
 } from "./CaptureRegionSelectionModal";
+import findGameRegions from "./findGameRegions";
 import { GAME_NAMES, ProperGame } from "@/app/goals";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { startGameDetection } from "./gamedetector/browser";
@@ -35,7 +35,7 @@ import { GeneralItem } from "./Cast";
 import { GeneralCounts } from "./CastPage";
 import { GameToGoals } from "./findAllGames";
 
-const AUTO_GAME_DEBUG = false;
+const AUTO_GAME_DEBUG = true;
 
 export type SnapshotInfo = {
   url: string;
@@ -82,6 +82,7 @@ export default function AutoGameSection({
     captureId: string;
     snapshotInfo: SnapshotInfo;
     initialRegions: ReadonlyArray<CaptureRegion>;
+    suggestions: ReadonlyArray<CropRect>;
   }>(null);
   const [detections, setDetections] = useState<{
     [regionId: string]: null | GameDetection;
@@ -99,7 +100,6 @@ export default function AutoGameSection({
   );
 
   const allRegions = captures.flatMap((capture) => capture.regions);
-  const nextPlayerNum = getNextPlayerNum(allRegions);
   const playerCount = getPlayerCount(numPlayers, allRegions);
   const editingCapture = captures.find(
     (capture) => capture.id === editing?.captureId,
@@ -187,17 +187,34 @@ export default function AutoGameSection({
     }
   };
 
-  // Starts with a pending region to place when the capture doesn't have any
   const openEditor = (capture: Capture) => {
-    const snapshotInfo = takeSnapshot(capture.video);
-    const aspectRatio = snapshotInfo.width / snapshotInfo.height;
+    const frame = drawFrame(capture.video);
+    const suggestions = findGameRegions(
+      frame.getContext("2d")!.getImageData(0, 0, frame.width, frame.height),
+      capture.stream.getVideoTracks()[0]?.label ?? "",
+    );
+    let initialRegions = capture.regions;
+    // When the capture doesn't have regions, starts with one on each detected
+    // game screen, or one to place by hand if nothing was detected
+    if (initialRegions.length === 0) {
+      for (let i = 0; i < Math.max(1, suggestions.length); i++) {
+        initialRegions = addRegion(
+          initialRegions,
+          allRegions,
+          suggestions,
+          frame.width / frame.height,
+        );
+      }
+    }
     setEditing({
       captureId: capture.id,
-      snapshotInfo,
-      initialRegions:
-        capture.regions.length > 0
-          ? capture.regions
-          : [createRegion(nextPlayerNum, 0, aspectRatio)],
+      snapshotInfo: {
+        url: frame.toDataURL(),
+        width: frame.width,
+        height: frame.height,
+      },
+      initialRegions,
+      suggestions,
     });
   };
 
@@ -389,6 +406,7 @@ export default function AutoGameSection({
             otherRegions={captures
               .filter((capture) => capture.id !== editingCapture.id)
               .flatMap((capture) => capture.regions)}
+            suggestions={editing.suggestions}
             numPlayers={numPlayers}
             leftColor={leftColor}
             rightColor={rightColor}
@@ -481,15 +499,6 @@ function drawFrame(video: HTMLVideoElement): HTMLCanvasElement {
   canvas.height = video.videoHeight;
   canvas.getContext("2d")!.drawImage(video, 0, 0, canvas.width, canvas.height);
   return canvas;
-}
-
-function takeSnapshot(video: HTMLVideoElement): SnapshotInfo {
-  const canvas = drawFrame(video);
-  return {
-    url: canvas.toDataURL(),
-    width: canvas.width,
-    height: canvas.height,
-  };
 }
 
 function copyScreenshot(video: HTMLVideoElement, cropRect: CropRect) {

@@ -36,7 +36,7 @@ export function getPlayerLabel(playerNum: number, playerCount: number): string {
     : `${side} player ${Math.floor(playerNum / 2) + 1}`;
 }
 
-export function getNextPlayerNum(regions: ReadonlyArray<CaptureRegion>): number {
+function getNextPlayerNum(regions: ReadonlyArray<CaptureRegion>): number {
   let playerNum = 0;
   while (regions.some((region) => region.playerNum === playerNum)) {
     playerNum++;
@@ -51,7 +51,7 @@ export function getPlayerCount(
   return Math.max(numPlayers, ...regions.map((region) => region.playerNum + 1));
 }
 
-export function createRegion(
+function createRegion(
   playerNum: number,
   index: number,
   aspectRatio: number,
@@ -69,11 +69,41 @@ export function createRegion(
   };
 }
 
+// Adds a region for the next free player, on the first suggestion that no
+// region covers yet
+export function addRegion(
+  regions: ReadonlyArray<CaptureRegion>,
+  otherRegions: ReadonlyArray<CaptureRegion>,
+  suggestions: ReadonlyArray<CropRect>,
+  aspectRatio: number,
+): ReadonlyArray<CaptureRegion> {
+  const region = createRegion(
+    getNextPlayerNum([...otherRegions, ...regions]),
+    regions.length,
+    aspectRatio,
+  );
+  const cropRect = suggestions.find((suggestion) =>
+    regions.every((r) => !overlaps(r.cropRect, suggestion)),
+  );
+  return [...regions, cropRect == null ? region : { ...region, cropRect }];
+}
+
+function overlaps(a: CropRect, b: CropRect): boolean {
+  return (
+    a.x < b.x + b.width &&
+    b.x < a.x + a.width &&
+    a.y < b.y + b.height &&
+    b.y < a.y + a.height
+  );
+}
+
 type Props = {
   snapshotInfo: SnapshotInfo;
   initialRegions: ReadonlyArray<CaptureRegion>;
   // Regions of the other captures, for picking players
   otherRegions: ReadonlyArray<CaptureRegion>;
+  // Likely game screens in the snapshot, for placing new regions
+  suggestions: ReadonlyArray<CropRect>;
   numPlayers: number;
   leftColor: BingosyncColor;
   rightColor: BingosyncColor;
@@ -85,6 +115,7 @@ export default function CaptureRegionSelectionModal({
   snapshotInfo,
   initialRegions,
   otherRegions,
+  suggestions,
   numPlayers,
   leftColor,
   rightColor,
@@ -92,7 +123,6 @@ export default function CaptureRegionSelectionModal({
   onClose,
 }: Props) {
   const [regions, setRegions] = useState(initialRegions);
-  const nextPlayerNum = getNextPlayerNum([...otherRegions, ...regions]);
   const playerCount = getPlayerCount(numPlayers, [...otherRegions, ...regions]);
   const [imgSize, setImgSize] = useState<{
     width: number;
@@ -182,14 +212,14 @@ export default function CaptureRegionSelectionModal({
           variant="light"
           leftSection={<IconPlus size={16} />}
           onClick={() =>
-            setRegions([
-              ...regions,
-              createRegion(
-                nextPlayerNum,
-                regions.length,
+            setRegions(
+              addRegion(
+                regions,
+                otherRegions,
+                suggestions,
                 snapshotInfo.width / snapshotInfo.height,
               ),
-            ])
+            )
           }
         >
           Add region

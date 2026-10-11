@@ -74,11 +74,13 @@ export function detectRewardIcon(img: ImageDataLike): RewardIconResult | null {
     }
   }
 
-  // Then fit the best frame's position and scale more finely
+  // Then fit the best frame's position and scale more finely, staying close to
+  // where the search found it
   let { x, y, score } = best;
   let s = s0;
   let stepXY = 0.5 * s0;
   let stepS = 0.02;
+  const maxShift = PARAMS.iconMaxShift * s0;
   for (let iter = 0; iter < 40 && stepXY > 0.1 * s0; iter++) {
     let improved = false;
     for (const [dx, dy, ds] of [
@@ -93,6 +95,8 @@ export function detectRewardIcon(img: ImageDataLike): RewardIconResult | null {
       // Scale about the icon center
       const nx = x + dx - (ns - s) * ICON_SIZE * 0.5;
       const ny = y + dy - (ns - s) * ICON_SIZE * 0.5;
+      if (Math.abs(nx - best.x) > maxShift || Math.abs(ny - best.y) > maxShift) continue;
+      if (Math.abs(ns / s0 - 1) > PARAMS.iconMaxScaleChange) continue;
       sampleGrid(img, nx, ny, ns);
       const sc = frameScore(best.frame);
       if (sc > score) {
@@ -114,6 +118,30 @@ export function detectRewardIcon(img: ImageDataLike): RewardIconResult | null {
   for (const [other, sc] of bestByIcon) {
     if (other !== icon && sc > otherScore) otherScore = sc;
   }
-  const found = score >= PARAMS.iconMinScore && score - otherScore >= PARAMS.iconMinMargin;
+  sampleGrid(img, x, y, s);
+  const found = score >= PARAMS.iconMinScore && score - otherScore >= PARAMS.iconMinMargin && hasIconColor(best.frame);
   return { icon, score, otherScore, found };
+}
+
+// The score ignores the average color, so check it separately against the
+// sampled grid. This keeps a pink rock shaped like the cup from passing as gold.
+function hasIconColor(f: IconFrame): boolean {
+  const sum = [0, 0, 0];
+  for (const p of f.pixels) {
+    for (let c = 0; c < 3; c++) sum[c] += grid[p * 3 + c];
+  }
+  const seen = fromGray(sum);
+  const icon = fromGray(f.color);
+  const seenLength = Math.hypot(...seen);
+  const iconLength = Math.hypot(...icon);
+  const cos = (seen[0] * icon[0] + seen[1] * icon[1] + seen[2] * icon[2]) / (seenLength * iconLength + 1e-9);
+  const maxHueShift = (PARAMS.iconMaxHueShift * Math.PI) / 180;
+  return seenLength >= PARAMS.iconMinSaturation * iconLength && cos >= Math.cos(maxHueShift);
+}
+
+// Where a color sits relative to gray, ignoring brightness. The direction is
+// the hue and the length is the saturation.
+function fromGray(rgb: ArrayLike<number>): number[] {
+  const total = rgb[0] + rgb[1] + rgb[2] + 1e-6;
+  return [rgb[0] / total - 1 / 3, rgb[1] / total - 1 / 3, rgb[2] / total - 1 / 3];
 }

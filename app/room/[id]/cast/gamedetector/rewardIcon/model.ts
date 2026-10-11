@@ -20,6 +20,8 @@ export type IconFrame = {
   values: Float32Array;
   // Sum of squares of values per channel
   ss: Float32Array;
+  // Average color of the opaque pixels
+  color: Float32Array;
 };
 
 let frames: IconFrame[] | null = null;
@@ -44,6 +46,7 @@ function buildFrames(): IconFrame[] {
       const n = sel.length;
       const values = new Float32Array(3 * n);
       const ss = new Float32Array(3);
+      const color = new Float32Array(3);
       for (let c = 0; c < 3; c++) {
         const plane = new Float32Array(n0);
         for (const p of sel) plane[p] = REWARD_ICON_PALETTE[idx[base + p] * 3 + c];
@@ -51,13 +54,14 @@ function buildFrames(): IconFrame[] {
         let mean = 0;
         for (const p of sel) mean += b[p];
         mean /= n;
+        color[c] = mean;
         for (let j = 0; j < n; j++) {
           const v = b[sel[j]] - mean;
           values[c * n + j] = v;
           ss[c] += v * v;
         }
       }
-      out.push({ icon, pixels: Uint16Array.from(sel), values, ss });
+      out.push({ icon, pixels: Uint16Array.from(sel), values, ss, color });
     }
   });
   return out;

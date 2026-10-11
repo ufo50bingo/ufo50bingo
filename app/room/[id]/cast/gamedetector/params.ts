@@ -62,9 +62,17 @@ export const PARAMS = {
   acceptedMinScore: 0.7,
   // Reward icon search distance in game px, for imperfect crops
   iconSearch: 10,
+  // How far the fine fit can move from the search's best spot, in game px and
+  // as a share of the scale
+  iconMaxShift: 2,
+  iconMaxScaleChange: 0.1,
   // Score the best reward icon frame must reach
   iconMinScore: 0.55,
   // How much it must beat the other icons by
   iconMinMargin: 0.3,
+  // The matched pixels' average color must be within this many degrees of the
+  // icon's hue and keep this share of its saturation
+  iconMaxHueShift: 25,
+  iconMinSaturation: 0.4,
   ...(TUNED as Record<string, number>),
 };

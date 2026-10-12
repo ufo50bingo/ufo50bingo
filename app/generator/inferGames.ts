@@ -6,12 +6,16 @@ export function inferGames(resolvedGoal: string, allGames: ReadonlyArray<string>
   if (
     allGames.includes("campanella") &&
     (remaining.includes("Campanella 1/2/3") ||
-      remaining.includes("Campanella 1, 2, and 3"))
+      remaining.includes("Campanella 1, 2, and 3") ||
+      remaining.includes("Campanella Trilogy") ||
+      remaining.includes("CAMPANELLA TRILOGY"))
   ) {
     matches.push("campanella2");
     matches.push("campanella3");
     remaining = remaining.replaceAll("Campanella 1/2/3", " ");
     remaining = remaining.replaceAll("Campanella 1, 2, and 3", " ");
+    remaining = remaining.replaceAll("Campanella Trilogy", " ");
+    remaining = remaining.replaceAll("CAMPANELLA TRILOGY", " ");
   }
   if (
     allGames.includes("miniandmax") && remaining.includes("Mini & Max")

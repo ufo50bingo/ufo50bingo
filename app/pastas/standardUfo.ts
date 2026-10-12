@@ -455,7 +455,7 @@ export const STANDARD_UFO = {
       ],
       combatants: [
         {
-          name: "COMBATANTS: Beat First Blood without shooting",
+          name: "COMBATANTS: Beat First Blood without pressing Shoot",
           short: "COMBATANTS: First Blood no shooting",
         },
         {

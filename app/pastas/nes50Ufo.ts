@@ -1791,7 +1791,7 @@ export const NES_50_UFO = {
           "name": "PLATFORMER: Beat 3 worlds across Super Mario Bros 2, Super Mario Bros 3, Kirby's Adventure",
           "cast": {
             "options": "$infer",
-            "type": "check",
+            "type": "counter",
             "on_card_only": false,
             "image": {
               "src": "/nes50general/platformer.png",

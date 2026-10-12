@@ -37,6 +37,7 @@ import getNonGeneralCategories from "./getNonGeneralCategories";
 import FiltersModal, { FilterInfo } from "./FiltersModal";
 import { getRoomLink, RoomBackend } from "../roomApi";
 import ExtraOptions from "./ExtraOptions";
+import ufoDoubleGenerator from "../generator/ufoDoubleGenerator";
 
 type CustomType = "srl_v5" | "ufo" | "fixed_board" | "randomized";
 
@@ -512,24 +513,13 @@ export default function NonLeagueMatch({ visible }: Props) {
                     leagueInfo: null,
                     roomBackend,
                   };
-                  const nonGeneralCategories = getNonGeneralCategories(pasta);
-                  const allGames = [
-                    ...getAllSubcategories(pasta.goals, nonGeneralCategories),
-                  ];
-                  shuffle(allGames);
-                  const partitionIndex = Math.floor(allGames.length / 2);
+                  const [card1, card2] = ufoDoubleGenerator(pasta);
                   promises.push(
                     createMatch({
                       ...common,
                       roomName: roomName + " — Card 1",
                       pasta: JSON.stringify(
-                        ufoGenerator({
-                          ...pasta,
-                          goals: getFilteredDifficulties(
-                            pasta.goals,
-                            new Set(allGames.slice(0, partitionIndex)),
-                          ),
-                        }).map((goal) => ({ name: goal })),
+                        card1.map((goal) => ({ name: goal })),
                       ),
                     }),
                   );
@@ -538,13 +528,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                       ...common,
                       roomName: roomName + " — Card 2",
                       pasta: JSON.stringify(
-                        ufoGenerator({
-                          ...pasta,
-                          goals: getFilteredDifficulties(
-                            pasta.goals,
-                            new Set(allGames.slice(partitionIndex)),
-                          ),
-                        }).map((goal) => ({ name: goal })),
+                        card2.map((goal) => ({ name: goal })),
                       ),
                     }),
                   );

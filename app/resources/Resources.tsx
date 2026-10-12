@@ -67,27 +67,10 @@ export default function Resources() {
             </List>
           </List.Item>
           <List.Item>
-            <a href="https://ufo50.bingo/doc" target="_blank">
+            <a href="/doc" target="_blank">
               Community-maintained resource doc with guides for nearly every
               game
             </a>
-            <List>
-              <List.Item>
-                You can also access the resource doc at{" "}
-                <a href="https://ufo50.bingo/doc" target="_blank">
-                  https://ufo50.bingo/doc
-                </a>
-                , or jump straight to a game's section by appending a game name
-                or abbreviation, like{" "}
-                <a href="https://ufo50.bingo/doc/roi" target="_blank">
-                  https://ufo50.bingo/roi
-                </a>{" "}
-                or{" "}
-                <a href="https://ufo50.bingo/doc/rockon" target="_blank">
-                  https://ufo50.bingo/rockon
-                </a>
-              </List.Item>
-            </List>
           </List.Item>
           <List.Item>
             <a
@@ -104,6 +87,73 @@ export default function Resources() {
             >
               Videos and times of optimal strategies for every goal (WIP)
             </a>
+          </List.Item>
+        </List>
+        <p>Shortcuts</p>
+        <List>
+          <List.Item>
+            <a href="/doc" target="_blank">
+              ufo50.bingo/doc
+            </a>{" "}
+            - The community resource doc. You can also append any game name or
+            abbreviation to get a direct link to the appropriate tab. For
+            example:
+            <List>
+              <List.Item>
+                <a href="/doc/m2" target="_blank">
+                  ufo50.bingo/doc/m2
+                </a>{" "}
+                - Mortol II
+              </List.Item>
+              <List.Item>
+                <a href="/doc/mini" target="_blank">
+                  ufo50.bingo/doc/mini
+                </a>{" "}
+                - Mini & Max
+              </List.Item>
+              <List.Item>
+                <a href="/doc/od" target="_blank">
+                  ufo50.bingo/doc/od
+                </a>{" "}
+                - Onion Delivery
+              </List.Item>
+              <List.Item>
+                <a href="/doc/rockon" target="_blank">
+                  ufo50.bingo/doc/rockon
+                </a>{" "}
+                - Rock On! Island
+              </List.Item>
+            </List>
+          </List.Item>
+          <List.Item>
+            <a href="/rules" target="_blank">
+              ufo50.bingo/rules
+            </a>{" "}
+            - The UFO 50 Bingo Doc
+          </List.Item>
+          <List.Item>
+            <a href="/league" target="_blank">
+              ufo50.bingo/league
+            </a>{" "}
+            - The most recent league sheet
+          </List.Item>
+          <List.Item>
+            <a href="/bosses" target="_blank">
+              ufo50.bingo/bosses
+            </a>{" "}
+            - List of valid bosses
+          </List.Item>
+          <List.Item>
+            <a href="/levels" target="_blank">
+              ufo50.bingo/levels
+            </a>{" "}
+            - List of valid levels
+          </List.Item>
+          <List.Item>
+            <a href="/stats" target="_blank">
+              ufo50.bingo/stats
+            </a>{" "}
+            - Stats and VOD links
           </List.Item>
         </List>
         <p>Deprecated Community Tools</p>

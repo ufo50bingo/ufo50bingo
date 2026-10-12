@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
       {
         source: "/rules",
         destination:
-          "https://docs.google.com/document/d/11kIVxD6NOsoXXXdv22owLPM_nj5oKiCpY53K418muW8/edit?tab=t.0#heading=h.us0d6jom1jp",
+          "https://docs.google.com/document/d/11kIVxD6NOsoXXXdv22owLPM_nj5oKiCpY53K418muW8/edit",
         permanent: true,
       },
       {
@@ -30,13 +30,13 @@ const nextConfig: NextConfig = {
       {
         source: "/bosses",
         destination:
-          "https://docs.google.com/document/d/11kIVxD6NOsoXXXdv22owLPM_nj5oKiCpY53K418muW8/edit?tab=t.0#heading=h.3iyiv7od9r7t",
+          "https://docs.google.com/document/d/11kIVxD6NOsoXXXdv22owLPM_nj5oKiCpY53K418muW8/edit?tab=t.0#heading=h.vil334sfr0uj",
         permanent: true,
       },
       {
         source: "/levels",
         destination:
-          "https://docs.google.com/spreadsheets/d/1Ee2MAlDuu4jxOSkVIGfg0rtrBbwIOp14M-aAEVz1Znc/edit?gid=0#gid=0",
+          "https://docs.google.com/spreadsheets/d/1Ee2MAlDuu4jxOSkVIGfg0rtrBbwIOp14M-aAEVz1Znc/edit",
         permanent: true,
       },
       {

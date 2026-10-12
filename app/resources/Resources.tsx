@@ -52,6 +52,21 @@ export default function Resources() {
         <p>Guides</p>
         <List>
           <List.Item>
+            <a href="/rules" target="_blank">
+              The UFO 50 Bingo Doc
+            </a>
+            , including:
+            <List>
+              <List.Item>Rules</List.Item>
+              <List.Item>
+                Details about what is counted specific goals, such as bosses and
+                levels
+              </List.Item>
+              <List.Item>Pause & mismark procedures</List.Item>
+              <List.Item>Goal changelog</List.Item>
+            </List>
+          </List.Item>
+          <List.Item>
             <a href="https://ufo50.bingo/doc" target="_blank">
               Community-maintained resource doc with guides for nearly every
               game
@@ -91,34 +106,7 @@ export default function Resources() {
             </a>
           </List.Item>
         </List>
-        <p>Details</p>
-        <List>
-          <List.Item>
-            <a
-              href="https://docs.google.com/document/d/11kIVxD6NOsoXXXdv22owLPM_nj5oKiCpY53K418muW8/edit?usp=sharing"
-              target="_blank"
-            >
-              Standard Rules
-            </a>
-            , including details about what is allowed for completing some goals
-          </List.Item>
-          <List.Item>
-            <a
-              href="https://docs.google.com/document/d/1XyEh20vdf7jtfYW94iIRHmf5YOQ0B-lZ2yh9lJjMMbM/edit?usp=sharing"
-              target="_blank"
-            >
-              Official goal list
-            </a>{" "}
-          </List.Item>
-          <List.Item>
-            For details about Variants, hover over the variant names on the
-            Non-League section of{" "}
-            <LinkWithVariant prefetch={false} href="/">
-              Create Match
-            </LinkWithVariant>
-          </List.Item>
-        </List>
-        <p>Community Tools</p>
+        <p>Deprecated Community Tools</p>
         <List>
           <List.Item>
             <a

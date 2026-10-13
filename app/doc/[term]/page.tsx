@@ -1,4 +1,4 @@
-import { Game, ORDERED_GAMES } from "@/app/goals";
+import { Game, ORDERED_GAMES, ORDERED_PROPER_GAMES } from "@/app/goals";
 import { DOC_LINKS } from "@/app/practice/docLinks";
 import { SequenceMatcher } from "difflib";
 import { redirect } from "next/navigation";
@@ -54,6 +54,11 @@ export default async function Page({
 
   let bestScore = null;
   let bestGame = null;
+
+  const num = Number(term);
+  if (!isNaN(num) && Number.isInteger(num) && num >= 1 && num <= 50) {
+    redirect(DOC_LINKS[ORDERED_PROPER_GAMES[num - 1]]);
+  }
 
   for (const game of ORDERED_GAMES) {
     const score = new SequenceMatcher(null, game, term).ratio();

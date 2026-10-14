@@ -26,7 +26,7 @@ import {
   TWO_BOSSES,
   BOSSES,
 } from "./timeEstimates";
-import { GeneralRestrictions, GeneralSettings } from "../play/GeneralSection";
+import { Restrictions, GeneralSettings } from "../play/GeneralSection";
 
 type Props = {
   showAll: boolean;
@@ -39,9 +39,9 @@ type Props = {
   addShowAll: (goal: string) => unknown;
   playerColors: ReadonlyArray<BingosyncColor>;
   pasta: UFOPasta;
-  restrictions: GeneralRestrictions;
+  restrictions: Restrictions;
   settings: GeneralSettings;
-  style?: CSSProperties,
+  style?: CSSProperties;
 };
 
 function getOtherGoals(
@@ -73,7 +73,9 @@ export default function GeneralGoal({
   settings,
   style = {},
 }: Props) {
-  const terminalCodes = restrictions.canUseTerminalCodes ? rawTerminalCodes : new Set();
+  const terminalCodes = restrictions.canUseTerminalCodes
+    ? rawTerminalCodes
+    : new Set();
   const cast = foundGoal.cast;
 
   const descriptions: null | Descriptions = useMemo(() => {
@@ -133,10 +135,7 @@ export default function GeneralGoal({
           <React.Fragment key={playerNum}>
             {playerNum > 0 ? " " : ""}
             <BingosyncColored color={color}>
-              {Object.keys(counts).reduce(
-                (acc, game) => acc + counts[game],
-                0,
-              )}
+              {Object.keys(counts).reduce((acc, game) => acc + counts[game], 0)}
             </BingosyncColored>
           </React.Fragment>
         );
@@ -170,9 +169,15 @@ export default function GeneralGoal({
     ...synergyWithOnCard,
     ...neverWithOnCard,
   ];
-  const entries = showAll || !settings.shouldSegment
-    ? allEntries
-    : [...alwaysWithOnCard, ...synergyWithOnCard.filter((e) => e[1] != null || !restrictions.canFilterOnCard)];
+  const entries =
+    showAll || !settings.shouldSegment
+      ? allEntries
+      : [
+          ...alwaysWithOnCard,
+          ...synergyWithOnCard.filter(
+            (e) => e[1] != null || !restrictions.canFilterOnCard,
+          ),
+        ];
 
   const hasMore = allEntries.length > entries.length;
 
@@ -189,9 +194,10 @@ export default function GeneralGoal({
   });
 
   const nonNullEntries = nullableEntries.filter((e) => e != null);
-  const finalEntries = cast.on_card_only && restrictions.canFilterOnCard
-    ? nonNullEntries.filter((e) => e[1] != null)
-    : nonNullEntries;
+  const finalEntries =
+    cast.on_card_only && restrictions.canFilterOnCard
+      ? nonNullEntries.filter((e) => e[1] != null)
+      : nonNullEntries;
 
   const isUfo50 = allEntries.every((entry) =>
     ORDERED_PROPER_GAMES.includes(entry[0] as ProperGame),
@@ -229,52 +235,48 @@ export default function GeneralGoal({
             <Group key={game} gap={6}>
               {playerColors.map((color, playerNum) => {
                 const counts = countState?.[playerNum] ?? {};
-                return (
-                  cast.type === "check"
-                    ? (
-                      <Checkbox
-                        key={playerNum}
-                        color={getColorHex(color)}
-                        checked={(counts[game] ?? 0) > 0}
-                        onChange={(event) =>
-                          setGeneralGameCount({
-                            goal: foundGoal.resolvedGoal,
-                            player_num: playerNum,
-                            game,
-                            count: event.currentTarget.checked ? 1 : 0,
-                          })
-                        }
-                      />
-                    )
-                    : (
-                      <Button
-                        key={playerNum}
-                        color={getColorHex(color)}
-                        h={18}
-                        w={18}
-                        p={0}
-                        size="compact-xs"
-                        onClick={() => {
-                          setGeneralGameCount({
-                            goal: foundGoal.resolvedGoal,
-                            player_num: playerNum,
-                            game,
-                            count: (counts[game] ?? 0) + 1,
-                          });
-                        }}
-                        onContextMenu={(e) => {
-                          e.preventDefault();
-                          setGeneralGameCount({
-                            goal: foundGoal.resolvedGoal,
-                            player_num: playerNum,
-                            game,
-                            count: Math.max(0, (counts[game] ?? 0) - 1),
-                          });
-                        }}
-                      >
-                        {counts[game] ?? 0}
-                      </Button>
-                    )
+                return cast.type === "check" ? (
+                  <Checkbox
+                    key={playerNum}
+                    color={getColorHex(color)}
+                    checked={(counts[game] ?? 0) > 0}
+                    onChange={(event) =>
+                      setGeneralGameCount({
+                        goal: foundGoal.resolvedGoal,
+                        player_num: playerNum,
+                        game,
+                        count: event.currentTarget.checked ? 1 : 0,
+                      })
+                    }
+                  />
+                ) : (
+                  <Button
+                    key={playerNum}
+                    color={getColorHex(color)}
+                    h={18}
+                    w={18}
+                    p={0}
+                    size="compact-xs"
+                    onClick={() => {
+                      setGeneralGameCount({
+                        goal: foundGoal.resolvedGoal,
+                        player_num: playerNum,
+                        game,
+                        count: (counts[game] ?? 0) + 1,
+                      });
+                    }}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      setGeneralGameCount({
+                        goal: foundGoal.resolvedGoal,
+                        player_num: playerNum,
+                        game,
+                        count: Math.max(0, (counts[game] ?? 0) - 1),
+                      });
+                    }}
+                  >
+                    {counts[game] ?? 0}
+                  </Button>
                 );
               })}
               <GameInfo

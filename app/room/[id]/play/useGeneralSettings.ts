@@ -1,8 +1,14 @@
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
-import { GeneralRestrictions, GeneralSetters, GeneralSettings } from "./GeneralSection";
+import {
+  Restrictions,
+  GeneralSetters,
+  GeneralSettings,
+} from "./GeneralSection";
 import useLocalBool from "@/app/localStorage/useLocalBool";
 
-export default function useGeneralSettings(restrictions: GeneralRestrictions): [GeneralSettings, GeneralSetters] {
+export default function useGeneralSettings(
+  restrictions: Restrictions,
+): [GeneralSettings, GeneralSetters] {
   const [rawType, setType] = useLocalEnum({
     key: "general_type",
     defaultValue: "full",
@@ -18,8 +24,10 @@ export default function useGeneralSettings(restrictions: GeneralRestrictions): [
     defaultValue: true,
   });
 
-  const type = !restrictions.canUseFull && rawType === "full" ? "simple" : rawType;
-  const sort = !restrictions.canFastSort && rawSort === "fast" ? "chronological" : rawSort;
+  const type =
+    !restrictions.canUseFull && rawType === "full" ? "simple" : rawType;
+  const sort =
+    !restrictions.canFastSort && rawSort === "fast" ? "chronological" : rawSort;
   const shouldSegment = rawShouldSegment && restrictions.canSegment;
 
   return [

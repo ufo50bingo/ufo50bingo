@@ -23,7 +23,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import SimpleGeneralTracker from "./SimpleGeneralTracker";
 import findGoal, { FoundGoal } from "@/app/findGoal";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
-import { FoundStandardGeneral, GeneralItem } from "../cast/Cast";
+import { GeneralItem } from "../cast/Cast";
 import useLocalBool from "@/app/localStorage/useLocalBool";
 import useFont from "@/app/font/useFont";
 import useSyncedTimer, { FullSyncedTimerEvent } from "../common/useSyncedTimer";
@@ -45,6 +45,13 @@ import GameInfo from "../cast/GameInfo";
 import InfoCard from "../cast/InfoCard";
 import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
 import { useSearchParams } from "next/navigation";
+import { Restrictions } from "./GeneralSection";
+
+export type FoundItem = {
+  color: BingosyncColor;
+  foundGoal: FoundGoal<string, string, string>;
+  pasta: UFOPasta;
+};
 
 export type Props = {
   id: string;
@@ -70,7 +77,6 @@ export default function Play({
   const searchParams = useSearchParams();
   const override = searchParams.get("override");
 
-  const [shownDifficulties, setShownDifficulties] = useShownDifficulties();
   const [showGeneralTrackerRaw, setShowGeneralTracker] = useLocalBool({
     key: "show_general_tracker",
     defaultValue: true,
@@ -119,7 +125,7 @@ export default function Play({
     roomBackend,
   });
 
-  const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(() => {
+  const foundItems = useMemo<ReadonlyArray<FoundItem>>(() => {
     return board
       .map((square) => {
         let foundGoal: null | FoundGoal<string, string, string> = null;
@@ -133,23 +139,29 @@ export default function Play({
           foundGoal = findGoal(square.name, EVERY_GAME_UFO);
           pasta = EVERY_GAME_UFO;
         }
-        if (foundGoal == null || foundGoal.cast == null) {
+        if (foundGoal == null) {
           return null;
         }
         return {
           color: square.color,
-          foundGoal: foundGoal as FoundStandardGeneral,
+          foundGoal,
           pasta,
         };
       })
       .filter((item) => item != null);
   }, [board]);
 
+  const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(() => {
+    return foundItems.filter(
+      (foundItem) => foundItem.foundGoal.cast != null,
+    ) as ReadonlyArray<GeneralItem>;
+  }, [foundItems]);
   const showGeneralTracker = showGeneralTrackerRaw && generalGoals.length > 0;
 
-  const generalRestrictions = useMemo(() => {
+  const restrictions: Restrictions = useMemo(() => {
     if (override === "all") {
       return {
+        canTagDifficultyFor: null,
         canUseFull: true,
         canFilterOnCard: true,
         canShowOnCardTooltips: true,
@@ -159,10 +171,12 @@ export default function Play({
         canShowMultiGoalGames: true,
       };
     }
-    const isUfo50 = generalGoals.every((item) => item.pasta === STANDARD_UFO);
-    // TODO: Need something when no generals are detected?
+    const isUfo50 =
+      generalGoals.every((item) => item.pasta === STANDARD_UFO) ||
+      foundItems.filter((item) => item.pasta === STANDARD_UFO).length > 15;
     if (isUfo50) {
       return {
+        canTagDifficultyFor: ["general"],
         canUseFull: true,
         canFilterOnCard: true,
         canShowOnCardTooltips: false,
@@ -172,9 +186,12 @@ export default function Play({
         canShowMultiGoalGames: false,
       };
     }
-    const isNes50 = generalGoals.every((item) => item.pasta === NES_50_UFO);
+    const isNes50 =
+      generalGoals.every((item) => item.pasta === NES_50_UFO) ||
+      foundItems.filter((item) => item.pasta === NES_50_UFO).length > 15;
     if (isNes50) {
       return {
+        canTagDifficultyFor: null,
         canUseFull: true,
         canFilterOnCard: true,
         canShowOnCardTooltips: false,
@@ -185,6 +202,7 @@ export default function Play({
       };
     }
     return {
+      canTagDifficultyFor: null,
       canUseFull: true,
       canFilterOnCard: true,
       canShowOnCardTooltips: true,
@@ -193,10 +211,11 @@ export default function Play({
       canUseTerminalCodes: true,
       canShowMultiGoalGames: true,
     };
-  }, [generalGoals, override]);
+  }, [generalGoals, foundItems, override]);
 
-  const [generalSettings, generalSetters] =
-    useGeneralSettings(generalRestrictions);
+  const [shownDifficulties, setShownDifficulties] =
+    useShownDifficulties(restrictions);
+  const [generalSettings, generalSetters] = useGeneralSettings(restrictions);
   const [fullGeneralState, setGeneralGameCount] = useFullGeneralState(id, seed);
   const [showAll, addShowAll] = useShowAll(`player-showall-${id}-${seed}`);
 
@@ -379,7 +398,7 @@ export default function Play({
             roomBackend={roomBackend}
             generalSettings={generalSettings}
             generalSetters={generalSetters}
-            generalRestrictions={generalRestrictions}
+            restrictions={restrictions}
           />
         </Stack>
         <Feed
@@ -414,13 +433,13 @@ export default function Play({
               }}
               settings={generalSettings}
               pasta={g.pasta}
-              restrictions={generalRestrictions}
+              restrictions={restrictions}
             />
           ))}
         {!isHidden &&
           showGeneralTracker &&
           generalSettings.type === "full" &&
-          generalRestrictions.canShowMultiGoalGames && (
+          restrictions.canShowMultiGoalGames && (
             <InfoCard
               title="Multi-goal games"
               style={{
@@ -437,9 +456,7 @@ export default function Play({
                         game={game as Game}
                         goals={gameToGoals[game]}
                         description={null}
-                        canShowTooltip={
-                          generalRestrictions.canShowOnCardTooltips
-                        }
+                        canShowTooltip={restrictions.canShowOnCardTooltips}
                       />
                     ))
                   : "No multi-goal games on this card!"}

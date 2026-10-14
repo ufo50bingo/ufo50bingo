@@ -44,10 +44,11 @@ import { UFOPasta } from "@/app/generator/ufoGenerator";
 import { RoomBackend } from "@/app/roomApi";
 import getGameList from "../common/getGameList";
 import getIsNes50 from "../common/getIsNes50";
-import { GeneralRestrictions, GeneralSettings } from "../play/GeneralSection";
+import { Restrictions, GeneralSettings } from "../play/GeneralSection";
 import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
 
-const GENERAL_RESTRICTIONS: GeneralRestrictions = {
+const RESTRICTIONS: Restrictions = {
+  canTagDifficultyFor: null,
   canUseFull: true,
   canFilterOnCard: true,
   canShowOnCardTooltips: true,
@@ -309,7 +310,7 @@ export default function Cast({
       style={{ height: `${h ?? 300}px` }}
       settings={generalSettings}
       pasta={g.pasta}
-      restrictions={GENERAL_RESTRICTIONS}
+      restrictions={RESTRICTIONS}
     />
   );
 

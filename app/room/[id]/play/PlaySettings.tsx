@@ -1,4 +1,4 @@
-import { Difficulty } from "@/app/goals";
+import { Difficulty, DIFFICULTY_NAMES, ORDERED_DIFFICULTY } from "@/app/goals";
 import {
   Accordion,
   Alert,
@@ -6,6 +6,7 @@ import {
   Checkbox,
   Drawer,
   Stack,
+  Text,
 } from "@mantine/core";
 import { IconAlertSquareRounded, IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
@@ -30,7 +31,7 @@ import { useShouldShortenContext } from "@/app/settings/ShouldShortenContext";
 import { RoomBackend } from "@/app/roomApi";
 import GeneralSection, {
   GeneralSettings,
-  GeneralRestrictions,
+  Restrictions,
   GeneralSetters,
 } from "./GeneralSection";
 import { useShouldShowRecentContext } from "@/app/settings/ShouldShowRecentContext";
@@ -54,7 +55,7 @@ type Props = {
   forceReveal: () => unknown;
   roomBackend: RoomBackend;
   generalSettings: GeneralSettings;
-  generalRestrictions: GeneralRestrictions;
+  restrictions: Restrictions;
   generalSetters: GeneralSetters;
 };
 
@@ -76,7 +77,7 @@ export default function PlaySettings({
   timerState,
   forceReveal,
   roomBackend,
-  generalRestrictions,
+  restrictions,
   generalSetters,
   generalSettings,
 }: Props) {
@@ -158,15 +159,27 @@ export default function PlaySettings({
                       }
                       label="Highlight opponent's recently-claimed squares"
                     />
-                    <Checkbox
-                      checked={shownDifficulties.includes("general")}
-                      onChange={(event) =>
-                        setShownDifficulties(
-                          event.target.checked ? ["general"] : [],
-                        )
-                      }
-                      label="Label general goals"
-                    />
+                    <Text size="sm">Display difficulty tags for:</Text>
+                    {ORDERED_DIFFICULTY.filter(
+                      (difficulty) =>
+                        restrictions.canTagDifficultyFor == null ||
+                        restrictions.canTagDifficultyFor.includes(difficulty),
+                    ).map((difficulty) => (
+                      <Checkbox
+                        key={difficulty}
+                        checked={shownDifficulties.includes(difficulty)}
+                        onChange={(event) =>
+                          setShownDifficulties(
+                            event.currentTarget.checked
+                              ? [...shownDifficulties, difficulty]
+                              : shownDifficulties.filter(
+                                  (d) => d !== difficulty,
+                                ),
+                          )
+                        }
+                        label={DIFFICULTY_NAMES[difficulty]}
+                      />
+                    ))}
                     <FontSelector font={font} setFont={setFont} />
                     <SelectRightClickBehavior label="Square right click behavior" />
                   </Stack>
@@ -175,7 +188,7 @@ export default function PlaySettings({
               <GeneralSection
                 generalSettings={generalSettings}
                 generalSetters={generalSetters}
-                generalRestrictions={generalRestrictions}
+                restrictions={restrictions}
                 showGeneralTracker={showGeneralTracker}
                 setShowGeneralTracker={setShowGeneralTracker}
               />

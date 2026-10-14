@@ -1,16 +1,20 @@
 import { Accordion, Checkbox, Select, Stack, Tooltip } from "@mantine/core";
 import { SortType } from "../cast/useLocalState";
 import { useMemo } from "react";
+import { Difficulty } from "@/app/goals";
 
 type GeneralType = "simple" | "full";
 
-export type GeneralRestrictions = {
+export type Restrictions = {
+  // null means everything
+  canTagDifficultyFor: null | ReadonlyArray<Difficulty>;
   canUseFull: boolean;
   canFilterOnCard: boolean;
   canShowOnCardTooltips: boolean;
   canFastSort: boolean;
   canSegment: boolean;
   canUseTerminalCodes: boolean;
+  canShowMultiGoalGames: boolean;
 };
 
 export type GeneralSettings = {
@@ -27,7 +31,7 @@ export type GeneralSetters = {
 
 type Props = {
   generalSettings: GeneralSettings;
-  generalRestrictions: GeneralRestrictions;
+  restrictions: Restrictions;
   generalSetters: GeneralSetters;
   showGeneralTracker: boolean;
   setShowGeneralTracker: (newShowGeneralTracker: boolean) => unknown;
@@ -35,7 +39,7 @@ type Props = {
 
 export default function GeneralSection({
   generalSettings,
-  generalRestrictions,
+  restrictions,
   generalSetters,
   showGeneralTracker,
   setShowGeneralTracker,
@@ -51,7 +55,7 @@ export default function GeneralSection({
       onChange={
         generalSetters.setType as (newGeneralType: string | null) => unknown
       }
-      disabled={!generalRestrictions.canUseFull}
+      disabled={!restrictions.canUseFull}
     />
   );
   const segmentCheckbox = (
@@ -64,13 +68,13 @@ export default function GeneralSection({
     />
   );
   const sortData = useMemo(() => {
-    const data = generalRestrictions.canFastSort
+    const data = restrictions.canFastSort
       ? [{ value: "fast", label: "Fastest" }]
       : [];
     data.push({ value: "alphabetical", label: "Alphabetical" });
     data.push({ value: "chronological", label: "Chronological" });
     return data;
-  }, [generalRestrictions.canFastSort]);
+  }, [restrictions.canFastSort]);
   const sortSelector = (
     <Select
       label="Sort type"
@@ -94,7 +98,7 @@ export default function GeneralSection({
             />
             {showGeneralTracker && (
               <>
-                {generalRestrictions.canUseFull ? (
+                {restrictions.canUseFull ? (
                   typeSelector
                 ) : (
                   <Tooltip label="Unavailable for this variant">
@@ -102,7 +106,7 @@ export default function GeneralSection({
                   </Tooltip>
                 )}
                 {generalSettings.type === "full" &&
-                  (generalRestrictions.canSegment ? (
+                  (restrictions.canSegment ? (
                     segmentCheckbox
                   ) : (
                     <Tooltip label="Unavailable for this variant">

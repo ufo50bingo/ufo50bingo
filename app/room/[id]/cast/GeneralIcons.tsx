@@ -64,7 +64,6 @@ function Icon({
       );
     return (
       <SideCell>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className={imgClass} src={src} alt={goal} />
         {tag}
       </SideCell>
@@ -95,7 +94,6 @@ function Icon({
         <Group gap={8}>
           {playerNum === 0 ? (
             <>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img className={imgClass} src={src} alt={goal} />
               {tag}
             </>
@@ -146,9 +144,9 @@ export default function GeneralIcons({
           countState == null
             ? 0
             : Object.keys(countState).reduce(
-              (acc, game) => acc + countState[game],
-              0,
-            )
+                (acc, game) => acc + countState[game],
+                0,
+              )
         }
         isPixel={
           explicitImg != null

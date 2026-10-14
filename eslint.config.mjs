@@ -14,6 +14,7 @@ export default defineConfig([
 
     rules: {
       "react/no-unescaped-entities": "off",
+      "@next/next/no-img-element": "off",
 
       "@typescript-eslint/no-unused-vars": [
         "error",

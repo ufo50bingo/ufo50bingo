@@ -183,14 +183,46 @@ export default function CastSettings({
                   {((leftColor === "pink" && rightColor === "blue") ||
                     (leftColor === "blue" && rightColor === "pink")) && (
                     <Group mt={8} gap={4}>
-                      <img className={classes.emoji} src="/transflag.svg" />
-                      <img className={classes.emoji} src="/transflag.svg" />
-                      <img className={classes.emoji} src="/transflag.svg" />
-                      <img className={classes.emoji} src="/transflag.svg" />
-                      <img className={classes.emoji} src="/transflag.svg" />
-                      <img className={classes.emoji} src="/transflag.svg" />
-                      <img className={classes.emoji} src="/transflag.svg" />
-                      <img className={classes.emoji} src="/transflag.svg" />
+                      <img
+                        className={classes.emoji}
+                        src="/transflag.svg"
+                        alt="trans flag"
+                      />
+                      <img
+                        className={classes.emoji}
+                        src="/transflag.svg"
+                        alt="trans flag"
+                      />
+                      <img
+                        className={classes.emoji}
+                        src="/transflag.svg"
+                        alt="trans flag"
+                      />
+                      <img
+                        className={classes.emoji}
+                        src="/transflag.svg"
+                        alt="trans flag"
+                      />
+                      <img
+                        className={classes.emoji}
+                        src="/transflag.svg"
+                        alt="trans flag"
+                      />
+                      <img
+                        className={classes.emoji}
+                        src="/transflag.svg"
+                        alt="trans flag"
+                      />
+                      <img
+                        className={classes.emoji}
+                        src="/transflag.svg"
+                        alt="trans flag"
+                      />
+                      <img
+                        className={classes.emoji}
+                        src="/transflag.svg"
+                        alt="trans flag"
+                      />
                     </Group>
                   )}
                 </Accordion.Panel>

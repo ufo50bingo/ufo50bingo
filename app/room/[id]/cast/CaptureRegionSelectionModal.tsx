@@ -244,7 +244,6 @@ export default function CaptureRegionSelectionModal({
         <Button onClick={() => onConfirm(regions)}>Done</Button>
       </Group>
       <div style={{ position: "relative", display: "inline-block" }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           ref={imgCallback}
           src={snapshotInfo.url}

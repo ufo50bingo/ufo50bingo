@@ -11,7 +11,12 @@ type Props = {
   isNes50: boolean;
 };
 
-export default function RecentGames({ recentGames, limit, font, isNes50 }: Props) {
+export default function RecentGames({
+  recentGames,
+  limit,
+  font,
+  isNes50,
+}: Props) {
   const filtered = recentGames.filter((recentGame, index) => {
     const prevGame =
       index < recentGames.length - 1 ? recentGames[index + 1] : null;
@@ -26,7 +31,13 @@ export default function RecentGames({ recentGames, limit, font, isNes50 }: Props
       const endTime = index > 0 ? filtered[index - 1].start_time : null;
       return (
         <SideCell key={startTime}>
-          <PlayedGame game={game} startTime={startTime} endTime={endTime} font={font} isNes50={isNes50} />
+          <PlayedGame
+            game={game}
+            startTime={startTime}
+            endTime={endTime}
+            font={font}
+            isNes50={isNes50}
+          />
         </SideCell>
       );
     })
@@ -37,14 +48,13 @@ export default function RecentGames({ recentGames, limit, font, isNes50 }: Props
     entries.push(
       <SideCell key={entries.length}>
         <div className={classes.container}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             alt="No game"
             src={`/cobwebs/cobwebs${entries.length}.png`}
             className={classes.gameIcon}
           />
         </div>
-      </SideCell>
+      </SideCell>,
     );
   }
   return <>{entries}</>;

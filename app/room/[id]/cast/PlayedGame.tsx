@@ -14,14 +14,21 @@ type Props = {
   isNes50: boolean;
 };
 
-export default function PlayedGame({ game, startTime, endTime, font, isNes50 }: Props) {
+export default function PlayedGame({
+  game,
+  startTime,
+  endTime,
+  font,
+  isNes50,
+}: Props) {
   const { getClientMsFromServerMs } = useServerOffsetContext();
-  const href = isNes50 ? `/nes50boxart/${encodeURIComponent(game)}.png` : ORDERED_PROPER_GAMES.includes(game as ProperGame)
-    ? `/games/${game}.png`
-    : `/cobwebs/cobwebs0.png`;
+  const href = isNes50
+    ? `/nes50boxart/${encodeURIComponent(game)}.png`
+    : ORDERED_PROPER_GAMES.includes(game as ProperGame)
+      ? `/games/${game}.png`
+      : `/cobwebs/cobwebs0.png`;
   return (
     <div className={classes.container}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img alt={game} src={href} className={classes.gameIcon} />
       <div className={classes.tag}>
         <span className={getFontClassname(font)}>

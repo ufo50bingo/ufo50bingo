@@ -171,21 +171,6 @@ export default function Play({
         canShowMultiGoalGames: true,
       };
     }
-    const isUfo50 =
-      generalGoals.every((item) => item.pasta === STANDARD_UFO) ||
-      foundItems.filter((item) => item.pasta === STANDARD_UFO).length > 15;
-    if (isUfo50) {
-      return {
-        canTagDifficultyFor: ["general"],
-        canUseFull: true,
-        canFilterOnCard: true,
-        canShowOnCardTooltips: false,
-        canFastSort: false,
-        canSegment: true,
-        canUseTerminalCodes: true,
-        canShowMultiGoalGames: false,
-      };
-    }
     const isNes50 =
       generalGoals.every((item) => item.pasta === NES_50_UFO) ||
       foundItems.filter((item) => item.pasta === NES_50_UFO).length > 15;
@@ -201,15 +186,31 @@ export default function Play({
         canShowMultiGoalGames: true,
       };
     }
+    const isEveryGame =
+      generalGoals.every((item) => item.pasta === EVERY_GAME_UFO) ||
+      foundItems.filter((item) => item.pasta === EVERY_GAME_UFO).length > 15;
+    if (isEveryGame) {
+      return {
+        canTagDifficultyFor: null,
+        canUseFull: true,
+        canFilterOnCard: true,
+        canShowOnCardTooltips: true,
+        canFastSort: true,
+        canSegment: true,
+        canUseTerminalCodes: true,
+        canShowMultiGoalGames: true,
+      };
+    }
+    // is UFO 50
     return {
-      canTagDifficultyFor: null,
+      canTagDifficultyFor: ["general"],
       canUseFull: true,
       canFilterOnCard: true,
-      canShowOnCardTooltips: true,
-      canFastSort: true,
+      canShowOnCardTooltips: false,
+      canFastSort: false,
       canSegment: true,
       canUseTerminalCodes: true,
-      canShowMultiGoalGames: true,
+      canShowMultiGoalGames: false,
     };
   }, [generalGoals, foundItems, override]);
 

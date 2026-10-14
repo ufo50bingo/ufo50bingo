@@ -55,6 +55,7 @@ const RESTRICTIONS: Restrictions = {
   canFastSort: true,
   canSegment: true,
   canUseTerminalCodes: true,
+  canShowMultiGoalGames: true,
 };
 
 export type FoundStandardGeneral = FoundGoalWithCast<string, string, string>;

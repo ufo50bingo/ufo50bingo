@@ -12,7 +12,6 @@ import {
   Group,
   JsonInput,
   List,
-  SegmentedControl,
   Select,
   Stack,
   Text,
@@ -31,9 +30,6 @@ import UFODraftCreator from "./UFODraftCreator";
 import useLocalEnum from "../localStorage/useLocalEnum";
 import validateStr from "../generator/validateStr";
 import getFilteredDifficulties from "./getFilteredDifficulties";
-import shuffle from "./shuffle";
-import getAllSubcategories from "./getAllSubcategories";
-import getNonGeneralCategories from "./getNonGeneralCategories";
 import FiltersModal, { FilterInfo } from "./FiltersModal";
 import { getRoomLink, RoomBackend } from "../roomApi";
 import ExtraOptions from "./ExtraOptions";
@@ -70,18 +66,23 @@ export default function NonLeagueMatch({ visible }: Props) {
 
   const [draftPasta, setDraftPasta] = useState<null | UFOPasta>(null);
   const [rawFormat, setFormat] = useState<Format>("Normal");
-  const [allFilterInfo, setAllFilterInfo] = useState<ReadonlyMap<string, FilterInfo>>(new Map());
+  const [allFilterInfo, setAllFilterInfo] = useState<
+    ReadonlyMap<string, FilterInfo>
+  >(new Map());
   const [roomBackend, setRoomBackend] = useState<RoomBackend>("bingosync");
   const [isExtraShown, setIsExtraShown] = useState<boolean>(false);
 
   const filterInfo = allFilterInfo.get(variant) ?? DEFAULT_FILTER_INFO;
-  const setFilterInfo = useCallback((newFilterInfo: FilterInfo) => {
-    setAllFilterInfo(prevAllFilterInfo => {
-      const newMap = new Map(prevAllFilterInfo.entries());
-      newMap.set(variant, newFilterInfo);
-      return newMap;
-    });
-  }, [variant]);
+  const setFilterInfo = useCallback(
+    (newFilterInfo: FilterInfo) => {
+      setAllFilterInfo((prevAllFilterInfo) => {
+        const newMap = new Map(prevAllFilterInfo.entries());
+        newMap.set(variant, newFilterInfo);
+        return newMap;
+      });
+    },
+    [variant],
+  );
 
   const [roomName, setRoomName] = useState("");
   const [password, setPassword] = useState("");
@@ -298,15 +299,17 @@ export default function NonLeagueMatch({ visible }: Props) {
                 </Chip.Group>
               )}
             <Group gap={8}>
-              {(metadata.type === "UFO" || (metadata.type === "Custom" && customUfo != null)) && metadata.hasFilters && (
-                <Button
-                  variant="light"
-                  size="xs"
-                  onClick={() => setIsFilterModalShown(true)}
-                >
-                  Filters
-                </Button>
-              )}
+              {(metadata.type === "UFO" ||
+                (metadata.type === "Custom" && customUfo != null)) &&
+                metadata.hasFilters && (
+                  <Button
+                    variant="light"
+                    size="xs"
+                    onClick={() => setIsFilterModalShown(true)}
+                  >
+                    Filters
+                  </Button>
+                )}
               {metadata.type === "UFO" && (
                 <Tooltip label="Copy the source in the new “UFO” format.">
                   <Button
@@ -343,9 +346,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                       metadata.type === "Custom" ? customUfo! : metadata.pasta
                     }
                     excludedGames={
-                      metadata.hasFilters
-                        ? filterInfo.excludedGames
-                        : undefined
+                      metadata.hasFilters ? filterInfo.excludedGames : undefined
                     }
                   />
                   <UFODifficultySelectors
@@ -356,9 +357,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                     }
                     uncheckedGames={uncheckedGames}
                     excludedGames={
-                      metadata.hasFilters
-                        ? filterInfo.excludedGames
-                        : undefined
+                      metadata.hasFilters ? filterInfo.excludedGames : undefined
                     }
                     counts={
                       difficultyCounts[metadata.name] ??
@@ -388,9 +387,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                   sort={checkerSort}
                   setSort={setCheckerSort}
                   excludedGames={
-                    metadata.hasFilters
-                      ? filterInfo.excludedGames
-                      : undefined
+                    metadata.hasFilters ? filterInfo.excludedGames : undefined
                   }
                 />
               )}
@@ -564,7 +561,10 @@ export default function NonLeagueMatch({ visible }: Props) {
                 setCreatedPassword(password);
 
                 if (format !== "Double") {
-                  window.open(getRoomLink(ids[0], password, roomBackend), "_blank");
+                  window.open(
+                    getRoomLink(ids[0], password, roomBackend),
+                    "_blank",
+                  );
                 }
               } catch (err: unknown) {
                 setIsExtraShown(true);
@@ -582,8 +582,8 @@ export default function NonLeagueMatch({ visible }: Props) {
           >
             Create Bingosync Board
             {format === "Double" &&
-              (metadata.type === "UFO" ||
-                (metadata.type === "Custom" && customUfo != null))
+            (metadata.type === "UFO" ||
+              (metadata.type === "Custom" && customUfo != null))
               ? "s"
               : ""}
           </Button>
@@ -613,7 +613,11 @@ export default function NonLeagueMatch({ visible }: Props) {
               {createdIds.length === 1 && (
                 <>
                   <a
-                    href={getRoomLink(createdIds[0], createdPassword, roomBackend)}
+                    href={getRoomLink(
+                      createdIds[0],
+                      createdPassword,
+                      roomBackend,
+                    )}
                     target="_blank"
                   >
                     Your new room is available at here.
@@ -634,7 +638,13 @@ export default function NonLeagueMatch({ visible }: Props) {
                   <List>
                     {createdIds.map((createdId, idx) => (
                       <List.Item key={createdId}>
-                        <a href={getRoomLink(createdId, createdPassword, roomBackend)}>
+                        <a
+                          href={getRoomLink(
+                            createdId,
+                            createdPassword,
+                            roomBackend,
+                          )}
+                        >
                           <Text size="sm">Room {idx + 1}</Text>
                         </a>
                       </List.Item>
@@ -663,7 +673,10 @@ export default function NonLeagueMatch({ visible }: Props) {
               icon={<IconExclamationMark />}
             >
               <Stack gap={8}>
-                <span>You can select a different backend, then try to create the match again.</span>
+                <span>
+                  You can select a different backend, then try to create the
+                  match again.
+                </span>
                 <span>{error.message}</span>
               </Stack>
             </Alert>

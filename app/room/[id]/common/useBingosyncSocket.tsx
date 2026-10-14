@@ -121,7 +121,7 @@ export default function useBingosyncSocket({
       socket.close();
       socketRef.current = null;
     };
-  }, [socketKey, id, onNewCard, onMessage]);
+  }, [socketKey, id, onNewCard, onMessage, roomBackend]);
 
   return {
     board,

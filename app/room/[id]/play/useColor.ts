@@ -20,7 +20,7 @@ export default function useColor(
       setColorRaw(newColor);
       await chooseColor(id, newColor, roomBackend);
     },
-    [id, setColorRaw]
+    [id, roomBackend, setColorRaw],
   );
 
   return [color, setColor];

@@ -8,15 +8,13 @@ import {
 import { isGift, isGoldCherry } from "./giftGoldCherry";
 import DailyFeedFetcher from "./DailyFeedFetcher";
 import { SPICY_UFO } from "../pastas/spicyUfo";
-import { STANDARD_UFO } from "../pastas/standardUfo";
 import ufoGenerator, { UFOPasta } from "../generator/ufoGenerator";
 import { StandardGeneral } from "../pastas/pastaTypes";
 import { readSession } from "../session/sessionUtil";
 import { redirect, RedirectType } from "next/navigation";
 import { Metadata } from "next";
-import { getNonStandardPracticeVariant, getPracticePasta, getPracticeVariant } from "../usePracticePasta";
+import { getPracticePasta, getPracticeVariant } from "../usePracticePasta";
 import { PracticeVariant } from "../PracticeVariantContext";
-import { SQL } from "../matches/page";
 
 export const metadata: Metadata = {
   title: "UFO 50 Daily Bingo",
@@ -96,7 +94,9 @@ async function constructBoard(
       const parsed: ReadonlyArray<string> = JSON.parse(raw.board);
       return parsed;
     }) ?? [];
-  const pasta = isSpicySunday ? SPICY_WITHOUT_GENERAL : getPracticePasta(variant);
+  const pasta = isSpicySunday
+    ? SPICY_WITHOUT_GENERAL
+    : getPracticePasta(variant);
   let bestBoard = ufoGenerator(pasta);
   let bestScore = getSimilarityScore(bestBoard, recentBoards);
   for (let i = 0; i < 100; i++) {
@@ -117,7 +117,7 @@ const SIMILARITY_PENALTY = [12, 7, 5, 4, 3, 2, 1];
 const GIFT_GOLD_CHERRY_PENALTY = [3, 2, 1, 1, 1, 1, 1];
 function getSimilarityScore(
   candidate: ReadonlyArray<string>,
-  prevBoards: ReadonlyArray<ReadonlyArray<string>>
+  prevBoards: ReadonlyArray<ReadonlyArray<string>>,
 ): number {
   let score = 0;
   const candidateGoals = new Set(candidate);
@@ -136,7 +136,10 @@ function getSimilarityScore(
   return score;
 }
 
-async function getDailyBoard(date: LocalDate, variant: PracticeVariant): Promise<DailyData> {
+async function getDailyBoard(
+  date: LocalDate,
+  variant: PracticeVariant,
+): Promise<DailyData> {
   const isoDate = toISODate(date);
   const sql = getSql(false);
   const sqlResult = await sql`
@@ -164,30 +167,30 @@ async function getDailyBoard(date: LocalDate, variant: PracticeVariant): Promise
   const newTitle = isSpicySunday ? "Spicy Sunday" : null;
   const newDescription = isSpicySunday
     ? JSON.stringify({
-      type: "doc",
-      content: [
-        {
-          type: "paragraph",
-          content: [
-            {
-              type: "text",
-              marks: [
-                {
-                  type: "link",
-                  attrs: {
-                    href: "https://docs.google.com/document/d/1Snf0qAm68dRROjoh8hb3Rn0OV-THyD2PcLJeuN-209U/edit?tab=t.0",
-                    target: null,
-                    rel: "noopener noreferrer nofollow",
-                    class: null,
+        type: "doc",
+        content: [
+          {
+            type: "paragraph",
+            content: [
+              {
+                type: "text",
+                marks: [
+                  {
+                    type: "link",
+                    attrs: {
+                      href: "https://docs.google.com/document/d/1Snf0qAm68dRROjoh8hb3Rn0OV-THyD2PcLJeuN-209U/edit?tab=t.0",
+                      target: null,
+                      rel: "noopener noreferrer nofollow",
+                      class: null,
+                    },
                   },
-                },
-              ],
-              text: "Follow the spicy bingo rules!",
-            },
-          ],
-        },
-      ],
-    })
+                ],
+                text: "Follow the spicy bingo rules!",
+              },
+            ],
+          },
+        ],
+      })
     : null;
   const newSeed = Math.ceil(999999 * Math.random());
   await sql`INSERT INTO daily (
@@ -218,12 +221,19 @@ async function getDailyBoard(date: LocalDate, variant: PracticeVariant): Promise
 export default async function DailyPage(props: {
   searchParams?: Promise<FilterParams>;
 }) {
-  const [params, session] = await Promise.all([props.searchParams, readSession()]);
+  const [params, session] = await Promise.all([
+    props.searchParams,
+    readSession(),
+  ]);
 
   const dateParam = params?.date;
   const variant = params?.v;
   // only allow admins to look into the future
-  if (dateParam != null && dateParam > toISODate(getEasternDate()) && session?.admin !== true) {
+  if (
+    dateParam != null &&
+    dateParam > toISODate(getEasternDate()) &&
+    session?.admin !== true
+  ) {
     if (variant == null) {
       redirect("/daily", RedirectType.replace);
     } else {
@@ -237,5 +247,11 @@ export default async function DailyPage(props: {
 
   const date = dateParam == null ? getEasternDate() : fromISODate(dateParam);
   const dailyData = await getDailyBoard(date, typedVariant);
-  return <DailyFeedFetcher date={date} dailyData={dailyData} variant={typedVariant} />;
+  return (
+    <DailyFeedFetcher
+      date={date}
+      dailyData={dailyData}
+      variant={typedVariant}
+    />
+  );
 }

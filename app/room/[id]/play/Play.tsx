@@ -33,7 +33,6 @@ import StartPauseButton from "../common/StartPauseButton";
 import { UFOPasta } from "@/app/generator/ufoGenerator";
 import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
 import { RoomBackend } from "@/app/roomApi";
-import { GeneralRestrictions } from "./GeneralSection";
 import useGeneralSettings from "./useGeneralSettings";
 import useFullGeneralState from "./useFullGeneralState";
 import GeneralGoal from "../cast/GeneralGoal";
@@ -69,7 +68,7 @@ export default function Play({
   roomBackend,
 }: Props) {
   const searchParams = useSearchParams();
-  const override = searchParams.get('override');
+  const override = searchParams.get("override");
 
   const [shownDifficulties, setShownDifficulties] = useShownDifficulties();
   const [showGeneralTrackerRaw, setShowGeneralTracker] = useLocalBool({
@@ -120,34 +119,31 @@ export default function Play({
     roomBackend,
   });
 
-  const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(
-    () => {
-      return board
-        .map((square) => {
-          let foundGoal: null | FoundGoal<string, string, string> = null;
-          foundGoal = findGoal(square.name, STANDARD_UFO);
-          let pasta: UFOPasta = STANDARD_UFO;
-          if (foundGoal == null) {
-            foundGoal = findGoal(square.name, NES_50_UFO);
-            pasta = NES_50_UFO;
-          }
-          if (foundGoal == null) {
-            foundGoal = findGoal(square.name, EVERY_GAME_UFO);
-            pasta = EVERY_GAME_UFO;
-          }
-          if (foundGoal == null || foundGoal.cast == null) {
-            return null;
-          }
-          return {
-            color: square.color,
-            foundGoal: foundGoal as FoundStandardGeneral,
-            pasta,
-          };
-        })
-        .filter((item) => item != null);
-    },
-    [board],
-  );
+  const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(() => {
+    return board
+      .map((square) => {
+        let foundGoal: null | FoundGoal<string, string, string> = null;
+        foundGoal = findGoal(square.name, STANDARD_UFO);
+        let pasta: UFOPasta = STANDARD_UFO;
+        if (foundGoal == null) {
+          foundGoal = findGoal(square.name, NES_50_UFO);
+          pasta = NES_50_UFO;
+        }
+        if (foundGoal == null) {
+          foundGoal = findGoal(square.name, EVERY_GAME_UFO);
+          pasta = EVERY_GAME_UFO;
+        }
+        if (foundGoal == null || foundGoal.cast == null) {
+          return null;
+        }
+        return {
+          color: square.color,
+          foundGoal: foundGoal as FoundStandardGeneral,
+          pasta,
+        };
+      })
+      .filter((item) => item != null);
+  }, [board]);
 
   const showGeneralTracker = showGeneralTrackerRaw && generalGoals.length > 0;
 
@@ -163,7 +159,7 @@ export default function Play({
         canShowMultiGoalGames: true,
       };
     }
-    const isUfo50 = generalGoals.every(item => item.pasta === STANDARD_UFO);
+    const isUfo50 = generalGoals.every((item) => item.pasta === STANDARD_UFO);
     // TODO: Need something when no generals are detected?
     if (isUfo50) {
       return {
@@ -176,7 +172,7 @@ export default function Play({
         canShowMultiGoalGames: false,
       };
     }
-    const isNes50 = generalGoals.every(item => item.pasta === NES_50_UFO);
+    const isNes50 = generalGoals.every((item) => item.pasta === NES_50_UFO);
     if (isNes50) {
       return {
         canUseFull: true,
@@ -199,7 +195,8 @@ export default function Play({
     };
   }, [generalGoals, override]);
 
-  const [generalSettings, generalSetters] = useGeneralSettings(generalRestrictions);
+  const [generalSettings, generalSetters] =
+    useGeneralSettings(generalRestrictions);
   const [fullGeneralState, setGeneralGameCount] = useFullGeneralState(id, seed);
   const [showAll, addShowAll] = useShowAll(`player-showall-${id}-${seed}`);
 
@@ -272,8 +269,8 @@ export default function Play({
     }
   }, [opponent, myScore, selectedColor, rawFeed, board]);
 
-  const isHidden = (timerState.type === "not_started" &&
-    !timerState.isForceRevealed) ||
+  const isHidden =
+    (timerState.type === "not_started" && !timerState.isForceRevealed) ||
     (timerState.type === "countdown" &&
       !timerState.wasPaused &&
       !timerState.isForceRevealed);
@@ -286,8 +283,14 @@ export default function Play({
             onClickSquare={async (squareIndex) => {
               const isClearing = board[squareIndex].color === selectedColor;
               try {
-                await changeColor(id, squareIndex, selectedColor, isClearing, roomBackend);
-              } catch { }
+                await changeColor(
+                  id,
+                  squareIndex,
+                  selectedColor,
+                  isClearing,
+                  roomBackend,
+                );
+              } catch {}
             }}
             shownDifficulties={shownDifficulties}
             viewerColor={selectedColor}
@@ -381,46 +384,68 @@ export default function Play({
         </Stack>
         <Feed
           rawFeed={rawFeed}
-          style={{ height: showGeneralTracker && generalSettings.type === "simple" ? "748px" : "592px" }}
+          style={{
+            height:
+              showGeneralTracker && generalSettings.type === "simple"
+                ? "748px"
+                : "592px",
+          }}
           roomBackend={roomBackend}
         />
-        {!isHidden && showGeneralTracker && generalSettings.type === "full" && generalGoals.map(g => (
-          <GeneralGoal
-            key={g.foundGoal.resolvedGoal}
-            gameToGoals={gameToGoals}
-            foundGoal={g.foundGoal}
-            isFinished={g.color !== "blank"}
-            terminalCodes={terminalCodes}
-            countState={fullGeneralState[g.foundGoal.resolvedGoal]}
-            showAll={showAll.includes(g.foundGoal.resolvedGoal)}
-            setGeneralGameCount={setGeneralGameCount}
-            addShowAll={addShowAll}
-            playerColors={[selectedColor]}
-            style={{ minHeight: "300px", maxHeight: "592px", flex: "1 1 auto" }}
-            settings={generalSettings}
-            pasta={g.pasta}
-            restrictions={generalRestrictions}
-          />
-        ))}
-        {
-          !isHidden && showGeneralTracker && generalSettings.type === "full" && generalRestrictions.canShowMultiGoalGames && (
-            <InfoCard title="Multi-goal games" style={{ minHeight: "300px", maxHeight: "592px", flex: "1 1 auto" }}>
+        {!isHidden &&
+          showGeneralTracker &&
+          generalSettings.type === "full" &&
+          generalGoals.map((g) => (
+            <GeneralGoal
+              key={g.foundGoal.resolvedGoal}
+              gameToGoals={gameToGoals}
+              foundGoal={g.foundGoal}
+              isFinished={g.color !== "blank"}
+              terminalCodes={terminalCodes}
+              countState={fullGeneralState[g.foundGoal.resolvedGoal]}
+              showAll={showAll.includes(g.foundGoal.resolvedGoal)}
+              setGeneralGameCount={setGeneralGameCount}
+              addShowAll={addShowAll}
+              playerColors={[selectedColor]}
+              style={{
+                minHeight: "300px",
+                maxHeight: "592px",
+                flex: "1 1 auto",
+              }}
+              settings={generalSettings}
+              pasta={g.pasta}
+              restrictions={generalRestrictions}
+            />
+          ))}
+        {!isHidden &&
+          showGeneralTracker &&
+          generalSettings.type === "full" &&
+          generalRestrictions.canShowMultiGoalGames && (
+            <InfoCard
+              title="Multi-goal games"
+              style={{
+                minHeight: "300px",
+                maxHeight: "592px",
+                flex: "1 1 auto",
+              }}
+            >
               <Stack gap={4}>
                 {multiGoalGames.length > 0
                   ? multiGoalGames.map((game) => (
-                    <GameInfo
-                      key={game}
-                      game={game as Game}
-                      goals={gameToGoals[game]}
-                      description={null}
-                      canShowTooltip={generalRestrictions.canShowOnCardTooltips}
-                    />
-                  ))
+                      <GameInfo
+                        key={game}
+                        game={game as Game}
+                        goals={gameToGoals[game]}
+                        description={null}
+                        canShowTooltip={
+                          generalRestrictions.canShowOnCardTooltips
+                        }
+                      />
+                    ))
                   : "No multi-goal games on this card!"}
               </Stack>
             </InfoCard>
-          )
-        }
+          )}
       </Group>
       {reconnectModal}
     </>

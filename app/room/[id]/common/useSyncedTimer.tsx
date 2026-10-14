@@ -135,25 +135,25 @@ export default function useSyncedTimer({
         getClientMsFromServerMs(lastPauseTime) < lastForceReveal);
     return curStartTime == null
       ? {
-        type: hasStarted ? "paused" : "not_started",
-        accumulatedDuration,
-        pauseRequester: hasStarted ? pauseRequester : undefined,
-        isForceRevealed,
-      }
-      : getClientMsFromServerMs(curStartTime) < Date.now()
-        ? {
-          type: "running",
-          startTime: getClientMsFromServerMs(curStartTime),
+          type: hasStarted ? "paused" : "not_started",
           accumulatedDuration,
+          pauseRequester: hasStarted ? pauseRequester : undefined,
           isForceRevealed,
         }
+      : getClientMsFromServerMs(curStartTime) < Date.now()
+        ? {
+            type: "running",
+            startTime: getClientMsFromServerMs(curStartTime),
+            accumulatedDuration,
+            isForceRevealed,
+          }
         : {
-          type: "countdown",
-          endTime: getClientMsFromServerMs(curStartTime),
-          accumulatedDuration,
-          isForceRevealed,
-          wasPaused: lastPauseTime != null,
-        };
+            type: "countdown",
+            endTime: getClientMsFromServerMs(curStartTime),
+            accumulatedDuration,
+            isForceRevealed,
+            wasPaused: lastPauseTime != null,
+          };
     // including `now` to force it to re-run to change from countdown to running
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [events, getClientMsFromServerMs, lastForceReveal, now]);
@@ -185,7 +185,7 @@ export default function useSyncedTimer({
       revealBoard(id, roomBackend);
     }
     prevIsBeforeRevealRef.current = isBeforeReveal;
-  }, [id, isBeforeReveal, isCast]);
+  }, [id, isBeforeReveal, isCast, roomBackend]);
 
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const seedRef = useRef<number>(seed);

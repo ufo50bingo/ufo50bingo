@@ -17,7 +17,7 @@ import { RoomView } from "./roomCookie";
 import createRoomCookie from "./createRoomCookie";
 import { useSearchParams } from "next/navigation";
 import useLocalString from "@/app/localStorage/useLocalString";
-import { getRoomUrl, parseRoomBackend, RoomBackend } from "@/app/roomApi";
+import { getRoomUrl, RoomBackend } from "@/app/roomApi";
 
 type Props = {
   id: string;

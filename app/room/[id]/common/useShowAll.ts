@@ -1,17 +1,22 @@
 import { useCallback, useEffect, useState } from "react";
 
-export default function useShowAll(key: string): [ReadonlyArray<string>, (goal: string) => unknown] {
+export default function useShowAll(
+  key: string,
+): [ReadonlyArray<string>, (goal: string) => unknown] {
   const [showAll, setShowAllRaw] = useState<ReadonlyArray<string>>([]);
-  const addShowAll = useCallback((goal: string) => {
-    setShowAllRaw(prevShowAll => {
-      const newShowAll = [...prevShowAll, goal];
-      setShowAllRaw(newShowAll);
-      if (global.window != undefined && localStorage != null) {
-        localStorage.setItem(key, JSON.stringify(newShowAll));
-      }
-      return newShowAll;
-    });
-  }, []);
+  const addShowAll = useCallback(
+    (goal: string) => {
+      setShowAllRaw((prevShowAll) => {
+        const newShowAll = [...prevShowAll, goal];
+        setShowAllRaw(newShowAll);
+        if (global.window != undefined && localStorage != null) {
+          localStorage.setItem(key, JSON.stringify(newShowAll));
+        }
+        return newShowAll;
+      });
+    },
+    [key],
+  );
 
   // clear data on key change
   useEffect(() => {

@@ -32,21 +32,23 @@ function isUnplayedColor(img: ImageDataLike, a: Aligned): boolean {
   let r = 0;
   let g = 0;
   let b = 0;
-  let n = 0;
   for (let gy = 26.75; gy < 30.5; gy += 0.5) {
     for (let gx = 24.75; gx < 27.5; gx += 0.5) {
       sample(img, a.x + gx * a.s, a.y + gy * a.s, tmp3, 0);
       r += tmp3[0];
       g += tmp3[1];
       b += tmp3[2];
-      n++;
     }
   }
   return g < 0.65 * b && b > 1.1 * r;
 }
 
 /** A cartridge-like frame at a library grid neighbor position means the library. */
-function hasNeighbor(img: ImageDataLike, m: CartridgeModel, a: Aligned): boolean {
+function hasNeighbor(
+  img: ImageDataLike,
+  m: CartridgeModel,
+  a: Aligned,
+): boolean {
   const { x, y, s } = a;
   const offsets = [
     [GRID_DX, 0],
@@ -57,7 +59,12 @@ function hasNeighbor(img: ImageDataLike, m: CartridgeModel, a: Aligned): boolean
   for (const [dx, dy] of offsets) {
     const nx = x + dx * s;
     const ny = y + dy * s;
-    if (nx < -2 * s || ny < -2 * s || nx + (CW - 2) * s > img.width + 2 * s || ny + (CH - 2) * s > img.height + 2 * s) {
+    if (
+      nx < -2 * s ||
+      ny < -2 * s ||
+      nx + (CW - 2) * s > img.width + 2 * s ||
+      ny + (CH - 2) * s > img.height + 2 * s
+    ) {
       continue;
     }
     const r = refine(img, m, { x: nx, y: ny, s, score: 0 }, 12, 1);
@@ -66,7 +73,11 @@ function hasNeighbor(img: ImageDataLike, m: CartridgeModel, a: Aligned): boolean
   return false;
 }
 
-export function detectCartridge(img: ImageDataLike, integ: Integral, scaleHint?: number): FrameResult {
+export function detectCartridge(
+  img: ImageDataLike,
+  integ: Integral,
+  scaleHint?: number,
+): FrameResult {
   const m = getCartridgeModel();
   const nominal = screenScale(img.width, img.height);
   // Only cartridges passing the full frame check count as library evidence;
@@ -78,16 +89,25 @@ export function detectCartridge(img: ImageDataLike, integ: Integral, scaleHint?:
     libraryCarts.push(a);
     return true;
   };
-  const { seeds, stopped, libraryLike } = coarseCandidates(integ, (top) => top.filter(isCart).length >= 2, scaleHint);
+  const { seeds, stopped, libraryLike } = coarseCandidates(
+    integ,
+    (top) => top.filter(isCart).length >= 2,
+    scaleHint,
+  );
   if (stopped) {
-    return { kind: "library", carts: libraryCarts.length, scale: libraryCarts[0].s / nominal };
+    return {
+      kind: "library",
+      carts: libraryCarts.length,
+      scale: libraryCarts[0].s / nominal,
+    };
   }
 
   // Verify seeds best-first. Seeds near a cartridge that passed the full frame
   // check are skipped; one that only passed under the LIVE badge may still be
   // aligned better by a nearby seed.
   const carts: Aligned[] = [];
-  const near = (c: Aligned, x: number, y: number) => Math.abs(c.x - x) < 8 * c.s && Math.abs(c.y - y) < 8 * c.s;
+  const near = (c: Aligned, x: number, y: number) =>
+    Math.abs(c.x - x) < 8 * c.s && Math.abs(c.y - y) < 8 * c.s;
   const strict = (c: Aligned) => c.score >= PARAMS.frameMinScore;
   let tries = 0;
   for (const h of seeds) {
@@ -110,13 +130,19 @@ export function detectCartridge(img: ImageDataLike, integ: Integral, scaleHint?:
   // More than one cartridge, or a cartridge with a grid neighbor, is never a
   // selection, but it's only the library if one scale had enough coarse hits
   // and the cartridges match clearly, since some gameplay tiles look similar.
-  const clearCarts = pool.filter((c) => c.score >= PARAMS.libraryMinScore).length;
+  const clearCarts = pool.filter(
+    (c) => c.score >= PARAMS.libraryMinScore,
+  ).length;
   if (strictCarts.length > 1) {
-    return libraryLike && clearCarts > 1 ? { kind: "library", carts: strictCarts.length, scale } : { kind: "none" };
+    return libraryLike && clearCarts > 1
+      ? { kind: "library", carts: strictCarts.length, scale }
+      : { kind: "none" };
   }
   if (pool.length > 1) return { kind: "none" };
   if (hasNeighbor(img, m, cart)) {
-    return libraryLike && clearCarts > 0 ? { kind: "library", carts: 2, scale } : { kind: "none" };
+    return libraryLike && clearCarts > 0
+      ? { kind: "library", carts: 2, scale }
+      : { kind: "none" };
   }
 
   const cobwebbed = isUnplayedColor(img, cart);
@@ -131,11 +157,18 @@ export function detectCartridge(img: ImageDataLike, integ: Integral, scaleHint?:
   // Whatever covers a large part of the art can mimic another game (the red
   // LIVE badge over black looks like Seaside Drive's car), so demand much
   // clearer evidence then.
-  const boost = occluded > PARAMS.occludedShare ? PARAMS.occludedMarginBoost : 1;
+  const boost =
+    occluded > PARAMS.occludedShare ? PARAMS.occludedMarginBoost : 1;
   if (!cobwebbed) {
-    if (art.err <= PARAMS.artMaxError && margin >= PARAMS.artMinMargin * boost) {
+    if (
+      art.err <= PARAMS.artMaxError &&
+      margin >= PARAMS.artMinMargin * boost
+    ) {
       game = ORDERED_PROPER_GAMES[art.game];
-    } else if (art.tErr <= PARAMS.trimMaxError && tMargin >= PARAMS.trimMinMargin * boost) {
+    } else if (
+      art.tErr <= PARAMS.trimMaxError &&
+      tMargin >= PARAMS.trimMinMargin * boost
+    ) {
       // Part of the art is covered (LIVE badge, smoke): judge by the pixels that fit.
       game = ORDERED_PROPER_GAMES[art.tGame];
     }
@@ -145,7 +178,12 @@ export function detectCartridge(img: ImageDataLike, integ: Integral, scaleHint?:
     game,
     bestGame: ORDERED_PROPER_GAMES[art.game],
     cobwebbed,
-    box: { x: cart.x, y: cart.y, width: (CW - 2) * cart.s, height: (CH - 2) * cart.s },
+    box: {
+      x: cart.x,
+      y: cart.y,
+      width: (CW - 2) * cart.s,
+      height: (CH - 2) * cart.s,
+    },
     artError: art.err,
     artMargin: margin,
     trimmedGame: ORDERED_PROPER_GAMES[art.tGame],

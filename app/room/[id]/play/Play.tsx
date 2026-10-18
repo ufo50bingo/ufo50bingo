@@ -172,7 +172,7 @@ export default function Play({
       };
     }
     const isNes50 =
-      generalGoals.every((item) => item.pasta === NES_50_UFO) ||
+      (generalGoals.length >= 5 && generalGoals.every((item) => item.pasta === NES_50_UFO)) ||
       foundItems.filter((item) => item.pasta === NES_50_UFO).length > 15;
     if (isNes50) {
       return {
@@ -187,7 +187,7 @@ export default function Play({
       };
     }
     const isEveryGame =
-      generalGoals.every((item) => item.pasta === EVERY_GAME_UFO) ||
+      (generalGoals.length >= 5 && generalGoals.every((item) => item.pasta === EVERY_GAME_UFO)) ||
       foundItems.filter((item) => item.pasta === EVERY_GAME_UFO).length > 15;
     if (isEveryGame) {
       return {
@@ -310,7 +310,7 @@ export default function Play({
                   isClearing,
                   roomBackend,
                 );
-              } catch {}
+              } catch { }
             }}
             shownDifficulties={shownDifficulties}
             viewerColor={selectedColor}
@@ -452,14 +452,14 @@ export default function Play({
               <Stack gap={4}>
                 {multiGoalGames.length > 0
                   ? multiGoalGames.map((game) => (
-                      <GameInfo
-                        key={game}
-                        game={game as Game}
-                        goals={gameToGoals[game]}
-                        description={null}
-                        canShowTooltip={restrictions.canShowOnCardTooltips}
-                      />
-                    ))
+                    <GameInfo
+                      key={game}
+                      game={game as Game}
+                      goals={gameToGoals[game]}
+                      description={null}
+                      canShowTooltip={restrictions.canShowOnCardTooltips}
+                    />
+                  ))
                   : "No multi-goal games on this card!"}
               </Stack>
             </InfoCard>

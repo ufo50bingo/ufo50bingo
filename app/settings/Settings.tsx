@@ -139,7 +139,7 @@ export default function Settings() {
           <Table.Tr>
             <Table.Th>Square right click behavior</Table.Th>
             <Table.Td>
-              <SelectRightClickBehavior />
+              <SelectRightClickBehavior isCast={false} />
             </Table.Td>
           </Table.Tr>
           <Table.Tr>

@@ -15,15 +15,22 @@ import React from "react";
 
 type Props = {
   label?: string;
+  isCast: boolean;
 };
 
-const DATA = [
+const CAST_DATA = [
+  { value: "star", label: "Star" },
+  { value: "left_hold", label: "Held by left player" },
+  { value: "right_hold", label: "Held by right player" },
+];
+
+const OTHER_DATA = [
   { value: "star", label: "Star" },
   { value: "my_color", label: "Highlight in my color" },
   { value: "custom_color", label: "Highlight in custom color" },
 ];
 
-export default function SelectRightClickBehavior({ label }: Props) {
+export default function SelectRightClickBehavior({ label, isCast }: Props) {
   const {
     rightClickBehavior,
     setRightClickBehavior,
@@ -63,13 +70,23 @@ export default function SelectRightClickBehavior({ label }: Props) {
               <Stack gap={4}>
                 <Select
                   value={behavior.type}
-                  data={DATA}
+                  data={isCast ? CAST_DATA : OTHER_DATA}
                   onChange={(value) => {
                     const typed = value as RightClickBehavior["type"];
                     switch (typed) {
                       case "star":
                         setRightClickBehavior(
                           updateAt(rightClickBehavior, { type: "star" }, idx),
+                        );
+                        break;
+                      case "left_hold":
+                        setRightClickBehavior(
+                          updateAt(rightClickBehavior, { type: "left_hold" }, idx),
+                        );
+                        break;
+                      case "right_hold":
+                        setRightClickBehavior(
+                          updateAt(rightClickBehavior, { type: "right_hold" }, idx),
                         );
                         break;
                       case "my_color":

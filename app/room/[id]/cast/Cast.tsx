@@ -46,6 +46,8 @@ import getGameList from "../common/getGameList";
 import getIsNes50 from "../common/getIsNes50";
 import { Restrictions, GeneralSettings } from "../play/GeneralSection";
 import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
+import useCastRightClickBehavior from "./useCastRightClickBehavior";
+import { RightClickBehaviorContext } from "@/app/settings/RightClickBehaviorContext";
 
 const RESTRICTIONS: Restrictions = {
   canTagDifficultyFor: null,
@@ -97,6 +99,17 @@ export default function Cast({
   playerName,
   roomBackend,
 }: CastProps) {
+  const [rightClickBehavior, setRightClickBehavior] =
+    useCastRightClickBehavior();
+  const rightClickBehaviorContextValue = useMemo(
+    () => ({
+      rightClickBehavior,
+      setRightClickBehavior,
+      customColor: "#ee5f5b",
+      setCustomColor: () => { },
+    }),
+    [rightClickBehavior, setRightClickBehavior],
+  );
   // TODO: Update getGameList to handle other pastas as well
   const [gameToGoals, setGameToGoals] = useState(() =>
     getGameToGoals(initialBoard, getGameList(getIsNes50(initialBoard))),
@@ -374,7 +387,7 @@ export default function Cast({
         !timerState.wasPaused &&
         !timerState.isForceRevealed));
   return (
-    <>
+    <RightClickBehaviorContext.Provider value={rightClickBehaviorContextValue}>
       <Group align="start">
         <Group gap={0}>
           {showRecentGames && generalGoals.length > 0 && (
@@ -432,7 +445,7 @@ export default function Cast({
             }
             shownDifficulties={shownDifficulties}
             viewerColor={null}
-            isCast={true}
+            castInfo={{ leftColor, rightColor }}
           />
           <SideColumn isDouble={isDouble}>
             <SideCell>
@@ -621,6 +634,6 @@ export default function Cast({
         />
       )}
       {reconnectModal}
-    </>
+    </RightClickBehaviorContext.Provider>
   );
 }

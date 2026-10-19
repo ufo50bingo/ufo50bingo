@@ -157,6 +157,9 @@
     position: relative;
     overflow: hidden;
 
+    /* needed to enable hold mask */
+    isolation: isolate;
+
     font-size: 14px;
     line-height: 1.1;
 }
@@ -239,13 +242,11 @@
     inset: 0;
     pointer-events: none;
 
-    background-image: repeating-linear-gradient(
-        45deg,
-        rgba(0, 0, 0, .60) 0px,
-        rgba(0, 0, 0, .60) 10px,
-        transparent 10px,
-        transparent 20px
-    );
+    background-image: repeating-linear-gradient(45deg,
+            rgba(0, 0, 0, .60) 0px,
+            rgba(0, 0, 0, .60) 10px,
+            transparent 10px,
+            transparent 20px);
 
     mix-blend-mode: soft-light;
     animation: recentFade 30s linear 1 forwards;
@@ -308,4 +309,24 @@
     z-index: 1;
     height: 15px;
     width: 15px;
+}
+
+.hand {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: 1;
+    height: 15px;
+    width: 15px;
+}
+
+.held {
+    position: absolute;
+    inset: 0%;
+    z-index: -1;
+    pointer-events: none;
+    mask-image:
+        linear-gradient(to right, transparent, black 20%, black 80%, transparent),
+        linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+    mask-composite: intersect;
 }

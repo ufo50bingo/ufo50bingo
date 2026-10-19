@@ -42,6 +42,7 @@ import { useShouldShowRecentContext } from "@/app/settings/ShouldShowRecentConte
 import AutoGameSection from "./AutoGameSection";
 import { AllPlayerGames, CountChange } from "./useSyncedState";
 import { GameToGoals } from "./findAllGames";
+import SelectRightClickBehavior from "@/app/settings/SelectRightClickBehavior";
 
 type Props = {
   id: string;
@@ -182,49 +183,49 @@ export default function CastSettings({
                   />
                   {((leftColor === "pink" && rightColor === "blue") ||
                     (leftColor === "blue" && rightColor === "pink")) && (
-                    <Group mt={8} gap={4}>
-                      <img
-                        className={classes.emoji}
-                        src="/transflag.svg"
-                        alt="trans flag"
-                      />
-                      <img
-                        className={classes.emoji}
-                        src="/transflag.svg"
-                        alt="trans flag"
-                      />
-                      <img
-                        className={classes.emoji}
-                        src="/transflag.svg"
-                        alt="trans flag"
-                      />
-                      <img
-                        className={classes.emoji}
-                        src="/transflag.svg"
-                        alt="trans flag"
-                      />
-                      <img
-                        className={classes.emoji}
-                        src="/transflag.svg"
-                        alt="trans flag"
-                      />
-                      <img
-                        className={classes.emoji}
-                        src="/transflag.svg"
-                        alt="trans flag"
-                      />
-                      <img
-                        className={classes.emoji}
-                        src="/transflag.svg"
-                        alt="trans flag"
-                      />
-                      <img
-                        className={classes.emoji}
-                        src="/transflag.svg"
-                        alt="trans flag"
-                      />
-                    </Group>
-                  )}
+                      <Group mt={8} gap={4}>
+                        <img
+                          className={classes.emoji}
+                          src="/transflag.svg"
+                          alt="trans flag"
+                        />
+                        <img
+                          className={classes.emoji}
+                          src="/transflag.svg"
+                          alt="trans flag"
+                        />
+                        <img
+                          className={classes.emoji}
+                          src="/transflag.svg"
+                          alt="trans flag"
+                        />
+                        <img
+                          className={classes.emoji}
+                          src="/transflag.svg"
+                          alt="trans flag"
+                        />
+                        <img
+                          className={classes.emoji}
+                          src="/transflag.svg"
+                          alt="trans flag"
+                        />
+                        <img
+                          className={classes.emoji}
+                          src="/transflag.svg"
+                          alt="trans flag"
+                        />
+                        <img
+                          className={classes.emoji}
+                          src="/transflag.svg"
+                          alt="trans flag"
+                        />
+                        <img
+                          className={classes.emoji}
+                          src="/transflag.svg"
+                          alt="trans flag"
+                        />
+                      </Group>
+                    )}
                 </Accordion.Panel>
               </Accordion.Item>
               <TimerSection
@@ -272,8 +273,8 @@ export default function CastSettings({
                               event.currentTarget.checked
                                 ? [...shownDifficulties, difficulty]
                                 : shownDifficulties.filter(
-                                    (d) => d !== difficulty,
-                                  ),
+                                  (d) => d !== difficulty,
+                                ),
                             )
                           }
                           label={DIFFICULTY_NAMES[difficulty]}
@@ -323,6 +324,7 @@ export default function CastSettings({
                       }
                     />
                     <FontSelector font={font} setFont={setFont} />
+                    <SelectRightClickBehavior label="Square right click behavior" isCast={true} />
                     <Checkbox
                       label="Hide board by default"
                       checked={hideByDefault}

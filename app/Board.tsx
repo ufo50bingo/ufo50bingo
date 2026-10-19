@@ -20,6 +20,7 @@ import { useShouldShortenContext } from "./settings/ShouldShortenContext";
 import { NES_50_UFO } from "./pastas/nes50Ufo";
 import { EVERY_GAME_UFO } from "./pastas/everyGameUfo";
 import { useShouldShowRecentContext } from "./settings/ShouldShowRecentContext";
+import HeldHandIcon from "./HeldHandIcon";
 
 type Props = {
   board: TBoard;
@@ -29,8 +30,8 @@ type Props = {
   shownDifficulties: ReadonlyArray<Difficulty>;
   viewerColor: BingosyncColor | null;
   boardCover: ReactNode;
-  isCast?: boolean;
   isPlay?: boolean;
+  castInfo?: { leftColor: BingosyncColor; rightColor: BingosyncColor };
 };
 
 function getColorClass(color: string): string {
@@ -143,14 +144,19 @@ export default function Board({
   shownDifficulties,
   viewerColor,
   boardCover,
-  isCast = false,
+  castInfo,
   isPlay = false,
 }: Props) {
   const { rightClickBehavior } = useRightClickBehaviorContext();
   const { shouldShortenPlay, shouldShortenCast } = useShouldShortenContext();
   const { shouldShowRecentPlay, shouldShowRecentCast } =
     useShouldShowRecentContext();
-  const shouldShowRecent = isCast ? shouldShowRecentCast : isPlay ? shouldShowRecentPlay : false;
+  const shouldShowRecent =
+    castInfo != null
+      ? shouldShowRecentCast
+      : isPlay
+        ? shouldShowRecentPlay
+        : false;
   const [rightClickCounts, setRightClickCounts] = useState<
     ReadonlyArray<number | null>
   >(board.map((_) => null));
@@ -165,7 +171,7 @@ export default function Board({
       (square, squareIndex) =>
         square.color !== prevBoard.current[squareIndex].color &&
         square.color !== viewerColor &&
-        prevBoard.current[squareIndex].color !== viewerColor
+        prevBoard.current[squareIndex].color !== viewerColor,
     );
 
     if (newlyColored.some(Boolean)) {
@@ -177,7 +183,8 @@ export default function Board({
     prevBoard.current = board;
   }, [board, viewerColor, shouldShowRecent]);
 
-  const shouldShorten = isCast ? shouldShortenCast : shouldShortenPlay;
+  const shouldShorten =
+    castInfo != null ? shouldShortenCast : shouldShortenPlay;
 
   const rightClickHighlights = useMemo(() => {
     if (
@@ -221,22 +228,31 @@ export default function Board({
         const isStarred =
           rightClickCount == null
             ? false
-            : viewerColor == null
-              ? true
-              : rightClickBehavior[
-                Math.min(rightClickBehavior.length - 1, rightClickCount)
-              ].type === "star";
+            : rightClickBehavior[
+              Math.min(rightClickBehavior.length - 1, rightClickCount)
+            ].type === "star";
+        let heldColor: BingosyncColor | null = null;
+        if (
+          castInfo != null &&
+          rightClickCount != null &&
+          board[squareIndex].color === "blank"
+        ) {
+          const curBehavior =
+            rightClickBehavior[
+              Math.min(rightClickBehavior.length - 1, rightClickCount)
+            ].type;
+          if (curBehavior === "left_hold") {
+            heldColor = castInfo.leftColor;
+          } else if (curBehavior === "right_hold") {
+            heldColor = castInfo.rightColor;
+          }
+        }
         const recentClass =
-          isRecent[squareIndex] &&
-            shouldShowRecent
-            ? classes.recent
-            : "";
+          isRecent[squareIndex] && shouldShowRecent ? classes.recent : "";
         return (
           <div
             key={squareIndex}
-            className={`${classes.unselectable} ${classes.square} ${recentClass} ${getColorClass(
-              board[squareIndex].color,
-            )}`}
+            className={`${classes.unselectable} ${classes.square} ${recentClass} ${getColorClass(board[squareIndex].color)}`}
             onClick={() => onClickSquare != null && onClickSquare(squareIndex)}
             onAnimationEnd={() => {
               setIsRecent((prev) => {
@@ -249,8 +265,7 @@ export default function Board({
               event.preventDefault();
               const oldCount = rightClickCounts[squareIndex];
               const newRightClickCounts = [...rightClickCounts];
-              const maxCount =
-                viewerColor == null ? 0 : rightClickBehavior.length - 1;
+              const maxCount = rightClickBehavior.length - 1;
               newRightClickCounts[squareIndex] =
                 oldCount == null
                   ? 0
@@ -266,6 +281,12 @@ export default function Board({
             }
           >
             {isStarred && <div className={classes.starred} />}
+            {heldColor != null && (
+              <>
+                <div className={`${classes.held} ${getColorClass(heldColor)}`} />
+                <HeldHandIcon color={heldColor} className={classes.hand} />
+              </>
+            )}
             {shownDifficulties.length > 0 &&
               foundGoal != null &&
               getDifficulty(foundGoal, shownDifficulties)}

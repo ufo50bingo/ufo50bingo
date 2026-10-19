@@ -6,6 +6,8 @@ import zod from "zod";
 export type RightClickBehavior =
   | { type: "star" }
   | { type: "my_color" }
+  | { type: "left_hold" }
+  | { type: "right_hold" }
   | { type: "custom_color"; color: string };
 
 export default function useRightClickBehavior(): [

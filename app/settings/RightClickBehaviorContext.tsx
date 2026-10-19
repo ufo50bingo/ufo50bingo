@@ -15,12 +15,13 @@ type RightClickBehaviorContextType = {
   setCustomColor: (newCustomColor: string) => void;
 };
 
-const RightClickBehaviorContext = createContext<RightClickBehaviorContextType>({
-  rightClickBehavior: [{ type: "star" }],
-  setRightClickBehavior: () => {},
-  customColor: "#ee5f5b",
-  setCustomColor: () => {},
-});
+export const RightClickBehaviorContext =
+  createContext<RightClickBehaviorContextType>({
+    rightClickBehavior: [{ type: "star" }],
+    setRightClickBehavior: () => {},
+    customColor: "#ee5f5b",
+    setCustomColor: () => {},
+  });
 
 export function RightClickBehaviorContextProvider({
   children,

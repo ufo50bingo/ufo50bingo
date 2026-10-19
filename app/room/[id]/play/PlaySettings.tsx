@@ -173,15 +173,15 @@ export default function PlaySettings({
                             event.currentTarget.checked
                               ? [...shownDifficulties, difficulty]
                               : shownDifficulties.filter(
-                                  (d) => d !== difficulty,
-                                ),
+                                (d) => d !== difficulty,
+                              ),
                           )
                         }
                         label={DIFFICULTY_NAMES[difficulty]}
                       />
                     ))}
                     <FontSelector font={font} setFont={setFont} />
-                    <SelectRightClickBehavior label="Square right click behavior" />
+                    <SelectRightClickBehavior label="Square right click behavior" isCast={false} />
                   </Stack>
                 </Accordion.Panel>
               </Accordion.Item>

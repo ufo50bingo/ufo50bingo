@@ -326,7 +326,7 @@
     z-index: -1;
     pointer-events: none;
     mask-image:
-        linear-gradient(to right, transparent, black 20%, black 80%, transparent),
-        linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+        linear-gradient(to right, transparent, rgba(0,0,0,0.7) 20%, rgba(0,0,0,0.7) 80%, transparent),
+        linear-gradient(to bottom, transparent, rgba(0,0,0,0.7) 20%, rgba(0,0,0,0.7) 80%, transparent);
     mask-composite: intersect;
 }

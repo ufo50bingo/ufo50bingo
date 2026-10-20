@@ -222,8 +222,8 @@ export const STANDARD_UFO = {
           short: "PORGY: 4 fuel tanks",
         },
         {
-          name: "PORGY: Equip the {{porgy_upgrade}}",
-          short: "PORGY: Equip the {{porgy_upgrade}}",
+          name: "PORGY: Return to base with the {{porgy_upgrade}}",
+          short: "PORGY: {{porgy_upgrade}}",
         },
       ],
       oniondelivery: [

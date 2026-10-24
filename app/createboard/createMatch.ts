@@ -2,13 +2,15 @@
 
 import getCsrfData from "../getCsrfData";
 import { insertMatch } from "./insertMatch";
-import { Variant } from "../pastas/metadata";
+import { METADATA, Variant } from "../pastas/metadata";
 import {
   createUserID,
   readSession,
   writeSession,
 } from "../session/sessionUtil";
 import { getBaseUrl, RoomBackend } from "../roomApi";
+import { UFOPasta } from "../generator/ufoGenerator";
+import { storePasta } from "../pastaStorage";
 
 export interface LeagueInfo {
   season: number;
@@ -34,6 +36,7 @@ export interface CommonMatchProps {
 interface Props extends CommonMatchProps {
   pasta: string;
   bingosyncVariant: string;
+  fullPasta: null | UFOPasta;
 }
 
 export default async function createMatch({
@@ -48,10 +51,12 @@ export default async function createMatch({
   pasta,
   leagueInfo,
   roomBackend,
+  fullPasta,
 }: Props): Promise<string> {
-  const [{ cookie, token }, userSessionRead] = await Promise.all([
+  const [{ cookie, token }, userSessionRead, _] = await Promise.all([
     getCsrfData(roomBackend),
     readSession(),
+    storePastaIfNecessary(fullPasta, variant),
   ]);
   const userSession = userSessionRead ?? { id: createUserID(), admin: false };
   const commonHeaders = {
@@ -118,4 +123,28 @@ export default async function createMatch({
     roomBackend,
   });
   return id;
+}
+
+function getFullPasta(
+  fullPasta: UFOPasta | null,
+  variant: Variant,
+): UFOPasta | null {
+  if (fullPasta != null) {
+    return fullPasta;
+  }
+  const metadata = METADATA.find((d) => d.name === variant);
+  if (metadata != null && metadata.type === "UFO") {
+    return metadata.pasta;
+  }
+  return null;
+}
+
+async function storePastaIfNecessary(
+  fullPasta: UFOPasta | null,
+  variant: Variant,
+): Promise<void> {
+  const pastaToStore = getFullPasta(fullPasta, variant);
+  if (pastaToStore != null) {
+    await storePasta(pastaToStore);
+  }
 }

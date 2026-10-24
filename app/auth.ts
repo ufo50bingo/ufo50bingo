@@ -7,6 +7,7 @@ const pool = new Pool({
 
 export const auth = betterAuth({
   database: pool,
+  baseURL: process.env.BETTER_AUTH_URL,
   user: {
     additionalFields: {
       username: {
@@ -17,8 +18,12 @@ export const auth = betterAuth({
     },
   },
   session: {
-    expiresIn: 60 * 60 * 24 * 365 * 2, // 2 years
+    expiresIn: 60 * 60 * 24 * 400, // 400 days, max allowed
     updateAge: 60 * 60 * 24 * 30, // 1 month
+    cookieCache: {
+      enabled: true,
+      maxAge: 7 * 60 * 60 * 24, // 1 week
+    },
   },
   socialProviders: {
     discord: {
@@ -30,6 +35,11 @@ export const auth = betterAuth({
         email: `${profile.id}@discord.placeholder.invalid`,
         username: profile.username,
       }),
+    },
+  },
+  advanced: {
+    database: {
+      generateId: "serial",
     },
   },
 });

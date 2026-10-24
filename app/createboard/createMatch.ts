@@ -53,16 +53,15 @@ export default async function createMatch({
     getCsrfData(roomBackend),
     readSession(),
   ]);
-
   const userSession = userSessionRead ?? { id: createUserID(), admin: false };
-
   const commonHeaders = {
     "Content-Type": "application/x-www-form-urlencoded",
     Cookie: cookie,
   };
-  const headers = roomBackend === "celeste"
-    ? { ...commonHeaders, Referer: "https://celestebingo.rhelmot.io/" }
-    : commonHeaders;
+  const headers =
+    roomBackend === "celeste"
+      ? { ...commonHeaders, Referer: "https://celestebingo.rhelmot.io/" }
+      : commonHeaders;
   const createResponse = await fetch(getBaseUrl(roomBackend), {
     method: "POST",
     redirect: "manual",
@@ -82,13 +81,11 @@ export default async function createMatch({
       hide_card: "on",
     }).toString(),
   });
-
   if (createResponse.status !== 302) {
     throw new Error(
       `Bingosync failed to redirect to room page with status ${createResponse.status}`,
     );
   }
-
   const location = createResponse.headers.get("location");
   if (!location?.startsWith("/room/")) {
     throw new Error(`Bingosync redirected to ${location}. Expected /room/<id>`);
@@ -96,16 +93,13 @@ export default async function createMatch({
   // strip off /room/ prefix
   const withoutRoom = location.slice(6);
   // remove any query data, if present
-  const split = withoutRoom.split('?');
+  const split = withoutRoom.split("?");
   const id = split[0];
-
   const sessionCookie = createResponse.headers.get("Set-Cookie");
   if (sessionCookie == null) {
     throw new Error(`Failed to fetch session cookie for id ${id}`);
   }
-
   await writeSession(userSession);
-
   // add room to table for tracking
   // shouldn't need the `await` here, but nextjs complains
   // if you revalidate while rendering
@@ -123,6 +117,5 @@ export default async function createMatch({
     creatorID: userSession.id,
     roomBackend,
   });
-
   return id;
 }

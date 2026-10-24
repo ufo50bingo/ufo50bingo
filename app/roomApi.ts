@@ -1,4 +1,4 @@
-export type RoomBackend = "bingosync" | "celeste";
+export type RoomBackend = "bingosync" | "celeste" | "ufo50bingo";
 
 function getDomain(roomBackend: RoomBackend): string {
   switch (roomBackend) {
@@ -48,7 +48,10 @@ export function getNewCardUrl(roomBackend: RoomBackend): string {
   return `https://${getDomain(roomBackend)}/api/new-card`;
 }
 
-export function getRoomSettingsUrl(id: string, roomBackend: RoomBackend): string {
+export function getRoomSettingsUrl(
+  id: string,
+  roomBackend: RoomBackend,
+): string {
   return `https://${getDomain(roomBackend)}/room/${id}/room-settings`;
 }
 
@@ -56,8 +59,10 @@ export function getChatUrl(roomBackend: RoomBackend): string {
   return `https://${getDomain(roomBackend)}/api/chat`;
 }
 
-export function getSocketUrl(roomBackend: RoomBackend): string {
+export function getSocketUrl(roomBackend: RoomBackend, roomId: string): string {
   switch (roomBackend) {
+    case "ufo50bingo":
+      return `wss://ufo50bingo-websocket.frankthompson-cd2.workers.dev/room/${roomId}`;
     case "celeste":
       return "wss://sockets-celestebingo.rhelmot.io/broadcast";
     case "bingosync":
@@ -78,7 +83,11 @@ export function getRevealUrl(roomBackend: RoomBackend): string {
   return `https://${getDomain(roomBackend)}/api/revealed`;
 }
 
-export function getRoomLink(id: string, password: string, roomBackend: RoomBackend): string {
+export function getRoomLink(
+  id: string,
+  password: string,
+  roomBackend: RoomBackend,
+): string {
   const searchParams = new URLSearchParams({
     p: password,
   });

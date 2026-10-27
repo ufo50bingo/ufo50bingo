@@ -1,12 +1,7 @@
 "use client";
 
 import Board from "@/app/Board";
-import {
-  BingosyncColor,
-  getChangelog,
-  RawFeed,
-  TBoard,
-} from "@/app/matches/parseBingosyncData";
+import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { Group, Stack, Text } from "@mantine/core";
 import { useCallback, useMemo, useState } from "react";
 import PlaySettings from "./PlaySettings";
@@ -26,13 +21,12 @@ import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import { GeneralItem } from "../cast/Cast";
 import useLocalBool from "@/app/localStorage/useLocalBool";
 import useFont from "@/app/font/useFont";
-import useSyncedTimer, { FullSyncedTimerEvent } from "../common/useSyncedTimer";
+import useSyncedTimer from "../common/useSyncedTimer";
 import SyncedTimerBoardCover from "../common/SyncedTimerBoardCover";
 import SyncedTimer from "../common/SyncedTimer";
 import StartPauseButton from "../common/StartPauseButton";
 import { UFOPasta } from "@/app/generator/ufoGenerator";
 import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
-import { RoomBackend } from "@/app/roomApi";
 import useGeneralSettings from "./useGeneralSettings";
 import useFullGeneralState from "./useFullGeneralState";
 import GeneralGoal from "../cast/GeneralGoal";
@@ -369,7 +363,6 @@ export default function Play({
               timerState={timerState}
               isCast={false}
               gameId={gameId}
-              userId={userId}
             />
           </Group>
           {showGeneralTracker && generalSettings.type === "simple" && (
@@ -379,8 +372,8 @@ export default function Play({
               generalGoals={generalGoals}
             />
           )}
-          {/* <PlaySettings
-            id={id}
+          <PlaySettings
+            gameId={gameId}
             color={color}
             setColor={setColor}
             shownDifficulties={shownDifficulties}
@@ -392,22 +385,20 @@ export default function Play({
             setShowGeneralTracker={setShowGeneralTracker}
             font={font}
             setFont={setFont}
-            addEvent={addEvent}
-            seed={seed}
             timerState={timerState}
             forceReveal={forceReveal}
-            roomBackend={roomBackend}
             generalSettings={generalSettings}
             generalSetters={generalSetters}
             restrictions={restrictions}
-          /> */}
+          />
         </Stack>
         <Feed
           feed={feed}
           style={{
             height:
-              // showGeneralTracker && generalSettings.type === "simple"
-              false ? "748px" : "592px",
+              showGeneralTracker && generalSettings.type === "simple"
+                ? "748px"
+                : "592px",
           }}
         />
         {!isHidden &&

@@ -1,48 +1,27 @@
-import { fetchBoard } from "@/app/fetchMatchInfo";
-import {
-  getBoard,
-  RawFeed,
-  RawFeedItem,
-  TBoard,
-} from "@/app/matches/parseBingosyncData";
 import { useState, useEffect, useRef, ReactNode, useCallback } from "react";
 import { Modal, Stack, Group, Button } from "@mantine/core";
 import { SoundChoices } from "./NotificationsSection";
-import { getSocketUrl, RoomBackend } from "@/app/roomApi";
+import { NewFeed, NewFeedItem } from "../play/PlayPage";
 
 type Props = {
-  id: string;
-  initialBoard: TBoard;
-  initialRawFeed: RawFeed;
-  socketKey: string;
-  initialSeed: number;
-  onNewCard?: (newBoard: TBoard) => unknown;
-  playerName: string;
+  gameId: number;
+  initialFeed: NewFeed;
+  userId: number;
   playAudio: (soundType: keyof SoundChoices) => void;
-  roomBackend: RoomBackend;
 };
 
 type Response = {
-  board: TBoard;
-  rawFeed: RawFeed;
-  seed: number;
+  feed: NewFeed;
   reconnectModal: null | undefined | ReactNode;
 };
 
 export default function useBingosyncSocket({
-  id,
-  initialBoard,
-  initialRawFeed,
-  initialSeed,
-  socketKey,
-  onNewCard,
-  playerName,
+  gameId,
+  initialFeed,
+  userId,
   playAudio,
-  roomBackend,
 }: Props): Response {
-  const [seed, setSeed] = useState(initialSeed);
-  const [board, setBoard] = useState(initialBoard);
-  const [rawFeed, setRawFeed] = useState(initialRawFeed);
+  const [feed, setFeed] = useState(initialFeed);
   const [shouldReconnect, setShouldReconnect] = useState(false);
   const socketRef = useRef<null | WebSocket>(null);
 
@@ -51,26 +30,26 @@ export default function useBingosyncSocket({
   playAudioRef.current = playAudio;
 
   const onMessage = useCallback(
-    (newItem: RawFeedItem) => {
-      if (newItem.player.name === playerName) {
+    (newItem: NewFeedItem) => {
+      if (newItem.user.id === userId) {
         return;
       }
-      if (newItem.type === "chat") {
-        playAudioRef.current("chat");
-      } else if (newItem.type === "goal") {
+      if (newItem.type === "color_mark") {
         playAudioRef.current("square");
       }
+      // else if (newItem.type === "chat") {
+      //   playAudioRef.current("chat");
+      // }
     },
-    [playerName],
+    [userId],
   );
 
   useEffect(() => {
-    const socket = new WebSocket(getSocketUrl(roomBackend, id));
+    const socket = new WebSocket(
+      `wss://ufo50bingo-websocket.frankthompson-cd2.workers.dev/room/${gameId}`,
+    );
 
     socket.onopen = () => {
-      if (roomBackend !== "ufo50bingo") {
-        socket.send(JSON.stringify({ socket_key: socketKey }));
-      }
       setShouldReconnect(false);
     };
 
@@ -87,33 +66,13 @@ export default function useBingosyncSocket({
     };
 
     socket.onmessage = async (evt) => {
-      const rawItem: RawFeedItem = JSON.parse(evt.data);
-      setRawFeed((prevRawFeed) => ({
-        events: [...prevRawFeed.events, rawItem],
-        allIncluded: true,
-      }));
-
-      if (rawItem.type === "goal") {
-        setBoard((prevBoard) => {
-          const newBoard = [...prevBoard];
-          const slot = rawItem.square.slot;
-          const color = rawItem.square.colors;
-          const slotIndex = Number(slot.slice(4)) - 1;
-
-          const square = { ...prevBoard[slotIndex], color };
-          newBoard[slotIndex] = square;
-          return newBoard;
-        });
-      } else if (rawItem.type === "new-card") {
-        setSeed(rawItem.seed);
-        const rawBoard = await fetchBoard(id, roomBackend);
-        const newBoard = getBoard(rawBoard);
-        if (onNewCard != null) {
-          onNewCard(newBoard);
-        }
-        setBoard(newBoard);
-      }
-
+      const rawItem: NewFeedItem = JSON.parse(evt.data);
+      setFeed((prevFeed) => {
+        const newFeed = [...prevFeed];
+        newFeed.push(rawItem);
+        newFeed.sort((a, b) => a.time - b.time);
+        return newFeed;
+      });
       onMessage(rawItem);
     };
 
@@ -123,12 +82,10 @@ export default function useBingosyncSocket({
       socket.close();
       socketRef.current = null;
     };
-  }, [socketKey, id, onNewCard, onMessage, roomBackend]);
+  }, [onMessage, gameId]);
 
   return {
-    board,
-    rawFeed,
-    seed,
+    feed,
     reconnectModal: shouldReconnect && (
       <Modal
         fullScreen={false}

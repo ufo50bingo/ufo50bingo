@@ -1,4 +1,3 @@
-import { parseRoomBackend } from "@/app/roomApi";
 import CastPage from "./cast/CastPage";
 import Login from "./Login";
 import PlayPage from "./play/PlayPage";
@@ -25,6 +24,6 @@ export default async function RoomPage({
   //   case "cast":
   //     return <CastPage id={id} roomCookie={roomCookie} roomBackend={roomBackend} />;
   //   case "play":
-  return <PlayPage id={id} roomCookie={null} roomBackend="ufo50bingo" />;
+  return <PlayPage gameId={Number(id)} />;
   // }
 }

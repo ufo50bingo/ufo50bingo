@@ -3,6 +3,7 @@ import PlayWrapper from "./PlayWrapper";
 import getSql from "@/app/getSql";
 import { SQL } from "@/app/matches/page";
 import { NeonQueryFunction } from "@neondatabase/serverless";
+import { SyncedTimerEventName } from "../common/useSyncedTimer";
 
 type Props = {
   gameId: number;
@@ -51,7 +52,15 @@ type FeedChat = {
   visibleToPlayers: null | ReadonlyArray<number>;
 };
 
-export type NewFeedItem = FeedColorMark | FeedChat;
+export type FeedTimerEvent = {
+  type: "timer_event";
+  user: NewFeedUser;
+  time: number;
+  event: SyncedTimerEventName;
+  duration: null | number;
+};
+
+export type NewFeedItem = FeedColorMark | FeedChat | FeedTimerEvent;
 
 export type NewFeed = ReadonlyArray<NewFeedItem>;
 
@@ -69,6 +78,7 @@ async function fetchData(
   const feedFetchPairs: ReadonlyArray<FeedFetchPairs> = [
     [fetchColorMarkSql(sql, gameId), parseColorMarkResult],
     [fetchChatSql(sql, gameId), parseChatResult],
+    [fetchTimerEventSql(sql, gameId), parseTimerEventResult],
   ];
   const results = await sql.transaction([
     ...feedFetchPairs.map((pair) => pair[0]),
@@ -150,5 +160,30 @@ function parseChatResult(result: SQLResult): Array<FeedChat> {
     time: Number(raw.unixtime),
     message: String(raw.message),
     visibleToPlayers: raw.visible_to_players,
+  }));
+}
+
+function fetchTimerEventSql(sql: SQLTemplate, gameId: number): SQL {
+  return sql`
+    SELECT
+      EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
+      user_id,
+      event,
+      duration
+    FROM timer_event
+    WHERE game_id = ${gameId}
+  `;
+}
+
+function parseTimerEventResult(result: SQLResult): Array<FeedTimerEvent> {
+  return result.map((raw) => ({
+    type: "timer_event",
+    user: {
+      id: Number(raw.user_id),
+      name: "Unknown",
+    },
+    time: Number(raw.unixtime),
+    event: raw.event,
+    duration: raw.duration,
   }));
 }

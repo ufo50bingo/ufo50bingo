@@ -3,10 +3,9 @@ import { useCallback, useState } from "react";
 type SimpleGeneralState = { [goal: string]: number };
 
 export default function useSimpleGeneralState(
-  id: string,
-  seed: number
+  gameId: number,
 ): [SimpleGeneralState, (newState: SimpleGeneralState) => unknown] {
-  const key = `${id}-${seed}-simplegeneral`;
+  const key = `${gameId}-simplegeneral`;
 
   const [state, setStateRaw] = useState<SimpleGeneralState>(() => {
     if (global.window == undefined || localStorage == null) {
@@ -32,7 +31,7 @@ export default function useSimpleGeneralState(
       }
       localStorage.setItem(key, JSON.stringify(newState));
     },
-    [key]
+    [key],
   );
 
   return [state, setState];

@@ -82,12 +82,19 @@ export function findGamesForResult(
   return games;
 }
 
-export function getGameToGoals(board: TBoard, allGames: ReadonlyArray<string>): GameToGoals {
+export function getGameToGoals(
+  board: ReadonlyArray<string>,
+  allGames: ReadonlyArray<string>,
+): GameToGoals {
   const gameToGoals: { [game: string]: [string, number][] } = {};
-  board.forEach((square, index) => {
-    const goal = square.name;
-    const result = findGoal(goal, STANDARD_UFO) ?? findGoal(goal, SPICY_UFO) ?? findGoal(goal, NES_50_UFO) ?? findGoal(goal, EVERY_GAME_UFO);
-    const gamesForGoal = result != null ? result.inferredGames : inferGames(goal, allGames);
+  board.forEach((goal, index) => {
+    const result =
+      findGoal(goal, STANDARD_UFO) ??
+      findGoal(goal, SPICY_UFO) ??
+      findGoal(goal, NES_50_UFO) ??
+      findGoal(goal, EVERY_GAME_UFO);
+    const gamesForGoal =
+      result != null ? result.inferredGames : inferGames(goal, allGames);
     gamesForGoal.forEach((game) => {
       const existingGoals = gameToGoals[game] ?? [];
       existingGoals.push([goal, index]);
@@ -106,10 +113,10 @@ export function getTerminalCode(goal: string): null | string {
   return result[0];
 }
 
-export function getAllTerminalCodes(board: TBoard): Set<string> {
+export function getAllTerminalCodes(board: ReadonlyArray<string>): Set<string> {
   const codes = new Set<string>();
-  board.forEach((square) => {
-    const code = getTerminalCode(square.name);
+  board.forEach((name) => {
+    const code = getTerminalCode(name);
     if (code != null) {
       codes.add(code);
     }

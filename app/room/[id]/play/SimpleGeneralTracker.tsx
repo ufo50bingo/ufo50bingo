@@ -5,18 +5,16 @@ import { GeneralItem } from "../cast/Cast";
 
 type Props = {
   generalGoals: ReadonlyArray<GeneralItem>;
-  id: string;
-  seed: number;
+  gameId: number;
   isHidden: boolean;
 };
 
 export default function SimpleGeneralTracker({
   generalGoals,
-  id,
-  seed,
+  gameId,
   isHidden,
 }: Props) {
-  const [state, setState] = useSimpleGeneralState(id, seed);
+  const [state, setState] = useSimpleGeneralState(gameId);
   return (
     <InfoCard maxWidth={525} style={{ height: `148px` }}>
       <Stack gap={4}>
@@ -33,7 +31,9 @@ export default function SimpleGeneralTracker({
                 label={isHidden ? "<Hidden>" : item.foundGoal.resolvedGoal}
               >
                 <Text size="sm">
-                  {item.color !== "blank" ? (
+                  {/* TODO: FIX HIDING GENERAL TRACKER */}
+                  {/* {item.color !== "blank" ? ( */}
+                  {false ? (
                     isHidden ? (
                       "<Hidden>"
                     ) : (

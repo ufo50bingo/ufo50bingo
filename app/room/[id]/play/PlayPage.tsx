@@ -1,6 +1,8 @@
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import PlayWrapper from "./PlayWrapper";
 import getSql from "@/app/getSql";
+import { SQL } from "@/app/matches/page";
+import { NeonQueryFunction } from "@neondatabase/serverless";
 
 type Props = {
   gameId: number;
@@ -25,24 +27,56 @@ export default async function PlayPage({ gameId }: Props) {
   );
 }
 
-export type NewFeedItem = {
+type NewFeedUser = {
+  id: number;
+  // todo: fetch player names separately?
+  name: string;
+};
+
+type FeedColorMark = {
   type: "color_mark";
-  user: {
-    id: number;
-    // todo: fetch player names separately
-    name: string;
-  };
+  user: NewFeedUser;
   color: BingosyncColor;
   squareIndex: number;
   time: number;
   isClear: boolean;
 };
 
+type FeedChat = {
+  type: "chat";
+  user: NewFeedUser;
+  time: number;
+  message: string;
+  visibleToPlayers: null | ReadonlyArray<number>;
+};
+
+export type NewFeedItem = FeedColorMark | FeedChat;
+
 export type NewFeed = ReadonlyArray<NewFeedItem>;
+
+type FetchParsePair = [SQL, (result: SQLResult) => ReadonlyArray<NewFeedItem>];
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SQLResult = ReadonlyArray<Record<string, any>>;
+
+type SQLTemplate = NeonQueryFunction<false, false>;
 
 async function fetchNewFeed(gameId: number): Promise<NewFeed> {
   const sql = getSql(false);
-  const result = await sql`
+  const fetchParsePairs: ReadonlyArray<FetchParsePair> = [
+    [fetchColorMarkSql(sql, gameId), parseColorMarkResult],
+    [fetchChatSql(sql, gameId), parseChatResult],
+  ];
+  const results = await sql.transaction(fetchParsePairs.map((pair) => pair[0]));
+  const parsed = results.flatMap((result, index) =>
+    fetchParsePairs[index][1](result),
+  );
+  parsed.sort((a, b) => a.time - b.time);
+  return parsed;
+}
+
+function fetchColorMarkSql(sql: SQLTemplate, gameId: number): SQL {
+  return sql`
     SELECT
       EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
       user_id,
@@ -52,7 +86,10 @@ async function fetchNewFeed(gameId: number): Promise<NewFeed> {
     FROM color_mark
     WHERE game_id = ${gameId}
   `;
-  const marks: ReadonlyArray<NewFeedItem> = result.map((raw) => ({
+}
+
+function parseColorMarkResult(result: SQLResult): Array<FeedColorMark> {
+  return result.map((raw) => ({
     type: "color_mark",
     user: {
       id: Number(raw.user_id),
@@ -63,5 +100,29 @@ async function fetchNewFeed(gameId: number): Promise<NewFeed> {
     color: raw.color,
     isClear: Boolean(raw.is_clear),
   }));
-  return marks;
+}
+
+function fetchChatSql(sql: SQLTemplate, gameId: number): SQL {
+  return sql`
+    SELECT
+      EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
+      user_id,
+      message,
+      visible_to_players
+    FROM chat
+    WHERE game_id = ${gameId}
+  `;
+}
+
+function parseChatResult(result: SQLResult): Array<FeedChat> {
+  return result.map((raw) => ({
+    type: "chat",
+    user: {
+      id: Number(raw.user_id),
+      name: "Unknown",
+    },
+    time: Number(raw.unixtime),
+    message: String(raw.message),
+    visibleToPlayers: raw.visible_to_players,
+  }));
 }

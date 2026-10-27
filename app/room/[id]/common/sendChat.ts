@@ -1,29 +1,45 @@
 "use server";
 
-import { getChatUrl, RoomBackend } from "@/app/roomApi";
-import { readBingosyncCookie } from "../roomCookie";
+import getUserId from "@/app/getUserId";
+import { NewFeedItem } from "../play/PlayPage";
+import broadcastToWebsockets from "../../broadcastToWebsockets";
+import getSql from "@/app/getSql";
 
 export default async function sendChat(
-  id: string,
-  text: string,
-  roomBackend: RoomBackend,
+  gameId: number,
+  message: string,
+  visibleToPlayers: null | ReadonlyArray<number>,
 ): Promise<void> {
-  const cookie = await readBingosyncCookie();
-  if (cookie == null) {
-    throw new Error(
-      "Failed to find sessionid cookie! Please refresh the page."
-    );
-  }
-
-  await fetch(getChatUrl(roomBackend), {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Cookie: cookie,
+  const userId = await getUserId();
+  const now = new Date();
+  const feedItem: NewFeedItem = {
+    type: "chat",
+    time: now.getTime() / 1000,
+    user: {
+      id: userId,
+      name: "Unknown",
     },
-    body: JSON.stringify({
-      room: id,
-      text,
-    }),
-  });
+    message,
+    visibleToPlayers,
+  };
+
+  const sql = getSql(false);
+  await Promise.all([
+    sql`
+      INSERT INTO chat (
+        game_id,
+        time,
+        user_id,
+        message,
+        visible_to_players
+      )
+      VALUES (
+        ${gameId},
+        ${now.toISOString()},
+        ${userId},
+        ${message},
+        ${visibleToPlayers}
+    )`,
+    broadcastToWebsockets(String(gameId), JSON.stringify(feedItem)),
+  ]);
 }

@@ -16,7 +16,19 @@ export default async function changeColor(
   const now = new Date();
   const userId = await getUserId();
   const sql = getSql(false);
-  await sql`
+  const feedItem: NewFeedItem = {
+    type: "color_mark",
+    time: now.getTime() / 1000,
+    user: {
+      id: userId,
+      name: "Unknown",
+    },
+    color,
+    squareIndex,
+    isClear,
+  };
+  await Promise.all([
+    sql`
     INSERT INTO color_mark (
       game_id,
       time,
@@ -32,17 +44,7 @@ export default async function changeColor(
       ${squareIndex},
       ${color},
       ${isClear}
-  )`;
-  const feedItem: NewFeedItem = {
-    type: "color_mark",
-    time: now.getTime() / 1000,
-    user: {
-      id: userId,
-      name: "Unknown",
-    },
-    color,
-    squareIndex,
-    isClear,
-  };
-  await broadcastToWebsockets(String(gameId), JSON.stringify(feedItem));
+  )`,
+    broadcastToWebsockets(String(gameId), JSON.stringify(feedItem)),
+  ]);
 }

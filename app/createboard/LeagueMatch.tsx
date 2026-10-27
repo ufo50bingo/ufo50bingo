@@ -193,9 +193,7 @@ export default function LeagueMatch({ visible }: Props) {
                 isCustom: false,
                 isDraft: false,
                 isLockout: true,
-                pasta: JSON.stringify(
-                  ufoGenerator(STANDARD_UFO).map((goal) => ({ name: goal })),
-                ),
+                goals: ufoGenerator(STANDARD_UFO),
                 leagueInfo: {
                   season: LEAGUE_SEASON,
                   p1,

@@ -4,11 +4,11 @@ import { METADATA, Variant } from "../pastas/metadata";
 import { RoomBackend } from "../roomApi";
 import { UFOPasta } from "../generator/ufoGenerator";
 import { hashJson, storePasta } from "../pastaStorage";
-import { auth } from "../auth";
-import { headers } from "next/headers";
+
 import findGoal from "../findGoal";
 import getSql from "../getSql";
 import joinValues from "../joinValues";
+import getUserId from "../getUserId";
 
 export interface LeagueInfo {
   season: number;
@@ -50,13 +50,7 @@ export default async function createMatch({
   roomBackend: _roomBackend,
   fullPasta,
 }: Props): Promise<string> {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (session == null) {
-    throw new Error("Not authenticated");
-  }
-  const userId = Number(session.user.id);
+  const userId = await getUserId();
   const pastaToStore = getFullPasta(fullPasta, variant);
   let hash: null | bigint = null;
   let json: null | string = null;
@@ -132,27 +126,27 @@ export default async function createMatch({
       ${matchInsertSql}
     ),
 
-    goal_indices(name, index) AS (
+    goal_indices(name, square_index) AS (
       VALUES ${joinValues(sql, goalIndexValues)}
     ),
 
     to_insert_game_goals AS (
-      SELECT goal_indices.index, goal_text.id
+      SELECT goal_indices.square_index, goal_text.id
       FROM goal_indices
       INNER JOIN goal_text
       ON goal_text.name = goal_indices.name
 
       UNION ALL
 
-      SELECT goal_indices.index, inserted_texts.id
+      SELECT goal_indices.square_index, inserted_texts.id
       FROM goal_indices
       INNER JOIN inserted_texts
       ON inserted_texts.name = goal_indices.name
     ),
 
     game_goals AS (
-      INSERT INTO game_goal (game_id, goal_id, index)
-      SELECT new_game.id, to_insert_game_goals.id AS goal_id, to_insert_game_goals.index 
+      INSERT INTO game_goal (game_id, goal_id, square_index)
+      SELECT new_game.id, to_insert_game_goals.id AS goal_id, to_insert_game_goals.square_index 
       FROM to_insert_game_goals
       CROSS JOIN new_game
     )

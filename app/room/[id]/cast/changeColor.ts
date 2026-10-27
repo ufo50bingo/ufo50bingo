@@ -1,57 +1,35 @@
 "use server";
 
-import { BingosyncColor, RawGoal } from "@/app/matches/parseBingosyncData";
-import { readBingosyncCookie } from "../roomCookie";
-import { getSelectUrl, RoomBackend } from "@/app/roomApi";
-import broadcastToWebsockets from "../../broadcastToWebsockets";
+import { BingosyncColor } from "@/app/matches/parseBingosyncData";
+// import broadcastToWebsockets from "../../broadcastToWebsockets";
+import getUserId from "@/app/getUserId";
+import getSql from "@/app/getSql";
 
 export default async function changeColor(
-  id: string,
-  slot: number,
+  gameId: number,
+  squareIndex: number,
   color: BingosyncColor,
-  removeColor: boolean,
-  roomBackend: RoomBackend,
+  isClear: boolean,
 ): Promise<void> {
-  const cookie = await readBingosyncCookie();
-  if (cookie == null) {
-    throw new Error(
-      "Failed to find sessionid cookie! Please refresh the page.",
-    );
-  }
-
-  if (roomBackend === "ufo50bingo") {
-    const rawGoal: RawGoal = {
-      type: "goal",
-      player: {
-        uuid: "",
-        name: "Frank",
-        color,
-        is_spectator: false,
-      },
-      square: {
-        name: "asdf",
-        slot: `slot${slot + 1}`,
-        colors: color,
-      },
-      player_color: color,
+  const now = new Date();
+  const userId = await getUserId();
+  const sql = getSql(false);
+  await sql`
+    INSERT INTO color_mark (
+      game_id,
+      time,
+      user_id,
+      square_index,
       color,
-      remove: removeColor,
-      timestamp: Date.now() / 1000,
-    };
-    await broadcastToWebsockets(id, JSON.stringify(rawGoal));
-  } else {
-    await fetch(getSelectUrl(roomBackend), {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Cookie: cookie,
-      },
-      body: JSON.stringify({
-        room: id,
-        slot: (slot + 1).toString(),
-        color,
-        remove_color: removeColor,
-      }),
-    });
-  }
+      is_clear
+    )
+    VALUES (
+      ${gameId},
+      ${now.toISOString()},
+      ${userId},
+      ${squareIndex},
+      ${color},
+      ${isClear}
+  )`;
+  // await broadcastToWebsockets(id, JSON.stringify(rawGoal));
 }

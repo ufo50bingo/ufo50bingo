@@ -4,7 +4,7 @@ import { ORDERED_PROPER_GAMES } from "@/app/goals";
 import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
 
 export default function getGameList(isNes50: boolean): ReadonlyArray<string> {
-  return isNes50
+  const allGames = isNes50
     ? [
       ...getAllSubcategories(
         NES_50_UFO.goals,
@@ -12,4 +12,5 @@ export default function getGameList(isNes50: boolean): ReadonlyArray<string> {
       ),
     ]
     : ORDERED_PROPER_GAMES;
+  return allGames.toSorted((a, b) => b.length - a.length);
 }

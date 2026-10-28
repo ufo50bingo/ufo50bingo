@@ -1,24 +1,27 @@
 import BingosyncColored from "@/app/matches/BingosyncColored";
 import classes from "./FeedEntry.module.css";
 import { NewFeedItem } from "@/app/fetchFeed";
+import { GameMembers } from "./useMembers";
 
 type Props = {
   entry: NewFeedItem;
   squareNames: ReadonlyArray<string>;
+  members: GameMembers;
 };
 
 // reference: https://github.com/kbuzsaki/bingosync/blob/b23d3b4e3192e7034573f3e8efc906aa4a83b0b8/bingosync-app/static/bingosync/room/chat_panel.js#L16
-export default function FeedEntry({ entry, squareNames }: Props) {
+export default function FeedEntry({ entry, squareNames, members }: Props) {
   const timestamp = (
     <span className={`${classes.timestamp} ${classes.defaultColor}`}>
       {getTimestamp(entry.time)}
     </span>
   );
-  // TODO: Use proper name
-  const player = <strong>{entry.userId}</strong>;
+  const member = members.get(entry.userId);
+  const player = <strong>{member?.name ?? entry.userId}</strong>;
   const coloredPlayer = (
-    // TODO: Use proper color
-    <BingosyncColored color="red">{player}</BingosyncColored>
+    <BingosyncColored color={member?.playerColor ?? "blank"}>
+      {player}
+    </BingosyncColored>
   );
   switch (entry.type) {
     case "chat":

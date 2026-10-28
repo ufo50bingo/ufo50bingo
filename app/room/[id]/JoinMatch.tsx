@@ -25,7 +25,7 @@ type Props = {
   userMember: null | FeedMember;
 };
 
-export default function JoinMatch({ gameId, userId, userMember }: Props) {
+export default function JoinMatch({ gameId, userMember }: Props) {
   const searchParams = useSearchParams();
 
   const [shouldOverrideName, setShouldOverrideName] = useState(false);

@@ -132,10 +132,10 @@ export function fetchMemberSql(sql: SQLTemplate, gameId: number): SQL {
       member.user_id,
       member.player_color,
       member.is_invite,
-      COALESCE(member.override_name, user.name) AS final_name
+      COALESCE(member.override_name, "user".name) AS final_name
     FROM member
-    INNER JOIN user
-    ON member.user_id = user.id
+    INNER JOIN "user"
+    ON member.user_id = "user".id
     WHERE game_id = ${gameId}
   `;
 }

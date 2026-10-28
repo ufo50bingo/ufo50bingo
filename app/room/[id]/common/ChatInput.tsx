@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import sendChat from "./sendChat";
 import { useParams } from "next/navigation";
-import { IconEye } from "@tabler/icons-react";
+import { IconEye, IconEyeOff } from "@tabler/icons-react";
 
 const PLAYERS = [
   { id: 1, name: "Frank" },
@@ -51,7 +51,7 @@ export default function ChatInput({ userId }: Props) {
         <Popover position="top" withArrow>
           <Popover.Target>
             <ActionIcon aria-label="Private message" size="lg" variant="subtle">
-              <IconEye />
+              {visibleToIds == null ? <IconEye /> : <IconEyeOff />}
             </ActionIcon>
           </Popover.Target>
           <Popover.Dropdown>
@@ -81,6 +81,7 @@ export default function ChatInput({ userId }: Props) {
                   }}
                 />
               ))}
+              <span>Casters and spectators see all messsages</span>
             </Stack>
           </Popover.Dropdown>
         </Popover>

@@ -4,27 +4,24 @@ import getSql from "@/app/getSql";
 import { SQL } from "@/app/matches/page";
 import { NeonQueryFunction } from "@neondatabase/serverless";
 import { SyncedTimerEventName } from "../common/useSyncedTimer";
+import getUserId from "@/app/getUserId";
 
 type Props = {
   gameId: number;
 };
 
 export default async function PlayPage({ gameId }: Props) {
-  const [data] = await Promise.all([
-    // fetchBoard(id, roomBackend),
+  const [userId, data] = await Promise.all([
+    getUserId(),
     fetchData(Number(gameId)),
-    // fetchFeed(id, bingosyncCookie, roomBackend),
-    // fetchTimerEvents(id),
     // getSocketKey(id, bingosyncCookie, roomBackend),
-    // getSeed(id, roomBackend),
   ]);
   return (
     <PlayWrapper
       gameId={gameId}
       initialFeed={data.feed}
       squareNames={data.squareNames}
-      userId={1}
-      // initialTimerEvents={timerEvents}
+      userId={userId}
     />
   );
 }

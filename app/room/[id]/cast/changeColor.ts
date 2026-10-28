@@ -5,7 +5,7 @@ import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import getUserId from "@/app/getUserId";
 import getSql from "@/app/getSql";
 import broadcastToWebsockets from "../../broadcastToWebsockets";
-import { NewFeedItem } from "../play/PlayPage";
+import { FeedColorMark } from "@/app/fetchFeed";
 
 export default async function changeColor(
   gameId: number,
@@ -16,13 +16,10 @@ export default async function changeColor(
   const now = new Date();
   const userId = await getUserId();
   const sql = getSql(false);
-  const feedItem: NewFeedItem = {
+  const feedItem: FeedColorMark = {
     type: "color_mark",
     time: now.getTime() / 1000,
-    user: {
-      id: userId,
-      name: "Unknown",
-    },
+    userId,
     color,
     squareIndex,
     isClear,

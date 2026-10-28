@@ -40,7 +40,7 @@ import InfoCard from "../cast/InfoCard";
 import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
 import { useSearchParams } from "next/navigation";
 import { Restrictions } from "./GeneralSection";
-import { NewFeed } from "./PlayPage";
+import { NewFeed } from "@/app/fetchFeed";
 
 export type FoundItem = {
   foundGoal: FoundGoal<string, string, string>;

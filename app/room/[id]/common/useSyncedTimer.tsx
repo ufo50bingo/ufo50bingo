@@ -2,8 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import { SoundChoices } from "./NotificationsSection";
 import useLocalNumber from "@/app/localStorage/useLocalNumber";
-import { NewFeed } from "../play/PlayPage";
-
+import { NewFeed } from "@/app/fetchFeed";
 export type SyncedTimerEventName = "set_duration" | "pause" | "start";
 
 interface SyncedTimerEvent {
@@ -107,7 +106,8 @@ export default function useSyncedTimer({
             accumulatedDuration += item.time * 1000 - curStartTime;
             curStartTime = null;
           }
-          pauseRequester = item.user.name;
+          // TODO: Use proper name
+          pauseRequester = String(item.userId);
           lastPauseTime = item.time * 1000;
           return;
         case "start":

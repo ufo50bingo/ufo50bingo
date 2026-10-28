@@ -24,7 +24,7 @@ function serializeRoomCookie(cookie: RoomCookie): string {
 }
 
 function deserializeRoomCookie(
-  serialized: null | undefined | string
+  serialized: null | undefined | string,
 ): null | RoomCookie {
   if (serialized == null) {
     return null;
@@ -45,7 +45,7 @@ function deserializeRoomCookie(
 
 export async function setRoomCookie(
   id: string,
-  cookie: RoomCookie
+  cookie: RoomCookie,
 ): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.set("room", serializeRoomCookie(cookie), {

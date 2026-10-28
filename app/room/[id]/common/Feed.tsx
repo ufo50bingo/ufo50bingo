@@ -9,9 +9,16 @@ type Props = {
   feed: NewFeed;
   style?: CSSProperties;
   isPlay: boolean;
+  squareNames: ReadonlyArray<string>;
 };
 
-export default function Feed({ feed, userId, isPlay, style = {} }: Props) {
+export default function Feed({
+  feed,
+  userId,
+  isPlay,
+  squareNames,
+  style = {},
+}: Props) {
   const feedRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     if (feedRef.current != null) {
@@ -48,7 +55,7 @@ export default function Feed({ feed, userId, isPlay, style = {} }: Props) {
       >
         <Stack gap={0}>
           {filteredFeed.map((entry, index) => (
-            <FeedEntry key={index} entry={entry} />
+            <FeedEntry key={index} entry={entry} squareNames={squareNames} />
           ))}
         </Stack>
       </Card.Section>

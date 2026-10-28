@@ -64,6 +64,7 @@ export type FoundStandardGeneral = FoundGoalWithCast<string, string, string>;
 export type GeneralItem = {
   foundGoal: FoundStandardGeneral;
   pasta: UFOPasta;
+  squareIndex: number;
 };
 
 export type CastProps = {

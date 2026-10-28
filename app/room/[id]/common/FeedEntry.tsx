@@ -4,10 +4,11 @@ import { NewFeedItem } from "../play/PlayPage";
 
 type Props = {
   entry: NewFeedItem;
+  squareNames: ReadonlyArray<string>;
 };
 
 // reference: https://github.com/kbuzsaki/bingosync/blob/b23d3b4e3192e7034573f3e8efc906aa4a83b0b8/bingosync-app/static/bingosync/room/chat_panel.js#L16
-export default function FeedEntry({ entry }: Props) {
+export default function FeedEntry({ entry, squareNames }: Props) {
   const timestamp = (
     <span className={`${classes.timestamp} ${classes.defaultColor}`}>
       {getTimestamp(entry.time)}
@@ -35,8 +36,7 @@ export default function FeedEntry({ entry }: Props) {
             {entry.isClear ? "cleared" : "marked"}
           </span>{" "}
           <BingosyncColored color={entry.isClear ? "blank" : entry.color}>
-            {/* Fill in square text */}
-            <strong>{entry.squareIndex}</strong>
+            <strong>{squareNames[entry.squareIndex]}</strong>
           </BingosyncColored>
         </em>
       );

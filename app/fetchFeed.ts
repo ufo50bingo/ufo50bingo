@@ -3,6 +3,11 @@ import { SQL } from "./matches/page";
 import { BingosyncColor } from "./matches/parseBingosyncData";
 import { SyncedTimerEventName } from "./room/[id]/common/useSyncedTimer";
 import getSql from "./getSql";
+import { fetchPasta } from "./pastaStorage";
+import { UFOPasta } from "./generator/ufoGenerator";
+import getAllSubcategories from "./createboard/getAllSubcategories";
+import getNonGeneralCategories from "./createboard/getNonGeneralCategories";
+import joinValues from "./joinValues";
 
 export type FeedColorMark = {
   type: "color_mark";
@@ -38,11 +43,21 @@ export type FeedMember = {
   name: string;
 };
 
+export type FeedGoalProgress = {
+  type: "goal_progress";
+  userId: number;
+  time: number;
+  goalId: number;
+  subcategoryId: number;
+  count: number;
+};
+
 export type NewFeedItem =
   | FeedColorMark
   | FeedChat
   | FeedTimerEvent
-  | FeedMember;
+  | FeedMember
+  | FeedGoalProgress;
 
 export type NewFeed = ReadonlyArray<NewFeedItem>;
 
@@ -52,6 +67,11 @@ type FeedFetchPairs = [SQL, (result: SQLResult) => ReadonlyArray<NewFeedItem>];
 export type SQLResult = ReadonlyArray<Record<string, any>>;
 
 export type SQLTemplate = NeonQueryFunction<false, false>;
+
+export type SquareWithId = {
+  goalId: number;
+  name: string;
+};
 
 function fetchColorMarkSql(sql: SQLTemplate, gameId: number): SQL {
   return sql`
@@ -147,9 +167,36 @@ export function parseMemberResult(result: SQLResult): Array<FeedMember> {
   }));
 }
 
-function fetchSquareNamesSql(sql: SQLTemplate, gameId: number): SQL {
+export function fetchGoalProgressSql(sql: SQLTemplate, gameId: number): SQL {
   return sql`
     SELECT
+      EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
+      user_id,
+      goal_id,
+      subcategory_id,
+      count
+    FROM goal_progress
+    WHERE game_id = ${gameId}
+  `;
+}
+
+export function parseGoalProgressResult(
+  result: SQLResult,
+): Array<FeedGoalProgress> {
+  return result.map((raw) => ({
+    type: "goal_progress",
+    userId: Number(raw.user_id),
+    time: Number(raw.unixtime),
+    goalId: Number(raw.goal_id),
+    subcategoryId: Number(raw.subcategory_id),
+    count: Number(raw.count),
+  }));
+}
+
+function fetchSquaresSql(sql: SQLTemplate, gameId: number): SQL {
+  return sql`
+    SELECT
+      goal_text.id,
       goal_text.name
     FROM game_goal
     INNER JOIN goal_text
@@ -159,27 +206,81 @@ function fetchSquareNamesSql(sql: SQLTemplate, gameId: number): SQL {
   `;
 }
 
-function parseSquareNames(result: SQLResult): ReadonlyArray<string> {
-  return result.map((raw) => raw.name);
+function parseSquares(result: SQLResult): ReadonlyArray<SquareWithId> {
+  return result.map((raw) => ({ goalId: raw.id, name: raw.name }));
+}
+
+function fetchGameSql(sql: SQLTemplate, gameId: number): SQL {
+  return sql`
+    SELECT
+      pasta_id
+    FROM game
+    WHERE id = ${gameId}
+  `;
+}
+
+type ParsedGame = {
+  pastaId: bigint;
+};
+
+function parseGame(result: SQLResult): ParsedGame {
+  return { pastaId: BigInt(result[0].pasta_id) };
+}
+
+function fetchSubcategoriesSql(sql: SQLTemplate, pasta: UFOPasta): SQL {
+  const toFetch = getAllSubcategories(
+    pasta.goals,
+    getNonGeneralCategories(pasta),
+  );
+  const subcategoryValues = [];
+  for (const sc of toFetch) {
+    subcategoryValues.push(sql`${sc}`);
+  }
+  return sql`
+    SELECT
+      id,
+      name
+    FROM subcategory
+    WHERE name IN (${joinValues(sql, subcategoryValues)})
+  `;
+}
+
+export type ParsedSubcategory = {
+  subcategoryId: number;
+  name: string;
+};
+
+function parseSubcategories(
+  result: SQLResult,
+): ReadonlyArray<ParsedSubcategory> {
+  return result.map((raw) => ({ subcategoryId: raw.id, name: raw.name }));
 }
 
 export async function fetchData(
   gameId: number,
   memberFeed: ReadonlyArray<FeedMember>,
   isPlay: boolean,
-): Promise<{ squareNames: ReadonlyArray<string>; feed: NewFeed }> {
+): Promise<{
+  squares: ReadonlyArray<SquareWithId>;
+  feed: NewFeed;
+  pasta: null | UFOPasta;
+  subcategories: ReadonlyArray<ParsedSubcategory>;
+}> {
   const sql = getSql(false);
-  const feedFetchPairs: ReadonlyArray<FeedFetchPairs> = [
+  let feedFetchPairs: ReadonlyArray<FeedFetchPairs> = [
     [fetchColorMarkSql(sql, gameId), parseColorMarkResult],
     [fetchChatSql(sql, gameId), parseChatResult],
     [fetchTimerEventSql(sql, gameId), parseTimerEventResult],
   ];
   if (!isPlay) {
-    // add some more stuff to the feed fetch
+    feedFetchPairs = feedFetchPairs.concat([
+      [fetchGoalProgressSql(sql, gameId), parseGoalProgressResult],
+    ]);
   }
   const results = await sql.transaction([
     ...feedFetchPairs.map((pair) => pair[0]),
-    fetchSquareNamesSql(sql, gameId),
+    fetchSquaresSql(sql, gameId),
+    fetchGameSql(sql, gameId),
   ]);
   const feedResults = results.slice(0, feedFetchPairs.length);
   const otherResults = results.slice(feedFetchPairs.length);
@@ -188,6 +289,12 @@ export async function fetchData(
     .concat(memberFeed);
   feed.sort((a, b) => a.time - b.time);
 
-  const squareNames = parseSquareNames(otherResults[0]);
-  return { squareNames, feed };
+  const squares = parseSquares(otherResults[0]);
+  const { pastaId } = parseGame(otherResults[1]);
+  const pasta = await fetchPasta(pastaId);
+  let subcategories: ReadonlyArray<ParsedSubcategory> = [];
+  if (pasta != null && !isPlay) {
+    subcategories = parseSubcategories(await fetchSubcategoriesSql(sql, pasta));
+  }
+  return { squares, feed, pasta, subcategories };
 }

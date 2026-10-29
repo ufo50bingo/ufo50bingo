@@ -13,7 +13,7 @@ export default async function PlayPage({ gameId, userId, memberFeed }: Props) {
     <PlayWrapper
       gameId={gameId}
       initialFeed={data.feed}
-      squareNames={data.squareNames}
+      squareNames={data.squares.map((square) => square.name)}
       userId={userId}
     />
   );

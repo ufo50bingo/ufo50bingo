@@ -4,20 +4,20 @@ import { CountChange, CountState } from "../cast/useSyncedState";
 
 export default function useFullGeneralState(
   gameId: number,
+  userId: number,
 ): [GeneralCounts, (change: CountChange) => unknown] {
-  const key = `${gameId}-fullgeneral`;
+  const key = `${gameId}-${userId}-fullgeneral`;
   const [state, setStateRaw] = useState<GeneralCounts>({});
 
   const setGeneralGameCount = useCallback(
     (change: CountChange) => {
       setStateRaw((prevState) => {
         const oldGeneralState: CountState = prevState[change.goal] ?? [];
-        // player num is always 0
-        const oldCounts = oldGeneralState?.[0] ?? {};
+        const oldCounts = oldGeneralState?.[userId] ?? {};
         const newCounts = { ...oldCounts };
         newCounts[change.game] = change.count;
-        const newGeneralState = [...oldGeneralState];
-        newGeneralState[change.player_num] = newCounts;
+        const newGeneralState = { ...oldGeneralState };
+        newGeneralState[change.userId] = newCounts;
         const newGenerals = {
           ...prevState,
           [change.goal]: newGeneralState,

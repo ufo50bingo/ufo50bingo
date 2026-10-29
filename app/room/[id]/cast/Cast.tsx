@@ -13,7 +13,7 @@ import GameInfo from "./GameInfo";
 import CastSettings from "./CastSettings";
 import GeneralIcons from "./GeneralIcons";
 import EditSquare from "./EditSquare";
-import { AllPlayerGames } from "./useSyncedState";
+import { AllPlayerGames, CountChange } from "./useSyncedState";
 import useLocalState from "./useLocalState";
 import useBingosyncSocket from "../common/useBingosyncSocket";
 import useSounds from "../play/useSounds";
@@ -41,10 +41,11 @@ import { Restrictions, GeneralSettings } from "../play/GeneralSection";
 import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
 import useCastRightClickBehavior from "./useCastRightClickBehavior";
 import { RightClickBehaviorContext } from "@/app/settings/RightClickBehaviorContext";
-import { NewFeed } from "@/app/fetchFeed";
+import { NewFeed, ParsedSubcategory, SquareWithId } from "@/app/fetchFeed";
 import { GeneralCounts } from "./CastPage";
 import useSquareColors from "../common/useSquareColors";
 import useMembers from "../common/useMembers";
+import addGoalProgress from "./addGoalProgress";
 
 const RESTRICTIONS: Restrictions = {
   canTagDifficultyFor: null,
@@ -68,7 +69,9 @@ export type CastProps = {
   gameId: number;
   initialFeed: NewFeed;
   userId: number;
-  squareNames: ReadonlyArray<string>;
+  squares: ReadonlyArray<SquareWithId>;
+  pasta: null | UFOPasta;
+  subcategories: ReadonlyArray<ParsedSubcategory>;
 };
 
 const COUNT_POSITION = ["side_by_side", "inset"] as const;
@@ -78,10 +81,22 @@ export default function Cast({
   gameId,
   initialFeed,
   userId,
-  squareNames,
+  squares,
+  subcategories,
 }: CastProps) {
   const isLockout = true;
   const boardSize = 25;
+  const squareNames = useMemo(() => squares.map((s) => s.name), [squares]);
+  const squareNameToId: Map<string, number> = useMemo(() => {
+    const nameToId = new Map();
+    for (const square of squares) {
+      nameToId.set(square.name, square.goalId);
+    }
+    return nameToId;
+  }, [squares]);
+  const subcategoryNameToId: Map<string, number> = useMemo(() => {
+    return new Map();
+  }, []);
   const [soundChoices, setSoundChoices, playAudio] = useSounds("cast");
   const { feed, reconnectModal } = useBingosyncSocket({
     gameId,
@@ -122,10 +137,23 @@ export default function Cast({
       return ["red", "blue"];
     }, []);
 
-  // TODO: CountState should be a userId map
   const generals: GeneralCounts = useMemo(() => {
-    return {};
-  }, []);
+    const generalCounts: GeneralCounts = {};
+    for (const item of feed) {
+      if (item.type === "goal_progress") {
+        const goalName = squares.find((sq) => sq.goalId === item.goalId)!.name;
+        const subcategoryName = subcategories.find(
+          (sc) => sc.subcategoryId === item.subcategoryId,
+        )!.name;
+        const goalCounts = generalCounts[goalName] ?? {};
+        const playerCounts = goalCounts[item.userId] ?? {};
+        playerCounts[subcategoryName] = item.count;
+        goalCounts[item.userId] = playerCounts;
+        generalCounts[goalName] = goalCounts;
+      }
+    }
+    return generalCounts;
+  }, [feed, squares, subcategories]);
 
   // TODO: use map for player IDs
   const allPlayerGames: AllPlayerGames = useMemo(() => {
@@ -286,20 +314,40 @@ export default function Cast({
     />
   ));
 
+  const leftUserId = 1;
+  const rightUserId = 2;
+  const generalTrackerPlayers = [
+    { userId: leftUserId, color: leftColor },
+    { userId: rightUserId, color: rightColor },
+  ];
+
+  const setGeneralGameCount = async (change: CountChange) => {
+    const foundSquare = squares.find((square) => square.name === change.goal);
+    const foundSubcategory = subcategories.find(
+      (sc) => sc.name === change.game,
+    );
+    await addGoalProgress({
+      gameId,
+      userId: change.userId,
+      goalId: foundSquare!.goalId,
+      subcategoryId: foundSubcategory!.subcategoryId,
+      count: change.count,
+    });
+  };
+
   const getCard = (g: GeneralItem, h: null | undefined | number) => (
     <GeneralGoal
       key={g.foundGoal.resolvedGoal}
       gameToGoals={gameToGoals}
       foundGoal={g.foundGoal}
-      // TODO: Use server action
-      setGeneralGameCount={() => {}}
+      setGeneralGameCount={setGeneralGameCount}
       // TODO: Determine whether all colors have marked this
       isFinished={isLockout && squareColors[g.squareIndex].length > 0}
       terminalCodes={terminalCodes}
       countState={generals[g.foundGoal.resolvedGoal]}
       showAll={showAll.includes(g.foundGoal.resolvedGoal)}
       addShowAll={addShowAll}
-      playerColors={[leftColor, rightColor]}
+      generalTrackerPlayers={generalTrackerPlayers}
       style={{ height: `${h ?? 300}px` }}
       settings={generalSettings}
       pasta={g.pasta}
@@ -600,8 +648,7 @@ export default function Cast({
         isDetecting={isDetecting}
         setIsDetecting={setIsDetecting}
         gameToGoals={gameToGoals}
-        // TODO: add server actions
-        setGeneralGameCount={() => {}}
+        setGeneralGameCount={setGeneralGameCount}
         countPosition={countPosition}
         setCountPosition={setCountPosition}
         generalOrder={generalOrder}

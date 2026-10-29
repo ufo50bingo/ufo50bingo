@@ -1,7 +1,11 @@
 // Browser helpers: capture a region of a video and run the detector on it.
 
 import { GameTransitionDetector, RewardIconDetector } from "./detector";
-import type { DetectorOptions, GameDetection, RewardIconDetection } from "./detector";
+import type {
+  DetectorOptions,
+  GameDetection,
+  RewardIconDetection,
+} from "./detector";
 import type { RewardIconResult } from "./rewardIcon/detect";
 import type { FrameResult } from "./types";
 
@@ -11,7 +15,7 @@ export type Region = { x: number; y: number; width: number; height: number };
  * Draw a region of a video/canvas into a reusable canvas and return its pixels.
  * Large regions are downscaled to `maxWidth` (3 px per game pixel is plenty).
  */
-export function captureRegion(
+function captureRegion(
   source: CanvasImageSource,
   region: Region,
   canvas: HTMLCanvasElement | OffscreenCanvas,
@@ -29,7 +33,17 @@ export function captureRegion(
   if (ctx == null) throw new Error("2d context unavailable");
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = "high";
-  ctx.drawImage(source, region.x, region.y, region.width, region.height, 0, 0, w, h);
+  ctx.drawImage(
+    source,
+    region.x,
+    region.y,
+    region.width,
+    region.height,
+    0,
+    0,
+    w,
+    h,
+  );
   return ctx.getImageData(0, 0, w, h);
 }
 
@@ -39,7 +53,11 @@ export type DetectionLoopOptions = DetectorOptions & {
   /** Captures wider than this are downscaled first. Default 1152 px. */
   maxWidth?: number;
   /** Called after every analyzed frame, e.g. for a debug readout. */
-  onFrame?: (result: FrameResult, elapsedMs: number, icon: RewardIconResult | null) => void;
+  onFrame?: (
+    result: FrameResult,
+    elapsedMs: number,
+    icon: RewardIconResult | null,
+  ) => void;
   // Called once each time a reward icon appears
   onRewardIcon?: (detection: RewardIconDetection) => void;
 };
@@ -63,12 +81,21 @@ export function startGameDetection(
   const tick = () => {
     if (stopped) return;
     const region = getRegion();
-    if (region != null && region.width >= 1 && region.height >= 1 && video.readyState >= 2) {
+    if (
+      region != null &&
+      region.width >= 1 &&
+      region.height >= 1 &&
+      video.readyState >= 2
+    ) {
       const t0 = performance.now();
       const img = captureRegion(video, region, canvas, opts.maxWidth);
       const detection = detector.update(img, t0);
       const icon = iconDetector.update(img, t0);
-      opts.onFrame?.(detector.lastResult, performance.now() - t0, iconDetector.lastResult);
+      opts.onFrame?.(
+        detector.lastResult,
+        performance.now() - t0,
+        iconDetector.lastResult,
+      );
       if (detection != null) onGame(detection);
       if (icon != null) opts.onRewardIcon?.(icon);
     }

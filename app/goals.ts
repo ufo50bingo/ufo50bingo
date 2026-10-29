@@ -127,7 +127,7 @@ const TYPED_SUBCATEGORY_NAMES = {
   collectathon: "Collectathon",
   theme: "Theme",
   bossenemy: "Boss",
-  level: "Level"
+  level: "Level",
 };
 
 export const SUBCATEGORY_NAMES: { [subcategory: string]: string } =
@@ -149,7 +149,7 @@ const standardDifficulty: StandardDifficulty = "easy";
 const _t1: StandardDifficulty = difficulty;
 const _t2: Difficulty = standardDifficulty;
 
-export type StandardSubcategory =
+type StandardSubcategory =
   | keyof typeof STANDARD_UFO.goals.easy
   | keyof typeof STANDARD_UFO.goals.general;
 

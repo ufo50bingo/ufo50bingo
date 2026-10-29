@@ -37,7 +37,7 @@ interface CountChangeSync extends CountChange {
   seed: number;
 }
 
-export interface CountChangeRow extends CountChangeSync {
+interface CountChangeRow extends CountChangeSync {
   room_id: string;
 }
 
@@ -51,7 +51,7 @@ interface CurrentGameSync extends CurrentGame {
   player_num: number;
 }
 
-export interface CurrentGameRow extends CurrentGameSync {
+interface CurrentGameRow extends CurrentGameSync {
   room_id: string;
 }
 
@@ -61,7 +61,7 @@ export type AllPlayerGames = ReadonlyArray<
   null | undefined | ReadonlyArray<CurrentGame>
 >;
 
-export type SyncedState = {
+type SyncedState = {
   leftColor: BingosyncColor;
   rightColor: BingosyncColor;
   generals: GeneralCounts;

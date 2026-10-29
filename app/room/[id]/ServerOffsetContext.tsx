@@ -4,11 +4,6 @@ import useLocalNumber from "@/app/localStorage/useLocalNumber";
 import React, { createContext, useContext, useEffect, useMemo } from "react";
 import getServerOffset from "./getServerOffset";
 
-export enum NextGoalChoice {
-  RANDOM = "RANDOM",
-  PREFER_FEWER_ATTEMPTS = "PREFER_FEWER_ATTEMPTS",
-}
-
 type ServerOffsetContextType = {
   getClientMsFromServerMs: (serverMs: number) => number;
   getServerMsFromClientMs: (serverMs: number) => number;

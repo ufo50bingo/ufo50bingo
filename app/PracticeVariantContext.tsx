@@ -34,9 +34,12 @@ export const PRACTICE_VARIANTS = {
 
 export type PracticeVariant = keyof typeof PRACTICE_VARIANTS;
 
-export type NonStandardPracticeVariant = Exclude<PracticeVariant, "standard"> | null;
+export type NonStandardPracticeVariant = Exclude<
+  PracticeVariant,
+  "standard"
+> | null;
 
-export function usePracticeVariantFull(): PracticeVariantContextValue {
+function usePracticeVariantFull(): PracticeVariantContextValue {
   const ctx = useContext(PracticeVariantContext);
   if (ctx == null) {
     throw new Error(

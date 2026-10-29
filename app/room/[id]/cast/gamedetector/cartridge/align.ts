@@ -18,15 +18,28 @@ const tmpMean = new Float32Array(3);
  * Samples the frame template pixels (interleaved RGB) for a cart at (x, y)
  * with scale s. Returns a shared buffer that the next call overwrites.
  */
-export function sampleFrame(img: ImageDataLike, m: CartridgeModel, x: number, y: number, s: number): Float32Array {
+export function sampleFrame(
+  img: ImageDataLike,
+  m: CartridgeModel,
+  x: number,
+  y: number,
+  s: number,
+): Float32Array {
   const n = m.frameX.length;
   if (frameObs.length < n * 3) frameObs = new Float32Array(n * 3);
-  for (let i = 0; i < n; i++) sample(img, x + m.frameX[i] * s, y + m.frameY[i] * s, frameObs, i * 3);
+  for (let i = 0; i < n; i++)
+    sample(img, x + m.frameX[i] * s, y + m.frameY[i] * s, frameObs, i * 3);
   return frameObs;
 }
 
 /** Best frame-template similarity over the variants for a cart at (x, y) with scale s. */
-export function frameScore(img: ImageDataLike, m: CartridgeModel, x: number, y: number, s: number): number {
+function frameScore(
+  img: ImageDataLike,
+  m: CartridgeModel,
+  x: number,
+  y: number,
+  s: number,
+): number {
   const n = m.frameX.length;
   const obs = sampleFrame(img, m, x, y, s);
   const ss = stats(obs, n, tmpMean);
@@ -43,7 +56,13 @@ export function frameScore(img: ImageDataLike, m: CartridgeModel, x: number, y: 
  * score's basin is only about +-0.5 game px wide, so a +-`scan` px grid at
  * 1 game px spacing picks the starting point.
  */
-export function refine(img: ImageDataLike, m: CartridgeModel, c: Candidate, maxIter = 40, scan = 2): Aligned {
+export function refine(
+  img: ImageDataLike,
+  m: CartridgeModel,
+  c: Candidate,
+  maxIter = 40,
+  scan = 2,
+): Aligned {
   let { x, y } = c;
   const s0 = c.s;
   let best = -1;

@@ -4,7 +4,6 @@ import {
   ORDERED_PROPER_GAMES,
   ProperGame,
 } from "@/app/goals";
-import { TBoard } from "@/app/matches/parseBingosyncData";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import findGoal from "@/app/findGoal";
 import { SPICY_UFO } from "@/app/pastas/spicyUfo";

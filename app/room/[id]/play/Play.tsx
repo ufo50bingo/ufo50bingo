@@ -3,16 +3,14 @@
 import Board from "@/app/Board";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { Group, Stack, Text } from "@mantine/core";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo } from "react";
 import PlaySettings from "./PlaySettings";
-import useColor from "./useColor";
 import useShownDifficulties from "./useShownDifficulties";
 import useSounds from "./useSounds";
 import useWakeLock from "./useWakeLock";
 import changeColor from "../cast/changeColor";
 import Feed from "../common/Feed";
 import useBingosyncSocket from "../common/useBingosyncSocket";
-import { getResult } from "@/app/matches/computeResult";
 import ScoreSquare from "../common/ScoreSquare";
 import { useMediaQuery } from "@mantine/hooks";
 import SimpleGeneralTracker from "./SimpleGeneralTracker";
@@ -42,6 +40,7 @@ import { useSearchParams } from "next/navigation";
 import { Restrictions } from "./GeneralSection";
 import { NewFeed } from "@/app/fetchFeed";
 import useMembers from "../common/useMembers";
+import useSquareColors from "../common/useSquareColors";
 
 export type FoundItem = {
   foundGoal: FoundGoal<string, string, string>;
@@ -72,28 +71,7 @@ export default function Play({
     playAudio,
   });
   const members = useMembers(feed);
-  const squareColors = useMemo(() => {
-    const colors: Array<Array<BingosyncColor>> = Array(boardSize)
-      .fill(null)
-      .map((_) => []);
-    for (const item of feed) {
-      if (item.type === "color_mark") {
-        const curColors = colors[item.squareIndex];
-        if (item.isClear) {
-          colors[item.squareIndex] = curColors.filter((c) => c !== item.color);
-        } else if (isLockout) {
-          if (curColors.length === 0) {
-            colors[item.squareIndex] = [item.color];
-          }
-        } else {
-          if (!curColors.includes(item.color)) {
-            curColors.push(item.color);
-          }
-        }
-      }
-    }
-    return colors;
-  }, [feed, isLockout, boardSize]);
+  const squareColors = useSquareColors(feed, boardSize, isLockout);
   const searchParams = useSearchParams();
   const override = searchParams.get("override");
 

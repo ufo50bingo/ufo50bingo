@@ -1,30 +1,29 @@
 import { Alert, Button, Drawer, Stack } from "@mantine/core";
 import ColorSelector from "../common/ColorSelector";
 import { useState } from "react";
-import { BingosyncColor, TBoard } from "@/app/matches/parseBingosyncData";
+import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import changeColor from "./changeColor";
-import { RoomBackend } from "@/app/roomApi";
 
 type Props = {
-  id: string;
-  board: TBoard;
+  gameId: number;
+  squareNames: ReadonlyArray<string>;
+  squareColors: ReadonlyArray<ReadonlyArray<BingosyncColor>>;
   editingIndex: number;
   setEditingIndex: (newEditingIndex: null | number) => unknown;
-  roomBackend: RoomBackend;
 };
 
 export default function EditSquare({
-  id,
-  board,
+  gameId,
+  squareNames,
+  squareColors,
   editingIndex,
   setEditingIndex,
-  roomBackend,
 }: Props) {
-  const square = board[editingIndex];
   const [newColor, setNewColor] = useState<null | BingosyncColor>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  const isClearing = square.color !== "blank";
+  // TODO: Support non-lockout
+  const isClearing = squareColors[editingIndex].length > 0;
 
   return (
     <Drawer.Root
@@ -46,7 +45,7 @@ export default function EditSquare({
               title="Please be absolutely certain you need to manually change this square. If you aren't sure, carefully review the stream VOD or ask the players to pause."
             />
             <span>
-              <strong>{square.name}</strong>
+              <strong>{squareNames[editingIndex]}</strong>
             </span>
             {!isClearing && (
               <ColorSelector
@@ -59,9 +58,12 @@ export default function EditSquare({
               disabled={isSaving || (!isClearing && newColor == null)}
               onClick={async () => {
                 setIsSaving(true);
-                const color = isClearing ? square.color : nullthrows(newColor);
+                // TODO: Handle non-lockout
+                const color = isClearing
+                  ? squareColors[editingIndex][0]
+                  : nullthrows(newColor);
                 try {
-                  await changeColor(id, editingIndex, color, isClearing, roomBackend);
+                  await changeColor(gameId, editingIndex, color, isClearing);
                   setEditingIndex(null);
                 } finally {
                   setIsSaving(false);

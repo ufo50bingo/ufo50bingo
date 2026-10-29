@@ -28,15 +28,15 @@ export interface CasterState extends BaseState {
   setShowRecentGames: (newShowRecentGames: boolean) => unknown;
 }
 
-export default function useLocalState(id: string, seed: number): CasterState {
-  const key = `${id}-${seed}`;
+export default function useLocalState(gameId: number): CasterState {
+  const key = `cast-local-state-${gameId}`;
 
   const initialState = useMemo(() => getInitialState(key), [key]);
   const [shownDifficulties, setShownDifficultiesRaw] = useState<
     ReadonlyArray<Difficulty>
   >(initialState.shownDifficulties);
   const [showAll, setShowAllRaw] = useState<ReadonlyArray<string>>(
-    initialState.showAll
+    initialState.showAll,
   );
   const [sortType, setSortType] = useLocalEnum<SortType>({
     key: "sort_type",
@@ -72,7 +72,7 @@ export default function useLocalState(id: string, seed: number): CasterState {
       setLocalStorage(key, { showAll: newShowAll, shownDifficulties });
     };
     const setShownDifficulties = (
-      newShownDifficulties: ReadonlyArray<Difficulty>
+      newShownDifficulties: ReadonlyArray<Difficulty>,
     ) => {
       setShownDifficultiesRaw(newShownDifficulties);
       setLocalStorage(key, {

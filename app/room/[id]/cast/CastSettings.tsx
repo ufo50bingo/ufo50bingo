@@ -6,7 +6,6 @@ import {
   Button,
   Checkbox,
   Drawer,
-  NumberInput,
   Select,
   Stack,
   Text,
@@ -55,8 +54,6 @@ type Props = {
   setHighlightCurrentGame: (newHighlightCurrentGame: boolean) => unknown;
   showRecentGames: boolean;
   setShowRecentGames: (newShowRecentGames: boolean) => unknown;
-  numPlayers: number;
-  setNumPlayers: (numPlayers: number) => unknown;
   allPlayerGames: AllPlayerGames;
   addSubcategoryName: (userId: number, newGame: null | string) => unknown;
   isDetecting: boolean;
@@ -94,8 +91,6 @@ export default function CastSettings({
   setHighlightCurrentGame,
   showRecentGames,
   setShowRecentGames,
-  numPlayers,
-  setNumPlayers,
   allPlayerGames,
   addSubcategoryName,
   isDetecting,
@@ -269,26 +264,6 @@ export default function CastSettings({
                         setHighlightCurrentGame(event.target.checked)
                       }
                     />
-                    {showGameSelector && highlightCurrentGame && (
-                      <NumberInput
-                        label="Number of players"
-                        description="General goals and recent games are only tracked for the first two players"
-                        min={2}
-                        max={8}
-                        allowDecimal={false}
-                        value={numPlayers}
-                        onChange={(maybeStr) => {
-                          if (
-                            typeof maybeStr !== "number" ||
-                            maybeStr < 2 ||
-                            maybeStr > 8
-                          ) {
-                            return;
-                          }
-                          setNumPlayers(maybeStr);
-                        }}
-                      />
-                    )}
                     <Checkbox
                       label="Show recent games"
                       checked={showRecentGames}

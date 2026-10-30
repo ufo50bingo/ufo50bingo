@@ -84,11 +84,13 @@ export default function JoinMatch({ gameId, userMember }: Props) {
               </Alert>
             )}
             <Stack>
-              <ColorSelector
-                label="Choose color"
-                color={color}
-                setColor={setColor}
-              />
+              {view === "play" && (
+                <ColorSelector
+                  label="Choose color"
+                  color={color}
+                  setColor={setColor}
+                />
+              )}
               <Checkbox
                 label="Use custom name"
                 checked={shouldOverrideName}

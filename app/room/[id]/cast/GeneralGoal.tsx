@@ -1,9 +1,8 @@
 import { ORDERED_PROPER_GAMES, ProperGame } from "@/app/goals";
-import { Anchor, Button, Checkbox, Group, Stack } from "@mantine/core";
+import { Anchor, Button, Checkbox, Group, Stack, Tooltip } from "@mantine/core";
 import { GameToGoals } from "./findAllGames";
 import InfoCard from "./InfoCard";
 import GameInfo from "./GameInfo";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import getColorHex from "./getColorHex";
 import BingosyncColored from "@/app/matches/BingosyncColored";
 import { CountChange, CountState } from "./useSyncedState";
@@ -27,6 +26,7 @@ import {
   BOSSES,
 } from "./timeEstimates";
 import { Restrictions, GeneralSettings } from "../play/GeneralSection";
+import { PlayerMember } from "../common/useMembers";
 
 type Props = {
   showAll: boolean;
@@ -37,10 +37,7 @@ type Props = {
   countState: null | undefined | CountState;
   setGeneralGameCount: (change: CountChange) => unknown;
   addShowAll: (goal: string) => unknown;
-  generalTrackerPlayers: ReadonlyArray<{
-    userId: number;
-    color: BingosyncColor;
-  }>;
+  generalTrackerPlayers: ReadonlyArray<PlayerMember>;
   pasta: UFOPasta;
   restrictions: Restrictions;
   settings: GeneralSettings;
@@ -241,51 +238,53 @@ export default function GeneralGoal({
           const description = descriptions != null ? descriptions[game] : null;
           return (
             <Group key={game} gap={6}>
-              {generalTrackerPlayers.map(({ userId, color }) => {
+              {generalTrackerPlayers.map(({ userId, color, name }) => {
                 const counts = countState?.[userId];
                 const gameCount = counts?.[game] ?? 0;
-                return cast.type === "check" ? (
-                  <Checkbox
-                    key={userId}
-                    color={getColorHex(color)}
-                    checked={gameCount > 0}
-                    onChange={(event) =>
-                      setGeneralGameCount({
-                        goal: foundGoal.resolvedGoal,
-                        userId,
-                        game,
-                        count: event.currentTarget.checked ? 1 : 0,
-                      })
-                    }
-                  />
-                ) : (
-                  <Button
-                    key={userId}
-                    color={getColorHex(color)}
-                    h={18}
-                    w={18}
-                    p={0}
-                    size="compact-xs"
-                    onClick={() => {
-                      setGeneralGameCount({
-                        goal: foundGoal.resolvedGoal,
-                        userId,
-                        game,
-                        count: gameCount + 1,
-                      });
-                    }}
-                    onContextMenu={(e) => {
-                      e.preventDefault();
-                      setGeneralGameCount({
-                        goal: foundGoal.resolvedGoal,
-                        userId,
-                        game,
-                        count: Math.max(0, gameCount - 1),
-                      });
-                    }}
-                  >
-                    {gameCount}
-                  </Button>
+                return (
+                  <Tooltip key={userId} label={name}>
+                    {cast.type === "check" ? (
+                      <Checkbox
+                        color={getColorHex(color)}
+                        checked={gameCount > 0}
+                        onChange={(event) =>
+                          setGeneralGameCount({
+                            goal: foundGoal.resolvedGoal,
+                            userId,
+                            game,
+                            count: event.currentTarget.checked ? 1 : 0,
+                          })
+                        }
+                      />
+                    ) : (
+                      <Button
+                        color={getColorHex(color)}
+                        h={18}
+                        w={18}
+                        p={0}
+                        size="compact-xs"
+                        onClick={() => {
+                          setGeneralGameCount({
+                            goal: foundGoal.resolvedGoal,
+                            userId,
+                            game,
+                            count: gameCount + 1,
+                          });
+                        }}
+                        onContextMenu={(e) => {
+                          e.preventDefault();
+                          setGeneralGameCount({
+                            goal: foundGoal.resolvedGoal,
+                            userId,
+                            game,
+                            count: Math.max(0, gameCount - 1),
+                          });
+                        }}
+                      >
+                        {gameCount}
+                      </Button>
+                    )}
+                  </Tooltip>
                 );
               })}
               <GameInfo

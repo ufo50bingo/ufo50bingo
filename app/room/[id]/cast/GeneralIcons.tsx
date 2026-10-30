@@ -11,7 +11,7 @@ import { Font } from "@/app/font/useFont";
 import getFontClassname from "@/app/font/getFontClassname";
 
 type IconProps = {
-  playerNum: number;
+  isLeft: boolean;
   goal: string;
   color: BingosyncColor;
   squareColors: ReadonlyArray<ReadonlyArray<BingosyncColor>>;
@@ -29,7 +29,7 @@ function Icon({
   color,
   squareColors,
   countPosition,
-  playerNum,
+  isLeft,
   font,
   isPixel,
 }: IconProps) {
@@ -94,7 +94,7 @@ function Icon({
     return (
       <SideCell>
         <Group gap={8}>
-          {playerNum === 0 ? (
+          {isLeft ? (
             <>
               <img className={imgClass} src={src} alt={goal} />
               {tag}
@@ -115,7 +115,8 @@ type Props = {
   color: BingosyncColor;
   generalGoals: ReadonlyArray<GeneralItem>;
   generalState: GeneralCounts;
-  playerNum: number;
+  playerId: null | undefined | number;
+  isLeft: boolean;
   iconType: IconType;
   isHidden: boolean;
   countPosition: TCountPosition;
@@ -127,7 +128,8 @@ export default function GeneralIcons({
   color,
   generalGoals,
   generalState,
-  playerNum,
+  playerId,
+  isLeft,
   iconType,
   isHidden,
   countPosition,
@@ -136,7 +138,8 @@ export default function GeneralIcons({
 }: Props) {
   return generalGoals.map((item) => {
     const { goal, resolvedGoal } = item.foundGoal;
-    const countState = generalState[resolvedGoal]?.[playerNum];
+    const countState =
+      playerId != null ? generalState[resolvedGoal]?.[playerId] : null;
     const explicitImg = item.foundGoal.cast?.image;
     return (
       <Icon
@@ -166,7 +169,7 @@ export default function GeneralIcons({
               : getClassicSrc(goal as StandardGeneral, isHidden))
         }
         countPosition={countPosition}
-        playerNum={playerNum}
+        isLeft={isLeft}
         font={font}
       />
     );

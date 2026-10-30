@@ -6,7 +6,6 @@ import {
   Button,
   Checkbox,
   Drawer,
-  Group,
   NumberInput,
   Select,
   Stack,
@@ -14,21 +13,17 @@ import {
 } from "@mantine/core";
 import { IconAlertSquareRounded, IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
-import ColorSelector from "../common/ColorSelector";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { IconType, SortType } from "./useLocalState";
 import NotificationsSection, {
   SetSoundChoices,
   SoundChoices,
 } from "../common/NotificationsSection";
-import FileSyncSection from "./FileSyncSection";
 import { GeneralCounts } from "./CastPage";
 import { GeneralItem, TCountPosition } from "./Cast";
 import GeneralOrderSelector, { TGeneralOrder } from "./GeneralOrderSelector";
 import { Font } from "@/app/font/useFont";
 import FontSelector from "@/app/font/FontSelector";
 
-import classes from "./CastSettings.module.css";
 import { SyncedTimerState } from "../common/useSyncedTimer";
 import TimerSection from "../common/TimerSection";
 import { useShouldShortenContext } from "@/app/settings/ShouldShortenContext";
@@ -42,10 +37,6 @@ import MembersSection from "../common/MembersSection";
 
 type Props = {
   gameId: number;
-  leftColor: BingosyncColor;
-  rightColor: BingosyncColor;
-  setLeftColor: (newColor: BingosyncColor) => unknown;
-  setRightColor: (newColor: BingosyncColor) => unknown;
   shownDifficulties: ReadonlyArray<Difficulty>;
   setShownDifficulties: (newShown: ReadonlyArray<Difficulty>) => unknown;
   sortType: SortType;
@@ -56,8 +47,6 @@ type Props = {
   setHideByDefault: (newHideByDefault: boolean) => unknown;
   soundChoices: SoundChoices;
   setSoundChoices: SetSoundChoices;
-  leftScore: number;
-  rightScore: number;
   generalCounts: GeneralCounts;
   generalGoals: ReadonlyArray<GeneralItem>;
   showGameSelector: boolean;
@@ -87,10 +76,6 @@ type Props = {
 
 export default function CastSettings({
   gameId,
-  leftColor,
-  rightColor,
-  setLeftColor,
-  setRightColor,
   shownDifficulties,
   setShownDifficulties,
   sortType,
@@ -101,8 +86,6 @@ export default function CastSettings({
   setHideByDefault,
   soundChoices,
   setSoundChoices,
-  leftScore,
-  rightScore,
   generalCounts,
   generalGoals,
   showGameSelector,
@@ -129,7 +112,7 @@ export default function CastSettings({
   players,
   casters,
 }: Props) {
-  const [isShown, setIsShown] = useState(leftColor === rightColor);
+  const [isShown, setIsShown] = useState(false);
   const { shouldShortenCast, setShouldShortenCast } = useShouldShortenContext();
   const { shouldShowRecentCast, setShouldShowRecentCast } =
     useShouldShowRecentContext();
@@ -164,67 +147,8 @@ export default function CastSettings({
                 players={players}
                 casters={casters}
                 isMobile={false}
+                isCast={true}
               />
-              <Accordion.Item value="color">
-                <Accordion.Control>Select Colors</Accordion.Control>
-                <Accordion.Panel>
-                  <ColorSelector
-                    label="Left player color"
-                    color={leftColor}
-                    setColor={setLeftColor}
-                  />
-                  <ColorSelector
-                    label="Right player color"
-                    color={rightColor}
-                    setColor={setRightColor}
-                  />
-                  {((leftColor === "pink" && rightColor === "blue") ||
-                    (leftColor === "blue" && rightColor === "pink")) && (
-                    <Group mt={8} gap={4}>
-                      <img
-                        className={classes.emoji}
-                        src="/transflag.svg"
-                        alt="trans flag"
-                      />
-                      <img
-                        className={classes.emoji}
-                        src="/transflag.svg"
-                        alt="trans flag"
-                      />
-                      <img
-                        className={classes.emoji}
-                        src="/transflag.svg"
-                        alt="trans flag"
-                      />
-                      <img
-                        className={classes.emoji}
-                        src="/transflag.svg"
-                        alt="trans flag"
-                      />
-                      <img
-                        className={classes.emoji}
-                        src="/transflag.svg"
-                        alt="trans flag"
-                      />
-                      <img
-                        className={classes.emoji}
-                        src="/transflag.svg"
-                        alt="trans flag"
-                      />
-                      <img
-                        className={classes.emoji}
-                        src="/transflag.svg"
-                        alt="trans flag"
-                      />
-                      <img
-                        className={classes.emoji}
-                        src="/transflag.svg"
-                        alt="trans flag"
-                      />
-                    </Group>
-                  )}
-                </Accordion.Panel>
-              </Accordion.Item>
               <TimerSection
                 gameId={gameId}
                 timerState={timerState}
@@ -381,8 +305,9 @@ export default function CastSettings({
               />
               <AutoGameSection
                 numPlayers={numPlayers}
-                leftColor={leftColor}
-                rightColor={rightColor}
+                // TODO: Fix autodetection
+                leftColor="red"
+                rightColor="red"
                 allPlayerGames={allPlayerGames}
                 addGame={addGame}
                 isDetecting={isDetecting}
@@ -391,12 +316,6 @@ export default function CastSettings({
                 generalCounts={generalCounts}
                 gameToGoals={gameToGoals}
                 setGeneralGameCount={setGeneralGameCount}
-              />
-              <FileSyncSection
-                leftScore={leftScore}
-                rightScore={rightScore}
-                generalCounts={generalCounts}
-                generalGoals={generalGoals}
               />
             </Accordion>
             {/* TODO: Add disconnect? */}

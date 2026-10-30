@@ -529,30 +529,33 @@ export default function Cast({
         {showGameSelector ? (
           <Stack gap={8}>
             <Group wrap="wrap" w={268} gap={8} justify="space-between">
-              {players.map((player) => (
-                <Tooltip key={player.userId} label={player.name}>
-                  <div>
-                    <GameSelector
-                      color={player.color}
-                      game={
-                        allPlayerGames.get(player.userId)?.[0]?.game ?? null
-                      }
-                      onChange={async (newGame: ProperGame | null) => {
-                        const subcategoryId =
-                          subcategories.find((sc) => sc.name === newGame)
-                            ?.subcategoryId ?? null;
-                        await addCurrentSubcategory({
-                          gameId,
-                          userId: player.userId,
-                          subcategoryId,
-                        });
-                      }}
-                      terminalCodes={terminalCodes}
-                      gameList={gameList}
-                    />
-                  </div>
-                </Tooltip>
-              ))}
+              {players.map((player) => {
+                const playerGames = allPlayerGames.get(player.userId);
+                return (
+                  <Tooltip key={player.userId} label={player.name}>
+                    <div>
+                      <GameSelector
+                        color={player.color}
+                        game={
+                          playerGames?.[playerGames.length - 1]?.game ?? null
+                        }
+                        onChange={async (newGame: ProperGame | null) => {
+                          const subcategoryId =
+                            subcategories.find((sc) => sc.name === newGame)
+                              ?.subcategoryId ?? null;
+                          await addCurrentSubcategory({
+                            gameId,
+                            userId: player.userId,
+                            subcategoryId,
+                          });
+                        }}
+                        terminalCodes={terminalCodes}
+                        gameList={gameList}
+                      />
+                    </div>
+                  </Tooltip>
+                );
+              })}
             </Group>
             {generalGoals.length > 0 ? (
               getCard(sortedGenerals[0], 475 - gameSelectorHeight)

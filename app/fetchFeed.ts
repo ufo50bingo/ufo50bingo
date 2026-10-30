@@ -60,13 +60,20 @@ export type FeedCurrentSubcategory = {
   subcategoryId: null | number;
 };
 
+export type FeedPlayerOrder = {
+  type: "player_order";
+  time: number;
+  orderedIds: ReadonlyArray<number>;
+};
+
 export type NewFeedItem =
   | FeedColorMark
   | FeedChat
   | FeedTimerEvent
   | FeedMember
   | FeedGoalProgress
-  | FeedCurrentSubcategory;
+  | FeedCurrentSubcategory
+  | FeedPlayerOrder;
 
 export type NewFeed = ReadonlyArray<NewFeedItem>;
 
@@ -229,6 +236,26 @@ export function parseCurrentSubcategoryResult(
   }));
 }
 
+export function fetchPlayerOrderSql(sql: SQLTemplate, gameId: number): SQL {
+  return sql`
+    SELECT
+      EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
+      ordered_ids
+    FROM player_order
+    WHERE game_id = ${gameId}
+  `;
+}
+
+export function parsePlayerOrderResult(
+  result: SQLResult,
+): Array<FeedPlayerOrder> {
+  return result.map((raw) => ({
+    type: "player_order",
+    time: Number(raw.unixtime),
+    orderedIds: raw.ordered_ids,
+  }));
+}
+
 function fetchSquaresSql(sql: SQLTemplate, gameId: number): SQL {
   return sql`
     SELECT
@@ -312,6 +339,7 @@ export async function fetchData(
     feedFetchPairs = feedFetchPairs.concat([
       [fetchGoalProgressSql(sql, gameId), parseGoalProgressResult],
       [fetchCurrentSubcategorySql(sql, gameId), parseCurrentSubcategoryResult],
+      [fetchPlayerOrderSql(sql, gameId), parsePlayerOrderResult],
     ]);
   }
   const results = await sql.transaction([

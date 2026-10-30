@@ -388,6 +388,16 @@ export default function Cast({
       (timerState.type === "countdown" &&
         !timerState.wasPaused &&
         !timerState.isForceRevealed));
+
+  const addSubcategoryName = async (userId: number, newGame: string | null) => {
+    const subcategoryId =
+      subcategories.find((sc) => sc.name === newGame)?.subcategoryId ?? null;
+    await addCurrentSubcategory({
+      gameId,
+      userId,
+      subcategoryId,
+    });
+  };
   return (
     <RightClickBehaviorContext.Provider value={rightClickBehaviorContextValue}>
       <Group align="start">
@@ -539,16 +549,9 @@ export default function Cast({
                         game={
                           playerGames?.[playerGames.length - 1]?.game ?? null
                         }
-                        onChange={async (newGame: ProperGame | null) => {
-                          const subcategoryId =
-                            subcategories.find((sc) => sc.name === newGame)
-                              ?.subcategoryId ?? null;
-                          await addCurrentSubcategory({
-                            gameId,
-                            userId: player.userId,
-                            subcategoryId,
-                          });
-                        }}
+                        onChange={async (newGame: ProperGame | null) =>
+                          await addSubcategoryName(player.userId, newGame)
+                        }
                         terminalCodes={terminalCodes}
                         gameList={gameList}
                       />
@@ -625,8 +628,7 @@ export default function Cast({
         numPlayers={numPlayers}
         setNumPlayers={setNumPlayers}
         allPlayerGames={allPlayerGames}
-        // TODO: add server actions
-        addGame={() => {}}
+        addSubcategoryName={addSubcategoryName}
         isDetecting={isDetecting}
         setIsDetecting={setIsDetecting}
         gameToGoals={gameToGoals}

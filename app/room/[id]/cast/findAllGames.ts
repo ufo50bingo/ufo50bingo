@@ -1,9 +1,4 @@
-import {
-  Game,
-  GAME_NAMES,
-  ORDERED_PROPER_GAMES,
-  ProperGame,
-} from "@/app/goals";
+import { GAME_NAMES, ProperGame } from "@/app/goals";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import findGoal from "@/app/findGoal";
 import { SPICY_UFO } from "@/app/pastas/spicyUfo";

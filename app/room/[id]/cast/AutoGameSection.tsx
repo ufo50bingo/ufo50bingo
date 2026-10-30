@@ -29,7 +29,6 @@ import { GameDetection, RewardIconDetection } from "./gamedetector/detector";
 import { RewardIconResult } from "./gamedetector/rewardIcon/detect";
 import { RewardIcon } from "./gamedetector/rewardIcon/model";
 import { FrameResult } from "./gamedetector/types";
-import getGamesForPlayer from "./getGamesForPlayer";
 import { AllPlayerGames, CountChange } from "./useSyncedState";
 import { GeneralItem } from "./Cast";
 import { GeneralCounts } from "./CastPage";
@@ -106,14 +105,15 @@ export default function AutoGameSection({
   );
   const isDetectionButtonDisabled = !isDetecting && allRegions.length === 0;
 
-
   const setRegions = (
     captureId: string,
     newRegions: ReadonlyArray<CaptureRegion>,
   ) =>
     setCaptures((oldCaptures) =>
       oldCaptures.map((capture) =>
-        capture.id === captureId ? { ...capture, regions: newRegions } : capture,
+        capture.id === captureId
+          ? { ...capture, regions: newRegions }
+          : capture,
       ),
     );
 
@@ -305,10 +305,21 @@ export default function AutoGameSection({
       <Accordion.Panel>
         <Stack>
           <Alert>
-            Share your Discord window, then choose regions displaying each player's stream.
+            Share your Discord window, then choose regions displaying each
+            player's stream.
             <List>
-              <List.Item><Text size="sm">If you are popping out the streams, add a capture for each popout, and add one region per capture.</Text></List.Item>
-              <List.Item><Text size="sm">If you are not popping out the streams, add a single capture of Discord, then add a region for each player.</Text></List.Item>
+              <List.Item>
+                <Text size="sm">
+                  If you are popping out the streams, add a capture for each
+                  popout, and add one region per capture.
+                </Text>
+              </List.Item>
+              <List.Item>
+                <Text size="sm">
+                  If you are not popping out the streams, add a single capture
+                  of Discord, then add a region for each player.
+                </Text>
+              </List.Item>
             </List>
           </Alert>
           {captures.map((capture, index) => (
@@ -381,9 +392,7 @@ export default function AutoGameSection({
           <Button leftSection={<IconPlus size={16} />} onClick={addCapture}>
             Add capture
           </Button>
-          <Tooltip
-            label="Detection will also be enabled automatically when starting the match if at least one region is selected"
-          >
+          <Tooltip label="Detection will also be enabled automatically when starting the match if at least one region is selected">
             <Button
               disabled={isDetectionButtonDisabled}
               onClick={() => {

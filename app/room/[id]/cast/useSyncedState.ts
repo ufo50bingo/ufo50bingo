@@ -1,9 +1,5 @@
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
-import { useEffect, useMemo, useRef, useState } from "react";
-import getSupabaseClient from "./getSupabaseClient";
 import { GeneralCounts } from "./CastPage";
-import getGamesForPlayer from "./getGamesForPlayer";
-import { useServerOffsetContext } from "../ServerOffsetContext";
 
 // IMPORTANT: Must update useFullGeneralState parser if this changes
 export type CountState = { [userId: number]: PlayerCountState };
@@ -56,11 +52,7 @@ interface CurrentGameRow extends CurrentGameSync {
   room_id: string;
 }
 
-// null | undefined is here because we sometimes update later indices before we
-// define earlier indices
-export type AllPlayerGames = ReadonlyArray<
-  null | undefined | ReadonlyArray<CurrentGame>
->;
+export type AllPlayerGames = Map<number, ReadonlyArray<CurrentGame>>;
 
 // type SyncedState = {
 //   leftColor: BingosyncColor;

@@ -34,12 +34,15 @@ export default function PlayedGame({
         <span className={getFontClassname(font)}>
           {endTime == null ? (
             <RunningDuration
-              curStartTime={getClientMsFromServerMs(startTime)}
+              curStartTime={getClientMsFromServerMs(startTime * 1000)}
               accumulatedDuration={0}
               showDecimal={false}
             />
           ) : (
-            <Duration duration={endTime - startTime} showDecimal={false} />
+            <Duration
+              duration={(endTime - startTime) * 1000}
+              showDecimal={false}
+            />
           )}
         </span>
       </div>

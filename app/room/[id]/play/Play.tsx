@@ -383,6 +383,7 @@ export default function Play({
           feed={feed}
           userId={userId}
           members={allMembers}
+          players={players}
           squareNames={squareNames}
           isPlay={true}
           style={{

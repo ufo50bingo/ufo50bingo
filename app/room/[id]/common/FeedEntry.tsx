@@ -2,6 +2,8 @@ import BingosyncColored from "@/app/matches/BingosyncColored";
 import classes from "./FeedEntry.module.css";
 import { NewFeedItem } from "@/app/fetchFeed";
 import { GenericMember } from "./useMembers";
+import { IconEyeOff } from "@tabler/icons-react";
+import { Stack, Tooltip } from "@mantine/core";
 
 type Props = {
   entry: NewFeedItem;
@@ -32,6 +34,23 @@ export default function FeedEntry({ entry, squareNames, members }: Props) {
           {timestamp} {coloredPlayer}
           <span className={classes.defaultColor}>: </span>
           <BingosyncColored color="blank">{entry.message}</BingosyncColored>
+          {entry.visibleToPlayers != null ? (
+            <Tooltip
+              label={
+                <Stack gap={0}>
+                  <div>Visible to players:</div>
+                  {entry.visibleToPlayers.map((visibleId) => {
+                    const member = members.get(visibleId);
+                    const name =
+                      member?.overrideName ?? member?.name ?? visibleId;
+                    return <span key={visibleId}>{name}</span>;
+                  })}
+                </Stack>
+              }
+            >
+              <IconEyeOff size={12} style={{ marginLeft: "4px" }} />
+            </Tooltip>
+          ) : null}
         </span>
       );
     case "color_mark":

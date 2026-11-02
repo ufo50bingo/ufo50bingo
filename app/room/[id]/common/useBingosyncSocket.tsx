@@ -2,17 +2,20 @@ import { useState, useEffect, useRef, ReactNode, useCallback } from "react";
 import { Modal, Stack, Group, Button } from "@mantine/core";
 import { SoundChoices } from "./NotificationsSection";
 import { NewFeed, NewFeedItem } from "@/app/fetchFeed";
+import persistEvent from "./persistEvent";
 
 type Props = {
   gameId: number;
   initialFeed: NewFeed;
   userId: number;
   playAudio: (soundType: keyof SoundChoices) => void;
+  token: string;
 };
 
 type Response = {
   feed: NewFeed;
   reconnectModal: null | undefined | ReactNode;
+  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
 };
 
 export default function useBingosyncSocket({
@@ -20,10 +23,12 @@ export default function useBingosyncSocket({
   initialFeed,
   userId,
   playAudio,
+  token,
 }: Props): Response {
   const [feed, setFeed] = useState(initialFeed);
   const [shouldReconnect, setShouldReconnect] = useState(false);
   const socketRef = useRef<null | WebSocket>(null);
+  const authenticatedRef = useRef(false);
 
   const playAudioRef = useRef(playAudio);
   // eslint-disable-next-line react-hooks/refs
@@ -48,12 +53,55 @@ export default function useBingosyncSocket({
     [userId],
   );
 
+  const addItem = useCallback((newItem: NewFeedItem) => {
+    setFeed((prevFeed: NewFeed) => {
+      // TODO: Check for dupes?
+      const newFeed = [...prevFeed];
+      newFeed.push(newItem);
+      newFeed.sort((a, b) => a.time - b.time);
+      return newFeed;
+    });
+  }, []);
+
+  const sendEvent = useCallback(
+    async (event: NewFeedItem): Promise<boolean> => {
+      const socket = socketRef.current;
+      if (
+        socket == null ||
+        socket.readyState !== WebSocket.OPEN ||
+        !authenticatedRef.current
+      ) {
+        return false;
+      }
+
+      addItem(event);
+
+      socket.send(
+        JSON.stringify({
+          type: "event",
+          message: JSON.stringify(event),
+        }),
+      );
+
+      await persistEvent(gameId, token, event);
+      return true;
+    },
+    [addItem, gameId, token],
+  );
+
   useEffect(() => {
     const socket = new WebSocket(
       `wss://ufo50bingo-websocket.frankthompson-cd2.workers.dev/room/${gameId}`,
     );
+    authenticatedRef.current = false;
 
     socket.onopen = () => {
+      socket.send(
+        JSON.stringify({
+          type: "authenticate",
+          token,
+        }),
+      );
       setShouldReconnect(false);
     };
 
@@ -70,14 +118,13 @@ export default function useBingosyncSocket({
     };
 
     socket.onmessage = async (evt) => {
-      const rawItem: NewFeedItem = JSON.parse(evt.data);
-      setFeed((prevFeed: NewFeed) => {
-        // TODO: Check for dupes?
-        const newFeed = [...prevFeed];
-        newFeed.push(rawItem);
-        newFeed.sort((a, b) => a.time - b.time);
-        return newFeed;
-      });
+      const data = JSON.parse(evt.data);
+      if (data.type === "authenticated") {
+        authenticatedRef.current = true;
+        return;
+      }
+      const rawItem: NewFeedItem = data;
+      addItem(rawItem);
       onMessage(rawItem);
     };
 
@@ -86,11 +133,13 @@ export default function useBingosyncSocket({
     return () => {
       socket.close();
       socketRef.current = null;
+      authenticatedRef.current = false;
     };
-  }, [onMessage, gameId]);
+  }, [onMessage, gameId, token, addItem]);
 
   return {
     feed,
+    sendEvent,
     reconnectModal: shouldReconnect && (
       <Modal
         fullScreen={false}

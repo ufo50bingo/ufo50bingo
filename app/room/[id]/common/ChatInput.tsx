@@ -8,17 +8,19 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useState } from "react";
-import sendChat from "./sendChat";
-import { useParams } from "next/navigation";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import { PlayerMember } from "./useMembers";
+import { FeedChat, NewFeedItem } from "@/app/fetchFeed";
+import { useServerOffsetContext } from "../ServerOffsetContext";
 
 type Props = {
   userId: number;
   players: ReadonlyArray<PlayerMember>;
+  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
 };
 
-export default function ChatInput({ userId, players }: Props) {
+export default function ChatInput({ userId, players, sendEvent }: Props) {
+  const { getServerMsFromClientMs } = useServerOffsetContext();
   const [text, setText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -26,14 +28,18 @@ export default function ChatInput({ userId, players }: Props) {
   const [visibleToIds, setVisibleToIds] =
     useState<null | ReadonlyArray<number>>(null);
 
-  const params = useParams<{ id: string }>();
-  const gameId = Number(params.id);
-
   const submit = async () => {
     if (text !== "" && !isSubmitting) {
       setIsSubmitting(true);
       try {
-        await sendChat(gameId, text, visibleToIds);
+        const event: FeedChat = {
+          type: "chat",
+          userId,
+          time: getServerMsFromClientMs(Date.now()) / 1000,
+          message: text,
+          visibleToPlayers: visibleToIds,
+        };
+        await sendEvent(event);
       } finally {
         setIsSubmitting(false);
       }

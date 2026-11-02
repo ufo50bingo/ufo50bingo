@@ -8,6 +8,7 @@ import { UFOPasta } from "./generator/ufoGenerator";
 import getAllSubcategories from "./createboard/getAllSubcategories";
 import getNonGeneralCategories from "./createboard/getNonGeneralCategories";
 import joinValues from "./joinValues";
+import { getMatchingRepoPasta } from "./getMatchingRepoPasta";
 
 export type FeedColorMark = {
   type: "color_mark";
@@ -283,11 +284,13 @@ function fetchGameSql(sql: SQLTemplate, gameId: number): SQL {
 }
 
 type ParsedGame = {
-  pastaId: bigint;
+  pastaId: bigint | null;
 };
 
 function parseGame(result: SQLResult): ParsedGame {
-  return { pastaId: BigInt(result[0].pasta_id) };
+  const pastaIdRaw = result[0].pasta_id;
+  const pastaId = pastaIdRaw == null ? null : BigInt(pastaIdRaw);
+  return { pastaId };
 }
 
 function fetchSubcategoriesSql(sql: SQLTemplate, pasta: UFOPasta): SQL {
@@ -326,7 +329,8 @@ export async function fetchData(
 ): Promise<{
   squares: ReadonlyArray<SquareWithId>;
   feed: NewFeed;
-  pasta: null | UFOPasta;
+  pastaId: null | bigint;
+  fetchedPasta: null | UFOPasta;
   subcategories: ReadonlyArray<ParsedSubcategory>;
 }> {
   const sql = getSql(false);
@@ -356,10 +360,15 @@ export async function fetchData(
 
   const squares = parseSquares(otherResults[0]);
   const { pastaId } = parseGame(otherResults[1]);
-  const pasta = await fetchPasta(pastaId);
+  let fetchedPasta: null | UFOPasta = null;
+  const repoPasta = pastaId == null ? null : getMatchingRepoPasta(pastaId);
+  if (repoPasta == null && pastaId != null) {
+    fetchedPasta = await fetchPasta(pastaId);
+  }
+  const pasta = fetchedPasta ?? repoPasta;
   let subcategories: ReadonlyArray<ParsedSubcategory> = [];
   if (pasta != null && !isPlay) {
     subcategories = parseSubcategories(await fetchSubcategoriesSql(sql, pasta));
   }
-  return { squares, feed, pasta, subcategories };
+  return { squares, feed, fetchedPasta, pastaId, subcategories };
 }

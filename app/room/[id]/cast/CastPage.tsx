@@ -21,7 +21,8 @@ export default async function CastPage({ gameId, userId, memberFeed }: Props) {
       gameId={gameId}
       initialFeed={data.feed}
       squares={data.squares}
-      pasta={data.pasta}
+      fetchedPasta={data.fetchedPasta}
+      pastaId={data.pastaId}
       subcategories={data.subcategories}
       userId={userId}
       token={token}

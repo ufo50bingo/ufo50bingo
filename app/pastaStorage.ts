@@ -1,23 +1,11 @@
 import { files } from "./files";
-import { xxh64 } from "@node-rs/xxhash";
 import { UFOPasta } from "./generator/ufoGenerator";
 import { brotliCompress, brotliDecompress } from "node:zlib";
 import { promisify } from "node:util";
-import { STANDARD_UFO } from "./pastas/standardUfo";
-import { SPICY_UFO } from "./pastas/spicyUfo";
-import { NES_50_UFO } from "./pastas/nes50Ufo";
-import { EVERY_GAME_UFO } from "./pastas/everyGameUfo";
 import validateStr from "./generator/validateStr";
 
 const compress = promisify(brotliCompress);
 const decompress = promisify(brotliDecompress);
-
-const HASHES: Array<[UFOPasta, null | bigint]> = [
-  [STANDARD_UFO, null],
-  [SPICY_UFO, null],
-  [NES_50_UFO, null],
-  [EVERY_GAME_UFO, null],
-];
 
 function getFilename(hash: bigint): string {
   return "pasta" + hash.toString() + ".json.br";
@@ -25,10 +13,6 @@ function getFilename(hash: bigint): string {
 
 async function isStored(hash: bigint): Promise<boolean> {
   return await files.exists(getFilename(hash));
-}
-
-export function hashJson(json: string): bigint {
-  return BigInt.asIntN(64, xxh64(json));
 }
 
 export async function storePasta(json: string, hash: bigint): Promise<void> {
@@ -43,14 +27,6 @@ export async function storePasta(json: string, hash: bigint): Promise<void> {
 }
 
 export async function fetchPasta(hash: bigint): Promise<null | UFOPasta> {
-  for (const pair of HASHES) {
-    if (pair[1] == null) {
-      pair[1] = hashJson(JSON.stringify(pair[0]));
-    }
-    if (pair[1] === hash) {
-      return pair[0];
-    }
-  }
   try {
     const storedFile = await files.download(getFilename(hash));
     const buffer = await storedFile.arrayBuffer();

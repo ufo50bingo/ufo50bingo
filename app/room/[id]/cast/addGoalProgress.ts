@@ -48,6 +48,6 @@ export default async function addGoalProgress({
         ${subcategoryId},
         ${count}
     )`,
-    broadcastToWebsockets(String(gameId), JSON.stringify(feedItem)),
+    broadcastToWebsockets(gameId, JSON.stringify(feedItem)),
   ]);
 }

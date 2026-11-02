@@ -32,6 +32,13 @@ type Props = {
   visible: boolean;
 };
 
+const PLAYOFF_WEEKS = [
+  "Quarterfinals",
+  "Semifinals",
+  "Championship",
+  "Third Place",
+];
+
 export default function LeagueMatch({ visible }: Props) {
   const [week, setWeek] = useState<null | string>(getCurrentWeek());
   const [p1, setP1Raw] = useState<null | string>(null);
@@ -48,6 +55,18 @@ export default function LeagueMatch({ visible }: Props) {
   const p1Tier = p1 != null ? PLAYER_TO_TIER[p1] : null;
   const p2Tier = p2 != null ? PLAYER_TO_TIER[p2] : null;
 
+  const shouldHaveMultipleGames = (tier: string, week: string | null) => {
+    if (tier === "A1") {
+      return true;
+    } else if (tier === "A2") {
+      return PLAYOFF_WEEKS.includes(week ?? "");
+    } else if (tier === "B1" || tier === "B2") {
+      return week === "Championship";
+    } else {
+      return false;
+    }
+  }
+
   const updateGameNumberIfNecessary = (
     newP1: null | string,
     newP2: null | string,
@@ -56,9 +75,10 @@ export default function LeagueMatch({ visible }: Props) {
       const newP1Tier = PLAYER_TO_TIER[newP1];
       const newP2Tier = PLAYER_TO_TIER[newP2];
       if (newP1Tier === newP2Tier) {
-        if (newP1Tier === "A1" && gameNumber == null) {
+        const shouldHaveMultiple = shouldHaveMultipleGames(newP1Tier, week);
+        if (shouldHaveMultiple && gameNumber == null) {
           setGameNumber(1);
-        } else if (newP1Tier !== "A1" && gameNumber != null) {
+        } else if (!shouldHaveMultiple && gameNumber != null) {
           setGameNumber(null);
         }
       }
@@ -118,24 +138,20 @@ export default function LeagueMatch({ visible }: Props) {
           }
           label="Is part of multi-game series"
         />
-        {gameNumber == null && p1Tier === "A1" && p2Tier === "A1" && (
+        {p1Tier != null && p1Tier === p2Tier && shouldHaveMultipleGames(p1Tier, week) && gameNumber == null && (
           <Alert variant="light" color="yellow">
-            A1 tier players are expected to play a 2-game series every week.
+            In {week}, {p1Tier} players are expected to play a multi-game series.
             Please select "Is part of multi-game series" unless you have special
             circumstances.
           </Alert>
         )}
-        {gameNumber != null &&
-          p1Tier !== "A1" &&
-          p2Tier !== "A1" &&
-          p1Tier != null &&
-          p2Tier != null && (
-            <Alert variant="light" color="yellow">
-              Only A1 tier players are expected to play a multi-game series.
-              Please deselect "Is part of multi-game series" unless you have
-              special circumstances.
-            </Alert>
-          )}
+        {p1Tier != null && p1Tier === p2Tier && !shouldHaveMultipleGames(p1Tier, week) && gameNumber != null && (
+          <Alert variant="light" color="yellow">
+            {p1Tier} players are not expected to play a multi-game series in {week}.
+            Please deselect "Is part of multi-game series" unless you have
+            special circumstances.
+          </Alert>
+        )}
         {gameNumber != null && (
           <NumberInput
             label="Game number"

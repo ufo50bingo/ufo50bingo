@@ -21,6 +21,7 @@ import { NES_50_UFO } from "./pastas/nes50Ufo";
 import { EVERY_GAME_UFO } from "./pastas/everyGameUfo";
 import { useShouldShowRecentContext } from "./settings/ShouldShowRecentContext";
 import HeldHandIcon from "./HeldHandIcon";
+import { UFOPasta } from "./generator/ufoGenerator";
 
 type Props = {
   board: TBoard;
@@ -32,6 +33,7 @@ type Props = {
   boardCover: ReactNode;
   isPlay?: boolean;
   castInfo?: { leftColor: BingosyncColor; rightColor: BingosyncColor };
+  pasta?: null | UFOPasta;
 };
 
 function getColorClass(color: string): string {
@@ -145,6 +147,7 @@ export default function Board({
   viewerColor,
   boardCover,
   castInfo,
+  pasta,
   isPlay = false,
 }: Props) {
   const { rightClickBehavior } = useRightClickBehaviorContext();
@@ -202,7 +205,7 @@ export default function Board({
       }
       const behavior =
         rightClickBehavior[
-        Math.min(rightClickBehavior.length - 1, behaviorIndex)
+          Math.min(rightClickBehavior.length - 1, behaviorIndex)
         ];
       if (behavior.type === "custom_color") {
         newHighlights[squareIndex] = [behavior.color];
@@ -217,10 +220,12 @@ export default function Board({
     <div className={classes.boardContainer}>
       {board.map((square, squareIndex) => {
         const foundGoal =
-          findGoal(square.name, STANDARD_UFO) ??
-          findGoal(square.name, SPICY_UFO) ??
-          findGoal(square.name, NES_50_UFO) ??
-          findGoal(square.name, EVERY_GAME_UFO);
+          pasta != null
+            ? findGoal(square.name, pasta)
+            : (findGoal(square.name, STANDARD_UFO) ??
+              findGoal(square.name, SPICY_UFO) ??
+              findGoal(square.name, NES_50_UFO) ??
+              findGoal(square.name, EVERY_GAME_UFO));
         const displayGoal = shouldShorten
           ? (foundGoal?.short?.resolved ?? square.name)
           : square.name;
@@ -229,8 +234,8 @@ export default function Board({
           rightClickCount == null
             ? false
             : rightClickBehavior[
-              Math.min(rightClickBehavior.length - 1, rightClickCount)
-            ].type === "star";
+                Math.min(rightClickBehavior.length - 1, rightClickCount)
+              ].type === "star";
         let heldColor: BingosyncColor | null = null;
         if (
           castInfo != null &&
@@ -283,7 +288,9 @@ export default function Board({
             {isStarred && <div className={classes.starred} />}
             {heldColor != null && (
               <>
-                <div className={`${classes.held} ${getColorClass(heldColor)}`} />
+                <div
+                  className={`${classes.held} ${getColorClass(heldColor)}`}
+                />
                 <HeldHandIcon color={heldColor} className={classes.hand} />
               </>
             )}

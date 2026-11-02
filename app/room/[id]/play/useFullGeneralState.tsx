@@ -30,7 +30,7 @@ export default function useFullGeneralState(
         return newGenerals;
       });
     },
-    [key],
+    [key, userId],
   );
 
   // clear data on key change

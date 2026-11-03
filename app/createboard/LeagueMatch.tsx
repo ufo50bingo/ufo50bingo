@@ -25,8 +25,7 @@ import {
 import Link from "next/link";
 import { STANDARD_UFO } from "../pastas/standardUfo";
 import ufoGenerator from "../generator/ufoGenerator";
-import { getRoomLink, RoomBackend } from "../roomApi";
-import ExtraOptions from "./ExtraOptions";
+import { getRoomLink } from "../roomApi";
 
 type Props = {
   visible: boolean;
@@ -42,7 +41,6 @@ export default function LeagueMatch({ visible }: Props) {
   const [id, setId] = useState<null | string>(null);
   const [error, setError] = useState<Error | null>(null);
   const [gameNumber, setGameNumber] = useState<null | number>(null);
-  const [roomBackend, setRoomBackend] = useState<RoomBackend>("bingosync");
   const [isExtraShown, setIsExtraShown] = useState<boolean>(false);
 
   const p1Tier = p1 != null ? PLAYER_TO_TIER[p1] : null;
@@ -153,12 +151,6 @@ export default function LeagueMatch({ visible }: Props) {
           value={password}
           onChange={(event) => setPassword(event.currentTarget.value)}
         />
-        <ExtraOptions
-          isExtraShown={isExtraShown}
-          setIsExtraShown={setIsExtraShown}
-          roomBackend={roomBackend}
-          setRoomBackend={setRoomBackend}
-        />
         <Button
           mt="md"
           disabled={
@@ -189,7 +181,6 @@ export default function LeagueMatch({ visible }: Props) {
                 password,
                 isPublic: true,
                 variant: "Standard",
-                bingosyncVariant: "18",
                 isCustom: false,
                 isDraft: false,
                 isLockout: true,
@@ -202,10 +193,9 @@ export default function LeagueMatch({ visible }: Props) {
                   tier: p1Tier,
                   game: gameNumber,
                 },
-                roomBackend,
                 fullPasta: null,
               });
-              const url = getRoomLink(id, password, roomBackend);
+              const url = getRoomLink(id, password);
               db.createdMatches.add({ id });
               setError(null);
               setUrl(url);

@@ -31,9 +31,14 @@ import AutoGameSection from "./AutoGameSection";
 import { AllPlayerGames, CountChange } from "./useSyncedState";
 import { GameToGoals } from "./findAllGames";
 import SelectRightClickBehavior from "@/app/settings/SelectRightClickBehavior";
-import { CasterMember, PlayerMember } from "../common/useMembers";
+import {
+  CasterMember,
+  GenericMember,
+  PlayerMember,
+} from "../common/useMembers";
 import CasterMembersSection from "../common/CasterMembersSection";
 import { NewFeedItem } from "@/app/fetchFeed";
+import BottomSection from "../common/BottomSection";
 
 type Props = {
   userId: number;
@@ -71,6 +76,7 @@ type Props = {
   players: ReadonlyArray<PlayerMember>;
   casters: ReadonlyArray<CasterMember>;
   sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
+  members: ReadonlyMap<number, GenericMember>;
 };
 
 export default function CastSettings({
@@ -109,6 +115,7 @@ export default function CastSettings({
   players,
   casters,
   sendEvent,
+  members,
 }: Props) {
   const [isShown, setIsShown] = useState(false);
   const { shouldShortenCast, setShouldShortenCast } = useShouldShortenContext();
@@ -294,7 +301,13 @@ export default function CastSettings({
                 players={players}
               />
             </Accordion>
-            {/* TODO: Add disconnect? */}
+            <BottomSection
+              userId={userId}
+              members={members}
+              isCast={true}
+              isMobile={false}
+              sendEvent={sendEvent}
+            />
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>

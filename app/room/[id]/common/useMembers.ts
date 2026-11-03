@@ -28,6 +28,7 @@ export default function useMembers(feed: NewFeed): {
 } {
   return useMemo(() => {
     const allMembers: Map<number, GenericMember> = new Map();
+    const disconnected: Set<number> = new Set();
     let lastPlayerOrder: null | ReadonlyArray<number> = null;
     for (const item of feed) {
       if (item.type === "member") {
@@ -40,6 +41,7 @@ export default function useMembers(feed: NewFeed): {
           isInvite: item.isInvite,
           initialTime: existing?.initialTime ?? item.time,
         });
+        disconnected.delete(item.userId);
       } else if (item.type === "player_color_change") {
         const existing = allMembers.get(item.userId);
         if (existing != null && existing.color != null) {
@@ -47,9 +49,13 @@ export default function useMembers(feed: NewFeed): {
         }
       } else if (item.type === "player_order") {
         lastPlayerOrder = item.orderedIds;
+      } else if (item.type === "disconnect") {
+        disconnected.add(item.userId);
       }
     }
-    const sortedMembers = [...allMembers.values()];
+    const sortedMembers = [
+      ...allMembers.values().filter((v) => !disconnected.has(v.userId)),
+    ];
     sortedMembers.sort((a, b) => {
       if (lastPlayerOrder != null) {
         const aIdx = lastPlayerOrder.findIndex((id) => a.userId === id);

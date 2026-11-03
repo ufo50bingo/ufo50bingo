@@ -4,6 +4,7 @@ import {
   FeedChat,
   FeedColorMark,
   FeedCurrentSubcategory,
+  FeedDisconnect,
   FeedGoalProgress,
   FeedMember,
   FeedPlayerColorChange,
@@ -50,6 +51,9 @@ export default async function persistEvent(
       break;
     case "player_color_change":
       await getPlayerColorChangeSql(sql, gameId, event);
+      break;
+    case "disconnect":
+      await getDisconnectSql(sql, gameId, event);
       break;
     default:
       event satisfies never;
@@ -235,6 +239,25 @@ function getPlayerColorChangeSql(
       ${getISO(event.time)},
       ${event.userId},
       ${event.playerColor}
+    )
+  `;
+}
+
+function getDisconnectSql(
+  sql: SQLTemplate,
+  gameId: number,
+  event: FeedDisconnect,
+): SQL {
+  return sql`
+    INSERT INTO disconnect (
+      game_id,
+      time,
+      user_id
+    )
+    VALUES (
+      ${gameId},
+      ${getISO(event.time)},
+      ${event.userId}
     )
   `;
 }

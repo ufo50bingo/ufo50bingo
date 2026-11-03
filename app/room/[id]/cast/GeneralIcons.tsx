@@ -136,7 +136,8 @@ export default function GeneralIcons({
   font,
   squareColors,
 }: Props) {
-  return generalGoals.map((item) => {
+  // TODO: Support more than 5 icons when boards can be bigger
+  return generalGoals.slice(0, 5).map((item) => {
     const { goal, resolvedGoal } = item.foundGoal;
     const countState =
       playerId != null ? generalState[resolvedGoal]?.[playerId] : null;

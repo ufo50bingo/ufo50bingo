@@ -574,7 +574,7 @@ export default function NonLeagueMatch({ visible }: Props) {
             }}
             color="green"
           >
-            Create Bingosync Board
+            Create Room
             {format === "Double" &&
             (metadata.type === "UFO" ||
               (metadata.type === "Custom" && customUfo != null))

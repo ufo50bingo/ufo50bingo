@@ -51,5 +51,21 @@ export const auth = betterAuth({
       },
     },
   },
-  plugins: [anonymous(), nextCookies()],
+  plugins: [
+    anonymous({
+      generateName: (ctx) => {
+        const raw = ctx.headers?.get("x-anonymous-name");
+        if (raw == null || raw === "") {
+          return "Anonymous";
+        }
+        try {
+          const name = decodeURIComponent(raw).trim();
+          return name ?? "Anonymous";
+        } catch {
+          return "Anonymous";
+        }
+      },
+    }),
+    nextCookies(),
+  ],
 });

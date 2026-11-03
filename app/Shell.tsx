@@ -21,8 +21,7 @@ import {
 import { usePathname } from "next/navigation";
 import LinkWithVariant from "./links/LinkWithVariant";
 import PVSelector from "./PVSelector";
-import LoginButton from "./LoginButton";
-import AnonLogin from "./AnonLogin";
+import SidebarLogin from "./SidebarLogin";
 
 const LINKS = [
   {
@@ -160,8 +159,18 @@ export default function Shell({ children }: Props) {
           />
         ))}
         <PVSelector />
-        <LoginButton />
-        <AnonLogin />
+        <div
+          style={{
+            paddingTop: "8px",
+            paddingBottom: "8px",
+            paddingLeft: "12px",
+            paddingRight: "12px",
+            width: "100%",
+            marginTop: "auto",
+          }}
+        >
+          <SidebarLogin />
+        </div>
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>
       <AppShell.Footer>

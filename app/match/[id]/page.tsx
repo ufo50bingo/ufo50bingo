@@ -1,3 +1,4 @@
+import { Alert } from "@mantine/core";
 import SingleMatchWrapper from "./SingleMatchWrapper";
 import fetchMatch from "@/app/matches/fetchMatch";
 
@@ -25,10 +26,16 @@ export default async function MatchPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
-  const match = await fetchMatch(id);
-  if (match == null) {
-    return `Failed to find match with ID ${id}`;
-  }
-  return <SingleMatchWrapper match={match} />;
+  // TODO: Enable match page
+  return (
+    <Alert color="red">
+      The Match page is not yet supported on the new backend.
+    </Alert>
+  );
+  // const { id } = await params;
+  // const match = await fetchMatch(id);
+  // if (match == null) {
+  //   return `Failed to find match with ID ${id}`;
+  // }
+  // return <SingleMatchWrapper match={match} />;
 }

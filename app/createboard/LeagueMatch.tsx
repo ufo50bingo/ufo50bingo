@@ -41,7 +41,6 @@ export default function LeagueMatch({ visible }: Props) {
   const [id, setId] = useState<null | string>(null);
   const [error, setError] = useState<Error | null>(null);
   const [gameNumber, setGameNumber] = useState<null | number>(null);
-  const [isExtraShown, setIsExtraShown] = useState<boolean>(false);
 
   const p1Tier = p1 != null ? PLAYER_TO_TIER[p1] : null;
   const p2Tier = p2 != null ? PLAYER_TO_TIER[p2] : null;
@@ -79,202 +78,210 @@ export default function LeagueMatch({ visible }: Props) {
     return null;
   }
 
+  // TODO: Remove this
   return (
-    <Card.Section withBorder={true} inheritPadding={true} py="xs">
-      <Stack gap={8}>
-        <Select label="Week" data={WEEKS} value={week} onChange={setWeek} />
-        <Select
-          spellCheck={false}
-          searchable={true}
-          data={ALL_PLAYERS}
-          label="First player"
-          value={p1}
-          onChange={setP1}
-        />
-        <Select
-          spellCheck={false}
-          searchable={true}
-          data={ALL_PLAYERS}
-          label="Second player"
-          value={p2}
-          onChange={setP2}
-        />
-        {tierMismatch && (
-          <Alert
-            variant="light"
-            color="red"
-            title={`${p1} (${p1Tier}) and ${p2} (${p2Tier}) are in different tiers!`}
-          >
-            To create a League match, you must select two players in the same
-            tier.
-          </Alert>
-        )}
-        <Checkbox
-          checked={gameNumber != null}
-          onChange={(event) =>
-            event.currentTarget.checked ? setGameNumber(1) : setGameNumber(null)
-          }
-          label="Is part of multi-game series"
-        />
-        {gameNumber == null && p1Tier === "A1" && p2Tier === "A1" && (
-          <Alert variant="light" color="yellow">
-            A1 tier players are expected to play a 2-game series every week.
-            Please select "Is part of multi-game series" unless you have special
-            circumstances.
-          </Alert>
-        )}
-        {gameNumber != null &&
-          p1Tier !== "A1" &&
-          p2Tier !== "A1" &&
-          p1Tier != null &&
-          p2Tier != null && (
-            <Alert variant="light" color="yellow">
-              Only A1 tier players are expected to play a multi-game series.
-              Please deselect "Is part of multi-game series" unless you have
-              special circumstances.
-            </Alert>
-          )}
-        {gameNumber != null && (
-          <NumberInput
-            label="Game number"
-            value={gameNumber}
-            onChange={(newValue) => setGameNumber(newValue as number)}
-            min={1}
-            max={99}
-            allowNegative={false}
-            allowDecimal={false}
-          />
-        )}
-        <TextInput
-          spellCheck={false}
-          label="Choose password"
-          value={password}
-          onChange={(event) => setPassword(event.currentTarget.value)}
-        />
-        <Button
-          mt="md"
-          disabled={
-            isCreationInProgress ||
-            week == null ||
-            p1 == null ||
-            p2 == null ||
-            tierMismatch ||
-            password === ""
-          }
-          onClick={async () => {
-            setIsCreationInProgress(true);
-            try {
-              if (
-                p1 == null ||
-                p2 == null ||
-                week == null ||
-                p1Tier == null ||
-                p1Tier !== p2Tier ||
-                LEAGUE_SEASON == null
-              ) {
-                throw new Error("Unexpected null when creating match");
-              }
-              const gameSuffix =
-                gameNumber == null ? "" : `, Game ${gameNumber}`;
-              const id = await createMatch({
-                roomName: `${p1} vs ${p2}${gameSuffix}`,
-                password,
-                isPublic: true,
-                variant: "Standard",
-                isCustom: false,
-                isDraft: false,
-                isLockout: true,
-                goals: ufoGenerator(STANDARD_UFO),
-                leagueInfo: {
-                  season: LEAGUE_SEASON,
-                  p1,
-                  p2,
-                  week,
-                  tier: p1Tier,
-                  game: gameNumber,
-                },
-                fullPasta: null,
-              });
-              const url = getRoomLink(id, password);
-              db.createdMatches.add({ id });
-              setError(null);
-              setUrl(url);
-              setId(id);
-              setIsCreationInProgress(false);
-              window.open(url, "_blank");
-            } catch (err: unknown) {
-              setIsExtraShown(true);
-              setIsCreationInProgress(false);
-              setUrl("");
-              setId(null);
-              if (err instanceof Error) {
-                setError(err);
-              } else {
-                setError(new Error("unknown error!"));
-              }
-            }
-          }}
-          color="green"
-        >
-          Create Bingosync Board
-        </Button>
-        <Tooltip
-          label={
-            <>
-              Please use the Copy button only if you need to reset an existing
-              room,
-              <br />
-              e.g. if a player accidentally reveals the card early.
-            </>
-          }
-        >
-          <Button
-            onClick={() => {
-              navigator.clipboard.writeText(
-                JSON.stringify(
-                  ufoGenerator(STANDARD_UFO).map((goal) => ({ name: goal })),
-                  null,
-                  2,
-                ),
-              );
-            }}
-          >
-            Copy Pasta to Clipboard
-          </Button>
-        </Tooltip>
-        {url !== "" && (
-          <Alert
-            variant="light"
-            color="green"
-            title="Success!"
-            icon={<IconCheck />}
-          >
-            <a href={url} target="_blank">
-              Your new room is available here.
-            </a>
-            <br />
-            <Link prefetch={false} href={`/match/${id}`} target="_blank">
-              Your Match results can be viewed here.
-            </Link>
-          </Alert>
-        )}
-        {error != null && (
-          <Alert
-            variant="light"
-            color="red"
-            title="Failed to create bingo board"
-            icon={<IconExclamationMark />}
-          >
-            <Stack gap={8}>
-              <span>
-                You can select a different backend, then try to create the match
-                again.
-              </span>
-              <span>{error.message}</span>
-            </Stack>
-          </Alert>
-        )}
-      </Stack>
+    <Card.Section>
+      <Alert color="red">
+        League matches are not yet supported on the new backend.
+      </Alert>
     </Card.Section>
   );
+
+  // return (
+  //   <Card.Section withBorder={true} inheritPadding={true} py="xs">
+  //     <Stack gap={8}>
+  //       <Select label="Week" data={WEEKS} value={week} onChange={setWeek} />
+  //       <Select
+  //         spellCheck={false}
+  //         searchable={true}
+  //         data={ALL_PLAYERS}
+  //         label="First player"
+  //         value={p1}
+  //         onChange={setP1}
+  //       />
+  //       <Select
+  //         spellCheck={false}
+  //         searchable={true}
+  //         data={ALL_PLAYERS}
+  //         label="Second player"
+  //         value={p2}
+  //         onChange={setP2}
+  //       />
+  //       {tierMismatch && (
+  //         <Alert
+  //           variant="light"
+  //           color="red"
+  //           title={`${p1} (${p1Tier}) and ${p2} (${p2Tier}) are in different tiers!`}
+  //         >
+  //           To create a League match, you must select two players in the same
+  //           tier.
+  //         </Alert>
+  //       )}
+  //       <Checkbox
+  //         checked={gameNumber != null}
+  //         onChange={(event) =>
+  //           event.currentTarget.checked ? setGameNumber(1) : setGameNumber(null)
+  //         }
+  //         label="Is part of multi-game series"
+  //       />
+  //       {gameNumber == null && p1Tier === "A1" && p2Tier === "A1" && (
+  //         <Alert variant="light" color="yellow">
+  //           A1 tier players are expected to play a 2-game series every week.
+  //           Please select "Is part of multi-game series" unless you have special
+  //           circumstances.
+  //         </Alert>
+  //       )}
+  //       {gameNumber != null &&
+  //         p1Tier !== "A1" &&
+  //         p2Tier !== "A1" &&
+  //         p1Tier != null &&
+  //         p2Tier != null && (
+  //           <Alert variant="light" color="yellow">
+  //             Only A1 tier players are expected to play a multi-game series.
+  //             Please deselect "Is part of multi-game series" unless you have
+  //             special circumstances.
+  //           </Alert>
+  //         )}
+  //       {gameNumber != null && (
+  //         <NumberInput
+  //           label="Game number"
+  //           value={gameNumber}
+  //           onChange={(newValue) => setGameNumber(newValue as number)}
+  //           min={1}
+  //           max={99}
+  //           allowNegative={false}
+  //           allowDecimal={false}
+  //         />
+  //       )}
+  //       <TextInput
+  //         spellCheck={false}
+  //         label="Choose password"
+  //         value={password}
+  //         onChange={(event) => setPassword(event.currentTarget.value)}
+  //       />
+  //       <Button
+  //         mt="md"
+  //         disabled={
+  //           isCreationInProgress ||
+  //           week == null ||
+  //           p1 == null ||
+  //           p2 == null ||
+  //           tierMismatch ||
+  //           password === ""
+  //         }
+  //         onClick={async () => {
+  //           setIsCreationInProgress(true);
+  //           try {
+  //             if (
+  //               p1 == null ||
+  //               p2 == null ||
+  //               week == null ||
+  //               p1Tier == null ||
+  //               p1Tier !== p2Tier ||
+  //               LEAGUE_SEASON == null
+  //             ) {
+  //               throw new Error("Unexpected null when creating match");
+  //             }
+  //             const gameSuffix =
+  //               gameNumber == null ? "" : `, Game ${gameNumber}`;
+  //             const id = await createMatch({
+  //               roomName: `${p1} vs ${p2}${gameSuffix}`,
+  //               password,
+  //               isPublic: true,
+  //               variant: "Standard",
+  //               isCustom: false,
+  //               isDraft: false,
+  //               isLockout: true,
+  //               goals: ufoGenerator(STANDARD_UFO),
+  //               leagueInfo: {
+  //                 season: LEAGUE_SEASON,
+  //                 p1,
+  //                 p2,
+  //                 week,
+  //                 tier: p1Tier,
+  //                 game: gameNumber,
+  //               },
+  //               fullPasta: null,
+  //             });
+  //             const url = getRoomLink(id, password);
+  //             db.createdMatches.add({ id });
+  //             setError(null);
+  //             setUrl(url);
+  //             setId(id);
+  //             setIsCreationInProgress(false);
+  //             window.open(url, "_blank");
+  //           } catch (err: unknown) {
+  //             setIsCreationInProgress(false);
+  //             setUrl("");
+  //             setId(null);
+  //             if (err instanceof Error) {
+  //               setError(err);
+  //             } else {
+  //               setError(new Error("unknown error!"));
+  //             }
+  //           }
+  //         }}
+  //         color="green"
+  //       >
+  //         Create Bingosync Board
+  //       </Button>
+  //       <Tooltip
+  //         label={
+  //           <>
+  //             Please use the Copy button only if you need to reset an existing
+  //             room,
+  //             <br />
+  //             e.g. if a player accidentally reveals the card early.
+  //           </>
+  //         }
+  //       >
+  //         <Button
+  //           onClick={() => {
+  //             navigator.clipboard.writeText(
+  //               JSON.stringify(
+  //                 ufoGenerator(STANDARD_UFO).map((goal) => ({ name: goal })),
+  //                 null,
+  //                 2,
+  //               ),
+  //             );
+  //           }}
+  //         >
+  //           Copy Pasta to Clipboard
+  //         </Button>
+  //       </Tooltip>
+  //       {url !== "" && (
+  //         <Alert
+  //           variant="light"
+  //           color="green"
+  //           title="Success!"
+  //           icon={<IconCheck />}
+  //         >
+  //           <a href={url} target="_blank">
+  //             Your new room is available here.
+  //           </a>
+  //           <br />
+  //           <Link prefetch={false} href={`/match/${id}`} target="_blank">
+  //             Your Match results can be viewed here.
+  //           </Link>
+  //         </Alert>
+  //       )}
+  //       {error != null && (
+  //         <Alert
+  //           variant="light"
+  //           color="red"
+  //           title="Failed to create bingo board"
+  //           icon={<IconExclamationMark />}
+  //         >
+  //           <Stack gap={8}>
+  //             <span>
+  //               You can select a different backend, then try to create the match
+  //               again.
+  //             </span>
+  //             <span>{error.message}</span>
+  //           </Stack>
+  //         </Alert>
+  //       )}
+  //     </Stack>
+  //   </Card.Section>
+  // );
 }

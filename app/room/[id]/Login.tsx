@@ -12,8 +12,8 @@ import {
   Title,
 } from "@mantine/core";
 import { useState } from "react";
-import { confirmAnonymous } from "./confirmAnonymous";
 import { useRouter } from "next/navigation";
+import { authClient } from "@/app/authClient";
 
 type Props = {
   gameId: number;
@@ -23,6 +23,7 @@ type Props = {
 export default function Login({ gameId, session }: Props) {
   const [clickedAnon, setClickedAnon] = useState(false);
   const [name, setName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   return (
     <Container>
@@ -45,17 +46,29 @@ export default function Login({ gameId, session }: Props) {
                 </Alert>
                 {session == null && (
                   <TextInput
-                    label="Name"
+                    placeholder="Choose a display name"
                     onChange={(event) => setName(event.target.value)}
                   />
                 )}
                 <Button
                   variant="subtle"
-                  disabled={session == null && name.length === 0}
+                  disabled={
+                    (session == null && name.trim().length === 0) || isLoading
+                  }
                   onClick={async () => {
-                    await confirmAnonymous(gameId, name);
-                    // Not sure why we need to refresh here.
-                    // The server action should do it automatically
+                    setIsLoading(true);
+                    if (session == null) {
+                      await authClient.signIn.anonymous({
+                        fetchOptions: {
+                          headers: {
+                            "x-anonymous-name": encodeURIComponent(name.trim()),
+                          },
+                        },
+                      });
+                    }
+                    document.cookie =
+                      `anonymous-confirmed-${gameId}=true; ` +
+                      `max-age=${24 * 60 * 60}; samesite=lax; path=/room/${gameId}`;
                     router.refresh();
                   }}
                   color="red"
@@ -65,7 +78,7 @@ export default function Login({ gameId, session }: Props) {
               </>
             ) : (
               <Button variant="subtle" onClick={() => setClickedAnon(true)}>
-                Continue without Discord
+                I don't have Discord
               </Button>
             )}
           </Stack>

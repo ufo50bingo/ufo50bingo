@@ -32,7 +32,7 @@ import { AllPlayerGames, CountChange } from "./useSyncedState";
 import { GameToGoals } from "./findAllGames";
 import SelectRightClickBehavior from "@/app/settings/SelectRightClickBehavior";
 import { CasterMember, PlayerMember } from "../common/useMembers";
-import MembersSection from "../common/MembersSection";
+import CasterMembersSection from "../common/CasterMembersSection";
 import { NewFeedItem } from "@/app/fetchFeed";
 
 type Props = {
@@ -140,7 +140,7 @@ export default function CastSettings({
           </Drawer.Header>
           <Drawer.Body p={0}>
             <Accordion multiple={true} defaultValue={["members"]}>
-              <MembersSection
+              <CasterMembersSection
                 players={players}
                 casters={casters}
                 isMobile={false}

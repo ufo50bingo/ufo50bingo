@@ -1,4 +1,4 @@
-import { Accordion, Group, List, Stack, Text } from "@mantine/core";
+import { Accordion, ColorSwatch, Group, Stack, Text } from "@mantine/core";
 import {
   DndContext,
   DragEndEvent,
@@ -20,10 +20,10 @@ import {
   restrictToVerticalAxis,
 } from "@dnd-kit/modifiers";
 import { CSS } from "@dnd-kit/utilities";
-import { IconGripVertical } from "@tabler/icons-react";
 import { CasterMember, PlayerMember } from "./useMembers";
 import { FeedPlayerOrder, NewFeedItem } from "@/app/fetchFeed";
 import { useServerOffsetContext } from "../ServerOffsetContext";
+import getColorHex from "../cast/getColorHex";
 
 interface Props {
   players: ReadonlyArray<PlayerMember>;
@@ -38,7 +38,6 @@ function SortablePlayer({ player }: { player: PlayerMember }) {
     attributes,
     listeners,
     setNodeRef,
-    setActivatorNodeRef,
     transform,
     transition,
     isDragging,
@@ -47,31 +46,28 @@ function SortablePlayer({ player }: { player: PlayerMember }) {
   return (
     <Group
       ref={setNodeRef}
+      {...attributes}
+      {...listeners}
       style={{
         transform: CSS.Transform.toString(transform),
         transition,
         position: "relative",
         zIndex: isDragging ? 1 : undefined,
+        cursor: isDragging ? "grabbing" : "grab",
+        touchAction: "none",
       }}
     >
-      <div
-        ref={setActivatorNodeRef}
-        {...attributes}
-        {...listeners}
-        style={{
-          cursor: isDragging ? "grabbing" : "grab",
-          touchAction: "none",
-          display: "flex",
-        }}
-      >
-        <IconGripVertical size={16} />
-      </div>
+      <ColorSwatch color={getColorHex(player.color)} size={14} />
       <span>{player.name}</span>
     </Group>
   );
 }
 
-export default function MembersSection({ players, casters, sendEvent }: Props) {
+export default function CasterMembersSection({
+  players,
+  casters,
+  sendEvent,
+}: Props) {
   const { getServerMsFromClientMs } = useServerOffsetContext();
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
@@ -103,7 +99,14 @@ export default function MembersSection({ players, casters, sendEvent }: Props) {
       <Accordion.Control>Members</Accordion.Control>
       <Accordion.Panel>
         <Stack>
-          <Text>Players</Text>
+          <Text>
+            <strong>Players</strong>
+          </Text>
+          <Text size="sm">
+            Drag and drop to sort the player list. The first player's tracker
+            info will be on the left side, and the second player's tracker info
+            will be on the right.
+          </Text>
           <DndContext
             id="members-dnd"
             sensors={sensors}
@@ -122,12 +125,14 @@ export default function MembersSection({ players, casters, sendEvent }: Props) {
               </Stack>
             </SortableContext>
           </DndContext>
-          <Text>Casters</Text>
-          <List>
-            {casters.map((p) => (
-              <List.Item key={p.userId}>{p.name}</List.Item>
+          <Text>
+            <strong>Casters</strong>
+          </Text>
+          <Stack>
+            {casters.map((c) => (
+              <span key={c.userId}>{c.name}</span>
             ))}
-          </List>
+          </Stack>
         </Stack>
       </Accordion.Panel>
     </Accordion.Item>

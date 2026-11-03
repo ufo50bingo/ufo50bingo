@@ -31,6 +31,8 @@ import GeneralSection, {
 import { useShouldShowRecentContext } from "@/app/settings/ShouldShowRecentContext";
 import DisconnectButton from "../common/DisconnectButton";
 import { NewFeedItem } from "@/app/fetchFeed";
+import PlayerMembersSection from "./PlayerMembersSection";
+import { PlayerMember, CasterMember } from "../common/useMembers";
 
 type Props = {
   userId: number;
@@ -51,6 +53,8 @@ type Props = {
   restrictions: Restrictions;
   generalSetters: GeneralSetters;
   sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
+  players: ReadonlyArray<PlayerMember>;
+  casters: ReadonlyArray<CasterMember>;
 };
 
 export default function PlaySettings({
@@ -72,6 +76,8 @@ export default function PlaySettings({
   generalSetters,
   generalSettings,
   sendEvent,
+  players,
+  casters,
 }: Props) {
   const [isShown, setIsShown] = useState(color == null);
   const { shouldShortenPlay, setShouldShortenPlay } = useShouldShortenContext();
@@ -100,15 +106,13 @@ export default function PlaySettings({
             <Drawer.CloseButton />
           </Drawer.Header>
           <Drawer.Body p={0}>
-            <Accordion
-              multiple={true}
-              defaultValue={color == null ? ["color"] : []}
-            >
+            <Accordion multiple={true}>
+              <PlayerMembersSection players={players} casters={casters} />
               <Accordion.Item value="color">
                 <Accordion.Control>Select Color</Accordion.Control>
                 <Accordion.Panel>
                   <ColorSelector
-                    label="Choose color"
+                    label={null}
                     color={color}
                     setColor={setColor}
                   />

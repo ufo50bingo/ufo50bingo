@@ -40,6 +40,11 @@ export default function useMembers(feed: NewFeed): {
           isInvite: item.isInvite,
           initialTime: existing?.initialTime ?? item.time,
         });
+      } else if (item.type === "player_color_change") {
+        const existing = allMembers.get(item.userId);
+        if (existing != null && existing.color != null) {
+          allMembers.set(item.userId, { ...existing, color: item.playerColor });
+        }
       } else if (item.type === "player_order") {
         lastPlayerOrder = item.orderedIds;
       }

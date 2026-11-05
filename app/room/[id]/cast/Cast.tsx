@@ -115,7 +115,7 @@ export default function Cast({
       rightClickBehavior,
       setRightClickBehavior,
       customColor: "#ee5f5b",
-      setCustomColor: () => {},
+      setCustomColor: () => { },
     }),
     [rightClickBehavior, setRightClickBehavior],
   );
@@ -168,10 +168,14 @@ export default function Cast({
     for (const item of feed) {
       if (item.type === "current_subcategory") {
         const userGames = allGames.get(item.userId) ?? [];
-        const subcategory = subcategories.find(
-          (sc) => sc.subcategoryId === item.subcategoryId,
-        )!;
-        userGames.push({ game: subcategory.name, start_time: item.time });
+        if (item.subcategoryId == null) {
+          userGames.push({ game: null, start_time: item.time });
+        } else {
+          const subcategory = subcategories.find(
+            (sc) => sc.subcategoryId === item.subcategoryId,
+          );
+          userGames.push({ game: subcategory?.name ?? null, start_time: item.time });
+        }
         allGames.set(item.userId, userGames);
       }
     }

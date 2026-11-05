@@ -54,7 +54,7 @@ function useAllUsers() {
 
 type Props = {
   selectedUserIds: ReadonlyArray<number>;
-  onChange: (newSelectedUserIds: ReadonlyArray<number>) => unknown;
+  onChange: (newSelectedUsers: ReadonlyArray<BasicUser>) => unknown;
   label?: string;
   description?: string;
   placeholder?: string;
@@ -113,9 +113,13 @@ export function UserTokenizer({
   );
 
   const onChange = useCallback(
-    (newSelectedUserIdStrs: ReadonlyArray<string>) =>
-      onChangeRaw(newSelectedUserIdStrs.map((id) => Number(id))),
-    [onChangeRaw],
+    (newSelectedUserIdStrs: ReadonlyArray<string>) => {
+      const newSelected = newSelectedUserIdStrs
+        .map((idStr) => userIdToUser.get(Number(idStr)))
+        .filter((u) => u != null);
+      onChangeRaw(newSelected);
+    },
+    [onChangeRaw, userIdToUser],
   );
 
   const fuse = useMemo(() => {

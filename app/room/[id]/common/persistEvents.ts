@@ -17,48 +17,42 @@ import getSql from "@/app/getSql";
 import { SQL } from "@/app/matches/page";
 import { env } from "process";
 
-export default async function persistEvent(
+export default async function persistEvents(
   gameId: number,
   token: string,
-  event: NewFeedItem,
+  events: ReadonlyArray<NewFeedItem>,
 ): Promise<void> {
   const isValidated = await validateToken(gameId, token);
   if (!isValidated) {
     throw new Error("Failed to validate token! Try refreshing your page");
   }
   const sql = getSql(false);
-  switch (event.type) {
-    case "color_mark":
-      await getColorMarkSql(sql, gameId, event);
-      break;
-    case "chat":
-      await getChatSql(sql, gameId, event);
-      break;
-    case "timer_event":
-      await getTimerEventSql(sql, gameId, event);
-      break;
-    case "member":
-      await getMemberSql(sql, gameId, event);
-      break;
-    case "goal_progress":
-      await getGoalProgressSql(sql, gameId, event);
-      break;
-    case "current_subcategory":
-      await getCurrentSubcategorySql(sql, gameId, event);
-      break;
-    case "player_order":
-      await getPlayerOrderSql(sql, gameId, event);
-      break;
-    case "player_color_change":
-      await getPlayerColorChangeSql(sql, gameId, event);
-      break;
-    case "disconnect":
-      await getDisconnectSql(sql, gameId, event);
-      break;
-    default:
-      event satisfies never;
-      throw new Error(`Unexpected event: ${JSON.stringify(event)}`);
-  }
+  const allSqls = events.map((event) => {
+    switch (event.type) {
+      case "color_mark":
+        return getColorMarkSql(sql, gameId, event);
+      case "chat":
+        return getChatSql(sql, gameId, event);
+      case "timer_event":
+        return getTimerEventSql(sql, gameId, event);
+      case "member":
+        return getMemberSql(sql, gameId, event);
+      case "goal_progress":
+        return getGoalProgressSql(sql, gameId, event);
+      case "current_subcategory":
+        return getCurrentSubcategorySql(sql, gameId, event);
+      case "player_order":
+        return getPlayerOrderSql(sql, gameId, event);
+      case "player_color_change":
+        return getPlayerColorChangeSql(sql, gameId, event);
+      case "disconnect":
+        return getDisconnectSql(sql, gameId, event);
+      default:
+        event satisfies never;
+        throw new Error(`Unexpected event: ${JSON.stringify(event)}`);
+    }
+  });
+  await sql.transaction(allSqls);
 }
 
 function getISO(timeInSeconds: number): string {

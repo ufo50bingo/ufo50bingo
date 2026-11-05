@@ -16,10 +16,10 @@ import { useServerOffsetContext } from "../ServerOffsetContext";
 type Props = {
   userId: number;
   players: ReadonlyArray<PlayerMember>;
-  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
+  sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
 };
 
-export default function ChatInput({ userId, players, sendEvent }: Props) {
+export default function ChatInput({ userId, players, sendEvents }: Props) {
   const { getServerMsFromClientMs } = useServerOffsetContext();
   const [text, setText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,7 +39,7 @@ export default function ChatInput({ userId, players, sendEvent }: Props) {
           message: text,
           visibleToPlayers: visibleToIds,
         };
-        await sendEvent(event);
+        await sendEvents([event]);
       } finally {
         setIsSubmitting(false);
       }

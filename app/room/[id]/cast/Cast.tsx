@@ -51,6 +51,7 @@ import useSquareColors from "../common/useSquareColors";
 import useMembers, { PlayerMember } from "../common/useMembers";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import { getMatchingRepoPasta } from "@/app/getMatchingRepoPasta";
+import StandardBoardWrapper from "@/app/StandardBoardWrapper";
 
 const RESTRICTIONS: Restrictions = {
   canTagDifficultyFor: null,
@@ -475,26 +476,28 @@ export default function Cast({
               />
             )}
           </SideColumn>
-          <Board
-            pasta={pasta}
-            board={squareColors.map((colors, index) => ({
-              name: squareNames[index],
-              color: colors.length > 0 ? colors[0] : "blank",
-            }))}
-            highlights={highlights}
-            onClickSquare={setEditingIndex}
-            boardCover={
-              <SyncedTimerBoardCover
-                isCast={true}
-                timerState={timerState}
-                isBoardVisibleByDefault={!hideByDefault}
-                forceReveal={forceReveal}
-              />
-            }
-            shownDifficulties={shownDifficulties}
-            viewerColor={null}
-            castInfo={{ leftColor, rightColor }}
-          />
+          <StandardBoardWrapper>
+            <Board
+              pasta={pasta}
+              board={squareColors.map((colors, index) => ({
+                name: squareNames[index],
+                color: colors.length > 0 ? colors[0] : "blank",
+              }))}
+              highlights={highlights}
+              onClickSquare={setEditingIndex}
+              boardCover={
+                <SyncedTimerBoardCover
+                  isCast={true}
+                  timerState={timerState}
+                  isBoardVisibleByDefault={!hideByDefault}
+                  forceReveal={forceReveal}
+                />
+              }
+              shownDifficulties={shownDifficulties}
+              viewerColor={null}
+              castInfo={{ leftColor, rightColor }}
+            />
+          </StandardBoardWrapper>
           <SideColumn isDouble={isDouble}>
             <SideCell>
               <ScoreSquare

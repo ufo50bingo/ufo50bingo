@@ -9,16 +9,80 @@ import useSelection from "./useSelection";
 import useUndoRedoShortcuts from "./useUndoRedoShortcuts";
 import useWidgetInteractions from "./useWidgetInteractions";
 import type { Widget } from "./layoutTypes";
+import Board from "../Board";
+import { TBoard } from "../matches/parseBingosyncData";
 
 type Props = {
   canvasWidth: number;
   canvasHeight: number;
 };
 
+const board: TBoard = [
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+  { name: "BARBUTA: Speak to 2 Bean NPCs", color: "blank" },
+];
+
 const initialWidgets: ReadonlyArray<Widget> = [
-  { id: "1", x: 50, y: 50, width: 100, height: 100 },
-  { id: "2", x: 200, y: 50, width: 100, height: 100, lockAspectRatio: true },
-  { id: "3", x: 350, y: 50, width: 100, height: 100 },
+  {
+    id: "1",
+    x: 50,
+    y: 50,
+    width: 100,
+    height: 100,
+    content: <div>Widget 1</div>,
+  },
+  {
+    id: "2",
+    x: 200,
+    y: 50,
+    width: 100,
+    height: 100,
+    lockAspectRatio: true,
+    content: <div>Widget 2</div>,
+  },
+  {
+    id: "3",
+    x: 350,
+    y: 50,
+    width: 100,
+    height: 100,
+    content: (
+      <Board
+        board={board.slice(0, 20)}
+        onClickSquare={() => {}}
+        boardCover={null}
+        shownDifficulties={[]}
+        viewerColor="red"
+        maxFontSize={30}
+        minFontSize={10}
+        rows={4}
+        columns={5}
+      />
+    ),
+  },
 ];
 
 export default function LayoutEditor({ canvasWidth, canvasHeight }: Props) {

@@ -67,7 +67,7 @@ export const EVERY_GAME_UFO = {
       ],
       "(FTP) BLOONS": [
         {
-          "name": "BLOONS: Score 700+ Points"
+          "name": "BLOONS: 100% Level 10"
         }
       ],
       "BUG FABLES": [
@@ -227,6 +227,11 @@ export const EVERY_GAME_UFO = {
       "GEOMETRY DASH": [
         {
           "name": "GEOMETRY DASH: Beat a level (practice mode ok)"
+        }
+      ],
+      "(FTP) GOLD MINER": [
+        {
+          "name": "GOLD MINER: Beat 3 levels without money from diamonds or big 500$ gold"
         }
       ],
       "GRAVITY CIRCUIT": [
@@ -425,6 +430,11 @@ export const EVERY_GAME_UFO = {
           "name": "MARIO KART: DOUBLE DASH: Hit a CPU with an item three times"
         }
       ],
+      "(Retro) METROID: ZERO MISSION": [
+        {
+          "name": "METROID: ZERO MISSION: Obtain the Long Beam"
+        }
+      ],
       "(Retro) MIKE TYSON'S PUNCH-OUT!!": [
         {
           "name": "MIKE TYSON'S PUNCH-OUT!!: Defeat Von Kaiser"
@@ -514,9 +524,22 @@ export const EVERY_GAME_UFO = {
           "name": "PAPER PLANET: Obtain 2 upgrades"
         }
       ],
+      "PARTY HARD": [
+        {
+          "name": "PARTY HARD: Have Mario block both windows in BBQ Party"
+        },
+        {
+          "name": "PARTY HARD: Hide 5 dead bodies"
+        }
+      ],
       "PATCH QUEST": [
         {
           "name": "PATCH QUEST: Mount 2 unique Critters"
+        }
+      ],
+      "PAWNBARIAN": [
+        {
+          "name": "PAWNBARIAN: Hold 40 Gold"
         }
       ],
       "PEAK": [
@@ -663,6 +686,14 @@ export const EVERY_GAME_UFO = {
       "SLAY THE SPIRE 2": [
         {
           "name": "SLAY THE SPIRE 2: Purchase a relic from a shop without gaining gold from Neow"
+        }
+      ],
+      "(FTP) SLITHER.IO": [
+        {
+          "name": "SLITHER.IO: In one run, see the borderwall in all 4 quadrants"
+        },
+        {
+          "name": "SLITHER.IO: Eat 2 running glowy orbs"
         }
       ],
       "SOL CESTO": [
@@ -840,6 +871,11 @@ export const EVERY_GAME_UFO = {
           "name": "ULTRAKILL: Complete 0-1"
         }
       ],
+      "UNCLE CHOP'S ROCKET SHOP": [
+        {
+          "name": "UNCLE CHOP'S ROCKET SHOP: Perfectly complete a Refuel job"
+        }
+      ],
       "UNFAIR FLIPS": [
         {
           "name": "UNFAIR FLIPS: Have $0.10"
@@ -950,7 +986,7 @@ export const EVERY_GAME_UFO = {
       ],
       "(FTP) BLOONS": [
         {
-          "name": "BLOONS: 100% Level 10"
+          "name": "BLOONS: Score 1100+ Points"
         }
       ],
       "BROOMSWEEPER": [
@@ -1100,6 +1136,11 @@ export const EVERY_GAME_UFO = {
       "GEOMETRY DASH": [
         {
           "name": "GEOMETRY DASH: Collect 5 Coins"
+        }
+      ],
+      "(FTP) GOLD MINER": [
+        {
+          "name": "GOLD MINER: Have 4+ dynamite"
         }
       ],
       "(FTP) GUNBALL 2: EMPEROR REVENGE": [
@@ -1259,6 +1300,11 @@ export const EVERY_GAME_UFO = {
           "name": "MEGA MAN UNLIMITED: Defeat a Robot Master"
         }
       ],
+      "(Retro) METROID: ZERO MISSION": [
+        {
+          "name": "METROID: ZERO MISSION: Survive an encounter with King Worm"
+        }
+      ],
       "MEWGENICS": [
         {
           "name": "MEWGENICS: Finish a level while only killing enemies with a Hunter"
@@ -1347,9 +1393,25 @@ export const EVERY_GAME_UFO = {
           "name": "PAPER PLANET: Obtain a 100 combo"
         }
       ],
+      "PARTY HARD": [
+        {
+          "name": "PARTY HARD: Beat a level while being pursued by a cop"
+        }
+      ],
       "PATCH QUEST": [
         {
           "name": "PATCH QUEST: Get a mount to level 4"
+        }
+      ],
+      "PAWNBARIAN": [
+        {
+          "name": "PAWNBARIAN: Defeat the Goblin Shaman"
+        },
+        {
+          "name": "PAWNBARIAN: Defeat the Goblin Tinkerer"
+        },
+        {
+          "name": "PAWNBARIAN: Defeat the Blight Heart"
         }
       ],
       "PEAK": [
@@ -1495,6 +1557,11 @@ export const EVERY_GAME_UFO = {
       "SLAY THE SPIRE 2": [
         {
           "name": "SLAY THE SPIRE 2: Defeat 2 Elites, then Rest at a campfire in one run"
+        }
+      ],
+      "(FTP) SLITHER.IO": [
+        {
+          "name": "SLITHER.IO: Get 5 kills"
         }
       ],
       "SOL CESTO": [
@@ -1665,6 +1732,11 @@ export const EVERY_GAME_UFO = {
       "ULTRAKILL": [
         {
           "name": "ULTRAKILL: Get killed by Something Wicked"
+        }
+      ],
+      "UNCLE CHOP'S ROCKET SHOP": [
+        {
+          "name": "UNCLE CHOP'S ROCKET SHOP: Complete any non-refuel job successfully"
         }
       ],
       "UNFAIR FLIPS": [
@@ -1907,6 +1979,11 @@ export const EVERY_GAME_UFO = {
           "name": "GEOMETRY DASH: Beat Electroman Adventures, Electrodynamix, Blast Processing (practice mode ok)"
         }
       ],
+      "(FTP) GOLD MINER": [
+        {
+          "name": "GOLD MINER: Have $8000"
+        }
+      ],
       "GRAVITY CIRCUIT": [
         {
           "name": "GRAVITY CIRCUIT: (Speedrun Mode Allowed) Beat {{circuit_mission}} with all robots saved"
@@ -2061,6 +2138,11 @@ export const EVERY_GAME_UFO = {
           "name": "MARIO KART WORLD: Complete the first two tracks in a Grand Prix"
         }
       ],
+      "(Retro) METROID: ZERO MISSION": [
+        {
+          "name": "METROID: ZERO MISSION: Obtain the Bombs"
+        }
+      ],
       "MEWGENICS": [
         {
           "name": "MEWGENICS: Defeat an Alley miniboss"
@@ -2136,9 +2218,22 @@ export const EVERY_GAME_UFO = {
           "name": "PAPER PLANET: Have a hitless run until you beat the first boss"
         }
       ],
+      "PARTY HARD": [
+        {
+          "name": "PARTY HARD: Beat BBQ Party without using traps or items"
+        }
+      ],
       "PATCH QUEST": [
         {
           "name": "PATCH QUEST: Reach a new Zone"
+        }
+      ],
+      "PAWNBARIAN": [
+        {
+          "name": "PAWNBARIAN: Complete the Goblin Caves"
+        },
+        {
+          "name": "PAWNBARIAN: Complete the Golem Fortress"
         }
       ],
       "PEAK": [
@@ -2273,6 +2368,11 @@ export const EVERY_GAME_UFO = {
       "SLAY THE SPIRE 2": [
         {
           "name": "SLAY THE SPIRE 2: Defeat the Act 1 Boss not playing as Ironclad"
+        }
+      ],
+      "(FTP) SLITHER.IO": [
+        {
+          "name": "SLITHER.IO: 2000+ length"
         }
       ],
       "SOL CESTO": [
@@ -2453,6 +2553,11 @@ export const EVERY_GAME_UFO = {
       "ULTRAKILL": [
         {
           "name": "ULTRAKILL: Beat Wave 10 in the Cybergrind"
+        }
+      ],
+      "UNCLE CHOP'S ROCKET SHOP": [
+        {
+          "name": "UNCLE CHOP'S ROCKET SHOP: Complete 4 jobs successfully, with no more than one Refuel job"
         }
       ],
       "UNFAIR FLIPS": [
@@ -2719,6 +2824,11 @@ export const EVERY_GAME_UFO = {
           "name": "GEOMETRY DASH: Collect 9 Coins after level 5 (base after base)"
         }
       ],
+      "(FTP) GOLD MINER": [
+        {
+          "name": "GOLD MINER: Buy out every shop and have $12,000"
+        }
+      ],
       "GRAVITY CIRCUIT": [
         {
           "name": "GRAVITY CIRCUIT: (Speedrun Mode Required) Beat two circuit missions on Master Mode"
@@ -2884,6 +2994,11 @@ export const EVERY_GAME_UFO = {
           "name": "MARIO KART: DOUBLE DASH: Win three races"
         }
       ],
+      "(Retro) METROID: ZERO MISSION": [
+        {
+          "name": "METROID: ZERO MISSION: Enter Norfair with the Charge Beam"
+        }
+      ],
       "MEWGENICS": [
         {
           "name": "MEWGENICS: Defeat Radical Rat"
@@ -2964,9 +3079,19 @@ export const EVERY_GAME_UFO = {
           "name": "PAPER PLANET: Beat 2 bosses"
         }
       ],
+      "PARTY HARD": [
+        {
+          "name": "PARTY HARD: Beat Biker Party"
+        }
+      ],
       "PATCH QUEST": [
         {
           "name": "PATCH QUEST: Beat 3 \"Danger\" Patches"
+        }
+      ],
+      "PAWNBARIAN": [
+        {
+          "name": "PAWNBARIAN: Complete the Foul Shrine"
         }
       ],
       "PEAK": [
@@ -3097,6 +3222,11 @@ export const EVERY_GAME_UFO = {
       "SLAY THE SPIRE 2": [
         {
           "name": "SLAY THE SPIRE 2: Defeat the Act 2 Boss"
+        }
+      ],
+      "(FTP) SLITHER.IO": [
+        {
+          "name": "SLITHER.IO: 4000+ length"
         }
       ],
       "SOL CESTO": [
@@ -3273,6 +3403,11 @@ export const EVERY_GAME_UFO = {
           "name": "ULTRAKILL: Defeat Cerberus (0-5)"
         }
       ],
+      "UNCLE CHOP'S ROCKET SHOP": [
+        {
+          "name": "UNCLE CHOP'S ROCKET SHOP: Pay your first rent"
+        }
+      ],
       "UNFAIR FLIPS": [
         {
           "name": "UNFAIR FLIPS: Have $1"
@@ -3371,6 +3506,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) KIRBY SUPER STAR",
               "MAGICAT",
               "MAIDEN & SPELL",
+              "(Retro) METROID: ZERO MISSION",
               "MEWGENICS",
               "(Retro) MIKE TYSON'S PUNCH-OUT!!",
               "MINA THE HOLLOWER",
@@ -3378,6 +3514,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) MONSTER HUNTER TRI (WII)",
               "NUBBY'S NUMBER FACTORY",
               "NUCLEAR THRONE",
+              "PAWNBARIAN",
               "PEGLIN",
               "(FTD) PHANTOM JUMP",
               "PIZZA TOWER",
@@ -3395,6 +3532,7 @@ export const EVERY_GAME_UFO = {
               "STEVE'S WAREHOUSE",
               "(FTP) STRATEGEMS",
               "(Retro) SUPER MARIO 64",
+              "(Retro) SUPER MARIO BROS. ",
               "(Retro) SUPER MARIO BROS. 3",
               "SUPER MARIO MAKER 2",
               "(Retro) SUPER MARIO SUNBURN",
@@ -3445,6 +3583,7 @@ export const EVERY_GAME_UFO = {
                 "RISK OF RAIN 2",
                 "SPELUNKY 2",
                 "(Retro) SUPER MARIO 64",
+                "(Retro) SUPER MARIO BROS. ",
                 "SUPER MARIO MAKER 2",
                 "(Retro) SUPER MARIO SUNSHINE",
                 "THE BINDING OF ISAAC: REBIRTH",
@@ -3474,8 +3613,10 @@ export const EVERY_GAME_UFO = {
                 "ENTER THE GUNGEON",
                 "(FTP) GUNBALL 2: EMPEROR REVENGE",
                 "KING OF THE BRIDGE",
+                "(Retro) METROID: ZERO MISSION",
                 "MEWGENICS",
                 "(Retro) MONSTER HUNTER TRI (WII)",
+                "PAWNBARIAN",
                 "PEGLIN",
                 "(FTD) PHANTOM JUMP",
                 "PIZZA TOWER",
@@ -3525,6 +3666,7 @@ export const EVERY_GAME_UFO = {
                 "STAR OF PROVIDENCE",
                 "STREETS OF ROGUE",
                 "TERRARIA",
+                "UNCLE CHOP'S ROCKET SHOP",
                 "UTOPIA MUST FALL",
                 "YOKU'S ISLAND EXPRESS"
               ],
@@ -3557,6 +3699,7 @@ export const EVERY_GAME_UFO = {
               "RISK OF RAIN 2": "Stage 1 Teleporter Boss",
               "SPELUNKY 2": "Quillback in 1-4",
               "(Retro) SUPER MARIO 64": "King Bob-Omb",
+              "(Retro) SUPER MARIO BROS. ": "Bowser (1-4)",
               "SUPER MARIO MAKER 2": "boss enemies",
               "(Retro) SUPER MARIO SUNSHINE": "Proto Piranha",
               "THE BINDING OF ISAAC: REBIRTH": "Basement I boss",
@@ -3586,8 +3729,10 @@ export const EVERY_GAME_UFO = {
               "ENTER THE GUNGEON": "Chamber 1 Boss",
               "(FTP) GUNBALL 2: EMPEROR REVENGE": "Gunner Joe",
               "KING OF THE BRIDGE": "Defeat the Troll",
+              "(Retro) METROID: ZERO MISSION": "King Worm",
               "MEWGENICS": "Alley Miniboss",
               "(Retro) MONSTER HUNTER TRI (WII)": "Great Jaggi",
+              "PAWNBARIAN": "Any Dungeon Floor 7",
               "PEGLIN": "End of Forest",
               "(FTD) PHANTOM JUMP": "Sunrise Mountains boss",
               "PIZZA TOWER": "Pepperman",
@@ -3637,6 +3782,7 @@ export const EVERY_GAME_UFO = {
               "STAR OF PROVIDENCE": "Overlord",
               "STREETS OF ROGUE": "Mayor in Mayor's Village",
               "TERRARIA": "Eye of Cthulhu",
+              "UNCLE CHOP'S ROCKET SHOP": "HOG machine (Day 6)",
               "UTOPIA MUST FALL": "Defeat Colossoteuthis, Technosphere",
               "YOKU'S ISLAND EXPRESS": ""
             }
@@ -3664,6 +3810,7 @@ export const EVERY_GAME_UFO = {
               "(FTD) EVIL EGG",
               "FTL",
               "GEOMETRY DASH",
+              "(FTP) GOLD MINER",
               "(FTP) GUNBALL 2: EMPEROR REVENGE",
               "HADES",
               "(FTP) HUMANBENCHMARK.COM",
@@ -3680,6 +3827,7 @@ export const EVERY_GAME_UFO = {
               "NUBBY'S NUMBER FACTORY",
               "NUCLEAR THRONE",
               "OPUS MAGNUM",
+              "PAWNBARIAN",
               "PETAL CRASH",
               "(FTD) PHANTOM JUMP",
               "POMPOM",
@@ -3694,6 +3842,7 @@ export const EVERY_GAME_UFO = {
               "STAR VADERS",
               "(FTP) STRATEGEMS",
               "STREETS OF ROGUE",
+              "(Retro) SUPER MARIO BROS. ",
               "(Retro) SUPER MARIO BROS. 3",
               "SUPER MARIO MAKER 2",
               "(Retro) SUPER MARIO SUNBURN",
@@ -3708,6 +3857,7 @@ export const EVERY_GAME_UFO = {
               "(FTP) VGM-QUIZ.COM",
               "VIVIDLOPE",
               "WHITE KNUCKLE",
+              "WILL YOU SNAIL?",
               "(FTD) YOU HAVE 10 SECONDS (2023)"
             ],
             "fallback": "Beat 5 levels in [5] games(ANY games) [Fallback]"
@@ -3737,20 +3887,24 @@ export const EVERY_GAME_UFO = {
                 "SPELUNKY HD",
                 "UFO 50",
                 "UFO 50 BINGOMOD",
+                "WILL YOU SNAIL?",
                 "(FTD) YOU HAVE 10 SECONDS (2023)",
                 "BACKPACK HERO",
                 "BROOMSWEEPER",
                 "CRYPT OF THE NECRODANCER",
                 "DUCK GAME",
+                "(FTP) GOLD MINER",
                 "(FTD) KILLER QUEEN BLACK",
                 "MOSA LINA",
                 "NIDHOGG",
                 "NUCLEAR THRONE",
                 "OPUS MAGNUM",
+                "PAWNBARIAN",
                 "ROCKET LEAGUE",
                 "SALAMANDER COUNTY PUBLIC TELEVISION",
                 "SNKRX",
                 "STAR VADERS",
+                "(Retro) SUPER MARIO BROS. ",
                 "(Retro) SUPER MARIO BROS. 3",
                 "(Retro) SUPER MARIO WORLD",
                 "(Retro) SUPER MONKEY BALL",
@@ -3806,6 +3960,7 @@ export const EVERY_GAME_UFO = {
                 "THE VOID RAINS UPON HER HEART",
                 "TOWERFALL ASCENSION",
                 "ULTRAKILL",
+                "UNCLE CHOP'S ROCKET SHOP",
                 "VVVVVV",
                 "WINDSWEPT",
                 "(Retro) YOSHI'S ISLAND",
@@ -3816,6 +3971,7 @@ export const EVERY_GAME_UFO = {
                 "HITMAN 3",
                 "KERO BLASTER",
                 "LETHAL COMPANY",
+                "PARTY HARD",
                 "PEAK",
                 "(Retro) SUPER MARIO SUNSHINE"
               ],
@@ -3843,20 +3999,24 @@ export const EVERY_GAME_UFO = {
               "SPELUNKY HD": "Beat 2-1",
               "UFO 50": "Campanella ",
               "UFO 50 BINGOMOD": "Campanella ",
+              "WILL YOU SNAIL?": "Screens",
               "(FTD) YOU HAVE 10 SECONDS (2023)": "1-5",
               "BACKPACK HERO": "floors",
               "BROOMSWEEPER": "Combat Offices",
               "CRYPT OF THE NECRODANCER": "Floors + Codex Levels",
               "DUCK GAME": "Arcade Missions",
+              "(FTP) GOLD MINER": "Beat level 5",
               "(FTD) KILLER QUEEN BLACK": "Tutorial Levels",
               "MOSA LINA": "Levels",
               "NIDHOGG": "Solo mode fights",
               "NUCLEAR THRONE": "",
               "OPUS MAGNUM": "Campaign levels, Sigmar's Balls",
+              "PAWNBARIAN": "Floor 5",
               "ROCKET LEAGUE": "Training Mode shots",
               "SALAMANDER COUNTY PUBLIC TELEVISION": "Complete Week 1",
               "SNKRX": "Levels",
               "STAR VADERS": "Combats",
+              "(Retro) SUPER MARIO BROS. ": "2-1",
               "(Retro) SUPER MARIO BROS. 3": "Any 5 levels",
               "(Retro) SUPER MARIO WORLD": "Beat 5 levels",
               "(Retro) SUPER MONKEY BALL": "???",
@@ -3912,6 +4072,7 @@ export const EVERY_GAME_UFO = {
               "THE VOID RAINS UPON HER HEART": "Love 5 Monsters",
               "TOWERFALL ASCENSION": "5 Towers",
               "ULTRAKILL": "Beat 0-5",
+              "UNCLE CHOP'S ROCKET SHOP": "Successful Jobs",
               "VVVVVV": "Rescues + Intermissions",
               "WINDSWEPT": "5 Levels",
               "(Retro) YOSHI'S ISLAND": "Beat 1-5",
@@ -3922,6 +4083,7 @@ export const EVERY_GAME_UFO = {
               "HITMAN 3": "Any 5 levels",
               "KERO BLASTER": "",
               "LETHAL COMPANY": "Beating 5 Quotas",
+              "PARTY HARD": "Beat Boat Party",
               "PEAK": "Beat Kiln/Citidal",
               "(Retro) SUPER MARIO SUNSHINE": "Level Shine Sprites"
             }
@@ -3943,6 +4105,7 @@ export const EVERY_GAME_UFO = {
               "(FTP) LONELY SOUL",
               "(FTD) MINESWEEPER PLUS",
               "(FTP) NYAMO'S ADVENTURE",
+              "PAWNBARIAN",
               "PETAL CRASH",
               "(FTP) SPACEVENTURE 2 - MINT CONDITION",
               "STEVE'S WAREHOUSE",
@@ -3969,6 +4132,7 @@ export const EVERY_GAME_UFO = {
                 "(FTP) ASTEROID MISSION",
                 "BALATRO",
                 "KING OF THE BRIDGE",
+                "PAWNBARIAN",
                 "PETAL CRASH",
                 "(FTP) SPACEVENTURE 2 - MINT CONDITION",
                 "STEVE'S WAREHOUSE",
@@ -4006,6 +4170,7 @@ export const EVERY_GAME_UFO = {
                 "SPELUNKY HD",
                 "STAR VADERS",
                 "SUPER HEXAGON",
+                "(Retro) SUPER MARIO BROS. ",
                 "(Retro) SUPER MARIO BROS. 3",
                 "(Retro) SUPER MARIO WORLD",
                 "(Retro) SUPER SMASH BROS. BRAWL",
@@ -4044,11 +4209,13 @@ export const EVERY_GAME_UFO = {
                 "MAGICAT",
                 "MARIO KART WORLD",
                 "(FTP) MEAT BOY",
+                "(Retro) METROID: ZERO MISSION",
                 "MEWGENICS",
                 "(Retro) MIKE TYSON'S PUNCH-OUT!!",
                 "MINA THE HOLLOWER",
                 "MINECRAFT",
                 "(FTP) NETHACK",
+                "PARTY HARD",
                 "PEAK",
                 "PEGLIN",
                 "(FTD) PHANTOM JUMP",
@@ -4080,6 +4247,7 @@ export const EVERY_GAME_UFO = {
                 "UFO 50",
                 "UFO 50 BINGOMOD",
                 "ULTRAKILL",
+                "UNCLE CHOP'S ROCKET SHOP",
                 "UNFAIR FLIPS",
                 "VIVIDLOPE",
                 "VVVVVV",
@@ -4103,6 +4271,7 @@ export const EVERY_GAME_UFO = {
               "(FTP) ASTEROID MISSION": "Entering hard mode for $18000 or entering streak mode from hard mode",
               "BALATRO": "Beat Ante 8",
               "KING OF THE BRIDGE": "Win against the Troll",
+              "PAWNBARIAN": "Beat a Dungeon",
               "PETAL CRASH": "Obtain all 7 roses",
               "(FTP) SPACEVENTURE 2 - MINT CONDITION": "Beat wave 6",
               "STEVE'S WAREHOUSE": "Beat the boss",
@@ -4140,6 +4309,7 @@ export const EVERY_GAME_UFO = {
               "SPELUNKY HD": "Defeat Olmec & Leave 4-4",
               "STAR VADERS": "Beat Act 3",
               "SUPER HEXAGON": "60s in Hyper Hexagonest",
+              "(Retro) SUPER MARIO BROS. ": "Defeat Bowser in 8-4",
               "(Retro) SUPER MARIO BROS. 3": "Defeat Bowser",
               "(Retro) SUPER MARIO WORLD": "Defeat Bowser",
               "(Retro) SUPER SMASH BROS. BRAWL": "Beat Classic Mode",
@@ -4178,11 +4348,13 @@ export const EVERY_GAME_UFO = {
               "MAGICAT": "Defeat the MagiMonkey",
               "MARIO KART WORLD": "???",
               "(FTP) MEAT BOY": "",
+              "(Retro) METROID: ZERO MISSION": "Escape Chozodia",
               "MEWGENICS": "Down on your knees",
               "(Retro) MIKE TYSON'S PUNCH-OUT!!": "Beat Mike Tyson",
               "MINA THE HOLLOWER": "Defeat Lionel",
               "MINECRAFT": "Beat Ender Dragon",
               "(FTP) NETHACK": "",
+              "PARTY HARD": "Beat Underground Sick",
               "PEAK": "Get rescued",
               "PEGLIN": "Beat act 3",
               "(FTD) PHANTOM JUMP": "Moonlit Peaks",
@@ -4214,6 +4386,7 @@ export const EVERY_GAME_UFO = {
               "UFO 50": "50 Gold/Cherries",
               "UFO 50 BINGOMOD": "50 Gold/Cherries",
               "ULTRAKILL": "Beat 8-4",
+              "UNCLE CHOP'S ROCKET SHOP": "",
               "UNFAIR FLIPS": "10 Heads in-a-row",
               "VIVIDLOPE": "???",
               "VVVVVV": "Beat the Final Levl",
@@ -4251,10 +4424,12 @@ export const EVERY_GAME_UFO = {
               "KERO BLASTER",
               "(Retro) KIRBY AIR RIDE",
               "MARIO KART WORLD",
+              "(Retro) METROID: ZERO MISSION",
               "MEWGENICS",
               "MINA THE HOLLOWER",
               "(FTP) NETHACK",
               "NOITA",
+              "PAWNBARIAN",
               "RABI-RIBI",
               "RISK OF RAIN 2",
               "ROGUE LEGACY",
@@ -4297,6 +4472,7 @@ export const EVERY_GAME_UFO = {
                 "MEWGENICS",
                 "(FTP) NETHACK",
                 "NOITA",
+                "PAWNBARIAN",
                 "RISK OF RAIN 2",
                 "ROGUE LEGACY",
                 "ROGUE LEGACY 2",
@@ -4324,6 +4500,7 @@ export const EVERY_GAME_UFO = {
                 "(Retro) ACTRAISER",
                 "ENTER THE GUNGEON",
                 "HADES",
+                "(Retro) METROID: ZERO MISSION",
                 "MINA THE HOLLOWER",
                 "TERRARIA",
                 "DEMONCRAWL",
@@ -4364,6 +4541,7 @@ export const EVERY_GAME_UFO = {
               "MEWGENICS": "Equip a Tank Collar",
               "(FTP) NETHACK": "Any level up",
               "NOITA": "Holy Mountain",
+              "PAWNBARIAN": "Heart Upgrade",
               "RISK OF RAIN 2": "Level up or find a relevant item",
               "ROGUE LEGACY": "Buy an Health Upgrade at the castle",
               "ROGUE LEGACY 2": "Castle upgrade",
@@ -4391,6 +4569,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) ACTRAISER": "80 population",
               "ENTER THE GUNGEON": "Heart Container",
               "HADES": "Centaur Heart",
+              "(Retro) METROID: ZERO MISSION": "Energy Tank",
               "MINA THE HOLLOWER": "Health Rose",
               "TERRARIA": "Life Crystal",
               "DEMONCRAWL": "",
@@ -4432,12 +4611,14 @@ export const EVERY_GAME_UFO = {
               "(FTD) SKORPULAC",
               "SPELUNKY 2",
               "(Retro) SUPER MARIO 64",
+              "(Retro) SUPER MARIO BROS. ",
               "(Retro) SUPER MARIO BROS. 3",
               "SUPER MARIO MAKER 2",
               "(Retro) SUPER MARIO SUNBURN",
               "(Retro) SUPER MARIO SUNSHINE",
               "(Retro) SUPER MARIO WORLD",
               "(Retro) SUPER SMASH BROS. BRAWL",
+              "THE END IS NIGH",
               "UFO 50",
               "UFO 50 BINGOMOD",
               "WHITE KNUCKLE",
@@ -4461,10 +4642,12 @@ export const EVERY_GAME_UFO = {
                 "POMPOM",
                 "(FTD) SKORPULAC",
                 "(Retro) SUPER MARIO 64",
+                "(Retro) SUPER MARIO BROS. ",
                 "(Retro) SUPER MARIO BROS. 3",
                 "SUPER MARIO MAKER 2",
                 "(Retro) SUPER MARIO SUNBURN",
                 "(Retro) SUPER MARIO WORLD",
+                "THE END IS NIGH",
                 "UFO 50",
                 "UFO 50 BINGOMOD",
                 "(Retro) YOSHI'S ISLAND",
@@ -4516,10 +4699,12 @@ export const EVERY_GAME_UFO = {
               "POMPOM": "Reaching a checkpoint with 0 extra lives gives 1",
               "(FTD) SKORPULAC": "Collect a 3-up atom",
               "(Retro) SUPER MARIO 64": "1-up shroom",
+              "(Retro) SUPER MARIO BROS. ": "1up Mushroom",
               "(Retro) SUPER MARIO BROS. 3": "1-UP mushroom",
               "SUPER MARIO MAKER 2": "1-up shroom",
               "(Retro) SUPER MARIO SUNBURN": "1-Up",
               "(Retro) SUPER MARIO WORLD": "1-up shroom",
+              "THE END IS NIGH": "Tumors",
               "UFO 50": "Waldorf Puffin",
               "UFO 50 BINGOMOD": "Waldorf Puffin",
               "(Retro) YOSHI'S ISLAND": "1-Up flying Shy Guy in the Underground section of 1-1",
@@ -4584,6 +4769,7 @@ export const EVERY_GAME_UFO = {
               "(FTP) DUCK LIFE",
               "ENTER THE GUNGEON",
               "FTL",
+              "(FTP) GOLD MINER",
               "(FTP) GUNBALL 2: EMPEROR REVENGE",
               "HADES",
               "HE IS COMING",
@@ -4599,6 +4785,8 @@ export const EVERY_GAME_UFO = {
               "(FTP) NETHACK",
               "NOITA",
               "NUBBY'S NUMBER FACTORY",
+              "PARTY HARD",
+              "PAWNBARIAN",
               "PEGLIN",
               "PIZZA TOWER",
               "RISK OF RAIN 2",
@@ -4623,6 +4811,7 @@ export const EVERY_GAME_UFO = {
               "UFO 50",
               "UFO 50 BINGOMOD",
               "ULTRAKILL",
+              "UNCLE CHOP'S ROCKET SHOP",
               "UNFAIR FLIPS",
               "WHITE KNUCKLE",
               "WINDSWEPT"
@@ -4645,6 +4834,7 @@ export const EVERY_GAME_UFO = {
                 "DEMONCRAWL",
                 "DICEY DUNGEONS",
                 "(FTP) DUCK LIFE",
+                "(FTP) GOLD MINER",
                 "(FTP) GUNBALL 2: EMPEROR REVENGE",
                 "I WANNA BE THE CAT",
                 "KERO BLASTER",
@@ -4652,6 +4842,8 @@ export const EVERY_GAME_UFO = {
                 "(FTD) MINESWEEPER PLUS",
                 "(FTP) NETHACK",
                 "NUBBY'S NUMBER FACTORY",
+                "PARTY HARD",
+                "PAWNBARIAN",
                 "RISK OF RAIN 2",
                 "ROGUE LEGACY",
                 "ROGUE LEGACY 2",
@@ -4667,6 +4859,7 @@ export const EVERY_GAME_UFO = {
                 "UFO 50",
                 "UFO 50 BINGOMOD",
                 "ULTRAKILL",
+                "UNCLE CHOP'S ROCKET SHOP",
                 "UNFAIR FLIPS",
                 "BLUE PRINCE",
                 "CHESSPLOSION",
@@ -4724,6 +4917,7 @@ export const EVERY_GAME_UFO = {
               "DEMONCRAWL": "",
               "DICEY DUNGEONS": "",
               "(FTP) DUCK LIFE": "seed",
+              "(FTP) GOLD MINER": "",
               "(FTP) GUNBALL 2: EMPEROR REVENGE": "Guns",
               "I WANNA BE THE CAT": "Any shop",
               "KERO BLASTER": "CF shop or hospital",
@@ -4731,6 +4925,8 @@ export const EVERY_GAME_UFO = {
               "(FTD) MINESWEEPER PLUS": "Use the radar",
               "(FTP) NETHACK": "Shop spawns on level 2",
               "NUBBY'S NUMBER FACTORY": "",
+              "PARTY HARD": "Receive item from the dealer",
+              "PAWNBARIAN": "Heart or Upgrades",
               "RISK OF RAIN 2": "Open a chest",
               "ROGUE LEGACY": "Anything at the Castle",
               "ROGUE LEGACY 2": "Castle Upgrades",
@@ -4746,6 +4942,7 @@ export const EVERY_GAME_UFO = {
               "UFO 50": "Party House Guest",
               "UFO 50 BINGOMOD": "Party House Guest",
               "ULTRAKILL": "Alt Weapons",
+              "UNCLE CHOP'S ROCKET SHOP": "Meatball's Mart",
               "UNFAIR FLIPS": "",
               "BLUE PRINCE": "",
               "CHESSPLOSION": "Dungeon",
@@ -4845,12 +5042,14 @@ export const EVERY_GAME_UFO = {
               "ROGUE LEGACY 2",
               "SALAMANDER COUNTY PUBLIC TELEVISION",
               "SHEEPO",
+              "(FTP) SLITHER.IO",
               "SOL CESTO",
               "(FTP) SPACEVENTURE 2 - MINT CONDITION",
               "SPELUNKY 2",
               "STEVE'S WAREHOUSE",
               "STREETS OF ROGUE",
               "(Retro) SUPER MARIO 64",
+              "(Retro) SUPER MARIO BROS. ",
               "(Retro) SUPER MARIO BROS. 3",
               "SUPER MARIO MAKER 2",
               "(Retro) SUPER MARIO SUNBURN",
@@ -4912,12 +5111,14 @@ export const EVERY_GAME_UFO = {
                 "RAIN WORLD: DOWNPOUR",
                 "ROGUE LEGACY",
                 "ROGUE LEGACY 2",
+                "(FTP) SLITHER.IO",
                 "SOL CESTO",
                 "(FTP) SPACEVENTURE 2 - MINT CONDITION",
                 "SPELUNKY 2",
                 "STEVE'S WAREHOUSE",
                 "STREETS OF ROGUE",
                 "(Retro) SUPER MARIO 64",
+                "(Retro) SUPER MARIO BROS. ",
                 "(Retro) SUPER MARIO BROS. 3",
                 "SUPER MARIO MAKER 2",
                 "(Retro) SUPER MARIO SUNBURN",
@@ -5000,12 +5201,14 @@ export const EVERY_GAME_UFO = {
               "RAIN WORLD: DOWNPOUR": "Scavengers as Artificer",
               "ROGUE LEGACY": "Chicken",
               "ROGUE LEGACY 2": "Chicken",
+              "(FTP) SLITHER.IO": "any orb",
               "SOL CESTO": "Strawberry",
               "(FTP) SPACEVENTURE 2 - MINT CONDITION": "cookie, cherry, grape etc",
               "SPELUNKY 2": "Cooked Turkey",
               "STEVE'S WAREHOUSE": "Buy fruit",
               "STREETS OF ROGUE": "Any food item",
               "(Retro) SUPER MARIO 64": "1-up shroom",
+              "(Retro) SUPER MARIO BROS. ": "Mushroom",
               "(Retro) SUPER MARIO BROS. 3": "Mushrooms",
               "SUPER MARIO MAKER 2": "Mushrooms",
               "(Retro) SUPER MARIO SUNBURN": "Any fruit",
@@ -5064,6 +5267,7 @@ export const EVERY_GAME_UFO = {
               "DARK SOULS 3",
               "DEMONCRAWL",
               "(Retro) DONKEY KONG 64",
+              "(FTP) GOLD MINER",
               "HADES",
               "HE IS COMING",
               "HITMAN 3",
@@ -5100,7 +5304,8 @@ export const EVERY_GAME_UFO = {
               "TERRARIA",
               "UFO 50",
               "UFO 50 BINGOMOD",
-              "ULTRAKILL"
+              "ULTRAKILL",
+              "UNCLE CHOP'S ROCKET SHOP"
             ],
             "fallback": "Collect or consume a beverage in [5] games(ANY games) [Fallback]"
           },
@@ -5117,6 +5322,7 @@ export const EVERY_GAME_UFO = {
                 "DARK SOULS 3",
                 "DEMONCRAWL",
                 "(Retro) DONKEY KONG 64",
+                "(FTP) GOLD MINER",
                 "HITMAN 3",
                 "I WANNA BE THE CAT",
                 "(Retro) KID ICARUS",
@@ -5142,6 +5348,7 @@ export const EVERY_GAME_UFO = {
                 "UFO 50",
                 "UFO 50 BINGOMOD",
                 "ULTRAKILL",
+                "UNCLE CHOP'S ROCKET SHOP",
                 "BROOMSWEEPER",
                 "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT",
                 "HE IS COMING",
@@ -5181,6 +5388,7 @@ export const EVERY_GAME_UFO = {
               "DARK SOULS 3": "Estus Flask",
               "DEMONCRAWL": "potions",
               "(Retro) DONKEY KONG 64": "Franky's Potion",
+              "(FTP) GOLD MINER": "Strength Drink",
               "HITMAN 3": "Wine (Mendoza)",
               "I WANNA BE THE CAT": "Potion",
               "(Retro) KID ICARUS": "Chalice",
@@ -5206,6 +5414,7 @@ export const EVERY_GAME_UFO = {
               "UFO 50": "Divers S.Potion",
               "UFO 50 BINGOMOD": "Divers S.Potion",
               "ULTRAKILL": "Heal with blood",
+              "UNCLE CHOP'S ROCKET SHOP": "Fill a canister with Coffee",
               "BROOMSWEEPER": "Drink Items",
               "(Retro) CASTLEVANIA: SYMPHONY OF THE NIGHT": "Potion",
               "HE IS COMING": "Various Items",
@@ -5271,6 +5480,7 @@ export const EVERY_GAME_UFO = {
               "MAGICAT",
               "(Retro) MARIO KART 64",
               "MARIO KART WORLD",
+              "(Retro) METROID: ZERO MISSION",
               "MINA THE HOLLOWER",
               "MINECRAFT",
               "MOSA LINA",
@@ -5341,6 +5551,7 @@ export const EVERY_GAME_UFO = {
                 "MAGICAT",
                 "(Retro) MARIO KART 64",
                 "MARIO KART WORLD",
+                "(Retro) METROID: ZERO MISSION",
                 "MINECRAFT",
                 "(FTP) NYAMO'S ADVENTURE",
                 "PEAK",
@@ -5403,6 +5614,7 @@ export const EVERY_GAME_UFO = {
                 "THE BINDING OF ISAAC: REBIRTH",
                 "HOLLOW KNIGHT SILKSONG",
                 "(FTD) SKORPULAC",
+                "UNCLE CHOP'S ROCKET SHOP",
                 "YOKU'S ISLAND EXPRESS",
                 "(FTD) YOU HAVE 10 SECONDS (2023)",
                 "BUG FABLES",
@@ -5438,6 +5650,7 @@ export const EVERY_GAME_UFO = {
               "MAGICAT": "Potion's Dash",
               "(Retro) MARIO KART 64": "Mushroom or Star",
               "MARIO KART WORLD": "Mushrooms",
+              "(Retro) METROID: ZERO MISSION": "Morph Ball",
               "MINECRAFT": "Craft ladder",
               "(FTP) NYAMO'S ADVENTURE": "Powerup 2",
               "PEAK": "rope, balloons, etc",
@@ -5500,6 +5713,7 @@ export const EVERY_GAME_UFO = {
               "THE BINDING OF ISAAC: REBIRTH": "",
               "HOLLOW KNIGHT SILKSONG": "Swift Step",
               "(FTD) SKORPULAC": "Stage 5 thing",
+              "UNCLE CHOP'S ROCKET SHOP": "Kyle's Speed upgrade",
               "YOKU'S ISLAND EXPRESS": "Kickback",
               "(FTD) YOU HAVE 10 SECONDS (2023)": "Gravity Ball (Area 7)",
               "BUG FABLES": "Kabbu's Dash Through (chap3)",
@@ -5522,6 +5736,7 @@ export const EVERY_GAME_UFO = {
               "HOLLOW KNIGHT",
               "HOLLOW KNIGHT SILKSONG",
               "(Retro) KID ICARUS",
+              "(Retro) METROID: ZERO MISSION",
               "MINA THE HOLLOWER",
               "MINECRAFT",
               "RISK OF RAIN 2",
@@ -5546,6 +5761,7 @@ export const EVERY_GAME_UFO = {
                 "UFO 50",
                 "UFO 50 BINGOMOD",
                 "(Retro) KID ICARUS",
+                "(Retro) METROID: ZERO MISSION",
                 "MINA THE HOLLOWER",
                 "MINECRAFT",
                 "(Retro) SUPER METROID MAP RANDO",
@@ -5573,6 +5789,7 @@ export const EVERY_GAME_UFO = {
               "UFO 50": "Zoldath Map Piece",
               "UFO 50 BINGOMOD": "Zoldath Map Piece",
               "(Retro) KID ICARUS": "Map (start of 1-4)",
+              "(Retro) METROID: ZERO MISSION": "Brinstar's Map Data",
               "MINA THE HOLLOWER": "Underlab Upgrade",
               "MINECRAFT": "Craft or Find",
               "(Retro) SUPER METROID MAP RANDO": "Map Station",
@@ -5613,6 +5830,7 @@ export const EVERY_GAME_UFO = {
               "SPELUNKY 2",
               "(FTD) SPELUNKY CLASSIC",
               "SPELUNKY HD",
+              "(Retro) SUPER MARIO BROS. ",
               "(Retro) SUPER MARIO BROS. 3",
               "(Retro) SUPER MARIO SUNBURN",
               "(Retro) SUPER MARIO SUNSHINE",
@@ -5640,6 +5858,7 @@ export const EVERY_GAME_UFO = {
                 "PIZZA TOWER",
                 "SPELUNKY 2",
                 "SPELUNKY HD",
+                "(Retro) SUPER MARIO BROS. ",
                 "(Retro) SUPER MARIO SUNBURN",
                 "UFO 50",
                 "UFO 50 BINGOMOD",
@@ -5702,6 +5921,7 @@ export const EVERY_GAME_UFO = {
               "PIZZA TOWER": "Tutorial's first topping",
               "SPELUNKY 2": "Damsel (pet)",
               "SPELUNKY HD": "Damsel",
+              "(Retro) SUPER MARIO BROS. ": "Toad in Castle",
               "(Retro) SUPER MARIO SUNBURN": "NPCs under goop",
               "UFO 50": "Grimstone / Cyber Owls Rescue",
               "UFO 50 BINGOMOD": "Grimstone / Cyber Owls Rescue",
@@ -5932,6 +6152,8 @@ export const EVERY_GAME_UFO = {
               "NIDHOGG",
               "NUBBY'S NUMBER FACTORY",
               "OPUS MAGNUM",
+              "PARTY HARD",
+              "PAWNBARIAN",
               "PETAL CRASH",
               "(FTD) PHANTOM JUMP",
               "PIZZA TOWER",
@@ -5954,7 +6176,9 @@ export const EVERY_GAME_UFO = {
               "STREETS OF ROGUE",
               "THE VOID RAINS UPON HER HEART",
               "ULTRAKILL",
+              "UNCLE CHOP'S ROCKET SHOP",
               "WHITE KNUCKLE",
+              "WILL YOU SNAIL?",
               "WINDSWEPT",
               "(Retro) YOSHI'S HIGHLAND",
               "(Retro) YOSHI'S ISLAND",
@@ -5984,6 +6208,8 @@ export const EVERY_GAME_UFO = {
                 "NIDHOGG",
                 "NUBBY'S NUMBER FACTORY",
                 "OPUS MAGNUM",
+                "PARTY HARD",
+                "PAWNBARIAN",
                 "PETAL CRASH",
                 "(FTD) PHANTOM JUMP",
                 "PIZZA TOWER",
@@ -6003,6 +6229,7 @@ export const EVERY_GAME_UFO = {
                 "THE VOID RAINS UPON HER HEART",
                 "ULTRAKILL",
                 "WHITE KNUCKLE",
+                "WILL YOU SNAIL?",
                 "WINDSWEPT",
                 "(Retro) YOSHI'S HIGHLAND",
                 "(Retro) YOSHI'S ISLAND",
@@ -6014,6 +6241,7 @@ export const EVERY_GAME_UFO = {
                 "ROCKET LEAGUE",
                 "STAR OF PROVIDENCE",
                 "STREETS OF ROGUE",
+                "UNCLE CHOP'S ROCKET SHOP",
                 "(FTD) KILLER QUEEN BLACK",
                 "(Retro) PUYO PUYO"
               ],
@@ -6038,6 +6266,8 @@ export const EVERY_GAME_UFO = {
               "NIDHOGG": "Tutorial",
               "NUBBY'S NUMBER FACTORY": "tutorial",
               "OPUS MAGNUM": "Beat all tutorial levels",
+              "PARTY HARD": "Opening gameplay section",
+              "PAWNBARIAN": "Tutorial Island",
               "PETAL CRASH": "How to Play - The Basics",
               "(FTD) PHANTOM JUMP": "Sunrise Trailhead",
               "PIZZA TOWER": "Tutorial",
@@ -6057,6 +6287,7 @@ export const EVERY_GAME_UFO = {
               "THE VOID RAINS UPON HER HEART": "Unit Lulu",
               "ULTRAKILL": "Tutorial",
               "WHITE KNUCKLE": "Tutorial",
+              "WILL YOU SNAIL?": "",
               "WINDSWEPT": "Guiding Glade",
               "(Retro) YOSHI'S HIGHLAND": "Demo Stage",
               "(Retro) YOSHI'S ISLAND": "Demo Stage",
@@ -6068,6 +6299,7 @@ export const EVERY_GAME_UFO = {
               "ROCKET LEAGUE": "",
               "STAR OF PROVIDENCE": "in Mirror",
               "STREETS OF ROGUE": "(needs clarification)",
+              "UNCLE CHOP'S ROCKET SHOP": "Training Day",
               "(FTD) KILLER QUEEN BLACK": "",
               "(Retro) PUYO PUYO": ""
             }
@@ -6099,6 +6331,7 @@ export const EVERY_GAME_UFO = {
               "(FTD) EVIL EGG",
               "FTL",
               "GEOMETRY DASH",
+              "(FTP) GOLD MINER",
               "(FTP) GUNBALL 2: EMPEROR REVENGE",
               "HE IS COMING",
               "HITMAN 3",
@@ -6114,6 +6347,7 @@ export const EVERY_GAME_UFO = {
               "LETHAL COMPANY",
               "MAGICAT",
               "MARIO KART WORLD",
+              "(Retro) METROID: ZERO MISSION",
               "MINECRAFT",
               "(FTD) MINESWEEPER PLUS",
               "(Retro) MONSTER HUNTER TRI (WII)",
@@ -6121,6 +6355,7 @@ export const EVERY_GAME_UFO = {
               "NOITA",
               "NUBBY'S NUMBER FACTORY",
               "NUCLEAR THRONE",
+              "PARTY HARD",
               "PEAK",
               "PEGLIN",
               "(FTD) PHANTOM JUMP",
@@ -6157,6 +6392,7 @@ export const EVERY_GAME_UFO = {
               "UFO 50",
               "UFO 50 BINGOMOD",
               "ULTRAKILL",
+              "UNCLE CHOP'S ROCKET SHOP",
               "UTOPIA MUST FALL",
               "WILL YOU SNAIL?",
               "WINDSWEPT",
@@ -6185,6 +6421,7 @@ export const EVERY_GAME_UFO = {
                 "ENVIRONMENTAL STATION ALPHA",
                 "FTL",
                 "GEOMETRY DASH",
+                "(FTP) GOLD MINER",
                 "(FTP) GUNBALL 2: EMPEROR REVENGE",
                 "HITMAN 3",
                 "HOLLOW KNIGHT SILKSONG",
@@ -6200,6 +6437,7 @@ export const EVERY_GAME_UFO = {
                 "(Retro) MONSTER HUNTER TRI (WII)",
                 "MOSA LINA",
                 "NOITA",
+                "PARTY HARD",
                 "PEAK",
                 "PEGLIN",
                 "(FTD) PHANTOM JUMP",
@@ -6224,6 +6462,7 @@ export const EVERY_GAME_UFO = {
                 "UFO 50",
                 "UFO 50 BINGOMOD",
                 "ULTRAKILL",
+                "UNCLE CHOP'S ROCKET SHOP",
                 "UTOPIA MUST FALL",
                 "WILL YOU SNAIL?",
                 "WINDSWEPT",
@@ -6236,6 +6475,7 @@ export const EVERY_GAME_UFO = {
                 "HOLLOW KNIGHT",
                 "KERO BLASTER",
                 "MARIO KART WORLD",
+                "(Retro) METROID: ZERO MISSION",
                 "NUBBY'S NUMBER FACTORY",
                 "PIZZA TOWER",
                 "PLANTS VS ZOMBIES",
@@ -6292,6 +6532,7 @@ export const EVERY_GAME_UFO = {
               "ENVIRONMENTAL STATION ALPHA": "Class C Guardian",
               "FTL": "Missle",
               "GEOMETRY DASH": "Player death/clicking players on title screen",
+              "(FTP) GOLD MINER": "Dynamite, TNT barrels",
               "(FTP) GUNBALL 2: EMPEROR REVENGE": "Kill an enemy",
               "HITMAN 3": "Various",
               "HOLLOW KNIGHT SILKSONG": "Kill Moss Mother",
@@ -6307,6 +6548,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) MONSTER HUNTER TRI (WII)": "Barrel Bombs",
               "MOSA LINA": "Items or Cannons",
               "NOITA": "explosive barrel",
+              "PARTY HARD": "Fuel explosion in BBQ Party",
               "PEAK": "Cook the flare",
               "PEGLIN": "bomb",
               "(FTD) PHANTOM JUMP": "Die",
@@ -6331,6 +6573,7 @@ export const EVERY_GAME_UFO = {
               "UFO 50": "Mortol 2 Bomber",
               "UFO 50 BINGOMOD": "Mortol 2 Bomber",
               "ULTRAKILL": "Yes",
+              "UNCLE CHOP'S ROCKET SHOP": "Overfill a Fuel Tank",
               "UTOPIA MUST FALL": "Enemy projectiles or your nukes",
               "WILL YOU SNAIL?": "Die",
               "WINDSWEPT": "Party Popper (end of level)",
@@ -6343,6 +6586,7 @@ export const EVERY_GAME_UFO = {
               "HOLLOW KNIGHT": "Kill Brooding Mawlek / exploding ennemies in Greenpath",
               "KERO BLASTER": "Defeat a boss",
               "MARIO KART WORLD": "Bob-Omb",
+              "(Retro) METROID: ZERO MISSION": "Missiles",
               "NUBBY'S NUMBER FACTORY": "various items",
               "PIZZA TOWER": "Bombs in Ancient Cheese",
               "PLANTS VS ZOMBIES": "Cherry bomb",
@@ -6629,7 +6873,8 @@ export const EVERY_GAME_UFO = {
                 "(Retro) SUPER MARIO 64",
                 "(Retro) KID ICARUS",
                 "BUG FABLES",
-                "HOLLOW KNIGHT SILKSONG"
+                "HOLLOW KNIGHT SILKSONG",
+                "UNCLE CHOP'S ROCKET SHOP"
               ],
               "shown_if_on_card": [],
               "hidden": []
@@ -6679,7 +6924,8 @@ export const EVERY_GAME_UFO = {
               "(Retro) SUPER MARIO 64": "Jolly Roger Bay",
               "(Retro) KID ICARUS": "Defeat 1-4 boss",
               "BUG FABLES": "Bandit Hideout",
-              "HOLLOW KNIGHT SILKSONG": "chests"
+              "HOLLOW KNIGHT SILKSONG": "chests",
+              "UNCLE CHOP'S ROCKET SHOP": "Thief's Initiation safe"
             }
           }
         },
@@ -6693,6 +6939,7 @@ export const EVERY_GAME_UFO = {
               "BUG FABLES",
               "CRYPT OF THE NECRODANCER",
               "MARIO KART WORLD",
+              "PAWNBARIAN",
               "(FTD) PHANTOM JUMP",
               "ROGUE LEGACY 2",
               "SLAY THE SPIRE",
@@ -6732,6 +6979,7 @@ export const EVERY_GAME_UFO = {
                 "(FTD) PHANTOM JUMP",
                 "(Retro) SUPER SMASH BROS. BRAWL",
                 "THE BINDING OF ISAAC: REBIRTH",
+                "PAWNBARIAN",
                 "SPEEDRUNNERS",
                 "(Retro) SUPER SMASH BROS.",
                 "(Retro) SUPER SMASH BROS. MELEE",
@@ -6750,6 +6998,7 @@ export const EVERY_GAME_UFO = {
                 "(FTD) CAVE STORY",
                 "ENTER THE GUNGEON",
                 "KATANA ZERO",
+                "PARTY HARD",
                 "PEGLIN",
                 "RAIN WORLD",
                 "RAIN WORLD: DOWNPOUR",
@@ -6776,6 +7025,7 @@ export const EVERY_GAME_UFO = {
               "(FTD) PHANTOM JUMP": "Beat a warp zone",
               "(Retro) SUPER SMASH BROS. BRAWL": "Ness",
               "THE BINDING OF ISAAC: REBIRTH": "Many viable options (check note)",
+              "PAWNBARIAN": "Finish a run as Pawnbarian",
               "SPEEDRUNNERS": "Moonraker - Complete 1-4",
               "(Retro) SUPER SMASH BROS.": "Luigi",
               "(Retro) SUPER SMASH BROS. MELEE": "Jigglypuff",
@@ -6794,6 +7044,7 @@ export const EVERY_GAME_UFO = {
               "(FTD) CAVE STORY": "Curly ",
               "ENTER THE GUNGEON": "Robot",
               "KATANA ZERO": "Fifteen (level 8)",
+              "PARTY HARD": "Miami Party",
               "PEGLIN": "idk but its possible",
               "RAIN WORLD": "Beating the game as Monk or Survivor",
               "RAIN WORLD: DOWNPOUR": "Beating the game as Monk or Survivor",
@@ -6814,6 +7065,7 @@ export const EVERY_GAME_UFO = {
               "MAIDEN & SPELL",
               "(FTP) NETHACK",
               "NOITA",
+              "PARTY HARD",
               "PEAK",
               "PEGLIN",
               "SPELUNKY 2",
@@ -6833,6 +7085,7 @@ export const EVERY_GAME_UFO = {
                 "MAIDEN & SPELL",
                 "(FTP) NETHACK",
                 "NOITA",
+                "PARTY HARD",
                 "PEAK",
                 "UFO 50",
                 "UFO 50 BINGOMOD",
@@ -6870,6 +7123,7 @@ export const EVERY_GAME_UFO = {
               "MAIDEN & SPELL": "Royal Arcanist's Defensive Special",
               "(FTP) NETHACK": "A specific character class starts with poison",
               "NOITA": "",
+              "PARTY HARD": "Poison the punch in BBQ Party",
               "PEAK": "various",
               "UFO 50": "Quibble Race Poison",
               "UFO 50 BINGOMOD": "Quibble Race Poison",
@@ -6926,6 +7180,7 @@ export const EVERY_GAME_UFO = {
               "ENTER THE GUNGEON",
               "(FTD) EVIL EGG",
               "FTL",
+              "(FTP) GOLD MINER",
               "(FTP) GUNBALL 2: EMPEROR REVENGE",
               "HADES",
               "HE IS COMING",
@@ -6939,12 +7194,14 @@ export const EVERY_GAME_UFO = {
               "(Retro) KIRBY SUPER STAR",
               "LETHAL COMPANY",
               "MARIO KART WORLD",
+              "(Retro) METROID: ZERO MISSION",
               "MINA THE HOLLOWER",
               "MINECRAFT",
               "MOSA LINA",
               "(FTP) NETHACK",
               "NIDHOGG",
               "NOITA",
+              "PARTY HARD",
               "PEGLIN",
               "PIZZA TOWER",
               "RABI-RIBI",
@@ -6995,6 +7252,7 @@ export const EVERY_GAME_UFO = {
                 "DICEY DUNGEONS",
                 "DUCK GAME",
                 "(FTD) EVIL EGG",
+                "(FTP) GOLD MINER",
                 "(FTP) GUNBALL 2: EMPEROR REVENGE",
                 "HE IS COMING",
                 "HITMAN 3",
@@ -7006,11 +7264,13 @@ export const EVERY_GAME_UFO = {
                 "(Retro) KIRBY SUPER STAR",
                 "LETHAL COMPANY",
                 "MARIO KART WORLD",
+                "(Retro) METROID: ZERO MISSION",
                 "MINA THE HOLLOWER",
                 "MINECRAFT",
                 "(FTP) NETHACK",
                 "NIDHOGG",
                 "NOITA",
+                "PARTY HARD",
                 "PEGLIN",
                 "RABI-RIBI",
                 "RAIN WORLD",
@@ -7083,6 +7343,7 @@ export const EVERY_GAME_UFO = {
               "DICEY DUNGEONS": "",
               "DUCK GAME": "Grab a gun",
               "(FTD) EVIL EGG": "Plasma cannon, Rail gun, Executioner's sword",
+              "(FTP) GOLD MINER": "Dynamite",
               "(FTP) GUNBALL 2: EMPEROR REVENGE": "New gun in shop",
               "HE IS COMING": "Sword Upgrade",
               "HITMAN 3": "Various",
@@ -7094,11 +7355,13 @@ export const EVERY_GAME_UFO = {
               "(Retro) KIRBY SUPER STAR": "Any transformation",
               "LETHAL COMPANY": "Shovel, Stun Grenade",
               "MARIO KART WORLD": "Red shell, green shell, banana peels, etc.",
+              "(Retro) METROID: ZERO MISSION": "Long Beam",
               "MINA THE HOLLOWER": "Ship Chest",
               "MINECRAFT": "Wooden Sword",
               "(FTP) NETHACK": "There are weapons everywhere",
               "NIDHOGG": "The enemy's rapier",
               "NOITA": "wand",
+              "PARTY HARD": "Receive an explosive from the dealer",
               "PEGLIN": "orb",
               "RABI-RIBI": "Hammer",
               "RAIN WORLD": "Spear",
@@ -7193,8 +7456,11 @@ export const EVERY_GAME_UFO = {
               "(Retro) KIRBY AIR RIDE",
               "(Retro) KIRBY SUPER STAR",
               "LETHAL LEAGUE BLAZE",
+              "(Retro) METROID: ZERO MISSION",
               "(Retro) MONSTER HUNTER TRI (WII)",
               "NUBBY'S NUMBER FACTORY",
+              "PARTY HARD",
+              "PAWNBARIAN",
               "PIZZA TOWER",
               "PLANTS VS ZOMBIES",
               "RABI-RIBI",
@@ -7214,6 +7480,7 @@ export const EVERY_GAME_UFO = {
               "STAR VADERS",
               "STREETS OF ROGUE",
               "(Retro) SUPER MARIO 64",
+              "(Retro) SUPER MARIO BROS. ",
               "(Retro) SUPER MARIO BROS. 3",
               "SUPER MARIO MAKER 2",
               "(Retro) SUPER MARIO SUNBURN",
@@ -7230,6 +7497,7 @@ export const EVERY_GAME_UFO = {
               "UFO 50 BINGOMOD",
               "ULTRAKILL",
               "UTOPIA MUST FALL",
+              "WILL YOU SNAIL?",
               "WINDSWEPT",
               "(Retro) YOSHI'S HIGHLAND",
               "(Retro) YOSHI'S ISLAND"
@@ -7262,6 +7530,8 @@ export const EVERY_GAME_UFO = {
                 "(Retro) KIRBY SUPER STAR",
                 "LETHAL LEAGUE BLAZE",
                 "(Retro) MONSTER HUNTER TRI (WII)",
+                "PARTY HARD",
+                "PAWNBARIAN",
                 "PIZZA TOWER",
                 "RABI-RIBI",
                 "RAIN WORLD: DOWNPOUR",
@@ -7275,6 +7545,7 @@ export const EVERY_GAME_UFO = {
                 "STAR VADERS",
                 "STREETS OF ROGUE",
                 "(Retro) SUPER MARIO 64",
+                "(Retro) SUPER MARIO BROS. ",
                 "(Retro) SUPER MARIO BROS. 3",
                 "SUPER MARIO MAKER 2",
                 "(Retro) SUPER MARIO SUNBURN",
@@ -7303,11 +7574,13 @@ export const EVERY_GAME_UFO = {
                 "(Retro) SUPER SMASH BROS.",
                 "(Retro) SUPER SMASH BROS. MELEE",
                 "TERRARIA",
+                "WILL YOU SNAIL?",
                 "(FTD) CAVE STORY",
                 "(Retro) DEMON'S CREST",
                 "(FTD) DOG WITCH",
                 "(Retro) DONKEY KONG 64",
                 "(FTP) GUNBALL 2: EMPEROR REVENGE",
+                "(Retro) METROID: ZERO MISSION",
                 "SOL CESTO",
                 "(Retro) SUPER MARIO SUNSHINE",
                 "(Retro) SUPER METROID MAP RANDO",
@@ -7321,6 +7594,7 @@ export const EVERY_GAME_UFO = {
                 "DEMONCRAWL",
                 "ENTER THE GUNGEON",
                 "FTL",
+                "(FTP) GOLD MINER",
                 "RAIN WORLD",
                 "MINECRAFT",
                 "POMPOM",
@@ -7357,6 +7631,8 @@ export const EVERY_GAME_UFO = {
               "(Retro) KIRBY SUPER STAR": "Many abilities",
               "LETHAL LEAGUE BLAZE": "FFA or Teams battle",
               "(Retro) MONSTER HUNTER TRI (WII)": "Jaggis",
+              "PARTY HARD": "Any explosion",
+              "PAWNBARIAN": "Plus or Cross attacks",
               "PIZZA TOWER": "Kill.",
               "RABI-RIBI": "Hammer strikes",
               "RAIN WORLD: DOWNPOUR": "Artificer",
@@ -7370,6 +7646,7 @@ export const EVERY_GAME_UFO = {
               "STAR VADERS": "Nova Bomb",
               "STREETS OF ROGUE": "Easiest with explosions",
               "(Retro) SUPER MARIO 64": "Dive into 2 goombas",
+              "(Retro) SUPER MARIO BROS. ": "Koopa Shell",
               "(Retro) SUPER MARIO BROS. 3": "Various ways",
               "SUPER MARIO MAKER 2": "Ground pound",
               "(Retro) SUPER MARIO SUNBURN": "Goobles",
@@ -7398,11 +7675,13 @@ export const EVERY_GAME_UFO = {
               "(Retro) SUPER SMASH BROS.": "KO two opponents",
               "(Retro) SUPER SMASH BROS. MELEE": "KO two opponents",
               "TERRARIA": "",
+              "WILL YOU SNAIL?": "Falling blocks on ennemies",
               "(FTD) CAVE STORY": "Missile Launcher",
               "(Retro) DEMON'S CREST": "Ground Gargoyle",
               "(FTD) DOG WITCH": "AoE",
               "(Retro) DONKEY KONG 64": "Jungle Japes Lobby",
               "(FTP) GUNBALL 2: EMPEROR REVENGE": "Rocket Tube",
+              "(Retro) METROID: ZERO MISSION": "Bombs",
               "SOL CESTO": "Bomb Items",
               "(Retro) SUPER MARIO SUNSHINE": "Goobles",
               "(Retro) SUPER METROID MAP RANDO": "PB, Shinespark",
@@ -7416,6 +7695,7 @@ export const EVERY_GAME_UFO = {
               "DEMONCRAWL": "any aoe attack",
               "ENTER THE GUNGEON": "AoE gun",
               "FTL": "likely requires either a teleporter or a bomb",
+              "(FTP) GOLD MINER": "blow up 2 pigs",
               "RAIN WORLD": "Grenades on Scavengers",
               "MINECRAFT": "Sword or spear",
               "POMPOM": "I think you can crush 2 enemies in toy world?",
@@ -7442,6 +7722,7 @@ export const EVERY_GAME_UFO = {
               "SPELUNKY 2",
               "UFO 50",
               "UFO 50 BINGOMOD",
+              "UNCLE CHOP'S ROCKET SHOP",
               "WINDSWEPT"
             ],
             "fallback": "Pet a pet/animal in [3] games(ANY games) [Fallback]"
@@ -7459,6 +7740,7 @@ export const EVERY_GAME_UFO = {
                 "SPELUNKY 2",
                 "UFO 50",
                 "UFO 50 BINGOMOD",
+                "UNCLE CHOP'S ROCKET SHOP",
                 "WINDSWEPT",
                 "WHITE KNUCKLE",
                 "MINA THE HOLLOWER",
@@ -7477,6 +7759,7 @@ export const EVERY_GAME_UFO = {
               "SPELUNKY 2": "campsite Monty",
               "UFO 50": "Grimstone Santonio",
               "UFO 50 BINGOMOD": "Grimstone Santonio",
+              "UNCLE CHOP'S ROCKET SHOP": "Mörk (black cat)",
               "WINDSWEPT": "Pet Dolphin",
               "WHITE KNUCKLE": "Pet a Strider??",
               "MINA THE HOLLOWER": "Mite (in Sandfalls)",
@@ -7499,9 +7782,11 @@ export const EVERY_GAME_UFO = {
               "MEWGENICS",
               "MINECRAFT",
               "(FTP) NETHACK",
+              "PARTY HARD",
               "PLANTS VS ZOMBIES",
               "RAIN WORLD",
               "RAIN WORLD: DOWNPOUR",
+              "ROGUE LEGACY",
               "SPELUNKY 2",
               "(FTD) SPELUNKY CLASSIC",
               "SPELUNKY HD",
@@ -7526,6 +7811,8 @@ export const EVERY_GAME_UFO = {
                 "CRYPT OF THE NECRODANCER",
                 "HITMAN 3",
                 "MINECRAFT",
+                "PARTY HARD",
+                "ROGUE LEGACY",
                 "SPELUNKY 2",
                 "SPELUNKY HD",
                 "STREETS OF ROGUE",
@@ -7561,6 +7848,8 @@ export const EVERY_GAME_UFO = {
               "CRYPT OF THE NECRODANCER": "Shopkeeper",
               "HITMAN 3": "Mendoza",
               "MINECRAFT": "Animals, Villagers",
+              "PARTY HARD": "Murder the dealer",
+              "ROGUE LEGACY": "Tutorial King",
               "SPELUNKY 2": "damsel/shops/yang",
               "SPELUNKY HD": "Damsel",
               "STREETS OF ROGUE": "Any character aligned to you (green circle)",

@@ -40,13 +40,15 @@ export default function RecentGames({
       index === filtered.length - 1 ? null : filtered[index + 1].start_time;
     result.push(
       <SideCell key={startTime}>
-        <PlayedGame
-          game={game}
-          startTime={startTime}
-          endTime={endTime}
-          font={font}
-          isNes50={isNes50}
-        />
+        <div style={{ width: "60px", height: "68px" }}>
+          <PlayedGame
+            game={game}
+            startTime={startTime}
+            endTime={endTime}
+            font={font}
+            isNes50={isNes50}
+          />
+        </div>
       </SideCell>,
     );
   }
@@ -54,12 +56,14 @@ export default function RecentGames({
   while (result.length < limit) {
     result.push(
       <SideCell key={result.length}>
-        <div className={classes.container}>
-          <img
-            alt="No game"
-            src={`/cobwebs/cobwebs${result.length}.png`}
-            className={classes.gameIcon}
-          />
+        <div style={{ width: "60px", height: "68px" }}>
+          <div className={classes.container}>
+            <img
+              alt="No game"
+              src={`/cobwebs/cobwebs${result.length}.png`}
+              className={classes.gameIcon}
+            />
+          </div>
         </div>
       </SideCell>,
     );

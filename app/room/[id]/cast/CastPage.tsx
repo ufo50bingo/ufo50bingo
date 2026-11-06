@@ -17,7 +17,7 @@ export default async function CastPage({
   alreadyFetched,
 }: Props) {
   const [data, token] = await Promise.all([
-    fetchData(gameId, alreadyFetched, false),
+    fetchData(gameId, alreadyFetched, "cast"),
     getBroadcastToken(gameId),
   ]);
   return (

@@ -94,6 +94,9 @@ const UfoPasta = zod.strictObject({
       category_counts: zod.array(zod.record(zod.string(), zod.number())),
     })
     .optional(),
+  current_game_options: zod
+    .union([zod.string(), zod.record(zod.string(), zod.string())])
+    .optional(),
 });
 
 export default function validateStr(json: string): Return {

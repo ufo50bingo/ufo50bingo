@@ -12,6 +12,7 @@ import getNonGeneralCategories from "./getNonGeneralCategories";
 import { METADATA, Variant } from "../pastas/metadata";
 import { hashJson } from "../hashJson";
 import getAllCastOptions from "./getAllCastOptions";
+import getGameList from "../room/[id]/common/getGameList";
 
 export interface LeagueInfo {
   season: number;
@@ -65,8 +66,11 @@ export default async function createMatch({
       getNonGeneralCategories(pastaToStore),
     );
     const castOptionsToStore = getAllCastOptions(pastaToStore);
+    const currentGameOptions = new Set(Object.keys(getGameList(pastaToStore)));
 
-    for (const sc of subcategoriesToStore.union(castOptionsToStore)) {
+    for (const sc of subcategoriesToStore
+      .union(castOptionsToStore)
+      .union(currentGameOptions)) {
       subcategoryValues.push(sql`(${sc})`);
     }
   }

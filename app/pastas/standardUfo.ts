@@ -1364,7 +1364,8 @@ export const STANDARD_UFO = {
       hypercontender: [
         {
           name: "HYPER CONTENDER: Beat round 6 as {{hc_char}} or {{hc_char}} (default ring settings)",
-          short: "HYPER CONTENDER: Beat round 6 as {{hc_char}} or {{hc_char}} (default rings)",
+          short:
+            "HYPER CONTENDER: Beat round 6 as {{hc_char}} or {{hc_char}} (default rings)",
         },
         {
           name: "HYPER CONTENDER: Win 3 fights in one run on Hyper difficulty (default ring settings)",
@@ -2130,7 +2131,8 @@ export const STANDARD_UFO = {
             fallback:
               "WAR IS BAD: Win 7 battles across Avianos, Combatants, and Lords of Diskonia",
           },
-          short: "WAR IS BAD: 7 battles across Avianos, Combatants, and Lords of Diskonia",
+          short:
+            "WAR IS BAD: 7 battles across Avianos, Combatants, and Lords of Diskonia",
           cast: {
             options: "$infer",
             type: "counter",
@@ -2454,4 +2456,5 @@ export const STANDARD_UFO = {
       },
     ],
   },
+  current_game_options: "$ufo50",
 } as const;

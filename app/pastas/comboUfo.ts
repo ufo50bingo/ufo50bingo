@@ -47,4 +47,5 @@ export const COMBO_UFO: UFOPasta = {
       },
     ],
   },
+  current_game_options: "$ufo50",
 };

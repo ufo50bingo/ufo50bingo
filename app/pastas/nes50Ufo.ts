@@ -30,6 +30,9 @@ export const NES_50_UFO = {
       "Bugs Bunny CC": [
         {
           "name": "BUGS BUNNY CC: 💾 1; Beat level 7 without using pipes"
+        },
+		{
+          "name": "BUGS BUNNY CC: Eliminate an enemy 3 different ways"
         }
       ],
       "Cabal": [
@@ -40,6 +43,9 @@ export const NES_50_UFO = {
       "Castlevania 3": [
         {
           "name": "CASTLEVANIA 3: Use 3 unique sub-weapons to kill 3 enemies with each"
+        },
+		{
+          "name": "CASTLEVANIA 3: 💾 1; Kill 5 owls and reach 3-02"
         }
       ],
       "Chip 'n Dale": [
@@ -70,6 +76,9 @@ export const NES_50_UFO = {
       "DuckTales": [
         {
           "name": "DUCKTALES: Beat {{DT_level}}"
+        },
+		{
+          "name": "DUCKTALES: In Transylvania, have the heads fall off 5 suits of armor"
         }
       ],
       "Excitebike": [
@@ -110,6 +119,9 @@ export const NES_50_UFO = {
       "Jaws": [
         {
           "name": "JAWS: Earn 4+ shells at the end of a bonus round"
+        },
+		{
+          "name": "JAWS: Survive an encounter with Jaws"
         }
       ],
       "Kirby's Adventure": [
@@ -126,6 +138,9 @@ export const NES_50_UFO = {
       "Mega Man 6": [
         {
           "name": "MEGA MAN 6: Collect a Giant Health Pickup from 2 different levels"
+        },
+		{
+          "name": "MEGA MAN 6: Use an E-Tank in a Boss Fight"
         }
       ],
       "Mendel Palace": [
@@ -199,11 +214,17 @@ export const NES_50_UFO = {
       "Super Dodge Ball": [
         {
           "name": "SUPER DODGE BALL: Deal damage with all 6 players on your team"
+        },
+		{
+          "name": "SUPER DODGE BALL: Eliminate 1 player in Bean Ball"
         }
       ],
       "Super Mario Bros. 2": [
         {
           "name": "SUPER MARIO BROS 2: Show 6+ coins in the slot machine"
+        },
+		{
+          "name": "SUPER MARIO BROS 2: Have 4 Max Health"
         }
       ],
       "Super Mario Bros. 3": [
@@ -245,11 +266,14 @@ export const NES_50_UFO = {
       "TMNT 3": [
         {
           "name": "TMNT 3: 💾 1; Reach the submarine on the Ocean level without taking damage from any Mines"
+        },
+		{
+          "name": "TMNT 3: 💾 1; Eat Pizza"
         }
       ],
       "Ufouria": [
         {
-          "name": "UFOURIA: Defeat 4 enemy types"
+          "name": "UFOURIA: Recruit Freeon"
         }
       ],
       "Uninvited": [
@@ -292,6 +316,9 @@ export const NES_50_UFO = {
       "Bugs Bunny CC": [
         {
           "name": "BUGS BUNNY CC: 💾 2; Beat levels 46, 47, 48 without eliminating anyone"
+        },
+		{
+          "name": "Bugs Bunny CC: In one run, eliminate 3 different colors of Sylvester"
         }
       ],
       "Cabal": [
@@ -301,7 +328,10 @@ export const NES_50_UFO = {
       ],
       "Castlevania 3": [
         {
-          "name": "CASTLEVANIA 3: Beat 1-4 using only {{CV3_char}}"
+          "name": "CASTLEVANIA 3: Beat 1-04 using only {{CV3_char}}"
+        },
+		{
+          "name": "CASTLEVANIA 3: Acquire Triple Shot (III)"
         }
       ],
       "Chip 'n Dale": [
@@ -376,6 +406,9 @@ export const NES_50_UFO = {
       "Jaws": [
         {
           "name": "JAWS: Have 18,000+ points"
+        },
+		{
+          "name": "JAWS: Deal 2 total bars of damage to Jaws at Power level 2 or below"
         }
       ],
       "Kirby's Adventure": [
@@ -395,6 +428,9 @@ export const NES_50_UFO = {
       "Mega Man 6": [
         {
           "name": "MEGA MAN 6: Detonate every bomb platform in Blizzard Man's Stage"
+        },
+		{
+          "name": "MEGA MAN 6: 💾 1; Defeat 4 Robot masters"
         }
       ],
       "Mendel Palace": [
@@ -438,6 +474,9 @@ export const NES_50_UFO = {
       "River City Ransom": [
         {
           "name": "RIVER CITY RANSOM: Get a kill with 6 different weapons"
+        },
+		{
+          "name": "RIVER CITY RANSOM: Deal the final blow to a boss with a {{RCR_weapon}}"
         }
       ],
       "Smash TV": [
@@ -479,11 +518,17 @@ export const NES_50_UFO = {
       "Super Mario Bros. 2": [
         {
           "name": "SUPER MARIO BROS 2: Collect a Mushroom, Heart and Star in 2 different levels"
+        },
+		{
+          "name": "SUPER MARIO BROS 2: Beat a level after exiting a Warp Jar"
         }
       ],
       "Super Mario Bros. 3": [
         {
           "name": "SUPER MARIO BROS 3: Have 4 unique items in your inventory at once"
+        },
+		{
+          "name": "SUPER MARIO BROS 3: Beat 3 levels as Small Mario only"
         }
       ],
       "Super Spy Hunter": [
@@ -514,14 +559,17 @@ export const NES_50_UFO = {
       "TMNT 3": [
         {
           "name": "TMNT 3: Beat Rocksteady using only {{TMNT3_character}}"
+        },
+		{
+          "name": "TMNT 3: 💾 1; Beat the Building scene without being crushed or falling off the platform"
         }
       ],
       "Ufouria": [
         {
-          "name": "UFOURIA: Reach an Ice Cave with Freeon"
+          "name": "UFOURIA: 💾 1; Deliver the Egg to the Bird"
         },
         {
-          "name": "UFOURIA: Open 3 Chests"
+          "name": "UFOURIA: Open 4 Chests"
         }
       ],
       "Uninvited": [
@@ -565,6 +613,9 @@ export const NES_50_UFO = {
       "Bugs Bunny CC": [
         {
           "name": "BUGS BUNNY CC: Beat 5 levels eliminating everyone"
+        },
+		{
+          "name": "BUGS BUNNY CC: Show 10,000 points"
         }
       ],
       "Cabal": [
@@ -578,6 +629,9 @@ export const NES_50_UFO = {
       "Castlevania 3": [
         {
           "name": "CASTLEVANIA 3: 💾 1; Recruit {{CV3_hard}}"
+        },
+		{
+          "name": "CASTLEVANIA 3: Finish 12 screens as Trevor without having an upgraded whip"
         }
       ],
       "Chip 'n Dale": [
@@ -608,6 +662,9 @@ export const NES_50_UFO = {
       "DuckTales": [
         {
           "name": "DUCKTALES: Talk to Huey, Dewey, Louie, Launchpad, Bubba, and Webby"
+        },
+		{
+          "name": "DUCKTALES: Spend $3,300,000+"
         }
       ],
       "Excitebike": [
@@ -649,6 +706,9 @@ export const NES_50_UFO = {
       "Jaws": [
         {
           "name": "JAWS: Reach power level 3"
+        },
+		{
+          "name": "JAWS: Kill 5 enemies in the Sub"
         }
       ],
       "Kirby's Adventure": [
@@ -708,6 +768,9 @@ export const NES_50_UFO = {
       "River City Ransom": [
         {
           "name": "RIVER CITY RANSOM: Beat 2 bosses and enter Merlin's Secret Shop"
+        },
+		{
+          "name": "RIVER CITY RANSOM: Have $25+ after buying something at 3 different Malls"
         }
       ],
       "Smash TV": [
@@ -738,11 +801,17 @@ export const NES_50_UFO = {
       "Super Dodge Ball": [
         {
           "name": "SUPER DODGE BALL: On Normal skill level, win a round of Bean Ball as {{SDB_character}}"
+        },
+		{
+          "name": "SUPER DODGE BALL: Defeat India (Must KO Swami)"
         }
       ],
       "Super Mario Bros. 2": [
         {
           "name": "SUPER MARIO BROS 2: Defeat Mouser only selecting {{SMB2_char}}"
+        },
+		{
+          "name": "SUPER MARIO BROS 2: 💾 2; Defeat Clawgrip selecting only {{SMB2_char}}"
         }
       ],
       "Super Mario Bros. 3": [
@@ -784,11 +853,17 @@ export const NES_50_UFO = {
       "TMNT 3": [
         {
           "name": "TMNT 3: 💾 1; Beat the {{TMNT3_scene}} and {{TMNT3_scene}} levels"
+        },
+		{
+          "name": "TMNT 3: 💾 1; Beat Spaceship 3 without being devolved (3 lives Normal)"
         }
       ],
       "Ufouria": [
         {
           "name": "UFOURIA: Recruit Shades"
+        },
+        {
+          "name": "UFOURIA: 💾 1; Collect the Suction Cups"
         }
       ],
       "Uninvited": [
@@ -966,7 +1041,7 @@ export const NES_50_UFO = {
       ],
       "River City Ransom": [
         {
-          "name": "RIVER CITY RANSOM: On Advanced skill level, Have $30+ after buying something at 3 different Malls"
+          "name": "RIVER CITY RANSOM: Enter the River City High School Gym without defeating any enemies or entering shops"
         }
       ],
       "Smash TV": [
@@ -1041,7 +1116,7 @@ export const NES_50_UFO = {
       ],
       "Ufouria": [
         {
-          "name": "UFOURIA: 💾 1; Collect 3 {{Ufouria_vh}}"
+          "name": "UFOURIA: 💾 2; Collect {{ufouria_item}}, and {{ufouria_item}}"
         }
       ],
       "Uninvited": [
@@ -2281,6 +2356,13 @@ export const NES_50_UFO = {
       "Hi-Jump",
       "Screw Attack"
     ],
+	"RCR_weapon": [
+      "Trash Can",
+      "Chain",
+      "Crate",
+      "Stick",
+	  "Tire"
+    ],
     "SDB_condition": [
       "jumping",
       "running shots",
@@ -2330,9 +2412,11 @@ export const NES_50_UFO = {
       "Shredder (Technodrome 1)",
       "Krang (Spaceship 2)"
     ],
-    "Ufouria_vh": [
-      "Power Rings",
-      "Secret Weapons"
+    "ufouria_item": [
+      "Freeon's Secret Weapon",
+      "the Red Key",
+	  "the Green Power Ring",
+	  "the Red Power Ring"
     ]
   },
   "category_counts": {

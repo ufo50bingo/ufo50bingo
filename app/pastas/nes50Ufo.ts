@@ -31,7 +31,7 @@ export const NES_50_UFO = {
         {
           "name": "BUGS BUNNY CC: 💾 1; Beat level 7 without using pipes"
         },
-		{
+        {
           "name": "BUGS BUNNY CC: Eliminate an enemy 3 different ways"
         }
       ],
@@ -44,7 +44,7 @@ export const NES_50_UFO = {
         {
           "name": "CASTLEVANIA 3: Use 3 unique sub-weapons to kill 3 enemies with each"
         },
-		{
+        {
           "name": "CASTLEVANIA 3: 💾 1; Kill 5 owls and reach 3-02"
         }
       ],
@@ -77,7 +77,7 @@ export const NES_50_UFO = {
         {
           "name": "DUCKTALES: Beat {{DT_level}}"
         },
-		{
+        {
           "name": "DUCKTALES: In Transylvania, have the heads fall off 5 suits of armor"
         }
       ],
@@ -120,7 +120,7 @@ export const NES_50_UFO = {
         {
           "name": "JAWS: Earn 4+ shells at the end of a bonus round"
         },
-		{
+        {
           "name": "JAWS: Survive an encounter with Jaws"
         }
       ],
@@ -139,7 +139,7 @@ export const NES_50_UFO = {
         {
           "name": "MEGA MAN 6: Collect a Giant Health Pickup from 2 different levels"
         },
-		{
+        {
           "name": "MEGA MAN 6: Use an E-Tank in a Boss Fight"
         }
       ],
@@ -215,7 +215,7 @@ export const NES_50_UFO = {
         {
           "name": "SUPER DODGE BALL: Deal damage with all 6 players on your team"
         },
-		{
+        {
           "name": "SUPER DODGE BALL: Eliminate 1 player in Bean Ball"
         }
       ],
@@ -223,7 +223,7 @@ export const NES_50_UFO = {
         {
           "name": "SUPER MARIO BROS 2: Show 6+ coins in the slot machine"
         },
-		{
+        {
           "name": "SUPER MARIO BROS 2: Have 4 Max Health"
         }
       ],
@@ -267,7 +267,7 @@ export const NES_50_UFO = {
         {
           "name": "TMNT 3: 💾 1; Reach the submarine on the Ocean level without taking damage from any Mines"
         },
-		{
+        {
           "name": "TMNT 3: 💾 1; Eat Pizza"
         }
       ],
@@ -317,7 +317,7 @@ export const NES_50_UFO = {
         {
           "name": "BUGS BUNNY CC: 💾 2; Beat levels 46, 47, 48 without eliminating anyone"
         },
-		{
+        {
           "name": "Bugs Bunny CC: In one run, eliminate 3 different colors of Sylvester"
         }
       ],
@@ -330,7 +330,7 @@ export const NES_50_UFO = {
         {
           "name": "CASTLEVANIA 3: Beat 1-04 using only {{CV3_char}}"
         },
-		{
+        {
           "name": "CASTLEVANIA 3: Acquire Triple Shot (III)"
         }
       ],
@@ -407,7 +407,7 @@ export const NES_50_UFO = {
         {
           "name": "JAWS: Have 18,000+ points"
         },
-		{
+        {
           "name": "JAWS: Deal 2 total bars of damage to Jaws at Power level 2 or below"
         }
       ],
@@ -429,7 +429,7 @@ export const NES_50_UFO = {
         {
           "name": "MEGA MAN 6: Detonate every bomb platform in Blizzard Man's Stage"
         },
-		{
+        {
           "name": "MEGA MAN 6: 💾 1; Defeat 4 Robot masters"
         }
       ],
@@ -475,7 +475,7 @@ export const NES_50_UFO = {
         {
           "name": "RIVER CITY RANSOM: Get a kill with 6 different weapons"
         },
-		{
+        {
           "name": "RIVER CITY RANSOM: Deal the final blow to a boss with a {{RCR_weapon}}"
         }
       ],
@@ -519,7 +519,7 @@ export const NES_50_UFO = {
         {
           "name": "SUPER MARIO BROS 2: Collect a Mushroom, Heart and Star in 2 different levels"
         },
-		{
+        {
           "name": "SUPER MARIO BROS 2: Beat a level after exiting a Warp Jar"
         }
       ],
@@ -527,7 +527,7 @@ export const NES_50_UFO = {
         {
           "name": "SUPER MARIO BROS 3: Have 4 unique items in your inventory at once"
         },
-		{
+        {
           "name": "SUPER MARIO BROS 3: Beat 3 levels as Small Mario only"
         }
       ],
@@ -560,7 +560,7 @@ export const NES_50_UFO = {
         {
           "name": "TMNT 3: Beat Rocksteady using only {{TMNT3_character}}"
         },
-		{
+        {
           "name": "TMNT 3: 💾 1; Beat the Building scene without being crushed or falling off the platform"
         }
       ],
@@ -614,7 +614,7 @@ export const NES_50_UFO = {
         {
           "name": "BUGS BUNNY CC: Beat 5 levels eliminating everyone"
         },
-		{
+        {
           "name": "BUGS BUNNY CC: Show 10,000 points"
         }
       ],
@@ -630,7 +630,7 @@ export const NES_50_UFO = {
         {
           "name": "CASTLEVANIA 3: 💾 1; Recruit {{CV3_hard}}"
         },
-		{
+        {
           "name": "CASTLEVANIA 3: Finish 12 screens as Trevor without having an upgraded whip"
         }
       ],
@@ -663,7 +663,7 @@ export const NES_50_UFO = {
         {
           "name": "DUCKTALES: Talk to Huey, Dewey, Louie, Launchpad, Bubba, and Webby"
         },
-		{
+        {
           "name": "DUCKTALES: Spend $3,300,000+"
         }
       ],
@@ -707,7 +707,7 @@ export const NES_50_UFO = {
         {
           "name": "JAWS: Reach power level 3"
         },
-		{
+        {
           "name": "JAWS: Kill 5 enemies in the Sub"
         }
       ],
@@ -769,7 +769,7 @@ export const NES_50_UFO = {
         {
           "name": "RIVER CITY RANSOM: Beat 2 bosses and enter Merlin's Secret Shop"
         },
-		{
+        {
           "name": "RIVER CITY RANSOM: Have $25+ after buying something at 3 different Malls"
         }
       ],
@@ -802,7 +802,7 @@ export const NES_50_UFO = {
         {
           "name": "SUPER DODGE BALL: On Normal skill level, win a round of Bean Ball as {{SDB_character}}"
         },
-		{
+        {
           "name": "SUPER DODGE BALL: Defeat India (Must KO Swami)"
         }
       ],
@@ -810,7 +810,7 @@ export const NES_50_UFO = {
         {
           "name": "SUPER MARIO BROS 2: Defeat Mouser only selecting {{SMB2_char}}"
         },
-		{
+        {
           "name": "SUPER MARIO BROS 2: 💾 2; Defeat Clawgrip selecting only {{SMB2_char}}"
         }
       ],
@@ -854,7 +854,7 @@ export const NES_50_UFO = {
         {
           "name": "TMNT 3: 💾 1; Beat the {{TMNT3_scene}} and {{TMNT3_scene}} levels"
         },
-		{
+        {
           "name": "TMNT 3: 💾 1; Beat Spaceship 3 without being devolved (3 lives Normal)"
         }
       ],
@@ -996,12 +996,12 @@ export const NES_50_UFO = {
       ],
       "Mappy": [
         {
-          "name": "MAPPY: Make Gosenzo (coin enemy) appear after on level 12"
+          "name": "MAPPY: Make Gosenzo (coin enemy) appear on level 12 or later"
         }
       ],
       "Mega Man 6": [
         {
-          "name": "MEGA MAN 6: Defeat {{MM6_boss}} and {{MM6_boss}} using only the Buster to damage the boss"
+          "name": "MEGA MAN 6: Beat the {{MM6_boss}} and {{MM6_boss}} levels using only the Buster to damage the boss"
         }
       ],
       "Mendel Palace": [
@@ -2356,12 +2356,12 @@ export const NES_50_UFO = {
       "Hi-Jump",
       "Screw Attack"
     ],
-	"RCR_weapon": [
+    "RCR_weapon": [
       "Trash Can",
       "Chain",
       "Crate",
       "Stick",
-	  "Tire"
+      "Tire"
     ],
     "SDB_condition": [
       "jumping",
@@ -2415,8 +2415,8 @@ export const NES_50_UFO = {
     "ufouria_item": [
       "Freeon's Secret Weapon",
       "the Red Key",
-	  "the Green Power Ring",
-	  "the Red Power Ring"
+      "the Green Power Ring",
+      "the Red Power Ring"
     ]
   },
   "category_counts": {

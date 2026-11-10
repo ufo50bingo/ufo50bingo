@@ -184,8 +184,8 @@ export const SPICY_UFO = {
         "MINI & MAX: Free the brainwashed mouse by defeating the Plasmage, using only blocks in combat"
       ],
       "combatants": [
-        "COMBATANTS: ANTS-ANTS allowed; Beat Deathsdoor & Open Field",
-        "COMBATANTS: Beat 6 levels"
+        "COMBATANTS: ANTS-ANTS allowed; Win with a spider slain on 3 levels",
+        "COMBATANTS: Beat 5 levels"
       ],
       "campanella3": [
         "CAMPANELLA 3: Have 5 continues at once",
@@ -395,8 +395,8 @@ export const SPICY_UFO = {
         "MINI & MAX: Fill 12/16 upgrade slots"
       ],
       "combatants": [
-        "COMBATANTS: ANTS-ANTS allowed; Beat The Push & Deathsdoor",
-        "COMBATANTS: Beat Commando, Commando2, and Open Field"
+        "COMBATANTS: ANTS-ANTS allowed; Beat {{ants_med}}, {{ants_med}}, and {{ants_med}}",
+        "COMBATANTS: Beat 5 levels without making any Soldier ants"
       ],
       "quibblerace": [
         "QUIBBLE RACE: Use TUFF-RACE; win a 4-round game",
@@ -600,8 +600,8 @@ export const SPICY_UFO = {
         "MINI & MAX: Have 350 shinies at once without collecting any Big Shinies"
       ],
       "combatants": [
-        "COMBATANTS: Beat 5 levels without making any Soldier ants",
-        "COMBATANTS: Slay a spider on 3 levels"
+        "COMBATANTS: ANTS-ANTS allowed; Beat {{ants_hard}}, {{ants_hard}}, and {{ants_hard}}",
+        "COMBATANTS: Beat 9 levels"
       ],
       "quibblerace": [
         "QUIBBLE RACE: Gold disk; Always bet on the Quibble with worst odds (highest payout) each round",
@@ -804,7 +804,7 @@ export const SPICY_UFO = {
         "MINI & MAX: Have 600+ shinies"
       ],
       "combatants": [
-        "COMBATANTS: Beat 9 levels"
+        "COMBATANTS: Cherry disk"
       ],
       "quibblerace": [
         "QUIBBLE RACE: Cherry disk; Training, Thug services, and loans are banned"
@@ -1380,6 +1380,18 @@ export const SPICY_UFO = {
       "7",
       "8",
       "9"
+    ],
+    "ants_med": [
+      "Spidernest",
+      "Commando 2",
+      "Ambush",
+      "Surprise"
+    ],
+    "ants_hard": [
+      "Deathsdoor",
+      "This Is It",
+      "The Push",
+      "Open Field"
     ]
   },
   "category_counts": {

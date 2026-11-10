@@ -618,7 +618,7 @@ export const SPICY_UFO = {
       "cyberowls": [
         "CYBER OWLS: Gold disk with 3 or fewer deaths",
         "CYBER OWLS: Have 4,000+ Points in HQ without playing Congo",
-        "CYBER OWLS: HAWK-BASE allowed; Beat Antarctica with no deaths"
+        "CYBER OWLS: HAWK-BASE allowed; Beat Antarctica with no deaths (No OOB)"
       ]
     },
     "veryhard": {
@@ -818,7 +818,7 @@ export const SPICY_UFO = {
         "CAMPANELLA 3: Beat the game with at least 16/20 star waves"
       ],
       "cyberowls": [
-        "CYBER OWLS: Cherry disk"
+        "CYBER OWLS: Cherry disk (No OOB)"
       ]
     },
     "general": {

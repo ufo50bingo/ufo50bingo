@@ -45,6 +45,7 @@ import { NewFeed } from "./PlayPage";
 export type FoundItem = {
   foundGoal: FoundGoal<string, string, string>;
   pasta: UFOPasta;
+  squareIndex: number;
 };
 
 export type Props = {
@@ -126,7 +127,7 @@ export default function Play({
 
   const foundItems = useMemo<ReadonlyArray<FoundItem>>(() => {
     return squareNames
-      .map((name) => {
+      .map((name, squareIndex) => {
         let foundGoal: null | FoundGoal<string, string, string> = null;
         foundGoal = findGoal(name, STANDARD_UFO);
         let pasta: UFOPasta = STANDARD_UFO;
@@ -144,6 +145,7 @@ export default function Play({
         return {
           foundGoal,
           pasta,
+          squareIndex,
         };
       })
       .filter((item) => item != null);
@@ -395,6 +397,7 @@ export default function Play({
         <Feed
           feed={feed}
           userId={userId}
+          squareNames={squareNames}
           isPlay={true}
           style={{
             height:
@@ -411,9 +414,11 @@ export default function Play({
               key={g.foundGoal.resolvedGoal}
               gameToGoals={gameToGoals}
               foundGoal={g.foundGoal}
-              isFinished={false}
-              // TODO: Fix general goal crossing off
-              //  isFinished={g.color !== "blank"}
+              isFinished={
+                isLockout
+                  ? squareColors[g.squareIndex].length > 0
+                  : squareColors[g.squareIndex].includes(selectedColor)
+              }
               terminalCodes={terminalCodes}
               countState={fullGeneralState[g.foundGoal.resolvedGoal]}
               showAll={showAll.includes(g.foundGoal.resolvedGoal)}

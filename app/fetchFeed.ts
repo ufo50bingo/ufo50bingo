@@ -52,12 +52,20 @@ export type FeedGoalProgress = {
   count: number;
 };
 
+export type FeedCurrentSubcategory = {
+  type: "current_subcategory";
+  userId: number;
+  time: number;
+  subcategoryId: null | number;
+};
+
 export type NewFeedItem =
   | FeedColorMark
   | FeedChat
   | FeedTimerEvent
   | FeedMember
-  | FeedGoalProgress;
+  | FeedGoalProgress
+  | FeedCurrentSubcategory;
 
 export type NewFeed = ReadonlyArray<NewFeedItem>;
 
@@ -193,6 +201,31 @@ export function parseGoalProgressResult(
   }));
 }
 
+export function fetchCurrentSubcategorySql(
+  sql: SQLTemplate,
+  gameId: number,
+): SQL {
+  return sql`
+    SELECT
+      EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
+      user_id,
+      subcategory_id
+    FROM current_subcategory
+    WHERE game_id = ${gameId}
+  `;
+}
+
+export function parseCurrentSubcategoryResult(
+  result: SQLResult,
+): Array<FeedCurrentSubcategory> {
+  return result.map((raw) => ({
+    type: "current_subcategory",
+    userId: Number(raw.user_id),
+    time: Number(raw.unixtime),
+    subcategoryId: raw.subcategory_id,
+  }));
+}
+
 function fetchSquaresSql(sql: SQLTemplate, gameId: number): SQL {
   return sql`
     SELECT
@@ -275,6 +308,7 @@ export async function fetchData(
   if (!isPlay) {
     feedFetchPairs = feedFetchPairs.concat([
       [fetchGoalProgressSql(sql, gameId), parseGoalProgressResult],
+      [fetchCurrentSubcategorySql(sql, gameId), parseCurrentSubcategoryResult],
     ]);
   }
   const results = await sql.transaction([

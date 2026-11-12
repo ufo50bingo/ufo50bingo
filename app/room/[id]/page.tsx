@@ -1,29 +1,51 @@
-import CastPage from "./cast/CastPage";
-import Login from "./Login";
+import JoinMatch from "./JoinMatch";
 import PlayPage from "./play/PlayPage";
-import { readRoomCookie } from "./roomCookie";
+import { fetchMemberSql, parseMemberResult } from "@/app/fetchFeed";
+import getSql from "@/app/getSql";
+import Login from "./Login";
+import getSession from "@/app/getSession";
+import { cookies } from "next/headers";
 
 export default async function RoomPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ b?: string }>;
 }) {
-  const [{ id }, roomCookie, { b: rawBackend }] = await Promise.all([
+  const [{ id: gameIdStr }, session] = await Promise.all([
     params,
-    readRoomCookie(),
-    searchParams,
+    getSession(),
   ]);
-  // const roomBackend = parseRoomBackend(rawBackend);
-  // if (roomCookie == null) {
-  //   return <Login id={id} roomBackend={roomBackend} />;
-  // }
+  const gameId = Number(gameIdStr);
+  if (session == null) {
+    return <Login gameId={gameId} session={null} />;
+  }
+  if (session.user.isAnonymous) {
+    const cookieStore = await cookies();
+    const isConfirmed =
+      cookieStore.get(`anonymous-confirmed-${gameId}`)?.value === "true";
+    if (!isConfirmed) {
+      return <Login gameId={gameId} session={session} />;
+    }
+  }
+  const userId = Number(session.user.id);
+  const sql = getSql(false);
+  const memberResult = await fetchMemberSql(sql, gameId);
+  const memberFeed = parseMemberResult(memberResult);
+  const userMember = memberFeed.findLast((member) => member.userId === userId);
+  if (userMember == null || userMember.isInvite) {
+    return (
+      <JoinMatch
+        gameId={gameId}
+        userId={userId}
+        userMember={userMember ?? null}
+      />
+    );
+  }
 
   // switch (roomCookie.view) {
   //   case "cast":
   //     return <CastPage id={id} roomCookie={roomCookie} roomBackend={roomBackend} />;
   //   case "play":
-  return <PlayPage gameId={Number(id)} />;
+  return <PlayPage gameId={gameId} userId={userId} memberFeed={memberFeed} />;
   // }
 }

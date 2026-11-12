@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, ReactNode, useCallback } from "react";
 import { Modal, Stack, Group, Button } from "@mantine/core";
 import { SoundChoices } from "./NotificationsSection";
-import { NewFeed, NewFeedItem } from "../play/PlayPage";
+import { NewFeed, NewFeedItem } from "@/app/fetchFeed";
 
 type Props = {
   gameId: number;
@@ -31,7 +31,7 @@ export default function useBingosyncSocket({
 
   const onMessage = useCallback(
     (newItem: NewFeedItem) => {
-      if (newItem.user.id === userId) {
+      if (newItem.userId === userId) {
         return;
       }
       if (newItem.type === "color_mark") {
@@ -68,7 +68,8 @@ export default function useBingosyncSocket({
 
     socket.onmessage = async (evt) => {
       const rawItem: NewFeedItem = JSON.parse(evt.data);
-      setFeed((prevFeed) => {
+      setFeed((prevFeed: NewFeed) => {
+        // TODO: Check for dupes?
         const newFeed = [...prevFeed];
         newFeed.push(rawItem);
         newFeed.sort((a, b) => a.time - b.time);

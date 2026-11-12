@@ -1,6 +1,6 @@
 import BingosyncColored from "@/app/matches/BingosyncColored";
 import classes from "./FeedEntry.module.css";
-import { NewFeedItem } from "../play/PlayPage";
+import { NewFeedItem } from "@/app/fetchFeed";
 
 type Props = {
   entry: NewFeedItem;
@@ -14,7 +14,8 @@ export default function FeedEntry({ entry, squareNames }: Props) {
       {getTimestamp(entry.time)}
     </span>
   );
-  const player = <strong>{entry.user.name}</strong>;
+  // TODO: Use proper name
+  const player = <strong>{entry.userId}</strong>;
   const coloredPlayer = (
     // TODO: Use proper color
     <BingosyncColored color="red">{player}</BingosyncColored>

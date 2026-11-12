@@ -2,6 +2,7 @@
 
 import {
   ActionIcon,
+  Anchor,
   Avatar,
   Button,
   Group,
@@ -40,6 +41,7 @@ import { authClient } from "../authClient";
 import EditLeagueModal from "./EditLeagueModal";
 import EditVodModal from "./EditVodModal";
 import { LEAGUE_SEASON } from "../createboard/leagueConstants";
+import MatchModal from "./MatchModal";
 
 type MatchPerson = { id: number; name: string };
 type MatchTeam = {
@@ -129,6 +131,7 @@ export function MatchRow({ game, isMobile }: Props) {
   const oldSession = useSession();
   const { data: session } = authClient.useSession();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeletionProessing, setIsDeletionProcessing] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -248,7 +251,14 @@ export function MatchRow({ game, isMobile }: Props) {
 
         <Stack gap={2} miw={0}>
           <Text fw={500} size="sm">
-            {name}
+            <Anchor
+              onClick={() => {
+                history.pushState({}, "", `/match/${game.game.id}`);
+                setIsModalOpen(true);
+              }}
+            >
+              {name}
+            </Anchor>
           </Text>
           <Text size="xs" c="dimmed">
             {getVariantText(game.game)}
@@ -421,6 +431,16 @@ export function MatchRow({ game, isMobile }: Props) {
             </Button>
           </Group>
         </Modal>
+      )}
+      {isModalOpen && (
+        <MatchModal
+          game={game}
+          isMobile={isMobile}
+          onClose={() => {
+            setIsModalOpen(false);
+            history.back();
+          }}
+        />
       )}
     </>
   );

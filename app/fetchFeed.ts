@@ -2,6 +2,7 @@ import { NeonQueryFunction } from "@neondatabase/serverless";
 import { SQL } from "./matches/page";
 import { BingosyncColor } from "./matches/parseBingosyncData";
 import { SyncedTimerEventName } from "./room/[id]/common/useSyncedTimer";
+import getSql from "./getSql";
 
 export type FeedColorMark = {
   type: "color_mark";
@@ -149,4 +150,49 @@ export function parseMemberResult(result: SQLResult): Array<FeedMember> {
     isInvite: raw.is_invite,
     name: raw.final_name,
   }));
+}
+
+export function fetchSquareNamesSql(sql: SQLTemplate, gameId: number): SQL {
+  return sql`
+    SELECT
+      goal_text.name
+    FROM game_goal
+    INNER JOIN goal_text
+    ON game_goal.goal_id = goal_text.id
+    WHERE game_goal.game_id = ${gameId}
+    ORDER BY game_goal.square_index
+  `;
+}
+
+export function parseSquareNames(result: SQLResult): ReadonlyArray<string> {
+  return result.map((raw) => raw.name);
+}
+
+export async function fetchData(
+  gameId: number,
+  memberFeed: ReadonlyArray<FeedMember>,
+  isPlay: boolean,
+): Promise<{ squareNames: ReadonlyArray<string>; feed: NewFeed }> {
+  const sql = getSql(false);
+  const feedFetchPairs: ReadonlyArray<FeedFetchPairs> = [
+    [fetchColorMarkSql(sql, gameId), parseColorMarkResult],
+    [fetchChatSql(sql, gameId), parseChatResult],
+    [fetchTimerEventSql(sql, gameId), parseTimerEventResult],
+  ];
+  if (!isPlay) {
+    // add some more stuff to the feed fetch
+  }
+  const results = await sql.transaction([
+    ...feedFetchPairs.map((pair) => pair[0]),
+    fetchSquareNamesSql(sql, gameId),
+  ]);
+  const feedResults = results.slice(0, feedFetchPairs.length);
+  const otherResults = results.slice(feedFetchPairs.length);
+  const feed = feedResults
+    .flatMap((result, index) => feedFetchPairs[index][1](result))
+    .concat(memberFeed);
+  feed.sort((a, b) => a.time - b.time);
+
+  const squareNames = parseSquareNames(otherResults[0]);
+  return { squareNames, feed };
 }

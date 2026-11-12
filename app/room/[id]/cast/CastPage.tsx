@@ -1,122 +1,71 @@
-import { fetchBoard, fetchFeed, getSocketKey } from "@/app/fetchMatchInfo";
-import { BingosyncColor, getBoard } from "@/app/matches/parseBingosyncData";
 import CastWrapper from "./CastWrapper";
-import getSupabaseClient from "./getSupabaseClient";
-import {
-  CountChangeRow,
-  CountState,
-  CurrentGame,
-  CurrentGameRow,
-} from "./useSyncedState";
-import { RoomCookie, toBingosyncCookie } from "../roomCookie";
-import getSeed from "../common/getSeed";
-import fetchTimerEvents from "../common/fetchTimerEvents";
-import { RoomBackend } from "@/app/roomApi";
+import { CountState } from "./useSyncedState";
+import { FeedMember, fetchData } from "@/app/fetchFeed";
 
 type Props = {
-  id: string;
-  roomCookie: RoomCookie;
-  roomBackend: RoomBackend;
+  userId: number;
+  gameId: number;
+  memberFeed: ReadonlyArray<FeedMember>;
 };
 
 export type GeneralCounts = { [goal: string]: CountState };
 
-export default async function CastPage({ id, roomCookie, roomBackend }: Props) {
-  const bingosyncCookie = toBingosyncCookie(roomCookie);
-  const [
-    rawBoard,
-    rawFeed,
-    rawTimerEvents,
-    socketKey,
-    seed,
-    rawGeneralCounts,
-    colors,
-    rawCurrentGames,
-  ] = await Promise.all([
-    fetchBoard(id, roomBackend),
-    fetchFeed(id, bingosyncCookie, roomBackend),
-    fetchTimerEvents(id),
-    getSocketKey(id, bingosyncCookie, roomBackend),
-    getSeed(id, roomBackend),
-    getGeneralCounts(id),
-    getColors(id),
-    getCurrentGames(id),
-  ]);
-  const countsForSeed = rawGeneralCounts.filter((entry) => entry.seed === seed);
-  const timerEventsForSeed = rawTimerEvents.filter((e) => e.seed === seed);
-  const currentGamesForSeed = rawCurrentGames.filter(
-    (entry) => entry.seed === seed,
-  );
-  const allPlayerGames: Array<Array<CurrentGame>> = [];
-  for (const entry of currentGamesForSeed) {
-    const curGames = allPlayerGames[entry.player_num] ?? [];
-    curGames.push({ game: entry.game, start_time: entry.start_time });
-    allPlayerGames[entry.player_num] = curGames;
-  }
-  const structuredCounts = structureCounts(countsForSeed);
-  const board = getBoard(rawBoard);
+export default async function CastPage({ gameId, userId, memberFeed }: Props) {
+  const data = await fetchData(Number(gameId), memberFeed, false);
   return (
     <CastWrapper
-      id={id}
-      board={board}
-      rawFeed={rawFeed}
-      socketKey={socketKey}
-      initialSeed={seed}
-      initialCounts={structuredCounts}
-      initialLeftColor={colors.left}
-      initialRightColor={colors.right}
-      initialAllPlayerGames={allPlayerGames}
-      initialTimerEvents={timerEventsForSeed}
-      playerName={roomCookie.name}
-      roomBackend={roomBackend}
+      gameId={gameId}
+      initialFeed={data.feed}
+      squareNames={data.squareNames}
+      userId={userId}
     />
   );
 }
 
-async function getGeneralCounts(id: string): Promise<CountChangeRow[]> {
-  const supabase = getSupabaseClient();
-  const { data } = await supabase
-    .from("general_count")
-    .select()
-    .eq("room_id", id);
-  return data ?? [];
-}
+// async function getGeneralCounts(id: string): Promise<CountChangeRow[]> {
+//   const supabase = getSupabaseClient();
+//   const { data } = await supabase
+//     .from("general_count")
+//     .select()
+//     .eq("room_id", id);
+//   return data ?? [];
+// }
 
-async function getColors(
-  id: string,
-): Promise<{ left: BingosyncColor; right: BingosyncColor }> {
-  const supabase = getSupabaseClient();
-  const { data } = await supabase.from("color").select().eq("room_id", id);
-  if (data == null) {
-    return { left: "red", right: "red" };
-  }
-  const left = data.find((entry) => entry.is_left === true)?.color ?? "red";
-  const right = data.find((entry) => entry.is_left === false)?.color ?? "red";
-  return { left, right };
-}
+// async function getColors(
+//   id: string,
+// ): Promise<{ left: BingosyncColor; right: BingosyncColor }> {
+//   const supabase = getSupabaseClient();
+//   const { data } = await supabase.from("color").select().eq("room_id", id);
+//   if (data == null) {
+//     return { left: "red", right: "red" };
+//   }
+//   const left = data.find((entry) => entry.is_left === true)?.color ?? "red";
+//   const right = data.find((entry) => entry.is_left === false)?.color ?? "red";
+//   return { left, right };
+// }
 
-async function getCurrentGames(id: string): Promise<CurrentGameRow[]> {
-  const supabase = getSupabaseClient();
-  const { data } = await supabase
-    .from("current_game")
-    .select()
-    .eq("room_id", id)
-    .order("start_time", { ascending: false });
-  return data ?? [];
-}
+// async function getCurrentGames(id: string): Promise<CurrentGameRow[]> {
+//   const supabase = getSupabaseClient();
+//   const { data } = await supabase
+//     .from("current_game")
+//     .select()
+//     .eq("room_id", id)
+//     .order("start_time", { ascending: false });
+//   return data ?? [];
+// }
 
-function structureCounts(
-  rawCounts: ReadonlyArray<CountChangeRow>,
-): GeneralCounts {
-  const generals: GeneralCounts = {};
-  rawCounts.forEach((rawCount) => {
-    const goalState: CountState = generals[rawCount.goal] ?? [];
-    const toUpdate = goalState[rawCount.player_num] ?? {};
-    toUpdate[rawCount.game] = rawCount.count;
+// function structureCounts(
+//   rawCounts: ReadonlyArray<CountChangeRow>,
+// ): GeneralCounts {
+//   const generals: GeneralCounts = {};
+//   rawCounts.forEach((rawCount) => {
+//     const goalState: CountState = generals[rawCount.goal] ?? [];
+//     const toUpdate = goalState[rawCount.player_num] ?? {};
+//     toUpdate[rawCount.game] = rawCount.count;
 
-    const newGoalState = [...goalState];
-    newGoalState[rawCount.player_num] = toUpdate;
-    generals[rawCount.goal] = newGoalState;
-  });
-  return generals;
-}
+//     const newGoalState = [...goalState];
+//     newGoalState[rawCount.player_num] = toUpdate;
+//     generals[rawCount.goal] = newGoalState;
+//   });
+//   return generals;
+// }

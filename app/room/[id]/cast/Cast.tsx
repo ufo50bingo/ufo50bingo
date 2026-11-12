@@ -24,7 +24,6 @@ import ScoreSquare from "../common/ScoreSquare";
 import SideCell from "./SideCell";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import findGoal, { FoundGoal, FoundGoalWithCast } from "@/app/findGoal";
-import useLocalNumber from "@/app/localStorage/useLocalNumber";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
 import { GENERAL_ORDER } from "./GeneralOrderSelector";
 import useFont from "@/app/font/useFont";
@@ -190,10 +189,6 @@ export default function Cast({
   });
 
   const [font, setFont] = useFont();
-  const [numPlayers, setNumPlayers] = useLocalNumber({
-    key: "num-players",
-    defaultValue: 2,
-  });
 
   const [countPosition, setCountPosition] = useLocalEnum({
     key: "count-position",
@@ -377,7 +372,7 @@ export default function Cast({
   const rightGames =
     rightPlayer != null ? (allPlayerGames.get(rightPlayer.userId) ?? []) : [];
 
-  const numRows = Math.ceil(numPlayers / 2);
+  const numRows = Math.ceil(players.length / 2);
   const gameSelectorHeight = numRows * 44;
 
   const isDouble = generalGoals.length > 0 && countPosition === "side_by_side";
@@ -625,8 +620,6 @@ export default function Cast({
         setHighlightCurrentGame={setHighlightCurrentGame}
         showRecentGames={showRecentGames}
         setShowRecentGames={setShowRecentGames}
-        numPlayers={numPlayers}
-        setNumPlayers={setNumPlayers}
         allPlayerGames={allPlayerGames}
         addSubcategoryName={addSubcategoryName}
         isDetecting={isDetecting}

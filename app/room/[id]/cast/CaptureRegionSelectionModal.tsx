@@ -198,7 +198,7 @@ export default function CaptureRegionSelectionModal({
             }
           }}
         >
-          Add region
+          {nextPlayer == null ? "No remaining players" : "Add region"}
         </Button>
         <Button ml="auto" variant="default" onClick={onClose}>
           Cancel

@@ -1,44 +1,33 @@
-import { fetchBoard, fetchFeed, getSocketKey } from "@/app/fetchMatchInfo";
-import { BingosyncColor, getBoard } from "@/app/matches/parseBingosyncData";
+import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import PlayWrapper from "./PlayWrapper";
-import { RoomCookie, toBingosyncCookie } from "../roomCookie";
-import getSeed from "../common/getSeed";
-import fetchTimerEvents from "../common/fetchTimerEvents";
-import { RoomBackend } from "@/app/roomApi";
 import getSql from "@/app/getSql";
 
 type Props = {
-  id: string;
-  roomCookie: RoomCookie;
-  roomBackend: RoomBackend;
+  gameId: number;
 };
 
-export default async function PlayPage({ id, roomCookie, roomBackend }: Props) {
-  const [rawFeed, rawTimerEvents] = await Promise.all([
+export default async function PlayPage({ gameId }: Props) {
+  const [initialFeed] = await Promise.all([
     // fetchBoard(id, roomBackend),
-    fetchNewFeed(Number(id)),
+    fetchNewFeed(Number(gameId)),
     // fetchFeed(id, bingosyncCookie, roomBackend),
-    fetchTimerEvents(id),
+    // fetchTimerEvents(id),
     // getSocketKey(id, bingosyncCookie, roomBackend),
     // getSeed(id, roomBackend),
   ]);
-  const timerEvents = rawTimerEvents;
   return (
     <PlayWrapper
-      id={id}
-      rawFeed={rawFeed}
-      socketKey=""
-      initialSeed={0}
-      playerName="Unknown"
-      initialTimerEvents={timerEvents}
-      roomBackend="ufo50bingo"
+      gameId={gameId}
+      initialFeed={initialFeed}
+      userId={1}
+      // initialTimerEvents={timerEvents}
     />
   );
 }
 
-type NewFeedItem = {
+export type NewFeedItem = {
   type: "color_mark";
-  player: {
+  user: {
     id: number;
     // todo: fetch player names separately
     name: string;
@@ -65,7 +54,7 @@ async function fetchNewFeed(gameId: number): Promise<NewFeed> {
   `;
   const marks: ReadonlyArray<NewFeedItem> = result.map((raw) => ({
     type: "color_mark",
-    player: {
+    user: {
       id: Number(raw.user_id),
       name: "Unknown",
     },

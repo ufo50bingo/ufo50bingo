@@ -4,6 +4,8 @@ import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 // import broadcastToWebsockets from "../../broadcastToWebsockets";
 import getUserId from "@/app/getUserId";
 import getSql from "@/app/getSql";
+import broadcastToWebsockets from "../../broadcastToWebsockets";
+import { NewFeedItem } from "../play/PlayPage";
 
 export default async function changeColor(
   gameId: number,
@@ -31,5 +33,16 @@ export default async function changeColor(
       ${color},
       ${isClear}
   )`;
-  // await broadcastToWebsockets(id, JSON.stringify(rawGoal));
+  const feedItem: NewFeedItem = {
+    type: "color_mark",
+    time: now.getTime() / 1000,
+    user: {
+      id: userId,
+      name: "Unknown",
+    },
+    color,
+    squareIndex,
+    isClear,
+  };
+  await broadcastToWebsockets(String(gameId), JSON.stringify(feedItem));
 }

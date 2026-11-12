@@ -3,10 +3,12 @@ import ChatInput from "./ChatInput";
 import { CSSProperties, useLayoutEffect, useMemo, useRef } from "react";
 import FeedEntry from "./FeedEntry";
 import { NewFeed } from "@/app/fetchFeed";
+import { GameMembers } from "./useMembers";
 
 type Props = {
   userId: number;
   feed: NewFeed;
+  members: GameMembers;
   style?: CSSProperties;
   isPlay: boolean;
   squareNames: ReadonlyArray<string>;
@@ -17,6 +19,7 @@ export default function Feed({
   userId,
   isPlay,
   squareNames,
+  members,
   style = {},
 }: Props) {
   const feedRef = useRef<HTMLDivElement>(null);
@@ -55,7 +58,12 @@ export default function Feed({
       >
         <Stack gap={0}>
           {filteredFeed.map((entry, index) => (
-            <FeedEntry key={index} entry={entry} squareNames={squareNames} />
+            <FeedEntry
+              key={index}
+              entry={entry}
+              squareNames={squareNames}
+              members={members}
+            />
           ))}
         </Stack>
       </Card.Section>

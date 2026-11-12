@@ -3,6 +3,7 @@ import { useServerOffsetContext } from "../ServerOffsetContext";
 import { SoundChoices } from "./NotificationsSection";
 import useLocalNumber from "@/app/localStorage/useLocalNumber";
 import { NewFeed } from "@/app/fetchFeed";
+import { GameMembers } from "./useMembers";
 export type SyncedTimerEventName = "set_duration" | "pause" | "start";
 
 interface SyncedTimerEvent {
@@ -26,6 +27,7 @@ type Input = {
   feed: NewFeed;
   playAudio: (soundType: keyof SoundChoices) => void;
   isCast: boolean;
+  members: GameMembers;
 };
 
 interface TimerStateBase {
@@ -67,6 +69,7 @@ export default function useSyncedTimer({
   gameId,
   feed,
   isCast,
+  members,
 }: Input): Return {
   const [lastForceReveal, setLastForceReveal] = useLocalNumber({
     key: `last-force-reveal-${gameId}`,
@@ -106,8 +109,8 @@ export default function useSyncedTimer({
             accumulatedDuration += item.time * 1000 - curStartTime;
             curStartTime = null;
           }
-          // TODO: Use proper name
-          pauseRequester = String(item.userId);
+          pauseRequester =
+            members.get(item.userId)?.name ?? String(item.userId);
           lastPauseTime = item.time * 1000;
           return;
         case "start":
@@ -148,7 +151,7 @@ export default function useSyncedTimer({
           };
     // including `now` to force it to re-run to change from countdown to running
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [feed, getClientMsFromServerMs, lastForceReveal, now]);
+  }, [feed, members, getClientMsFromServerMs, lastForceReveal, now]);
 
   useEffect(() => {
     if (timerState.type !== "countdown") {

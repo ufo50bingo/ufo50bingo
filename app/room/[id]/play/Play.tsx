@@ -79,7 +79,7 @@ export default function Play({
     playAudio,
     token,
   });
-  const { players, allMembers } = useMembers(feed);
+  const { players, casters, allMembers } = useMembers(feed);
   const squareColors = useSquareColors(feed, boardSize, isLockout);
   const searchParams = useSearchParams();
   const override = searchParams.get("override");
@@ -395,6 +395,8 @@ export default function Play({
           <PlaySettings
             userId={userId}
             color={selectedColor}
+            players={players}
+            casters={casters}
             // TODO: Allow changing color
             setColor={() => {}}
             shownDifficulties={shownDifficulties}

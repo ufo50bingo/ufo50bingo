@@ -1,7 +1,6 @@
-import { ReactNode } from "react";
-import { InputBase, Combobox, useCombobox } from "@mantine/core";
+import { ColorSwatch, Select, Group } from "@mantine/core";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
-import BingosyncColored from "@/app/matches/BingosyncColored";
+import getColorHex from "../cast/getColorHex";
 
 export const COLORS: ReadonlyArray<BingosyncColor> = [
   "orange",
@@ -16,59 +15,46 @@ export const COLORS: ReadonlyArray<BingosyncColor> = [
   "yellow",
 ];
 
-function displayColor(color: BingosyncColor): ReactNode {
-  return (
-    <BingosyncColored color={color}>
-      <strong>
-        {color === "blank"
-          ? "Clear"
-          : color.charAt(0).toUpperCase() + color.slice(1)}
-      </strong>
-    </BingosyncColored>
-  );
-}
+const COLOR_OPTIONS = COLORS.map((c) => ({
+  value: c,
+  label: c.charAt(0).toUpperCase() + c.slice(1),
+}));
 
 type Props = {
-  label: string;
+  label: null | string;
   color: null | BingosyncColor;
   setColor: (newColor: BingosyncColor) => unknown;
 };
 
 export default function ColorSelector({ label, color, setColor }: Props) {
-  const combobox = useCombobox({
-    onDropdownClose: () => combobox.resetSelectedOption(),
-  });
   return (
-    <Combobox
-      store={combobox}
-      onOptionSubmit={(val) => {
-        setColor(val as BingosyncColor);
-        combobox.closeDropdown();
+    <Select
+      placeholder="Select a color"
+      label={label}
+      leftSection={
+        color != null ? (
+          <ColorSwatch color={getColorHex(color)} size={14} />
+        ) : null
+      }
+      renderOption={({ option }) => (
+        <Group>
+          <ColorSwatch
+            color={getColorHex(option.value as BingosyncColor)}
+            size={14}
+          />
+          <span>{option.label}</span>
+        </Group>
+      )}
+      data={COLOR_OPTIONS}
+      allowDeselect={false}
+      withCheckIcon={false}
+      value={color}
+      onChange={(newColor) => {
+        if (newColor == null) {
+          return;
+        }
+        setColor(newColor as BingosyncColor);
       }}
-    >
-      <Combobox.Target>
-        <InputBase
-          label={label}
-          component="button"
-          type="button"
-          pointer
-          rightSection={<Combobox.Chevron />}
-          rightSectionPointerEvents="none"
-          onClick={() => combobox.toggleDropdown()}
-        >
-          {color == null ? "Select a color" : displayColor(color)}
-        </InputBase>
-      </Combobox.Target>
-
-      <Combobox.Dropdown>
-        <Combobox.Options>
-          {COLORS.map((option) => (
-            <Combobox.Option value={option} key={option}>
-              {displayColor(option)}
-            </Combobox.Option>
-          ))}
-        </Combobox.Options>
-      </Combobox.Dropdown>
-    </Combobox>
+    />
   );
 }

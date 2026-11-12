@@ -28,6 +28,6 @@ export default async function addPlayerOrder(
         ${now.toISOString()},
         ${orderedIds}
     )`,
-    broadcastToWebsockets(String(gameId), JSON.stringify(feedItem)),
+    broadcastToWebsockets(gameId, JSON.stringify(feedItem)),
   ]);
 }

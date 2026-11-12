@@ -45,6 +45,6 @@ export default async function addTimerEvent({
         ${event},
         ${duration}
     )`,
-    broadcastToWebsockets(String(gameId), JSON.stringify(feedItem)),
+    broadcastToWebsockets(gameId, JSON.stringify(feedItem)),
   ]);
 }

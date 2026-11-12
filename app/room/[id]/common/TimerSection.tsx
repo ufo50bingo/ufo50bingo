@@ -8,7 +8,7 @@ import { FeedTimerEvent, NewFeedItem } from "@/app/fetchFeed";
 interface Props {
   timerState: SyncedTimerState;
   isMobile: boolean;
-  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
+  sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
   userId: number;
 }
 
@@ -45,7 +45,7 @@ function TimerModal({
   timerState,
   close,
   isMobile,
-  sendEvent,
+  sendEvents,
 }: ModalProps) {
   const { getServerMsFromClientMs } = useServerOffsetContext();
   const [accumulatedDuration, setAccumulatedDuration] = useState<null | number>(
@@ -84,7 +84,7 @@ function TimerModal({
                 event: "set_duration",
                 duration: accumulatedDuration / 1000,
               };
-              await sendEvent(event);
+              await sendEvents([event]);
               close();
             }}
           >

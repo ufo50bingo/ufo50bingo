@@ -13,7 +13,7 @@ type Props = {
   isPlay: boolean;
   squareNames: ReadonlyArray<string>;
   players: ReadonlyArray<PlayerMember>;
-  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
+  sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
 };
 
 export default function Feed({
@@ -23,7 +23,7 @@ export default function Feed({
   squareNames,
   members,
   players,
-  sendEvent,
+  sendEvents,
   style = {},
 }: Props) {
   const feedRef = useRef<HTMLDivElement>(null);
@@ -72,7 +72,7 @@ export default function Feed({
         </Stack>
       </Card.Section>
       <Card.Section inheritPadding={true} withBorder={true} py="sm">
-        <ChatInput userId={userId} players={players} sendEvent={sendEvent} />
+        <ChatInput userId={userId} players={players} sendEvents={sendEvents} />
       </Card.Section>
     </Card>
   );

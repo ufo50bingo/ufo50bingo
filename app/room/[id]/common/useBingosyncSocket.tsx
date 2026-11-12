@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, ReactNode, useCallback } from "react";
 import { Modal, Stack, Group, Button } from "@mantine/core";
 import { SoundChoices } from "./NotificationsSection";
 import { NewFeed, NewFeedItem } from "@/app/fetchFeed";
-import persistEvent from "./persistEvent";
+import persistEvents from "./persistEvents";
 
 type Props = {
   gameId: number;
@@ -15,7 +15,7 @@ type Props = {
 type Response = {
   feed: NewFeed;
   reconnectModal: null | undefined | ReactNode;
-  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
+  sendEvents: (newEvents: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
 };
 
 export default function useBingosyncSocket({
@@ -53,18 +53,17 @@ export default function useBingosyncSocket({
     [userId],
   );
 
-  const addItem = useCallback((newItem: NewFeedItem) => {
+  const addItems = useCallback((newItems: ReadonlyArray<NewFeedItem>) => {
     setFeed((prevFeed: NewFeed) => {
       // TODO: Check for dupes?
-      const newFeed = [...prevFeed];
-      newFeed.push(newItem);
+      const newFeed = [...prevFeed, ...newItems];
       newFeed.sort((a, b) => a.time - b.time);
       return newFeed;
     });
   }, []);
 
-  const sendEvent = useCallback(
-    async (event: NewFeedItem): Promise<boolean> => {
+  const sendEvents = useCallback(
+    async (events: ReadonlyArray<NewFeedItem>): Promise<boolean> => {
       const socket = socketRef.current;
       if (
         socket == null ||
@@ -74,19 +73,21 @@ export default function useBingosyncSocket({
         return false;
       }
 
-      addItem(event);
+      addItems(events);
 
-      socket.send(
-        JSON.stringify({
-          type: "event",
-          message: JSON.stringify(event),
-        }),
-      );
+      for (const event of events) {
+        socket.send(
+          JSON.stringify({
+            type: "event",
+            message: JSON.stringify(event),
+          }),
+        );
+      }
 
-      await persistEvent(gameId, token, event);
+      await persistEvents(gameId, token, events);
       return true;
     },
-    [addItem, gameId, token],
+    [addItems, gameId, token],
   );
 
   useEffect(() => {
@@ -124,7 +125,7 @@ export default function useBingosyncSocket({
         return;
       }
       const rawItem: NewFeedItem = data;
-      addItem(rawItem);
+      addItems([rawItem]);
       onMessage(rawItem);
     };
 
@@ -135,11 +136,11 @@ export default function useBingosyncSocket({
       socketRef.current = null;
       authenticatedRef.current = false;
     };
-  }, [onMessage, gameId, token, addItem]);
+  }, [onMessage, gameId, token, addItems]);
 
   return {
     feed,
-    sendEvent,
+    sendEvents,
     reconnectModal: shouldReconnect && (
       <Modal
         fullScreen={false}

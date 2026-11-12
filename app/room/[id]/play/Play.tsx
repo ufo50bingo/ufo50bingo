@@ -72,7 +72,7 @@ export default function Play({
   const boardSize = 25;
   const { getServerMsFromClientMs } = useServerOffsetContext();
   const [soundChoices, setSoundChoices, playAudio] = useSounds("play");
-  const { feed, reconnectModal, sendEvent } = useBingosyncSocket({
+  const { feed, reconnectModal, sendEvents } = useBingosyncSocket({
     gameId,
     initialFeed,
     userId,
@@ -344,7 +344,7 @@ export default function Play({
                   squareIndex,
                   isClear,
                 };
-                await sendEvent(feedItem);
+                await sendEvents([feedItem]);
               } catch {}
             }}
             shownDifficulties={shownDifficulties}
@@ -398,7 +398,7 @@ export default function Play({
               timerState={timerState}
               isCast={false}
               userId={userId}
-              sendEvent={sendEvent}
+              sendEvents={sendEvents}
             />
           </Group>
           {showGeneralTracker && generalSettings.type === "simple" && (
@@ -427,7 +427,7 @@ export default function Play({
             generalSettings={generalSettings}
             generalSetters={generalSetters}
             restrictions={restrictions}
-            sendEvent={sendEvent}
+            sendEvents={sendEvents}
             members={allMembers}
           />
         </Stack>
@@ -444,7 +444,7 @@ export default function Play({
                 ? "748px"
                 : "592px",
           }}
-          sendEvent={sendEvent}
+          sendEvents={sendEvents}
         />
         {!isHidden &&
           showGeneralTracker &&

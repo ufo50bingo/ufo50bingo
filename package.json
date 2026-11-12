@@ -11,6 +11,9 @@
     "tsc": "tsc",
     "test": "jest"
   },
+  "engines": {
+    "node": "26.x"
+  },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1156.0",
     "@aws-sdk/lib-storage": "^3.1156.0",

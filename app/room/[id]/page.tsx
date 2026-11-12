@@ -38,6 +38,7 @@ export default async function RoomPage({
   }
   const userId = Number(session.user.id);
   const sql = getSql(false);
+  // KEEP IN SYNC WITH FETCHFEED SO SPECTATE ISN'T BROKEN
   const memberResult = await sql.transaction([
     fetchMemberSql(sql, gameId),
     fetchDisconnectSql(sql, gameId),

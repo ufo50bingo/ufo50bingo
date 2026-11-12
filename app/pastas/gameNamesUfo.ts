@@ -11,4 +11,5 @@ export const GAME_NAMES_UFO: UFOPasta = {
   category_counts: {
     normal: 25,
   },
+  current_game_options: "$ufo50",
 };

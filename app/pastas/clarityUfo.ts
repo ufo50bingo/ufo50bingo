@@ -684,24 +684,23 @@ export const CLARITY_UFO = {
     veryhard: 2,
     general: 5,
   },
-  "general_categories": ["general"],
-  "draft": {
-    "excluded_categories": [
-      "general"
-    ],
-    "category_counts": [
+  general_categories: ["general"],
+  draft: {
+    excluded_categories: ["general"],
+    category_counts: [
       {
-        "easy": 3,
-        "medium": 3,
-        "hard": 3,
-        "veryhard": 3
+        easy: 3,
+        medium: 3,
+        hard: 3,
+        veryhard: 3,
       },
       {
-        "easy": 2,
-        "medium": 4,
-        "hard": 5,
-        "veryhard": 2
-      }
-    ]
-  }
+        easy: 2,
+        medium: 4,
+        hard: 5,
+        veryhard: 2,
+      },
+    ],
+  },
+  current_game_options: "$ufo50",
 };

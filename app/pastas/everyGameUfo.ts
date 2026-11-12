@@ -8080,5 +8080,12 @@ export const EVERY_GAME_UFO = {
         "veryhard": 2
       }
     ]
+  },
+  "current_game_options": "$infer",
+  "player_tracker_restrictions": {
+    "allowed_difficulty_tags": null,
+    "allow_fast_sort": true,
+    "show_on_card_tooltips": true,
+    "show_multi_goal_games": true
   }
 } as const;

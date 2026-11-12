@@ -34,7 +34,6 @@ import StartPauseButton from "../common/StartPauseButton";
 import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
 import { UFOPasta } from "@/app/generator/ufoGenerator";
 import getGameList from "../common/getGameList";
-import getIsNes50 from "../common/getIsNes50";
 import { Restrictions, GeneralSettings } from "../play/GeneralSection";
 import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
 import useCastRightClickBehavior from "./useCastRightClickBehavior";
@@ -131,13 +130,14 @@ export default function Cast({
     return getMatchingRepoPasta(pastaId);
   }, [fetchedPasta, pastaId]);
 
-  const isNes50 = useMemo(
-    () => pasta === NES_50_UFO || getIsNes50(squareNames),
-    [pasta, squareNames],
+  const gameList = useMemo(() => getGameList(pasta), [pasta]);
+  const sortedGameList = useMemo(
+    () => Object.keys(gameList).toSorted((a, b) => b.length - a.length),
+    [gameList],
   );
   const gameToGoals = useMemo(
-    () => getGameToGoals(squareNames, getGameList(isNes50), pasta),
-    [squareNames, isNes50, pasta],
+    () => getGameToGoals(squareNames, sortedGameList, pasta),
+    [squareNames, sortedGameList, pasta],
   );
   const terminalCodes = useMemo(
     () => getAllTerminalCodes(squareNames),
@@ -204,8 +204,6 @@ export default function Cast({
     showRecentGames,
     setShowRecentGames,
   } = useLocalState(gameId);
-
-  const gameList = useMemo(() => getGameList(isNes50), [isNes50]);
 
   const { timerState, forceReveal } = useSyncedTimer({
     gameId,
@@ -439,7 +437,7 @@ export default function Cast({
                 limit={6}
                 recentGames={leftGames}
                 font={font}
-                isNes50={isNes50}
+                gameList={gameList}
               />
             </SideColumn>
           )}
@@ -472,7 +470,7 @@ export default function Cast({
                 limit={5}
                 recentGames={leftGames}
                 font={font}
-                isNes50={isNes50}
+                gameList={gameList}
               />
             )}
           </SideColumn>
@@ -527,7 +525,7 @@ export default function Cast({
                 limit={5}
                 recentGames={rightGames}
                 font={font}
-                isNes50={isNes50}
+                gameList={gameList}
               />
             )}
           </SideColumn>
@@ -537,7 +535,7 @@ export default function Cast({
                 limit={6}
                 recentGames={rightGames}
                 font={font}
-                isNes50={isNes50}
+                gameList={gameList}
               />
             </SideColumn>
           )}

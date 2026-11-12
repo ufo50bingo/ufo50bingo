@@ -14,7 +14,7 @@ export default async function PlayPage({
   alreadyFetched,
 }: Props) {
   const [data, token] = await Promise.all([
-    fetchData(gameId, alreadyFetched, true),
+    fetchData(gameId, alreadyFetched, "play"),
     getBroadcastToken(gameId),
   ]);
   return (

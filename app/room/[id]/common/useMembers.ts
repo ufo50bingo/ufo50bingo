@@ -28,6 +28,7 @@ export default function useMembers(feed: NewFeed): {
 } {
   return useMemo(() => {
     const allMembers: Map<number, GenericMember> = new Map();
+    let lastPlayerOrder: null | ReadonlyArray<number> = null;
     for (const item of feed) {
       if (item.type === "member") {
         const existing = allMembers.get(item.userId);
@@ -39,10 +40,26 @@ export default function useMembers(feed: NewFeed): {
           isInvite: item.isInvite,
           initialTime: existing?.initialTime ?? item.time,
         });
+      } else if (item.type === "player_order") {
+        lastPlayerOrder = item.orderedIds;
       }
     }
     const sortedMembers = [...allMembers.values()];
     sortedMembers.sort((a, b) => {
+      if (lastPlayerOrder != null) {
+        const aIdx = lastPlayerOrder.findIndex((id) => a.userId === id);
+        const bIdx = lastPlayerOrder.findIndex((id) => b.userId === id);
+
+        if (aIdx !== bIdx) {
+          if (aIdx === -1) {
+            return 1;
+          } else if (bIdx === -1) {
+            return -1;
+          } else {
+            return aIdx - bIdx;
+          }
+        }
+      }
       const timeDiff = a.initialTime - b.initialTime;
       if (timeDiff !== 0) {
         return timeDiff;

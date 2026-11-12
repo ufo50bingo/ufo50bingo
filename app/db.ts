@@ -44,7 +44,7 @@ export interface DailyFeedRow {
   squareIndex: number | null;
 }
 
-export interface GameFilterRow {
+interface GameFilterRow {
   id: number;
   name: string;
   time: number;

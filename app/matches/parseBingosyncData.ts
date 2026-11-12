@@ -11,7 +11,7 @@ export type BingosyncColor =
   | "brown"
   | "yellow";
 
-export type RawSquare = {
+type RawSquare = {
   // goal text
   name: string;
   // string like slot1, slot2, ..., slot25
@@ -68,7 +68,7 @@ type RawNewCard = {
   is_current: boolean;
   timestamp: number;
 };
-export type RawGoal = {
+type RawGoal = {
   type: "goal";
   // `player` and `square` seem to have values from AFTER the change was made. So if a square is
   // marked, `square` will contain the *new* color
@@ -119,7 +119,7 @@ type RawOther = {
   player_color: BingosyncColor;
   timestamp: number;
 };
-export type RawFeedItem =
+type RawFeedItem =
   | RawNewCard
   | RawGoal
   | RawChat
@@ -159,7 +159,7 @@ export function getChangelog(feed: RawFeed): Changelog {
 
 function getReveals(
   relevantEvents: ReadonlyArray<RawFeedItem>,
-  playerNames: ReadonlyArray<string>
+  playerNames: ReadonlyArray<string>,
 ): ReadonlyArray<Reveal> {
   const finalReveals: Reveal[] = [];
   const seenPlayers: string[] = [];
@@ -181,7 +181,7 @@ function getReveals(
 }
 
 function getChanges(
-  relevantEvents: ReadonlyArray<RawFeedItem>
+  relevantEvents: ReadonlyArray<RawFeedItem>,
 ): ReadonlyArray<Change> {
   return relevantEvents
     .filter((event) => event.type === "goal")
@@ -198,10 +198,12 @@ function getChanges(
 
 export type PlayerToColors = { [name: string]: ReadonlyArray<BingosyncColor> };
 export function getPlayerColors(
-  changes: ReadonlyArray<Change>
+  changes: ReadonlyArray<Change>,
 ): PlayerToColors {
   const boardColors: Array<BingosyncColor> = Array(25).fill("blank");
-  const playerToColorToNetAdditions: { [name: string]: { [color: string]: number } } = {};
+  const playerToColorToNetAdditions: {
+    [name: string]: { [color: string]: number };
+  } = {};
   changes.forEach((change) => {
     const { name, color } = change;
 
@@ -212,7 +214,8 @@ export function getPlayerColors(
       return;
     }
     const netAdditions = colorToNetAdditions[actualColor] ?? 0;
-    const newNetAdditions = change.color === "blank" ? netAdditions - 1 : netAdditions + 1;
+    const newNetAdditions =
+      change.color === "blank" ? netAdditions - 1 : netAdditions + 1;
     colorToNetAdditions[actualColor] = newNetAdditions;
     playerToColorToNetAdditions[name] = colorToNetAdditions;
 
@@ -228,7 +231,7 @@ export function getPlayerColors(
     }
     const colors: Array<BingosyncColor> = [];
     const colorToNetAdditions = playerToColorToNetAdditions[name];
-    Object.keys(colorToNetAdditions).forEach(color => {
+    Object.keys(colorToNetAdditions).forEach((color) => {
       if (colorToNetAdditions[color] > 0) {
         colors.push(color as BingosyncColor);
       }

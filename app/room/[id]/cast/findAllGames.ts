@@ -22,65 +22,6 @@ Object.entries(GAME_NAMES).forEach(([game, name]) => {
 
 export type GameToGoals = { [game: string]: ReadonlyArray<[string, number]> };
 
-export function findGamesForGoal(goal: string): Game[] {
-  const result = findGoal(goal, STANDARD_UFO) ?? findGoal(goal, SPICY_UFO);
-  return findGamesForResult(goal, result);
-}
-
-interface WithSubcategory {
-  subcategory: string;
-}
-export function findGamesForResult(
-  goal: string,
-  result: WithSubcategory | null,
-  isGenerator: boolean = false,
-): Game[] {
-  // this is an old goal, or from a non-standard variant
-  if (result == null) {
-    const split = goal.split(":");
-    if (split.length < 2) {
-      return [];
-    }
-    const prefix = stripText(split[0]);
-    const game: null | undefined | ProperGame = NAME_TO_GAME[prefix];
-    return game != null ? [game] : [];
-  }
-  const game = result.subcategory;
-  if (game == null) {
-    return [];
-  }
-  if (ORDERED_PROPER_GAMES.includes(game as ProperGame)) {
-    return [game as ProperGame];
-  }
-  const games: Game[] = [];
-  if (
-    goal.includes("Campanella 1/2/3") ||
-    goal.includes("Campanella 1, 2, and 3")
-  ) {
-    games.push("campanella2");
-    games.push("campanella3");
-  }
-  const strippedGoal = stripText(goal);
-  ORDERED_PROPER_GAMES.forEach((name) => {
-    const testName = name === "miniandmax" ? "minimax" : name;
-    const testGoal =
-      name === "mortol"
-        ? strippedGoal.replace("mortolii", "")
-        : name === "campanella"
-          ? strippedGoal.replace("campanella2", "").replace("campanella3", "")
-          : strippedGoal;
-    if (testGoal.includes(testName)) {
-      games.push(name);
-    }
-  });
-  // HACK: NES 50 bingo uses restrictions but has their own set of games which aren't in
-  // ORDERED_PROPER_GAMES
-  if (isGenerator && !games.includes(game as ProperGame)) {
-    games.push(game as ProperGame);
-  }
-  return games;
-}
-
 export function getGameToGoals(
   board: ReadonlyArray<string>,
   allGames: ReadonlyArray<string>,

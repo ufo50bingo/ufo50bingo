@@ -21,7 +21,7 @@ export interface LeagueInfo {
   p2: string;
 }
 
-export interface CommonMatchProps {
+interface CommonMatchProps {
   roomName: string;
   password: string;
   leagueInfo: LeagueInfo | null;

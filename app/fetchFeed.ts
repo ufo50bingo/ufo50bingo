@@ -46,17 +46,14 @@ export type NewFeedItem =
 
 export type NewFeed = ReadonlyArray<NewFeedItem>;
 
-export type FeedFetchPairs = [
-  SQL,
-  (result: SQLResult) => ReadonlyArray<NewFeedItem>,
-];
+type FeedFetchPairs = [SQL, (result: SQLResult) => ReadonlyArray<NewFeedItem>];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type SQLResult = ReadonlyArray<Record<string, any>>;
 
 export type SQLTemplate = NeonQueryFunction<false, false>;
 
-export function fetchColorMarkSql(sql: SQLTemplate, gameId: number): SQL {
+function fetchColorMarkSql(sql: SQLTemplate, gameId: number): SQL {
   return sql`
     SELECT
       EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
@@ -69,7 +66,7 @@ export function fetchColorMarkSql(sql: SQLTemplate, gameId: number): SQL {
   `;
 }
 
-export function parseColorMarkResult(result: SQLResult): Array<FeedColorMark> {
+function parseColorMarkResult(result: SQLResult): Array<FeedColorMark> {
   return result.map((raw) => ({
     type: "color_mark",
     userId: Number(raw.user_id),
@@ -80,7 +77,7 @@ export function parseColorMarkResult(result: SQLResult): Array<FeedColorMark> {
   }));
 }
 
-export function fetchChatSql(sql: SQLTemplate, gameId: number): SQL {
+function fetchChatSql(sql: SQLTemplate, gameId: number): SQL {
   return sql`
     SELECT
       EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
@@ -92,7 +89,7 @@ export function fetchChatSql(sql: SQLTemplate, gameId: number): SQL {
   `;
 }
 
-export function parseChatResult(result: SQLResult): Array<FeedChat> {
+function parseChatResult(result: SQLResult): Array<FeedChat> {
   return result.map((raw) => ({
     type: "chat",
     userId: Number(raw.user_id),
@@ -102,7 +99,7 @@ export function parseChatResult(result: SQLResult): Array<FeedChat> {
   }));
 }
 
-export function fetchTimerEventSql(sql: SQLTemplate, gameId: number): SQL {
+function fetchTimerEventSql(sql: SQLTemplate, gameId: number): SQL {
   return sql`
     SELECT
       EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
@@ -114,9 +111,7 @@ export function fetchTimerEventSql(sql: SQLTemplate, gameId: number): SQL {
   `;
 }
 
-export function parseTimerEventResult(
-  result: SQLResult,
-): Array<FeedTimerEvent> {
+function parseTimerEventResult(result: SQLResult): Array<FeedTimerEvent> {
   return result.map((raw) => ({
     type: "timer_event",
     userId: Number(raw.user_id),
@@ -152,7 +147,7 @@ export function parseMemberResult(result: SQLResult): Array<FeedMember> {
   }));
 }
 
-export function fetchSquareNamesSql(sql: SQLTemplate, gameId: number): SQL {
+function fetchSquareNamesSql(sql: SQLTemplate, gameId: number): SQL {
   return sql`
     SELECT
       goal_text.name
@@ -164,7 +159,7 @@ export function fetchSquareNamesSql(sql: SQLTemplate, gameId: number): SQL {
   `;
 }
 
-export function parseSquareNames(result: SQLResult): ReadonlyArray<string> {
+function parseSquareNames(result: SQLResult): ReadonlyArray<string> {
   return result.map((raw) => raw.name);
 }
 

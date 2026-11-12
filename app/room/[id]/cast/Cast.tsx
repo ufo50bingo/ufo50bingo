@@ -115,7 +115,7 @@ export default function Cast({
       rightClickBehavior,
       setRightClickBehavior,
       customColor: "#ee5f5b",
-      setCustomColor: () => {},
+      setCustomColor: () => { },
     }),
     [rightClickBehavior, setRightClickBehavior],
   );
@@ -359,7 +359,7 @@ export default function Cast({
       countState={generals[g.foundGoal.resolvedGoal]}
       showAll={showAll.includes(g.foundGoal.resolvedGoal)}
       addShowAll={addShowAll}
-      generalTrackerPlayers={[players[0], players[1]]}
+      generalTrackerPlayers={players.slice(0, 2)}
       style={{ height: `${h ?? 300}px` }}
       settings={generalSettings}
       pasta={g.pasta}

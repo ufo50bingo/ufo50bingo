@@ -5,6 +5,7 @@ import { SPICY_UFO } from "@/app/pastas/spicyUfo";
 import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
 import { inferGames } from "@/app/generator/inferGames";
 import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
+import { UFOPasta } from "@/app/generator/ufoGenerator";
 
 function stripText(text: string): string {
   return text.toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -20,14 +21,17 @@ export type GameToGoals = { [game: string]: ReadonlyArray<[string, number]> };
 export function getGameToGoals(
   board: ReadonlyArray<string>,
   allGames: ReadonlyArray<string>,
+  pasta: null | UFOPasta,
 ): GameToGoals {
   const gameToGoals: { [game: string]: [string, number][] } = {};
   board.forEach((goal, index) => {
     const result =
-      findGoal(goal, STANDARD_UFO) ??
-      findGoal(goal, SPICY_UFO) ??
-      findGoal(goal, NES_50_UFO) ??
-      findGoal(goal, EVERY_GAME_UFO);
+      pasta != null
+        ? findGoal(goal, pasta)
+        : (findGoal(goal, STANDARD_UFO) ??
+          findGoal(goal, SPICY_UFO) ??
+          findGoal(goal, NES_50_UFO) ??
+          findGoal(goal, EVERY_GAME_UFO));
     const gamesForGoal =
       result != null ? result.inferredGames : inferGames(goal, allGames);
     gamesForGoal.forEach((game) => {

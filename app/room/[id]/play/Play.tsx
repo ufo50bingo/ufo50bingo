@@ -113,6 +113,7 @@ export default function Play({
       getGameToGoals(
         squareNames,
         getGameList(pasta === NES_50_UFO || getIsNes50(squareNames)),
+        pasta,
       ),
     [pasta, squareNames],
   );
@@ -132,28 +133,25 @@ export default function Play({
   const foundItems = useMemo<ReadonlyArray<FoundItem>>(() => {
     return squareNames
       .map((name, squareIndex) => {
-        let foundGoal: null | FoundGoal<string, string, string> = null;
-        foundGoal = findGoal(name, STANDARD_UFO);
-        let pasta: UFOPasta = STANDARD_UFO;
-        if (foundGoal == null) {
-          foundGoal = findGoal(name, NES_50_UFO);
-          pasta = NES_50_UFO;
+        const pastasToCheck =
+          pasta != null ? [pasta] : [STANDARD_UFO, NES_50_UFO, EVERY_GAME_UFO];
+        for (const pastaToCheck of pastasToCheck) {
+          const foundGoal = findGoal(name, pastaToCheck);
+          if (foundGoal != null) {
+            if (foundGoal.cast == null) {
+              return null;
+            }
+            return {
+              foundGoal,
+              pasta: pastaToCheck,
+              squareIndex,
+            };
+          }
         }
-        if (foundGoal == null) {
-          foundGoal = findGoal(name, EVERY_GAME_UFO);
-          pasta = EVERY_GAME_UFO;
-        }
-        if (foundGoal == null) {
-          return null;
-        }
-        return {
-          foundGoal,
-          pasta,
-          squareIndex,
-        };
+        return null;
       })
       .filter((item) => item != null);
-  }, [squareNames]);
+  }, [pasta, squareNames]);
 
   const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(() => {
     return foundItems.filter(
@@ -309,6 +307,7 @@ export default function Play({
       <Group align="stretch">
         <Stack gap={8}>
           <Board
+            pasta={pasta}
             board={squareColors.map((colors, index) => ({
               name: squareNames[index],
               color: colors.length > 0 ? colors[0] : "blank",

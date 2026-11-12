@@ -1,23 +1,22 @@
-import { RawFeed } from "@/app/matches/parseBingosyncData";
 import { Card, Stack } from "@mantine/core";
 import ChatInput from "./ChatInput";
 import { CSSProperties, useLayoutEffect, useRef } from "react";
 import FeedEntry from "./FeedEntry";
-import { RoomBackend } from "@/app/roomApi";
+import { NewFeed } from "../play/PlayPage";
 
 type Props = {
-  rawFeed: RawFeed;
-  roomBackend: RoomBackend;
-  style?: CSSProperties,
+  feed: NewFeed;
+  style?: CSSProperties;
 };
 
-export default function Feed({ rawFeed, style = {}, roomBackend }: Props) {
+export default function Feed({ feed, style = {} }: Props) {
   const feedRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     if (feedRef.current != null) {
       feedRef.current.scrollTop = feedRef.current.scrollHeight;
     }
-  }, [rawFeed]);
+  }, [feed]);
+  console.log(feed);
   return (
     <Card
       shadow="sm"
@@ -34,13 +33,13 @@ export default function Feed({ rawFeed, style = {}, roomBackend }: Props) {
         style={{ height: "100%", overflowY: "auto" }}
       >
         <Stack gap={0}>
-          {rawFeed.events.map((entry, index) => (
+          {feed.map((entry, index) => (
             <FeedEntry key={index} entry={entry} />
           ))}
         </Stack>
       </Card.Section>
       <Card.Section inheritPadding={true} withBorder={true} py="sm">
-        <ChatInput roomBackend={roomBackend} />
+        <ChatInput />
       </Card.Section>
     </Card>
   );

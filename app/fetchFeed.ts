@@ -10,7 +10,8 @@ import joinValues from "./joinValues";
 import { getMatchingRepoPasta } from "./getMatchingRepoPasta";
 import getAllCastOptions from "./createboard/getAllCastOptions";
 import getGameList from "./room/[id]/common/getGameList";
-import { LEAGUE_TIER, WEEK } from "./createboard/leagueConstants";
+import { LEAGUE_TIER } from "./matches/tier";
+import { WEEK } from "./matches/week";
 
 export type FeedColorMark = {
   type: "color_mark";

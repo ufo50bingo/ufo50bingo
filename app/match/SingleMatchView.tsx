@@ -3,6 +3,12 @@ import { FullParsedGame } from "../fetchFeed";
 import CastBoardWithTrackers from "../room/[id]/cast/CastBoardWithTrackers";
 import getGameList from "../room/[id]/common/getGameList";
 import usePasta from "../room/[id]/common/usePasta";
+import useGeneralGoals from "../room/[id]/common/useGeneralGoals";
+import useMembers from "../room/[id]/common/useMembers";
+import useAllPlayerGames from "../room/[id]/cast/useAllPlayerGames";
+import { getGameToGoals } from "../room/[id]/cast/findAllGames";
+import useGeneralCounts from "../room/[id]/cast/useGeneralCounts";
+import useSquareColors from "../room/[id]/common/useSquareColors";
 
 type Props = {
   game: FullParsedGame;
@@ -10,8 +16,34 @@ type Props = {
 
 export default function SingleMatchView({ game }: Props) {
   const pasta = usePasta(game);
+  const squareNames = useMemo(
+    () => game.squares.map((s) => s.name),
+    [game.squares],
+  );
   const gameList = useMemo(() => getGameList(pasta), [pasta]);
+  const generalGoals = useGeneralGoals(pasta, squareNames);
+  const gameToGoals = useMemo(
+    () => getGameToGoals(squareNames, Object.keys(gameList), pasta),
+    [squareNames, gameList, pasta],
+  );
+  // TODO: figure out what to do with casters
+  const { players, casters: _casters, allMembers } = useMembers(game.feed);
+  // TODO: fill in real value
   const hasStarted = true;
+
+  // TODO: update these based on time slider
+  const allPlayerGames = useAllPlayerGames(game.feed, game.subcategories);
+  const generals = useGeneralCounts(
+    game.feed,
+    game.squares,
+    game.subcategories,
+  );
+  // TODO: support non-lockout
+  const squareColors = useSquareColors(
+    game.feed,
+    game.game.width * game.game.height,
+    true,
+  );
   return (
     <CastBoardWithTrackers
       game={game}
@@ -37,7 +69,7 @@ export default function SingleMatchView({ game }: Props) {
       }
       gameList={gameList}
       gameToGoals={gameToGoals}
-      shownDifficulties={shownDifficulties}
+      shownDifficulties={["easy", "veryhard", "general"]}
       generals={generals}
     />
   );

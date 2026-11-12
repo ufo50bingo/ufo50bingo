@@ -18,12 +18,9 @@ import CaptureRegionSelectionModal, {
   CaptureRegion,
   CropRect,
   addRegion,
-  getPlayerCount,
-  getPlayerLabel,
 } from "./CaptureRegionSelectionModal";
 import findGameRegions from "./findGameRegions";
-import { GAME_NAMES, ProperGame } from "@/app/goals";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
+import { GAME_NAMES } from "@/app/goals";
 import { startGameDetection } from "./gamedetector/browser";
 import { GameDetection, RewardIconDetection } from "./gamedetector/detector";
 import { RewardIconResult } from "./gamedetector/rewardIcon/detect";
@@ -33,6 +30,7 @@ import { AllPlayerGames, CountChange } from "./useSyncedState";
 import { GeneralItem } from "./Cast";
 import { GeneralCounts } from "./CastPage";
 import { GameToGoals } from "./findAllGames";
+import { PlayerMember } from "../common/useMembers";
 
 const AUTO_GAME_DEBUG = false;
 
@@ -50,25 +48,21 @@ type Capture = {
 };
 
 type Props = {
-  numPlayers: number;
-  leftColor: BingosyncColor;
-  rightColor: BingosyncColor;
   allPlayerGames: AllPlayerGames;
-  addGame: (newGame: null | string, playerNum: number) => unknown;
+  addSubcategoryName: (userId: number, newGame: null | string) => unknown;
   isDetecting: boolean;
   setIsDetecting: (newIsDetecting: boolean) => unknown;
   generalGoals: ReadonlyArray<GeneralItem>;
   generalCounts: GeneralCounts;
   gameToGoals: GameToGoals;
   setGeneralGameCount: (change: CountChange) => unknown;
+  players: ReadonlyArray<PlayerMember>;
 };
 
 export default function AutoGameSection({
-  numPlayers,
-  leftColor,
-  rightColor,
+  players,
   allPlayerGames,
-  addGame,
+  addSubcategoryName,
   isDetecting,
   setIsDetecting,
   generalGoals,
@@ -99,7 +93,6 @@ export default function AutoGameSection({
   );
 
   const allRegions = captures.flatMap((capture) => capture.regions);
-  const playerCount = getPlayerCount(numPlayers, allRegions);
   const editingCapture = captures.find(
     (capture) => capture.id === editing?.captureId,
   );
@@ -117,17 +110,18 @@ export default function AutoGameSection({
       ),
     );
 
-  const updateCurrentGame = (game: null | ProperGame, playerNum: number) => {
-    const sent = sentGamesRef.current.get(playerNum);
+  const updateCurrentGame = (game: null | string, userId: number) => {
+    const sent = sentGamesRef.current.get(userId);
+    const playerGames = allPlayerGames.get(userId);
     const currentGame =
       sent != null && sent.allPlayerGames === allPlayerGames
         ? sent.game
-        : (getGamesForPlayer(allPlayerGames, playerNum)[0]?.game ?? null);
+        : (playerGames?.[playerGames.length - 1] ?? null);
     if (game === currentGame) {
       return;
     }
-    sentGamesRef.current.set(playerNum, { game, allPlayerGames });
-    addGame(game, playerNum);
+    sentGamesRef.current.set(userId, { game, allPlayerGames });
+    addSubcategoryName(userId, game);
   };
 
   const clearIcon = (regionId: string) =>
@@ -135,17 +129,12 @@ export default function AutoGameSection({
       oldIcons[regionId] == null ? oldIcons : { ...oldIcons, [regionId]: null },
     );
 
-  const checkGeneralGoals = (icon: RewardIcon, playerNum: number) => {
+  const checkGeneralGoals = (icon: RewardIcon, userId: number) => {
     if (!shouldAutoTrack) {
       return;
     }
-    // only the first two players are tracked in general goals for now
-    if (playerNum > 1) {
-      return;
-    }
-    const game = getGamesForPlayer(allPlayerGames, playerNum).find(
-      (entry) => entry.game != null,
-    )?.game;
+    const playerGames = allPlayerGames.get(userId);
+    const game = playerGames?.findLast((entry) => entry.game != null)?.game;
     if (game == null) {
       return;
     }
@@ -175,11 +164,11 @@ export default function AutoGameSection({
         }
       }
       const isChecked =
-        (generalCounts[resolvedGoal]?.[playerNum]?.[game] ?? 0) > 0;
+        (generalCounts[resolvedGoal]?.[userId]?.[game] ?? 0) > 0;
       if (!isChecked) {
         setGeneralGameCount({
           goal: resolvedGoal,
-          player_num: playerNum,
+          userId,
           game,
           count: 1,
         });
@@ -197,12 +186,14 @@ export default function AutoGameSection({
     // When the capture doesn't have regions, starts with one on each detected
     // game screen, or one to place by hand if nothing was detected
     if (initialRegions.length === 0) {
-      for (let i = 0; i < Math.max(1, suggestions.length); i++) {
+      const maxSuggestedRegions = Math.max(1, suggestions.length);
+      for (let i = 0; i < Math.min(maxSuggestedRegions, players.length); i++) {
         initialRegions = addRegion(
           initialRegions,
           allRegions,
           suggestions,
           frame.width / frame.height,
+          players[i].userId,
         );
       }
     }
@@ -275,7 +266,7 @@ export default function AutoGameSection({
                       : { ...oldDetections, [region.id]: null },
                   );
                   clearIcon(region.id);
-                  updateCurrentGame(null, region.playerNum);
+                  updateCurrentGame(null, region.userId);
                 }
                 if (AUTO_GAME_DEBUG) {
                   setStatuses((oldStatuses) => ({
@@ -290,14 +281,14 @@ export default function AutoGameSection({
                   [region.id]: detection,
                 }));
                 clearIcon(region.id);
-                updateCurrentGame(detection.game, region.playerNum);
+                updateCurrentGame(detection.game, region.userId);
               }}
               onRewardIcon={(detection) => {
                 setIcons((oldIcons) => ({
                   ...oldIcons,
                   [region.id]: detection.icon,
                 }));
-                checkGeneralGoals(detection.icon, region.playerNum);
+                checkGeneralGoals(detection.icon, region.userId);
               }}
             />
           )),
@@ -351,7 +342,8 @@ export default function AutoGameSection({
                     <div key={region.id}>
                       <Group justify="space-between" wrap="nowrap">
                         <Text size="sm" fw={500}>
-                          {getPlayerLabel(region.playerNum, playerCount)}
+                          {players.find((p) => p.userId === region.userId)
+                            ?.name ?? region.userId}
                           {detected != null &&
                             ` - ${GAME_NAMES[detected.game]}`}
                           {icon != null && ` (${icon})`}
@@ -416,9 +408,7 @@ export default function AutoGameSection({
               .filter((capture) => capture.id !== editingCapture.id)
               .flatMap((capture) => capture.regions)}
             suggestions={editing.suggestions}
-            numPlayers={numPlayers}
-            leftColor={leftColor}
-            rightColor={rightColor}
+            players={players}
             onConfirm={(newRegions) => {
               setRegions(editingCapture.id, newRegions);
               setEditing(null);

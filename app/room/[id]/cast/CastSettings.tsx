@@ -58,7 +58,7 @@ type Props = {
   numPlayers: number;
   setNumPlayers: (numPlayers: number) => unknown;
   allPlayerGames: AllPlayerGames;
-  addGame: (newGame: null | string, playerNum: number) => unknown;
+  addSubcategoryName: (userId: number, newGame: null | string) => unknown;
   isDetecting: boolean;
   setIsDetecting: (newIsDetecting: boolean) => unknown;
   gameToGoals: GameToGoals;
@@ -97,7 +97,7 @@ export default function CastSettings({
   numPlayers,
   setNumPlayers,
   allPlayerGames,
-  addGame,
+  addSubcategoryName,
   isDetecting,
   setIsDetecting,
   gameToGoals,
@@ -304,18 +304,15 @@ export default function CastSettings({
                 setSoundChoices={setSoundChoices}
               />
               <AutoGameSection
-                numPlayers={numPlayers}
-                // TODO: Fix autodetection
-                leftColor="red"
-                rightColor="red"
                 allPlayerGames={allPlayerGames}
-                addGame={addGame}
+                addSubcategoryName={addSubcategoryName}
                 isDetecting={isDetecting}
                 setIsDetecting={setIsDetecting}
                 generalGoals={generalGoals}
                 generalCounts={generalCounts}
                 gameToGoals={gameToGoals}
                 setGeneralGameCount={setGeneralGameCount}
+                players={players}
               />
             </Accordion>
             {/* TODO: Add disconnect? */}

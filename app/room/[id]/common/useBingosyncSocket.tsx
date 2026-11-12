@@ -31,6 +31,9 @@ export default function useBingosyncSocket({
 
   const onMessage = useCallback(
     (newItem: NewFeedItem) => {
+      if (newItem.type === "player_order") {
+        return;
+      }
       if (newItem.userId === userId) {
         return;
       }

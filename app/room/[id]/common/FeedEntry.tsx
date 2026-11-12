@@ -13,6 +13,9 @@ type Props = {
 
 // reference: https://github.com/kbuzsaki/bingosync/blob/b23d3b4e3192e7034573f3e8efc906aa4a83b0b8/bingosync-app/static/bingosync/room/chat_panel.js#L16
 export default function FeedEntry({ entry, squareNames, members }: Props) {
+  if (entry.type === "player_order") {
+    return null;
+  }
   const timestamp = (
     <span className={`${classes.timestamp} ${classes.defaultColor}`}>
       {getTimestamp(entry.time)}

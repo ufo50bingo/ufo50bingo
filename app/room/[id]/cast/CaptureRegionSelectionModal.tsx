@@ -10,11 +10,11 @@ import {
   Select,
   Tooltip,
 } from "@mantine/core";
-import { IconArrowsLeftRight, IconPlus, IconTrash } from "@tabler/icons-react";
+import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { useState, useCallback } from "react";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { SnapshotInfo } from "./AutoGameSection";
 import getColorHex from "./getColorHex";
+import { PlayerMember } from "../common/useMembers";
 
 export type CropRect = {
   x: number;
@@ -25,41 +25,19 @@ export type CropRect = {
 
 export type CaptureRegion = {
   id: string;
-  playerNum: number;
+  userId: number;
   cropRect: CropRect;
 };
 
-export function getPlayerLabel(playerNum: number, playerCount: number): string {
-  const side = playerNum % 2 === 0 ? "Left" : "Right";
-  return playerCount < 3
-    ? `${side} player`
-    : `${side} player ${Math.floor(playerNum / 2) + 1}`;
-}
-
-function getNextPlayerNum(regions: ReadonlyArray<CaptureRegion>): number {
-  let playerNum = 0;
-  while (regions.some((region) => region.playerNum === playerNum)) {
-    playerNum++;
-  }
-  return playerNum;
-}
-
-export function getPlayerCount(
-  numPlayers: number,
-  regions: ReadonlyArray<CaptureRegion>,
-): number {
-  return Math.max(numPlayers, ...regions.map((region) => region.playerNum + 1));
-}
-
 function createRegion(
-  playerNum: number,
+  userId: number,
   index: number,
   aspectRatio: number,
 ): CaptureRegion {
   const height = Math.min(0.45, 0.4 * (9 / 16) * aspectRatio);
   return {
     id: crypto.randomUUID(),
-    playerNum,
+    userId,
     cropRect: {
       x: 0.05 + 0.5 * (index % 2),
       y: 0.05 + 0.5 * (Math.floor(index / 2) % 2),
@@ -76,12 +54,9 @@ export function addRegion(
   otherRegions: ReadonlyArray<CaptureRegion>,
   suggestions: ReadonlyArray<CropRect>,
   aspectRatio: number,
+  nextPlayerId: number,
 ): ReadonlyArray<CaptureRegion> {
-  const region = createRegion(
-    getNextPlayerNum([...otherRegions, ...regions]),
-    regions.length,
-    aspectRatio,
-  );
+  const region = createRegion(nextPlayerId, regions.length, aspectRatio);
   const cropRect = suggestions.find((suggestion) =>
     regions.every((r) => !overlaps(r.cropRect, suggestion)),
   );
@@ -104,9 +79,7 @@ type Props = {
   otherRegions: ReadonlyArray<CaptureRegion>;
   // Likely game screens in the snapshot, for placing new regions
   suggestions: ReadonlyArray<CropRect>;
-  numPlayers: number;
-  leftColor: BingosyncColor;
-  rightColor: BingosyncColor;
+  players: ReadonlyArray<PlayerMember>;
   onConfirm: (newRegions: ReadonlyArray<CaptureRegion>) => unknown;
   onClose: () => unknown;
 };
@@ -116,14 +89,11 @@ export default function CaptureRegionSelectionModal({
   initialRegions,
   otherRegions,
   suggestions,
-  numPlayers,
-  leftColor,
-  rightColor,
+  players,
   onConfirm,
   onClose,
 }: Props) {
   const [regions, setRegions] = useState(initialRegions);
-  const playerCount = getPlayerCount(numPlayers, [...otherRegions, ...regions]);
   const [imgSize, setImgSize] = useState<{
     width: number;
     height: number;
@@ -154,14 +124,16 @@ export default function CaptureRegionSelectionModal({
       ),
     );
 
-  const playerOptions = new Array(playerCount)
-    .fill(null)
-    .map((_, playerNum) => ({
-      value: String(playerNum),
-      label: getPlayerLabel(playerNum, playerCount),
-    }));
-  const getPlayerColor = (playerNum: number) =>
-    getColorHex(playerNum % 2 === 0 ? leftColor : rightColor);
+  const playerOptions = players.map((player) => ({
+    value: player.userId.toString(),
+    label: player.name,
+  }));
+  const getPlayer = (userId: number) =>
+    players.find((p) => p.userId === userId);
+
+  const nextPlayer = players.find((p) =>
+    regions.every((r) => r.userId !== p.userId),
+  );
 
   return (
     <Modal
@@ -179,19 +151,19 @@ export default function CaptureRegionSelectionModal({
               aria-label="Player"
               leftSection={
                 <ColorSwatch
-                  color={getPlayerColor(region.playerNum)}
+                  color={getColorHex(getPlayer(region.userId)?.color ?? "red")}
                   size={14}
                 />
               }
               data={playerOptions}
               allowDeselect={false}
               w={170}
-              value={String(region.playerNum)}
+              value={String(region.userId)}
               onChange={(newValue) => {
                 if (newValue == null) {
                   return;
                 }
-                updateRegion(region.id, { playerNum: Number(newValue) });
+                updateRegion(region.id, { userId: Number(newValue) });
               }}
             />
             <Tooltip label="Remove region">
@@ -208,33 +180,23 @@ export default function CaptureRegionSelectionModal({
             </Tooltip>
           </Group>
         ))}
-        {regions.length === 2 && (
-          <Button
-            variant="light"
-            leftSection={<IconArrowsLeftRight size={16} />}
-            onClick={() =>
-              setRegions([
-                { ...regions[0], playerNum: regions[1].playerNum },
-                { ...regions[1], playerNum: regions[0].playerNum },
-              ])
-            }
-          >
-            Swap players
-          </Button>
-        )}
         <Button
           variant="light"
+          disabled={nextPlayer == null}
           leftSection={<IconPlus size={16} />}
-          onClick={() =>
-            setRegions(
-              addRegion(
-                regions,
-                otherRegions,
-                suggestions,
-                snapshotInfo.width / snapshotInfo.height,
-              ),
-            )
-          }
+          onClick={() => {
+            if (nextPlayer != null) {
+              setRegions(
+                addRegion(
+                  regions,
+                  otherRegions,
+                  suggestions,
+                  snapshotInfo.width / snapshotInfo.height,
+                  nextPlayer.userId,
+                ),
+              );
+            }
+          }}
         >
           Add region
         </Button>
@@ -253,7 +215,8 @@ export default function CaptureRegionSelectionModal({
 
         {imgSize != null &&
           regions.map((region) => {
-            const color = getPlayerColor(region.playerNum);
+            const player = getPlayer(region.userId);
+            const color = getColorHex(player?.color ?? "red");
             const position = {
               x: region.cropRect.x * imgSize.width,
               y: region.cropRect.y * imgSize.height,
@@ -304,7 +267,7 @@ export default function CaptureRegionSelectionModal({
                 }}
               >
                 <Badge color={color} autoContrast={true} radius={0}>
-                  {getPlayerLabel(region.playerNum, playerCount)}
+                  {player?.name ?? region.userId}
                 </Badge>
               </Rnd>
             );

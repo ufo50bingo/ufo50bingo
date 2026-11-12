@@ -1,22 +1,36 @@
 import { Card, Stack } from "@mantine/core";
 import ChatInput from "./ChatInput";
-import { CSSProperties, useLayoutEffect, useRef } from "react";
+import { CSSProperties, useLayoutEffect, useMemo, useRef } from "react";
 import FeedEntry from "./FeedEntry";
 import { NewFeed } from "../play/PlayPage";
 
 type Props = {
+  userId: number;
   feed: NewFeed;
   style?: CSSProperties;
+  isPlay: boolean;
 };
 
-export default function Feed({ feed, style = {} }: Props) {
+export default function Feed({ feed, userId, isPlay, style = {} }: Props) {
   const feedRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     if (feedRef.current != null) {
       feedRef.current.scrollTop = feedRef.current.scrollHeight;
     }
   }, [feed]);
-  console.log(feed);
+
+  const filteredFeed = useMemo(
+    () =>
+      feed.filter(
+        (item) =>
+          !isPlay ||
+          item.type !== "chat" ||
+          item.visibleToPlayers == null ||
+          item.user.id === userId ||
+          item.visibleToPlayers.includes(userId),
+      ),
+    [feed, isPlay, userId],
+  );
   return (
     <Card
       shadow="sm"
@@ -33,13 +47,13 @@ export default function Feed({ feed, style = {} }: Props) {
         style={{ height: "100%", overflowY: "auto" }}
       >
         <Stack gap={0}>
-          {feed.map((entry, index) => (
+          {filteredFeed.map((entry, index) => (
             <FeedEntry key={index} entry={entry} />
           ))}
         </Stack>
       </Card.Section>
       <Card.Section inheritPadding={true} withBorder={true} py="sm">
-        <ChatInput />
+        <ChatInput userId={userId} />
       </Card.Section>
     </Card>
   );

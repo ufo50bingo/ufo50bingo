@@ -394,6 +394,8 @@ export default function Play({
         </Stack>
         <Feed
           feed={feed}
+          userId={userId}
+          isPlay={true}
           style={{
             height:
               showGeneralTracker && generalSettings.type === "simple"

@@ -13,6 +13,7 @@ import { Group, Text } from "@mantine/core";
 import BingosyncColored from "./BingosyncColored";
 import { db } from "../db";
 import StandardBoardCover from "../StandardBoardCover";
+import StandardBoardWrapper from "../StandardBoardWrapper";
 
 type Props = {
   finalBoard: TBoard;
@@ -124,41 +125,43 @@ export default function InProgressBoard({
   );
   return (
     <>
-      <Board
-        board={
-          rawChanges == null || rawStartTime == null || isFinal
-            ? finalBoard
-            : board
-        }
-        overlays={showOverlays && overlays != null ? overlays : undefined}
-        onClickSquare={null}
-        boardCover={
-          (!isRevealed || !isBoardVisible) && (
-            <StandardBoardCover
-              onReveal={async () => {
-                if (isBoardVisible) {
-                  await db.revealedMatches.add({ id: matchId });
+      <StandardBoardWrapper>
+        <Board
+          board={
+            rawChanges == null || rawStartTime == null || isFinal
+              ? finalBoard
+              : board
+          }
+          overlays={showOverlays && overlays != null ? overlays : undefined}
+          onClickSquare={null}
+          boardCover={
+            (!isRevealed || !isBoardVisible) && (
+              <StandardBoardCover
+                onReveal={async () => {
+                  if (isBoardVisible) {
+                    await db.revealedMatches.add({ id: matchId });
+                  }
+                }}
+                content={
+                  isBoardVisible ? (
+                    "Click to reveal match details"
+                  ) : (
+                    <>
+                      No goals have been claimed yet! The board can be
+                      <br />
+                      viewed after at least one goal has been claimed
+                      <br />
+                      and data has been refreshed.
+                    </>
+                  )
                 }
-              }}
-              content={
-                isBoardVisible ? (
-                  "Click to reveal match details"
-                ) : (
-                  <>
-                    No goals have been claimed yet! The board can be
-                    <br />
-                    viewed after at least one goal has been claimed
-                    <br />
-                    and data has been refreshed.
-                  </>
-                )
-              }
-            />
-          )
-        }
-        shownDifficulties={["general", "veryhard"]}
-        viewerColor={null}
-      />
+              />
+            )
+          }
+          shownDifficulties={["general", "veryhard"]}
+          viewerColor={null}
+        />
+      </StandardBoardWrapper>
       {isRevealed && result != null && (
         <Group justify="space-between">
           <BingosyncColored color={result.winnerColor as BingosyncColor}>

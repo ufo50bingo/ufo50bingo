@@ -3,11 +3,8 @@
 .boardContainer {
     display: grid;
     position: relative;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    grid-template-rows: repeat(5, minmax(0, 1fr));
     width: 100%;
-    max-width: 525px;
-    height: 475px;
+    height: 100%;
 }
 
 .boardCover {
@@ -70,11 +67,6 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}
-
-.goalText {
-    color: rgb(255, 255, 255);
-    font-size: 14px;
 }
 
 .difficulty {
@@ -160,7 +152,6 @@
     /* needed to enable hold mask */
     isolation: isolate;
 
-    font-size: 14px;
     line-height: 1.1;
 }
 

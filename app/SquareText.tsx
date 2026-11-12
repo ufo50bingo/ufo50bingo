@@ -3,43 +3,55 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 type Props = {
   text: string;
   hasOverlays: boolean;
+  maxFontSize: number;
+  minFontSize: number;
 };
 
-type FontSearch = {
-  fontSize: number;
-  lower: number;
-  upper: number;
-};
-
-const DEFAULT_SEARCH = { fontSize: 100, lower: 65, upper: 100 };
-
-export default function SquareText({ text, hasOverlays }: Props) {
+export default function SquareText({
+  text,
+  hasOverlays,
+  maxFontSize,
+  minFontSize,
+}: Props) {
   const divRef = useRef<HTMLDivElement>(null);
-  const [fontSearch, setFontSearch] = useState<FontSearch>(DEFAULT_SEARCH);
+  const [fontSize, setFontSize] = useState(maxFontSize);
+  const [dummy, setDummy] = useState(0); // only used to force a re-render
   const timeoutRef = useRef<null | NodeJS.Timeout>(null);
 
   useLayoutEffect(() => {
     const cur = divRef.current;
-    if (cur == null || fontSearch.fontSize === fontSearch.lower) {
+    const parent = cur?.parentElement;
+    if (cur == null || parent == null) {
       return;
     }
-    const parent = cur.parentElement?.getBoundingClientRect();
-    // 10px padding
-    const heightThreshold = (parent?.height ?? 95) - (hasOverlays ? 30 : 10);
-    const widthThreshold = (parent?.width ?? 105) - 10;
-    const { height, width } = cur.getBoundingClientRect();
-    const fits = height <= heightThreshold && width <= widthThreshold;
-    if (fits && fontSearch.fontSize >= fontSearch.upper - 1) {
+
+    const maxWidth = parent.clientWidth - 10;
+    const maxHeight = parent.clientHeight - (hasOverlays ? 30 : 10);
+
+    cur.style.width = `${maxWidth}px`;
+
+    const doesFit = (newFontSize: number) => {
+      cur.style.fontSize = `${newFontSize}px`;
+      return cur.scrollHeight <= maxHeight && cur.scrollWidth <= maxWidth;
+    };
+
+    let lower = minFontSize;
+    let upper = maxFontSize;
+    if (doesFit(upper)) {
+      setFontSize(upper);
       return;
     }
-    const lower = fits ? fontSearch.fontSize : fontSearch.lower;
-    const upper = fits ? fontSearch.upper : fontSearch.fontSize;
-    setFontSearch({
-      fontSize: upper - lower >= 1 ? (lower + upper) / 2 : lower,
-      upper,
-      lower,
-    });
-  }, [fontSearch, hasOverlays]);
+    while (upper - lower > 0.1) {
+      const mid = (upper + lower) / 2;
+      if (doesFit(mid)) {
+        lower = mid;
+      } else {
+        upper = mid;
+      }
+    }
+    cur.style.fontSize = `${lower}px`;
+    setFontSize(lower);
+  }, [text, hasOverlays, maxFontSize, minFontSize, dummy]);
 
   useEffect(() => {
     const parent = divRef.current?.parentElement;
@@ -51,7 +63,7 @@ export default function SquareText({ text, hasOverlays }: Props) {
         clearTimeout(timeoutRef.current);
       }
       timeoutRef.current = setTimeout(() => {
-        setFontSearch({ ...DEFAULT_SEARCH }); // Reset font size to trigger recalculation
+        setDummy((d) => d + 1); // trigger recalculation
       }, 200); // 200ms debounce
     });
     observer.observe(parent);
@@ -59,7 +71,12 @@ export default function SquareText({ text, hasOverlays }: Props) {
   }, []);
 
   return (
-    <div ref={divRef} style={{ fontSize: `${fontSearch.fontSize}%` }}>
+    <div
+      ref={divRef}
+      style={{
+        fontSize: `${fontSize}px`,
+      }}
+    >
       {text}
     </div>
   );

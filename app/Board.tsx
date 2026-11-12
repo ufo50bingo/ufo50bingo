@@ -34,6 +34,10 @@ type Props = {
   isPlay?: boolean;
   castInfo?: { leftColor: BingosyncColor; rightColor: BingosyncColor };
   pasta?: null | UFOPasta;
+  rows?: number;
+  columns?: number;
+  maxFontSize?: number;
+  minFontSize?: number;
 };
 
 function getColorClass(color: string): string {
@@ -149,6 +153,10 @@ export default function Board({
   castInfo,
   pasta,
   isPlay = false,
+  rows = 5,
+  columns = 5,
+  maxFontSize = 14,
+  minFontSize = 9.1,
 }: Props) {
   const { rightClickBehavior } = useRightClickBehaviorContext();
   const { shouldShortenPlay, shouldShortenCast } = useShouldShortenContext();
@@ -217,7 +225,13 @@ export default function Board({
   }, [highlights, rightClickBehavior, rightClickCounts, viewerColor]);
   const resolvedHighlights = highlights ?? rightClickHighlights;
   return (
-    <div className={classes.boardContainer}>
+    <div
+      className={classes.boardContainer}
+      style={{
+        gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+        gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
+      }}
+    >
       {board.map((square, squareIndex) => {
         const foundGoal =
           pasta != null
@@ -301,6 +315,8 @@ export default function Board({
               key={displayGoal}
               text={displayGoal}
               hasOverlays={overlays != null}
+              maxFontSize={maxFontSize}
+              minFontSize={minFontSize}
             />
             {overlays != null && overlays[squareIndex] != null && (
               <div className={classes.overlay}>{overlays[squareIndex]}</div>

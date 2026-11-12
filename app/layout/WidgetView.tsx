@@ -10,7 +10,9 @@ function WidgetView({ widget }: Props) {
     <div
       className="editor-widget"
       data-id={widget.id}
-      data-lock-aspect-ratio={widget.lockAspectRatio === true ? "true" : "false"}
+      data-lock-aspect-ratio={
+        widget.lockAspectRatio === true ? "true" : "false"
+      }
       style={{
         position: "absolute",
         left: widget.x,
@@ -26,7 +28,7 @@ function WidgetView({ widget }: Props) {
         userSelect: "none",
       }}
     >
-      Widget {widget.id}
+      {widget.content}
     </div>
   );
 }

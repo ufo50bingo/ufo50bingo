@@ -2,8 +2,8 @@ import getAllSubcategories from "../createboard/getAllSubcategories";
 import getNonGeneralCategories from "../createboard/getNonGeneralCategories";
 import shuffle from "../createboard/shuffle";
 import { getTerminalCode } from "../room/[id]/cast/findAllGames";
+import { getDifficultyLayout } from "./getDifficultyLayout";
 import getGoalAndFallback from "./getGoalAndFallback";
-import getMagicSquare from "./getMagicSquare";
 import { inferGames } from "./inferGames";
 import replaceTokens from "./replaceTokens";
 import splitAtTokens from "./splitAtTokens";
@@ -114,7 +114,7 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
   let tryNum = 0;
   while (bestFallbacks > 0 && tryNum < MAX_TRIES) {
     tryNum += 1;
-    const result = generateCandidate(pasta, bestFallbacks);
+    const result = generateCandidate(pasta, bestFallbacks, 5, 5);
     if (result != null) {
       [bestBoard, bestFallbacks] = result;
     }
@@ -125,11 +125,17 @@ export default function ufoGenerator(pasta: UFOPasta): ReadonlyArray<string> {
 function generateCandidate(
   pasta: UFOPasta,
   bestFallbacks: number,
+  rows: number,
+  cols: number,
 ): null | [ReadonlyArray<string>, number] {
   const nonGeneralCategories = getNonGeneralCategories(pasta);
   const allGames = [...getAllSubcategories(pasta.goals, nonGeneralCategories)];
   // fill squares in order of how many bingo lines they're on
   // this helps prevent having two goals from the same game on one line
+  // TODO: should we add a more complex search algorithm here as well?
+  // const centerIndex = rows === cols && rows % 2 === 1 ? [(rows * cols - 1) / 2] : [];
+  // const diagonalIndices = 
+  // TODO: What can we reuse from difficulty seletion? Lines?
   const centerIndex = 12;
   const diagonalIndices = [0, 6, 18, 24, 4, 8, 16, 20];
   const remainingIndices = [
@@ -139,13 +145,13 @@ function generateCandidate(
   shuffle(remainingIndices);
   const fillOrder = [centerIndex, ...diagonalIndices, ...remainingIndices];
 
-  // choose difficulty of each square by using a magic square
-  const magicSquare = getMagicSquare();
   const difficultyTiers =
     pasta.category_difficulty_tiers ??
     Object.keys(pasta.category_counts).map((category) => [category]);
-  const orderedCategories = difficultyTiers.flatMap((tier) => {
-    const categories = tier.flatMap((category) =>
+  const tierCounts = difficultyTiers.map(tier => tier.reduce((acc, difficulty) => acc + pasta.category_counts[difficulty], 0));
+  const tierLayout = getDifficultyLayout(tierCounts, rows, cols).board;
+  const categoriesByTier = difficultyTiers.map((tier) => {
+    const categories: Array<string> = tier.flatMap((category) =>
       Array(pasta.category_counts[category]).fill(category),
     );
     if (tier.length > 1) {
@@ -153,9 +159,14 @@ function generateCandidate(
     }
     return categories;
   });
-  const difficultyByIndex: Array<string> = magicSquare.map(
-    (index) => orderedCategories[index],
-  );
+  const difficultyByIndex: Array<string> = Array(rows * cols).fill("");
+  const indexForTiers: Array<number> = tierCounts.map(_ => 0);
+  for (let cellIdx = 0; cellIdx < tierLayout.length; cellIdx++) {
+    const tier = tierLayout[cellIdx];
+    const catIdx = indexForTiers[tier];
+    difficultyByIndex[cellIdx] = categoriesByTier[tier][catIdx];
+    indexForTiers[tier]++;
+  }
 
   const availableGamesByDifficulty: { [difficulty: string]: Array<string> } =
     {};

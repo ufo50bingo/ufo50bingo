@@ -34,6 +34,7 @@ export default function JoinMatch({ gameId, userMember, playerColor }: Props) {
   const [color, setColor] = useState<BingosyncColor>(
     userMember?.playerColor ?? playerColor ?? "red",
   );
+  const [error, setError] = useState<string | null>(null);
 
   const invitedView =
     userMember == null
@@ -48,7 +49,12 @@ export default function JoinMatch({ gameId, userMember, playerColor }: Props) {
     view != null && name !== "" && (password !== "" || userMember != null);
   const submit = async () => {
     if (canSubmit) {
-      joinGame(gameId, view === "play" ? color : null, name);
+      try {
+        setError(null);
+        await joinGame(gameId, view === "play" ? color : null, name, password);
+      } catch (error) {
+        setError(error instanceof Error ? error.message : "Unknown error");
+      }
     }
   };
   return (
@@ -125,6 +131,9 @@ export default function JoinMatch({ gameId, userMember, playerColor }: Props) {
               <Button disabled={!canSubmit} onClick={submit}>
                 Join as {view === "cast" ? "Caster" : "Player"}
               </Button>
+              {error != null && (
+                <Alert color="red">Failed to join match! {error}</Alert>
+              )}
             </Stack>
           </Card.Section>
         )}

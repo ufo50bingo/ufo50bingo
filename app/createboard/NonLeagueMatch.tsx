@@ -103,12 +103,12 @@ export default function NonLeagueMatch({ visible }: Props) {
 
   const format = metadata.name === "10 Cherry Race" ? "Custom" : rawFormat;
 
-  const getSerializedPasta = (pretty: boolean): string => {
-    const stringify = (structured: ReadonlyArray<{ name: string }>) =>
-      pretty ? JSON.stringify(structured, null, 2) : JSON.stringify(structured);
-    const getUFOPastaWithCustomSelectors = (pasta: UFOPasta): string => {
+  const getSerializedPasta = (): ReadonlyArray<string> => {
+    const getUFOPastaWithCustomSelectors = (
+      pasta: UFOPasta,
+    ): ReadonlyArray<string> => {
       if (format !== "Custom" && !metadata.hasFilters) {
-        return stringify(ufoGenerator(pasta).map((goal) => ({ name: goal })));
+        return ufoGenerator(pasta);
       }
       const finalUncheckedGames =
         metadata.hasFilters && format === "Custom"
@@ -127,18 +127,16 @@ export default function NonLeagueMatch({ visible }: Props) {
       if (metadata.name === "10 Cherry Race") {
         goals = goals.toSorted();
       }
-      return stringify(goals.map((goal) => ({ name: goal })));
+      return goals;
     };
     switch (metadata.type) {
       case "Custom":
         if (customType !== "ufo" || customUfo == null) {
-          return custom;
+          throw new Error("TODO!");
         }
         if (format === "Draft") {
           if (draftPasta != null) {
-            return stringify(
-              ufoGenerator(draftPasta).map((goal) => ({ name: goal })),
-            );
+            return ufoGenerator(draftPasta);
           } else {
             throw new Error("draftPasta expected to be nonnull");
           }
@@ -148,9 +146,7 @@ export default function NonLeagueMatch({ visible }: Props) {
       case "UFO":
         if (format === "Draft") {
           if (draftPasta != null) {
-            return stringify(
-              ufoGenerator(draftPasta).map((goal) => ({ name: goal })),
-            );
+            return ufoGenerator(draftPasta);
           } else {
             throw new Error("draftPasta expected to be nonnull");
           }
@@ -516,18 +512,14 @@ export default function NonLeagueMatch({ visible }: Props) {
                     createMatch({
                       ...common,
                       roomName: roomName + " — Card 1",
-                      pasta: JSON.stringify(
-                        card1.map((goal) => ({ name: goal })),
-                      ),
+                      goals: card1,
                     }),
                   );
                   promises.push(
                     createMatch({
                       ...common,
                       roomName: roomName + " — Card 2",
-                      pasta: JSON.stringify(
-                        card2.map((goal) => ({ name: goal })),
-                      ),
+                      goals: card2,
                     }),
                   );
                 } else {
@@ -547,7 +539,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                         (metadata.type === "UFO" ||
                           (metadata.type === "Custom" && customUfo != null)),
                       isLockout,
-                      pasta: getSerializedPasta(false),
+                      goals: getSerializedPasta(),
                       fullPasta: metadata.type === "Custom" ? customUfo : null,
                       leagueInfo: null,
                       roomBackend,
@@ -600,10 +592,10 @@ export default function NonLeagueMatch({ visible }: Props) {
               format === "Double"
             }
             onClick={() => {
-              navigator.clipboard.writeText(getSerializedPasta(true));
+              navigator.clipboard.writeText(getSerializedPasta().join("\n"));
             }}
           >
-            Copy Pasta to Clipboard
+            Copy Goals to Clipboard
           </Button>
           {createdIds.length > 0 && (
             <Alert

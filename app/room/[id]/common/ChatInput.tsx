@@ -11,22 +11,18 @@ import { useState } from "react";
 import sendChat from "./sendChat";
 import { useParams } from "next/navigation";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
-
-const PLAYERS = [
-  { id: 1, name: "Frank" },
-  { id: 2, name: "Matt" },
-  { id: 3, name: "Karma" },
-];
+import { PlayerMember } from "./useMembers";
 
 type Props = {
   userId: number;
+  players: ReadonlyArray<PlayerMember>;
 };
 
-export default function ChatInput({ userId }: Props) {
+export default function ChatInput({ userId, players }: Props) {
   const [text, setText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const otherPlayers = PLAYERS.filter((p) => p.id !== userId);
+  const otherPlayers = players.filter((p) => p.userId !== userId);
   const [visibleToIds, setVisibleToIds] =
     useState<null | ReadonlyArray<number>>(null);
 
@@ -59,23 +55,25 @@ export default function ChatInput({ userId }: Props) {
               <span>Message will be visible to:</span>
               {otherPlayers.map((p) => (
                 <Checkbox
-                  key={p.id}
-                  checked={visibleToIds == null || visibleToIds.includes(p.id)}
+                  key={p.userId}
+                  checked={
+                    visibleToIds == null || visibleToIds.includes(p.userId)
+                  }
                   label={p.name}
                   onChange={(event) => {
                     if (event.currentTarget.checked) {
                       if (visibleToIds == null) {
                         return;
                       }
-                      const newIds = [...visibleToIds, p.id];
+                      const newIds = [...visibleToIds, p.userId];
                       setVisibleToIds(
                         newIds.length === otherPlayers.length ? null : newIds,
                       );
                     } else {
                       const newIds = (
                         visibleToIds ??
-                        otherPlayers.map((otherPlayer) => otherPlayer.id)
-                      ).filter((playerId) => playerId !== p.id);
+                        otherPlayers.map((otherPlayer) => otherPlayer.userId)
+                      ).filter((playerId) => playerId !== p.userId);
                       setVisibleToIds(newIds);
                     }
                   }}

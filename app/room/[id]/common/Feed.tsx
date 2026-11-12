@@ -3,7 +3,7 @@ import ChatInput from "./ChatInput";
 import { CSSProperties, useLayoutEffect, useMemo, useRef } from "react";
 import FeedEntry from "./FeedEntry";
 import { NewFeed } from "@/app/fetchFeed";
-import { GenericMember } from "./useMembers";
+import { GenericMember, PlayerMember } from "./useMembers";
 
 type Props = {
   userId: number;
@@ -12,6 +12,7 @@ type Props = {
   style?: CSSProperties;
   isPlay: boolean;
   squareNames: ReadonlyArray<string>;
+  players: ReadonlyArray<PlayerMember>;
 };
 
 export default function Feed({
@@ -20,6 +21,7 @@ export default function Feed({
   isPlay,
   squareNames,
   members,
+  players,
   style = {},
 }: Props) {
   const feedRef = useRef<HTMLDivElement>(null);
@@ -68,7 +70,7 @@ export default function Feed({
         </Stack>
       </Card.Section>
       <Card.Section inheritPadding={true} withBorder={true} py="sm">
-        <ChatInput userId={userId} />
+        <ChatInput userId={userId} players={players} />
       </Card.Section>
     </Card>
   );

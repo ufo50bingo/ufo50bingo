@@ -83,6 +83,7 @@ export default function SingleMatchView({ game }: Props) {
         shownDifficulties={["easy", "veryhard", "general"]}
         generals={generals}
       />
+      {/* TODO: space-between if only two teams? */}
       <Stack gap={4}>
         <div className={classes.teams} style={{ maxWidth: "360px" }}>
           {teams.map((team) => {

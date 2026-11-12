@@ -39,6 +39,8 @@
 // each other will have identical distributions.
 
 import shuffle from "../createboard/shuffle";
+import getBingoLines from "./getBingoLines";
+import range from "./range";
 
 export interface GetDifficultyLayoutOptions {
   // setting this allows you to bias the center square toward being a given difficulty.
@@ -98,17 +100,8 @@ export function getDifficultyLayout(
 
   const isSquare = rows === cols;
   const centerIdx = isSquare && rows % 2 === 1 ? (cellCount - 1) / 2 : null;
-  const lineCells: Array<Array<number>> = [];
-  for (let r = 0; r < rows; r++) {
-    lineCells.push(range(cols).map((c) => r * cols + c));
-  }
-  for (let c = 0; c < cols; c++) {
-    lineCells.push(range(rows).map((r) => r * cols + c));
-  }
-  if (rows === cols) {
-    lineCells.push(range(rows).map((i) => i * (rows + 1)));
-    lineCells.push(range(rows).map((i) => (i + 1) * (rows - 1)));
-  }
+  const bingoLines = getBingoLines(rows, cols);
+  const lineCells = bingoLines.rowsAndCols.concat(bingoLines.diagonals);
   const isDiagonal = (lineIdx: number) => lineIdx >= rows + cols;
 
   let best: { board: Array<number>; cost: number } | null = null;
@@ -434,10 +427,4 @@ function pickWeighted(weights: ReadonlyArray<number>): number {
 function shuffled<T>(array: Array<T>): Array<T> {
   shuffle(array);
   return array;
-}
-
-function range(n: number): Array<number> {
-  return Array(n)
-    .fill(null)
-    .map((_, idx) => idx);
 }

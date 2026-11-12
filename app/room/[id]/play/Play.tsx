@@ -435,6 +435,7 @@ export default function Play({
           generalGoals.map((g) => (
             <GeneralGoal
               key={g.foundGoal.resolvedGoal}
+              isPlay={true}
               gameToGoals={gameToGoals}
               foundGoal={g.foundGoal}
               isFinished={

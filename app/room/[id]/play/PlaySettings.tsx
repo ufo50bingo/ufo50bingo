@@ -30,9 +30,10 @@ import GeneralSection, {
 } from "./GeneralSection";
 import { useShouldShowRecentContext } from "@/app/settings/ShouldShowRecentContext";
 import DisconnectButton from "../common/DisconnectButton";
+import { NewFeedItem } from "@/app/fetchFeed";
 
 type Props = {
-  gameId: number;
+  userId: number;
   color: null | BingosyncColor;
   setColor: (newcolor: BingosyncColor) => unknown;
   shownDifficulties: ReadonlyArray<Difficulty>;
@@ -49,10 +50,11 @@ type Props = {
   generalSettings: GeneralSettings;
   restrictions: Restrictions;
   generalSetters: GeneralSetters;
+  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
 };
 
 export default function PlaySettings({
-  gameId,
+  userId,
   color,
   setColor,
   shownDifficulties,
@@ -69,6 +71,7 @@ export default function PlaySettings({
   restrictions,
   generalSetters,
   generalSettings,
+  sendEvent,
 }: Props) {
   const [isShown, setIsShown] = useState(color == null);
   const { shouldShortenPlay, setShouldShortenPlay } = useShouldShortenContext();
@@ -112,9 +115,10 @@ export default function PlaySettings({
                 </Accordion.Panel>
               </Accordion.Item>
               <TimerSection
-                gameId={gameId}
+                userId={userId}
                 timerState={timerState}
                 isMobile={isMobile}
+                sendEvent={sendEvent}
               />
               <RevealSection forceReveal={forceReveal} />
               <NotificationsSection

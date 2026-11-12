@@ -3,12 +3,13 @@ import { useState } from "react";
 import DurationInput from "./DurationInput";
 import { SyncedTimerState } from "./useSyncedTimer";
 import { useServerOffsetContext } from "../ServerOffsetContext";
-import addTimerEvent from "./addTimerEvent";
+import { FeedTimerEvent, NewFeedItem } from "@/app/fetchFeed";
 
 interface Props {
-  gameId: number;
   timerState: SyncedTimerState;
   isMobile: boolean;
+  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
+  userId: number;
 }
 
 interface ModalProps extends Props {
@@ -39,7 +40,13 @@ export default function TimerSection(props: Props) {
   );
 }
 
-function TimerModal({ gameId, timerState, close, isMobile }: ModalProps) {
+function TimerModal({
+  userId,
+  timerState,
+  close,
+  isMobile,
+  sendEvent,
+}: ModalProps) {
   const { getServerMsFromClientMs } = useServerOffsetContext();
   const [accumulatedDuration, setAccumulatedDuration] = useState<null | number>(
     () =>
@@ -70,12 +77,14 @@ function TimerModal({ gameId, timerState, close, isMobile }: ModalProps) {
               if (accumulatedDuration == null) {
                 return;
               }
-              await addTimerEvent({
-                gameId,
+              const event: FeedTimerEvent = {
+                type: "timer_event",
+                userId,
                 time: getServerMsFromClientMs(Date.now()) / 1000,
                 event: "set_duration",
                 duration: accumulatedDuration / 1000,
-              });
+              };
+              await sendEvent(event);
               close();
             }}
           >

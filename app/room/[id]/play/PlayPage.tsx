@@ -9,9 +9,9 @@ type Props = {
 };
 
 export default async function PlayPage({ gameId }: Props) {
-  const [initialFeed] = await Promise.all([
+  const [data] = await Promise.all([
     // fetchBoard(id, roomBackend),
-    fetchNewFeed(Number(gameId)),
+    fetchData(Number(gameId)),
     // fetchFeed(id, bingosyncCookie, roomBackend),
     // fetchTimerEvents(id),
     // getSocketKey(id, bingosyncCookie, roomBackend),
@@ -20,7 +20,8 @@ export default async function PlayPage({ gameId }: Props) {
   return (
     <PlayWrapper
       gameId={gameId}
-      initialFeed={initialFeed}
+      initialFeed={data.feed}
+      squareNames={data.squareNames}
       userId={1}
       // initialTimerEvents={timerEvents}
     />
@@ -54,25 +55,50 @@ export type NewFeedItem = FeedColorMark | FeedChat;
 
 export type NewFeed = ReadonlyArray<NewFeedItem>;
 
-type FetchParsePair = [SQL, (result: SQLResult) => ReadonlyArray<NewFeedItem>];
+type FeedFetchPairs = [SQL, (result: SQLResult) => ReadonlyArray<NewFeedItem>];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SQLResult = ReadonlyArray<Record<string, any>>;
 
 type SQLTemplate = NeonQueryFunction<false, false>;
 
-async function fetchNewFeed(gameId: number): Promise<NewFeed> {
+async function fetchData(
+  gameId: number,
+): Promise<{ squareNames: ReadonlyArray<string>; feed: NewFeed }> {
   const sql = getSql(false);
-  const fetchParsePairs: ReadonlyArray<FetchParsePair> = [
+  const feedFetchPairs: ReadonlyArray<FeedFetchPairs> = [
     [fetchColorMarkSql(sql, gameId), parseColorMarkResult],
     [fetchChatSql(sql, gameId), parseChatResult],
   ];
-  const results = await sql.transaction(fetchParsePairs.map((pair) => pair[0]));
-  const parsed = results.flatMap((result, index) =>
-    fetchParsePairs[index][1](result),
+  const results = await sql.transaction([
+    ...feedFetchPairs.map((pair) => pair[0]),
+    fetchSquareTextSql(sql, gameId),
+  ]);
+  const feedResults = results.slice(0, feedFetchPairs.length);
+  const otherResults = results.slice(feedFetchPairs.length);
+  const feed = feedResults.flatMap((result, index) =>
+    feedFetchPairs[index][1](result),
   );
-  parsed.sort((a, b) => a.time - b.time);
-  return parsed;
+  feed.sort((a, b) => a.time - b.time);
+
+  const squareNames = parseSquareNames(otherResults[0]);
+  return { squareNames, feed };
+}
+
+function fetchSquareTextSql(sql: SQLTemplate, gameId: number): SQL {
+  return sql`
+    SELECT
+      goal_text.name
+    FROM game_goal
+    INNER JOIN goal_text
+    ON game_goal.goal_id = goal_text.id
+    WHERE game_goal.game_id = ${gameId}
+    ORDER BY game_goal.square_index
+  `;
+}
+
+function parseSquareNames(result: SQLResult): ReadonlyArray<string> {
+  return result.map((raw) => raw.name);
 }
 
 function fetchColorMarkSql(sql: SQLTemplate, gameId: number): SQL {

@@ -3,10 +3,9 @@ import { GeneralCounts } from "../cast/CastPage";
 import { CountChange, CountState } from "../cast/useSyncedState";
 
 export default function useFullGeneralState(
-  id: string,
-  seed: number,
+  gameId: number,
 ): [GeneralCounts, (change: CountChange) => unknown] {
-  const key = `${id}-${seed}-fullgeneral`;
+  const key = `${gameId}-fullgeneral`;
   const [state, setStateRaw] = useState<GeneralCounts>({});
 
   const setGeneralGameCount = useCallback(

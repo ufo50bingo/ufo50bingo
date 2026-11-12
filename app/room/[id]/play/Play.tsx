@@ -13,17 +13,18 @@ import useBingosyncSocket from "../common/useBingosyncSocket";
 import ScoreSquare from "../common/ScoreSquare";
 import { useMediaQuery } from "@mantine/hooks";
 import SimpleGeneralTracker from "./SimpleGeneralTracker";
-import findGoal, { FoundGoal } from "@/app/findGoal";
-import { STANDARD_UFO } from "@/app/pastas/standardUfo";
-import { GeneralItem } from "../cast/Cast";
+import { FoundGoal } from "@/app/findGoal";
+import { CASTER_RESTRICTIONS } from "../cast/Cast";
 import useLocalBool from "@/app/localStorage/useLocalBool";
 import useFont from "@/app/font/useFont";
 import useSyncedTimer from "../common/useSyncedTimer";
 import SyncedTimerBoardCover from "../common/SyncedTimerBoardCover";
 import SyncedTimer from "../common/SyncedTimer";
 import StartPauseButton from "../common/StartPauseButton";
-import { UFOPasta } from "@/app/generator/ufoGenerator";
-import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
+import {
+  PlayerTrackerRestrictions,
+  UFOPasta,
+} from "@/app/generator/ufoGenerator";
 import useGeneralSettings from "./useGeneralSettings";
 import useFullGeneralState from "./useFullGeneralState";
 import GeneralGoal from "../cast/GeneralGoal";
@@ -33,16 +34,14 @@ import getGameList from "../common/getGameList";
 import { Game, ORDERED_GAMES } from "@/app/goals";
 import GameInfo from "../cast/GameInfo";
 import InfoCard from "../cast/InfoCard";
-import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
 import { useSearchParams } from "next/navigation";
-import { Restrictions } from "./GeneralSection";
 import { FeedColorMark, FullParsedGame } from "@/app/fetchFeed";
 import useMembers, { PlayerMember } from "../common/useMembers";
 import useSquareColors from "../common/useSquareColors";
 import { useServerOffsetContext } from "../ServerOffsetContext";
-import { getMatchingRepoPasta } from "@/app/getMatchingRepoPasta";
 import StandardBoardWrapper from "@/app/StandardBoardWrapper";
 import usePasta from "../common/usePasta";
+import useGeneralGoals from "../common/useGeneralGoals";
 
 export type FoundItem = {
   foundGoal: FoundGoal<string, string, string>;
@@ -57,10 +56,9 @@ export type Props = {
 };
 
 export default function Play({ game: fullParsedGame, userId, token }: Props) {
-  const { game, feed: initialFeed, squares, fetchedPasta } = fullParsedGame;
+  const { game, feed: initialFeed, squares } = fullParsedGame;
   const squareNames = useMemo(() => squares.map((s) => s.name), [squares]);
   const gameId = game.id;
-  const pastaId = game.pastaId;
   const isLockout = game.isLockout;
   const boardSize = game.width * game.height;
   const { getServerMsFromClientMs } = useServerOffsetContext();
@@ -122,95 +120,23 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
     members: allMembers,
   });
 
-  const foundItems = useMemo<ReadonlyArray<FoundItem>>(() => {
-    return squareNames
-      .map((name, squareIndex) => {
-        const pastasToCheck =
-          pasta != null ? [pasta] : [STANDARD_UFO, NES_50_UFO, EVERY_GAME_UFO];
-        for (const pastaToCheck of pastasToCheck) {
-          const foundGoal = findGoal(name, pastaToCheck);
-          if (foundGoal != null) {
-            if (foundGoal.cast == null) {
-              return null;
-            }
-            return {
-              foundGoal,
-              pasta: pastaToCheck,
-              squareIndex,
-            };
-          }
-        }
-        return null;
-      })
-      .filter((item) => item != null);
-  }, [pasta, squareNames]);
-
-  const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(() => {
-    return foundItems.filter(
-      (foundItem) => foundItem.foundGoal.cast != null,
-    ) as ReadonlyArray<GeneralItem>;
-  }, [foundItems]);
+  const generalGoals = useGeneralGoals(pasta, squareNames);
   const showGeneralTracker = showGeneralTrackerRaw && generalGoals.length > 0;
 
-  const restrictions: Restrictions = useMemo(() => {
+  const restrictions: PlayerTrackerRestrictions = useMemo(() => {
     if (override === "all") {
-      return {
-        canTagDifficultyFor: null,
-        canUseFull: true,
-        canFilterOnCard: true,
-        canShowOnCardTooltips: true,
-        canFastSort: true,
-        canSegment: true,
-        canUseTerminalCodes: true,
-        canShowMultiGoalGames: true,
-      };
+      return CASTER_RESTRICTIONS;
     }
-    const isNes50 =
-      pasta === NES_50_UFO ||
-      (generalGoals.length >= 5 &&
-        generalGoals.every((item) => item.pasta === NES_50_UFO)) ||
-      foundItems.filter((item) => item.pasta === NES_50_UFO).length > 15;
-    if (isNes50) {
-      return {
-        canTagDifficultyFor: null,
-        canUseFull: true,
-        canFilterOnCard: true,
-        canShowOnCardTooltips: false,
-        canFastSort: false,
-        canSegment: true,
-        canUseTerminalCodes: false,
-        canShowMultiGoalGames: true,
-      };
-    }
-    const isEveryGame =
-      pasta === EVERY_GAME_UFO ||
-      (generalGoals.length >= 5 &&
-        generalGoals.every((item) => item.pasta === EVERY_GAME_UFO)) ||
-      foundItems.filter((item) => item.pasta === EVERY_GAME_UFO).length > 15;
-    if (isEveryGame) {
-      return {
-        canTagDifficultyFor: null,
-        canUseFull: true,
-        canFilterOnCard: true,
-        canShowOnCardTooltips: true,
-        canFastSort: true,
-        canSegment: true,
-        canUseTerminalCodes: true,
-        canShowMultiGoalGames: true,
-      };
-    }
-    // is UFO 50
-    return {
-      canTagDifficultyFor: ["general"],
-      canUseFull: true,
-      canFilterOnCard: true,
-      canShowOnCardTooltips: false,
-      canFastSort: false,
-      canSegment: true,
-      canUseTerminalCodes: true,
-      canShowMultiGoalGames: false,
-    };
-  }, [override, pasta, generalGoals, foundItems]);
+    const restrictions = pasta?.player_tracker_restrictions;
+    return (
+      restrictions ?? {
+        allowed_difficulty_tags: ["general"],
+        allow_fast_sort: false,
+        show_on_card_tooltips: false,
+        show_multi_goal_games: false,
+      }
+    );
+  }, [override, pasta]);
 
   const [shownDifficulties, setShownDifficulties] =
     useShownDifficulties(restrictions);
@@ -468,7 +394,7 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
         {!isHidden &&
           showGeneralTracker &&
           generalSettings.type === "full" &&
-          restrictions.canShowMultiGoalGames && (
+          restrictions.show_multi_goal_games && (
             <InfoCard
               title="Multi-goal games"
               style={{
@@ -485,7 +411,7 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
                         game={game as Game}
                         goals={gameToGoals[game]}
                         description={null}
-                        canShowTooltip={restrictions.canShowOnCardTooltips}
+                        canShowTooltip={restrictions.show_on_card_tooltips}
                       />
                     ))
                   : "No multi-goal games on this card!"}

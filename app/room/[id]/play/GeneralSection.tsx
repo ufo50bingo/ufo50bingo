@@ -1,21 +1,9 @@
 import { Accordion, Checkbox, Select, Stack, Tooltip } from "@mantine/core";
 import { SortType } from "../cast/useLocalState";
 import { useMemo } from "react";
-import { Difficulty } from "@/app/goals";
+import { PlayerTrackerRestrictions } from "@/app/generator/ufoGenerator";
 
 type GeneralType = "simple" | "full";
-
-export type Restrictions = {
-  // null means everything
-  canTagDifficultyFor: null | ReadonlyArray<Difficulty>;
-  canUseFull: boolean;
-  canFilterOnCard: boolean;
-  canShowOnCardTooltips: boolean;
-  canFastSort: boolean;
-  canSegment: boolean;
-  canUseTerminalCodes: boolean;
-  canShowMultiGoalGames: boolean;
-};
 
 export type GeneralSettings = {
   type: "simple" | "full";
@@ -31,7 +19,7 @@ export type GeneralSetters = {
 
 type Props = {
   generalSettings: GeneralSettings;
-  restrictions: Restrictions;
+  restrictions: PlayerTrackerRestrictions;
   generalSetters: GeneralSetters;
   showGeneralTracker: boolean;
   setShowGeneralTracker: (newShowGeneralTracker: boolean) => unknown;
@@ -55,7 +43,6 @@ export default function GeneralSection({
       onChange={
         generalSetters.setType as (newGeneralType: string | null) => unknown
       }
-      disabled={!restrictions.canUseFull}
     />
   );
   const segmentCheckbox = (
@@ -68,13 +55,13 @@ export default function GeneralSection({
     />
   );
   const sortData = useMemo(() => {
-    const data = restrictions.canFastSort
+    const data = restrictions.allow_fast_sort
       ? [{ value: "fast", label: "Fastest" }]
       : [];
     data.push({ value: "alphabetical", label: "Alphabetical" });
     data.push({ value: "chronological", label: "Chronological" });
     return data;
-  }, [restrictions.canFastSort]);
+  }, [restrictions.allow_fast_sort]);
   const sortSelector = (
     <Select
       label="Sort type"
@@ -98,21 +85,8 @@ export default function GeneralSection({
             />
             {showGeneralTracker && (
               <>
-                {restrictions.canUseFull ? (
-                  typeSelector
-                ) : (
-                  <Tooltip label="Unavailable for this variant">
-                    {typeSelector}
-                  </Tooltip>
-                )}
-                {generalSettings.type === "full" &&
-                  (restrictions.canSegment ? (
-                    segmentCheckbox
-                  ) : (
-                    <Tooltip label="Unavailable for this variant">
-                      {segmentCheckbox}
-                    </Tooltip>
-                  ))}
+                {typeSelector}
+                {segmentCheckbox}
                 {generalSettings.type === "full" && sortSelector}
               </>
             )}

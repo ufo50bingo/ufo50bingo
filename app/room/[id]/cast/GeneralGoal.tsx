@@ -10,11 +10,12 @@ import {
   Descriptions,
   OptionList,
   OptionListEntry,
+  PlayerTrackerRestrictions,
   UFOPasta,
 } from "@/app/generator/ufoGenerator";
 import React, { CSSProperties, useMemo } from "react";
 import { FoundStandardGeneral } from "./Cast";
-import { Restrictions, GeneralSettings } from "../play/GeneralSection";
+import { GeneralSettings } from "../play/GeneralSection";
 import { PlayerMember } from "../common/useMembers";
 import getPresetOptionList from "./getPresetOptionList";
 import { GIFT_DESCRIPTIONS } from "./timeEstimates";
@@ -31,7 +32,7 @@ type Props = {
   addShowAll: (goal: string) => unknown;
   generalTrackerPlayers: ReadonlyArray<PlayerMember>;
   pasta: UFOPasta;
-  restrictions: Restrictions;
+  restrictions: PlayerTrackerRestrictions;
   settings: GeneralSettings;
   isPlay: boolean;
   style?: CSSProperties;
@@ -56,7 +57,7 @@ export default function GeneralGoal({
   gameToGoals,
   foundGoal,
   isFinished,
-  terminalCodes: rawTerminalCodes,
+  terminalCodes,
   countState,
   setGeneralGameCount,
   addShowAll,
@@ -67,9 +68,6 @@ export default function GeneralGoal({
   isPlay,
   style = {},
 }: Props) {
-  const terminalCodes = restrictions.canUseTerminalCodes
-    ? rawTerminalCodes
-    : new Set();
   const cast = foundGoal.cast;
 
   const descriptions: null | Descriptions = useMemo(() => {
@@ -146,12 +144,7 @@ export default function GeneralGoal({
   const entries =
     showAll || !settings.shouldSegment
       ? allEntries
-      : [
-          ...alwaysWithOnCard,
-          ...synergyWithOnCard.filter(
-            (e) => e[1] != null || !restrictions.canFilterOnCard,
-          ),
-        ];
+      : [...alwaysWithOnCard, ...synergyWithOnCard.filter((e) => e[1] != null)];
 
   const hasMore = allEntries.length > entries.length;
 
@@ -168,10 +161,9 @@ export default function GeneralGoal({
   });
 
   const nonNullEntries = nullableEntries.filter((e) => e != null);
-  const finalEntries =
-    cast.on_card_only && restrictions.canFilterOnCard
-      ? nonNullEntries.filter((e) => e[1] != null)
-      : nonNullEntries;
+  const finalEntries = cast.on_card_only
+    ? nonNullEntries.filter((e) => e[1] != null)
+    : nonNullEntries;
 
   const isUfo50 = allEntries.every((entry) =>
     ORDERED_PROPER_GAMES.includes(entry[0] as ProperGame),
@@ -210,7 +202,7 @@ export default function GeneralGoal({
               game={game}
               goals={otherGoals}
               description={description}
-              canShowTooltip={restrictions.canShowOnCardTooltips}
+              canShowTooltip={restrictions.show_on_card_tooltips}
             />
           );
           const getCheckbox = (

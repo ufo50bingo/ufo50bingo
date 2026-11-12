@@ -37,6 +37,7 @@ type Props = {
   gameToGoals: GameToGoals;
   shownDifficulties: ReadonlyArray<Difficulty>;
   generals: GeneralCounts;
+  onClickSquare?: (squareIndex: number) => unknown;
 };
 
 export default function CastBoardWithTrackers({
@@ -57,6 +58,7 @@ export default function CastBoardWithTrackers({
   gameToGoals,
   shownDifficulties,
   generals,
+  onClickSquare,
 }: Props) {
   const leftPlayer: null | undefined | PlayerMember = players[0];
   const rightPlayer: null | undefined | PlayerMember = players[1];
@@ -180,7 +182,7 @@ export default function CastBoardWithTrackers({
             color: colors.length > 0 ? colors[0] : null,
           }))}
           highlights={highlights}
-          onClickSquare={(_newIndex: number) => {}}
+          onClickSquare={onClickSquare}
           boardCover={boardCover}
           shownDifficulties={shownDifficulties}
           viewerColor={null}

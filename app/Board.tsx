@@ -31,7 +31,7 @@ type Props = {
   board: TBoard;
   overlays?: ReadonlyArray<null | ReactNode>;
   highlights?: ReadonlyArray<null | ReadonlyArray<BingosyncColor>>;
-  onClickSquare: null | ((squareIndex: number) => void);
+  onClickSquare: null | undefined | ((squareIndex: number) => void);
   shownDifficulties: ReadonlyArray<Difficulty>;
   viewerColor: BingosyncColor | null;
   boardCover: ReactNode;

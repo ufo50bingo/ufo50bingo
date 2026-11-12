@@ -252,6 +252,7 @@ export default function Cast({
           };
           sendEvents([event]);
         };
+
   return (
     <RightClickBehaviorContext.Provider value={rightClickBehaviorContextValue}>
       <Group align="start">
@@ -280,6 +281,7 @@ export default function Cast({
           gameToGoals={gameToGoals}
           shownDifficulties={shownDifficulties}
           generals={generals}
+          onClickSquare={setEditingIndex}
         />
         <Stack gap={8}>
           <Group justify="space-between">

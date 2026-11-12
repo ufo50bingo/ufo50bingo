@@ -397,8 +397,6 @@ export default function Play({
             color={selectedColor}
             players={players}
             casters={casters}
-            // TODO: Allow changing color
-            setColor={() => {}}
             shownDifficulties={shownDifficulties}
             setShownDifficulties={setShownDifficulties}
             soundChoices={soundChoices}

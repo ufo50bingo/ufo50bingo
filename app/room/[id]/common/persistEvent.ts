@@ -6,6 +6,7 @@ import {
   FeedCurrentSubcategory,
   FeedGoalProgress,
   FeedMember,
+  FeedPlayerColorChange,
   FeedPlayerOrder,
   FeedTimerEvent,
   NewFeedItem,
@@ -47,7 +48,11 @@ export default async function persistEvent(
     case "player_order":
       await getPlayerOrderSql(sql, gameId, event);
       break;
+    case "player_color_change":
+      await getPlayerColorChangeSql(sql, gameId, event);
+      break;
     default:
+      event satisfies never;
       throw new Error(`Unexpected event: ${JSON.stringify(event)}`);
   }
 }
@@ -209,6 +214,27 @@ function getPlayerOrderSql(
       ${gameId},
       ${getISO(event.time)},
       ${event.orderedIds}
+    )
+  `;
+}
+
+function getPlayerColorChangeSql(
+  sql: SQLTemplate,
+  gameId: number,
+  event: FeedPlayerColorChange,
+): SQL {
+  return sql`
+    INSERT INTO player_color_change (
+      game_id,
+      time,
+      user_id,
+      player_color
+    )
+    VALUES (
+      ${gameId},
+      ${getISO(event.time)},
+      ${event.userId},
+      ${event.playerColor}
     )
   `;
 }

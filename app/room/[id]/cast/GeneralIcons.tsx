@@ -1,6 +1,5 @@
 import classes from "./GeneralIcons.module.css";
 import { IconCircleCheckFilled } from "@tabler/icons-react";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { IconType } from "./useLocalState";
 import { GeneralCounts } from "./CastPage";
 import SideCell from "./SideCell";
@@ -9,12 +8,13 @@ import { StandardGeneral } from "@/app/pastas/pastaTypes";
 import { Group } from "@mantine/core";
 import { Font } from "@/app/font/useFont";
 import getFontClassname from "@/app/font/getFontClassname";
+import { BingosyncColor } from "@/app/color";
 
 type IconProps = {
   isLeft: boolean;
   goal: string;
   color: BingosyncColor;
-  squareColors: ReadonlyArray<ReadonlyArray<BingosyncColor>>;
+  markedSquareColors: ReadonlyArray<BingosyncColor>;
   src: string;
   count: number;
   countPosition: TCountPosition;
@@ -27,7 +27,7 @@ function Icon({
   src,
   count,
   color,
-  squareColors,
+  markedSquareColors,
   countPosition,
   isLeft,
   font,
@@ -37,9 +37,10 @@ function Icon({
     ? `${classes.icon} ${classes.spritesIcon}`
     : classes.icon;
   // TODO: Support non-lockout
-  const squareColor = squareColors.length > 0 ? squareColors[0] : "blank";
+  const squareColor =
+    markedSquareColors.length > 0 ? markedSquareColors[0] : null;
   const imgClass =
-    squareColor !== "blank" ? `${iconClass} ${classes.grayscale}` : iconClass;
+    squareColor != null ? `${iconClass} ${classes.grayscale}` : iconClass;
 
   if (countPosition === "inset") {
     const tag =
@@ -84,7 +85,7 @@ function Icon({
         )
       ) : (
         <div
-          className={`${classes.sideBySideTag} ${squareColor !== "blank" ? classes.opponentClaimed : ""}`}
+          className={`${classes.sideBySideTag} ${squareColor != null ? classes.opponentClaimed : ""}`}
         >
           <span className={getFontClassname(font, false, count > 9)}>
             {count}
@@ -147,7 +148,7 @@ export default function GeneralIcons({
         key={resolvedGoal}
         goal={resolvedGoal}
         color={color}
-        squareColors={squareColors}
+        markedSquareColors={squareColors[item.squareIndex]}
         count={
           countState == null
             ? 0

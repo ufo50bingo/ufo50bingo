@@ -1,10 +1,9 @@
 import { Group, Text, Tooltip } from "@mantine/core";
-import getColorHex from "../room/[id]/cast/getColorHex";
 import BingoIcon from "./BingoIcon";
 import { WinType } from "./matchUtil";
-import { BingosyncColor } from "./parseBingosyncData";
 import { MatchTeam } from "./useTeams";
 import classes from "./MatchRow.module.css";
+import { BingosyncColor, getColorHex } from "../color";
 
 type Props = {
   team: MatchTeam;

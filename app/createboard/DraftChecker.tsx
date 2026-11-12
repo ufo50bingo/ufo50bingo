@@ -1,11 +1,10 @@
 import { Checkbox, Group, SimpleGrid, Text } from "@mantine/core";
-import { BingosyncColor } from "../matches/parseBingosyncData";
-import getColorHex from "../room/[id]/cast/getColorHex";
 import CheckerSortSelector, { CheckerSort } from "./CheckerSortSelector";
 import { UFOPasta } from "../generator/ufoGenerator";
 import getSubcategoryName from "../generator/getSubcategoryName";
 import useCheckerSortInfo from "./useCheckerSortInfo";
 import { useMemo } from "react";
+import { BingosyncColor, getColorHex } from "../color";
 
 const COLORS: ReadonlyArray<BingosyncColor> = [
   "red",

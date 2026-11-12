@@ -10,7 +10,6 @@ import {
 } from "@mantine/core";
 import { IconAlertSquareRounded, IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import ColorSelector from "../common/ColorSelector";
 import NotificationsSection, {
   SetSoundChoices,
@@ -39,6 +38,7 @@ import { useServerOffsetContext } from "../ServerOffsetContext";
 import BottomSection from "../common/BottomSection";
 import { PlayerTrackerRestrictions } from "@/app/generator/ufoGenerator";
 import { authClient } from "@/app/authClient";
+import { BingosyncColor } from "@/app/color";
 
 type Props = {
   userId: number;

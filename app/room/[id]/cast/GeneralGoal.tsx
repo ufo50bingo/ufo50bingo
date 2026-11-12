@@ -3,7 +3,6 @@ import { Anchor, Button, Checkbox, Group, Stack, Tooltip } from "@mantine/core";
 import { GameToGoals } from "./findAllGames";
 import InfoCard from "./InfoCard";
 import GameInfo from "./GameInfo";
-import getColorHex from "./getColorHex";
 import BingosyncColored from "@/app/matches/BingosyncColored";
 import { CountChange, CountState } from "./useSyncedState";
 import {
@@ -19,7 +18,7 @@ import { GeneralSettings } from "../play/GeneralSection";
 import { PlayerMember } from "../common/useMembers";
 import getPresetOptionList from "./getPresetOptionList";
 import { GIFT_DESCRIPTIONS } from "./timeEstimates";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
+import { BingosyncColor, getColorHex } from "@/app/color";
 
 type Props = {
   showAll: boolean;

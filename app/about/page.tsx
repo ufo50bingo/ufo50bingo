@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import ufoGenerator from "../generator/ufoGenerator";
-import { BingosyncColor } from "../matches/parseBingosyncData";
 import { STANDARD_UFO } from "../pastas/standardUfo";
 import About from "./About";
 
@@ -9,11 +8,9 @@ export const metadata: Metadata = {
   description: "Learn how to play UFO 50 Bingo!",
 };
 
-// generating board here to avoid hydration errors
-const INITIAL_COLOR: BingosyncColor = "blank";
 const BOARD = ufoGenerator(STANDARD_UFO, 5, 5).map((name) => ({
   name,
-  color: INITIAL_COLOR,
+  color: null,
 }));
 
 export default function AboutPage() {

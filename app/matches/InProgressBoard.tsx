@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { BingosyncColor, Change, Square, TBoard } from "./parseBingosyncData";
+import { Change, Square, TBoard } from "./parseBingosyncData";
 import { getChangesWithoutMistakes } from "./analyzeMatch";
 import getOverlays from "./getOverlays";
 import Board from "../Board";
@@ -14,6 +14,7 @@ import BingosyncColored from "./BingosyncColored";
 import { db } from "../db";
 import StandardBoardCover from "../StandardBoardCover";
 import StandardBoardWrapper from "../StandardBoardWrapper";
+import { BingosyncColor } from "../color";
 
 type Props = {
   finalBoard: TBoard;
@@ -60,7 +61,7 @@ export default function InProgressBoard({
   );
   const board: TBoard = useMemo(() => {
     const board: Array<Square> = finalBoard.map((square) => ({
-      color: "blank",
+      color: null,
       name: square.name,
     }));
     for (const change of trimmedChanges) {
@@ -174,7 +175,7 @@ export default function InProgressBoard({
           </BingosyncColored>
           {result.opponentName != null && (
             <BingosyncColored
-              color={(result.opponentColor ?? "blank") as BingosyncColor}
+              color={(result.opponentColor ?? null) as BingosyncColor}
             >
               <Text>
                 <strong>

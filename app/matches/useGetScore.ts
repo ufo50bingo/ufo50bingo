@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { BingosyncColor } from "./parseBingosyncData";
+import { BingosyncColor } from "../color";
 
 export default function useGetScore(
   squareColors: ReadonlyArray<ReadonlyArray<BingosyncColor>>,

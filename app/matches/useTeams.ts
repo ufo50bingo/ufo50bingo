@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { BingosyncColor } from "./parseBingosyncData";
 import { PlayerMember } from "../room/[id]/common/useMembers";
+import { BingosyncColor } from "../color";
 
 export type MatchTeam = {
   color: BingosyncColor;

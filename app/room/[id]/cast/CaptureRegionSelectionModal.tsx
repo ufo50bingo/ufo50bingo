@@ -13,8 +13,8 @@ import {
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { useState, useCallback } from "react";
 import { SnapshotInfo } from "./AutoGameSection";
-import getColorHex from "./getColorHex";
 import { PlayerMember } from "../common/useMembers";
+import { getColorHex } from "@/app/color";
 
 export type CropRect = {
   x: number;

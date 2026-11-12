@@ -1,9 +1,9 @@
 import { GAME_NAMES, ProperGame } from "@/app/goals";
 import BingosyncColored from "@/app/matches/BingosyncColored";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { ComboboxItem, OptionsFilter, Select } from "@mantine/core";
 import { useCallback, useMemo } from "react";
 import { TERMINAL_CODES } from "./terminalCodes";
+import { BingosyncColor } from "@/app/color";
 
 type Props = {
   color: BingosyncColor;

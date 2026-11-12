@@ -1,7 +1,6 @@
 "use client";
 
 import Board from "@/app/Board";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { Group, Stack, Text } from "@mantine/core";
 import { useMemo } from "react";
 import PlaySettings from "./PlaySettings";
@@ -42,6 +41,7 @@ import { useServerOffsetContext } from "../ServerOffsetContext";
 import StandardBoardWrapper from "@/app/StandardBoardWrapper";
 import usePasta from "../common/usePasta";
 import useGeneralGoals from "../common/useGeneralGoals";
+import { BingosyncColor } from "@/app/color";
 
 export type FoundItem = {
   foundGoal: FoundGoal<string, string, string>;
@@ -237,7 +237,7 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
               pasta={pasta}
               board={squareColors.map((colors, index) => ({
                 name: squareNames[index],
-                color: colors.length > 0 ? colors[0] : "blank",
+                color: colors.length > 0 ? colors[0] : null,
               }))}
               onClickSquare={async (squareIndex) => {
                 const isClear =

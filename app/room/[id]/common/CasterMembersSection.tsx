@@ -30,10 +30,10 @@ import { CSS } from "@dnd-kit/utilities";
 import { CasterMember, PlayerMember } from "./useMembers";
 import { FeedMember, FeedPlayerOrder, NewFeedItem } from "@/app/fetchFeed";
 import { useServerOffsetContext } from "../ServerOffsetContext";
-import getColorHex from "../cast/getColorHex";
 import { UserTokenizer } from "@/app/UserTokenizer";
 import { BasicUser } from "@/app/api/users/route";
 import { useMemo, useState } from "react";
+import { getColorHex } from "@/app/color";
 
 interface Props {
   players: ReadonlyArray<PlayerMember>;

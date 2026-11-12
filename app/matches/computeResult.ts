@@ -1,3 +1,5 @@
+// TODO: Dead code
+import { BingosyncColor } from "../color";
 import getSql from "../getSql";
 import {
   getFirstBingoPlayer,
@@ -7,7 +9,6 @@ import {
 } from "./analyzeMatch";
 import { SQL } from "./page";
 import {
-  BingosyncColor,
   Change,
   getPlayerColors,
   PlayerToColors,
@@ -109,22 +110,11 @@ export function getTeamColors(
 }
 
 export function getTeamScores(
-  board: TBoard,
-  teamColors: PlayerToColors,
+  _board: TBoard,
+  _teamColors: PlayerToColors,
 ): PlayerScores {
-  const teamScores: PlayerScores = {};
-  Object.keys(teamColors).forEach((teamName) => {
-    teamScores[teamName] = 0;
-  });
-  board.forEach((square) => {
-    Object.keys(teamColors).forEach((teamName) => {
-      if (teamColors[teamName].includes(square.color)) {
-        const newScore = (teamScores[teamName] ?? 0) + 1;
-        teamScores[teamName] = newScore;
-      }
-    });
-  });
-  return teamScores;
+  // Dead code
+  return {};
 }
 
 export function getResultForTeams(

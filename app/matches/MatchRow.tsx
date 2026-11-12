@@ -22,7 +22,6 @@ import {
 } from "@tabler/icons-react";
 import { Fragment, useMemo, useState } from "react";
 import classes from "./MatchRow.module.css";
-import type { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { FullParsedGame } from "../fetchFeed";
 import useMembers from "../room/[id]/common/useMembers";
 import useSquareColors from "../room/[id]/common/useSquareColors";
@@ -43,6 +42,7 @@ import useTeams from "./useTeams";
 import useGetScore from "./useGetScore";
 import TeamPlayers from "./TeamPlayers";
 import TeamScoreCell from "./TeamScoreCell";
+import { BingosyncColor } from "../color";
 
 const ICON_SIZE = 16;
 

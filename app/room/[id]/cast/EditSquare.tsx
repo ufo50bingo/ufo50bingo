@@ -1,9 +1,9 @@
 import { Alert, Button, Drawer, Stack } from "@mantine/core";
 import ColorSelector from "../common/ColorSelector";
 import { useState } from "react";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { FeedColorMark, NewFeedItem } from "@/app/fetchFeed";
 import { useServerOffsetContext } from "../ServerOffsetContext";
+import { BingosyncColor } from "@/app/color";
 
 type Props = {
   userId: number;

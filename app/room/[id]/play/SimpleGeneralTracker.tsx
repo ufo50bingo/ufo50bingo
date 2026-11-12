@@ -32,7 +32,7 @@ export default function SimpleGeneralTracker({
               >
                 <Text size="sm">
                   {/* TODO: FIX HIDING GENERAL TRACKER */}
-                  {/* {item.color !== "blank" ? ( */}
+                  {/* {item.color !== null ? ( */}
                   {false ? (
                     isHidden ? (
                       "<Hidden>"

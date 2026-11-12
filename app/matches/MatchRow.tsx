@@ -3,7 +3,6 @@
 import {
   ActionIcon,
   Anchor,
-  Avatar,
   Button,
   Group,
   Menu,
@@ -23,14 +22,12 @@ import {
 } from "@tabler/icons-react";
 import { Fragment, useMemo, useState } from "react";
 import classes from "./MatchRow.module.css";
-import getColorHex from "../room/[id]/cast/getColorHex";
 import type { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { FullParsedGame } from "../fetchFeed";
 import useMembers from "../room/[id]/common/useMembers";
 import useSquareColors from "../room/[id]/common/useSquareColors";
 import { displayWeek } from "./week";
 import { displayTier } from "./tier";
-import BingoIcon from "./BingoIcon";
 import { getVariantText, WinType } from "./matchUtil";
 import { getHost } from "./vodUtil";
 import formatMatchDate from "./formatMatchDate";
@@ -42,82 +39,12 @@ import EditLeagueModal from "./EditLeagueModal";
 import EditVodModal from "./EditVodModal";
 import { LEAGUE_SEASON } from "../createboard/leagueConstants";
 import MatchModal from "./MatchModal";
-
-type MatchPerson = { id: number; name: string };
-type MatchTeam = {
-  color: BingosyncColor;
-  score: number;
-  players: ReadonlyArray<MatchPerson>;
-};
+import useTeams from "./useTeams";
+import useGetScore from "./useGetScore";
+import TeamPlayers from "./TeamPlayers";
+import TeamScoreCell from "./TeamScoreCell";
 
 const ICON_SIZE = 16;
-
-function TeamPlayers({
-  team,
-  isVisible,
-  isWinner,
-}: {
-  team: MatchTeam;
-  isVisible: boolean;
-  isWinner: boolean;
-}) {
-  return (
-    <Group gap={8} wrap="nowrap" align="stretch" miw={0}>
-      <span
-        className={classes.teamBar}
-        style={{ background: getColorHex(team.color) }}
-        role="img"
-        aria-label={`${team.color} team`}
-      />
-      <Group wrap="wrap" miw={0} style={{ columnGap: 12, rowGap: 4 }}>
-        {team.players.map((p) => (
-          <Group key={p.id} gap={6} wrap="nowrap" miw={0}>
-            <Avatar
-              name={p.name}
-              color="initials"
-              size={20}
-              radius="xl"
-              style={{ flexShrink: 0 }}
-            />
-            <Text
-              size="sm"
-              c={!isWinner && isVisible ? "dimmed" : undefined}
-              className={classes.name}
-            >
-              {isWinner && isVisible ? <strong>{p.name}</strong> : p.name}
-            </Text>
-          </Group>
-        ))}
-      </Group>
-    </Group>
-  );
-}
-
-function ScoreCell({
-  team,
-  winType,
-}: {
-  team: MatchTeam;
-  winType: WinType | null;
-}) {
-  const iconColor = getColorHex(team.color);
-  return (
-    <Group gap={6} wrap="nowrap" justify="flex-end" align="center">
-      <Text lh={1} size="md" c={winType != null ? undefined : "dimmed"}>
-        {winType != null ? <strong>{team.score}</strong> : team.score}
-      </Text>
-      <span className={classes.iconSlot}>
-        {winType != null && (
-          <Tooltip label={winType} withArrow>
-            <span className={classes.winIcon}>
-              <BingoIcon size={ICON_SIZE} color={iconColor} winType={winType} />
-            </span>
-          </Tooltip>
-        )}
-      </span>
-    </Group>
-  );
-}
 
 type Props = {
   game: FullParsedGame;
@@ -142,32 +69,8 @@ export function MatchRow({ game, isMobile }: Props) {
 
   const { players, casters } = useMembers(feed);
   const squareColors = useSquareColors(feed, boardSize, info.isLockout);
-
-  const scores = useMemo(() => {
-    const result = new Map<BingosyncColor, number>();
-    for (const colorsOnSquare of squareColors) {
-      for (const color of colorsOnSquare) {
-        result.set(color, (result.get(color) ?? 0) + 1);
-      }
-    }
-    return result;
-  }, [squareColors]);
-
-  const teams: ReadonlyArray<MatchTeam> = useMemo(() => {
-    const colorToTeam = new Map<BingosyncColor, MatchTeam>();
-    for (const p of players) {
-      let team = colorToTeam.get(p.color);
-      if (team == null) {
-        team = { color: p.color, score: scores.get(p.color) ?? 0, players: [] };
-        colorToTeam.set(p.color, team);
-      }
-      (team.players as Array<MatchPerson>).push({
-        id: p.userId,
-        name: p.name,
-      });
-    }
-    return [...colorToTeam.values()];
-  }, [players, scores]);
+  const getScore = useGetScore(squareColors);
+  const teams = useTeams(players);
 
   // TODO: fix up winner logic
   const winInfo: null | { color: BingosyncColor; winType: WinType } =
@@ -175,12 +78,17 @@ export function MatchRow({ game, isMobile }: Props) {
       if (teams.length === 0) {
         return null;
       }
-      const sorted = [...teams].sort((a, b) => b.score - a.score);
-      if (sorted.length > 1 && sorted[0].score === sorted[1].score) {
+      const sorted = [...teams].sort(
+        (a, b) => getScore(a.color) - getScore(b.color),
+      );
+      if (
+        sorted.length > 1 &&
+        getScore(sorted[0].color) === getScore(sorted[1].color)
+      ) {
         return { color: sorted[0].color, winType: "Tiebreak" };
       }
       return { color: sorted[0].color, winType: "Majority" };
-    }, [teams]);
+    }, [getScore, teams]);
 
   const isVisible =
     !hideByDefault || revealedMatchIDs?.has(String(info.id)) === true;
@@ -293,15 +201,18 @@ export function MatchRow({ game, isMobile }: Props) {
                   team={team}
                   isWinner={isWinner}
                   isVisible={isVisible}
+                  size="md"
                 />
                 {isVisible ? (
-                  <ScoreCell
+                  <TeamScoreCell
+                    getScore={getScore}
                     team={team}
                     winType={
                       winInfo != null && winInfo.color === team.color
                         ? winInfo.winType
                         : null
                     }
+                    size="md"
                   />
                 ) : (
                   idx === 0 && (

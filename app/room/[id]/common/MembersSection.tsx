@@ -1,7 +1,27 @@
 import { Accordion, Group, List, Stack, Text } from "@mantine/core";
-import { CasterMember, PlayerMember } from "./useMembers";
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import {
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import {
+  restrictToParentElement,
+  restrictToVerticalAxis,
+} from "@dnd-kit/modifiers";
+import { CSS } from "@dnd-kit/utilities";
 import { IconGripVertical } from "@tabler/icons-react";
+import { CasterMember, PlayerMember } from "./useMembers";
 
 interface Props {
   gameId: number;
@@ -11,85 +31,98 @@ interface Props {
   isCast: boolean;
 }
 
-export default function MembersSection({
-  gameId,
-  players,
-  casters,
-  isMobile,
-}: Props) {
+function SortablePlayer({ player }: { player: PlayerMember }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: player.userId.toString() });
+
   return (
-    <>
-      <Accordion.Item value="members">
-        <Accordion.Control>Members</Accordion.Control>
-        <Accordion.Panel>
-          <Stack>
-            <Text>Players</Text>
-            <DragDropContext
-              onDragEnd={async ({ destination, source }) => {
-                const destIndex = destination?.index ?? 0;
-                const sourceIndex = source.index;
+    <Group
+      ref={setNodeRef}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+        position: "relative",
+        zIndex: isDragging ? 1 : undefined,
+      }}
+    >
+      <div
+        ref={setActivatorNodeRef}
+        {...attributes}
+        {...listeners}
+        style={{
+          cursor: isDragging ? "grabbing" : "grab",
+          touchAction: "none",
+          display: "flex",
+        }}
+      >
+        <IconGripVertical size={16} />
+      </div>
+      <span>{player.name}</span>
+    </Group>
+  );
+}
 
-                if (destIndex === sourceIndex) {
-                  return;
-                }
+export default function MembersSection({ gameId, players, casters }: Props) {
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
 
-                const destItemWillBeAboveDroppedItem = sourceIndex > destIndex;
-                const lowerIndex = destItemWillBeAboveDroppedItem
-                  ? destIndex - 1
-                  : destIndex;
-                const upperIndex = destItemWillBeAboveDroppedItem
-                  ? destIndex
-                  : destIndex + 1;
+  const handleDragEnd = async ({ active, over }: DragEndEvent) => {
+    if (!over || active.id === over.id) {
+      return;
+    }
 
-                console.log(destIndex, sourceIndex, lowerIndex, upperIndex);
-              }}
+    const sourceIndex = players.findIndex(
+      (p) => p.userId.toString() === active.id,
+    );
+    const destIndex = players.findIndex((p) => p.userId.toString() === over.id);
+    const newPlayers = arrayMove([...players], sourceIndex, destIndex);
+
+    console.log(newPlayers);
+  };
+
+  return (
+    <Accordion.Item value="members">
+      <Accordion.Control>Members</Accordion.Control>
+      <Accordion.Panel>
+        <Stack>
+          <Text>Players</Text>
+          <DndContext
+            id={`members-dnd-${gameId}`}
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={players.map((p) => p.userId.toString())}
+              strategy={verticalListSortingStrategy}
             >
-              <Droppable droppableId="dnd-list" direction="vertical">
-                {(provided) => (
-                  <Stack {...provided.droppableProps} ref={provided.innerRef}>
-                    {players.map((player, idx) => {
-                      return (
-                        <Draggable
-                          key={player.userId}
-                          index={idx}
-                          draggableId={player.userId.toString()}
-                        >
-                          {(provided, snapshot) => (
-                            <Group
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              style={{
-                                ...provided.draggableProps.style,
-                                backgroundColor: snapshot.isDragging
-                                  ? "red"
-                                  : "transparent",
-                                padding: 8,
-                                zIndex: snapshot.isDragging ? 9999 : undefined,
-                              }}
-                            >
-                              <div {...provided.dragHandleProps}>
-                                <IconGripVertical size={16} />
-                              </div>
-                              <span>{player.name}</span>
-                            </Group>
-                          )}
-                        </Draggable>
-                      );
-                    })}
-                    {provided.placeholder}
-                  </Stack>
-                )}
-              </Droppable>
-            </DragDropContext>
-            <Text>Casters</Text>
-            <List>
-              {casters.map((p) => (
-                <List.Item key={p.userId}>{p.name}</List.Item>
-              ))}
-            </List>
-          </Stack>
-        </Accordion.Panel>
-      </Accordion.Item>
-    </>
+              <Stack>
+                {players.map((player) => (
+                  <SortablePlayer key={player.userId} player={player} />
+                ))}
+              </Stack>
+            </SortableContext>
+          </DndContext>
+          <Text>Casters</Text>
+          <List>
+            {casters.map((p) => (
+              <List.Item key={p.userId}>{p.name}</List.Item>
+            ))}
+          </List>
+        </Stack>
+      </Accordion.Panel>
+    </Accordion.Item>
   );
 }

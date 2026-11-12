@@ -1,19 +1,23 @@
 import getBroadcastToken from "../common/getBroadcastToken";
 import CastWrapper from "./CastWrapper";
 import { CountState } from "./useSyncedState";
-import { FeedMember, fetchData } from "@/app/fetchFeed";
+import { fetchData, NewFeedItem } from "@/app/fetchFeed";
 
 type Props = {
   userId: number;
   gameId: number;
-  memberFeed: ReadonlyArray<FeedMember>;
+  alreadyFetched: ReadonlyArray<NewFeedItem>;
 };
 
 export type GeneralCounts = { [goal: string]: CountState };
 
-export default async function CastPage({ gameId, userId, memberFeed }: Props) {
+export default async function CastPage({
+  gameId,
+  userId,
+  alreadyFetched,
+}: Props) {
   const [data, token] = await Promise.all([
-    fetchData(gameId, memberFeed, false),
+    fetchData(gameId, alreadyFetched, false),
     getBroadcastToken(gameId),
   ]);
   return (

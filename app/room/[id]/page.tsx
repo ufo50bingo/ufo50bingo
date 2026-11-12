@@ -1,6 +1,14 @@
 import JoinMatch from "./JoinMatch";
 import PlayPage from "./play/PlayPage";
-import { fetchMemberSql, parseMemberResult } from "@/app/fetchFeed";
+import {
+  FeedDisconnect,
+  FeedMember,
+  fetchDisconnectSql,
+  fetchMemberSql,
+  NewFeedItem,
+  parseDisconnectResult,
+  parseMemberResult,
+} from "@/app/fetchFeed";
 import getSql from "@/app/getSql";
 import Login from "./Login";
 import getSession from "@/app/getSession";
@@ -30,9 +38,26 @@ export default async function RoomPage({
   }
   const userId = Number(session.user.id);
   const sql = getSql(false);
-  const memberResult = await fetchMemberSql(sql, gameId);
-  const memberFeed = parseMemberResult(memberResult);
-  const userMember = memberFeed.findLast((member) => member.userId === userId);
+  const memberResult = await sql.transaction([
+    fetchMemberSql(sql, gameId),
+    fetchDisconnectSql(sql, gameId),
+  ]);
+  const memberFeed = parseMemberResult(memberResult[0]);
+  const disconnectFeed = parseDisconnectResult(memberResult[1]);
+  const lastMember: null | undefined | FeedMember = memberFeed
+    .filter((member) => member.userId === userId)
+    .toSorted((a, b) => b.time - a.time)[0];
+  const lastDisconnect: null | undefined | FeedDisconnect = disconnectFeed
+    .filter((dc) => dc.userId === userId)
+    .toSorted((a, b) => b.time - a.time)[0];
+
+  console.log(lastMember, lastDisconnect);
+  const userMember =
+    lastDisconnect != null &&
+    lastMember != null &&
+    lastDisconnect.time > lastMember.time
+      ? null
+      : (lastMember ?? null);
   if (userMember == null || userMember.isInvite) {
     return (
       <JoinMatch
@@ -43,9 +68,26 @@ export default async function RoomPage({
     );
   }
 
-  if (userMember.playerColor == null) {
-    return <CastPage gameId={gameId} userId={userId} memberFeed={memberFeed} />;
+  const alreadyFetched: ReadonlyArray<NewFeedItem> = [
+    ...memberFeed,
+    ...disconnectFeed,
+  ];
+
+  if (lastMember.playerColor == null) {
+    return (
+      <CastPage
+        gameId={gameId}
+        userId={userId}
+        alreadyFetched={alreadyFetched}
+      />
+    );
   } else {
-    return <PlayPage gameId={gameId} userId={userId} memberFeed={memberFeed} />;
+    return (
+      <PlayPage
+        gameId={gameId}
+        userId={userId}
+        alreadyFetched={alreadyFetched}
+      />
+    );
   }
 }

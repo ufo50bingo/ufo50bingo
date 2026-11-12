@@ -38,7 +38,7 @@ import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
 import { useSearchParams } from "next/navigation";
 import { Restrictions } from "./GeneralSection";
 import { FeedColorMark, NewFeed } from "@/app/fetchFeed";
-import useMembers from "../common/useMembers";
+import useMembers, { PlayerMember } from "../common/useMembers";
 import useSquareColors from "../common/useSquareColors";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import { getMatchingRepoPasta } from "@/app/getMatchingRepoPasta";
@@ -90,8 +90,14 @@ export default function Play({
   });
   const [font, setFont] = useFont();
 
-  const selfPlayer = players.find((p) => p.userId === userId)!;
-  const selectedColor = selfPlayer.color;
+  const selfMember = allMembers.get(userId)!;
+  const selectedColor = selfMember.color ?? "red";
+  const selfPlayer: PlayerMember = players.find((p) => p.userId === userId) ?? {
+    userId,
+    color: selectedColor,
+    name: selfMember.overrideName ?? selfMember.name,
+    isInvite: selfMember.isInvite,
+  };
 
   // 525px is the width of the board, which is also the default width of the modal
   const isMobile = useMediaQuery("(max-width: 525px)");
@@ -422,6 +428,7 @@ export default function Play({
             generalSetters={generalSetters}
             restrictions={restrictions}
             sendEvent={sendEvent}
+            members={allMembers}
           />
         </Stack>
         <Feed

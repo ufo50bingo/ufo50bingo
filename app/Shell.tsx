@@ -110,7 +110,10 @@ export default function Shell({ children }: Props) {
   let title = page?.text;
   if (title == null && pathname.startsWith("/match/")) {
     title = "Matches";
-  } else if (title == null && pathname.startsWith("/room/")) {
+  } else if (
+    title == null &&
+    (pathname.startsWith("/room/") || pathname.startsWith("/watch/"))
+  ) {
     return <div style={{ padding: "16px" }}>{children}</div>;
   } else if (pathname.startsWith("/layout")) {
     return <div>{children}</div>;

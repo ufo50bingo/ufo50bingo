@@ -7,15 +7,17 @@ import persistEvents from "./persistEvents";
 type Props = {
   gameId: number;
   initialFeed: NewFeed;
-  userId: number;
+  userId: null | number;
   playAudio: (soundType: keyof SoundChoices) => void;
-  token: string;
+  token: string | null;
 };
 
 type Response = {
   feed: NewFeed;
   reconnectModal: null | undefined | ReactNode;
-  sendEvents: (newEvents: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
+  sendEvents:
+    | null
+    | ((newEvents: ReadonlyArray<NewFeedItem>) => Promise<boolean>);
 };
 
 export default function useBingosyncSocket({
@@ -68,7 +70,8 @@ export default function useBingosyncSocket({
       if (
         socket == null ||
         socket.readyState !== WebSocket.OPEN ||
-        !authenticatedRef.current
+        !authenticatedRef.current ||
+        token == null
       ) {
         return false;
       }
@@ -97,12 +100,14 @@ export default function useBingosyncSocket({
     authenticatedRef.current = false;
 
     socket.onopen = () => {
-      socket.send(
-        JSON.stringify({
-          type: "authenticate",
-          token,
-        }),
-      );
+      if (token != null) {
+        socket.send(
+          JSON.stringify({
+            type: "authenticate",
+            token,
+          }),
+        );
+      }
       setShouldReconnect(false);
     };
 
@@ -140,7 +145,7 @@ export default function useBingosyncSocket({
 
   return {
     feed,
-    sendEvents,
+    sendEvents: token != null ? sendEvents : null,
     reconnectModal: shouldReconnect && (
       <Modal
         fullScreen={false}
@@ -150,9 +155,7 @@ export default function useBingosyncSocket({
         title="Reconnection needed"
       >
         <Stack>
-          <span>
-            You have been disconnected from Bingosync! Please refresh your page.
-          </span>
+          <span>You have been disconnected! Please refresh your page.</span>
           <Group justify="end">
             <Button onClick={() => setShouldReconnect(false)}>Ignore</Button>
             <Button

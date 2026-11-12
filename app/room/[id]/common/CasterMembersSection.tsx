@@ -40,7 +40,9 @@ interface Props {
   casters: ReadonlyArray<CasterMember>;
   isMobile: boolean;
   isCast: boolean;
-  sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
+  sendEvents:
+    | null
+    | ((newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>);
 }
 
 function SortablePlayer({ player }: { player: PlayerMember }) {
@@ -87,7 +89,7 @@ export default function CasterMembersSection({
   );
 
   const handleDragEnd = async ({ active, over }: DragEndEvent) => {
-    if (!over || active.id === over.id) {
+    if (!over || active.id === over.id || sendEvents == null) {
       return;
     }
 
@@ -125,80 +127,94 @@ export default function CasterMembersSection({
           <Text>
             <strong>Players</strong>
           </Text>
-          <Text size="sm">
-            Drag and drop to sort the player list. The first player's tracker
-            info will be on the left side, and the second player's tracker info
-            will be on the right.
-          </Text>
-          <DndContext
-            id="members-dnd"
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            modifiers={[restrictToVerticalAxis, restrictToParentElement]}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={players.map((p) => p.userId.toString())}
-              strategy={verticalListSortingStrategy}
-            >
-              <Stack>
-                {players.map((player) => (
-                  <SortablePlayer key={player.userId} player={player} />
-                ))}
-              </Stack>
-            </SortableContext>
-          </DndContext>
-          <Stack gap={4}>
-            <UserTokenizer
-              label="Add players"
-              selectedUserIds={selectedUserIds}
-              onChange={setPlayersToAdd}
-              excludedIds={excludedUserIds}
-            />
-            {playersToAdd.length > 0 && (
-              <Group gap={8} justify="end">
-                <Button
-                  disabled={isSending}
-                  size="xs"
-                  color="red"
-                  onClick={() => setPlayersToAdd([])}
+          {sendEvents == null ? (
+            <>
+              {players.map((player) => (
+                <Group key={player.userId}>
+                  <ColorSwatch color={getColorHex(player.color)} size={14} />
+                  <span>{player.name}</span>
+                </Group>
+              ))}
+            </>
+          ) : (
+            <>
+              <Text size="sm">
+                Drag and drop to sort the player list. The first player's
+                tracker info will be on the left side, and the second player's
+                tracker info will be on the right.
+              </Text>
+              <DndContext
+                id="members-dnd"
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+                onDragEnd={handleDragEnd}
+              >
+                <SortableContext
+                  items={players.map((p) => p.userId.toString())}
+                  strategy={verticalListSortingStrategy}
                 >
-                  Cancel
-                </Button>
-                <Button
-                  disabled={isSending}
-                  size="xs"
-                  color="green"
-                  onClick={async () => {
-                    const time = getServerMsFromClientMs(Date.now()) / 1000;
-                    const events: ReadonlyArray<FeedMember> = playersToAdd.map(
-                      (p) => ({
-                        type: "member",
-                        userId: p.userId,
-                        time,
-                        // TODO: use favorite color
-                        playerColor: "red",
-                        isInvite: true,
-                        name: p.name,
-                        overrideName: null,
-                      }),
-                    );
-                    try {
-                      setIsSending(true);
-                      const success = await sendEvents(events);
-                      if (success) {
-                        setPlayersToAdd([]);
+                  <Stack>
+                    {players.map((player) => (
+                      <SortablePlayer key={player.userId} player={player} />
+                    ))}
+                  </Stack>
+                </SortableContext>
+              </DndContext>
+            </>
+          )}
+          {sendEvents != null && (
+            <Stack gap={4}>
+              <UserTokenizer
+                label="Add players"
+                selectedUserIds={selectedUserIds}
+                onChange={setPlayersToAdd}
+                excludedIds={excludedUserIds}
+              />
+              {playersToAdd.length > 0 && (
+                <Group gap={8} justify="end">
+                  <Button
+                    disabled={isSending}
+                    size="xs"
+                    color="red"
+                    onClick={() => setPlayersToAdd([])}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    disabled={isSending}
+                    size="xs"
+                    color="green"
+                    onClick={async () => {
+                      const time = getServerMsFromClientMs(Date.now()) / 1000;
+                      const events: ReadonlyArray<FeedMember> =
+                        playersToAdd.map((p) => ({
+                          type: "member",
+                          userId: p.userId,
+                          time,
+                          // TODO: use favorite color
+                          playerColor: "red",
+                          isInvite: true,
+                          name: p.name,
+                          overrideName: null,
+                        }));
+                      try {
+                        setIsSending(true);
+                        const success = await sendEvents(events);
+                        if (success) {
+                          setPlayersToAdd([]);
+                        }
+                      } finally {
+                        setIsSending(false);
                       }
-                    } finally {
-                      setIsSending(false);
-                    }
-                  }}
-                >
-                  Add
-                </Button>
-              </Group>
-            )}
-          </Stack>
+                    }}
+                  >
+                    Add
+                  </Button>
+                </Group>
+              )}
+            </Stack>
+          )}
           <Text>
             <strong>Casters</strong>
           </Text>

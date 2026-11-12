@@ -8,7 +8,7 @@ import { TERMINAL_CODES } from "./terminalCodes";
 type Props = {
   color: BingosyncColor;
   game: string | null;
-  onChange: (newGame: ProperGame | null) => void;
+  onChange: null | ((newGame: ProperGame | null) => void);
   terminalCodes: Set<string>;
   gameList: { [game: string]: string };
 };
@@ -55,15 +55,17 @@ export default function GameSelector({
   return (
     <Select
       w="124px"
+      disabled={onChange == null}
       value={game}
       onChange={(newValue) =>
+        onChange != null &&
         onChange(newValue == null ? null : (newValue as ProperGame))
       }
       placeholder="Select game"
       data={data}
       allowDeselect={false}
       searchable={true}
-      clearable={true}
+      clearable={onChange != null}
       renderOption={(option) => (
         <BingosyncColored color={color}>{option.option.label}</BingosyncColored>
       )}

@@ -27,7 +27,7 @@ type Props = {
   foundGoal: FoundStandardGeneral;
   terminalCodes: Set<string>;
   countState: null | undefined | CountState;
-  setGeneralGameCount: (change: CountChange) => unknown;
+  setGeneralGameCount: null | ((change: CountChange) => unknown);
   addShowAll: (goal: string) => unknown;
   generalTrackerPlayers: ReadonlyArray<PlayerMember>;
   pasta: UFOPasta;
@@ -196,7 +196,7 @@ export default function GeneralGoal({
       style={style}
       title={title}
       description={
-        cast.type === "check"
+        cast.type === "check" || setGeneralGameCount == null
           ? undefined
           : "Left click increases, right click decreases"
       }
@@ -224,14 +224,18 @@ export default function GeneralGoal({
               key={isPlay ? game : undefined}
               color={getColorHex(color)}
               checked={gameCount > 0}
-              onChange={(event) =>
+              readOnly={setGeneralGameCount == null}
+              onChange={(event) => {
+                if (setGeneralGameCount == null) {
+                  return null;
+                }
                 setGeneralGameCount({
                   goal: foundGoal.resolvedGoal,
                   userId,
                   game,
                   count: event.currentTarget.checked ? 1 : 0,
-                })
-              }
+                });
+              }}
               label={isPlay ? label : undefined}
             />
           );
@@ -242,12 +246,20 @@ export default function GeneralGoal({
             gameCount: number,
           ) => (
             <Button
+              style={
+                setGeneralGameCount == null
+                  ? { pointerEvents: "none", cursor: "not-allowed" }
+                  : undefined
+              }
               color={getColorHex(color)}
               h={18}
               w={18}
               p={0}
               size="compact-xs"
               onClick={() => {
+                if (setGeneralGameCount == null) {
+                  return null;
+                }
                 setGeneralGameCount({
                   goal: foundGoal.resolvedGoal,
                   userId,
@@ -257,6 +269,9 @@ export default function GeneralGoal({
               }}
               onContextMenu={(e) => {
                 e.preventDefault();
+                if (setGeneralGameCount == null) {
+                  return null;
+                }
                 setGeneralGameCount({
                   goal: foundGoal.resolvedGoal,
                   userId,

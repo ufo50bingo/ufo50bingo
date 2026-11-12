@@ -72,13 +72,19 @@ export default function Play({
   const boardSize = game.width * game.height;
   const { getServerMsFromClientMs } = useServerOffsetContext();
   const [soundChoices, setSoundChoices, playAudio] = useSounds("play");
-  const { feed, reconnectModal, sendEvents } = useBingosyncSocket({
+  const {
+    feed,
+    reconnectModal,
+    sendEvents: sendEventsRaw,
+  } = useBingosyncSocket({
     gameId,
     initialFeed,
     userId,
     playAudio,
     token,
   });
+  // Play always has sendEvents available
+  const sendEvents = sendEventsRaw!;
   const { players, casters, allMembers } = useMembers(feed);
   const squareColors = useSquareColors(feed, boardSize, isLockout);
   const searchParams = useSearchParams();

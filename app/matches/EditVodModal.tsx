@@ -4,23 +4,21 @@ import {
   Group,
   List,
   Modal,
-  NumberInput,
   Space,
   Stack,
   TextInput,
 } from "@mantine/core";
-import { Match } from "./Matches";
 import { IconAlertSquareRounded, IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
 import { getBaseUrlAndStartSeconds, getVodLink, getWarning } from "./vodUtil";
-import updateVod from "./updateVod";
 import runWithMaybeRefresh from "./runWithMaybeRefresh";
 import { useRouter } from "next/navigation";
+import { FullParsedGame } from "../fetchFeed";
 
 type Props = {
   matchesUrl: string | null;
   isMobile: boolean;
-  match: Match;
+  match: FullParsedGame;
   onClose: () => void;
 };
 
@@ -31,11 +29,9 @@ export default function EditVodModal({
   onClose,
 }: Props) {
   const router = useRouter();
-  const oldVodLink = getVodLink(match, 0) ?? "";
+  const vod = match.game.vod;
+  const oldVodLink = vod != null ? getVodLink(vod, 0) : "";
   const [newVodLink, setNewVodLink] = useState<string>(oldVodLink);
-  const [analysisSeconds, setAnalysisSeconds] = useState<number | string>(
-    match.analysisSeconds,
-  );
   const [isSaving, setIsSaving] = useState(false);
 
   const warning = getWarning(oldVodLink, newVodLink);
@@ -45,7 +41,7 @@ export default function EditVodModal({
       centered={true}
       onClose={onClose}
       opened={true}
-      title={`Edit VOD for ${match.name}`}
+      title={`Edit VOD for ${match.game.name}`}
       size={800}
     >
       <p>
@@ -74,12 +70,6 @@ export default function EditVodModal({
           onChange={(event) => setNewVodLink(event.target.value)}
           placeholder="Example: https://youtu.be/CLreXQuyzjs?t=759"
         />
-        <NumberInput
-          label="Seconds between first board reveal and match start (leave at 60 for most Standard matches)"
-          min={0}
-          value={analysisSeconds}
-          onChange={setAnalysisSeconds}
-        />
         {warning != null && (
           <Alert
             variant="light"
@@ -93,11 +83,7 @@ export default function EditVodModal({
         <Group mt="lg" justify="flex-end">
           <Button onClick={onClose}>Cancel</Button>
           <Button
-            disabled={
-              (oldVodLink === newVodLink &&
-                analysisSeconds === match.analysisSeconds) ||
-              isSaving
-            }
+            disabled={oldVodLink === newVodLink || isSaving}
             onClick={async () => {
               setIsSaving(true);
               await runWithMaybeRefresh(
@@ -106,12 +92,8 @@ export default function EditVodModal({
                 async () => {
                   const [baseUrl, startSeconds] =
                     getBaseUrlAndStartSeconds(newVodLink);
-                  await updateVod(
-                    match.id,
-                    baseUrl,
-                    startSeconds,
-                    analysisSeconds === "" ? 60 : Number(analysisSeconds),
-                  );
+                  // TODO: Fix updateVod
+                  // await updateVod(match.id, baseUrl, startSeconds);
                   onClose();
                   return true;
                 },

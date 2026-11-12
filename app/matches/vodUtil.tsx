@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Match } from "./Matches";
 import { Anchor } from "@mantine/core";
+import { FullParsedGame, Vod } from "../fetchFeed";
 
 export type VodHost = "youtube" | "twitch";
 
@@ -42,12 +43,8 @@ export function setUrlAtTime(
   }
 }
 
-export function getVodLink(match: Match, offsetFromStart: number): string {
+export function getVodLink(vod: Vod, offsetFromStart: number): string {
   try {
-    const vod = match.vod;
-    if (vod == null) {
-      return "";
-    }
     if (vod.startSeconds == null) {
       return vod.url;
     }

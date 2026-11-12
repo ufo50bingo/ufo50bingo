@@ -47,10 +47,11 @@ export default async function createMatch({
   isCustom,
   isDraft,
   isLockout,
-  goals,
+  goals: goalsRaw,
   leagueInfo: _leagueInfo,
   fullPasta,
 }: Props): Promise<string> {
+  const goals = goalsRaw.concat(goalsRaw.slice(0, 11));
   const userId = await getUserId();
   const sql = getSql(false);
   const pastaToStore = getFullPasta(fullPasta, variant);
@@ -112,8 +113,8 @@ export default async function createMatch({
     ${bool(isLockout)},
     ${userId},
     ${hash},
-    5,
-    5
+    6,
+    6
   ) RETURNING id`;
 
   const mainCreateSql = sql`

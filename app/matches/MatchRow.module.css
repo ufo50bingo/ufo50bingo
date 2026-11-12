@@ -1,0 +1,89 @@
+.row {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 8px;
+  align-items: center;
+  padding: 8px 12px;
+}
+
+@media (min-width: 48em) {
+  .row {
+    /* vod, misc info, league, people, edit */
+    grid-template-columns: 28px 280px 120px minmax(260px, 360px) minmax(0, 1fr);
+    column-gap: 24px;
+  }
+}
+
+/* collapse empty cells on mobile */
+@media (max-width: 47.99em) {
+  .vod:empty,
+  .league:empty,
+  .edit:empty {
+    display: none;
+  }
+}
+
+.row + .row {
+  border-top: 1px solid var(--mantine-color-default-border);
+}
+
+.row:hover {
+  background: var(--mantine-color-default-hover);
+}
+
+.vod {
+  display: flex;
+  align-items: center;
+}
+
+.edit {
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 48em) {
+  .edit {
+    justify-content: flex-end;
+  }
+}
+
+.teams {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 56px;
+  column-gap: 12px;
+  row-gap: 6px;
+  align-items: center;
+  min-width: 0;
+}
+
+.teamBar {
+  width: 3px;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+
+.name {
+  overflow-wrap: anywhere;
+}
+
+.reveal {
+  grid-column: 2;
+  grid-row: 1 / span var(--row-count);
+  align-self: stretch;
+  min-height: 24px;
+}
+
+.casters {
+  grid-column: 1 / -1;
+}
+
+.iconSlot {
+  width: 16px;
+  height: 16px;
+  color: var(--mantine-color-dimmed);
+  transform: translateY(-2px);
+}
+
+.winIcon {
+  display: inline-flex;
+}

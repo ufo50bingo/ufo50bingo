@@ -75,6 +75,7 @@ export default async function RoomPage({
   if (lastMember.playerColor == null) {
     return (
       <CastPage
+        sql={sql}
         gameId={gameId}
         userId={userId}
         alreadyFetched={alreadyFetched}
@@ -83,6 +84,7 @@ export default async function RoomPage({
   } else {
     return (
       <PlayPage
+        sql={sql}
         gameId={gameId}
         userId={userId}
         alreadyFetched={alreadyFetched}

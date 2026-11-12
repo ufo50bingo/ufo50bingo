@@ -1,4 +1,7 @@
+import { ParsedGame } from "../fetchFeed";
 import { Match } from "./Matches";
+
+export type WinType = "Bingo" | "Majority" | "Tiebreak";
 
 export function getWinType(match: Match): null | string {
   if (match.winner != null && match.opponent != null) {
@@ -12,6 +15,10 @@ export function getWinType(match: Match): null | string {
   }
 }
 
-export function getVariantText(match: Match): string {
-  return match.variant + (match.isCustom && match.variant !== "10 Cherry Race" ? " (Custom)" : "") + (match.isDraft ? " Draft" : "");
+export function getVariantText(game: ParsedGame): string {
+  return (
+    game.variant +
+    (game.isCustom && game.variant !== "10 Cherry Race" ? " (Custom)" : "") +
+    (game.isDraft ? " Draft" : "")
+  );
 }

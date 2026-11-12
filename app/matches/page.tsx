@@ -4,6 +4,10 @@ import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 import { NeonQueryFunction, NeonQueryPromise } from "@neondatabase/serverless";
 import { Metadata } from "next";
 import { Alert } from "@mantine/core";
+import { MatchSummary } from "./MatchRow";
+import { MatchList } from "./MatchList";
+import DummyMatches from "./DummyMatches";
+import { fetchDataMulti, SQLResult, SQLTemplate } from "../fetchFeed";
 
 export const metadata: Metadata = {
   title: "UFO 50 Bingo Matches",
@@ -27,20 +31,20 @@ export type SQL = NeonQueryPromise<false, false, Record<string, any>[]>;
 export default async function MatchesFetcher(props: {
   searchParams?: Promise<FilterParams>;
 }) {
-  // TODO: Enable matches
-  return (
-    <Alert color="red">
-      The Matches table is not yet supported on the new backend.
-    </Alert>
-  );
-  // const searchParams = await props.searchParams;
-  // const filterSql = getFilterSql(searchParams);
+  const sql = getSql();
+  const searchParams = await props.searchParams;
+  const filterSql = getFilterSql(searchParams);
 
-  // const pageNumber = Number(searchParams?.page ?? "1");
-  // const [totalPages, matches] = await Promise.all([
-  //   fetchTotalPages(filterSql),
-  //   fetchMatches(pageNumber, filterSql),
-  // ]);
+  const pageNumber = Number(searchParams?.page ?? "1");
+  const combinedResults = await sql.transaction([
+    fetchGameCountSql(sql, filterSql),
+    fetchRecentGameIdsSql(sql, filterSql, pageNumber),
+  ]);
+  const gameCount = parseGameCountSql(combinedResults[0]);
+  const totalPages = Math.ceil(gameCount / PAGE_SIZE);
+  const recentGameIds = parseRecentGameIdsSql(combinedResults[1]);
+  const games = await fetchDataMulti(sql, recentGameIds, "spectate");
+  return <MatchList totalPages={totalPages} games={games} />;
   // return <Matches matches={matches} totalPages={totalPages} />;
 }
 
@@ -102,34 +106,42 @@ function getFilterSql(searchParams: FilterParams | undefined): SQL {
   return sql`${seasonSql} ${weekSql} ${tierSql} ${playerSql} ${adminSql}`;
 }
 
-async function fetchTotalPages(filterSql: SQL): Promise<number> {
-  const sql = getSql();
-  const result = await sql`
+function fetchGameCountSql(sql: SQLTemplate, filterSql: SQL): SQL {
+  return sql`
     SELECT COUNT(id) as total_matches
-    FROM match
+    FROM game
     WHERE
       is_public = TRUE
       AND is_deleted = FALSE
-      ${filterSql};`;
-  const totalMatches: number = result[0].total_matches;
-  return Math.ceil(totalMatches / PAGE_SIZE);
+      ${filterSql}
+  `;
 }
 
-async function fetchMatches(
-  pageNumber: number,
+export function parseGameCountSql(result: SQLResult): number {
+  return result[0].total_matches;
+}
+
+function fetchRecentGameIdsSql(
+  sql: SQLTemplate,
   filterSql: SQL,
-): Promise<ReadonlyArray<Match>> {
-  const sql = getSql();
-  const result = await sql`
+  pageNumber: number,
+): SQL {
+  return sql`
     SELECT
-      ${MATCH_FIELDS}
-    FROM match
+      id
+    FROM game
     WHERE
       is_public = TRUE
       AND is_deleted = FALSE
       ${filterSql}
     ORDER BY date_created DESC
     OFFSET ${(pageNumber - 1) * PAGE_SIZE}
-    LIMIT ${PAGE_SIZE}`;
-  return result.map(getMatchFromRaw);
+    LIMIT ${PAGE_SIZE}
+  `;
+}
+
+export function parseRecentGameIdsSql(
+  result: SQLResult,
+): ReadonlyArray<number> {
+  return result.map((row) => row.id);
 }

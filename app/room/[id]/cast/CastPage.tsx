@@ -1,9 +1,10 @@
 import getBroadcastToken from "../common/getBroadcastToken";
 import CastWrapper from "./CastWrapper";
 import { CountState } from "./useSyncedState";
-import { fetchData, NewFeedItem } from "@/app/fetchFeed";
+import { fetchData, NewFeedItem, SQLTemplate } from "@/app/fetchFeed";
 
 type Props = {
+  sql: SQLTemplate;
   userId: number;
   gameId: number;
   alreadyFetched: ReadonlyArray<NewFeedItem>;
@@ -12,23 +13,23 @@ type Props = {
 export type GeneralCounts = { [goal: string]: CountState };
 
 export default async function CastPage({
+  sql,
   gameId,
   userId,
   alreadyFetched,
 }: Props) {
   const [data, token] = await Promise.all([
-    fetchData(gameId, "cast"),
+    fetchData(sql, gameId, "cast"),
     getBroadcastToken(gameId),
   ]);
   const feed = data.feed.concat(alreadyFetched);
   feed.sort((a, b) => a.time - b.time);
   return (
     <CastWrapper
-      gameId={gameId}
+      game={data.game}
       initialFeed={feed}
       squares={data.squares}
       fetchedPasta={data.fetchedPasta}
-      pastaId={data.pastaId}
       subcategories={data.subcategories}
       userId={userId}
       token={token}

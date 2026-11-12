@@ -42,6 +42,7 @@ import {
   FeedCurrentSubcategory,
   FeedGoalProgress,
   NewFeed,
+  ParsedGame,
   ParsedSubcategory,
   SquareWithId,
 } from "@/app/fetchFeed";
@@ -71,13 +72,12 @@ export type GeneralItem = {
 };
 
 export type CastProps = {
-  gameId: number;
+  game: ParsedGame;
   initialFeed: NewFeed;
   userId: number;
   squares: ReadonlyArray<SquareWithId>;
   subcategories: ReadonlyArray<ParsedSubcategory>;
   token: string;
-  pastaId: null | bigint;
   fetchedPasta: null | UFOPasta;
 };
 
@@ -85,17 +85,18 @@ const COUNT_POSITION = ["side_by_side", "inset"] as const;
 export type TCountPosition = (typeof COUNT_POSITION)[number];
 
 export default function Cast({
-  gameId,
+  game,
   initialFeed,
   userId,
   squares,
   subcategories,
   token,
-  pastaId,
   fetchedPasta,
 }: CastProps) {
-  const isLockout = true;
-  const boardSize = 25;
+  const gameId = game.id;
+  const pastaId = game.pastaId;
+  const isLockout = game.isLockout;
+  const boardSize = game.width * game.height;
   const { getServerMsFromClientMs } = useServerOffsetContext();
   const squareNames = useMemo(() => squares.map((s) => s.name), [squares]);
   const [soundChoices, setSoundChoices, playAudio] = useSounds("cast");
@@ -396,7 +397,13 @@ export default function Cast({
       }
     }
     return highlights;
-  }, [highlightCurrentGame, allPlayerGames, allMembers, gameToGoals]);
+  }, [
+    highlightCurrentGame,
+    boardSize,
+    allPlayerGames,
+    allMembers,
+    gameToGoals,
+  ]);
 
   const leftGames =
     leftPlayer != null ? (allPlayerGames.get(leftPlayer.userId) ?? []) : [];
@@ -474,7 +481,7 @@ export default function Cast({
               />
             )}
           </SideColumn>
-          <StandardBoardWrapper>
+          <StandardBoardWrapper rows={game.height} columns={game.width}>
             <Board
               pasta={pasta}
               board={squareColors.map((colors, index) => ({
@@ -494,6 +501,8 @@ export default function Cast({
               shownDifficulties={shownDifficulties}
               viewerColor={null}
               castInfo={{ leftColor, rightColor }}
+              rows={game.height}
+              columns={game.width}
             />
           </StandardBoardWrapper>
           <SideColumn isDouble={isDouble}>

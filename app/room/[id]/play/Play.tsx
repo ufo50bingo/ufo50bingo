@@ -36,7 +36,7 @@ import InfoCard from "../cast/InfoCard";
 import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
 import { useSearchParams } from "next/navigation";
 import { Restrictions } from "./GeneralSection";
-import { FeedColorMark, NewFeed } from "@/app/fetchFeed";
+import { FeedColorMark, NewFeed, ParsedGame } from "@/app/fetchFeed";
 import useMembers, { PlayerMember } from "../common/useMembers";
 import useSquareColors from "../common/useSquareColors";
 import { useServerOffsetContext } from "../ServerOffsetContext";
@@ -50,26 +50,26 @@ export type FoundItem = {
 };
 
 export type Props = {
-  gameId: number;
+  game: ParsedGame;
   initialFeed: NewFeed;
   userId: number;
   squareNames: ReadonlyArray<string>;
   token: string;
-  pastaId: null | bigint;
   fetchedPasta: null | UFOPasta;
 };
 
 export default function Play({
-  gameId,
+  game,
   initialFeed,
   userId,
   squareNames,
   token,
-  pastaId,
   fetchedPasta,
 }: Props) {
-  const isLockout = true;
-  const boardSize = 25;
+  const gameId = game.id;
+  const pastaId = game.pastaId;
+  const isLockout = game.isLockout;
+  const boardSize = game.width * game.height;
   const { getServerMsFromClientMs } = useServerOffsetContext();
   const [soundChoices, setSoundChoices, playAudio] = useSounds("play");
   const { feed, reconnectModal, sendEvents } = useBingosyncSocket({
@@ -315,7 +315,7 @@ export default function Play({
     <>
       <Group align="stretch">
         <Stack gap={8}>
-          <StandardBoardWrapper>
+          <StandardBoardWrapper rows={game.height} columns={game.width}>
             <Board
               pasta={pasta}
               board={squareColors.map((colors, index) => ({

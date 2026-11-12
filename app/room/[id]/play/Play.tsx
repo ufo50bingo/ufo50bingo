@@ -42,6 +42,7 @@ import useSquareColors from "../common/useSquareColors";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import { getMatchingRepoPasta } from "@/app/getMatchingRepoPasta";
 import StandardBoardWrapper from "@/app/StandardBoardWrapper";
+import usePasta from "../common/usePasta";
 
 export type FoundItem = {
   foundGoal: FoundGoal<string, string, string>;
@@ -102,15 +103,7 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
 
   useWakeLock();
 
-  const pasta = useMemo(() => {
-    if (pastaId == null) {
-      return null;
-    }
-    if (fetchedPasta != null) {
-      return fetchedPasta;
-    }
-    return getMatchingRepoPasta(pastaId);
-  }, [fetchedPasta, pastaId]);
+  const pasta = usePasta(fullParsedGame);
 
   const gameToGoals = useMemo(
     () => getGameToGoals(squareNames, Object.keys(getGameList(pasta)), pasta),

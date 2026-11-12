@@ -1,5 +1,6 @@
 import { Modal } from "@mantine/core";
 import { FullParsedGame } from "../fetchFeed";
+import SingleMatchView from "../match/SingleMatchView";
 
 type Props = {
   isMobile: boolean;
@@ -17,7 +18,7 @@ export default function MatchModal({ game, onClose, isMobile }: Props) {
       size="auto"
       withCloseButton={isMobile}
     >
-      <div>{game.game.name}</div>
+      <SingleMatchView game={game} />
     </Modal>
   );
 }

@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
-import { Match } from "./Matches";
 import { Anchor } from "@mantine/core";
-import { FullParsedGame, Vod } from "../fetchFeed";
+import { Vod } from "../fetchFeed";
 
 export type VodHost = "youtube" | "twitch";
 

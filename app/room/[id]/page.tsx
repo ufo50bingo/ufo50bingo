@@ -14,6 +14,7 @@ import Login from "./Login";
 import getSession from "@/app/getSession";
 import { cookies } from "next/headers";
 import CastPage from "./cast/CastPage";
+import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 
 export default async function RoomPage({
   params,
@@ -58,11 +59,12 @@ export default async function RoomPage({
       ? null
       : (lastMember ?? null);
   if (userMember == null || userMember.isInvite) {
+    const color = (session.user.color ?? null) as null | BingosyncColor;
     return (
       <JoinMatch
         gameId={gameId}
-        userId={userId}
         userMember={userMember ?? null}
+        playerColor={color}
       />
     );
   }

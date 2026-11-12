@@ -21,19 +21,18 @@ import joinGame from "./joinGame";
 
 type Props = {
   gameId: number;
-  userId: number;
   userMember: null | FeedMember;
+  playerColor: null | BingosyncColor;
 };
 
-export default function JoinMatch({ gameId, userMember }: Props) {
+export default function JoinMatch({ gameId, userMember, playerColor }: Props) {
   const searchParams = useSearchParams();
 
   const [shouldOverrideName, setShouldOverrideName] = useState(false);
   const [overrideName, setOverrideName] = useState<string>("");
   const [password, setPassword] = useState(searchParams.get("p") ?? "");
-  // TODO: Set default color when not invited also
   const [color, setColor] = useState<BingosyncColor>(
-    userMember?.playerColor ?? "red",
+    userMember?.playerColor ?? playerColor ?? "red",
   );
 
   const invitedView =

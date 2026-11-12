@@ -21,6 +21,11 @@ export const auth = betterAuth({
         required: false,
         input: true,
       },
+      color: {
+        type: "string",
+        required: false,
+        input: true,
+      },
     },
   },
   session: {

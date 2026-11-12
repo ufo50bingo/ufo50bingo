@@ -38,6 +38,7 @@ import {
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import BottomSection from "../common/BottomSection";
 import { PlayerTrackerRestrictions } from "@/app/generator/ufoGenerator";
+import { authClient } from "@/app/authClient";
 
 type Props = {
   userId: number;
@@ -127,7 +128,10 @@ export default function PlaySettings({
                         playerColor: newColor,
                         time: getServerMsFromClientMs(Date.now()) / 1000,
                       };
-                      await sendEvents([event]);
+                      await Promise.all([
+                        authClient.updateUser({ color: newColor }),
+                        sendEvents([event]),
+                      ]);
                     }}
                   />
                 </Accordion.Panel>

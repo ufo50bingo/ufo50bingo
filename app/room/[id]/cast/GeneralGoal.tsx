@@ -37,7 +37,10 @@ type Props = {
   countState: null | undefined | CountState;
   setGeneralGameCount: (change: CountChange) => unknown;
   addShowAll: (goal: string) => unknown;
-  playerColors: ReadonlyArray<BingosyncColor>;
+  generalTrackerPlayers: ReadonlyArray<{
+    userId: number;
+    color: BingosyncColor;
+  }>;
   pasta: UFOPasta;
   restrictions: Restrictions;
   settings: GeneralSettings;
@@ -67,7 +70,7 @@ export default function GeneralGoal({
   countState,
   setGeneralGameCount,
   addShowAll,
-  playerColors,
+  generalTrackerPlayers,
   pasta: _pasta,
   restrictions,
   settings,
@@ -129,13 +132,18 @@ export default function GeneralGoal({
   const titleEl = (
     <>
       {foundGoal.resolvedGoal} (
-      {playerColors.map((color, playerNum) => {
-        const counts = countState?.[playerNum] ?? {};
+      {generalTrackerPlayers.map(({ userId, color }, index) => {
+        const counts = countState?.[userId];
         return (
-          <React.Fragment key={playerNum}>
-            {playerNum > 0 ? " " : ""}
+          <React.Fragment key={userId}>
+            {index > 0 ? " " : ""}
             <BingosyncColored color={color}>
-              {Object.keys(counts).reduce((acc, game) => acc + counts[game], 0)}
+              {counts == null
+                ? 0
+                : Object.entries(counts).reduce(
+                    (acc, [_subcategory, count]) => acc + count,
+                    0,
+                  )}
             </BingosyncColored>
           </React.Fragment>
         );
@@ -233,17 +241,18 @@ export default function GeneralGoal({
           const description = descriptions != null ? descriptions[game] : null;
           return (
             <Group key={game} gap={6}>
-              {playerColors.map((color, playerNum) => {
-                const counts = countState?.[playerNum] ?? {};
+              {generalTrackerPlayers.map(({ userId, color }) => {
+                const counts = countState?.[userId];
+                const gameCount = counts?.[game] ?? 0;
                 return cast.type === "check" ? (
                   <Checkbox
-                    key={playerNum}
+                    key={userId}
                     color={getColorHex(color)}
-                    checked={(counts[game] ?? 0) > 0}
+                    checked={gameCount > 0}
                     onChange={(event) =>
                       setGeneralGameCount({
                         goal: foundGoal.resolvedGoal,
-                        player_num: playerNum,
+                        userId,
                         game,
                         count: event.currentTarget.checked ? 1 : 0,
                       })
@@ -251,7 +260,7 @@ export default function GeneralGoal({
                   />
                 ) : (
                   <Button
-                    key={playerNum}
+                    key={userId}
                     color={getColorHex(color)}
                     h={18}
                     w={18}
@@ -260,22 +269,22 @@ export default function GeneralGoal({
                     onClick={() => {
                       setGeneralGameCount({
                         goal: foundGoal.resolvedGoal,
-                        player_num: playerNum,
+                        userId,
                         game,
-                        count: (counts[game] ?? 0) + 1,
+                        count: gameCount + 1,
                       });
                     }}
                     onContextMenu={(e) => {
                       e.preventDefault();
                       setGeneralGameCount({
                         goal: foundGoal.resolvedGoal,
-                        player_num: playerNum,
+                        userId,
                         game,
-                        count: Math.max(0, (counts[game] ?? 0) - 1),
+                        count: Math.max(0, gameCount - 1),
                       });
                     }}
                   >
-                    {counts[game] ?? 0}
+                    {gameCount}
                   </Button>
                 );
               })}

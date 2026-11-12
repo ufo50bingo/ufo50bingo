@@ -16,7 +16,9 @@ export default async function CastPage({ gameId, userId, memberFeed }: Props) {
     <CastWrapper
       gameId={gameId}
       initialFeed={data.feed}
-      squareNames={data.squareNames}
+      squares={data.squares}
+      pasta={data.pasta}
+      subcategories={data.subcategories}
       userId={userId}
     />
   );

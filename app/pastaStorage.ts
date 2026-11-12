@@ -26,15 +26,45 @@ export async function storePasta(json: string, hash: bigint): Promise<void> {
   } catch {}
 }
 
-export async function fetchPasta(hash: bigint): Promise<null | UFOPasta> {
-  try {
-    const storedFile = await files.download(getFilename(hash));
-    const buffer = await storedFile.arrayBuffer();
-    const decompressed = await decompress(buffer);
-    const pastaStr = decompressed.toString();
-    const result = validateStr(pastaStr);
-    return result.pasta;
-  } catch {
-    return null;
+export async function fetchPastas(
+  hashes: bigint[],
+): Promise<Map<bigint, UFOPasta | null>> {
+  const pastas = new Map<bigint, UFOPasta | null>(
+    hashes.map((hash) => [hash, null]),
+  );
+  if (hashes.length === 0) {
+    return pastas;
   }
+
+  const filenameToHash = new Map<string, bigint>(
+    hashes.map((hash) => [getFilename(hash), hash]),
+  );
+
+  let storedFiles;
+  try {
+    ({ results: storedFiles } = await files.download([
+      ...filenameToHash.keys(),
+    ]));
+  } catch {
+    return pastas; // whole download failed
+  }
+
+  await Promise.all(
+    storedFiles.map(async (storedFile) => {
+      const hash = filenameToHash.get(storedFile.key);
+      if (hash == null) {
+        return;
+      }
+      try {
+        const buffer = await storedFile.arrayBuffer();
+        const decompressed = await decompress(buffer);
+        const result = validateStr(decompressed.toString());
+        pastas.set(hash, result.pasta);
+      } catch {
+        // failed to decrypt, so just keep it null
+      }
+    }),
+  );
+
+  return pastas;
 }

@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
       fullUrl: true,
     },
   },
+  serverExternalPackages: ["@node-rs/xxhash"],
   async redirects() {
     return [
       {

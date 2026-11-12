@@ -118,16 +118,17 @@ function generateCandidate(
   // this helps prevent having two goals from the same game on one line
   // TODO: should we add a more complex search algorithm here as well?
   const bingoLines = getBingoLines(rows, cols);
+  const boardSize = rows * cols;
   const maybeCenterIndex =
-    rows === cols && rows % 2 === 1 ? [(rows * cols - 1) / 2] : [];
+    rows === cols && rows % 2 === 1 ? [(boardSize - 1) / 2] : [];
   const allDiagonalIndices = bingoLines.diagonals.flatMap(
     (cellIndex) => cellIndex,
   );
   const diagonalIndicesWithoutCenter = allDiagonalIndices.filter(
     (cellIndex) =>
-      maybeCenterIndex.length > 0 && cellIndex !== maybeCenterIndex[0],
+      maybeCenterIndex.length === 0 || cellIndex !== maybeCenterIndex[0],
   );
-  const remainingIndices = range(rows * cols).filter(
+  const remainingIndices = range(boardSize).filter(
     (cellIndex) => !allDiagonalIndices.includes(cellIndex),
   );
   shuffle(diagonalIndicesWithoutCenter);
@@ -139,7 +140,7 @@ function generateCandidate(
   ];
 
   const allBingoLines = bingoLines.rowsAndCols.concat(bingoLines.diagonals);
-  const sameLineIndices = range(rows * cols).map((_) => new Set<number>());
+  const sameLineIndices = range(boardSize).map((_) => new Set<number>());
   for (const line of allBingoLines) {
     for (const cellToUpdate of line) {
       for (const otherCell of line) {
@@ -169,7 +170,7 @@ function generateCandidate(
     }
     return categories;
   });
-  const difficultyByIndex: Array<string> = Array(rows * cols).fill("");
+  const difficultyByIndex: Array<string> = Array(boardSize).fill("");
   const indexForTiers: Array<number> = tierCounts.map((_) => 0);
   for (let cellIdx = 0; cellIdx < tierLayout.length; cellIdx++) {
     const tier = tierLayout[cellIdx];
@@ -180,9 +181,10 @@ function generateCandidate(
 
   const availableGamesByDifficulty: { [difficulty: string]: Array<string> } =
     {};
-  const gameByIndex: Array<string> = Array(25).fill("");
-  const finalBoard: Array<string | null> = Array(25).fill(null);
-  const finalBoardWithTokens: Array<string | null> = Array(25).fill(null);
+  const gameByIndex: Array<string> = Array(boardSize).fill("");
+  const finalBoard: Array<string | null> = Array(boardSize).fill(null);
+  const finalBoardWithTokens: Array<string | null> =
+    Array(boardSize).fill(null);
   const difficultyToGameToUsedCount: {
     [difficulty: string]: { [game: string]: number };
   } = {};
@@ -236,7 +238,7 @@ function generateCandidate(
 
   const unrestricted: Array<number> = [];
   const restricted: Array<number> = [];
-  for (let i = 0; i < 25; i++) {
+  for (let i = 0; i < boardSize; i++) {
     const difficulty = difficultyByIndex[i];
     const game = gameByIndex[i];
     const goals = pasta.goals[difficulty][game];

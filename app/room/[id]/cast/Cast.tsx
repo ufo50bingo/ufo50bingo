@@ -75,7 +75,7 @@ export default function Cast({
   const { game, feed: initialFeed, squares, subcategories } = fullParsedGame;
   const gameId = game.id;
   const isLockout = game.isLockout;
-  const boardSize = game.width * game.height;
+  const boardSize = game.rows * game.cols;
   const { getServerMsFromClientMs } = useServerOffsetContext();
   const squareNames = useMemo(() => squares.map((s) => s.name), [squares]);
   const [soundChoices, setSoundChoices, playAudio] = useSounds("cast");

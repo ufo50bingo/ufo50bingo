@@ -65,7 +65,7 @@ export function MatchRow({ game, isMobile }: Props) {
   const [isEditingLeague, setIsEditingLeague] = useState(false);
 
   const { game: info, feed } = game;
-  const boardSize = info.width * info.height;
+  const boardSize = info.rows * info.cols;
 
   const { players, casters } = useMembers(feed);
   const squareColors = useSquareColors(feed, boardSize, info.isLockout);

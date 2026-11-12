@@ -60,7 +60,7 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
   const squareNames = useMemo(() => squares.map((s) => s.name), [squares]);
   const gameId = game.id;
   const isLockout = game.isLockout;
-  const boardSize = game.width * game.height;
+  const boardSize = game.rows * game.cols;
   const { getServerMsFromClientMs } = useServerOffsetContext();
   const [soundChoices, setSoundChoices, playAudio] = useSounds("play");
   const {
@@ -232,7 +232,7 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
     <>
       <Group align="stretch">
         <Stack gap={8}>
-          <StandardBoardWrapper rows={game.height} columns={game.width}>
+          <StandardBoardWrapper rows={game.rows} columns={game.cols}>
             <Board
               pasta={pasta}
               board={squareColors.map((colors, index) => ({
@@ -272,6 +272,8 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
                 />
               }
               isPlay={true}
+              rows={game.rows}
+              columns={game.cols}
             />
           </StandardBoardWrapper>
           <Group justify="space-between">

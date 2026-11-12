@@ -1401,7 +1401,9 @@ export const SPICY_UFO = {
     "veryhard": 4,
     "general": 5
   },
-  "general_categories": ["general"],
+  "general_categories": [
+    "general"
+  ],
   "draft": {
     "excluded_categories": [
       "general"

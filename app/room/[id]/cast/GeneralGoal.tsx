@@ -14,20 +14,10 @@ import {
 } from "@/app/generator/ufoGenerator";
 import React, { CSSProperties, useMemo } from "react";
 import { FoundStandardGeneral } from "./Cast";
-import {
-  CHERRIES,
-  GIFTS,
-  GIFT_DESCRIPTIONS,
-  GOLDS,
-  TWO_LEVELS,
-  FOUR_LEVELS,
-  EIGHT_LEVELS,
-  TWO_BOSSES,
-  BOSSES,
-} from "./timeEstimates";
 import { Restrictions, GeneralSettings } from "../play/GeneralSection";
 import { PlayerMember } from "../common/useMembers";
 import getPresetOptionList from "./getPresetOptionList";
+import { GIFT_DESCRIPTIONS } from "./timeEstimates";
 
 type Props = {
   showAll: boolean;
@@ -114,9 +104,9 @@ export default function GeneralGoal({
               {counts == null
                 ? 0
                 : Object.entries(counts).reduce(
-                  (acc, [_subcategory, count]) => acc + count,
-                  0,
-                )}
+                    (acc, [_subcategory, count]) => acc + count,
+                    0,
+                  )}
             </BingosyncColored>
           </React.Fragment>
         );
@@ -154,11 +144,11 @@ export default function GeneralGoal({
     showAll || !settings.shouldSegment
       ? allEntries
       : [
-        ...alwaysWithOnCard,
-        ...synergyWithOnCard.filter(
-          (e) => e[1] != null || !restrictions.canFilterOnCard,
-        ),
-      ];
+          ...alwaysWithOnCard,
+          ...synergyWithOnCard.filter(
+            (e) => e[1] != null || !restrictions.canFilterOnCard,
+          ),
+        ];
 
   const hasMore = allEntries.length > entries.length;
 

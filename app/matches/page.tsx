@@ -3,6 +3,7 @@ import getSql from "../getSql";
 import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 import { NeonQueryFunction, NeonQueryPromise } from "@neondatabase/serverless";
 import { Metadata } from "next";
+import { Alert } from "@mantine/core";
 
 export const metadata: Metadata = {
   title: "UFO 50 Bingo Matches",
@@ -26,20 +27,26 @@ export type SQL = NeonQueryPromise<false, false, Record<string, any>[]>;
 export default async function MatchesFetcher(props: {
   searchParams?: Promise<FilterParams>;
 }) {
-  const searchParams = await props.searchParams;
-  const filterSql = getFilterSql(searchParams);
+  // TODO: Enable matches
+  return (
+    <Alert color="red">
+      The Matches table is not yet supported on the new backend.
+    </Alert>
+  );
+  // const searchParams = await props.searchParams;
+  // const filterSql = getFilterSql(searchParams);
 
-  const pageNumber = Number(searchParams?.page ?? "1");
-  const [totalPages, matches] = await Promise.all([
-    fetchTotalPages(filterSql),
-    fetchMatches(pageNumber, filterSql),
-  ]);
-  return <Matches matches={matches} totalPages={totalPages} />;
+  // const pageNumber = Number(searchParams?.page ?? "1");
+  // const [totalPages, matches] = await Promise.all([
+  //   fetchTotalPages(filterSql),
+  //   fetchMatches(pageNumber, filterSql),
+  // ]);
+  // return <Matches matches={matches} totalPages={totalPages} />;
 }
 
 function getAdminFilterSql(
   adminFilter: AdminFilter,
-  sql: NeonQueryFunction<false, false>
+  sql: NeonQueryFunction<false, false>,
 ): SQL {
   switch (adminFilter) {
     case "missingTimestamps":
@@ -110,7 +117,7 @@ async function fetchTotalPages(filterSql: SQL): Promise<number> {
 
 async function fetchMatches(
   pageNumber: number,
-  filterSql: SQL
+  filterSql: SQL,
 ): Promise<ReadonlyArray<Match>> {
   const sql = getSql();
   const result = await sql`

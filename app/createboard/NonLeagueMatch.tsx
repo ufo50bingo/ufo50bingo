@@ -34,7 +34,7 @@ import { getRoomLink } from "../roomApi";
 import ufoDoubleGenerator from "../generator/ufoDoubleGenerator";
 import findGoal from "../findGoal";
 import { authClient } from "../authClient";
-import { getDifficultyLayout } from "../generator/getDifficultyLayout";
+import BoardSizeSelectors from "./BoardSizeSelectors";
 
 type CustomType = "ufo" | "fixed_board";
 
@@ -48,6 +48,12 @@ type Props = {
 const DEFAULT_FILTER_INFO: FilterInfo = {
   selectedIds: new Set(),
   excludedGames: new Set(),
+};
+
+export type BoardSize = {
+  rows: number;
+  cols: number;
+  lockSquare: boolean;
 };
 
 export default function NonLeagueMatch({ visible }: Props) {
@@ -95,9 +101,25 @@ export default function NonLeagueMatch({ visible }: Props) {
   const [error, setError] = useState<Error | null>(null);
   const [customType, setCustomType] = useState<CustomType>("ufo");
 
+  const [boardSize, setBoardSizeRaw] = useState<BoardSize>({
+    rows: 5,
+    cols: 5,
+    lockSquare: true,
+  });
   const [difficultyCounts, setDifficultyCounts] = useState<{
     [name: string]: Counts;
   }>({});
+  const setBoardSize = useCallback((newBoardSize: BoardSize) => {
+    setBoardSizeRaw((prevBoardSize: BoardSize) => {
+      if (
+        prevBoardSize.rows !== newBoardSize.rows ||
+        prevBoardSize.cols !== newBoardSize.cols
+      ) {
+        setDifficultyCounts({});
+      }
+      return newBoardSize;
+    });
+  }, []);
 
   const isPublic = isPublicRaw && isLockout;
   const metadata = METADATA.find((d) => d.name === variant)!;
@@ -109,7 +131,7 @@ export default function NonLeagueMatch({ visible }: Props) {
       pasta: UFOPasta,
     ): ReadonlyArray<string> => {
       if (format !== "Custom" && !metadata.hasFilters) {
-        return ufoGenerator(pasta);
+        return ufoGenerator(pasta, 5, 5);
       }
       const finalUncheckedGames =
         metadata.hasFilters && format === "Custom"
@@ -117,14 +139,21 @@ export default function NonLeagueMatch({ visible }: Props) {
           : format === "Custom"
             ? uncheckedGames
             : filterInfo.excludedGames;
-      let goals = ufoGenerator({
-        ...pasta,
-        goals: getFilteredDifficulties(pasta.goals, finalUncheckedGames),
-        category_counts:
-          format === "Custom"
-            ? (difficultyCounts[metadata.name] ?? pasta.category_counts)
-            : pasta.category_counts,
-      });
+      const rowsToUse = format === "Custom" ? boardSize.rows : 5;
+      const colsToUse = format === "Custom" ? boardSize.cols : 5;
+      let goals = ufoGenerator(
+        {
+          ...pasta,
+          goals: getFilteredDifficulties(pasta.goals, finalUncheckedGames),
+          category_counts:
+            format === "Custom"
+              ? (difficultyCounts[metadata.name] ??
+                getDefaultDifficultyCounts(pasta, rowsToUse, colsToUse))
+              : pasta.category_counts,
+        },
+        rowsToUse,
+        colsToUse,
+      );
       if (metadata.name === "10 Cherry Race") {
         goals = goals.toSorted();
       }
@@ -140,7 +169,7 @@ export default function NonLeagueMatch({ visible }: Props) {
         }
         if (format === "Draft") {
           if (draftPasta != null) {
-            return ufoGenerator(draftPasta);
+            return ufoGenerator(draftPasta, 5, 5);
           } else {
             throw new Error("draftPasta expected to be nonnull");
           }
@@ -150,7 +179,7 @@ export default function NonLeagueMatch({ visible }: Props) {
       case "UFO":
         if (format === "Draft") {
           if (draftPasta != null) {
-            return ufoGenerator(draftPasta);
+            return ufoGenerator(draftPasta, 5, 5);
           } else {
             throw new Error("draftPasta expected to be nonnull");
           }
@@ -379,6 +408,10 @@ export default function NonLeagueMatch({ visible }: Props) {
                       metadata.hasFilters ? filterInfo.excludedGames : undefined
                     }
                   />
+                  <BoardSizeSelectors
+                    boardSize={boardSize}
+                    setBoardSize={setBoardSize}
+                  />
                   <UFODifficultySelectors
                     goals={
                       metadata.type === "Custom"
@@ -391,9 +424,13 @@ export default function NonLeagueMatch({ visible }: Props) {
                     }
                     counts={
                       difficultyCounts[metadata.name] ??
-                      (metadata.type === "Custom"
-                        ? customUfo!.category_counts
-                        : metadata.pasta.category_counts)
+                      getDefaultDifficultyCounts(
+                        metadata.type === "Custom"
+                          ? customUfo!
+                          : metadata.pasta,
+                        boardSize.rows,
+                        boardSize.cols,
+                      )
                     }
                     setCounts={(newCounts) => {
                       setDifficultyCounts({
@@ -693,5 +730,60 @@ export default function NonLeagueMatch({ visible }: Props) {
         />
       )}
     </>
+  );
+}
+
+function getDefaultDifficultyCounts(
+  pasta: UFOPasta,
+  rows: number,
+  cols: number,
+): Counts {
+  if (rows === 5 && cols === 5) {
+    return pasta.category_counts;
+  }
+  const foundConfig = pasta.other_category_counts?.find(
+    (config) => config.rows === rows && config.cols === cols,
+  );
+  if (foundConfig != null) {
+    return foundConfig.category_counts;
+  }
+  return scaleCounts(pasta.category_counts, rows * cols);
+}
+
+function scaleCounts(counts: Counts, targetTotal: number): Counts {
+  const entries = Object.entries(counts);
+  const originalTotal = entries.reduce((acc, [, value]) => acc + value, 0);
+
+  if (originalTotal === 0 || targetTotal === 0) {
+    throw new Error("Cannot scale to/from 0");
+  }
+
+  const scaledCounts = entries.map(([difficulty, count], index) => {
+    const exact = (count / originalTotal) * targetTotal;
+    const floor = Math.floor(exact);
+
+    return {
+      difficulty,
+      value: floor,
+      remainder: exact - floor,
+      order: index,
+    };
+  });
+  scaledCounts.sort((a, b) => {
+    const remainderDiff = b.remainder - a.remainder;
+    if (remainderDiff !== 0) {
+      return remainderDiff;
+    }
+    return a.order - b.order;
+  });
+
+  const remaining =
+    targetTotal - scaledCounts.reduce((acc, item) => acc + item.value, 0);
+  for (let i = 0; i < remaining; i++) {
+    scaledCounts[i].value += 1;
+  }
+
+  return Object.fromEntries(
+    scaledCounts.map((item) => [item.difficulty, item.value]),
   );
 }

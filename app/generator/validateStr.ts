@@ -82,6 +82,15 @@ const UfoPasta = zod.strictObject({
   ),
   tokens: zod.record(zod.string(), zod.array(zod.string())),
   category_counts: zod.record(zod.string(), zod.int()),
+  other_category_counts: zod
+    .array(
+      zod.strictObject({
+        rows: zod.number(),
+        cols: zod.number(),
+        category_counts: zod.record(zod.string(), zod.int()),
+      }),
+    )
+    .optional(),
   general_categories: zod.array(zod.string()).optional(),
   category_difficulty_tiers: zod.array(zod.array(zod.string())).optional(),
   restriction_option_lists: zod

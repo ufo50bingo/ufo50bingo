@@ -36,10 +36,11 @@ export default function useBingosyncSocket({
       }
       if (newItem.type === "color_mark") {
         playAudioRef.current("square");
+      } else if (newItem.type === "chat") {
+        playAudioRef.current("chat");
+      } else if (newItem.type === "timer_event" && newItem.event === "pause") {
+        playAudioRef.current("pause");
       }
-      // else if (newItem.type === "chat") {
-      //   playAudioRef.current("chat");
-      // }
     },
     [userId],
   );

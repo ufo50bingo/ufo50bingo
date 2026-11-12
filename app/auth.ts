@@ -2,6 +2,8 @@ import { betterAuth } from "better-auth";
 import { Pool } from "pg";
 import { anonymous } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
+import { revalidateTag } from "next/cache";
+import { USER_CACHE_TAG } from "./api/users/route";
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -48,6 +50,15 @@ export const auth = betterAuth({
           return false; // Let PostgreSQL serial generate it
         }
         return crypto.randomUUID(); // UUIDs for session, account, verification
+      },
+    },
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        after: async () => {
+          revalidateTag(USER_CACHE_TAG, "max");
+        },
       },
     },
   },

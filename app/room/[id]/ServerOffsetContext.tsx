@@ -26,7 +26,7 @@ export function ServerOffsetContextProvider({
 
   useEffect(() => {
     async function computeOffset() {
-      const offset = await getServerOffset(3);
+      const offset = await getServerOffset(6, 3);
       setOffsetMs(offset);
     }
     computeOffset();

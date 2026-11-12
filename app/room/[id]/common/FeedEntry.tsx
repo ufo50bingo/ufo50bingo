@@ -1,12 +1,12 @@
 import BingosyncColored from "@/app/matches/BingosyncColored";
 import classes from "./FeedEntry.module.css";
 import { NewFeedItem } from "@/app/fetchFeed";
-import { GameMembers } from "./useMembers";
+import { GenericMember } from "./useMembers";
 
 type Props = {
   entry: NewFeedItem;
   squareNames: ReadonlyArray<string>;
-  members: GameMembers;
+  members: ReadonlyMap<number, GenericMember>;
 };
 
 // reference: https://github.com/kbuzsaki/bingosync/blob/b23d3b4e3192e7034573f3e8efc906aa4a83b0b8/bingosync-app/static/bingosync/room/chat_panel.js#L16
@@ -17,9 +17,11 @@ export default function FeedEntry({ entry, squareNames, members }: Props) {
     </span>
   );
   const member = members.get(entry.userId);
-  const player = <strong>{member?.name ?? entry.userId}</strong>;
+  const player = (
+    <strong>{member?.overrideName ?? member?.name ?? entry.userId}</strong>
+  );
   const coloredPlayer = (
-    <BingosyncColored color={member?.playerColor ?? "blank"}>
+    <BingosyncColored color={member?.color ?? "blank"}>
       {player}
     </BingosyncColored>
   );

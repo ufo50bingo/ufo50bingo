@@ -94,7 +94,7 @@ export default function Cast({
     userId,
     playAudio,
   });
-  const members = useMembers(feed);
+  const { allMembers, players, casters } = useMembers(feed);
   const squareColors = useSquareColors(feed, boardSize, isLockout);
   const [rightClickBehavior, setRightClickBehavior] =
     useCastRightClickBehavior();
@@ -186,7 +186,7 @@ export default function Cast({
     feed,
     playAudio,
     isCast: false,
-    members,
+    members: allMembers,
   });
 
   const [generalOrder, setGeneralOrder] = useLocalEnum({
@@ -368,7 +368,7 @@ export default function Cast({
           ? currentGames[currentGames.length - 1].game
           : null;
       if (currentGame != null) {
-        const color = members.get(userId)?.playerColor ?? "red";
+        const color = allMembers.get(userId)?.color ?? "red";
         for (const [_, index] of gameToGoals[currentGame] ?? []) {
           if (!highlights[index].includes(color)) {
             highlights[index].push(color);
@@ -377,7 +377,7 @@ export default function Cast({
       }
     }
     return highlights;
-  }, [highlightCurrentGame, allPlayerGames, members, gameToGoals]);
+  }, [highlightCurrentGame, allPlayerGames, allMembers, gameToGoals]);
 
   const leftGames = allPlayerGames.get(leftUserId) ?? [];
   const rightGames = allPlayerGames.get(rightUserId) ?? [];
@@ -522,7 +522,7 @@ export default function Cast({
           <Feed
             feed={feed}
             userId={userId}
-            members={members}
+            members={allMembers}
             squareNames={squareNames}
             isPlay={false}
             style={{ height: `${475 - 44}px` }}
@@ -644,6 +644,8 @@ export default function Cast({
         font={font}
         setFont={setFont}
         timerState={timerState}
+        players={players}
+        casters={casters}
       />
       {editingIndex != null && (
         <EditSquare

@@ -70,7 +70,7 @@ export default function Play({
     userId,
     playAudio,
   });
-  const members = useMembers(feed);
+  const { allMembers } = useMembers(feed);
   const squareColors = useSquareColors(feed, boardSize, isLockout);
   const searchParams = useSearchParams();
   const override = searchParams.get("override");
@@ -81,8 +81,8 @@ export default function Play({
   });
   const [font, setFont] = useFont();
 
-  const selfUser = members.get(userId)!;
-  const selectedColor = selfUser.playerColor!;
+  const selfUser = allMembers.get(userId)!;
+  const selectedColor = selfUser.color ?? "red";
 
   // 525px is the width of the board, which is also the default width of the modal
   const isMobile = useMediaQuery("(max-width: 525px)");
@@ -103,7 +103,7 @@ export default function Play({
     feed,
     playAudio,
     isCast: false,
-    members,
+    members: allMembers,
   });
 
   const foundItems = useMemo<ReadonlyArray<FoundItem>>(() => {
@@ -382,7 +382,7 @@ export default function Play({
         <Feed
           feed={feed}
           userId={userId}
-          members={members}
+          members={allMembers}
           squareNames={squareNames}
           isPlay={true}
           style={{

@@ -41,6 +41,7 @@ export type FeedMember = {
   playerColor: null | BingosyncColor;
   isInvite: boolean;
   name: string;
+  overrideName: null | string;
 };
 
 export type FeedGoalProgress = {
@@ -156,7 +157,8 @@ export function fetchMemberSql(sql: SQLTemplate, gameId: number): SQL {
       member.user_id,
       member.player_color,
       member.is_invite,
-      COALESCE(member.override_name, "user".name) AS final_name
+      "user".name,
+      member.override_name
     FROM member
     INNER JOIN "user"
     ON member.user_id = "user".id
@@ -171,7 +173,8 @@ export function parseMemberResult(result: SQLResult): Array<FeedMember> {
     time: Number(raw.unixtime),
     playerColor: raw.player_color,
     isInvite: raw.is_invite,
-    name: raw.final_name,
+    name: raw.name,
+    overrideName: raw.override_name,
   }));
 }
 

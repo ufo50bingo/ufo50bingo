@@ -36,7 +36,7 @@ import InfoCard from "../cast/InfoCard";
 import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
 import { useSearchParams } from "next/navigation";
 import { Restrictions } from "./GeneralSection";
-import { FeedColorMark, NewFeed, ParsedGame } from "@/app/fetchFeed";
+import { FeedColorMark, FullParsedGame } from "@/app/fetchFeed";
 import useMembers, { PlayerMember } from "../common/useMembers";
 import useSquareColors from "../common/useSquareColors";
 import { useServerOffsetContext } from "../ServerOffsetContext";
@@ -50,22 +50,14 @@ export type FoundItem = {
 };
 
 export type Props = {
-  game: ParsedGame;
-  initialFeed: NewFeed;
+  game: FullParsedGame;
   userId: number;
-  squareNames: ReadonlyArray<string>;
   token: string;
-  fetchedPasta: null | UFOPasta;
 };
 
-export default function Play({
-  game,
-  initialFeed,
-  userId,
-  squareNames,
-  token,
-  fetchedPasta,
-}: Props) {
+export default function Play({ game: fullParsedGame, userId, token }: Props) {
+  const { game, feed: initialFeed, squares, fetchedPasta } = fullParsedGame;
+  const squareNames = useMemo(() => squares.map((s) => s.name), [squares]);
   const gameId = game.id;
   const pastaId = game.pastaId;
   const isLockout = game.isLockout;

@@ -21,14 +21,6 @@ export default async function PlayPage({
   ]);
   const feed = data.feed.concat(alreadyFetched);
   feed.sort((a, b) => a.time - b.time);
-  return (
-    <PlayWrapper
-      game={data.game}
-      initialFeed={feed}
-      squareNames={data.squares.map((square) => square.name)}
-      userId={userId}
-      token={token}
-      fetchedPasta={data.fetchedPasta}
-    />
-  );
+  data.feed = feed;
+  return <PlayWrapper game={data} userId={userId} token={token} />;
 }

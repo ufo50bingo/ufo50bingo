@@ -24,17 +24,8 @@ export default async function CastPage({
   ]);
   const feed = data.feed.concat(alreadyFetched);
   feed.sort((a, b) => a.time - b.time);
-  return (
-    <CastWrapper
-      game={data.game}
-      initialFeed={feed}
-      squares={data.squares}
-      fetchedPasta={data.fetchedPasta}
-      subcategories={data.subcategories}
-      userId={userId}
-      token={token}
-    />
-  );
+  data.feed = feed;
+  return <CastWrapper game={data} userId={userId} token={token} />;
 }
 
 // async function getGeneralCounts(id: string): Promise<CountChangeRow[]> {

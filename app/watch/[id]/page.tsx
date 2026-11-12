@@ -12,15 +12,5 @@ export default async function CastPage({
 
   const sql = getSql(false);
   const data = await fetchData(sql, gameId, "spectate");
-  return (
-    <CastWrapper
-      game={data.game}
-      initialFeed={data.feed}
-      squares={data.squares}
-      fetchedPasta={data.fetchedPasta}
-      subcategories={data.subcategories}
-      userId={null}
-      token={null}
-    />
-  );
+  return <CastWrapper game={data} userId={null} token={null} />;
 }

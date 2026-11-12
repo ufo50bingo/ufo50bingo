@@ -19,7 +19,6 @@ import NotificationsSection, {
 } from "../common/NotificationsSection";
 import { GeneralCounts } from "./CastPage";
 import { GeneralItem, TCountPosition } from "./Cast";
-import GeneralOrderSelector, { TGeneralOrder } from "./GeneralOrderSelector";
 import { Font } from "@/app/font/useFont";
 import FontSelector from "@/app/font/FontSelector";
 
@@ -70,8 +69,6 @@ type Props = {
   setGeneralGameCount: null | ((change: CountChange) => unknown);
   countPosition: TCountPosition;
   setCountPosition: (newCountPosition: TCountPosition) => unknown;
-  generalOrder: TGeneralOrder;
-  setGeneralOrder: (newGeneralOrder: TGeneralOrder) => unknown;
   font: Font;
   setFont: (newFont: Font) => unknown;
   timerState: SyncedTimerState;
@@ -111,8 +108,6 @@ export default function CastSettings({
   setGeneralGameCount,
   countPosition,
   setCountPosition,
-  generalOrder,
-  setGeneralOrder,
   font,
   setFont,
   timerState,
@@ -224,10 +219,6 @@ export default function CastSettings({
                       onChange={(newSortType: string | null) =>
                         setSortType((newSortType ?? "fast") as SortType)
                       }
-                    />
-                    <GeneralOrderSelector
-                      generalOrder={generalOrder}
-                      setGeneralOrder={setGeneralOrder}
                     />
                     <Select
                       label="Icon type"

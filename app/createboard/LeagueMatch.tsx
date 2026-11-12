@@ -221,6 +221,7 @@ export default function LeagueMatch({ visible }: Props) {
                   game: gameNumber,
                 },
                 roomBackend,
+                fullPasta: null,
               });
               const url = getRoomLink(id, password, roomBackend);
               db.createdMatches.add({ id });

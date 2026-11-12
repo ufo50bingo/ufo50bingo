@@ -509,6 +509,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                     isLockout,
                     leagueInfo: null,
                     roomBackend,
+                    fullPasta: metadata.type === "Custom" ? customUfo : null,
                   };
                   const [card1, card2] = ufoDoubleGenerator(pasta);
                   promises.push(
@@ -547,6 +548,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                           (metadata.type === "Custom" && customUfo != null)),
                       isLockout,
                       pasta: getSerializedPasta(false),
+                      fullPasta: metadata.type === "Custom" ? customUfo : null,
                       leagueInfo: null,
                       roomBackend,
                     }),

@@ -5,6 +5,7 @@ import getSql from "@/app/getSql";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import broadcastToWebsockets from "../broadcastToWebsockets";
 import getSession from "@/app/getSession";
+import { refresh } from "next/cache";
 
 export default async function joinGame(
   gameId: number,
@@ -46,4 +47,5 @@ export default async function joinGame(
     )`,
     broadcastToWebsockets(String(gameId), JSON.stringify(feedItem)),
   ]);
+  refresh();
 }

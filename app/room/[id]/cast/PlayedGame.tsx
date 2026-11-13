@@ -4,24 +4,26 @@ import Duration from "@/app/practice/Duration";
 import { Font } from "@/app/font/useFont";
 import getFontClassname from "@/app/font/getFontClassname";
 import { useServerOffsetContext } from "../ServerOffsetContext";
+import { TPlayedGame } from "./PlayedGameState";
 
 type Props = {
-  game: string;
-  startTime: number;
-  endTime: null | undefined | number;
+  recentGame: TPlayedGame;
+  subcategoryIdToName: ReadonlyMap<number, string>;
   font: Font;
   gameList: { [game: string]: string };
 };
 
+// TODO: When unpausing, it rewinds the timer a little bit.
+// Maybe add a "min duration" or something?
 export default function PlayedGame({
-  game,
-  startTime,
-  endTime,
+  recentGame,
+  subcategoryIdToName,
   font,
   gameList,
 }: Props) {
   const { getClientMsFromServerMs } = useServerOffsetContext();
-  const href = gameList[game];
+  const game = subcategoryIdToName.get(recentGame.subcategoryId);
+  const href = game != null ? gameList[game] : null;
   return (
     <div className={classes.container}>
       {href != null && href !== "" ? (
@@ -35,15 +37,17 @@ export default function PlayedGame({
       )}
       <div className={classes.tag}>
         <span className={getFontClassname(font)}>
-          {endTime == null ? (
+          {recentGame.type === "running" ? (
             <RunningDuration
-              curStartTime={getClientMsFromServerMs(startTime * 1000)}
+              curStartTime={getClientMsFromServerMs(
+                recentGame.effectiveStartTime * 1000,
+              )}
               accumulatedDuration={0}
               showDecimal={false}
             />
           ) : (
             <Duration
-              duration={(endTime - startTime) * 1000}
+              duration={recentGame.duration * 1000}
               showDecimal={false}
             />
           )}

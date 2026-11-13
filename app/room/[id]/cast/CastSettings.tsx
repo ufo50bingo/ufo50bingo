@@ -27,7 +27,7 @@ import TimerSection from "../common/TimerSection";
 import { useShouldShortenContext } from "@/app/settings/ShouldShortenContext";
 import { useShouldShowRecentContext } from "@/app/settings/ShouldShowRecentContext";
 import AutoGameSection from "./AutoGameSection";
-import { AllPlayerGames, CountChange } from "./useSyncedState";
+import { CountChange } from "./useSyncedState";
 import { GameToGoals } from "./findAllGames";
 import SelectRightClickBehavior from "@/app/settings/SelectRightClickBehavior";
 import {
@@ -38,6 +38,7 @@ import {
 import CasterMembersSection from "../common/CasterMembersSection";
 import { NewFeedItem } from "@/app/fetchFeed";
 import BottomSection from "../common/BottomSection";
+import PlayedGameState from "./PlayedGameState";
 
 type Props = {
   userId: null | number;
@@ -59,10 +60,9 @@ type Props = {
   setHighlightCurrentGame: (newHighlightCurrentGame: boolean) => unknown;
   showRecentGames: boolean;
   setShowRecentGames: (newShowRecentGames: boolean) => unknown;
-  allPlayerGames: AllPlayerGames;
+  playedGameState: PlayedGameState;
   addSubcategoryName:
-    | null
-    | ((userId: number, newGame: null | string) => unknown);
+    null | ((userId: number, newGame: null | string) => unknown);
   isDetecting: boolean;
   setIsDetecting: (newIsDetecting: boolean) => unknown;
   gameToGoals: GameToGoals;
@@ -75,9 +75,9 @@ type Props = {
   players: ReadonlyArray<PlayerMember>;
   casters: ReadonlyArray<CasterMember>;
   sendEvents:
-    | null
-    | ((newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>);
+    null | ((newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>);
   members: ReadonlyMap<number, GenericMember>;
+  subcategoryIdToName: ReadonlyMap<number, string>;
 };
 
 export default function CastSettings({
@@ -100,7 +100,7 @@ export default function CastSettings({
   setHighlightCurrentGame,
   showRecentGames,
   setShowRecentGames,
-  allPlayerGames,
+  playedGameState,
   addSubcategoryName,
   isDetecting,
   setIsDetecting,
@@ -115,6 +115,7 @@ export default function CastSettings({
   casters,
   sendEvents,
   members,
+  subcategoryIdToName,
 }: Props) {
   const [isShown, setIsShown] = useState(false);
   const { shouldShortenCast, setShouldShortenCast } = useShouldShortenContext();
@@ -290,7 +291,8 @@ export default function CastSettings({
                 addSubcategoryName != null &&
                 setGeneralGameCount != null && (
                   <AutoGameSection
-                    allPlayerGames={allPlayerGames}
+                    playedGameState={playedGameState}
+                    subcategoryIdToName={subcategoryIdToName}
                     addSubcategoryName={addSubcategoryName}
                     isDetecting={isDetecting}
                     setIsDetecting={setIsDetecting}

@@ -4,34 +4,20 @@ import { NewFeed } from "../fetchFeed";
 import getMatchResult from "../match/[id]/getMatchResult";
 import { WinType } from "./matchUtil";
 import { MatchTeam } from "./useTeams";
+import { BoardStateParams } from "../match/[id]/BoardState";
 
 export interface MatchTeamWithResult extends MatchTeam {
   score: number;
   winType: null | WinType;
 }
 
-type Props = {
-  teams: ReadonlyMap<BingosyncColor, MatchTeam>;
-  feedWithoutMistakes: NewFeed;
-  rows: number;
-  cols: number;
-  isLockout: boolean;
-};
-
-export default function useTeamsWithResults({
-  teams,
-  feedWithoutMistakes,
-  rows,
-  cols,
-  isLockout,
-}: Props): ReadonlyArray<MatchTeamWithResult> {
+export default function useTeamsWithResults(
+  teams: ReadonlyMap<BingosyncColor, MatchTeam>,
+  feedWithoutMistakes: NewFeed,
+  boardStateParams: BoardStateParams,
+): ReadonlyArray<MatchTeamWithResult> {
   return useMemo(() => {
-    const result = getMatchResult({
-      feedWithoutMistakes,
-      isLockout,
-      rows,
-      cols,
-    });
+    const result = getMatchResult(feedWithoutMistakes, boardStateParams);
     const finalTeams: Array<MatchTeamWithResult> = result.map((res) => ({
       ...res,
       // ?? [] in case a color has no current team members
@@ -44,5 +30,5 @@ export default function useTeamsWithResults({
       }
     }
     return finalTeams;
-  }, [cols, feedWithoutMistakes, isLockout, rows, teams]);
+  }, [boardStateParams, feedWithoutMistakes, teams]);
 }

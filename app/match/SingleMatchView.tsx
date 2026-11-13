@@ -36,22 +36,23 @@ export default function SingleMatchView({ game }: Props) {
   // TODO: figure out what to do with casters
   const { players, casters: _casters, allMembers } = useMembers(game.feed);
   const teamsMap = useTeams(players);
-  const feedWithoutMistakes = useMemo(
-    () =>
-      getFeedWithoutMistakes(
-        game.feed,
-        game.game.rows * game.game.cols,
-        game.game.isLockout,
-      ),
-    [game.feed, game.game.cols, game.game.isLockout, game.game.rows],
+  const boardStateParams = useMemo(
+    () => ({
+      rows: game.game.rows,
+      cols: game.game.cols,
+      isLockout: game.game.isLockout,
+    }),
+    [game.game.cols, game.game.isLockout, game.game.rows],
   );
-  const teamsWithResults = useTeamsWithResults({
+  const feedWithoutMistakes = useMemo(
+    () => getFeedWithoutMistakes(game.feed, boardStateParams),
+    [boardStateParams, game.feed],
+  );
+  const teamsWithResults = useTeamsWithResults(
+    teamsMap,
     feedWithoutMistakes,
-    teams: teamsMap,
-    isLockout: game.game.isLockout,
-    rows: game.game.rows,
-    cols: game.game.cols,
-  });
+    boardStateParams,
+  );
   const hasWinner =
     teamsWithResults.length > 0 && teamsWithResults[0].winType != null;
   // TODO: fill in real value

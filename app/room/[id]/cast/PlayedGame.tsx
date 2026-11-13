@@ -13,8 +13,6 @@ type Props = {
   gameList: { [game: string]: string };
 };
 
-// TODO: When unpausing, it rewinds the timer a little bit.
-// Maybe add a "min duration" or something?
 export default function PlayedGame({
   recentGame,
   subcategoryIdToName,
@@ -43,6 +41,7 @@ export default function PlayedGame({
                 recentGame.effectiveStartTime * 1000,
               )}
               accumulatedDuration={0}
+              minDuration={recentGame.minDuration * 1000}
               showDecimal={false}
             />
           ) : (

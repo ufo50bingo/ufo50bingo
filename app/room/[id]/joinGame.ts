@@ -50,6 +50,7 @@ export default async function joinGame(
     playerColor,
     name: session.user.name,
     overrideName,
+    image: session.user.image ?? null,
   };
   await Promise.all([
     sql`

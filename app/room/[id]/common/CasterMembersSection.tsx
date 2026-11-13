@@ -41,8 +41,7 @@ interface Props {
   isMobile: boolean;
   isCast: boolean;
   sendEvents:
-    | null
-    | ((newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>);
+    null | ((newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>);
 }
 
 function SortablePlayer({ player }: { player: PlayerMember }) {
@@ -195,6 +194,7 @@ export default function CasterMembersSection({
                           playerColor: p.color ?? "red",
                           isInvite: true,
                           name: p.name,
+                          image: p.image,
                           overrideName: null,
                         }));
                       try {

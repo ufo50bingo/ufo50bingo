@@ -39,6 +39,7 @@ type Props = {
   onClickSquare?: (squareIndex: number) => unknown;
   subcategoryIdToName: ReadonlyMap<number, string>;
   playedGameState: PlayedGameState;
+  tiebreakWinner: null | BingosyncColor;
 };
 
 export default function CastBoardWithTrackers({
@@ -61,6 +62,7 @@ export default function CastBoardWithTrackers({
   onClickSquare,
   subcategoryIdToName,
   playedGameState,
+  tiebreakWinner,
 }: Props) {
   const leftPlayer: null | undefined | PlayerMember = players[0];
   const rightPlayer: null | undefined | PlayerMember = players[1];
@@ -74,36 +76,6 @@ export default function CastBoardWithTrackers({
   const rightScore = squareColors.filter((colors) =>
     colors.includes(rightColor),
   ).length;
-  const tiebreakWinner = null;
-  // const tiebreakWinner = useMemo<BingosyncColor | null>(() => {
-  //   try {
-  //     if (
-  //       leftScore !== rightScore ||
-  //       leftColor === rightColor ||
-  //       leftScore === 0
-  //     ) {
-  //       return null;
-  //     }
-  //     const changelog = getChangelog(rawFeed);
-  //     const result = getResult(board, changelog.changes, null, null);
-  //     if (result == null) {
-  //       return null;
-  //     }
-  //     const isValid =
-  //       result.winnerScore === leftScore &&
-  //       result.opponentScore === leftScore &&
-  //       (result.winnerColor === leftColor ||
-  //         result.winnerColor === rightColor) &&
-  //       (result.opponentColor === leftColor ||
-  //         result.opponentColor === rightColor);
-  //     if (!isValid) {
-  //       return null;
-  //     }
-  //     return result.winnerColor as BingosyncColor;
-  //   } catch {
-  //     return null;
-  //   }
-  // }, [leftScore, rightScore, leftColor, rightColor, rawFeed, board]);
 
   const leftGames =
     leftPlayer != null ? playedGameState.getPlayedGames(leftPlayer.userId) : [];

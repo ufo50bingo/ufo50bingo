@@ -2,14 +2,14 @@ import { useMemo } from "react";
 import { PlayerMember } from "../room/[id]/common/useMembers";
 import { BingosyncColor } from "../color";
 
-export type MatchTeam = {
+export interface MatchTeam {
   color: BingosyncColor;
   players: ReadonlyArray<PlayerMember>;
-};
+}
 
 export default function useTeams(
   players: ReadonlyArray<PlayerMember>,
-): ReadonlyArray<MatchTeam> {
+): ReadonlyMap<BingosyncColor, MatchTeam> {
   return useMemo(() => {
     const colorToTeam = new Map<BingosyncColor, MatchTeam>();
     for (const p of players) {
@@ -20,6 +20,6 @@ export default function useTeams(
       }
       (team.players as Array<PlayerMember>).push(p);
     }
-    return [...colorToTeam.values()];
+    return colorToTeam;
   }, [players]);
 }

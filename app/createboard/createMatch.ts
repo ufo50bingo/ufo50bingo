@@ -13,6 +13,7 @@ import { METADATA, Variant } from "../pastas/metadata";
 import { hashJson } from "../hashJson";
 import getAllCastOptions from "./getAllCastOptions";
 import getGameList from "../room/[id]/common/getGameList";
+import { revalidatePath } from "next/cache";
 
 export interface LeagueInfo {
   season: number;
@@ -209,6 +210,8 @@ export default async function createMatch({
     sql.transaction([mainCreateSql, setUnresolvedIdSql]),
     storePastaIfNecessary(json, hash),
   ]);
+
+  revalidatePath("/matches");
 
   return String(sqlResult[0][0].id);
 }

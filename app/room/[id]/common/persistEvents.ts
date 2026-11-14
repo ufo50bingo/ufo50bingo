@@ -15,6 +15,7 @@ import {
 } from "@/app/fetchFeed";
 import getSql from "@/app/getSql";
 import { SQL } from "@/app/matches/page";
+import { revalidatePath } from "next/cache";
 import { env } from "process";
 
 export default async function persistEvents(
@@ -53,6 +54,8 @@ export default async function persistEvents(
     }
   });
   await sql.transaction(allSqls);
+  revalidatePath("/matches");
+  revalidatePath(`/match/${gameId}`);
 }
 
 function getISO(timeInSeconds: number): string {

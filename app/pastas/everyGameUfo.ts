@@ -1,6 +1,11 @@
 export const EVERY_GAME_UFO = {
   "goals": {
     "easy": {
+      "(FTP) ACHIEVEMENT UNLOCKED": [
+        {
+          "name": "ACHIEVEMENT UNLOCKED: Achieve 67% Completion"
+        }
+      ],
       "(Retro) ACTRAISER": [
         {
           "name": "ACTRAISER: Score 2500 Points in Fillmore Act I"
@@ -123,6 +128,16 @@ export const EVERY_GAME_UFO = {
           "name": "CHIPPY: Defeat Neophyte"
         }
       ],
+      "CLUSTERTRUCK": [
+        {
+          "name": "CLUSTERTRUCK: Beat 1-1 to 1-5"
+        }
+      ],
+      "(FTP) COLOR BLIND": [
+        {
+          "name": "COLOR BLIND: destroy 9 crates and win the last level."
+        }
+      ],
       "(FTP) COOKIE CLICKER": [
         {
           "name": "COOKIE CLICKER: Sell 10 Grandmas"
@@ -167,6 +182,11 @@ export const EVERY_GAME_UFO = {
       "(FTD) DOG WITCH": [
         {
           "name": "DOG WITCH: Win the first fight with a customised dog"
+        }
+      ],
+      "(FTD) DOMINION": [
+        {
+          "name": "DOMINION: Obtain a Province"
         }
       ],
       "(FTD) DOTA2": [
@@ -232,6 +252,11 @@ export const EVERY_GAME_UFO = {
       "GEOMETRY DASH": [
         {
           "name": "GEOMETRY DASH: Beat a level (practice mode ok)"
+        }
+      ],
+      "GETTING OVER IT": [
+        {
+          "name": "GETTING OVER IT: Touch the coffee cup"
         }
       ],
       "(FTP) GOLD MINER": [
@@ -392,6 +417,11 @@ export const EVERY_GAME_UFO = {
           "name": "LINELITH: Have your entire screen be solved area"
         }
       ],
+      "(FTP) LITTLE MASTER CRICKET": [
+        {
+          "name": "LITTLE MASTER CRICKET: Hit 6 sixes"
+        }
+      ],
       "(FTP) LONELY SOUL": [
         {
           "name": "LONELY SOUL: Make friends with 2 Blue Cuties"
@@ -460,6 +490,11 @@ export const EVERY_GAME_UFO = {
           "name": "MINESWEEPER PLUS: Clear an Intermediate board in Free Play"
         }
       ],
+      "(FTP) MONKEY MODE": [
+        {
+          "name": "MONKEY MODE: beat levels 1 to 5 getting only 10 bananas"
+        }
+      ],
       "(Retro) MONSTER HUNTER TRI (WII)": [
         {
           "name": "MONSTER HUNTER TRI (WII): Arena mode; break the Great Jaggi's Head"
@@ -468,6 +503,11 @@ export const EVERY_GAME_UFO = {
       "MOSA LINA": [
         {
           "name": "MOSA LINA: In one run, complete 4 levels"
+        }
+      ],
+      "(FTD) NERTS!": [
+        {
+          "name": "NERTS!: Nert"
         }
       ],
       "(FTP) NETHACK": [
@@ -625,6 +665,11 @@ export const EVERY_GAME_UFO = {
           "name": "RATS, BATS AND BONES: Beat Old Road"
         }
       ],
+      "RHYTHM DOCTOR": [
+        {
+          "name": "RHYTHM DOCTOR: S+ a level"
+        }
+      ],
       "RISK OF RAIN": [
         {
           "name": "RISK OF RAIN: Have 6 passive items at once"
@@ -652,7 +697,7 @@ export const EVERY_GAME_UFO = {
       ],
       "(FTD) SACRIFICES MUST BE MADE": [
         {
-          "name": "Sacrifices must be made: beat the second fight"
+          "name": "SACRIFICES MUST BE MADE: beat the second fight"
         }
       ],
       "SALAMANDER COUNTY PUBLIC TELEVISION": [
@@ -865,6 +910,11 @@ export const EVERY_GAME_UFO = {
           "name": "TOWERFALL ASCENSION: Complete Sacred Ground in Quest"
         }
       ],
+      "TYPE ME HOME": [
+        {
+          "name": "TYPE ME HOME: beat high and low without jumping from moving platforms"
+        }
+      ],
       "UFO 50": [
         {
           "name": "UFO 50: Collect a Gold Disk"
@@ -897,6 +947,11 @@ export const EVERY_GAME_UFO = {
       "UNFAIR FLIPS": [
         {
           "name": "UNFAIR FLIPS: Have $0.10"
+        }
+      ],
+      "(FTP) UPGRADE COMPLETE": [
+        {
+          "name": "UPGRADE COMPLETE: mute the music"
         }
       ],
       "UTOPIA MUST FALL": [
@@ -937,6 +992,16 @@ export const EVERY_GAME_UFO = {
           "name": "WINDSWEPT: Finish Guiding Glade with 3 moons"
         }
       ],
+      "(FTP) WORLD'S HARDEST GAME": [
+        {
+          "name": "WORLD'S HARDEST GAME: Reach Level 5"
+        }
+      ],
+      "(FTP) YACHT DICE": [
+        {
+          "name": "YACHT DICE: Score 250+ Points"
+        }
+      ],
       "YOKU'S ISLAND EXPRESS": [
         {
           "name": "YOKU'S ISLAND EXPRESS: Give a mushroom to an eel"
@@ -954,6 +1019,14 @@ export const EVERY_GAME_UFO = {
       ]
     },
     "medium": {
+      "(FTP) ACHIEVEMENT UNLOCKED": [
+        {
+          "name": "ACHIEVEMENT UNLOCKED: Achieve \"Extreme Makeover\" by painting all possible tiles"
+        },
+        {
+          "name": "ACHIEVEMENT UNLOCKED: Get Achievements 22,54,56,57,58"
+        }
+      ],
       "(Retro) ACTRAISER": [
         {
           "name": "ACTRAISER: Clear Fillmore Act I"
@@ -1065,6 +1138,11 @@ export const EVERY_GAME_UFO = {
           "name": "CHIPPY: Defeat Neophyte with the Secret Curse active"
         }
       ],
+      "CLUSTERTRUCK": [
+        {
+          "name": "CLUSTERTRUCK: Get a 500+ air time bonus and win on 2 levels"
+        }
+      ],
       "(FTP) COOKIE CLICKER": [
         {
           "name": "COOKIE CLICKER: Have 10 Mines"
@@ -1104,6 +1182,11 @@ export const EVERY_GAME_UFO = {
       "(FTD) DOG WITCH": [
         {
           "name": "DOG WITCH: Perfect 2 levels (no health damage taken)"
+        }
+      ],
+      "(FTD) DOMINION": [
+        {
+          "name": "DOMINION: Gain 15+ Treasure in one turn"
         }
       ],
       "(Retro) DONKEY KONG 64": [
@@ -1159,6 +1242,11 @@ export const EVERY_GAME_UFO = {
       "GEOMETRY DASH": [
         {
           "name": "GEOMETRY DASH: Collect 5 Coins"
+        }
+      ],
+      "GETTING OVER IT": [
+        {
+          "name": "GETTING OVER IT: Touch the rusted electicity box (just after the lamps)"
         }
       ],
       "(FTP) GOLD MINER": [
@@ -1273,6 +1361,11 @@ export const EVERY_GAME_UFO = {
           "name": "LINELITH: Solve 60 Puzzles"
         }
       ],
+      "(FTP) LITTLE MASTER CRICKET": [
+        {
+          "name": "LITTLE MASTER CRICKET: Reach 75 runs not out"
+        }
+      ],
       "(FTP) LONELY SOUL": [
         {
           "name": "LONELY SOUL: Have 4 friends in your inventory at once"
@@ -1358,9 +1451,19 @@ export const EVERY_GAME_UFO = {
           "name": "MINI METRO: Fully upgrade a train with 3 carriages"
         }
       ],
+      "(FTP) MONKEY MODE": [
+        {
+          "name": "MONKEY MODE: beat levels 1 to 10 getting every banana"
+        }
+      ],
       "MOSA LINA": [
         {
           "name": "MOSA LINA: In one run, complete 3 levels with only one type of tool"
+        }
+      ],
+      "(FTD) NERTS!": [
+        {
+          "name": "NERTS!: Place a Jack in the centre"
         }
       ],
       "(FTP) NETHACK": [
@@ -1519,6 +1622,11 @@ export const EVERY_GAME_UFO = {
           "name": "RATS, BATS AND BONES: Beat Ruins"
         }
       ],
+      "RHYTHM DOCTOR": [
+        {
+          "name": "RHYTHM DOCTOR: S+ 2 levels"
+        }
+      ],
       "RISK OF RAIN": [
         {
           "name": "RISK OF RAIN: Reach Level 8"
@@ -1544,7 +1652,7 @@ export const EVERY_GAME_UFO = {
       ],
       "(FTD) SACRIFICES MUST BE MADE": [
         {
-          "name": "Sacrifices must be made: Kill 10 enemies"
+          "name": "SACRIFICES MUST BE MADE: Kill 10 enemies"
         }
       ],
       "SALAMANDER COUNTY PUBLIC TELEVISION": [
@@ -1746,6 +1854,14 @@ export const EVERY_GAME_UFO = {
           "name": "TOPDECK AUTOMAT: As Original A.C.E deal 50 damage in one hit"
         }
       ],
+      "TYPE ME HOME": [
+        {
+          "name": "TYPE ME HOME: perfect 3 levels"
+        },
+        {
+          "name": "TYPE ME HOME: beat shrew burrow pacifist"
+        }
+      ],
       "UFO 50": [
         {
           "name": "UFO 50: See the exact number '50' in 10 games "
@@ -1778,6 +1894,11 @@ export const EVERY_GAME_UFO = {
       "UNFAIR FLIPS": [
         {
           "name": "UNFAIR FLIPS: Get 3 Heads in-a-row"
+        }
+      ],
+      "(FTP) UPGRADE COMPLETE": [
+        {
+          "name": "UPGRADE COMPLETE: Have 12/12 parts"
         }
       ],
       "UTOPIA MUST FALL": [
@@ -1813,6 +1934,16 @@ export const EVERY_GAME_UFO = {
       "WINDSWEPT": [
         {
           "name": "WINDSWEPT: Collect 3 Comet Medals"
+        }
+      ],
+      "(FTP) WORLD'S HARDEST GAME": [
+        {
+          "name": "WORLD'S HARDEST GAME: Reach Level 6"
+        }
+      ],
+      "(FTP) YACHT DICE": [
+        {
+          "name": "YACHT DICE: Score 777+ Points"
         }
       ],
       "YOKU'S ISLAND EXPRESS": [
@@ -1935,6 +2066,11 @@ export const EVERY_GAME_UFO = {
           "name": "CHIPPY: Defeat Kraken"
         }
       ],
+      "CLUSTERTRUCK": [
+        {
+          "name": "CLUSTERTRUCK: Beat all levels in World 1"
+        }
+      ],
       "(FTP) COOKIE CLICKER": [
         {
           "name": "COOKIE CLICKER: Have 100,000+ Cookies"
@@ -1968,6 +2104,11 @@ export const EVERY_GAME_UFO = {
       "(FTD) DOG WITCH": [
         {
           "name": "DOG WITCH: Defeat the first boss"
+        }
+      ],
+      "(FTD) DOMINION": [
+        {
+          "name": "DOMINION: Win a game"
         }
       ],
       "(FTD) DOTA2": [
@@ -2018,6 +2159,11 @@ export const EVERY_GAME_UFO = {
       "GEOMETRY DASH": [
         {
           "name": "GEOMETRY DASH: Beat Electroman Adventures, Electrodynamix, Blast Processing (practice mode ok)"
+        }
+      ],
+      "GETTING OVER IT": [
+        {
+          "name": "GETTING OVER IT: Touch a blue slide"
         }
       ],
       "(FTP) GOLD MINER": [
@@ -2144,6 +2290,11 @@ export const EVERY_GAME_UFO = {
           "name": "LINELITH: Solve 100 Puzzles"
         }
       ],
+      "(FTP) LITTLE MASTER CRICKET": [
+        {
+          "name": "LITTLE MASTER CRICKET: Get out for 300+ score"
+        }
+      ],
       "(FTP) LONELY SOUL": [
         {
           "name": "LONELY SOUL: Make friends with 7 Blue Cuties"
@@ -2212,6 +2363,16 @@ export const EVERY_GAME_UFO = {
       "MINI METRO": [
         {
           "name": "MINI METRO: Reach Week 5 without ever having >6 people at one station"
+        }
+      ],
+      "(FTP) MONKEY MODE": [
+        {
+          "name": "MONKEY MODE: beat level 3 & 14 pacifist"
+        }
+      ],
+      "(FTD) NERTS!": [
+        {
+          "name": "NERTS!: Nert 3 times"
         }
       ],
       "(FTP) NETHACK": [
@@ -2353,6 +2514,11 @@ export const EVERY_GAME_UFO = {
           "name": "RATS, BATS AND BONES: Beat any level on Hard"
         }
       ],
+      "RHYTHM DOCTOR": [
+        {
+          "name": "RHYTHM DOCTOR: Beat 1-X"
+        }
+      ],
       "RISK OF RAIN": [
         {
           "name": "RISK OF RAIN: Complete Damp Caverns or Sky Meadows"
@@ -2378,10 +2544,10 @@ export const EVERY_GAME_UFO = {
       ],
       "(FTD) SACRIFICES MUST BE MADE": [
         {
-          "name": "Sacrifices must be made: Run out of cards in the deck"
+          "name": "SACRIFICES MUST BE MADE: Run out of cards in the deck"
         },
         {
-          "name": "Sacrifices must be made: Beat the game and feed someone"
+          "name": "SACRIFICES MUST BE MADE: Beat the game and feed someone"
         }
       ],
       "SALAMANDER COUNTY PUBLIC TELEVISION": [
@@ -2585,6 +2751,14 @@ export const EVERY_GAME_UFO = {
           "name": "TOWERFALL ASCENSION: Complete Darkfang in Dark World"
         }
       ],
+      "TYPE ME HOME": [
+        {
+          "name": "TYPE ME HOME: perfect hungry hoard pacifist"
+        },
+        {
+          "name": "TYPE ME HOME: beat the crevasse having 0 perfected levels"
+        }
+      ],
       "UFO 50": [
         {
           "name": "UFO 50: Defeat 7 bosses (terminal codes ok)"
@@ -2617,6 +2791,11 @@ export const EVERY_GAME_UFO = {
       "UNFAIR FLIPS": [
         {
           "name": "UNFAIR FLIPS: Have $0.25"
+        }
+      ],
+      "(FTP) UPGRADE COMPLETE": [
+        {
+          "name": "UPGRADE COMPLETE: Show 60% progress"
         }
       ],
       "UTOPIA MUST FALL": [
@@ -2655,6 +2834,16 @@ export const EVERY_GAME_UFO = {
       "WINDSWEPT": [
         {
           "name": "WINDSWEPT: Unlock Laamp's Shade"
+        }
+      ],
+      "(FTP) WORLD'S HARDEST GAME": [
+        {
+          "name": "WORLD'S HARDEST GAME: Reach Level 8"
+        }
+      ],
+      "(FTP) YACHT DICE": [
+        {
+          "name": "YACHT DICE: Score 1,000+ Points on Hard"
         }
       ],
       "YOKU'S ISLAND EXPRESS": [
@@ -2777,6 +2966,11 @@ export const EVERY_GAME_UFO = {
           "name": "CHIPPY: Defeat Guardian"
         }
       ],
+      "CLUSTERTRUCK": [
+        {
+          "name": "CLUSTERTRUCK: Starting from 1-1, Beat World 1 with at most 3 fails"
+        }
+      ],
       "(FTP) COOKIE CLICKER": [
         {
           "name": "COOKIE CLICKER: Have 1,000,000+ cookies"
@@ -2821,6 +3015,11 @@ export const EVERY_GAME_UFO = {
       "(FTD) DOG WITCH": [
         {
           "name": "DOG WITCH: Defeat the second boss"
+        }
+      ],
+      "(FTD) DOMINION": [
+        {
+          "name": "DOMINION: Win a game vs. Hard AI only"
         }
       ],
       "(Retro) DONKEY KONG 64": [
@@ -2881,6 +3080,11 @@ export const EVERY_GAME_UFO = {
       "GEOMETRY DASH": [
         {
           "name": "GEOMETRY DASH: Collect 9 Coins after level 5 (base after base)"
+        }
+      ],
+      "GETTING OVER IT": [
+        {
+          "name": "GETTING OVER IT: Touch the Orange"
         }
       ],
       "(FTP) GOLD MINER": [
@@ -3007,6 +3211,11 @@ export const EVERY_GAME_UFO = {
           "name": "LINELITH: 100% the game"
         }
       ],
+      "(FTP) LITTLE MASTER CRICKET": [
+        {
+          "name": "LITTLE MASTER CRICKET: Reach 200 runs not out"
+        }
+      ],
       "LOOP HERO": [
         {
           "name": "LOOP HERO: Unlock Rogue"
@@ -3088,6 +3297,11 @@ export const EVERY_GAME_UFO = {
           "name": "MINI METRO: Reach Week 8 on Extreme Mode"
         }
       ],
+      "(FTP) MONKEY MODE": [
+        {
+          "name": "MONKEY MODE: beat level 22"
+        }
+      ],
       "(Retro) MONSTER HUNTER TRI (WII)": [
         {
           "name": "MONSTER HUNTER TRI (WII): Arena mode; Slay the Great Jaggi"
@@ -3096,6 +3310,11 @@ export const EVERY_GAME_UFO = {
       "MOSA LINA": [
         {
           "name": "MOSA LINA: Beat the final level"
+        }
+      ],
+      "(FTD) NERTS!": [
+        {
+          "name": "NERTS!: Score 100+ Points"
         }
       ],
       "(FTP) NETHACK": [
@@ -3185,6 +3404,9 @@ export const EVERY_GAME_UFO = {
       ],
       "POMPOM": [
         {
+          "name": "POMPOM: Perfect Toyland lvl 1 without placing inside outlines"
+        },
+        {
           "name": "POMPOM: Defeat a boss"
         }
       ],
@@ -3223,6 +3445,11 @@ export const EVERY_GAME_UFO = {
           "name": "RATS, BATS AND BONES: Unlock 1+ upgrade from each of the 4 categories in the Workshop"
         }
       ],
+      "RHYTHM DOCTOR": [
+        {
+          "name": "RHYTHM DOCTOR: S+ 1-X"
+        }
+      ],
       "RISK OF RAIN": [
         {
           "name": "RISK OF RAIN: Reach the Temple Grounds"
@@ -3250,7 +3477,7 @@ export const EVERY_GAME_UFO = {
       ],
       "(FTD) SACRIFICES MUST BE MADE": [
         {
-          "name": "Sacrifices must be made: win a fight not playing any cards the first 2 turns"
+          "name": "SACRIFICES MUST BE MADE: win a fight not playing any cards the first 2 turns"
         }
       ],
       "SALAMANDER COUNTY PUBLIC TELEVISION": [
@@ -3451,6 +3678,11 @@ export const EVERY_GAME_UFO = {
           "name": "TOWERFALL ASCENSION: Complete Flight, Mirage and Thornwood in Quest"
         }
       ],
+      "TYPE ME HOME": [
+        {
+          "name": "TYPE ME HOME: beat squishy cave"
+        }
+      ],
       "UFO 50": [
         {
           "name": "UFO 50: Show 10 Gifts"
@@ -3480,6 +3712,11 @@ export const EVERY_GAME_UFO = {
       "UNFAIR FLIPS": [
         {
           "name": "UNFAIR FLIPS: Have $1"
+        }
+      ],
+      "(FTP) UPGRADE COMPLETE": [
+        {
+          "name": "UPGRADE COMPLETE: Beat Wave 10"
         }
       ],
       "UTOPIA MUST FALL": [
@@ -3515,6 +3752,16 @@ export const EVERY_GAME_UFO = {
       "WINDSWEPT": [
         {
           "name": "WINDSWEPT: Complete Thornado"
+        }
+      ],
+      "(FTP) WORLD'S HARDEST GAME": [
+        {
+          "name": "WORLD'S HARDEST GAME: Reach Level 10"
+        }
+      ],
+      "(FTP) YACHT DICE": [
+        {
+          "name": "YACHT DICE: Score 1,000+ Points on Extreme \"Big waves\" mode"
         }
       ],
       "YOKU'S ISLAND EXPRESS": [
@@ -3590,6 +3837,7 @@ export const EVERY_GAME_UFO = {
               "(FTD) PHANTOM JUMP",
               "PIZZA TOWER",
               "RABI-RIBI",
+              "RHYTHM DOCTOR",
               "RISK OF RAIN 2",
               "SHEEPO",
               "SLAY THE SPIRE",
@@ -3693,6 +3941,7 @@ export const EVERY_GAME_UFO = {
                 "PEGLIN",
                 "(FTD) PHANTOM JUMP",
                 "PIZZA TOWER",
+                "RHYTHM DOCTOR",
                 "SLAY THE SPIRE",
                 "SLAY THE SPIRE 2",
                 "(FTP) SPACEVENTURE 2 - MINT CONDITION",
@@ -3740,6 +3989,7 @@ export const EVERY_GAME_UFO = {
                 "STAR OF PROVIDENCE",
                 "STREETS OF ROGUE",
                 "TERRARIA",
+                "TYPE ME HOME",
                 "UNCLE CHOP'S ROCKET SHOP",
                 "UTOPIA MUST FALL",
                 "YOKU'S ISLAND EXPRESS"
@@ -3812,6 +4062,7 @@ export const EVERY_GAME_UFO = {
               "PEGLIN": "End of Forest",
               "(FTD) PHANTOM JUMP": "Sunrise Mountains boss",
               "PIZZA TOWER": "Pepperman",
+              "RHYTHM DOCTOR": "1-X",
               "SLAY THE SPIRE": "Act 1 Boss",
               "SLAY THE SPIRE 2": "Act 1 Boss",
               "(FTP) SPACEVENTURE 2 - MINT CONDITION": "Moonrock (wave 6)",
@@ -3859,6 +4110,7 @@ export const EVERY_GAME_UFO = {
               "STAR OF PROVIDENCE": "Overlord",
               "STREETS OF ROGUE": "Mayor in Mayor's Village",
               "TERRARIA": "Eye of Cthulhu",
+              "TYPE ME HOME": "Beat Dead End",
               "UNCLE CHOP'S ROCKET SHOP": "HOG machine (Day 6)",
               "UTOPIA MUST FALL": "Defeat Colossoteuthis, Technosphere",
               "YOKU'S ISLAND EXPRESS": ""
@@ -3876,6 +4128,8 @@ export const EVERY_GAME_UFO = {
               "(FTP) BLOONS",
               "BROOMSWEEPER",
               "CHESSPLOSION",
+              "CLUSTERTRUCK",
+              "(FTP) COLOR BLIND",
               "CORGISPACE",
               "CRYPT OF THE NECRODANCER",
               "CUPHEAD",
@@ -3897,6 +4151,7 @@ export const EVERY_GAME_UFO = {
               "LETHAL LEAGUE BLAZE",
               "(FTP) MEAT BOY",
               "(FTD) MINESWEEPER PLUS",
+              "(FTP) MONKEY MODE",
               "MOSA LINA",
               "(FTP) NETHACK",
               "NIDHOGG",
@@ -3908,6 +4163,7 @@ export const EVERY_GAME_UFO = {
               "PETAL CRASH",
               "(FTD) PHANTOM JUMP",
               "POMPOM",
+              "RHYTHM DOCTOR",
               "(FTD) ROCKET LEAGUE",
               "SALAMANDER COUNTY PUBLIC TELEVISION",
               "SNKRX",
@@ -3929,6 +4185,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) SUPER SMASH BROS. BRAWL",
               "(Retro) SUPER SMASH BROS. MELEE",
               "THE BINDING OF ISAAC: REBIRTH",
+              "TYPE ME HOME",
               "UFO 50",
               "UFO 50 BINGOMOD",
               "(FTP) VGM-QUIZ.COM",
@@ -3948,6 +4205,8 @@ export const EVERY_GAME_UFO = {
                 "(FTP) BLOOMBOX",
                 "(FTP) BLOONS",
                 "CHESSPLOSION",
+                "CLUSTERTRUCK",
+                "(FTP) COLOR BLIND",
                 "CORGISPACE",
                 "DISC ROOM",
                 "(FTD) EVIL EGG",
@@ -3955,6 +4214,7 @@ export const EVERY_GAME_UFO = {
                 "(Retro) KIRBY AIR RIDE",
                 "(FTP) MEAT BOY",
                 "(FTD) MINESWEEPER PLUS",
+                "(FTP) MONKEY MODE",
                 "(FTP) NETHACK",
                 "NUBBY'S NUMBER FACTORY",
                 "PETAL CRASH",
@@ -3988,6 +4248,7 @@ export const EVERY_GAME_UFO = {
                 "(Retro) SUPER SMASH BROS.",
                 "(Retro) SUPER SMASH BROS. BRAWL",
                 "(Retro) SUPER SMASH BROS. MELEE",
+                "TYPE ME HOME",
                 "(FTP) VGM-QUIZ.COM",
                 "VIVIDLOPE",
                 "CUPHEAD",
@@ -4002,6 +4263,7 @@ export const EVERY_GAME_UFO = {
                 "LETHAL LEAGUE BLAZE",
                 "NOITA",
                 "POMPOM",
+                "RHYTHM DOCTOR",
                 "(FTP) SPACEVENTURE 2 - MINT CONDITION",
                 "SPEEDRUNNERS",
                 "STREETS OF ROGUE",
@@ -4043,6 +4305,7 @@ export const EVERY_GAME_UFO = {
                 "(Retro) YOSHI'S ISLAND",
                 "(Retro) ACTRAISER",
                 "(Retro) DEMON'S CREST",
+                "(FTD) DOMINION",
                 "(FTP) DUCK LIFE",
                 "ENTER THE GUNGEON",
                 "GRAVITY CIRCUIT",
@@ -4061,6 +4324,8 @@ export const EVERY_GAME_UFO = {
               "(FTP) BLOOMBOX": "complete 5 gardens",
               "(FTP) BLOONS": "",
               "CHESSPLOSION": "Any mode works",
+              "CLUSTERTRUCK": "1-5",
+              "(FTP) COLOR BLIND": "",
               "CORGISPACE": "10-14, 16-18 & secret",
               "DISC ROOM": "Rooms",
               "(FTD) EVIL EGG": "",
@@ -4068,6 +4333,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) KIRBY AIR RIDE": "Top Ride 1 Lap",
               "(FTP) MEAT BOY": "Levels",
               "(FTD) MINESWEEPER PLUS": "Adventure mode",
+              "(FTP) MONKEY MODE": "",
               "(FTP) NETHACK": "Floors",
               "NUBBY'S NUMBER FACTORY": "Rounds",
               "PETAL CRASH": "Puzzle Mode Levels",
@@ -4101,6 +4367,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) SUPER SMASH BROS.": "Classic Mode stages",
               "(Retro) SUPER SMASH BROS. BRAWL": "Classic Mode stages",
               "(Retro) SUPER SMASH BROS. MELEE": "Classic Mode stages",
+              "TYPE ME HOME": "",
               "(FTP) VGM-QUIZ.COM": "Guess songs correctly",
               "VIVIDLOPE": "",
               "CUPHEAD": "Bosses and Run n' Guns",
@@ -4114,7 +4381,8 @@ export const EVERY_GAME_UFO = {
               "(Retro) KIRBY SUPER STAR": "Spring Breeze + 1 Dynablade level",
               "LETHAL LEAGUE BLAZE": "Win 5 Matches",
               "NOITA": "Enter 5 portals",
-              "POMPOM": "house rules if tutorial level counts",
+              "POMPOM": "tutorial + 4 lvls",
+              "RHYTHM DOCTOR": "includes night",
               "(FTP) SPACEVENTURE 2 - MINT CONDITION": "Beat wave 5",
               "SPEEDRUNNERS": "5 story mode levels",
               "STREETS OF ROGUE": "Beat 5 levels",
@@ -4156,6 +4424,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) YOSHI'S ISLAND": "Beat 1-5",
               "(Retro) ACTRAISER": "Acts",
               "(Retro) DEMON'S CREST": "levels",
+              "(FTD) DOMINION": "games",
               "(FTP) DUCK LIFE": "Races",
               "ENTER THE GUNGEON": "Beat the game",
               "GRAVITY CIRCUIT": "Any 5 Levels",
@@ -4179,19 +4448,23 @@ export const EVERY_GAME_UFO = {
               "BROOMSWEEPER",
               "(FTD) CELESTE 64",
               "CHESSPLOSION",
+              "(FTP) COLOR BLIND",
+              "(FTD) DOMINION",
               "(FTP) HR. B",
               "KING OF THE BRIDGE",
               "(FTP) LONELY SOUL",
               "(FTD) MINESWEEPER PLUS",
+              "(FTD) NERTS!",
               "(FTP) NYAMO'S ADVENTURE",
               "PAWNBARIAN",
               "PETAL CRASH",
-              "(FTD) Sacrifices must be made",
+              "(FTD) SACRIFICES MUST BE MADE",
               "(FTP) SPACEVENTURE 2 - MINT CONDITION",
               "STEVE'S WAREHOUSE",
               "(FTP) SUDOKU.COM",
               "(Retro) SUPER SMASH BROS.",
-              "(Retro) SUPER SMASH BROS. MELEE"
+              "(Retro) SUPER SMASH BROS. MELEE",
+              "(FTP) YACHT DICE"
             ],
             "fallback": "Beat [3] games(ANY games) [Fallback]"
           },
@@ -4201,20 +4474,24 @@ export const EVERY_GAME_UFO = {
             "options": {
               "shown": [
                 "(FTD) CELESTE 64",
+                "(FTP) COLOR BLIND",
                 "(FTP) HR. B",
                 "(FTP) BLOOMBOX",
                 "BROOMSWEEPER",
                 "CHESSPLOSION",
+                "(FTD) DOMINION",
                 "(FTP) LONELY SOUL",
                 "(FTD) MINESWEEPER PLUS",
                 "(FTP) NYAMO'S ADVENTURE",
                 "(FTP) SUDOKU.COM",
+                "(FTP) YACHT DICE",
                 "(FTP) ASTEROID MISSION",
                 "BALATRO",
                 "KING OF THE BRIDGE",
+                "(FTD) NERTS!",
                 "PAWNBARIAN",
                 "PETAL CRASH",
-                "(FTD) Sacrifices must be made",
+                "(FTD) SACRIFICES MUST BE MADE",
                 "(FTP) SPACEVENTURE 2 - MINT CONDITION",
                 "STEVE'S WAREHOUSE",
                 "(Retro) SUPER SMASH BROS.",
@@ -4236,10 +4513,12 @@ export const EVERY_GAME_UFO = {
                 "(FTD) ERASER",
                 "(FTD) EVIL EGG",
                 "FLIP OF LIGHT",
+                "GETTING OVER IT",
                 "I WANNA BE THE CAT",
                 "LETHAL LEAGUE BLAZE",
                 "LINELITH",
                 "MAIDEN & SPELL",
+                "(FTP) MONKEY MODE",
                 "NIDHOGG",
                 "NOITA",
                 "NUBBY'S NUMBER FACTORY",
@@ -4267,6 +4546,7 @@ export const EVERY_GAME_UFO = {
                 "CELESTE",
                 "CELESTE: STRAWBERRY JAM COLLAB",
                 "CHIPPY",
+                "CLUSTERTRUCK",
                 "CUPHEAD",
                 "DARK SOULS 3",
                 "(Retro) DEMON'S CREST",
@@ -4311,6 +4591,7 @@ export const EVERY_GAME_UFO = {
                 "RABI-RIBI",
                 "RAIN WORLD",
                 "RAIN WORLD: DOWNPOUR",
+                "RHYTHM DOCTOR",
                 "RISK OF RAIN 2",
                 "ROGUE LEGACY",
                 "ROGUE LEGACY 2",
@@ -4328,6 +4609,7 @@ export const EVERY_GAME_UFO = {
                 "TERRARIA",
                 "THE END IS NIGH",
                 "TOWERFALL ASCENSION",
+                "TYPE ME HOME",
                 "UFO 50",
                 "UFO 50 BINGOMOD",
                 "ULTRAKILL",
@@ -4344,20 +4626,24 @@ export const EVERY_GAME_UFO = {
             },
             "descriptions": {
               "(FTD) CELESTE 64": "Talk to Badeline",
+              "(FTP) COLOR BLIND": "",
               "(FTP) HR. B": "Die after surviving 100s",
               "(FTP) BLOOMBOX": "complete all gardens",
               "BROOMSWEEPER": "Beat Act 3",
               "CHESSPLOSION": "Arcade Mode",
+              "(FTD) DOMINION": "win a game",
               "(FTP) LONELY SOUL": "Make friends with 7 blue cuties",
               "(FTD) MINESWEEPER PLUS": "Adventure mode",
               "(FTP) NYAMO'S ADVENTURE": "Beat the final dungeon",
               "(FTP) SUDOKU.COM": "Solve the board",
+              "(FTP) YACHT DICE": "777 Points",
               "(FTP) ASTEROID MISSION": "Entering hard mode for $18000 or entering streak mode from hard mode",
               "BALATRO": "Beat Ante 8",
               "KING OF THE BRIDGE": "Win against the Troll",
+              "(FTD) NERTS!": "score 100+ points",
               "PAWNBARIAN": "Beat a Dungeon",
               "PETAL CRASH": "Obtain all 7 roses",
-              "(FTD) Sacrifices must be made": "feed someone",
+              "(FTD) SACRIFICES MUST BE MADE": "feed someone",
               "(FTP) SPACEVENTURE 2 - MINT CONDITION": "Beat wave 6",
               "STEVE'S WAREHOUSE": "Beat the boss",
               "(Retro) SUPER SMASH BROS.": "Beat Classic Mode",
@@ -4379,10 +4665,12 @@ export const EVERY_GAME_UFO = {
               "(FTD) ERASER": "Reach the top",
               "(FTD) EVIL EGG": "Defeat Evil egg",
               "FLIP OF LIGHT": "Restore the Violet Segment",
+              "GETTING OVER IT": "",
               "I WANNA BE THE CAT": "Defeat the Cat and play the credits",
               "LETHAL LEAGUE BLAZE": "Finish Arcade Mode",
               "LINELITH": "100%",
               "MAIDEN & SPELL": "Stage 6",
+              "(FTP) MONKEY MODE": "beat level 25",
               "NIDHOGG": "Beat the 16 solo mode fights",
               "NOITA": "Larboratory",
               "NUBBY'S NUMBER FACTORY": "Beat level 80",
@@ -4410,6 +4698,7 @@ export const EVERY_GAME_UFO = {
               "CELESTE": "Finish Chapter 7",
               "CELESTE: STRAWBERRY JAM COLLAB": "Beat grandmaster",
               "CHIPPY": "Crusade Campaign",
+              "CLUSTERTRUCK": "",
               "CUPHEAD": "Defeat the Devil",
               "DARK SOULS 3": "Beat Lord of Cinders",
               "(Retro) DEMON'S CREST": "Beat Phalanx",
@@ -4454,6 +4743,7 @@ export const EVERY_GAME_UFO = {
               "RABI-RIBI": "Noah",
               "RAIN WORLD": "Getting Karma 10 and Ascending",
               "RAIN WORLD: DOWNPOUR": "Karma 10 & Ascending or campaign specific ending",
+              "RHYTHM DOCTOR": "",
               "RISK OF RAIN 2": "Defeat Mithrix",
               "ROGUE LEGACY": "Defeat the Traitor",
               "ROGUE LEGACY 2": "Defeat Cain",
@@ -4471,6 +4761,7 @@ export const EVERY_GAME_UFO = {
               "TERRARIA": "Moon Lord",
               "THE END IS NIGH": "Reach the Friend ending",
               "TOWERFALL ASCENSION": "Finish Ascension",
+              "TYPE ME HOME": "21 levels",
               "UFO 50": "50 Gold/Cherries",
               "UFO 50 BINGOMOD": "50 Gold/Cherries",
               "ULTRAKILL": "Beat 8-4",
@@ -4788,7 +5079,7 @@ export const EVERY_GAME_UFO = {
               "MAIDEN & SPELL": "Lose a card, then win a round",
               "(FTD) MINESWEEPER PLUS": "Die and buy a continue",
               "NUBBY'S NUMBER FACTORY": "Beat 1 level",
-              "POMPOM": "Reaching a checkpoint with 0 extra lives gives 1",
+              "POMPOM": "Reaching a checkpoint with 0 bubbles",
               "(FTD) SKORPULAC": "Collect a 3-up atom",
               "(Retro) SUPER MARIO 64": "1-up shroom",
               "(Retro) SUPER MARIO BROS.": "1up Mushroom",
@@ -4857,6 +5148,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) DEMON'S CREST",
               "DEMONCRAWL",
               "DICEY DUNGEONS",
+              "(FTD) DOMINION",
               "(Retro) DONKEY KONG 64",
               "DUCK GAME",
               "(FTP) DUCK LIFE",
@@ -4927,6 +5219,7 @@ export const EVERY_GAME_UFO = {
                 "CRYPT OF THE NECRODANCER",
                 "DEMONCRAWL",
                 "DICEY DUNGEONS",
+                "(FTD) DOMINION",
                 "(FTP) DUCK LIFE",
                 "(FTP) GOLD MINER",
                 "(FTP) GUNBALL 2: EMPEROR REVENGE",
@@ -5011,6 +5304,7 @@ export const EVERY_GAME_UFO = {
               "CRYPT OF THE NECRODANCER": "",
               "DEMONCRAWL": "",
               "DICEY DUNGEONS": "",
+              "(FTD) DOMINION": "card",
               "(FTP) DUCK LIFE": "seed",
               "(FTP) GOLD MINER": "",
               "(FTP) GUNBALL 2: EMPEROR REVENGE": "Guns",
@@ -5125,6 +5419,7 @@ export const EVERY_GAME_UFO = {
               "MARIO KART WORLD",
               "MEWGENICS",
               "MINECRAFT",
+              "(FTP) MONKEY MODE",
               "(Retro) MONSTER HUNTER TRI (WII)",
               "MOSA LINA",
               "(FTP) NETHACK",
@@ -5138,7 +5433,7 @@ export const EVERY_GAME_UFO = {
               "RISK OF RAIN 2",
               "ROGUE LEGACY",
               "ROGUE LEGACY 2",
-              "(FTD) Sacrifices must be made",
+              "(FTD) SACRIFICES MUST BE MADE",
               "SALAMANDER COUNTY PUBLIC TELEVISION",
               "SHEEPO",
               "(FTP) SLITHER.IO",
@@ -5159,6 +5454,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) SUPER SMASH BROS. MELEE",
               "TERRARIA",
               "THE BINDING OF ISAAC: REBIRTH",
+              "TYPE ME HOME",
               "UFO 50",
               "UFO 50 BINGOMOD",
               "WHITE KNUCKLE",
@@ -5202,6 +5498,7 @@ export const EVERY_GAME_UFO = {
                 "(Retro) MARIO KART 64",
                 "MARIO KART WORLD",
                 "MINECRAFT",
+                "(FTP) MONKEY MODE",
                 "(Retro) MONSTER HUNTER TRI (WII)",
                 "MOSA LINA",
                 "(FTP) NETHACK",
@@ -5229,6 +5526,7 @@ export const EVERY_GAME_UFO = {
                 "(Retro) SUPER SMASH BROS. BRAWL",
                 "(Retro) SUPER SMASH BROS. MELEE",
                 "TERRARIA",
+                "TYPE ME HOME",
                 "UFO 50",
                 "UFO 50 BINGOMOD",
                 "WHITE KNUCKLE",
@@ -5249,7 +5547,7 @@ export const EVERY_GAME_UFO = {
                 "SHEEPO",
                 "THE BINDING OF ISAAC: REBIRTH",
                 "HADES",
-                "(FTD) Sacrifices must be made",
+                "(FTD) SACRIFICES MUST BE MADE",
                 "DEMONCRAWL",
                 "SLAY THE SPIRE",
                 "SLAY THE SPIRE 2",
@@ -5295,6 +5593,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) MARIO KART 64": "Mushroom",
               "MARIO KART WORLD": "Mushrooms",
               "MINECRAFT": "Animal meat / Apple",
+              "(FTP) MONKEY MODE": "banana",
               "(Retro) MONSTER HUNTER TRI (WII)": "Rations or Steak",
               "MOSA LINA": "Fruit",
               "(FTP) NETHACK": "You start with food",
@@ -5322,6 +5621,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) SUPER SMASH BROS. BRAWL": "Food",
               "(Retro) SUPER SMASH BROS. MELEE": "Food",
               "TERRARIA": "Mushroom",
+              "TYPE ME HOME": "Beat a level",
               "UFO 50": "Waldorf Fish",
               "UFO 50 BINGOMOD": "Waldorf Fish",
               "WHITE KNUCKLE": "Beans can",
@@ -5342,7 +5642,7 @@ export const EVERY_GAME_UFO = {
               "SHEEPO": "Eggs",
               "THE BINDING OF ISAAC: REBIRTH": "Health up items",
               "HADES": "Snacks or Pomegranate",
-              "(FTD) Sacrifices must be made": "beat the game",
+              "(FTD) SACRIFICES MUST BE MADE": "beat the game",
               "DEMONCRAWL": "various",
               "SLAY THE SPIRE": "Various Relics",
               "SLAY THE SPIRE 2": "Various Relics",
@@ -5596,6 +5896,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) METROID: ZERO MISSION",
               "MINA THE HOLLOWER",
               "MINECRAFT",
+              "(FTP) MONKEY MODE",
               "MOSA LINA",
               "NUCLEAR THRONE",
               "(FTP) NYAMO'S ADVENTURE",
@@ -5667,6 +5968,7 @@ export const EVERY_GAME_UFO = {
                 "MARIO KART WORLD",
                 "(Retro) METROID: ZERO MISSION",
                 "MINECRAFT",
+                "(FTP) MONKEY MODE",
                 "(FTP) NYAMO'S ADVENTURE",
                 "PEAK",
                 "(FTD) PHANTOM JUMP",
@@ -5768,6 +6070,7 @@ export const EVERY_GAME_UFO = {
               "MARIO KART WORLD": "Mushrooms",
               "(Retro) METROID: ZERO MISSION": "Morph Ball",
               "MINECRAFT": "Craft ladder",
+              "(FTP) MONKEY MODE": "monkey mode",
               "(FTP) NYAMO'S ADVENTURE": "Powerup 2",
               "PEAK": "rope, balloons, etc",
               "(FTD) PHANTOM JUMP": "Phantom Jump gem",
@@ -6027,7 +6330,8 @@ export const EVERY_GAME_UFO = {
                 "STAR OF PROVIDENCE",
                 "(Retro) SUPER MARIO 64",
                 "(Retro) SUPER METROID",
-                "(Retro) SUPER METROID MAP RANDO"
+                "(Retro) SUPER METROID MAP RANDO",
+                "TYPE ME HOME"
               ],
               "shown_if_on_card": [],
               "hidden": []
@@ -6091,7 +6395,8 @@ export const EVERY_GAME_UFO = {
               "STAR OF PROVIDENCE": "",
               "(Retro) SUPER MARIO 64": "Peach",
               "(Retro) SUPER METROID": "Save the Animals",
-              "(Retro) SUPER METROID MAP RANDO": "Save the Animals"
+              "(Retro) SUPER METROID MAP RANDO": "Save the Animals",
+              "TYPE ME HOME": "Good ending"
             }
           }
         },
@@ -6124,7 +6429,8 @@ export const EVERY_GAME_UFO = {
               "UFO 50 BINGOMOD",
               "UNFAIR FLIPS",
               "UTOPIA MUST FALL",
-              "WILL YOU SNAIL?"
+              "WILL YOU SNAIL?",
+              "(FTP) YACHT DICE"
             ],
             "fallback": "Level up 4 times in [3] games(ANY games) [Fallback]"
           },
@@ -6139,6 +6445,7 @@ export const EVERY_GAME_UFO = {
                 "ROGUE LEGACY 2",
                 "UNFAIR FLIPS",
                 "WILL YOU SNAIL?",
+                "(FTP) YACHT DICE",
                 "BACKPACK HERO",
                 "CORGISPACE",
                 "DARK SOULS 3",
@@ -6175,6 +6482,7 @@ export const EVERY_GAME_UFO = {
               "ROGUE LEGACY 2": "1 upgrade at the castle == 1 level",
               "UNFAIR FLIPS": "Shop Upgrades",
               "WILL YOU SNAIL?": "Smiley Minigame",
+              "(FTP) YACHT DICE": "4 checks",
               "BACKPACK HERO": "char levelups",
               "CORGISPACE": "01 RAT DREAMS",
               "DARK SOULS 3": "~3000 Souls",
@@ -6292,10 +6600,11 @@ export const EVERY_GAME_UFO = {
               "POMPOM",
               "RAIN WORLD",
               "RAIN WORLD: DOWNPOUR",
+              "RHYTHM DOCTOR",
               "(FTD) ROCKET LEAGUE",
               "ROGUE LEGACY",
               "ROGUE LEGACY 2",
-              "(FTD) Sacrifices must be made",
+              "(FTD) SACRIFICES MUST BE MADE",
               "SHEEPO",
               "SLAY THE SPIRE",
               "SLAY THE SPIRE 2",
@@ -6351,9 +6660,10 @@ export const EVERY_GAME_UFO = {
                 "POMPOM",
                 "RAIN WORLD",
                 "RAIN WORLD: DOWNPOUR",
+                "RHYTHM DOCTOR",
                 "ROGUE LEGACY",
                 "ROGUE LEGACY 2",
-                "(FTD) Sacrifices must be made",
+                "(FTD) SACRIFICES MUST BE MADE",
                 "SHEEPO",
                 "SLAY THE SPIRE",
                 "SLAY THE SPIRE 2",
@@ -6412,9 +6722,10 @@ export const EVERY_GAME_UFO = {
               "POMPOM": "",
               "RAIN WORLD": "Monk/Survivor first cycle",
               "RAIN WORLD: DOWNPOUR": "Monk/Survivor first cycle",
+              "RHYTHM DOCTOR": "",
               "ROGUE LEGACY": "yea",
               "ROGUE LEGACY 2": "Tutorial",
-              "(FTD) Sacrifices must be made": "the first fight",
+              "(FTD) SACRIFICES MUST BE MADE": "the first fight",
               "SHEEPO": "Spaceship",
               "SLAY THE SPIRE": "",
               "SLAY THE SPIRE 2": "",
@@ -7018,6 +7329,7 @@ export const EVERY_GAME_UFO = {
                 "(Retro) SUPER MARIO 64",
                 "(Retro) KID ICARUS",
                 "BUG FABLES",
+                "ENDACOPIA",
                 "HOLLOW KNIGHT SILKSONG",
                 "UNCLE CHOP'S ROCKET SHOP"
               ],
@@ -7069,6 +7381,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) SUPER MARIO 64": "Jolly Roger Bay",
               "(Retro) KID ICARUS": "Defeat 1-4 boss",
               "BUG FABLES": "Bandit Hideout",
+              "ENDACOPIA": "Toy Chest",
               "HOLLOW KNIGHT SILKSONG": "chests",
               "UNCLE CHOP'S ROCKET SHOP": "Thief's Initiation safe"
             }
@@ -7145,6 +7458,7 @@ export const EVERY_GAME_UFO = {
                 "(FTD) CAVE STORY",
                 "ENTER THE GUNGEON",
                 "KATANA ZERO",
+                "(FTD) NERTS!",
                 "PARTY HARD",
                 "PEGLIN",
                 "RAIN WORLD",
@@ -7192,6 +7506,7 @@ export const EVERY_GAME_UFO = {
               "(FTD) CAVE STORY": "Curly ",
               "ENTER THE GUNGEON": "Robot",
               "KATANA ZERO": "Fifteen (level 8)",
+              "(FTD) NERTS!": "buy another zachtronics game",
               "PARTY HARD": "Miami Party",
               "PEGLIN": "idk but its possible",
               "RAIN WORLD": "Beating the game as Monk or Survivor",
@@ -7217,7 +7532,7 @@ export const EVERY_GAME_UFO = {
               "PARTY HARD",
               "PEAK",
               "PEGLIN",
-              "(FTD) Sacrifices must be made",
+              "(FTD) SACRIFICES MUST BE MADE",
               "SPELUNKY 2",
               "STREETS OF ROGUE",
               "TERRARIA",
@@ -7244,7 +7559,7 @@ export const EVERY_GAME_UFO = {
                 "ENVIRONMENTAL STATION ALPHA",
                 "HITMAN 3",
                 "PEGLIN",
-                "(FTD) Sacrifices must be made",
+                "(FTD) SACRIFICES MUST BE MADE",
                 "SPELUNKY 2",
                 "STREETS OF ROGUE",
                 "TERRARIA",
@@ -7284,7 +7599,7 @@ export const EVERY_GAME_UFO = {
               "ENVIRONMENTAL STATION ALPHA": "Green Water",
               "HITMAN 3": "Emetic/Lethal poison",
               "PEGLIN": "Spinfection",
-              "(FTD) Sacrifices must be made": "kill someone with the Adder",
+              "(FTD) SACRIFICES MUST BE MADE": "kill someone with the Adder",
               "SPELUNKY 2": "Pots/Tun",
               "STREETS OF ROGUE": "A bit RNG dependent but various poison hazards",
               "TERRARIA": "Dart Trap",
@@ -7614,6 +7929,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) KIRBY SUPER STAR",
               "LETHAL LEAGUE BLAZE",
               "(Retro) METROID: ZERO MISSION",
+              "(FTP) MONKEY MODE",
               "(Retro) MONSTER HUNTER TRI (WII)",
               "NUBBY'S NUMBER FACTORY",
               "PARTY HARD",
@@ -7687,6 +8003,7 @@ export const EVERY_GAME_UFO = {
                 "(Retro) KIRBY AIR RIDE",
                 "(Retro) KIRBY SUPER STAR",
                 "LETHAL LEAGUE BLAZE",
+                "(FTP) MONKEY MODE",
                 "(Retro) MONSTER HUNTER TRI (WII)",
                 "PARTY HARD",
                 "PAWNBARIAN",
@@ -7755,10 +8072,10 @@ export const EVERY_GAME_UFO = {
                 "(FTP) GOLD MINER",
                 "RAIN WORLD",
                 "MINECRAFT",
-                "POMPOM",
                 "BUG FABLES",
                 "DISC ROOM",
                 "KERO BLASTER",
+                "POMPOM",
                 "(Retro) KID ICARUS",
                 "(FTP) NETHACK",
                 "PEAK",
@@ -7789,6 +8106,7 @@ export const EVERY_GAME_UFO = {
               "(Retro) KIRBY AIR RIDE": "Air Ride Enemies",
               "(Retro) KIRBY SUPER STAR": "Many abilities",
               "LETHAL LEAGUE BLAZE": "FFA or Teams battle",
+              "(FTP) MONKEY MODE": "kill 2 gorillas somewhat synchronized",
               "(Retro) MONSTER HUNTER TRI (WII)": "Jaggis",
               "PARTY HARD": "Any explosion",
               "PAWNBARIAN": "Plus or Cross attacks",
@@ -7857,10 +8175,10 @@ export const EVERY_GAME_UFO = {
               "(FTP) GOLD MINER": "blow up 2 pigs",
               "RAIN WORLD": "Grenades on Scavengers",
               "MINECRAFT": "Sword or spear",
-              "POMPOM": "I think you can crush 2 enemies in toy world?",
               "BUG FABLES": "Leif Special Attack",
               "DISC ROOM": "Lobotomy Room",
               "KERO BLASTER": "Requires 300 coin upgrade 'Quad'",
+              "POMPOM": "crush 2 enemies in toy world",
               "(Retro) KID ICARUS": "Piercing arrow in 4-1",
               "(FTP) NETHACK": "",
               "PEAK": "scorpions with TNT (mesa)",

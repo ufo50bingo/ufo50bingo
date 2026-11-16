@@ -43,6 +43,7 @@ type Props = {
   columns?: number;
   maxFontSize?: number;
   minFontSize?: number;
+  canShowRecent?: boolean;
 };
 
 function getDifficulty(
@@ -155,17 +156,19 @@ export default function Board({
   columns = 5,
   maxFontSize = 14,
   minFontSize = 9.1,
+  canShowRecent = true,
 }: Props) {
   const { rightClickBehavior } = useRightClickBehaviorContext();
   const { shouldShortenPlay, shouldShortenCast } = useShouldShortenContext();
   const { shouldShowRecentPlay, shouldShowRecentCast } =
     useShouldShowRecentContext();
   const shouldShowRecent =
-    castInfo != null
+    canShowRecent &&
+    (castInfo != null
       ? shouldShowRecentCast
       : isPlay
         ? shouldShowRecentPlay
-        : false;
+        : false);
   const [rightClickCounts, setRightClickCounts] = useState<
     ReadonlyArray<number | null>
   >(squareNames.map((_) => null));

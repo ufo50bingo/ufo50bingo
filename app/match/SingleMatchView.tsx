@@ -1,4 +1,4 @@
-import { Fragment, useMemo } from "react";
+import { Fragment, useMemo, useRef, useState } from "react";
 import { FullParsedGame } from "../fetchFeed";
 import CastBoardWithTrackers from "../room/[id]/cast/CastBoardWithTrackers";
 import getGameList from "../room/[id]/common/getGameList";
@@ -9,13 +9,45 @@ import { getGameToGoals } from "../room/[id]/cast/findAllGames";
 import useGeneralCounts from "../room/[id]/cast/useGeneralCounts";
 import useSquareColors from "../room/[id]/common/useSquareColors";
 import useTeams from "../matches/useTeams";
-import { Stack } from "@mantine/core";
+import {
+  ActionIcon,
+  Group,
+  Menu,
+  Stack,
+  Text,
+  Title,
+  Tooltip,
+} from "@mantine/core";
+import {
+  IconBrandTwitch,
+  IconBrandYoutube,
+  IconCamera,
+  IconClock,
+  IconLink,
+  IconList,
+  IconSettings,
+} from "@tabler/icons-react";
+import { useMediaQuery } from "@mantine/hooks";
+import html2canvas from "html2canvas";
 import TeamPlayers from "../matches/TeamPlayers";
 import TeamScoreCell from "../matches/TeamScoreCell";
 import classes from "@/app/matches/MatchRow.module.css";
 import useTeamsWithResults from "../matches/useTeamsWithResults";
 import getFeedWithoutMistakes from "./[id]/getFeedWithoutMistakes";
 import PlayedGameState from "../room/[id]/cast/PlayedGameState";
+import MatchPlaybackSlider from "./MatchPlaybackSlider";
+import Feed from "../room/[id]/common/Feed";
+import EditVodModal from "../matches/EditVodModal";
+import formatMatchDate from "../matches/formatMatchDate";
+import { getVariantText } from "../matches/matchUtil";
+import { displayTier } from "../matches/tier";
+import { displayWeek } from "../matches/week";
+import { getHost, getVodLink } from "../matches/vodUtil";
+import {
+  SCREENSHOT_HIDDEN_ATTR,
+  SCREENSHOT_ONLY_ATTR,
+  screenshotHiddenProps,
+} from "./screenshotHidden";
 
 type Props = {
   game: FullParsedGame;
@@ -44,9 +76,40 @@ export default function SingleMatchView({ game }: Props) {
     }),
     [game.game.cols, game.game.isLockout, game.game.rows],
   );
+
+  const { startTime, maxSeekSec } = useMemo(() => {
+    const feed = game.feed;
+    const firstStart = feed.find(
+      (item) => item.type === "timer_event" && item.event === "start",
+    );
+    if (firstStart == null || feed.length === 0) {
+      return { startTime: 0, maxSeekSec: 0 };
+    }
+    const endTime = feed[feed.length - 1].time;
+    return {
+      startTime: firstStart.time,
+      maxSeekSec: Math.max(endTime - firstStart.time, 0),
+    };
+  }, [game.feed]);
+  const hasPlayback = maxSeekSec > 0;
+  const [seekSec, setSeekSec] = useState(maxSeekSec);
+  const curTime = startTime + seekSec;
+  const endIndex = useMemo(() => {
+    if (seekSec >= maxSeekSec) {
+      return game.feed.length;
+    }
+    const endIndex = game.feed.findIndex((item) => item.time > curTime);
+    return endIndex < 0 ? game.feed.length : endIndex;
+  }, [curTime, game.feed, maxSeekSec, seekSec]);
+  const shownFeed = useMemo(
+    () =>
+      endIndex >= game.feed.length ? game.feed : game.feed.slice(0, endIndex),
+    [endIndex, game.feed],
+  );
+
   const feedWithoutMistakes = useMemo(
-    () => getFeedWithoutMistakes(game.feed, boardStateParams),
-    [boardStateParams, game.feed],
+    () => getFeedWithoutMistakes(shownFeed, boardStateParams),
+    [boardStateParams, shownFeed],
   );
   const teamsWithResults = useTeamsWithResults(
     teamsMap,
@@ -63,76 +126,284 @@ export default function SingleMatchView({ game }: Props) {
     [game.subcategories],
   );
   const playedGameState = useMemo(
-    () => PlayedGameState.fromFeed(game.feed),
-    [game.feed],
+    () => PlayedGameState.fromFeed(shownFeed),
+    [shownFeed],
   );
   const generals = useGeneralCounts(
-    game.feed,
+    shownFeed,
     game.squares,
     game.subcategories,
   );
   // TODO: use board state here instead
   const squareColors = useSquareColors(
-    game.feed,
+    shownFeed,
     game.game.rows * game.game.cols,
     true,
   );
   // TODO: check whether this is the final result
   const isFinal = false;
 
+  const isMobile = useMediaQuery("(max-width: 525px)");
+  const [showFeed, setShowFeed] = useState(false);
+  // TODO: compute completion times
+  const [showTimes, setShowTimes] = useState(true);
+  const [isEditingVod, setIsEditingVod] = useState(false);
+
+  const ref = useRef<HTMLDivElement>(null);
+
+  const info = game.game;
+  const leagueGame = info.leagueGame;
+  const getMemberName = (userId: number) => {
+    const member = allMembers.get(userId);
+    return member?.overrideName ?? member?.name ?? userId.toString();
+  };
+  const name =
+    info.name ??
+    (leagueGame != null
+      ? `${getMemberName(leagueGame.p1Id)} vs ${getMemberName(leagueGame.p2Id)}`
+      : "Unknown");
+  const date = formatMatchDate(info.dateCreated);
+  const subtitle =
+    leagueGame == null
+      ? `${date} — ${getVariantText(info)}`
+      : `${date} — Season ${leagueGame.season}, Tier ${displayTier(leagueGame.tier)}, ${displayWeek(leagueGame.week)}`;
+
+  const vod = info.vod;
+  // rewind 90 seconds to get the lead-up to the reveal
+  const vodLink = vod != null ? getVodLink(vod, -90) : "";
+  let isTwitch = false;
+  if (vod != null) {
+    try {
+      isTwitch = getHost(new URL(vod.url)) === "twitch";
+    } catch {}
+  }
+
+  const copyImage = async () => {
+    const element = ref.current;
+    if (element == null) {
+      return;
+    }
+    const width = element.offsetWidth;
+    const canvas = await html2canvas(element, {
+      onclone(_cloneDoc, clonedElement) {
+        clonedElement
+          .querySelectorAll<HTMLElement>(`[${SCREENSHOT_HIDDEN_ATTR}]`)
+          .forEach((hidden) => {
+            hidden.style.display = "none";
+          });
+        clonedElement
+          .querySelectorAll<HTMLElement>(`[${SCREENSHOT_ONLY_ATTR}]`)
+          .forEach((shown) => {
+            shown.style.position = "static";
+            shown.style.opacity = "1";
+          });
+        clonedElement.style.padding = "8px";
+        clonedElement.style.width = `${width + 16}px`;
+      },
+      backgroundColor: "rgb(36, 36, 36)",
+      scale: 4,
+      // player avatars may be hosted on Discord
+      useCORS: true,
+    });
+    canvas.toBlob((blob) => {
+      if (blob == null) {
+        return;
+      }
+      const item = new ClipboardItem({ "image/png": blob });
+      navigator.clipboard.write([item]);
+    });
+  };
+
   return (
-    <Stack>
-      <CastBoardWithTrackers
-        game={game}
-        pasta={pasta}
-        countPosition="side_by_side"
-        showRecentGames={true}
-        generalGoals={generalGoals}
-        font="default"
-        iconType="sprites"
-        players={players}
-        areGeneralGoalsHidden={false}
-        squareColors={squareColors}
-        playedGameState={playedGameState}
-        subcategoryIdToName={subcategoryIdToName}
-        allMembers={allMembers}
-        boardCover={
-          hasStarted ? null : (
-            <>
-              You can view the board after
-              <br />
-              the match has been started.
-            </>
-          )
-        }
-        gameList={gameList}
-        gameToGoals={gameToGoals}
-        shownDifficulties={["easy", "veryhard", "general"]}
-        generals={generals}
-        tiebreakWinner={
-          teamsWithResults.length > 0 &&
-          teamsWithResults[0].winType === "Tiebreak"
-            ? teamsWithResults[0].color
-            : null
-        }
-      />
-      <Stack gap={4}>
-        <div className={classes.teams} style={{ maxWidth: "360px" }}>
-          {teamsWithResults.map((team) => {
-            return (
-              <Fragment key={team.color}>
-                <TeamPlayers
-                  team={team}
-                  isWinner={team.winType != null}
-                  isWinnerShown={isFinal && hasWinner}
-                  size="lg"
-                />
-                <TeamScoreCell team={team} size="lg" />
-              </Fragment>
-            );
-          })}
+    <>
+      <Stack>
+        <div ref={ref}>
+          <Stack gap={8}>
+            <Group justify="space-between" align="start" wrap="nowrap">
+              <Stack gap={4}>
+                <Title order={3}>
+                  {vodLink !== "" && (
+                    <Tooltip label="Watch VOD">
+                      <ActionIcon
+                        {...screenshotHiddenProps}
+                        style={{ marginRight: "8px" }}
+                        size="sm"
+                        component="a"
+                        href={vodLink}
+                        target="_blank"
+                        color={isTwitch ? "violet" : "red"}
+                        aria-label="Watch VOD"
+                      >
+                        {isTwitch ? (
+                          <IconBrandTwitch size={16} />
+                        ) : (
+                          <IconBrandYoutube size={16} />
+                        )}
+                      </ActionIcon>
+                    </Tooltip>
+                  )}
+                  {name}
+                </Title>
+                <Text>{subtitle}</Text>
+              </Stack>
+              <Group gap={4} wrap="nowrap" {...screenshotHiddenProps}>
+                <Tooltip label="Copy match link">
+                  <ActionIcon
+                    variant="subtle"
+                    color="gray"
+                    size="lg"
+                    onClick={() =>
+                      navigator.clipboard.writeText(
+                        `https://ufo50.bingo/match/${info.id}`,
+                      )
+                    }
+                    aria-label="Copy match link"
+                  >
+                    <IconLink size={20} />
+                  </ActionIcon>
+                </Tooltip>
+                <Tooltip
+                  label={
+                    <span>
+                      Copy an image of the match.
+                      <br />
+                      Paste in the #bingo-chat channel to
+                      <br />
+                      share your results with the community!
+                    </span>
+                  }
+                >
+                  <ActionIcon
+                    variant="subtle"
+                    color="gray"
+                    size="lg"
+                    onClick={copyImage}
+                    aria-label="Copy image to clipboard"
+                  >
+                    <IconCamera size={20} />
+                  </ActionIcon>
+                </Tooltip>
+                <Menu shadow="md" width="auto" position="bottom-end">
+                  <Menu.Target>
+                    <ActionIcon
+                      variant="subtle"
+                      color="gray"
+                      size="lg"
+                      aria-label="Match settings"
+                    >
+                      <IconSettings size={20} />
+                    </ActionIcon>
+                  </Menu.Target>
+                  <Menu.Dropdown>
+                    <Menu.Item
+                      leftSection={<IconClock size={16} />}
+                      onClick={() => setShowTimes(!showTimes)}
+                    >
+                      {showTimes ? "Hide Times" : "Show Times"}
+                    </Menu.Item>
+                    <Menu.Item
+                      leftSection={<IconList size={16} />}
+                      onClick={() => setShowFeed(!showFeed)}
+                    >
+                      {showFeed ? "Hide Feed" : "Show Feed"}
+                    </Menu.Item>
+                    <Menu.Item
+                      leftSection={<IconBrandYoutube size={16} />}
+                      onClick={() => setIsEditingVod(true)}
+                    >
+                      {vodLink !== "" ? "Edit" : "Add"} VOD Link
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
+              </Group>
+            </Group>
+            <Group align="start" wrap="nowrap" gap="md">
+              <CastBoardWithTrackers
+                game={game}
+                pasta={pasta}
+                countPosition="side_by_side"
+                showRecentGames={true}
+                generalGoals={generalGoals}
+                font="default"
+                iconType="sprites"
+                players={players}
+                areGeneralGoalsHidden={false}
+                squareColors={squareColors}
+                playedGameState={playedGameState}
+                subcategoryIdToName={subcategoryIdToName}
+                allMembers={allMembers}
+                boardCover={
+                  hasStarted ? null : (
+                    <>
+                      You can view the board after
+                      <br />
+                      the match has been started.
+                    </>
+                  )
+                }
+                gameList={gameList}
+                gameToGoals={gameToGoals}
+                shownDifficulties={["easy", "veryhard", "general"]}
+                generals={generals}
+                tiebreakWinner={
+                  teamsWithResults.length > 0 &&
+                  teamsWithResults[0].winType === "Tiebreak"
+                    ? teamsWithResults[0].color
+                    : null
+                }
+                canShowRecent={false}
+              />
+              {showFeed && (
+                <div {...screenshotHiddenProps} style={{ flexShrink: 0 }}>
+                  <Feed
+                    feed={shownFeed}
+                    boardStateParams={boardStateParams}
+                    userId={null}
+                    members={allMembers}
+                    players={players}
+                    squareNames={squareNames}
+                    isPlay={false}
+                    sendEvents={null}
+                    style={{ height: `${95 * game.game.rows}px` }}
+                  />
+                </div>
+              )}
+            </Group>
+            <Stack gap={4}>
+              <div className={classes.teams} style={{ maxWidth: "360px" }}>
+                {teamsWithResults.map((team) => {
+                  return (
+                    <Fragment key={team.color}>
+                      <TeamPlayers
+                        team={team}
+                        isWinner={team.winType != null}
+                        isWinnerShown={isFinal && hasWinner}
+                        size="lg"
+                      />
+                      <TeamScoreCell team={team} size="lg" />
+                    </Fragment>
+                  );
+                })}
+              </div>
+            </Stack>
+            {hasPlayback && (
+              <MatchPlaybackSlider
+                seekSec={seekSec}
+                setSeekSec={setSeekSec}
+                maxSeekSec={maxSeekSec}
+              />
+            )}
+          </Stack>
         </div>
       </Stack>
-    </Stack>
+      {isEditingVod && (
+        <EditVodModal
+          matchesUrl={null}
+          isMobile={isMobile}
+          match={game}
+          onClose={() => setIsEditingVod(false)}
+        />
+      )}
+    </>
   );
 }

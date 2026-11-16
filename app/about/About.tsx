@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Card, Container, Divider, List, Title } from "@mantine/core";
 import Board from "../Board";
 import { useState } from "react";
-import { TBoard } from "../matches/parseBingosyncData";
 import LinkWithVariant from "../links/LinkWithVariant";
 import StandardBoardCover from "../StandardBoardCover";
 import StandardBoardWrapper from "../StandardBoardWrapper";
@@ -13,12 +12,14 @@ import { BingosyncColor } from "../color";
 const COLOR: BingosyncColor = "red";
 
 type Props = {
-  initialBoard: TBoard;
+  squareNames: ReadonlyArray<string>;
 };
 
-export default function About({ initialBoard }: Props) {
+export default function About({ squareNames }: Props) {
   const [isHidden, setIsHidden] = useState(true);
-  const [board, setBoard] = useState<TBoard>(initialBoard);
+  const [squareColors, setSquareColors] = useState<
+    ReadonlyArray<ReadonlyArray<BingosyncColor>>
+  >(() => squareNames.map((_) => []));
 
   return (
     <Container my="md">
@@ -43,13 +44,13 @@ export default function About({ initialBoard }: Props) {
         <div style={{ alignSelf: "center" }}>
           <StandardBoardWrapper>
             <Board
-              board={board}
+              squareNames={squareNames}
+              squareColors={squareColors}
               onClickSquare={(squareIndex: number) => {
-                const newBoard = [...board];
-                const newSquare = { ...board[squareIndex] };
-                newSquare.color = newSquare.color == null ? COLOR : null;
-                newBoard[squareIndex] = newSquare;
-                setBoard(newBoard);
+                const newSquareColors = [...squareColors];
+                newSquareColors[squareIndex] =
+                  squareColors[squareIndex].length === 0 ? [COLOR] : [];
+                setSquareColors(newSquareColors);
               }}
               boardCover={
                 isHidden && (

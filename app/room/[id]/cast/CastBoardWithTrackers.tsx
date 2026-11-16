@@ -86,6 +86,10 @@ export default function CastBoardWithTrackers({
   const isDouble = generalGoals.length > 0 && countPosition === "side_by_side";
 
   const boardSize = game.game.rows * game.game.cols;
+  const squareNames = useMemo(
+    () => game.squares.map((square) => square.name),
+    [game.squares],
+  );
 
   const highlights = useMemo(() => {
     const highlights: Array<Array<BingosyncColor>> = Array(boardSize)
@@ -158,10 +162,8 @@ export default function CastBoardWithTrackers({
       <StandardBoardWrapper rows={game.game.rows} columns={game.game.cols}>
         <Board
           pasta={pasta}
-          board={squareColors.map((colors, index) => ({
-            name: game.squares[index].name,
-            color: colors.length > 0 ? colors[0] : null,
-          }))}
+          squareNames={squareNames}
+          squareColors={squareColors}
           highlights={highlights}
           onClickSquare={onClickSquare}
           boardCover={boardCover}

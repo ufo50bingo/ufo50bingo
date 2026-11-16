@@ -19,7 +19,7 @@ export const RightClickBehaviorContext =
   createContext<RightClickBehaviorContextType>({
     rightClickBehavior: [{ type: "star" }],
     setRightClickBehavior: () => {},
-    customColor: "#ee5f5b",
+    customColor: "#DA4440",
     setCustomColor: () => {},
   });
 

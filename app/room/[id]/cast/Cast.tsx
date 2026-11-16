@@ -97,7 +97,7 @@ export default function Cast({
     () => ({
       rightClickBehavior,
       setRightClickBehavior,
-      customColor: "#ee5f5b",
+      customColor: "#DA4440",
       setCustomColor: () => {},
     }),
     [rightClickBehavior, setRightClickBehavior],

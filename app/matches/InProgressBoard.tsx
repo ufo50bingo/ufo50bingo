@@ -124,15 +124,23 @@ export default function InProgressBoard({
     () => getOverlays(noMistakes, startTime),
     [noMistakes, startTime],
   );
+  const shownBoard =
+    rawChanges == null || rawStartTime == null || isFinal ? finalBoard : board;
+  const squareNames = useMemo(
+    () => shownBoard.map((square) => square.name),
+    [shownBoard],
+  );
+  const squareColors = useMemo(
+    () =>
+      shownBoard.map((square) => (square.color == null ? [] : [square.color])),
+    [shownBoard],
+  );
   return (
     <>
       <StandardBoardWrapper>
         <Board
-          board={
-            rawChanges == null || rawStartTime == null || isFinal
-              ? finalBoard
-              : board
-          }
+          squareNames={squareNames}
+          squareColors={squareColors}
           overlays={showOverlays && overlays != null ? overlays : undefined}
           onClickSquare={null}
           boardCover={

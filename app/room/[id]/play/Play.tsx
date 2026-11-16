@@ -227,10 +227,8 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
           <StandardBoardWrapper rows={game.rows} columns={game.cols}>
             <Board
               pasta={pasta}
-              board={squareColors.map((colors, index) => ({
-                name: squareNames[index],
-                color: colors.length > 0 ? colors[0] : null,
-              }))}
+              squareNames={squareNames}
+              squareColors={squareColors}
               onClickSquare={async (squareIndex) => {
                 const isClear =
                   squareColors[squareIndex].includes(selectedColor);

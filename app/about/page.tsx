@@ -8,11 +8,8 @@ export const metadata: Metadata = {
   description: "Learn how to play UFO 50 Bingo!",
 };
 
-const BOARD = ufoGenerator(STANDARD_UFO, 5, 5).map((name) => ({
-  name,
-  color: null,
-}));
+const SQUARE_NAMES = ufoGenerator(STANDARD_UFO, 5, 5);
 
 export default function AboutPage() {
-  return <About initialBoard={BOARD} />;
+  return <About squareNames={SQUARE_NAMES} />;
 }

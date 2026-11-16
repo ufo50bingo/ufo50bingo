@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { TBoard } from "../matches/parseBingosyncData";
 import Board from "../Board";
 import {
   Container,
@@ -120,12 +119,11 @@ export default function Daily({
     [feed],
   );
 
-  const board = useMemo<TBoard>(
+  const squareColors = useMemo(
     () =>
-      plainBoard.map((name, index) => ({
-        name,
-        color: completedIndexes.has(index) ? color : null,
-      })),
+      plainBoard.map((_, index) =>
+        completedIndexes.has(index) ? [color] : [],
+      ),
     [plainBoard, completedIndexes, color],
   );
 
@@ -234,7 +232,8 @@ export default function Daily({
                 />
                 <StandardBoardWrapper>
                   <Board
-                    board={board}
+                    squareNames={plainBoard}
+                    squareColors={squareColors}
                     onClickSquare={async (squareIndex: number) => {
                       if (completedIndexes.has(squareIndex)) {
                         await db.dailyFeed.add({

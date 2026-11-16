@@ -8,7 +8,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { TBoard } from "./matches/parseBingosyncData";
 import { Difficulty } from "./goals";
 import findGoal, { FoundGoal } from "./findGoal";
 import { STANDARD_UFO } from "./pastas/standardUfo";
@@ -25,10 +24,12 @@ import {
   BLANK_SQUARE_CLASS,
   COLOR_INFO,
   getColorSquareClass,
+  getColorHex,
 } from "./color";
 
 type Props = {
-  board: TBoard;
+  squareNames: ReadonlyArray<string>;
+  squareColors: ReadonlyArray<ReadonlyArray<BingosyncColor>>;
   overlays?: ReadonlyArray<null | ReactNode>;
   highlights?: ReadonlyArray<null | ReadonlyArray<BingosyncColor>>;
   onClickSquare: null | undefined | ((squareIndex: number) => void);
@@ -118,8 +119,29 @@ function getBorderStyles(
   };
 }
 
+// adds diagonal stripes, and tries to give equal area
+function getStripeStyles(colors: ReadonlyArray<BingosyncColor>): CSSProperties {
+  const stops: Array<string> = [];
+  let prevPercent = 0;
+  colors.forEach((color, index) => {
+    const areaFraction = (index + 1) / colors.length;
+    const position =
+      areaFraction <= 0.5
+        ? Math.sqrt(areaFraction / 2)
+        : 1 - Math.sqrt((1 - areaFraction) / 2);
+    const percent = position * 100;
+    const hex = getColorHex(color);
+    stops.push(`${hex} ${prevPercent}%`, `${hex} ${percent}%`);
+    prevPercent = percent;
+  });
+  return {
+    backgroundImage: `linear-gradient(to bottom right, ${stops.join(", ")})`,
+  };
+}
+
 export default function Board({
-  board,
+  squareNames,
+  squareColors,
   overlays,
   highlights,
   onClickSquare,
@@ -146,20 +168,23 @@ export default function Board({
         : false;
   const [rightClickCounts, setRightClickCounts] = useState<
     ReadonlyArray<number | null>
-  >(board.map((_) => null));
+  >(squareNames.map((_) => null));
 
-  const prevBoard = useRef(board);
-  const [isRecent, setIsRecent] = useState(() => board.map((_) => false));
+  const prevSquareColors = useRef(squareColors);
+  const [isRecent, setIsRecent] = useState(() => squareNames.map((_) => false));
   useEffect(() => {
     if (!shouldShowRecent) {
       return;
     }
-    const newlyColored = board.map(
-      (square, squareIndex) =>
-        square.color !== prevBoard.current[squareIndex].color &&
-        square.color !== viewerColor &&
-        prevBoard.current[squareIndex].color !== viewerColor,
-    );
+    // A square is recent if someone other than the viewer added or removed
+    // a color on it
+    const newlyColored = squareColors.map((colors, squareIndex) => {
+      const prevColors = prevSquareColors.current[squareIndex] ?? [];
+      return [
+        ...colors.filter((color) => !prevColors.includes(color)),
+        ...prevColors.filter((color) => !colors.includes(color)),
+      ].some((color) => color !== viewerColor);
+    });
 
     if (newlyColored.some(Boolean)) {
       setIsRecent((prev) =>
@@ -167,8 +192,8 @@ export default function Board({
       );
     }
 
-    prevBoard.current = board;
-  }, [board, viewerColor, shouldShowRecent]);
+    prevSquareColors.current = squareColors;
+  }, [squareColors, viewerColor, shouldShowRecent]);
 
   const shouldShorten =
     castInfo != null ? shouldShortenCast : shouldShortenPlay;
@@ -216,17 +241,18 @@ export default function Board({
         gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
       }}
     >
-      {board.map((square, squareIndex) => {
+      {squareNames.map((name, squareIndex) => {
         const foundGoal =
           pasta != null
-            ? findGoal(square.name, pasta)
-            : (findGoal(square.name, STANDARD_UFO) ??
-              findGoal(square.name, SPICY_UFO) ??
-              findGoal(square.name, NES_50_UFO) ??
-              findGoal(square.name, EVERY_GAME_UFO));
+            ? findGoal(name, pasta)
+            : (findGoal(name, STANDARD_UFO) ??
+              findGoal(name, SPICY_UFO) ??
+              findGoal(name, NES_50_UFO) ??
+              findGoal(name, EVERY_GAME_UFO));
         const displayGoal = shouldShorten
-          ? (foundGoal?.short?.resolved ?? square.name)
-          : square.name;
+          ? (foundGoal?.short?.resolved ?? name)
+          : name;
+        const colors = squareColors[squareIndex] ?? [];
         const rightClickCount = rightClickCounts[squareIndex];
         const isStarred =
           rightClickCount == null
@@ -238,7 +264,7 @@ export default function Board({
         if (
           castInfo != null &&
           rightClickCount != null &&
-          board[squareIndex].color == null
+          colors.length === 0
         ) {
           const curBehavior =
             rightClickBehavior[
@@ -252,9 +278,18 @@ export default function Board({
         }
         const recentClass =
           isRecent[squareIndex] && shouldShowRecent ? classes.recent : "";
-        const color = board[squareIndex].color;
         const colorClass =
-          color == null ? BLANK_SQUARE_CLASS : getColorSquareClass(color);
+          colors.length === 0
+            ? BLANK_SQUARE_CLASS
+            : colors.length === 1
+              ? getColorSquareClass(colors[0])
+              : "";
+        const style =
+          colors.length > 1
+            ? getStripeStyles(colors)
+            : colors.length === 0 && resolvedHighlights != null
+              ? getBorderStyles(resolvedHighlights[squareIndex])
+              : undefined;
         return (
           <div
             key={squareIndex}
@@ -280,11 +315,7 @@ export default function Board({
                     : oldCount + 1;
               setRightClickCounts(newRightClickCounts);
             }}
-            style={
-              resolvedHighlights == null || board[squareIndex].color != null
-                ? undefined
-                : getBorderStyles(resolvedHighlights[squareIndex])
-            }
+            style={style}
           >
             {isStarred && <div className={classes.starred} />}
             {heldColor != null && (

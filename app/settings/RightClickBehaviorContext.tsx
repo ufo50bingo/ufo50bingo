@@ -5,6 +5,7 @@ import useRightClickBehavior, {
   RightClickBehavior,
 } from "./useRightClickBehavior";
 import useCustomColor from "./useCustomColor";
+import { getColorHex } from "../color";
 
 type RightClickBehaviorContextType = {
   rightClickBehavior: ReadonlyArray<RightClickBehavior>;
@@ -19,7 +20,7 @@ export const RightClickBehaviorContext =
   createContext<RightClickBehaviorContextType>({
     rightClickBehavior: [{ type: "star" }],
     setRightClickBehavior: () => {},
-    customColor: "#ee5f5b",
+    customColor: getColorHex("red"),
     setCustomColor: () => {},
   });
 

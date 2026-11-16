@@ -1,19 +1,26 @@
 .score {
-    font-size: 44px;
-    font-weight: bold;
-    color: white;
-    border-radius: 8px;
-    height: 62px;
+  font-size: 44px;
+  font-weight: bold;
+  color: white;
+  border-radius: 8px;
+  height: 62px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .normal {
-    width: 62px;
+  width: 62px;
 }
 
 .double {
-    width: 100%;
+  width: 100%;
+}
+
+/* previously we used an underline for this, but that doesn't work well in html2canvas */
+.tiebreak {
+  display: inline-block;
+  line-height: 0.9;
+  border-bottom: 3px solid currentColor;
 }

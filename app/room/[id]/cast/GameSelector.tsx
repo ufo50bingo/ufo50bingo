@@ -1,6 +1,6 @@
 import { GAME_NAMES, ProperGame } from "@/app/goals";
 import BingosyncColored from "@/app/matches/BingosyncColored";
-import { ComboboxItem, OptionsFilter, Select } from "@mantine/core";
+import { ComboboxItem, OptionsFilter, Select, Tooltip } from "@mantine/core";
 import { useCallback, useMemo } from "react";
 import { TERMINAL_CODES } from "./terminalCodes";
 import { BingosyncColor } from "@/app/color";
@@ -11,6 +11,7 @@ type Props = {
   onChange: null | ((newGame: ProperGame | null) => void);
   terminalCodes: Set<string>;
   gameList: { [game: string]: string };
+  disabledReason?: string;
 };
 
 export default function GameSelector({
@@ -19,6 +20,7 @@ export default function GameSelector({
   onChange,
   terminalCodes,
   gameList,
+  disabledReason,
 }: Props) {
   const data = useMemo(
     () =>
@@ -52,10 +54,10 @@ export default function GameSelector({
     },
     [terminalCodes],
   );
-  return (
+  const mainSelector = (
     <Select
       w="124px"
-      disabled={onChange == null}
+      disabled={onChange == null || disabledReason != null}
       value={game}
       onChange={(newValue) =>
         onChange != null &&
@@ -71,5 +73,10 @@ export default function GameSelector({
       )}
       filter={optionsFilter}
     />
+  );
+  return disabledReason != null ? (
+    <Tooltip label={disabledReason}>{mainSelector}</Tooltip>
+  ) : (
+    mainSelector
   );
 }

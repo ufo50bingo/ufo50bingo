@@ -38,7 +38,7 @@ import BoardSizeSelectors from "./BoardSizeSelectors";
 
 type CustomType = "ufo" | "fixed_board";
 
-const FORMAT_OPTIONS = ["Normal", "Draft", "Custom", "Double"] as const;
+const FORMAT_OPTIONS = ["Normal", "Draft", "6x6", "Custom", "Double"] as const;
 type Format = (typeof FORMAT_OPTIONS)[number];
 
 type Props = {
@@ -130,8 +130,12 @@ export default function NonLeagueMatch({ visible }: Props) {
     const getUFOPastaWithCustomSelectors = (
       pasta: UFOPasta,
     ): ReadonlyArray<string> => {
+      const rowsToUse =
+        format === "Custom" ? boardSize.rows : format === "6x6" ? 6 : 5;
+      const colsToUse =
+        format === "Custom" ? boardSize.cols : format === "6x6" ? 6 : 5;
       if (format !== "Custom" && !metadata.hasFilters) {
-        return ufoGenerator(pasta, 5, 5);
+        return ufoGenerator(pasta, rowsToUse, colsToUse);
       }
       const finalUncheckedGames =
         metadata.hasFilters && format === "Custom"
@@ -139,8 +143,6 @@ export default function NonLeagueMatch({ visible }: Props) {
           : format === "Custom"
             ? uncheckedGames
             : filterInfo.excludedGames;
-      const rowsToUse = format === "Custom" ? boardSize.rows : 5;
-      const colsToUse = format === "Custom" ? boardSize.cols : 5;
       let goals = ufoGenerator(
         {
           ...pasta,

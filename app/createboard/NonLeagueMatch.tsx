@@ -127,14 +127,18 @@ export default function NonLeagueMatch({ visible }: Props) {
   const format = metadata.name === "10 Cherry Race" ? "Custom" : rawFormat;
 
   const actualRows =
-    rawFormat === "Custom" || rawFormat === "Draft"
+    rawFormat === "Custom" ||
+    rawFormat === "Draft" ||
+    (metadata.type === "Custom" && customType === "fixed_board")
       ? boardSize.rows
       : rawFormat === "6x6"
         ? 6
         : 5;
 
   const actualCols =
-    rawFormat === "Custom" || rawFormat === "Draft"
+    rawFormat === "Custom" ||
+    rawFormat === "Draft" ||
+    (metadata.type === "Custom" && customType === "fixed_board")
       ? boardSize.rows
       : rawFormat === "6x6"
         ? 6
@@ -361,6 +365,12 @@ export default function NonLeagueMatch({ visible }: Props) {
               </Anchor>
             </>
           )}
+          {metadata.type === "Custom" && customType === "fixed_board" && (
+            <BoardSizeSelectors
+              boardSize={boardSize}
+              setBoardSize={setBoardSize}
+            />
+          )}
           <Group justify="space-between">
             {(metadata.type === "UFO" ||
               (metadata.type === "Custom" &&
@@ -385,7 +395,9 @@ export default function NonLeagueMatch({ visible }: Props) {
               )}
             <Group gap={8}>
               {(metadata.type === "UFO" ||
-                (metadata.type === "Custom" && customUfo != null)) &&
+                (metadata.type === "Custom" &&
+                  customType === "ufo" &&
+                  customUfo != null)) &&
                 metadata.hasFilters && (
                   <Button
                     variant="light"
@@ -415,7 +427,9 @@ export default function NonLeagueMatch({ visible }: Props) {
         </Stack>
       </Card.Section>
       {(metadata.type === "UFO" ||
-        (metadata.type === "Custom" && customUfo != null)) &&
+        (metadata.type === "Custom" &&
+          customUfo != null &&
+          customType === "ufo")) &&
         (format === "Custom" || format === "Draft") && (
           <Card.Section withBorder={true} inheritPadding={true} py="xs">
             <Stack gap={8}>
@@ -560,7 +574,9 @@ export default function NonLeagueMatch({ visible }: Props) {
                 if (
                   format === "Double" &&
                   (metadata.type === "UFO" ||
-                    (metadata.type === "Custom" && customUfo != null))
+                    (metadata.type === "Custom" &&
+                      customUfo != null &&
+                      customType === "ufo"))
                 ) {
                   const common = {
                     password,
@@ -601,11 +617,15 @@ export default function NonLeagueMatch({ visible }: Props) {
                       isCustom:
                         format === "Custom" &&
                         (metadata.type === "UFO" ||
-                          (metadata.type === "Custom" && customUfo != null)),
+                          (metadata.type === "Custom" &&
+                            customUfo != null &&
+                            customType === "ufo")),
                       isDraft:
                         format === "Draft" &&
                         (metadata.type === "UFO" ||
-                          (metadata.type === "Custom" && customUfo != null)),
+                          (metadata.type === "Custom" &&
+                            customUfo != null &&
+                            customType === "ufo")),
                       isLockout,
                       goals: getSerializedPasta(),
                       rows: actualRows,
@@ -642,7 +662,9 @@ export default function NonLeagueMatch({ visible }: Props) {
             Create Room
             {format === "Double" &&
             (metadata.type === "UFO" ||
-              (metadata.type === "Custom" && customUfo != null))
+              (metadata.type === "Custom" &&
+                customUfo != null &&
+                customType === "ufo"))
               ? "s"
               : ""}
           </Button>

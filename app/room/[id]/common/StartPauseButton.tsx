@@ -10,6 +10,7 @@ type Props = {
   userId: number;
   onCountdownStart?: () => void;
   sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
+  disabled: boolean;
 };
 
 export default function StartPauseButton({
@@ -18,6 +19,7 @@ export default function StartPauseButton({
   userId,
   onCountdownStart,
   sendEvents,
+  disabled,
 }: Props) {
   const { getServerMsFromClientMs } = useServerOffsetContext();
 
@@ -35,7 +37,9 @@ export default function StartPauseButton({
           shadow="md"
         >
           <Popover.Target>
-            <Button leftSection={<IconPlayerPlay />}>Start</Button>
+            <Button disabled={disabled} leftSection={<IconPlayerPlay />}>
+              Start
+            </Button>
           </Popover.Target>
           <Popover.Dropdown>
             <Stack>
@@ -85,7 +89,9 @@ export default function StartPauseButton({
           shadow="md"
         >
           <Popover.Target>
-            <Button leftSection={<IconPlayerPlay />}>Resume</Button>
+            <Button disabled={disabled} leftSection={<IconPlayerPlay />}>
+              Resume
+            </Button>
           </Popover.Target>
           <Popover.Dropdown>
             <Stack>
@@ -141,7 +147,9 @@ export default function StartPauseButton({
           shadow="md"
         >
           <Popover.Target>
-            <Button leftSection={<IconPlayerPause />}>Pause</Button>
+            <Button disabled={disabled} leftSection={<IconPlayerPause />}>
+              Pause
+            </Button>
           </Popover.Target>
           <Popover.Dropdown>
             <Stack>

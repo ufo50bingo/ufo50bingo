@@ -76,9 +76,20 @@ export default function useSyncedTimer({
     let hasStarted = false;
     let pauseRequester: null | undefined | string = null;
     let lastPauseTime: null | number = null;
+    let endTime: null | number = null;
 
     feed.forEach((item) => {
-      if (item.type !== "timer_event") {
+      if (endTime != null) {
+        return;
+      }
+      if (item.type === "end_game") {
+        if (curStartTime != null) {
+          accumulatedDuration += item.time * 1000 - curStartTime;
+          curStartTime = null;
+        }
+        endTime = item.time * 1000;
+        return;
+      } else if (item.type !== "timer_event") {
         return;
       }
       switch (item.event) {
@@ -110,14 +121,16 @@ export default function useSyncedTimer({
       }
     });
     const isForceRevealed =
-      lastForceReveal > 0 &&
-      (lastPauseTime == null ||
-        getClientMsFromServerMs(lastPauseTime) < lastForceReveal);
+      endTime != null ||
+      (lastForceReveal > 0 &&
+        (lastPauseTime == null ||
+          getClientMsFromServerMs(lastPauseTime) < lastForceReveal));
     return curStartTime == null
       ? {
           type: hasStarted ? "paused" : "not_started",
           accumulatedDuration,
-          pauseRequester: hasStarted ? pauseRequester : undefined,
+          pauseRequester:
+            hasStarted && endTime == null ? pauseRequester : undefined,
           isForceRevealed,
         }
       : getClientMsFromServerMs(curStartTime) < Date.now()

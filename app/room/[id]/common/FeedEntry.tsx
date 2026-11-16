@@ -149,6 +149,13 @@ export default function FeedEntry({ entry, members }: Props) {
           <span className={classes.defaultColor}>started the match</span>
         </em>
       );
+    case "end_game":
+      return (
+        <em>
+          {timestamp} {displayedUser}{" "}
+          <span className={classes.defaultColor}>ended the match</span>
+        </em>
+      );
     default:
       entry satisfies never;
       break;

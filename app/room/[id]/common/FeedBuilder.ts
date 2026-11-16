@@ -48,6 +48,9 @@ interface DisplayedPause extends BaseDisplayedFeedItem {
 interface DisplayedStart extends BaseDisplayedFeedItem {
   type: "start";
 }
+interface DisplayedEndGame extends BaseDisplayedFeedItem {
+  type: "end_game";
+}
 
 export type DisplayedFeedItem =
   | DisplayedChat
@@ -59,7 +62,8 @@ export type DisplayedFeedItem =
   | DisplayedColorChange
   | DisplayedSetDuration
   | DisplayedPause
-  | DisplayedStart;
+  | DisplayedStart
+  | DisplayedEndGame;
 
 export default class FeedBuilder {
   boardState: BoardState;
@@ -238,6 +242,15 @@ export default class FeedBuilder {
         this.displayedFeed.push(newItem);
         break;
       }
+      case "end_game": {
+        const newItem: DisplayedEndGame = {
+          type: "end_game",
+          userId: item.userId,
+          time: item.time,
+          userColor: this.getCurrentUserColor(item.userId),
+        };
+        this.displayedFeed.push(newItem);
+      }
       case "goal_progress": {
         break;
       }
@@ -247,6 +260,8 @@ export default class FeedBuilder {
       case "player_order": {
         break;
       }
+      default:
+        item satisfies never;
     }
   }
 

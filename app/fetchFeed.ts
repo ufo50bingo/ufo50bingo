@@ -84,6 +84,12 @@ export type FeedDisconnect = {
   userId: number;
 };
 
+export type FeedEndGame = {
+  type: "end_game";
+  time: number;
+  userId: number;
+};
+
 export type NewFeedItem =
   | FeedColorMark
   | FeedChat
@@ -93,7 +99,8 @@ export type NewFeedItem =
   | FeedCurrentSubcategory
   | FeedPlayerOrder
   | FeedPlayerColorChange
-  | FeedDisconnect;
+  | FeedDisconnect
+  | FeedEndGame;
 
 export type NewFeed = ReadonlyArray<NewFeedItem>;
 
@@ -326,6 +333,24 @@ export function parseDisconnectResult(
   }));
 }
 
+export function fetchEndGameSql(sql: SQLTemplate, gameId: number): SQL {
+  return sql`
+    SELECT
+      EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
+      user_id
+    FROM end_game
+    WHERE game_id = ${gameId}
+  `;
+}
+
+export function parseEndGameResult(result: SQLResult): Array<FeedEndGame> {
+  return result.map((raw) => ({
+    type: "end_game",
+    time: Number(raw.unixtime),
+    userId: raw.user_id,
+  }));
+}
+
 function fetchSquaresSql(sql: SQLTemplate, gameId: number): SQL {
   return sql`
     SELECT
@@ -512,6 +537,7 @@ export async function fetchDataMulti(
     [fetchChatSql, parseChatResult],
     [fetchTimerEventSql, parseTimerEventResult],
     [fetchPlayerColorChangeSql, parsePlayerColorChangeResult],
+    [fetchEndGameSql, parseEndGameResult],
   ];
   if (view !== "play") {
     feedFetchPairs = feedFetchPairs.concat([

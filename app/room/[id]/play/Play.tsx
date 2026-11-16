@@ -75,6 +75,7 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
     userId,
     playAudio,
     token,
+    isPlay: true,
   });
   // Play always has sendEvents available
   const sendEvents = sendEventsRaw!;

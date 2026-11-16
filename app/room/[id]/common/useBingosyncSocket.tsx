@@ -13,6 +13,7 @@ type Props = {
   userId: null | number;
   playAudio: (soundType: keyof SoundChoices) => void;
   token: string | null;
+  isPlay: boolean;
 };
 
 type Response = {
@@ -28,6 +29,7 @@ export default function useBingosyncSocket({
   userId,
   playAudio,
   token,
+  isPlay,
 }: Props): Response {
   const [feed, setFeed] = useState(initialFeed);
   const [shouldReconnect, setShouldReconnect] = useState(false);
@@ -48,7 +50,12 @@ export default function useBingosyncSocket({
       }
       if (newItem.type === "color_mark") {
         playAudioRef.current("square");
-      } else if (newItem.type === "chat") {
+      } else if (
+        newItem.type === "chat" &&
+        (!isPlay ||
+          newItem.visibleToPlayers == null ||
+          (userId != null && newItem.visibleToPlayers.includes(userId)))
+      ) {
         playAudioRef.current("chat");
       } else if (newItem.type === "timer_event" && newItem.event === "pause") {
         playAudioRef.current("pause");

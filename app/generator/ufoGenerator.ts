@@ -11,8 +11,7 @@ import replaceTokens from "./replaceTokens";
 import splitAtTokens from "./splitAtTokens";
 
 export type OptionListEntry =
-  | string
-  | { type: "include" | "exclude"; has_extra: string; option: string };
+  string | { type: "include" | "exclude"; has_extra: string; option: string };
 export type OptionList = {
   shown: ReadonlyArray<OptionListEntry>;
   shown_if_on_card: ReadonlyArray<OptionListEntry>;
@@ -56,6 +55,11 @@ export type OtherCounts = {
   cols: number;
   category_counts: Counts;
 };
+export type OtherDraftCounts = {
+  rows: number;
+  cols: number;
+  category_counts: ReadonlyArray<Counts>;
+};
 
 type RestrictionOption = string | { option: string; if: string };
 
@@ -81,7 +85,8 @@ export interface UFOPasta {
   };
   draft?: {
     excluded_categories: ReadonlyArray<string>;
-    category_counts: ReadonlyArray<{ [category: string]: number }>;
+    category_counts: ReadonlyArray<Counts>;
+    other_category_counts?: ReadonlyArray<OtherDraftCounts>;
   };
   current_game_options?: string | { [game: string]: string };
   player_tracker_restrictions?: PlayerTrackerRestrictions;

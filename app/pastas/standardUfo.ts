@@ -2740,7 +2740,27 @@ export const STANDARD_UFO = {
         "hard": 5,
         "veryhard": 2
       }
-    ]
+    ],
+    "other_category_counts": [
+      {
+        "rows": 6,
+        "cols": 6,
+        "category_counts":  [
+          {
+            "easy": 3,
+            "medium": 6,
+            "hard": 6,
+            "veryhard": 3
+          },
+          {
+            "easy": 3,
+            "medium": 6,
+            "hard": 6,
+            "veryhard": 3
+          }
+        ]
+      }
+    ],
   },
   "current_game_options": "$ufo50"
 } as const;

@@ -321,6 +321,7 @@ export default function AutoGameSection({
                 </Text>
               </List.Item>
             </List>
+            Detection will start automatically once the match countdown begins.
           </Alert>
           {captures.map((capture, index) => (
             <Paper key={capture.id} withBorder={true} p="xs">
@@ -393,7 +394,7 @@ export default function AutoGameSection({
           <Button leftSection={<IconPlus size={16} />} onClick={addCapture}>
             Add capture
           </Button>
-          <Tooltip label="Detection will also be enabled automatically when starting the match if at least one region is selected">
+          {captures.length > 0 && (
             <Button
               disabled={isDetectionButtonDisabled}
               onClick={() => {
@@ -402,7 +403,7 @@ export default function AutoGameSection({
             >
               {isDetecting ? "Stop detection" : "Start detection"}
             </Button>
-          </Tooltip>
+          )}
           <Checkbox
             label="Automatically track gift/gold/cherry checkboxes"
             checked={shouldAutoTrack}

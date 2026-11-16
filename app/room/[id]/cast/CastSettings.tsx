@@ -78,6 +78,7 @@ type Props = {
     null | ((newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>);
   members: ReadonlyMap<number, GenericMember>;
   subcategoryIdToName: ReadonlyMap<number, string>;
+  isUfo50GameList: boolean;
 };
 
 export default function CastSettings({
@@ -116,6 +117,7 @@ export default function CastSettings({
   sendEvents,
   members,
   subcategoryIdToName,
+  isUfo50GameList,
 }: Props) {
   const [isShown, setIsShown] = useState(false);
   const { shouldShortenCast, setShouldShortenCast } = useShouldShortenContext();
@@ -287,7 +289,8 @@ export default function CastSettings({
                 soundChoices={soundChoices}
                 setSoundChoices={setSoundChoices}
               />
-              {sendEvents != null &&
+              {isUfo50GameList &&
+                sendEvents != null &&
                 addSubcategoryName != null &&
                 setGeneralGameCount != null && (
                   <AutoGameSection

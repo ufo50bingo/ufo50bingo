@@ -47,7 +47,7 @@ export default function RecentGames({
           <div className={classes.container}>
             <img
               alt="No game"
-              src={`/cobwebs/cobwebs${result.length}.png`}
+              src={`/cobwebs/cobwebs${result.length % 6}.png`}
               className={classes.gameIcon}
             />
           </div>

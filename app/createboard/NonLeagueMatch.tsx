@@ -792,7 +792,7 @@ function scaleCounts(counts: Counts, targetTotal: number): Counts {
       order: index,
     };
   });
-  scaledCounts.sort((a, b) => {
+  const byRemainder = [...scaledCounts].sort((a, b) => {
     const remainderDiff = b.remainder - a.remainder;
     if (remainderDiff !== 0) {
       return remainderDiff;
@@ -803,7 +803,9 @@ function scaleCounts(counts: Counts, targetTotal: number): Counts {
   const remaining =
     targetTotal - scaledCounts.reduce((acc, item) => acc + item.value, 0);
   for (let i = 0; i < remaining; i++) {
-    scaledCounts[i].value += 1;
+    // byRemainder shares the same objects as scaledCounts, so updating value
+    // here also updates scaledCounts
+    byRemainder[i].value += 1;
   }
 
   return Object.fromEntries(

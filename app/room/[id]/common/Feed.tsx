@@ -4,6 +4,8 @@ import { CSSProperties, useLayoutEffect, useMemo, useRef } from "react";
 import FeedEntry from "./FeedEntry";
 import { NewFeed, NewFeedItem } from "@/app/fetchFeed";
 import { GenericMember, PlayerMember } from "./useMembers";
+import FeedBuilder from "./FeedBuilder";
+import { BoardStateParams } from "@/app/match/[id]/BoardState";
 
 type Props = {
   userId: null | number;
@@ -11,11 +13,11 @@ type Props = {
   members: ReadonlyMap<number, GenericMember>;
   style?: CSSProperties;
   isPlay: boolean;
+  boardStateParams: BoardStateParams;
   squareNames: ReadonlyArray<string>;
   players: ReadonlyArray<PlayerMember>;
   sendEvents:
-    | null
-    | ((newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>);
+    null | ((newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>);
 };
 
 export default function Feed({
@@ -23,30 +25,37 @@ export default function Feed({
   userId,
   isPlay,
   squareNames,
+  boardStateParams,
   members,
   players,
   sendEvents,
   style = {},
 }: Props) {
   const feedRef = useRef<HTMLDivElement>(null);
+  const displayedFeed = useMemo(
+    () => FeedBuilder.getDisplayedFeed(boardStateParams, squareNames, feed),
+    [boardStateParams, squareNames, feed],
+  );
+
+  const filteredFeed = useMemo(
+    () =>
+      displayedFeed.filter(
+        (item) =>
+          !isPlay ||
+          item.type !== "chat" ||
+          item.visibleToPlayerIds == null ||
+          item.userId === userId ||
+          (userId !== null && item.visibleToPlayerIds.includes(userId)),
+      ),
+    [displayedFeed, isPlay, userId],
+  );
+
   useLayoutEffect(() => {
     if (feedRef.current != null) {
       feedRef.current.scrollTop = feedRef.current.scrollHeight;
     }
-  }, [feed]);
+  }, [filteredFeed.length]);
 
-  const filteredFeed = useMemo(
-    () =>
-      feed.filter(
-        (item) =>
-          !isPlay ||
-          item.type !== "chat" ||
-          item.visibleToPlayers == null ||
-          item.userId === userId ||
-          (userId !== null && item.visibleToPlayers.includes(userId)),
-      ),
-    [feed, isPlay, userId],
-  );
   return (
     <Card
       shadow="sm"
@@ -64,12 +73,7 @@ export default function Feed({
       >
         <Stack gap={0}>
           {filteredFeed.map((entry, index) => (
-            <FeedEntry
-              key={index}
-              entry={entry}
-              squareNames={squareNames}
-              members={members}
-            />
+            <FeedEntry key={index} entry={entry} members={members} />
           ))}
         </Stack>
       </Card.Section>

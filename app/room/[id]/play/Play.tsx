@@ -13,7 +13,7 @@ import ScoreSquare from "../common/ScoreSquare";
 import { useMediaQuery } from "@mantine/hooks";
 import SimpleGeneralTracker from "./SimpleGeneralTracker";
 import { FoundGoal } from "@/app/findGoal";
-import { CASTER_RESTRICTIONS } from "../cast/Cast";
+import { CASTER_RESTRICTIONS, GeneralItem } from "../cast/Cast";
 import useLocalBool from "@/app/localStorage/useLocalBool";
 import useFont from "@/app/font/useFont";
 import useSyncedTimer from "../common/useSyncedTimer";
@@ -129,6 +129,10 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
 
   const generalGoals = useGeneralGoals(pasta, squareNames);
   const showGeneralTracker = showGeneralTrackerRaw && generalGoals.length > 0;
+  const isGeneralFinished = (g: GeneralItem) =>
+    isLockout
+      ? squareColors[g.squareIndex].length > 0
+      : squareColors[g.squareIndex].includes(selectedColor);
 
   const restrictions: PlayerTrackerRestrictions = useMemo(() => {
     if (override === "all") {
@@ -322,6 +326,7 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
               isHidden={isHidden}
               gameId={gameId}
               generalGoals={generalGoals}
+              isFinished={isGeneralFinished}
             />
           )}
           <Group>
@@ -400,11 +405,7 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
               isPlay={true}
               gameToGoals={gameToGoals}
               foundGoal={g.foundGoal}
-              isFinished={
-                isLockout
-                  ? squareColors[g.squareIndex].length > 0
-                  : squareColors[g.squareIndex].includes(selectedColor)
-              }
+              isFinished={isGeneralFinished(g)}
               terminalCodes={terminalCodes}
               countState={fullGeneralState[g.foundGoal.resolvedGoal]}
               showAll={showAll.includes(g.foundGoal.resolvedGoal)}

@@ -17,8 +17,7 @@ import { BasicUser } from "../api/users/route";
 import { LATEST_SEASON } from "../createboard/leagueConstants";
 import { ALL_LEAGUE_TIERS, displayTier } from "./tier";
 import range from "../generator/range";
-
-const NON_LEAGUE_SEASON = "0";
+import { NON_LEAGUE_SEASON, parseUserIds } from "./matchFilterParams";
 
 const SEASON_OPTIONS = [
   ...range(LATEST_SEASON).map((index) => {
@@ -32,16 +31,6 @@ const TIER_OPTIONS = ALL_LEAGUE_TIERS.map((tier) => {
   const tierStr = displayTier(tier);
   return { value: tierStr, label: tierStr };
 });
-
-function parseUserIds(raw: string | null): ReadonlyArray<number> {
-  if (raw == null || raw === "") {
-    return [];
-  }
-  return raw
-    .split(",")
-    .map((idStr) => Number(idStr))
-    .filter((id) => Number.isInteger(id));
-}
 
 function parseOptionValues(
   raw: string | null,

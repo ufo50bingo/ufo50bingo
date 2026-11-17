@@ -44,3 +44,7 @@ export function displayTier(tier: LEAGUE_TIER): string {
       return "C2";
   }
 }
+
+export function parseTier(tierStr: string): null | LEAGUE_TIER {
+  return ALL_LEAGUE_TIERS.find((tier) => displayTier(tier) === tierStr) ?? null;
+}

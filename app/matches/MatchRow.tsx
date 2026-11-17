@@ -37,7 +37,7 @@ import EditLeagueModal from "./EditLeagueModal";
 import EditVodModal from "./EditVodModal";
 import { LEAGUE_SEASON } from "../createboard/leagueConstants";
 import MatchModal from "./MatchModal";
-import useTeams, { compareNames } from "./useTeams";
+import useTeams from "./useTeams";
 import TeamPlayers from "./TeamPlayers";
 import TeamScoreCell from "./TeamScoreCell";
 import getFeedWithoutMistakes from "../match/[id]/getFeedWithoutMistakes";

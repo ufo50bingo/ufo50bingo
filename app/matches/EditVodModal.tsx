@@ -14,6 +14,7 @@ import { getBaseUrlAndStartSeconds, getVodLink, getWarning } from "./vodUtil";
 import runWithMaybeRefresh from "./runWithMaybeRefresh";
 import { useRouter } from "next/navigation";
 import { FullParsedGame } from "../fetchFeed";
+import updateVod from "./updateVod";
 
 type Props = {
   matchesUrl: string | null;
@@ -92,8 +93,7 @@ export default function EditVodModal({
                 async () => {
                   const [baseUrl, startSeconds] =
                     getBaseUrlAndStartSeconds(newVodLink);
-                  // TODO: Fix updateVod
-                  // await updateVod(match.id, baseUrl, startSeconds);
+                  await updateVod(match.game.id, baseUrl, startSeconds);
                   onClose();
                   return true;
                 },

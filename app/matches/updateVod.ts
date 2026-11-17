@@ -2,30 +2,30 @@
 
 import { revalidatePath } from "next/cache";
 import getSql from "../getSql";
-import syncToGSheet from "./syncToGSheet";
-import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
-import syncVodToLeagueSheet from "./syncVodToLeagueSheet";
 
 export default async function updateVod(
-  id: string,
-  url: string | null,
+  gameId: number,
+  url: string,
   startSeconds: number | null,
-  analysisSeconds: number | null,
 ): Promise<void> {
-  const sql = getSql(false);
+  const trimmedUrl = url.trim();
+  const vodUrl = trimmedUrl === "" ? null : trimmedUrl;
+  const vodStartSeconds = vodUrl == null ? null : startSeconds;
 
-  const result = await sql`UPDATE match
+  const sql = getSql(false);
+  const result = await sql`
+    UPDATE game
     SET
-      vod_url = ${url},
-      vod_match_start_seconds = ${startSeconds},
-      analysis_seconds = ${analysisSeconds}
-    WHERE id = ${id}
-    RETURNING ${MATCH_FIELDS}`;
+      vod_url = ${vodUrl},
+      vod_match_start_seconds = ${vodStartSeconds}
+    WHERE id = ${gameId}
+    RETURNING id`;
+  if (result.length === 0) {
+    throw new Error(`Match ${gameId} not found`);
+  }
+
   revalidatePath("/matches");
-  revalidatePath(`/match/${id}`);
-  try {
-    const rawMatch = result[0];
-    const match = getMatchFromRaw(rawMatch);
-    await Promise.all([syncToGSheet(match), syncVodToLeagueSheet(match)]);
-  } catch {}
+  revalidatePath(`/match/${gameId}`);
+
+  // await Promise.all([syncToGSheet(match), syncVodToLeagueSheet(match)]);
 }

@@ -4,11 +4,12 @@ import { useState } from "react";
 import { FeedColorMark, NewFeedItem } from "@/app/fetchFeed";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import { BingosyncColor, COLORS } from "@/app/color";
+import BoardState from "@/app/match/[id]/BoardState";
 
 type Props = {
   userId: number;
   squareNames: ReadonlyArray<string>;
-  squareColors: ReadonlyArray<ReadonlyArray<BingosyncColor>>;
+  boardState: BoardState;
   editingIndex: number;
   setEditingIndex: (newEditingIndex: null | number) => unknown;
   sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
@@ -18,7 +19,7 @@ type Props = {
 export default function EditSquare({
   userId,
   squareNames,
-  squareColors,
+  boardState,
   editingIndex,
   setEditingIndex,
   sendEvents,
@@ -26,7 +27,7 @@ export default function EditSquare({
 }: Props) {
   const [newColor, setNewColor] = useState<null | BingosyncColor>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const activeColors = squareColors[editingIndex];
+  const activeColors = [...boardState.squares[editingIndex]];
   // for non-lockout you have to manually choose whether to clear or mark a color
   const [isClearRaw, setIsClearRaw] = useState(() => activeColors.length > 0);
   const { getServerMsFromClientMs } = useServerOffsetContext();

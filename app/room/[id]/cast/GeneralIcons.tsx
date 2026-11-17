@@ -9,12 +9,13 @@ import { Group } from "@mantine/core";
 import { Font } from "@/app/font/useFont";
 import getFontClassname from "@/app/font/getFontClassname";
 import { BingosyncColor } from "@/app/color";
+import BoardState from "@/app/match/[id]/BoardState";
 
 type IconProps = {
   isLeft: boolean;
   goal: string;
   color: BingosyncColor;
-  markedSquareColors: ReadonlyArray<BingosyncColor>;
+  markedSquareColors: ReadonlySet<BingosyncColor>;
   src: string;
   count: number;
   countPosition: TCountPosition;
@@ -37,8 +38,11 @@ function Icon({
     ? `${classes.icon} ${classes.spritesIcon}`
     : classes.icon;
   // TODO: Support non-lockout
-  const squareColor =
-    markedSquareColors.length > 0 ? markedSquareColors[0] : null;
+  let squareColor: null | BingosyncColor = null;
+  for (const color of markedSquareColors) {
+    squareColor = color;
+    break;
+  }
   const imgClass =
     squareColor != null ? `${iconClass} ${classes.grayscale}` : iconClass;
 
@@ -122,7 +126,7 @@ type Props = {
   isHidden: boolean;
   countPosition: TCountPosition;
   font: Font;
-  squareColors: ReadonlyArray<ReadonlyArray<BingosyncColor>>;
+  boardState: BoardState;
 };
 
 export default function GeneralIcons({
@@ -135,7 +139,7 @@ export default function GeneralIcons({
   isHidden,
   countPosition,
   font,
-  squareColors,
+  boardState,
 }: Props) {
   return generalGoals.map((item) => {
     const { goal, resolvedGoal } = item.foundGoal;
@@ -147,7 +151,7 @@ export default function GeneralIcons({
         key={resolvedGoal}
         goal={resolvedGoal}
         color={color}
-        markedSquareColors={squareColors[item.squareIndex]}
+        markedSquareColors={boardState.squares[item.squareIndex]}
         count={
           countState == null
             ? 0

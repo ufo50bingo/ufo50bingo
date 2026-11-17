@@ -7,7 +7,7 @@ import useGeneralGoals from "../room/[id]/common/useGeneralGoals";
 import useMembers from "../room/[id]/common/useMembers";
 import { getGameToGoals } from "../room/[id]/cast/findAllGames";
 import useGeneralCounts from "../room/[id]/cast/useGeneralCounts";
-import useSquareColors from "../room/[id]/common/useSquareColors";
+import useBoardState from "./[id]/useBoardState";
 import useTeams from "../matches/useTeams";
 import {
   ActionIcon,
@@ -150,12 +150,7 @@ export default function SingleMatchView({ game }: Props) {
     game.squares,
     game.subcategories,
   );
-  // TODO: use board state here instead
-  const squareColors = useSquareColors(
-    shownFeed,
-    game.game.rows * game.game.cols,
-    true,
-  );
+  const boardState = useBoardState(shownFeed, boardStateParams);
 
   const isMobile = useMediaQuery("(max-width: 525px)");
   const [showFeed, setShowFeed] = useState(false);
@@ -375,7 +370,7 @@ export default function SingleMatchView({ game }: Props) {
                 iconType="sprites"
                 players={players}
                 areGeneralGoalsHidden={!hasStarted}
-                squareColors={squareColors}
+                boardState={boardState}
                 playedGameState={playedGameState}
                 subcategoryIdToName={subcategoryIdToName}
                 allMembers={allMembers}

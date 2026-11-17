@@ -26,6 +26,11 @@ export const auth = betterAuth({
         required: false,
         input: true,
       },
+      pronouns: {
+        type: "string",
+        required: false,
+        input: true,
+      },
       isAdmin: {
         type: "boolean",
         required: false,

@@ -16,14 +16,15 @@ import {
 import { IconPencil, IconRefresh } from "@tabler/icons-react";
 import { useState } from "react";
 import { authClient } from "@/app/authClient";
-import { refreshFromDiscord, updateName } from "./updateProfile";
-import { MAX_NAME_LENGTH } from "./maxNameLength";
+import { refreshFromDiscord, updateNameAndPronouns } from "./updateProfile";
+import { MAX_NAME_LENGTH, MAX_PRONOUNS_LENGTH } from "./profileLimits";
 
 export type ProfileUser = {
   id: number;
   name: string;
   username: null | string;
   image: null | string;
+  pronouns: null | string;
 };
 
 export default function UserProfile({ user }: { user: ProfileUser }) {
@@ -34,7 +35,10 @@ export default function UserProfile({ user }: { user: ProfileUser }) {
     session.user.id === String(user.id);
 
   // null when not editing
-  const [editedName, setEditedName] = useState<null | string>(null);
+  const [edited, setEdited] = useState<null | {
+    name: string;
+    pronouns: string;
+  }>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [hasError, setHasError] = useState(false);
 
@@ -50,11 +54,13 @@ export default function UserProfile({ user }: { user: ProfileUser }) {
     }
   };
 
-  const trimmedName = editedName?.trim() ?? "";
-  const canSaveName =
+  const trimmedName = edited?.name.trim() ?? "";
+  const trimmedPronouns = edited?.pronouns.trim() ?? "";
+  const canSave =
     trimmedName !== "" &&
     trimmedName.length <= MAX_NAME_LENGTH &&
-    trimmedName !== user.name;
+    trimmedPronouns.length <= MAX_PRONOUNS_LENGTH &&
+    (trimmedName !== user.name || trimmedPronouns !== (user.pronouns ?? ""));
 
   return (
     <Container my="md">
@@ -63,17 +69,25 @@ export default function UserProfile({ user }: { user: ProfileUser }) {
           <Group gap="md">
             <Avatar src={user.image} alt={user.name} size={96} />
             <Stack gap={0}>
-              {editedName == null ? (
+              {edited == null ? (
                 <Group gap="xs">
-                  <Title order={2}>{user.name}</Title>
+                  <Title order={2}>
+                    {user.name}
+                    {user.pronouns != null && ` (${user.pronouns})`}
+                  </Title>
                   {isOwnProfile && (
-                    <Tooltip label="Edit name">
+                    <Tooltip label="Edit name and pronouns">
                       <ActionIcon
                         variant="subtle"
                         color="gray"
                         disabled={isSaving}
-                        onClick={() => setEditedName(user.name)}
-                        aria-label="Edit name"
+                        onClick={() =>
+                          setEdited({
+                            name: user.name,
+                            pronouns: user.pronouns ?? "",
+                          })
+                        }
+                        aria-label="Edit name and pronouns"
                       >
                         <IconPencil size={16} />
                       </ActionIcon>
@@ -84,20 +98,36 @@ export default function UserProfile({ user }: { user: ProfileUser }) {
                 <Group gap="xs">
                   <TextInput
                     aria-label="Name"
-                    value={editedName}
+                    placeholder="Name"
+                    value={edited.name}
                     maxLength={MAX_NAME_LENGTH}
-                    onChange={(event) => setEditedName(event.target.value)}
+                    onChange={(event) =>
+                      setEdited({ ...edited, name: event.target.value })
+                    }
+                  />
+                  <TextInput
+                    aria-label="Pronouns"
+                    placeholder="they/them"
+                    value={edited.pronouns}
+                    maxLength={MAX_PRONOUNS_LENGTH}
+                    onChange={(event) =>
+                      setEdited({ ...edited, pronouns: event.target.value })
+                    }
                   />
                   <Button
-                    disabled={isSaving || !canSaveName}
-                    onClick={() => run(() => updateName(trimmedName))}
+                    disabled={isSaving || !canSave}
+                    onClick={() =>
+                      run(() =>
+                        updateNameAndPronouns(trimmedName, trimmedPronouns),
+                      )
+                    }
                   >
                     Save
                   </Button>
                   <Button
                     variant="default"
                     disabled={isSaving}
-                    onClick={() => setEditedName(null)}
+                    onClick={() => setEdited(null)}
                   >
                     Cancel
                   </Button>

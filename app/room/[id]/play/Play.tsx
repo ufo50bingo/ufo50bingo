@@ -41,9 +41,9 @@ import { useServerOffsetContext } from "../ServerOffsetContext";
 import StandardBoardWrapper from "@/app/StandardBoardWrapper";
 import usePasta from "../common/usePasta";
 import useGeneralGoals from "../common/useGeneralGoals";
-import { BingosyncColor } from "@/app/color";
 import getFeedWithoutMistakes from "@/app/match/[id]/getFeedWithoutMistakes";
-import getMatchResult from "@/app/match/[id]/getMatchResult";
+import useTeams from "@/app/matches/useTeams";
+import useTeamsWithResults from "@/app/matches/useTeamsWithResults";
 import { IconFlagCheck } from "@tabler/icons-react";
 import EndMatchPopover from "../common/EndMatchPopover";
 import useIsEnded from "../common/useIsEnded";
@@ -182,39 +182,26 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
     return multiGoalGames;
   }, [gameToGoals, generalSettings.sort]);
 
-  // TODO: Account for tiebreakers
-  const [myScore, opponent] = useMemo(() => {
-    const scores = boardState.getScores();
-    const myScore = scores.get(selectedColor) ?? 0;
-    const entries = [...scores];
-    entries.sort((a, b) => a[1] - b[1]);
-    const highScoreOpponentColor = entries.find(
-      (e) => e[0] !== selectedColor,
-    )?.[0];
-    const bestOpponentColor =
-      highScoreOpponentColor ?? players.find((p) => p.userId !== userId)?.color;
-    const bestOpponentEntry =
-      bestOpponentColor == null
-        ? null
-        : {
-            color: bestOpponentColor as BingosyncColor,
-            score: scores.get(bestOpponentColor) ?? 0,
-          };
-    return [myScore, bestOpponentEntry];
-  }, [boardState, selectedColor, players, userId]);
-
   const feedWithoutMistakes = useMemo(
     () => getFeedWithoutMistakes(feed, boardStateParams),
     [boardStateParams, feed],
   );
-  const matchResult = useMemo(
-    () => getMatchResult(feedWithoutMistakes, boardStateParams),
-    [boardStateParams, feedWithoutMistakes],
+  const teamsMap = useTeams(players);
+  const teamsWithResults = useTeamsWithResults(
+    teamsMap,
+    feedWithoutMistakes,
+    boardStateParams,
   );
   const tiebreakWinner =
-    matchResult.length > 0 && matchResult[0].winType === "Tiebreak"
-      ? matchResult[0].color
+    teamsWithResults.length > 0 && teamsWithResults[0].winType === "Tiebreak"
+      ? teamsWithResults[0].color
       : null;
+
+  const myScore =
+    teamsWithResults.find((team) => team.color === selectedColor)?.score ?? 0;
+  const opponent = teamsWithResults.find(
+    (team) => team.color !== selectedColor,
+  );
 
   const isHidden =
     (timerState.type === "not_started" && !timerState.isForceRevealed) ||

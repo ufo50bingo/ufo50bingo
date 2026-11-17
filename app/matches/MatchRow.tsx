@@ -34,6 +34,7 @@ import { useAppContext } from "../AppContextProvider";
 import { authClient } from "../authClient";
 import EditLeagueModal from "./EditLeagueModal";
 import EditVodModal from "./EditVodModal";
+import deleteMatch from "./deleteMatch";
 import { LEAGUE_SEASON } from "../createboard/leagueConstants";
 import MatchModal from "./MatchModal";
 import useTeams from "./useTeams";
@@ -341,9 +342,9 @@ export function MatchRow({ game, isMobile }: Props) {
               onClick={async () => {
                 try {
                   setIsDeletionProcessing(true);
-                  // TODO: Fix up delete match
-                  // await deleteMatch(info.id);
+                  await deleteMatch(info.id);
                 } finally {
+                  setIsDeletionProcessing(false);
                   setIsDeleting(false);
                 }
               }}

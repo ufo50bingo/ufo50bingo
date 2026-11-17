@@ -36,6 +36,7 @@ import classes from "@/app/matches/MatchRow.module.css";
 import useTeamsWithResults from "../matches/useTeamsWithResults";
 import getFeedWithoutMistakes from "./[id]/getFeedWithoutMistakes";
 import getOverlays from "./[id]/getOverlays";
+import NotStartedBoardCover from "../room/[id]/common/NotStartedBoardCover";
 import PlayedGameState from "../room/[id]/cast/PlayedGameState";
 import MatchPlaybackSlider from "./MatchPlaybackSlider";
 import Feed from "../room/[id]/common/Feed";
@@ -131,8 +132,8 @@ export default function SingleMatchView({ game }: Props) {
   );
   const hasWinner =
     teamsWithResults.length > 0 && teamsWithResults[0].winType != null;
-  // TODO: fill in real value
-  const hasStarted = true;
+  // the board stays covered unless the match was started
+  const hasStarted = matchStartTime != null;
 
   const subcategoryIdToName = useMemo(
     () => new Map(game.subcategories.map((sc) => [sc.subcategoryId, sc.name])),
@@ -376,20 +377,12 @@ export default function SingleMatchView({ game }: Props) {
                 font="default"
                 iconType="sprites"
                 players={players}
-                areGeneralGoalsHidden={false}
+                areGeneralGoalsHidden={!hasStarted}
                 squareColors={squareColors}
                 playedGameState={playedGameState}
                 subcategoryIdToName={subcategoryIdToName}
                 allMembers={allMembers}
-                boardCover={
-                  hasStarted ? null : (
-                    <>
-                      You can view the board after
-                      <br />
-                      the match has been started.
-                    </>
-                  )
-                }
+                boardCover={hasStarted ? null : <NotStartedBoardCover />}
                 gameList={gameList}
                 gameToGoals={gameToGoals}
                 shownDifficulties={["easy", "veryhard", "general"]}

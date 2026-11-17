@@ -31,7 +31,6 @@ import { getHost } from "./vodUtil";
 import formatMatchDate from "./formatMatchDate";
 import { db } from "../db";
 import { useAppContext } from "../AppContextProvider";
-import useSession from "../session/useSession";
 import { authClient } from "../authClient";
 import EditLeagueModal from "./EditLeagueModal";
 import EditVodModal from "./EditVodModal";
@@ -52,7 +51,6 @@ type Props = {
 
 export function MatchRow({ game, isMobile }: Props) {
   const { revealedMatchIDs, hideByDefault } = useAppContext();
-  const oldSession = useSession();
   const { data: session } = authClient.useSession();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -127,7 +125,8 @@ export function MatchRow({ game, isMobile }: Props) {
   const userIdStr = session?.user.id;
   const userId = userIdStr != null ? Number(userIdStr) : null;
   const isCreatorOrAdmin =
-    (userId != null && userId === info.creatorId) || oldSession?.admin === true;
+    (userId != null && userId === info.creatorId) ||
+    session?.user.isAdmin === true;
   const canEditLeague =
     isCreatorOrAdmin &&
     info.variant == "Standard" &&

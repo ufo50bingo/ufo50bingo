@@ -7,6 +7,11 @@ import {
 export const authClient = createAuthClient({
   plugins: [
     anonymousClient(),
-    inferAdditionalFields({ user: { color: { type: "string" } } }),
+    inferAdditionalFields({
+      user: {
+        color: { type: "string" },
+        isAdmin: { type: "boolean", input: false },
+      },
+    }),
   ],
 });

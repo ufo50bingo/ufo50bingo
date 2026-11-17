@@ -1,7 +1,7 @@
 "use server";
 
 import getSql from "../getSql";
-import { readSession, writeSession } from "../session/sessionUtil";
+import getIsAdmin from "../getIsAdmin";
 import { LocalDate, toISODate } from "./localDate";
 import { DailyData } from "./page";
 
@@ -9,11 +9,7 @@ export default async function saveDailyBoard(
   { board, title, creator, description, seed, variant }: DailyData,
   date: LocalDate
 ): Promise<void> {
-  const session = await readSession();
-  if (session == null) {
-    throw new Error("No session found!");
-  }
-  if (session.admin !== true) {
+  if (!(await getIsAdmin())) {
     throw new Error("Only admins can edit the daily board!");
   }
 
@@ -29,6 +25,4 @@ export default async function saveDailyBoard(
       WHERE
         date = ${toISODate(date)}
         AND variant = ${variant}`;
-
-  await writeSession(session);
 }

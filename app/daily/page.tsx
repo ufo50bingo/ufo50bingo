@@ -10,7 +10,7 @@ import DailyFeedFetcher from "./DailyFeedFetcher";
 import { SPICY_UFO } from "../pastas/spicyUfo";
 import ufoGenerator, { UFOPasta } from "../generator/ufoGenerator";
 import { StandardGeneral } from "../pastas/pastaTypes";
-import { readSession } from "../session/sessionUtil";
+import getIsAdmin from "../getIsAdmin";
 import { redirect, RedirectType } from "next/navigation";
 import { Metadata } from "next";
 import { getPracticePasta, getPracticeVariant } from "../usePracticePasta";
@@ -221,9 +221,9 @@ async function getDailyBoard(
 export default async function DailyPage(props: {
   searchParams?: Promise<FilterParams>;
 }) {
-  const [params, session] = await Promise.all([
+  const [params, isAdmin] = await Promise.all([
     props.searchParams,
-    readSession(),
+    getIsAdmin(),
   ]);
 
   const dateParam = params?.date;
@@ -232,7 +232,7 @@ export default async function DailyPage(props: {
   if (
     dateParam != null &&
     dateParam > toISODate(getEasternDate()) &&
-    session?.admin !== true
+    !isAdmin
   ) {
     if (variant == null) {
       redirect("/daily", RedirectType.replace);

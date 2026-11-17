@@ -5,3 +5,15 @@
 .timestamp {
   font-size: 80%;
 }
+
+.link {
+  color: inherit;
+}
+
+.link:not(:hover) {
+  text-decoration: none;
+}
+
+.unlinked {
+  cursor: default;
+}

@@ -18,6 +18,7 @@ type Props = {
   players: ReadonlyArray<PlayerMember>;
   sendEvents:
     null | ((newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>);
+  getEntryLink?: null | ((time: number) => string);
 };
 
 export default function Feed({
@@ -30,6 +31,7 @@ export default function Feed({
   players,
   sendEvents,
   style = {},
+  getEntryLink,
 }: Props) {
   const feedRef = useRef<HTMLDivElement>(null);
   const displayedFeed = useMemo(
@@ -73,7 +75,12 @@ export default function Feed({
       >
         <Stack gap={0}>
           {filteredFeed.map((entry, index) => (
-            <FeedEntry key={index} entry={entry} members={members} />
+            <FeedEntry
+              key={index}
+              entry={entry}
+              members={members}
+              link={getEntryLink != null ? getEntryLink(entry.time) : null}
+            />
           ))}
         </Stack>
       </Card.Section>

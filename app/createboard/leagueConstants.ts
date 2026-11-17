@@ -377,3 +377,4 @@ export const PLAYERS_FOR_FILTER: ReadonlyArray<string> =
 export const ALL_TIERS = ["A", "A1", "A2", "B", "B1", "B2", "C", "C1", "C2"];
 
 export const LEAGUE_SEASON: null | number = 4;
+export const LATEST_SEASON: number = 4;

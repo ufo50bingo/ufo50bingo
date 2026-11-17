@@ -6,6 +6,7 @@ import { MatchRow } from "./MatchRow";
 import { FullParsedGame } from "../fetchFeed";
 import { useAppContext } from "../AppContextProvider";
 import { useMediaQuery } from "@mantine/hooks";
+import MatchFilters from "./MatchFilters";
 
 type Props = {
   games: ReadonlyArray<FullParsedGame>;
@@ -24,8 +25,7 @@ export function MatchList({ games, totalPages }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { isMounted, hideByDefault, setHideByDefault, revealedMatchIDs } =
-    useAppContext();
+  const { isMounted, hideByDefault, revealedMatchIDs } = useAppContext();
 
   // 525px is the width of the board, which is also the default width of the modal
   const isMobile = useMediaQuery("(max-width: 525px)");
@@ -49,6 +49,7 @@ export function MatchList({ games, totalPages }: Props) {
   return (
     <Container my="md">
       <Stack gap="sm">
+        <MatchFilters />
         {games.length === 0 ? (
           <Text c="dimmed" ta="center" py="xl">
             No matches found.

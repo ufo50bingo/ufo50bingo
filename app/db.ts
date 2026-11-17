@@ -55,6 +55,9 @@ interface GameFilterRow {
 const db = new Dexie("UFO50BingoDatabase") as Dexie & {
   attempts: EntityTable<AttemptRow, "id">;
   unselectedGoals: EntityTable<GoalSelectionRow, "goal">;
+  // goals  that aren't included in Normal games are excluded from practice
+  // except for these
+  selectedNonNormalGoals: EntityTable<GoalSelectionRow, "goal">;
   playlist: EntityTable<PlaylistRow, "id">;
   createdMatches: EntityTable<CreatedMatchRow, "id">;
   revealedMatches: EntityTable<RevealedMatchRow, "id">;
@@ -93,6 +96,18 @@ db.version(2)
         attempt.variant = "standard";
       });
   });
+
+db.version(3).stores({
+  attempts: "++id, goal, startTime, duration",
+  unselectedGoals: "goal",
+  selectedNonNormalGoals: "goal",
+  playlist: "++id, priority",
+  createdMatches: "id",
+  revealedMatches: "id",
+  directory: "++id",
+  dailyFeed: "++id, [date+attempt+variant]",
+  gameFilters: "++id, variant",
+});
 
 export type { Attempt, AttemptRow, PlaylistRow };
 export { db };

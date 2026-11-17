@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   IconChevronDown,
   IconChevronUp,
+  IconInfoCircle,
   IconPlayerPlay,
   IconSelector,
 } from "@tabler/icons-react";
@@ -20,7 +21,6 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { useAppContext } from "../AppContextProvider";
-import { db } from "../db";
 import Duration from "../practice/Duration";
 import { compareByDifficulty, ProperGame } from "../goals";
 import PlaylistAddButton from "../PlaylistAddButton";
@@ -34,6 +34,7 @@ import getFlatGoals from "../generator/getFlatGoals";
 import { usePracticePasta } from "../usePracticePasta";
 import getSubcategoryName from "../generator/getSubcategoryName";
 import getCategoryName from "../generator/getCategoryName";
+import isInNormalFormat from "../generator/isInNormalFormat";
 import { PracticeVariant, usePracticeVariant } from "../PracticeVariantContext";
 import { Metadata } from "next";
 import { STANDARD_UFO } from "../pastas/standardUfo";
@@ -55,7 +56,8 @@ export default function AllGoals() {
 }
 
 function Inner({ practiceVariant }: { practiceVariant: PracticeVariant }) {
-  const { goalStats, unselectedGoals, setGoalPartsAndPasta } = useAppContext();
+  const { goalStats, isGoalSelected, setGoalsSelected, setGoalPartsAndPasta } =
+    useAppContext();
   const pasta = usePracticePasta();
   const flatGoals = getFlatGoals(pasta);
 
@@ -80,10 +82,13 @@ function Inner({ practiceVariant }: { practiceVariant: PracticeVariant }) {
     }
   };
 
-  const allChecked = flatGoals.every((goal) => !unselectedGoals.has(goal.name));
-  const allUnchecked = flatGoals.every((goal) =>
-    unselectedGoals.has(goal.name),
+  const normalGoals = flatGoals.filter((goal) =>
+    isInNormalFormat(goal.category, pasta),
   );
+  // only "normal" goals need to be checked for allChecked to be true, since
+  // we don't want to accidentally show people non-normal goals unless they ask for it
+  const allChecked = normalGoals.every(isGoalSelected);
+  const allUnchecked = flatGoals.every((goal) => !isGoalSelected(goal));
 
   const [sortBy, setSortBy] = useState<string>("goal");
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
@@ -168,13 +173,10 @@ function Inner({ practiceVariant }: { practiceVariant: PracticeVariant }) {
                 indeterminate={!allChecked && !allUnchecked}
                 onChange={async (event) => {
                   if (event.currentTarget.checked) {
-                    await db.unselectedGoals.clear();
+                    // select all should not alter non-normal goals
+                    await setGoalsSelected(normalGoals, true);
                   } else {
-                    await db.unselectedGoals.bulkAdd(
-                      flatGoals
-                        .filter((goal) => !unselectedGoals.has(goal.name))
-                        .map((goal) => ({ goal: goal.name })),
-                    );
+                    await setGoalsSelected(flatGoals, false);
                   }
                 }}
               />
@@ -242,14 +244,13 @@ function Inner({ practiceVariant }: { practiceVariant: PracticeVariant }) {
                     label={<>The Practice tab will exclude unchecked goals</>}
                   >
                     <Checkbox
-                      checked={!unselectedGoals.has(goal.name)}
-                      onChange={async (event) => {
-                        if (event.currentTarget.checked) {
-                          await db.unselectedGoals.delete(goal.name);
-                        } else {
-                          await db.unselectedGoals.add({ goal: goal.name });
-                        }
-                      }}
+                      checked={isGoalSelected(goal)}
+                      onChange={async (event) =>
+                        await setGoalsSelected(
+                          [goal],
+                          event.currentTarget.checked,
+                        )
+                      }
                     />
                   </Tooltip>
                 </Table.Td>
@@ -275,6 +276,16 @@ function Inner({ practiceVariant }: { practiceVariant: PracticeVariant }) {
                     canClear={true}
                     tokens={pasta.tokens}
                   />
+                  {!isInNormalFormat(goal.category, pasta) && (
+                    <Tooltip label="Not included in Normal format">
+                      <IconInfoCircle
+                        size={14}
+                        color="var(--mantine-color-dimmed)"
+                        style={{ marginLeft: 4, verticalAlign: "text-bottom" }}
+                        aria-label="Not included in Normal format"
+                      />
+                    </Tooltip>
+                  )}
                 </Table.Td>
                 <Table.Td>
                   {resourceLink != null ? (

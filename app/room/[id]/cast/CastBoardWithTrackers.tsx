@@ -41,6 +41,7 @@ type Props = {
   playedGameState: PlayedGameState;
   tiebreakWinner: null | BingosyncColor;
   canShowRecent?: boolean;
+  overlays?: ReadonlyArray<null | ReactNode>;
 };
 
 export default function CastBoardWithTrackers({
@@ -65,6 +66,7 @@ export default function CastBoardWithTrackers({
   playedGameState,
   tiebreakWinner,
   canShowRecent = true,
+  overlays,
 }: Props) {
   const leftPlayer: null | undefined | PlayerMember = players[0];
   const rightPlayer: null | undefined | PlayerMember = players[1];
@@ -173,6 +175,7 @@ export default function CastBoardWithTrackers({
           viewerColor={null}
           castInfo={{ leftColor, rightColor }}
           canShowRecent={canShowRecent}
+          overlays={overlays}
           rows={game.game.rows}
           columns={game.game.cols}
         />

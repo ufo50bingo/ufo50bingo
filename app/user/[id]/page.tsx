@@ -12,7 +12,7 @@ const fetchUser = cache(async (idStr: string): Promise<null | ProfileUser> => {
   }
   const sql = getSql();
   const result = await sql`
-    SELECT name, username, image
+    SELECT id, name, username, image
     FROM "user"
     WHERE id = ${id}
   `;
@@ -21,6 +21,7 @@ const fetchUser = cache(async (idStr: string): Promise<null | ProfileUser> => {
     return null;
   }
   return {
+    id: row.id,
     name: row.name,
     username: row.username ?? null,
     image: row.image ?? null,

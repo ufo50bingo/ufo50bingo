@@ -36,6 +36,7 @@ import classes from "@/app/matches/MatchRow.module.css";
 import useTeamsWithResults from "../matches/useTeamsWithResults";
 import getFeedWithoutMistakes from "./[id]/getFeedWithoutMistakes";
 import getOverlays from "./[id]/getOverlays";
+import { getClockZeroTime } from "./[id]/MatchClock";
 import NotStartedBoardCover from "../room/[id]/common/NotStartedBoardCover";
 import PlayedGameState from "../room/[id]/cast/PlayedGameState";
 import MatchPlaybackSlider from "./MatchPlaybackSlider";
@@ -81,19 +82,18 @@ export default function SingleMatchView({ game }: Props) {
     [game.game.cols, game.game.isLockout, game.game.rows],
   );
 
-  const { matchStartTime, maxSeekSec } = useMemo(() => {
+  const { hasStarted, matchStartTime, maxSeekSec } = useMemo(() => {
     const feed = game.feed;
-    const firstStart = feed.find(
+    const hasStarted = feed.some(
       (item) => item.type === "timer_event" && item.event === "start",
     );
-    if (firstStart == null || feed.length === 0) {
-      return { matchStartTime: null, maxSeekSec: 0 };
-    }
-    const endTime = feed[feed.length - 1].time;
-    return {
-      matchStartTime: firstStart.time,
-      maxSeekSec: Math.max(endTime - firstStart.time, 0),
-    };
+    const matchStartTime = hasStarted ? getClockZeroTime(feed) : null;
+    // no playback if the clock never reached 0
+    const maxSeekSec =
+      matchStartTime != null && feed.length > 0
+        ? Math.max(feed[feed.length - 1].time - matchStartTime, 0)
+        : 0;
+    return { hasStarted, matchStartTime, maxSeekSec };
   }, [game.feed]);
   const hasPlayback = maxSeekSec > 0;
   const [seekSec, setSeekSec] = useState(maxSeekSec);
@@ -132,9 +132,6 @@ export default function SingleMatchView({ game }: Props) {
   );
   const hasWinner =
     teamsWithResults.length > 0 && teamsWithResults[0].winType != null;
-  // the board stays covered unless the match was started
-  const hasStarted = matchStartTime != null;
-
   const subcategoryIdToName = useMemo(
     () => new Map(game.subcategories.map((sc) => [sc.subcategoryId, sc.name])),
     [game.subcategories],

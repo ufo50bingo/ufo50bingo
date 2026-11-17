@@ -4,6 +4,7 @@ import { SoundChoices } from "./NotificationsSection";
 import useLocalNumber from "@/app/localStorage/useLocalNumber";
 import { NewFeed } from "@/app/fetchFeed";
 import { GenericMember } from "./useMembers";
+import { MatchClock } from "@/app/match/[id]/MatchClock";
 export type SyncedTimerEventName = "set_duration" | "pause" | "start";
 
 type Input = {
@@ -62,8 +63,6 @@ export default function useSyncedTimer({
 
   const forceReveal = useCallback(async () => {
     setLastForceReveal(Date.now());
-    // TODO: Sync reveal info
-    // await revealBoard(id, roomBackend);
   }, [setLastForceReveal]);
 
   const { getClientMsFromServerMs } = useServerOffsetContext();
@@ -71,57 +70,29 @@ export default function useSyncedTimer({
   const [now, setNow] = useState(() => Date.now());
 
   const timerState = useMemo<SyncedTimerState>(() => {
-    let accumulatedDuration = -60000;
-    let curStartTime: null | number = null;
-    let hasStarted = false;
+    const clock = new MatchClock();
     let pauseRequester: null | undefined | string = null;
     let lastPauseTime: null | number = null;
-    let endTime: null | number = null;
 
-    feed.forEach((item) => {
-      if (endTime != null) {
-        return;
+    for (const item of feed) {
+      if (clock.endTime != null) {
+        break;
       }
-      if (item.type === "end_game") {
-        if (curStartTime != null) {
-          accumulatedDuration += item.time * 1000 - curStartTime;
-          curStartTime = null;
-        }
-        endTime = item.time * 1000;
-        return;
-      } else if (item.type !== "timer_event") {
-        return;
+      clock.apply(item);
+      if (item.type === "timer_event" && item.event === "pause") {
+        const member = members.get(item.userId);
+        pauseRequester =
+          member?.overrideName ?? member?.name ?? String(item.userId);
+        lastPauseTime = item.time * 1000;
       }
-      switch (item.event) {
-        case "set_duration":
-          accumulatedDuration = item.duration! * 1000;
-          if (curStartTime != null) {
-            curStartTime = item.time * 1000;
-          }
-          return;
-        case "pause":
-          if (curStartTime != null) {
-            accumulatedDuration += item.time * 1000 - curStartTime;
-            curStartTime = null;
-          }
-          const member = members.get(item.userId);
-          pauseRequester =
-            member?.overrideName ?? member?.name ?? String(item.userId);
-          lastPauseTime = item.time * 1000;
-          return;
-        case "start":
-          hasStarted = true;
-          if (curStartTime == null) {
-            curStartTime = item.time * 1000;
-          }
-          return;
-        default:
-          item.event satisfies never;
-          return;
-      }
-    });
+    }
+    const accumulatedDuration = clock.accumulated * 1000;
+    const curStartTime =
+      clock.runningSince != null ? clock.runningSince * 1000 : null;
+    const hasStarted = clock.hasStarted;
+    const isEnded = clock.endTime != null;
     const isForceRevealed =
-      endTime != null ||
+      isEnded ||
       (lastForceReveal > 0 &&
         (lastPauseTime == null ||
           getClientMsFromServerMs(lastPauseTime) < lastForceReveal));
@@ -129,8 +100,7 @@ export default function useSyncedTimer({
       ? {
           type: hasStarted ? "paused" : "not_started",
           accumulatedDuration,
-          pauseRequester:
-            hasStarted && endTime == null ? pauseRequester : undefined,
+          pauseRequester: hasStarted && !isEnded ? pauseRequester : undefined,
           isForceRevealed,
         }
       : getClientMsFromServerMs(curStartTime) < Date.now()
@@ -167,19 +137,6 @@ export default function useSyncedTimer({
 
     return () => clearTimeout(timeoutId);
   }, [timerState]);
-
-  const prevIsBeforeRevealRef = useRef<null | boolean>(null);
-  const isBeforeReveal =
-    timerState.type === "not_started" ||
-    (timerState.type === "countdown" && !timerState.wasPaused);
-  useEffect(() => {
-    const prevIsBeforeReveal = prevIsBeforeRevealRef.current;
-    if (!isCast && prevIsBeforeReveal && !isBeforeReveal) {
-      // TOOD: Reveal board
-      // revealBoard(id, roomBackend);
-    }
-    prevIsBeforeRevealRef.current = isBeforeReveal;
-  }, [isBeforeReveal, isCast]);
 
   return {
     timerState,

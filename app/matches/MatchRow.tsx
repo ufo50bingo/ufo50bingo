@@ -126,7 +126,7 @@ export function MatchRow({ game, isMobile }: Props) {
   const userIdStr = session?.user.id;
   const userId = userIdStr != null ? Number(userIdStr) : null;
   const isCreatorOrAdmin =
-    (userId != null && userId === info.creatorId) ||
+    (userId != null && info.creatorId != null && userId === info.creatorId) ||
     session?.user.isAdmin === true;
   const canEditLeague =
     isCreatorOrAdmin &&

@@ -6,7 +6,6 @@ import { storePasta } from "../pastaStorage";
 import findGoal from "../findGoal";
 import getSql from "../getSql";
 import joinValues from "../joinValues";
-import getUserId from "../getUserId";
 import getAllSubcategories from "./getAllSubcategories";
 import getNonGeneralCategories from "./getNonGeneralCategories";
 import { METADATA, Variant } from "../pastas/metadata";
@@ -14,6 +13,7 @@ import { hashJson } from "../hashJson";
 import getAllCastOptions from "./getAllCastOptions";
 import getGameList from "../room/[id]/common/getGameList";
 import { revalidatePath } from "next/cache";
+import getUserIdNullable from "../getUserIdNullable";
 
 interface LeagueInfo {
   season: number;
@@ -56,7 +56,7 @@ export default async function createMatch({
   rows,
   cols,
 }: Props): Promise<string> {
-  const userId = await getUserId();
+  const userId = await getUserIdNullable();
   const sql = getSql(false);
   const pastaToStore = getFullPasta(fullPasta, variant);
   let hash: null | bigint = null;

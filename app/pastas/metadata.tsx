@@ -286,6 +286,6 @@ interface UFO extends MetadataBase {
   pasta: UFOPasta;
 }
 
-export type VariantMetadata = Custom | UFO;
+type VariantMetadata = Custom | UFO;
 
 export const METADATA: ReadonlyArray<VariantMetadata> = RAW_METADATA;

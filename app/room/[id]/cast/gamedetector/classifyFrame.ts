@@ -4,7 +4,7 @@ import { screenScale } from "./screen";
 import { detectTerminal } from "./terminal/detect";
 import type { FrameResult, ImageDataLike } from "./types";
 
-export type ClassifyOptions = {
+type ClassifyOptions = {
   /**
    * Expected cartridge scale relative to min(width / 384, height / 216), e.g.
    * the `scale` of an earlier result. Searches 3 scales around it instead of

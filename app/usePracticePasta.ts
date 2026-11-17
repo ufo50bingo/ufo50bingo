@@ -4,11 +4,7 @@ import { CHOCO_UFO } from "./pastas/chocoUfo";
 import { NES_50_UFO } from "./pastas/nes50Ufo";
 import { SPICY_UFO } from "./pastas/spicyUfo";
 import { STANDARD_UFO } from "./pastas/standardUfo";
-import {
-  NonStandardPracticeVariant,
-  PracticeVariant,
-  usePracticeVariant,
-} from "./PracticeVariantContext";
+import { PracticeVariant, usePracticeVariant } from "./PracticeVariantContext";
 
 export const ALL_PRACTICE_PASTAS: ReadonlyArray<UFOPasta> = [
   STANDARD_UFO,

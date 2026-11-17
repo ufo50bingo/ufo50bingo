@@ -12,7 +12,6 @@ import useBingosyncSocket from "../common/useBingosyncSocket";
 import ScoreSquare from "../common/ScoreSquare";
 import { useMediaQuery } from "@mantine/hooks";
 import SimpleGeneralTracker from "./SimpleGeneralTracker";
-import { FoundGoal } from "@/app/findGoal";
 import { CASTER_RESTRICTIONS, GeneralItem } from "../cast/Cast";
 import useLocalBool from "@/app/localStorage/useLocalBool";
 import useFont from "@/app/font/useFont";
@@ -20,10 +19,7 @@ import useSyncedTimer from "../common/useSyncedTimer";
 import SyncedTimerBoardCover from "../common/SyncedTimerBoardCover";
 import SyncedTimer from "../common/SyncedTimer";
 import StartPauseButton from "../common/StartPauseButton";
-import {
-  PlayerTrackerRestrictions,
-  UFOPasta,
-} from "@/app/generator/ufoGenerator";
+import { PlayerTrackerRestrictions } from "@/app/generator/ufoGenerator";
 import useGeneralSettings from "./useGeneralSettings";
 import useFullGeneralState from "./useFullGeneralState";
 import GeneralGoal from "../cast/GeneralGoal";
@@ -47,12 +43,6 @@ import useTeamsWithResults from "@/app/matches/useTeamsWithResults";
 import { IconFlagCheck } from "@tabler/icons-react";
 import EndMatchPopover from "../common/EndMatchPopover";
 import useIsEnded from "../common/useIsEnded";
-
-export type FoundItem = {
-  foundGoal: FoundGoal<string, string, string>;
-  pasta: UFOPasta;
-  squareIndex: number;
-};
 
 export type Props = {
   game: FullParsedGame;

@@ -217,7 +217,7 @@ export function parseMemberResult(result: SQLResult): Array<FeedMember> {
   }));
 }
 
-export function fetchGoalProgressSql(sql: SQLTemplate, gameId: number): SQL {
+function fetchGoalProgressSql(sql: SQLTemplate, gameId: number): SQL {
   return sql`
     SELECT
       EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
@@ -230,9 +230,7 @@ export function fetchGoalProgressSql(sql: SQLTemplate, gameId: number): SQL {
   `;
 }
 
-export function parseGoalProgressResult(
-  result: SQLResult,
-): Array<FeedGoalProgress> {
+function parseGoalProgressResult(result: SQLResult): Array<FeedGoalProgress> {
   return result.map((raw) => ({
     type: "goal_progress",
     userId: Number(raw.user_id),
@@ -243,10 +241,7 @@ export function parseGoalProgressResult(
   }));
 }
 
-export function fetchCurrentSubcategorySql(
-  sql: SQLTemplate,
-  gameId: number,
-): SQL {
+function fetchCurrentSubcategorySql(sql: SQLTemplate, gameId: number): SQL {
   return sql`
     SELECT
       EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
@@ -257,7 +252,7 @@ export function fetchCurrentSubcategorySql(
   `;
 }
 
-export function parseCurrentSubcategoryResult(
+function parseCurrentSubcategoryResult(
   result: SQLResult,
 ): Array<FeedCurrentSubcategory> {
   return result.map((raw) => ({
@@ -268,7 +263,7 @@ export function parseCurrentSubcategoryResult(
   }));
 }
 
-export function fetchPlayerOrderSql(sql: SQLTemplate, gameId: number): SQL {
+function fetchPlayerOrderSql(sql: SQLTemplate, gameId: number): SQL {
   return sql`
     SELECT
       EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
@@ -278,9 +273,7 @@ export function fetchPlayerOrderSql(sql: SQLTemplate, gameId: number): SQL {
   `;
 }
 
-export function parsePlayerOrderResult(
-  result: SQLResult,
-): Array<FeedPlayerOrder> {
+function parsePlayerOrderResult(result: SQLResult): Array<FeedPlayerOrder> {
   return result.map((raw) => ({
     type: "player_order",
     time: Number(raw.unixtime),
@@ -288,10 +281,7 @@ export function parsePlayerOrderResult(
   }));
 }
 
-export function fetchPlayerColorChangeSql(
-  sql: SQLTemplate,
-  gameId: number,
-): SQL {
+function fetchPlayerColorChangeSql(sql: SQLTemplate, gameId: number): SQL {
   return sql`
     SELECT
       EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
@@ -302,7 +292,7 @@ export function fetchPlayerColorChangeSql(
   `;
 }
 
-export function parsePlayerColorChangeResult(
+function parsePlayerColorChangeResult(
   result: SQLResult,
 ): Array<FeedPlayerColorChange> {
   return result.map((raw) => ({
@@ -333,7 +323,7 @@ export function parseDisconnectResult(
   }));
 }
 
-export function fetchEndGameSql(sql: SQLTemplate, gameId: number): SQL {
+function fetchEndGameSql(sql: SQLTemplate, gameId: number): SQL {
   return sql`
     SELECT
       EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
@@ -343,7 +333,7 @@ export function fetchEndGameSql(sql: SQLTemplate, gameId: number): SQL {
   `;
 }
 
-export function parseEndGameResult(result: SQLResult): Array<FeedEndGame> {
+function parseEndGameResult(result: SQLResult): Array<FeedEndGame> {
   return result.map((raw) => ({
     type: "end_game",
     time: Number(raw.unixtime),
@@ -490,7 +480,7 @@ export type Vod = {
   startSeconds: null | number;
 };
 
-export type LeagueGame = {
+type LeagueGame = {
   id: number;
   p1Id: number;
   p2Id: number;

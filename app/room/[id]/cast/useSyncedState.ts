@@ -8,10 +8,3 @@ export interface CountChange {
   game: string;
   count: number;
 }
-
-export interface CurrentGame {
-  game: null | string;
-  start_time: number;
-}
-
-export type AllPlayerGames = Map<number, ReadonlyArray<CurrentGame>>;

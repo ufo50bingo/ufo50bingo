@@ -15,7 +15,7 @@ import getAllCastOptions from "./getAllCastOptions";
 import getGameList from "../room/[id]/common/getGameList";
 import { revalidatePath } from "next/cache";
 
-export interface LeagueInfo {
+interface LeagueInfo {
   season: number;
   tier: string;
   week: string;

@@ -22,7 +22,7 @@ const TOP_K = 6;
 const TRIM = 0.25;
 
 /** Best and runner-up errors (1 - R^2); games are indices into GAMES. */
-export type ArtMatch = {
+type ArtMatch = {
   game: number;
   err: number;
   err2: number;

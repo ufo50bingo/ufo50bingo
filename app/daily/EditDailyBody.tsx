@@ -10,12 +10,10 @@ import {
   Textarea,
   TextInput,
 } from "@mantine/core";
-import { fetchBoard } from "../fetchMatchInfo";
 import saveDailyBoard from "./saveDailyBoard";
 import { RTE } from "./RTE";
 import { JSONContent } from "@tiptap/react";
 import { PracticeVariant } from "../PracticeVariantContext";
-import { RoomBackend } from "../roomApi";
 
 type Props = {
   date: LocalDate;
@@ -45,8 +43,6 @@ export default function EditDailyBody({
 
   const board = textBoard.trim().split("\n");
   const lines = board.length;
-
-  const [bingosyncId, setBingosyncId] = useState("");
   return (
     <Stack>
       <TextInput
@@ -60,26 +56,6 @@ export default function EditDailyBody({
         onChange={(event) => setCreator(event.currentTarget.value)}
       />
       <RTE label="Description" value={description} onChange={setDescription} />
-      <Group align="end">
-        <TextInput
-          label="Optional: Enter Bingosync ID to sync board"
-          value={bingosyncId}
-          onChange={(event) => setBingosyncId(event.currentTarget.value)}
-        />
-        <Button
-          onClick={async () => {
-            try {
-              const roomBackend: RoomBackend = "bingosync";
-              const rawBoard = await fetchBoard(bingosyncId, roomBackend);
-              setTextBoard(rawBoard.map((square) => square.name).join("\n"));
-            } catch (err) {
-              console.error(err);
-            }
-          }}
-        >
-          Sync
-        </Button>
-      </Group>
       <NumberInput
         label="Seed"
         description="Not used in card generation. Only intended for terminal codes."

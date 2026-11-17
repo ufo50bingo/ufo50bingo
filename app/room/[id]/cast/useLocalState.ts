@@ -11,7 +11,7 @@ interface BaseState {
   showAll: ReadonlyArray<string>;
 }
 
-export interface CasterState extends BaseState {
+interface CasterState extends BaseState {
   addShowAll: (goal: string) => unknown;
   setShownDifficulties: (newDifficulties: ReadonlyArray<Difficulty>) => unknown;
   sortType: SortType;

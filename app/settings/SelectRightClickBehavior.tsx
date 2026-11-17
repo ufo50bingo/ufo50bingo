@@ -11,7 +11,6 @@ import { RightClickBehavior } from "./useRightClickBehavior";
 import { useRightClickBehaviorContext } from "./RightClickBehaviorContext";
 import { useAppContext } from "../AppContextProvider";
 import { IconX } from "@tabler/icons-react";
-import React from "react";
 
 type Props = {
   label?: string;

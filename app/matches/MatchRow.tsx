@@ -37,7 +37,7 @@ import EditLeagueModal from "./EditLeagueModal";
 import EditVodModal from "./EditVodModal";
 import { LEAGUE_SEASON } from "../createboard/leagueConstants";
 import MatchModal from "./MatchModal";
-import useTeams from "./useTeams";
+import useTeams, { compareNames } from "./useTeams";
 import TeamPlayers from "./TeamPlayers";
 import TeamScoreCell from "./TeamScoreCell";
 import getFeedWithoutMistakes from "../match/[id]/getFeedWithoutMistakes";
@@ -91,6 +91,28 @@ export function MatchRow({ game, isMobile }: Props) {
   const isVisible =
     !hideByDefault || revealedMatchIDs?.has(String(info.id)) === true;
   const name = info.name ?? `Match #${info.id}`;
+
+  // teamsWithResults puts the best team first, which would give away the
+  // result, so sort hidden teams by their first (alphabetical) player instead
+  const displayedTeams = useMemo(
+    () =>
+      isVisible
+        ? teamsWithResults
+        : teamsWithResults.slice().sort((a, b) => {
+            const firstAPlayer = a.players[0];
+            const firstBPlayer = b.players[0];
+            if (firstAPlayer == null && firstBPlayer != null) {
+              return 1;
+            } else if (firstBPlayer == null && firstAPlayer != null) {
+              return -1;
+            } else if (firstAPlayer == null && firstBPlayer == null) {
+              return a.color.localeCompare(b.color);
+            } else {
+              return firstAPlayer.name.localeCompare(firstBPlayer.name);
+            }
+          }),
+    [isVisible, teamsWithResults],
+  );
 
   let isTwitch = false;
   const vod = info.vod;
@@ -191,7 +213,7 @@ export function MatchRow({ game, isMobile }: Props) {
         </div>
 
         <div className={classes.teams}>
-          {teamsWithResults.map((team, idx) => {
+          {displayedTeams.map((team, idx) => {
             return (
               <Fragment key={team.color}>
                 <TeamPlayers
@@ -208,7 +230,7 @@ export function MatchRow({ game, isMobile }: Props) {
                       <ActionIcon
                         className={classes.reveal}
                         style={{
-                          gridRow: `1 / span ${teamsWithResults.length}`,
+                          gridRow: `1 / span ${displayedTeams.length}`,
                         }}
                         variant="light"
                         w="auto"

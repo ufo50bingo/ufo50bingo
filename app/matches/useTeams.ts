@@ -20,6 +20,11 @@ export default function useTeams(
       }
       (team.players as Array<PlayerMember>).push(p);
     }
+    for (const team of colorToTeam.values()) {
+      (team.players as Array<PlayerMember>).sort((a, b) =>
+        a.name.localeCompare(b.name),
+      );
+    }
     return colorToTeam;
   }, [players]);
 }

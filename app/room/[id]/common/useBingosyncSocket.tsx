@@ -5,7 +5,8 @@ import { NewFeed, NewFeedItem } from "@/app/fetchFeed";
 import persistEvents from "./persistEvents";
 
 const PING_MESSAGE = JSON.stringify({ type: "ping" });
-const HEARTBEAT_INTERVAL_MS = 10000;
+const HEARTBEAT_INTERVAL_MS = 30000;
+const PING_TIMEOUT_MS = 10000;
 
 type Props = {
   gameId: number;
@@ -111,7 +112,7 @@ export default function useBingosyncSocket({
     // prevent showing modal if connection was closed on purpose
     let isCleanedUp = false;
     let isDisconnected = false;
-    let awaitingReply = false;
+    let pingSentAt: null | number = null;
 
     const markDisconnected = () => {
       if (isCleanedUp || isDisconnected) {
@@ -129,7 +130,7 @@ export default function useBingosyncSocket({
       if (socket.readyState !== WebSocket.OPEN) {
         return;
       }
-      awaitingReply = true;
+      pingSentAt = Date.now();
       socket.send(PING_MESSAGE);
     };
 
@@ -137,24 +138,22 @@ export default function useBingosyncSocket({
       if (socket.readyState !== WebSocket.OPEN) {
         return;
       }
-      if (awaitingReply) {
-        // we didn't get a response from the last ping, so assume disconnection
+      if (pingSentAt == null) {
+        sendPing();
+      } else if (Date.now() - pingSentAt >= PING_TIMEOUT_MS) {
         markDisconnected();
-        return;
       }
-      sendPing();
     }, HEARTBEAT_INTERVAL_MS);
 
-    // after sleep or a long time in the background, the socket may be dead.
-    // ping right away
     const onVisibilityChange = () => {
       if (document.visibilityState === "visible") {
-        awaitingReply = false;
         sendPing();
       }
     };
+    const onResume = () => sendPing();
 
     document.addEventListener("visibilitychange", onVisibilityChange);
+    document.addEventListener("resume", onResume);
     window.addEventListener("offline", markDisconnected);
 
     socket.onopen = () => {
@@ -168,7 +167,7 @@ export default function useBingosyncSocket({
 
     socket.onmessage = (evt) => {
       // any message receieved satisfies the heartbeat
-      awaitingReply = false;
+      pingSentAt = null;
 
       let data;
       try {
@@ -194,6 +193,7 @@ export default function useBingosyncSocket({
       isCleanedUp = true;
       clearInterval(heartbeat);
       document.removeEventListener("visibilitychange", onVisibilityChange);
+      document.removeEventListener("resume", onResume);
       window.removeEventListener("offline", markDisconnected);
       socket.close();
       socketRef.current = null;

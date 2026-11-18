@@ -12,7 +12,7 @@ import CastSettings from "./CastSettings";
 import EditSquare from "./EditSquare";
 import { CountChange } from "./useSyncedState";
 import useLocalState from "./useLocalState";
-import useBingosyncSocket from "../common/useBingosyncSocket";
+import useFeedSocket from "../common/useFeedSocket";
 import useSounds from "../play/useSounds";
 import GameSelector from "./GameSelector";
 import { FoundGoalWithCast } from "@/app/findGoal";
@@ -87,7 +87,7 @@ export default function Cast({
   const { getServerMsFromClientMs } = useServerOffsetContext();
   const squareNames = useMemo(() => squares.map((s) => s.name), [squares]);
   const [soundChoices, setSoundChoices, playAudio] = useSounds("cast");
-  const { feed, reconnectModal, sendEvents } = useBingosyncSocket({
+  const { feed, reconnectModal, sendEvents } = useFeedSocket({
     gameId,
     initialFeed,
     userId,

@@ -71,3 +71,27 @@ export function fromISODate(isoDate: string): LocalDate {
     day: Number(dayStr),
   };
 }
+
+export function getEasternDate(): LocalDate {
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+  });
+  const parts = formatter.formatToParts(new Date());
+  let month = 1;
+  let day = 1;
+  let year = 1970;
+  parts.forEach((part) => {
+    if (part.type === "month") {
+      month = Number(part.value);
+    } else if (part.type === "day") {
+      day = Number(part.value);
+    } else if (part.type === "year") {
+      year = Number(part.value);
+    }
+  });
+  return { year, month, day };
+}

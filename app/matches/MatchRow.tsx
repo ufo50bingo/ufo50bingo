@@ -42,6 +42,7 @@ import TeamPlayers from "./TeamPlayers";
 import TeamScoreCell from "./TeamScoreCell";
 import getFeedWithoutMistakes from "../match/[id]/getFeedWithoutMistakes";
 import useTeamsWithResults from "./useTeamsWithResults";
+import useIsEnded from "../room/[id]/common/useIsEnded";
 
 const ICON_SIZE = 16;
 
@@ -85,8 +86,11 @@ export function MatchRow({ game, isMobile }: Props) {
     boardStateParams,
   );
 
+  const isEnded = useIsEnded(feed);
   const hasWinner =
-    teamsWithResults.length > 0 && teamsWithResults[0].winType != null;
+    isEnded &&
+    teamsWithResults.length > 0 &&
+    teamsWithResults[0].winType != null;
   const isVisible =
     !hideByDefault || revealedMatchIDs?.has(String(info.id)) === true;
   const name = info.name ?? `Match #${info.id}`;
@@ -223,7 +227,12 @@ export function MatchRow({ game, isMobile }: Props) {
                   size="md"
                 />
                 {isVisible ? (
-                  <TeamScoreCell team={team} size="md" />
+                  <TeamScoreCell
+                    team={team}
+                    size="md"
+                    isWinnerShown={isEnded}
+                    isInProgress={!isEnded && idx === 0}
+                  />
                 ) : (
                   idx === 0 && (
                     <Tooltip label="Show result" withArrow>

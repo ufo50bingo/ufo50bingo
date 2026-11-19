@@ -1,4 +1,5 @@
 import { Group, Text, Tooltip } from "@mantine/core";
+import { IconProgress } from "@tabler/icons-react";
 import BingoIcon from "./BingoIcon";
 import classes from "./MatchRow.module.css";
 import { getColorHex } from "../color";
@@ -8,12 +9,14 @@ type Props = {
   team: MatchTeamWithResult;
   size: "md" | "lg";
   isWinnerShown?: boolean;
+  isInProgress?: boolean;
 };
 
 export default function TeamScoreCell({
   team,
   size,
   isWinnerShown = true,
+  isInProgress = false,
 }: Props) {
   const iconColor = getColorHex(team.color);
   return (
@@ -29,7 +32,14 @@ export default function TeamScoreCell({
           team.score
         )}
       </Text>
-      <span className={classes.iconSlot}>
+      <span
+        className={`${classes.iconSlot} ${isInProgress ? classes.inProgressSlot : ""}`}
+      >
+        {isInProgress && (
+          <Tooltip label="In progress" withArrow={true}>
+            <IconProgress size={size === "md" ? 16 : 20} />
+          </Tooltip>
+        )}
         {isWinnerShown && team.winType != null && (
           <Tooltip label={team.winType} withArrow={true}>
             <span className={classes.winIcon}>

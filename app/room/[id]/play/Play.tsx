@@ -205,7 +205,7 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
   return (
     <>
       <Group align="stretch">
-        <Stack gap={8}>
+        <Stack gap={8} style={{ minWidth: 0 }}>
           <StandardBoardWrapper rows={game.rows} columns={game.cols}>
             <Board
               pasta={pasta}

@@ -387,6 +387,7 @@ export default function SingleMatchView({ game }: Props) {
                 }
                 canShowRecent={false}
                 overlays={showTimes && overlays != null ? overlays : undefined}
+                canShrink={true}
               />
               {showFeed && (
                 <div style={{ flexShrink: 0 }}>

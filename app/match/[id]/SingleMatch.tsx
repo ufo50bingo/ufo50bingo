@@ -21,6 +21,7 @@ export default function SingleMatch({ game }: Props) {
       <Card
         style={{
           width: "fit-content",
+          maxWidth: "100%",
         }}
       >
         <SingleMatchView game={game} />

@@ -44,6 +44,7 @@ type Props = {
   canShowRecent?: boolean;
   overlays?: ReadonlyArray<null | ReactNode>;
   canShrink?: boolean;
+  showSideColumns?: boolean;
 };
 
 export default function CastBoardWithTrackers({
@@ -70,6 +71,7 @@ export default function CastBoardWithTrackers({
   canShowRecent = true,
   overlays,
   canShrink = false,
+  showSideColumns = true,
 }: Props) {
   const leftPlayer: null | undefined | PlayerMember = players[0];
   const rightPlayer: null | undefined | PlayerMember = players[1];
@@ -128,7 +130,7 @@ export default function CastBoardWithTrackers({
       wrap="nowrap"
       style={canShrink ? { minWidth: 0 } : undefined}
     >
-      {showRecentGames && generalGoals.length > 0 && (
+      {showSideColumns && showRecentGames && generalGoals.length > 0 && (
         <SideColumn isDouble={false} rows={game.game.rows}>
           <RecentGames
             limit={game.game.rows + 1}
@@ -139,38 +141,40 @@ export default function CastBoardWithTrackers({
           />
         </SideColumn>
       )}
-      <SideColumn isDouble={isDouble} rows={game.game.rows}>
-        <SideCell>
-          <ScoreSquare
+      {showSideColumns && (
+        <SideColumn isDouble={isDouble} rows={game.game.rows}>
+          <SideCell>
+            <ScoreSquare
+              color={leftColor}
+              score={leftScore}
+              hasTiebreaker={tiebreakWinner === leftColor}
+              isDouble={isDouble}
+              font={font}
+            />
+          </SideCell>
+          <GeneralIcons
+            playerId={leftPlayer?.userId}
+            isLeft={true}
             color={leftColor}
-            score={leftScore}
-            hasTiebreaker={tiebreakWinner === leftColor}
-            isDouble={isDouble}
+            generalGoals={generalGoals}
+            generalState={generals}
+            iconType={iconType}
+            isHidden={areGeneralGoalsHidden}
+            countPosition={countPosition}
             font={font}
+            boardState={boardState}
           />
-        </SideCell>
-        <GeneralIcons
-          playerId={leftPlayer?.userId}
-          isLeft={true}
-          color={leftColor}
-          generalGoals={generalGoals}
-          generalState={generals}
-          iconType={iconType}
-          isHidden={areGeneralGoalsHidden}
-          countPosition={countPosition}
-          font={font}
-          boardState={boardState}
-        />
-        {showRecentGames && generalGoals.length === 0 && (
-          <RecentGames
-            limit={game.game.rows}
-            recentGames={leftGames}
-            subcategoryIdToName={subcategoryIdToName}
-            font={font}
-            gameList={gameList}
-          />
-        )}
-      </SideColumn>
+          {showRecentGames && generalGoals.length === 0 && (
+            <RecentGames
+              limit={game.game.rows}
+              recentGames={leftGames}
+              subcategoryIdToName={subcategoryIdToName}
+              font={font}
+              gameList={gameList}
+            />
+          )}
+        </SideColumn>
+      )}
       <StandardBoardWrapper
         rows={game.game.rows}
         columns={game.game.cols}
@@ -192,39 +196,41 @@ export default function CastBoardWithTrackers({
           columns={game.game.cols}
         />
       </StandardBoardWrapper>
-      <SideColumn isDouble={isDouble} rows={game.game.rows}>
-        <SideCell>
-          <ScoreSquare
+      {showSideColumns && (
+        <SideColumn isDouble={isDouble} rows={game.game.rows}>
+          <SideCell>
+            <ScoreSquare
+              color={rightColor}
+              score={rightScore}
+              hasTiebreaker={tiebreakWinner === rightColor}
+              isDouble={isDouble}
+              font={font}
+            />
+          </SideCell>
+          <GeneralIcons
+            isLeft={false}
+            playerId={rightPlayer?.userId}
             color={rightColor}
-            score={rightScore}
-            hasTiebreaker={tiebreakWinner === rightColor}
-            isDouble={isDouble}
+            generalGoals={generalGoals}
+            generalState={generals}
+            iconType={iconType}
+            isHidden={areGeneralGoalsHidden}
+            countPosition={countPosition}
             font={font}
+            boardState={boardState}
           />
-        </SideCell>
-        <GeneralIcons
-          isLeft={false}
-          playerId={rightPlayer?.userId}
-          color={rightColor}
-          generalGoals={generalGoals}
-          generalState={generals}
-          iconType={iconType}
-          isHidden={areGeneralGoalsHidden}
-          countPosition={countPosition}
-          font={font}
-          boardState={boardState}
-        />
-        {showRecentGames && generalGoals.length === 0 && (
-          <RecentGames
-            limit={game.game.rows}
-            recentGames={rightGames}
-            subcategoryIdToName={subcategoryIdToName}
-            font={font}
-            gameList={gameList}
-          />
-        )}
-      </SideColumn>
-      {showRecentGames && generalGoals.length > 0 && (
+          {showRecentGames && generalGoals.length === 0 && (
+            <RecentGames
+              limit={game.game.rows}
+              recentGames={rightGames}
+              subcategoryIdToName={subcategoryIdToName}
+              font={font}
+              gameList={gameList}
+            />
+          )}
+        </SideColumn>
+      )}
+      {showSideColumns && showRecentGames && generalGoals.length > 0 && (
         <SideColumn isDouble={false} rows={game.game.rows}>
           <RecentGames
             limit={game.game.rows + 1}

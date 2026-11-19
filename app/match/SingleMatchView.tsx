@@ -65,7 +65,21 @@ export default function SingleMatchView({ game }: Props) {
     [game.squares],
   );
   const gameList = useMemo(() => getGameList(pasta), [pasta]);
-  const generalGoals = useGeneralGoals(pasta, squareNames);
+  const allGeneralGoals = useGeneralGoals(pasta, squareNames);
+  // based on the full feed so the layout doesn't change while seeking
+  const { hasCurrentSubcategories, hasGoalProgress } = useMemo(
+    () => ({
+      hasCurrentSubcategories: game.feed.some(
+        (item) => item.type === "current_subcategory",
+      ),
+      hasGoalProgress: game.feed.some((item) => item.type === "goal_progress"),
+    }),
+    [game.feed],
+  );
+  const generalGoals = useMemo(
+    () => (hasGoalProgress ? allGeneralGoals : []),
+    [allGeneralGoals, hasGoalProgress],
+  );
   const gameToGoals = useMemo(
     () => getGameToGoals(squareNames, Object.keys(gameList), pasta),
     [squareNames, gameList, pasta],
@@ -364,7 +378,8 @@ export default function SingleMatchView({ game }: Props) {
                 game={game}
                 pasta={pasta}
                 countPosition="side_by_side"
-                showRecentGames={true}
+                showRecentGames={hasCurrentSubcategories}
+                showSideColumns={hasCurrentSubcategories || hasGoalProgress}
                 generalGoals={generalGoals}
                 font="default"
                 iconType="sprites"

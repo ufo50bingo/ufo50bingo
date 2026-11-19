@@ -2,7 +2,7 @@ import Board from "@/app/Board";
 import StandardBoardWrapper from "@/app/StandardBoardWrapper";
 import { Group } from "@mantine/core";
 import ScoreSquare from "../common/ScoreSquare";
-import { GeneralItem, TCountPosition } from "./Cast";
+import { GeneralItem } from "./Cast";
 import GeneralIcons from "./GeneralIcons";
 import RecentGames from "./RecentGames";
 import SideCell from "./SideCell";
@@ -19,6 +19,7 @@ import { GeneralCounts } from "./CastPage";
 import { BingosyncColor } from "@/app/color";
 import BoardState from "@/app/match/[id]/BoardState";
 import PlayedGameState from "./PlayedGameState";
+import { TCountPosition } from "./useCountPosition";
 
 type Props = {
   game: FullParsedGame;

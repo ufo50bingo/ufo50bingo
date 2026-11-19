@@ -40,6 +40,11 @@ import { getClockZeroTime } from "./[id]/MatchClock";
 import NotStartedBoardCover from "../room/[id]/common/NotStartedBoardCover";
 import PlayedGameState from "../room/[id]/cast/PlayedGameState";
 import MatchPlaybackSlider from "./MatchPlaybackSlider";
+import MatchDisplaySubmenus from "./MatchDisplaySubmenus";
+import useLocalState from "../room/[id]/cast/useLocalState";
+import useCountPosition from "../room/[id]/cast/useCountPosition";
+import useFont from "../font/useFont";
+import { useShouldShortenContext } from "../settings/ShouldShortenContext";
 import Feed from "../room/[id]/common/Feed";
 import EditVodModal from "../matches/EditVodModal";
 import formatMatchDate from "../matches/formatMatchDate";
@@ -66,6 +71,11 @@ export default function SingleMatchView({ game }: Props) {
   );
   const gameList = useMemo(() => getGameList(pasta), [pasta]);
   const allGeneralGoals = useGeneralGoals(pasta, squareNames);
+  const { shownDifficulties, setShownDifficulties, iconType, setIconType } =
+    useLocalState(game.game.id);
+  const [countPosition, setCountPosition] = useCountPosition();
+  const [font, setFont] = useFont();
+  const { shouldShortenCast, setShouldShortenCast } = useShouldShortenContext();
   // based on the full feed so the layout doesn't change while seeking
   const { hasCurrentSubcategories, hasGoalProgress } = useMemo(
     () => ({
@@ -363,6 +373,20 @@ export default function SingleMatchView({ game }: Props) {
                     >
                       {showFeed ? "Hide Feed" : "Show Feed"}
                     </Menu.Item>
+                    <Menu.Divider />
+                    <MatchDisplaySubmenus
+                      shownDifficulties={shownDifficulties}
+                      setShownDifficulties={setShownDifficulties}
+                      countPosition={countPosition}
+                      setCountPosition={setCountPosition}
+                      iconType={iconType}
+                      setIconType={setIconType}
+                      shouldShorten={shouldShortenCast}
+                      setShouldShorten={setShouldShortenCast}
+                      font={font}
+                      setFont={setFont}
+                    />
+                    <Menu.Divider />
                     <Menu.Item
                       leftSection={<IconBrandYoutube size={16} />}
                       onClick={() => setIsEditingVod(true)}
@@ -377,12 +401,12 @@ export default function SingleMatchView({ game }: Props) {
               <CastBoardWithTrackers
                 game={game}
                 pasta={pasta}
-                countPosition="side_by_side"
+                countPosition={countPosition}
                 showRecentGames={hasCurrentSubcategories}
                 showSideColumns={hasCurrentSubcategories || hasGoalProgress}
                 generalGoals={generalGoals}
-                font="default"
-                iconType="sprites"
+                font={font}
+                iconType={iconType}
                 players={players}
                 areGeneralGoalsHidden={!hasStarted}
                 boardState={boardState}
@@ -392,7 +416,7 @@ export default function SingleMatchView({ game }: Props) {
                 boardCover={hasStarted ? null : <NotStartedBoardCover />}
                 gameList={gameList}
                 gameToGoals={gameToGoals}
-                shownDifficulties={["easy", "veryhard", "general"]}
+                shownDifficulties={shownDifficulties}
                 generals={generals}
                 tiebreakWinner={
                   teamsWithResults.length > 0 &&

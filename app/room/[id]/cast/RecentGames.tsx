@@ -34,6 +34,7 @@ export default function RecentGames({
             subcategoryIdToName={subcategoryIdToName}
             font={font}
             gameList={gameList}
+            showTimer={true}
           />
         </div>
       </SideCell>,

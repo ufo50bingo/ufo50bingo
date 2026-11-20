@@ -1,0 +1,12 @@
+.icon {
+  width: 62px;
+  height: 62px;
+}
+
+.spritesIcon {
+  image-rendering: pixelated;
+}
+
+.grayscale {
+  filter: grayscale(1);
+}

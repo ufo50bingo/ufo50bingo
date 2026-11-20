@@ -2,8 +2,10 @@
 
 import {
   Box,
+  Button,
   CloseButton,
   Group,
+  Menu,
   NumberInput,
   Stack,
   Text,
@@ -12,7 +14,8 @@ import {
 } from "@mantine/core";
 import WidgetEditor from "./WidgetEditor";
 import type { WidgetChangeHandler } from "./WidgetEditor";
-import { getWidgetLabel } from "./widgetInfo";
+import { WIDGET_TYPES, getWidgetLabel } from "./widgetInfo";
+import type { WidgetType } from "./widgetInfo";
 import type { Widget } from "./widgetTypes";
 
 const MIN_CANVAS_SIZE = 1;
@@ -24,6 +27,7 @@ type Props = {
   canvasWidth: number;
   canvasHeight: number;
   onCanvasSizeChange: (width: number, height: number) => void;
+  onAddWidget: (type: WidgetType) => void;
   selectedWidgets: ReadonlyArray<Widget>;
   onDeselect: () => void;
   onWidgetChange: WidgetChangeHandler;
@@ -35,6 +39,7 @@ export default function LayoutSidebar({
   canvasWidth,
   canvasHeight,
   onCanvasSizeChange,
+  onAddWidget,
   selectedWidgets,
   onDeselect,
   onWidgetChange,
@@ -58,6 +63,7 @@ export default function LayoutSidebar({
           canvasWidth={canvasWidth}
           canvasHeight={canvasHeight}
           onCanvasSizeChange={onCanvasSizeChange}
+          onAddWidget={onAddWidget}
         />
       ) : (
         <SelectionProperties
@@ -78,6 +84,7 @@ function LayoutProperties({
   canvasWidth,
   canvasHeight,
   onCanvasSizeChange,
+  onAddWidget,
 }: Omit<Props, "selectedWidgets" | "onDeselect" | "onWidgetChange">) {
   return (
     <Stack>
@@ -99,6 +106,18 @@ function LayoutProperties({
           onChange={(height) => onCanvasSizeChange(canvasWidth, height)}
         />
       </Group>
+      <Menu position="bottom-start">
+        <Menu.Target>
+          <Button>Add widget</Button>
+        </Menu.Target>
+        <Menu.Dropdown>
+          {WIDGET_TYPES.map((type) => (
+            <Menu.Item key={type} onClick={() => onAddWidget(type)}>
+              {getWidgetLabel(type)}
+            </Menu.Item>
+          ))}
+        </Menu.Dropdown>
+      </Menu>
     </Stack>
   );
 }

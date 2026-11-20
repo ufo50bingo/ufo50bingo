@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useMemo, useState } from "react";
 import CanvasViewport from "./CanvasViewport";
+import LayoutSidebar from "./LayoutSidebar";
 import WidgetView from "./WidgetView";
 import useCanvasScale from "./useCanvasScale";
 import useEditorHistory from "./useEditorHistory";
@@ -65,11 +66,31 @@ const initialWidgets: ReadonlyArray<Widget> = [
   },
 ];
 
-export default function LayoutEditor({ canvasWidth, canvasHeight }: Props) {
+export default function LayoutEditor(props: Props) {
+  const [name, setName] = useState("Untitled layout");
+  const [canvasSize, setCanvasSize] = useState({
+    width: props.canvasWidth,
+    height: props.canvasHeight,
+  });
+  const canvasWidth = canvasSize.width;
+  const canvasHeight = canvasSize.height;
+  const handleCanvasSizeChange = useCallback(
+    (width: number, height: number) => setCanvasSize({ width, height }),
+    [],
+  );
+
   const { widgets, commit, undo, redo } = useEditorHistory(initialWidgets);
-  const scale = useCanvasScale(canvasWidth, canvasHeight);
+  const [viewportEl, setViewportEl] = useState<HTMLDivElement | null>(null);
+  const scale = useCanvasScale(viewportEl, canvasWidth, canvasHeight);
   const selection = useSelection();
-  const { clearSelection } = selection;
+  const { clearSelection, selectedTargets } = selection;
+
+  const selectedWidgets = useMemo(() => {
+    const selectedIds = new Set(
+      selectedTargets.map((element) => element.dataset.id),
+    );
+    return widgets.filter((widget) => selectedIds.has(widget.id));
+  }, [selectedTargets, widgets]);
 
   const interactions = useWidgetInteractions({
     canvasWidth,
@@ -91,16 +112,29 @@ export default function LayoutEditor({ canvasWidth, canvasHeight }: Props) {
   useUndoRedoShortcuts({ undo: handleUndo, redo: handleRedo });
 
   return (
-    <CanvasViewport
-      canvasWidth={canvasWidth}
-      canvasHeight={canvasHeight}
-      scale={scale}
-      interactions={interactions}
-      selection={selection}
-    >
-      {widgets.map((widget) => (
-        <WidgetView key={widget.id} widget={widget} />
-      ))}
-    </CanvasViewport>
+    <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
+      <LayoutSidebar
+        name={name}
+        onNameChange={setName}
+        canvasWidth={canvasWidth}
+        canvasHeight={canvasHeight}
+        onCanvasSizeChange={handleCanvasSizeChange}
+        selectedWidgets={selectedWidgets}
+        onDeselect={clearSelection}
+      />
+      <CanvasViewport
+        canvasWidth={canvasWidth}
+        canvasHeight={canvasHeight}
+        scale={scale}
+        viewportEl={viewportEl}
+        onViewportRef={setViewportEl}
+        interactions={interactions}
+        selection={selection}
+      >
+        {widgets.map((widget) => (
+          <WidgetView key={widget.id} widget={widget} />
+        ))}
+      </CanvasViewport>
+    </div>
   );
 }

@@ -10,6 +10,8 @@ type Props = {
   canvasWidth: number;
   canvasHeight: number;
   scale: number;
+  viewportEl: HTMLDivElement | null;
+  onViewportRef: (element: HTMLDivElement | null) => void;
   interactions: WidgetInteractionHandlers;
   selection: SelectionApi;
   children: ReactNode;
@@ -19,19 +21,21 @@ export default function CanvasViewport({
   canvasWidth,
   canvasHeight,
   scale,
+  viewportEl,
+  onViewportRef,
   interactions,
   selection,
   children,
 }: Props) {
-  const [viewportEl, setViewportEl] = useState<HTMLDivElement | null>(null);
   const [stageEl, setStageEl] = useState<HTMLDivElement | null>(null);
 
   return (
     <div
-      ref={setViewportEl}
+      ref={onViewportRef}
       style={{
-        width: "100vw",
-        height: "100vh",
+        flex: 1,
+        minWidth: 0,
+        height: "100%",
         overflow: "hidden",
         display: "flex",
         alignItems: "center",

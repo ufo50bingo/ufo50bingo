@@ -3,6 +3,7 @@
 import { Card } from "@mantine/core";
 import SingleMatchView from "../SingleMatchView";
 import { FullParsedGame } from "@/app/fetchFeed";
+import classes from "./SingleMatch.module.css";
 
 type Props = {
   game: FullParsedGame;
@@ -10,20 +11,8 @@ type Props = {
 
 export default function SingleMatch({ game }: Props) {
   return (
-    <div
-      style={{
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
-      <Card
-        style={{
-          width: "fit-content",
-          maxWidth: "100%",
-        }}
-      >
+    <div className={classes.container}>
+      <Card className={classes.card}>
         <SingleMatchView game={game} />
       </Card>
     </div>

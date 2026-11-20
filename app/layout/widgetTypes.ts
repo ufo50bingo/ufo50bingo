@@ -1,10 +1,13 @@
-export interface BaseElement {
-  id: string;
+export interface Rect {
   x: number;
   y: number;
-  z: number;
   width: number;
   height: number;
+}
+
+export interface BaseWidget extends Rect {
+  id: string;
+  z: number;
 }
 
 interface HasColor {
@@ -26,67 +29,68 @@ interface CanShrinkFont extends HasFontWithSize {
   minSize: number;
 }
 
-// -------------------- FINAL ELEMENTS ------------------
+// -------------------- FINAL WIDGETS ------------------
 
-export interface PlainText extends CanShrinkFont {
+export interface PlainText extends BaseWidget, CanShrinkFont {
+  type: "plain_text";
   text: string;
 }
 
-export interface RecentGame extends Element, HasFont {
+export interface RecentGame extends BaseWidget, HasFont {
   type: "recent_game";
   playerNum: number;
-  recentGameIndex: number;
+  recentGameNumber: number;
   hasDefaultTimer: boolean;
 }
 
-export interface RecentGameTimer extends Element, CanShrinkFont, HasColor {
+export interface RecentGameTimer extends BaseWidget, CanShrinkFont, HasColor {
   type: "recent_game_timer";
   playerNum: number;
-  recentGameIndex: number;
+  recentGameNumber: number;
 }
 
-export interface LayoutBoard extends Element, CanShrinkFont, HasColor {
+export interface LayoutBoard extends BaseWidget, CanShrinkFont, HasColor {
   type: "board";
 }
 
-export interface MatchTimer extends Element, CanShrinkFont, HasColor {
+export interface MatchTimer extends BaseWidget, CanShrinkFont, HasColor {
   type: "match_timer";
   showStart: boolean;
 }
 
-export interface GeneralIcon extends Element, HasFont {
+export interface GeneralIcon extends BaseWidget, HasFont {
   type: "general_icon";
   playerNum: number;
-  generalIndex: number;
+  generalNumber: number;
   hasInsetCount: boolean;
   iconSet: string;
 }
 
-export interface GeneralCount extends Element, CanShrinkFont, HasColor {
+export interface GeneralCount extends BaseWidget, CanShrinkFont, HasColor {
   type: "general_count";
   playerNum: number;
-  generalIndex: number;
+  generalNumber: number;
 }
 
-export interface PlayerScore extends Element, CanShrinkFont, HasColor {
+export interface PlayerScore extends BaseWidget, CanShrinkFont, HasColor {
   type: "player_score";
   playerNum: number;
   hasDefaultBackground: boolean;
   showTiebreaker: boolean;
 }
 
-export interface PlayerPronouns extends Element, CanShrinkFont, HasColor {
+export interface PlayerPronouns extends BaseWidget, CanShrinkFont, HasColor {
   type: "player_pronouns";
   playerNum: number;
 }
 
-export interface PlayerName extends Element, CanShrinkFont, HasColor {
+export interface PlayerName extends BaseWidget, CanShrinkFont, HasColor {
   type: "player_name";
   playerNum: number;
   allowCustomName: boolean;
 }
 
-export type LayoutElement =
+export type Widget =
   | RecentGame
   | RecentGameTimer
   | MatchTimer
@@ -95,4 +99,5 @@ export type LayoutElement =
   | GeneralIcon
   | GeneralCount
   | PlayerPronouns
+  | PlayerName
   | PlainText;

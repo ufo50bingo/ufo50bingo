@@ -1807,7 +1807,21 @@ export const STANDARD_UFO = {
             "options": "$gift",
             "descriptions": "$gift_desc",
             "type": "check",
-            "on_card_only": true
+            "on_card_only": true,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Gift.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/GIFT.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconGarden.png",
+                "is_pixel": true
+              }
+            }
           }
         }
       ],
@@ -1818,7 +1832,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$cherry",
             "type": "check",
-            "on_card_only": true
+            "on_card_only": true,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Cherry.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/CHERRY.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconCherry.png",
+                "is_pixel": true
+              }
+            }
           }
         },
         {
@@ -1827,7 +1855,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$gold",
             "type": "check",
-            "on_card_only": true
+            "on_card_only": true,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Gold.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/GOLD.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconGold.png",
+                "is_pixel": true
+              }
+            }
           }
         }
       ],
@@ -1870,7 +1912,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$two_levels",
             "type": "check",
-            "on_card_only": true
+            "on_card_only": true,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Level.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/LEVEL.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconLevel.png",
+                "is_pixel": true
+              }
+            }
           }
         },
         {
@@ -1905,7 +1961,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$four_levels",
             "type": "check",
-            "on_card_only": true
+            "on_card_only": true,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Level.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/LEVEL.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconLevel.png",
+                "is_pixel": true
+              }
+            }
           }
         },
         {
@@ -1934,7 +2004,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$eight_levels",
             "type": "check",
-            "on_card_only": true
+            "on_card_only": true,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Level.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/LEVEL.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconLevel.png",
+                "is_pixel": true
+              }
+            }
           }
         }
       ],
@@ -1945,7 +2029,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$bosses",
             "type": "counter",
-            "on_card_only": true
+            "on_card_only": true,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Boss.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/BOSS.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconBoss.png",
+                "is_pixel": true
+              }
+            }
           }
         },
         {
@@ -2001,7 +2099,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$bosses",
             "type": "check",
-            "on_card_only": true
+            "on_card_only": true,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Boss.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/BOSS.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconBoss.png",
+                "is_pixel": true
+              }
+            }
           }
         },
         {
@@ -2032,7 +2144,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$two_bosses",
             "type": "check",
-            "on_card_only": true
+            "on_card_only": true,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Boss.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/BOSS.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconBoss.png",
+                "is_pixel": true
+              }
+            }
           }
         }
       ],
@@ -2052,7 +2178,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$infer",
             "type": "counter",
-            "on_card_only": false
+            "on_card_only": false,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/SHOOTER.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconShooter.png",
+                "is_pixel": true
+              }
+            }
           }
         },
         {
@@ -2070,7 +2210,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$infer",
             "type": "counter",
-            "on_card_only": false
+            "on_card_only": false,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/DAYJOB.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconDayJob.png",
+                "is_pixel": true
+              }
+            }
           }
         },
         {
@@ -2088,7 +2242,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$infer",
             "type": "counter",
-            "on_card_only": false
+            "on_card_only": false,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/RACER.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconRacer.png",
+                "is_pixel": true
+              }
+            }
           }
         },
         {
@@ -2106,7 +2274,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$infer",
             "type": "counter",
-            "on_card_only": false
+            "on_card_only": false,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/PUZZLER.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconPuzzler.png",
+                "is_pixel": true
+              }
+            }
           }
         },
         {
@@ -2124,7 +2306,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$infer",
             "type": "counter",
-            "on_card_only": false
+            "on_card_only": false,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/AMY.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconAmy.png",
+                "is_pixel": true
+              }
+            }
           }
         },
         {
@@ -2142,7 +2338,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$infer",
             "type": "counter",
-            "on_card_only": false
+            "on_card_only": false,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/WARISBAD.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconWarIsBad.png",
+                "is_pixel": true
+              }
+            }
           }
         },
         {
@@ -2160,7 +2370,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$infer",
             "type": "counter",
-            "on_card_only": false
+            "on_card_only": false,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/METROIDVANIA.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconMetroidvania.png",
+                "is_pixel": true
+              }
+            }
           }
         },
         {
@@ -2178,7 +2402,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$infer",
             "type": "counter",
-            "on_card_only": false
+            "on_card_only": false,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/REVOLUTIONARY.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconRevolutionary.png",
+                "is_pixel": true
+              }
+            }
           }
         },
         {
@@ -2196,7 +2434,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$infer",
             "type": "counter",
-            "on_card_only": false
+            "on_card_only": false,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/ROLEPLAYER.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconRoleplayer.png",
+                "is_pixel": true
+              }
+            }
           }
         },
         {
@@ -2214,7 +2466,21 @@ export const STANDARD_UFO = {
           "cast": {
             "options": "$infer",
             "type": "counter",
-            "on_card_only": false
+            "on_card_only": false,
+            "image": {
+              "WinnerBit": {
+                "src": "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                "is_pixel": false
+              },
+              "Sprites": {
+                "src": "/general/matt/TRADER.png",
+                "is_pixel": true
+              },
+              "Classic": {
+                "src": "/general/sprites/IconTrader.png",
+                "is_pixel": true
+              }
+            }
           }
         }
       ]

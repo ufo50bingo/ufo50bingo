@@ -19,6 +19,7 @@ type Props = {
   countPosition: TCountPosition;
   setCountPosition: (newCountPosition: TCountPosition) => unknown;
   iconType: IconType;
+  iconSets: ReadonlyArray<IconType>;
   setIconType: (newIconType: IconType) => unknown;
   shouldShorten: boolean;
   setShouldShorten: (newShouldShorten: boolean) => unknown;
@@ -32,6 +33,7 @@ export default function MatchDisplaySubmenus({
   countPosition,
   setCountPosition,
   iconType,
+  iconSets,
   setIconType,
   shouldShorten,
   setShouldShorten,
@@ -74,26 +76,19 @@ export default function MatchDisplaySubmenus({
           Inset
         </OptionItem>
       </Submenu>
-      <Submenu icon={<IconPhoto size={16} />} label="Icon type">
-        <OptionItem
-          isSelected={iconType === "winnerbit"}
-          onClick={() => setIconType("winnerbit")}
-        >
-          WinnerBit
-        </OptionItem>
-        <OptionItem
-          isSelected={iconType === "sprites"}
-          onClick={() => setIconType("sprites")}
-        >
-          Sprites
-        </OptionItem>
-        <OptionItem
-          isSelected={iconType === "classic"}
-          onClick={() => setIconType("classic")}
-        >
-          Classic
-        </OptionItem>
-      </Submenu>
+      {iconSets.length > 1 && (
+        <Submenu icon={<IconPhoto size={16} />} label="Icon type">
+          {iconSets.map((iconSet) => (
+            <OptionItem
+              key={iconSet}
+              isSelected={iconType === iconSet}
+              onClick={() => setIconType(iconSet)}
+            >
+              {iconSet}
+            </OptionItem>
+          ))}
+        </Submenu>
+      )}
       <Submenu icon={<IconLetterCase size={16} />} label="Goal text">
         <OptionItem
           isSelected={!shouldShorten}

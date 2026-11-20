@@ -20,6 +20,12 @@ const getOptionList = () =>
     ]),
   );
 
+const getCastImage = () =>
+  zod.strictObject({
+    src: zod.string(),
+    is_pixel: zod.boolean().optional(),
+  });
+
 const getRestrictionList = () =>
   zod.array(
     zod.union([
@@ -65,10 +71,10 @@ const UfoPasta = zod.strictObject({
                 ]),
                 on_card_only: zod.boolean(),
                 image: zod
-                  .strictObject({
-                    src: zod.string(),
-                    is_pixel: zod.boolean(),
-                  })
+                  .union([
+                    getCastImage(),
+                    zod.record(zod.string(), getCastImage()),
+                  ])
                   .optional(),
                 descriptions: zod
                   .union([zod.string(), zod.record(zod.string(), zod.string())])

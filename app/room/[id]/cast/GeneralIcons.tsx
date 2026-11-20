@@ -11,6 +11,7 @@ import getFontClassname from "@/app/font/getFontClassname";
 import { BingosyncColor } from "@/app/color";
 import BoardState from "@/app/match/[id]/BoardState";
 import { TCountPosition } from "./useCountPosition";
+import { getCastImage } from "./iconSets";
 
 type IconProps = {
   isLeft: boolean;
@@ -147,7 +148,8 @@ export default function GeneralIcons({
     const { goal, resolvedGoal } = item.foundGoal;
     const countState =
       playerId != null ? generalState[resolvedGoal]?.[playerId] : null;
-    const explicitImg = item.foundGoal.cast?.image;
+    const image = isHidden ? null : getCastImage(item.foundGoal.cast, iconType);
+    const builtIn = getBuiltInIcon(iconType, goal as StandardGeneral, isHidden);
     return (
       <Icon
         key={resolvedGoal}
@@ -163,25 +165,29 @@ export default function GeneralIcons({
                 0,
               )
         }
-        isPixel={
-          explicitImg != null
-            ? explicitImg.is_pixel !== false
-            : iconType !== "winnerbit"
-        }
-        src={
-          explicitImg?.src ??
-          (iconType === "sprites"
-            ? getSpritesSrc(goal as StandardGeneral, isHidden)
-            : iconType === "winnerbit"
-              ? getWinnerBitSrc(goal as StandardGeneral, isHidden)
-              : getClassicSrc(goal as StandardGeneral, isHidden))
-        }
+        isPixel={image != null ? image.is_pixel !== false : builtIn.isPixel}
+        src={image?.src ?? builtIn.src}
         countPosition={countPosition}
         isLeft={isLeft}
         font={font}
       />
     );
   });
+}
+
+function getBuiltInIcon(
+  iconSet: string,
+  goal: StandardGeneral,
+  isHidden: boolean,
+): { src: string; isPixel: boolean } {
+  switch (iconSet) {
+    case "Sprites":
+      return { src: getSpritesSrc(goal, isHidden), isPixel: true };
+    case "Classic":
+      return { src: getClassicSrc(goal, isHidden), isPixel: true };
+    default:
+      return { src: getWinnerBitSrc(goal, isHidden), isPixel: false };
+  }
 }
 
 function getWinnerBitSrc(goal: StandardGeneral, isHidden: boolean): string {

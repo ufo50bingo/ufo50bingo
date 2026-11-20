@@ -54,6 +54,7 @@ import { displayTier } from "../matches/tier";
 import { displayWeek } from "../matches/week";
 import { getHost, getVodLink, setUrlAtTime } from "../matches/vodUtil";
 import getBaseUrlAndHost from "../matches/getBaseUrlAndHost";
+import { getPastaIconSets, pickIconSet } from "../room/[id]/cast/iconSets";
 import {
   SCREENSHOT_HIDDEN_ATTR,
   SCREENSHOT_ONLY_ATTR,
@@ -74,6 +75,8 @@ export default function SingleMatchView({ game }: Props) {
   const allGeneralGoals = useGeneralGoals(pasta, squareNames);
   const { shownDifficulties, setShownDifficulties, iconType, setIconType } =
     useLocalState(game.game.id);
+  const iconSets = useMemo(() => getPastaIconSets(pasta), [pasta]);
+  const iconSet = pickIconSet(iconType, iconSets);
   const [countPosition, setCountPosition] = useCountPosition();
   const [font, setFont] = useFont();
   const { shouldShortenCast, setShouldShortenCast } = useShouldShortenContext();
@@ -383,7 +386,8 @@ export default function SingleMatchView({ game }: Props) {
                       setShownDifficulties={setShownDifficulties}
                       countPosition={countPosition}
                       setCountPosition={setCountPosition}
-                      iconType={iconType}
+                      iconType={iconSet}
+                      iconSets={iconSets}
                       setIconType={setIconType}
                       shouldShorten={shouldShortenCast}
                       setShouldShorten={setShouldShortenCast}
@@ -410,7 +414,7 @@ export default function SingleMatchView({ game }: Props) {
                 showSideColumns={hasCurrentSubcategories || hasGoalProgress}
                 generalGoals={generalGoals}
                 font={font}
-                iconType={iconType}
+                iconType={iconSet}
                 players={players}
                 areGeneralGoalsHidden={!hasStarted}
                 boardState={boardState}

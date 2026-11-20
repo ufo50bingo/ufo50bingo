@@ -50,6 +50,7 @@ import getMatchResult from "@/app/match/[id]/getMatchResult";
 import EndMatchPopover from "../common/EndMatchPopover";
 import { IconFlagCheck } from "@tabler/icons-react";
 import useIsEnded from "../common/useIsEnded";
+import { getPastaIconSets, pickIconSet } from "./iconSets";
 
 export const CASTER_RESTRICTIONS: PlayerTrackerRestrictions = {
   allowed_difficulty_tags: null,
@@ -168,6 +169,8 @@ export default function Cast({
   const [countPosition, setCountPosition] = useCountPosition();
 
   const generalGoals = useGeneralGoals(pasta, squareNames);
+  const iconSets = useMemo(() => getPastaIconSets(pasta), [pasta]);
+  const iconSet = pickIconSet(iconType, iconSets);
   const generalSettings: GeneralSettings = useMemo(
     () => ({
       sort: sortType,
@@ -304,7 +307,7 @@ export default function Cast({
           showRecentGames={showRecentGames}
           generalGoals={generalGoals}
           font={font}
-          iconType={iconType}
+          iconType={iconSet}
           players={players}
           areGeneralGoalsHidden={isHiddenForWatch}
           boardState={boardState}
@@ -477,7 +480,8 @@ export default function Cast({
         setShownDifficulties={setShownDifficulties}
         sortType={sortType}
         setSortType={setSortType}
-        iconType={iconType}
+        iconType={iconSet}
+        iconSets={iconSets}
         setIconType={setIconType}
         hideByDefault={hideByDefault}
         setHideByDefault={setHideByDefault}

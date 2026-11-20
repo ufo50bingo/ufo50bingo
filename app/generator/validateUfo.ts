@@ -4,6 +4,7 @@ import { Return } from "./validateStr";
 import findAllGoalsWithSortedTokens from "./findAllGoalsWithSortedTokens";
 import splitAtTokens from "./splitAtTokens";
 import findAllGoalsWithShort from "./findAllGoalsWithShort";
+import { isSingleCastImage } from "./castImages";
 
 export default function validateUfo(pasta: UFOPasta): Return {
   try {
@@ -172,6 +173,36 @@ export default function validateUfo(pasta: UFOPasta): Return {
           `✖ Goal "${goal.name}" and short "${goal.short}" must have exactly the same tokens in the same order`,
         );
         continue;
+      }
+    }
+    // every cast image with icon sets must use the same icon sets
+    let firstIconSets: null | {
+      goal: string;
+      iconSets: ReadonlyArray<string>;
+    } = null;
+    for (const subcategories of Object.values(pasta.goals)) {
+      for (const goals of Object.values(subcategories)) {
+        for (const goal of goals) {
+          const image = typeof goal === "string" ? null : goal.cast?.image;
+          if (typeof goal === "string" || image == null) {
+            continue;
+          }
+          if (isSingleCastImage(image)) {
+            continue;
+          }
+          const iconSets = Object.keys(image).toSorted();
+          if (firstIconSets == null) {
+            firstIconSets = { goal: goal.name, iconSets };
+          } else if (
+            iconSets.join("\n") !== firstIconSets.iconSets.join("\n")
+          ) {
+            const pretty = (sets: ReadonlyArray<string>) =>
+              sets.map((s) => `"${s}"`).join(", ");
+            errors.push(
+              `✖ Goal "${goal.name}" has images for icon sets ${pretty(iconSets)}, but goal "${firstIconSets.goal}" has ${pretty(firstIconSets.iconSets)}. Every cast image with icon sets must use the same ones`,
+            );
+          }
+        }
       }
     }
     // TODO: Add more validations for casting stuff

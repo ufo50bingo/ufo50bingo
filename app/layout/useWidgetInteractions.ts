@@ -28,14 +28,14 @@ import {
   getSize,
 } from "./layoutGeometry";
 import type { ResizeDirection } from "./layoutGeometry";
-import type { EditorEvent, GeometryEvent } from "./layoutTypes";
 import type { Rect } from "./widgetTypes";
+import type { WidgetsUpdate } from "./useEditorHistory";
 
 type Props = {
   canvasWidth: number;
   canvasHeight: number;
   scale: number;
-  onCommit: (event: EditorEvent) => void;
+  onCommit: (update: WidgetsUpdate) => void;
 };
 
 interface ResizeItem {
@@ -60,8 +60,8 @@ export default function useWidgetInteractions({
   const resizeSession = useRef<ResizeSession | null>(null);
 
   const commitTargets = useCallback(
-    (targets: ReadonlyArray<HTMLElement>, action: GeometryEvent["action"]) => {
-      const geometries: Array<GeometryEvent["geometries"][number]> = [];
+    (targets: ReadonlyArray<HTMLElement>) => {
+      const rectById = new Map<string, Rect>();
 
       targets.forEach((element) => {
         const id = element.dataset.id;
@@ -81,14 +81,19 @@ export default function useWidgetInteractions({
         );
 
         applyGeometry(element, constrained);
-        geometries.push({ ...constrained, id });
+        rectById.set(id, constrained);
       });
 
-      if (geometries.length === 0) {
+      if (rectById.size === 0) {
         return;
       }
 
-      onCommit({ type: "geometry", action, geometries });
+      onCommit((widgets) =>
+        widgets.map((widget) => {
+          const rect = rectById.get(widget.id);
+          return rect == null ? widget : { ...widget, ...rect };
+        }),
+      );
     },
     [canvasWidth, canvasHeight, onCommit],
   );
@@ -252,20 +257,19 @@ export default function useWidgetInteractions({
   );
 
   const onDragEnd = useCallback(
-    (e: OnDragEnd) => commitTargets([getHtmlTarget(e.target)], "move"),
+    (e: OnDragEnd) => commitTargets([getHtmlTarget(e.target)]),
     [commitTargets],
   );
 
   const onDragGroupEnd = useCallback(
-    (e: OnDragGroupEnd) =>
-      commitTargets(e.targets.map(getHtmlTarget), "group-move"),
+    (e: OnDragGroupEnd) => commitTargets(e.targets.map(getHtmlTarget)),
     [commitTargets],
   );
 
   const onResizeEnd = useCallback(
     (e: OnResizeEnd) => {
       resizeSession.current = null;
-      commitTargets([getHtmlTarget(e.target)], "resize");
+      commitTargets([getHtmlTarget(e.target)]);
     },
     [commitTargets],
   );
@@ -273,7 +277,7 @@ export default function useWidgetInteractions({
   const onResizeGroupEnd = useCallback(
     (e: OnResizeGroupEnd) => {
       resizeSession.current = null;
-      commitTargets(e.targets.map(getHtmlTarget), "group-resize");
+      commitTargets(e.targets.map(getHtmlTarget));
     },
     [commitTargets],
   );

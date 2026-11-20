@@ -1,5 +1,5 @@
 import { FeedDisconnect, NewFeedItem } from "@/app/fetchFeed";
-import { Button, Modal, Stack, Group } from "@mantine/core";
+import { Button, Modal, Stack, Group, Checkbox } from "@mantine/core";
 import { IconPlugConnectedX } from "@tabler/icons-react";
 import { useState } from "react";
 import { useServerOffsetContext } from "../ServerOffsetContext";
@@ -16,6 +16,7 @@ export default function DisconnectButton({
   sendEvents,
 }: Props) {
   const [isDisconnecting, setIsDisconnecting] = useState(false);
+  const [hasConfirmed, setHasConfirmed] = useState(false);
   const { getServerMsFromClientMs } = useServerOffsetContext();
   return (
     <>
@@ -24,7 +25,7 @@ export default function DisconnectButton({
         onClick={() => setIsDisconnecting(true)}
         leftSection={<IconPlugConnectedX />}
       >
-        Disconnect
+        Withdraw
       </Button>
       {isDisconnecting && (
         <Modal
@@ -32,14 +33,29 @@ export default function DisconnectButton({
           centered={true}
           onClose={() => setIsDisconnecting(false)}
           opened={true}
-          title="Disconnect"
+          title="Withdraw"
         >
           <Stack>
-            <span>Are you sure you want to disconnect?</span>
+            <span>
+              Are you sure you want to withdraw from the match? You will be
+              removed from the member list for the match, and your name won't be
+              included in the final results.
+              <br />
+              <br />
+              <strong>
+                You should only withdraw if you joined the match by mistake!
+              </strong>
+            </span>
+            <Checkbox
+              checked={hasConfirmed}
+              onChange={(e) => setHasConfirmed(e.target.checked)}
+              label="I joined this match by mistake"
+            />
             <Group justify="end">
               <Button onClick={() => setIsDisconnecting(false)}>Cancel</Button>
               <Button
                 color="red"
+                disabled={!hasConfirmed}
                 onClick={async () => {
                   const event: FeedDisconnect = {
                     type: "disconnect",
@@ -50,7 +66,7 @@ export default function DisconnectButton({
                   window.location.reload();
                 }}
               >
-                Disconnect
+                Withdraw
               </Button>
             </Group>
           </Stack>

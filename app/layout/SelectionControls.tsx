@@ -37,6 +37,8 @@ export default function SelectionControls({
         renderDirections={lockRatio ? CORNER_DIRECTIONS : ALL_DIRECTIONS}
         rotatable={false}
         origin={false}
+        // allows it to properly respect changes made from the sidebar
+        useMutationObserver={true}
         {...interactions}
       />
 

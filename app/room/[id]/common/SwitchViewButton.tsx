@@ -69,6 +69,10 @@ function SwitchViewModal({
       <Stack>
         <span>
           Are you sure you want to become a {isCast ? "player" : "caster"}?
+          <br />
+          <br />
+          <strong>You cannot be both a caster and a player.</strong> You will be
+          removed from the {isCast ? "caster" : "player"} list.
         </span>
         {isCast && (
           <ColorSelector

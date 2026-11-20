@@ -21,6 +21,7 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import { Fragment, useMemo, useState } from "react";
+import Link from "next/link";
 import classes from "./MatchRow.module.css";
 import { FullParsedGame } from "../fetchFeed";
 import useMembers from "../room/[id]/common/useMembers";
@@ -272,7 +273,19 @@ export function MatchRow({ game, isMobile }: Props) {
                 style={{ flexShrink: 0, marginTop: 2 }}
               />
               <Text size="xs" c="dimmed" className={classes.name}>
-                {casters.map((c) => c.name).join(", ")}
+                {casters.map((c, index) => (
+                  <Fragment key={c.userId}>
+                    {index > 0 && ", "}
+                    <Link
+                      href={`/user/${c.userId}`}
+                      target="_blank"
+                      prefetch={false}
+                      className={classes.playerLink}
+                    >
+                      {c.name}
+                    </Link>
+                  </Fragment>
+                ))}
               </Text>
             </Group>
           )}

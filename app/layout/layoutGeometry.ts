@@ -1,4 +1,4 @@
-import type { Rect } from "./layoutTypes";
+import type { Rect } from "./widgetTypes";
 
 export type ResizeDirection = [number, number];
 

@@ -1,5 +1,5 @@
 import type { ResizeDirection } from "./layoutGeometry";
-import type { WidgetGeometry } from "./layoutTypes";
+import type { Rect } from "./widgetTypes";
 
 export interface Point {
   x: number;
@@ -14,25 +14,15 @@ export function getHtmlTarget(target: HTMLElement | SVGElement): HTMLElement {
   return target;
 }
 
-export function applyGeometry(
-  target: HTMLElement,
-  geometry: WidgetGeometry,
-): void {
+export function applyGeometry(target: HTMLElement, geometry: Rect): void {
   target.style.left = `${geometry.x}px`;
   target.style.top = `${geometry.y}px`;
   target.style.width = `${geometry.width}px`;
   target.style.height = `${geometry.height}px`;
 }
 
-export function readGeometry(target: HTMLElement): WidgetGeometry | null {
-  const widgetId = target.dataset.id;
-
-  if (widgetId == null) {
-    return null;
-  }
-
+export function readGeometry(target: HTMLElement): Rect | null {
   const geometry = {
-    widgetId,
     x: parseFloat(target.style.left),
     y: parseFloat(target.style.top),
     width: parseFloat(target.style.width),

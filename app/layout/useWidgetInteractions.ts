@@ -28,12 +28,8 @@ import {
   getSize,
 } from "./layoutGeometry";
 import type { ResizeDirection } from "./layoutGeometry";
-import type {
-  EditorEvent,
-  GeometryEvent,
-  Rect,
-  WidgetGeometry,
-} from "./layoutTypes";
+import type { EditorEvent, GeometryEvent } from "./layoutTypes";
+import type { Rect } from "./widgetTypes";
 
 type Props = {
   canvasWidth: number;
@@ -44,7 +40,6 @@ type Props = {
 
 interface ResizeItem {
   target: HTMLElement;
-  widgetId: string;
   rect: Rect;
 }
 
@@ -66,12 +61,13 @@ export default function useWidgetInteractions({
 
   const commitTargets = useCallback(
     (targets: ReadonlyArray<HTMLElement>, action: GeometryEvent["action"]) => {
-      const geometries: Array<WidgetGeometry> = [];
+      const geometries: Array<GeometryEvent["geometries"][number]> = [];
 
       targets.forEach((element) => {
+        const id = element.dataset.id;
         const geometry = readGeometry(element);
 
-        if (geometry == null) {
+        if (id == null || geometry == null) {
           return;
         }
 
@@ -84,10 +80,8 @@ export default function useWidgetInteractions({
           canvasHeight,
         );
 
-        const finalGeometry = { ...constrained, widgetId: geometry.widgetId };
-
-        applyGeometry(element, finalGeometry);
-        geometries.push(finalGeometry);
+        applyGeometry(element, constrained);
+        geometries.push({ ...constrained, id });
       });
 
       if (geometries.length === 0) {
@@ -102,12 +96,6 @@ export default function useWidgetInteractions({
   const onDrag = useCallback(
     (e: OnDrag) => {
       const target = getHtmlTarget(e.target);
-      const widgetId = target.dataset.id;
-
-      if (widgetId == null) {
-        return;
-      }
-
       const geometry = getPosition(
         e.left,
         e.top,
@@ -117,7 +105,7 @@ export default function useWidgetInteractions({
         canvasHeight,
       );
 
-      applyGeometry(target, { ...geometry, widgetId });
+      applyGeometry(target, geometry);
     },
     [canvasWidth, canvasHeight],
   );
@@ -145,12 +133,6 @@ export default function useWidgetInteractions({
       );
 
       items.forEach(({ event, target }) => {
-        const widgetId = target.dataset.id;
-
-        if (widgetId == null) {
-          return;
-        }
-
         const geometry = getPosition(
           event.left + dx,
           event.top + dy,
@@ -160,7 +142,7 @@ export default function useWidgetInteractions({
           canvasHeight,
         );
 
-        applyGeometry(target, { ...geometry, widgetId });
+        applyGeometry(target, geometry);
       });
     },
     [canvasWidth, canvasHeight],
@@ -177,16 +159,7 @@ export default function useWidgetInteractions({
         const geometry = readGeometry(target);
 
         if (geometry != null) {
-          items.push({
-            target,
-            widgetId: geometry.widgetId,
-            rect: {
-              x: geometry.x,
-              y: geometry.y,
-              width: geometry.width,
-              height: geometry.height,
-            },
-          });
+          items.push({ target, rect: geometry });
         }
       });
 
@@ -241,8 +214,8 @@ export default function useWidgetInteractions({
         session.lockRatio,
       );
 
-      session.items.forEach(({ target, widgetId }, i) => {
-        applyGeometry(target, { ...rects[i], widgetId });
+      session.items.forEach(({ target }, i) => {
+        applyGeometry(target, rects[i]);
       });
     },
     [canvasWidth, canvasHeight, scale],

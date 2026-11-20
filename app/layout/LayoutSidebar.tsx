@@ -10,7 +10,7 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import type { Widget } from "./layoutTypes";
+import type { Widget } from "./widgetTypes";
 
 const MIN_CANVAS_SIZE = 1;
 const MAX_CANVAS_SIZE = 3840;

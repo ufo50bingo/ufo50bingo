@@ -8,6 +8,7 @@ import { ORDERED_PROPER_GAMES } from "../goals";
 import getGameList from "../room/[id]/common/getGameList";
 import { STANDARD_UFO } from "../pastas/standardUfo";
 import GeneralIcon from "../room/[id]/cast/GeneralIcon";
+import StandaloneGeneralCount from "./StandaloneGeneralCount";
 import findGoal, { FoundGoalWithCast } from "../findGoal";
 
 type Props = {
@@ -130,6 +131,8 @@ function WidgetContent({ widget }: Props) {
           }
         />
       );
+    case "general_count":
+      return <StandaloneGeneralCount widget={widget} />;
     case "plain_text":
       return (
         <div

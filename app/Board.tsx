@@ -335,7 +335,8 @@ export default function Board({
             <SquareText
               key={displayGoal}
               text={displayGoal}
-              hasOverlays={overlays != null}
+              horizontalPadding={10}
+              verticalPadding={overlays != null ? 30 : 10}
               maxFontSize={maxFontSize}
               minFontSize={minFontSize}
             />

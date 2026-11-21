@@ -24,6 +24,8 @@ export function getGameToGoals(
   pasta: null | UFOPasta,
 ): GameToGoals {
   const gameToGoals: { [game: string]: [string, number][] } = {};
+  // inferGames needs longest first
+  const sortedGames = [...allGames].sort((a, b) => b.length - a.length);
   board.forEach((goal, index) => {
     const result =
       pasta != null
@@ -33,7 +35,7 @@ export function getGameToGoals(
           findGoal(goal, NES_50_UFO) ??
           findGoal(goal, EVERY_GAME_UFO));
     const gamesForGoal =
-      result != null ? result.inferredGames : inferGames(goal, allGames);
+      result != null ? result.inferredGames : inferGames(goal, sortedGames);
     gamesForGoal.forEach((game) => {
       const existingGoals = gameToGoals[game] ?? [];
       existingGoals.push([goal, index]);

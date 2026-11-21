@@ -1,3 +1,5 @@
+// allGames must be sorted longest first, so a name that contains a shorter one
+// (e.g. "campanella2" contains "campanella") is matched before the shorter one
 export function inferGames(resolvedGoal: string, allGames: ReadonlyArray<string>): ReadonlyArray<string> {
   const matches: Array<string> = [];
   let remaining = resolvedGoal;
@@ -10,6 +12,7 @@ export function inferGames(resolvedGoal: string, allGames: ReadonlyArray<string>
       remaining.includes("Campanella Trilogy") ||
       remaining.includes("CAMPANELLA TRILOGY"))
   ) {
+    matches.push("campanella");
     matches.push("campanella2");
     matches.push("campanella3");
     remaining = remaining.replaceAll("Campanella 1/2/3", " ");

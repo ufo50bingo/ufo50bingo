@@ -232,7 +232,7 @@ function preprocess(pasta: UFOPasta): ProcessedPasta {
   });
   const nonGeneralCategories = getNonGeneralCategories(pasta);
   const allGames = [...getAllSubcategories(pasta.goals, nonGeneralCategories)];
-  // longest first, so we make sure to handle
+  // longest first, as inferGames requires
   allGames.sort((a, b) => b.length - a.length);
   return { plain, withTokens, allGames };
 }

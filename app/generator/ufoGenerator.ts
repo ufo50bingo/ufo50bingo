@@ -124,6 +124,8 @@ function generateCandidate(
 ): null | [ReadonlyArray<string>, number] {
   const nonGeneralCategories = getNonGeneralCategories(pasta);
   const allGames = [...getAllSubcategories(pasta.goals, nonGeneralCategories)];
+  // sort needed for inferGames
+  allGames.sort((a, b) => b.length - a.length);
   // fill squares in order of how many bingo lines they're on
   // this helps prevent having two goals from the same game on one line
   // TODO: should we add a more complex search algorithm here as well?

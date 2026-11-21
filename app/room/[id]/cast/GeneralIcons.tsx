@@ -45,81 +45,54 @@ function Icon({
   const isOpponentClaimed =
     isLockout && !isCompleted && markedSquareColors.size > 0;
 
+  const countInfo =
+    countPosition === "inset"
+      ? { hasCheck: isCompleted, count, font }
+      : undefined;
+
   const icon = (
     <GeneralIcon
       foundGoal={foundGoal}
       iconType={iconType}
       isHidden={isHidden}
       isGray={isCompleted || isOpponentClaimed}
+      countInfo={countInfo}
     />
   );
 
   if (countPosition === "inset") {
-    const tag = isCompleted ? (
-      font === "ufo50" ? (
-        <div className={classes.tag}>
-          <img
-            className={classes.smallCheck}
-            src="/elf_check.png"
-            alt="checkmark"
-          />
-        </div>
-      ) : (
-        <IconCircleCheckFilled
-          className={classes.tagPosition}
-          color="green"
-          size={24}
-        />
-      )
-    ) : (
-      <div className={classes.tag}>
-        <span className={getFontClassname(font, count > 9)}>{count}</span>
-      </div>
-    );
-    return (
-      <SideCell>
-        {icon}
-        {tag}
-      </SideCell>
-    );
-  } else {
-    const tag = isCompleted ? (
-      font === "ufo50" ? (
-        <img
-          className={classes.bigCheck}
-          src="/elf_check.png"
-          alt="checkmark"
-        />
-      ) : (
-        <IconCircleCheckFilled color="green" size={30} />
-      )
-    ) : (
-      <div
-        className={`${classes.sideBySideTag} ${isOpponentClaimed ? classes.opponentClaimed : ""}`}
-      >
-        <span className={getFontClassname(font, false, count > 9)}>
-          {count}
-        </span>
-      </div>
-    );
-    return (
-      <SideCell>
-        <Group gap={8}>
-          {isLeft ? (
-            <>
-              {icon}
-              {tag}
-            </>
-          ) : (
-            <>
-              {tag}
-              {icon}
-            </>
-          )}
-        </Group>
-      </SideCell>
-    );
+    return <SideCell>{icon}</SideCell>;
   }
+  const tag = isCompleted ? (
+    font === "ufo50" ? (
+      <img className={classes.bigCheck} src="/elf_check.png" alt="checkmark" />
+    ) : (
+      <IconCircleCheckFilled color="green" size={30} />
+    )
+  ) : (
+    <div
+      className={`${classes.sideBySideTag} ${isOpponentClaimed ? classes.opponentClaimed : ""}`}
+    >
+      <span className={getFontClassname(font, false, count > 9)}>{count}</span>
+    </div>
+  );
+  return (
+    <SideCell>
+      <Group gap={8}>
+        {isLeft ? (
+          <>
+            {icon}
+            {tag}
+          </>
+        ) : (
+          <>
+            {tag}
+            {icon}
+          </>
+        )}
+      </Group>
+    </SideCell>
+  );
 }
 
 type Props = {

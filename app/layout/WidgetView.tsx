@@ -7,6 +7,8 @@ import PlayedGame from "../room/[id]/cast/PlayedGame";
 import { ORDERED_PROPER_GAMES } from "../goals";
 import getGameList from "../room/[id]/common/getGameList";
 import { STANDARD_UFO } from "../pastas/standardUfo";
+import GeneralIcon from "../room/[id]/cast/GeneralIcon";
+import findGoal, { FoundGoalWithCast } from "../findGoal";
 
 type Props = {
   widget: Widget;
@@ -16,6 +18,36 @@ const UFO_50_SUBCATEGORIES = new Map(
   ORDERED_PROPER_GAMES.map((game, idx) => [idx + 1, game]),
 );
 const UFO_50_GAME_LIST = getGameList(STANDARD_UFO);
+
+// placeholder general goals until the layout is connected to a match, one list
+// per subcategory so consecutive general numbers cycle through subcategories
+const SAMPLE_GENERAL_SUBCATEGORIES = [
+  "gift",
+  "goldcherry",
+  "bossenemy",
+  "level",
+  "theme",
+] as const;
+const SAMPLE_GENERAL_GOALS: ReadonlyArray<
+  ReadonlyArray<FoundGoalWithCast<string, string, string>>
+> = SAMPLE_GENERAL_SUBCATEGORIES.map((subcategory) =>
+  STANDARD_UFO.goals.general[subcategory]
+    .map((goal) =>
+      findGoal(typeof goal === "string" ? goal : goal.name, STANDARD_UFO),
+    )
+    .filter(
+      (found): found is FoundGoalWithCast<string, string, string> =>
+        found?.cast != null,
+    ),
+);
+
+function getSampleGeneralGoal(
+  generalNumber: number,
+): FoundGoalWithCast<string, string, string> {
+  const index = generalNumber - 1;
+  const goals = SAMPLE_GENERAL_GOALS[index % SAMPLE_GENERAL_GOALS.length];
+  return goals[Math.floor(index / SAMPLE_GENERAL_GOALS.length) % goals.length];
+}
 
 const squareNames: ReadonlyArray<string> = Array(25).fill(
   "BARBUTA: Speak to 2 different Bean NPCs",
@@ -82,6 +114,20 @@ function WidgetContent({ widget }: Props) {
           font="default"
           gameList={UFO_50_GAME_LIST}
           showTimer={widget.hasDefaultTimer}
+        />
+      );
+    case "general_icon":
+      return (
+        <GeneralIcon
+          foundGoal={getSampleGeneralGoal(widget.generalNumber)}
+          iconType={widget.iconSet}
+          isHidden={false}
+          isGray={false}
+          countInfo={
+            widget.hasInsetCount
+              ? { hasCheck: false, count: 3, font: "default" }
+              : undefined
+          }
         />
       );
     case "plain_text":

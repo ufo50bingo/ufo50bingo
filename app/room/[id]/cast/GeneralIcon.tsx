@@ -7,16 +7,18 @@ import { Font } from "@/app/font/useFont";
 import getFontClassname from "@/app/font/getFontClassname";
 import { IconCircleCheckFilled } from "@tabler/icons-react";
 
+type CountInfo = {
+  hasCheck: boolean;
+  count: number;
+  font: Font;
+};
+
 type Props = {
   foundGoal: FoundGoalWithCast<string, string, string>;
   iconType: string;
   isHidden: boolean;
   isGray: boolean;
-  countInfo?: {
-    hasCheck: boolean;
-    count: number;
-    font: Font;
-  };
+  countInfo?: CountInfo;
 };
 
 export default function GeneralIcon({
@@ -40,12 +42,17 @@ export default function GeneralIcon({
     <img className={imgClass} src={image.src} alt={foundGoal.resolvedGoal} />
   );
 
-  if (countInfo == null) {
-    return mainImg;
-  }
+  return (
+    <div className={classes.container}>
+      {mainImg}
+      {countInfo != null && <CountTag countInfo={countInfo} />}
+    </div>
+  );
+}
 
-  const tag =
-    countInfo.hasCheck && countInfo.font === "ufo50" ? (
+function CountTag({ countInfo }: { countInfo: CountInfo }) {
+  if (countInfo.hasCheck && countInfo.font === "ufo50") {
+    return (
       <div className={classes.tag}>
         <img
           className={classes.smallCheck}
@@ -53,24 +60,20 @@ export default function GeneralIcon({
           alt="checkmark"
         />
       </div>
-    ) : countInfo.hasCheck ? (
-      <IconCircleCheckFilled
-        className={classes.tagPosition}
-        color="green"
-        size={24}
-      />
-    ) : (
-      <div className={classes.tag}>
-        <span className={getFontClassname(countInfo.font, countInfo.count > 9)}>
-          {countInfo.count}
-        </span>
-      </div>
     );
+  }
+  if (countInfo.hasCheck) {
+    // sized by .tagPosition so it scales with the icon
+    return (
+      <IconCircleCheckFilled className={classes.tagPosition} color="green" />
+    );
+  }
   return (
-    <>
-      {mainImg}
-      {tag}
-    </>
+    <div className={classes.tag}>
+      <span className={getFontClassname(countInfo.font, countInfo.count > 9)}>
+        {countInfo.count}
+      </span>
+    </div>
   );
 }
 

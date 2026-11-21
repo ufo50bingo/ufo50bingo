@@ -1,6 +1,13 @@
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  container-type: size;
+}
+
 .icon {
-  width: 62px;
-  height: 62px;
+  width: 100%;
+  height: 100%;
 }
 
 .spritesIcon {
@@ -11,22 +18,23 @@
   filter: grayscale(1);
 }
 
+/* values in comments are original values from when the icon was a fixed 62px square */
 .smallCheck {
-  width: 18px;
-  height: 18px;
+  width: 29.03cqw; /* 18px */
+  height: 29.03cqw; /* 18px */
   image-rendering: pixelated;
 }
 
 .tag {
   position: absolute;
-  bottom: 8px;
-  right: 8px;
+  bottom: 0;
+  right: 0;
 
-  border-radius: 4px;
-  border: 2px solid white;
+  border-radius: 6.45cqw; /* 4px */
+  border: 3.23cqw solid white; /* 2px */
 
-  height: 20px;
-  width: 24px;
+  height: 32.26cqw; /* 20px */
+  width: 38.71cqw; /* 24px */
   background-color: #2e2e2e;
   color: white;
 
@@ -34,14 +42,16 @@
   align-items: center;
   justify-content: center;
 
-  font-size: 14px;
+  font-size: 22.58cqw; /* 14px */
   font-weight: bold;
 }
 
 .tagPosition {
   position: absolute;
-  bottom: 8px;
-  right: 8px;
+  bottom: 0;
+  right: 0;
+  width: 38.71cqw; /* 24px */
+  height: 38.71cqw; /* 24px */
 
   background-color: white;
   border-radius: 50%;

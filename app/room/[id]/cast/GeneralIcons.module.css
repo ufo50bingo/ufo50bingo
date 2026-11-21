@@ -16,3 +16,9 @@
   height: 29px;
   image-rendering: pixelated;
 }
+
+.iconBox {
+  width: 62px;
+  height: 62px;
+  flex-shrink: 0;
+}

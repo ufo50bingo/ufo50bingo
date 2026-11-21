@@ -51,13 +51,15 @@ function Icon({
       : undefined;
 
   const icon = (
-    <GeneralIcon
-      foundGoal={foundGoal}
-      iconType={iconType}
-      isHidden={isHidden}
-      isGray={isCompleted || isOpponentClaimed}
-      countInfo={countInfo}
-    />
+    <div className={classes.iconBox}>
+      <GeneralIcon
+        foundGoal={foundGoal}
+        iconType={iconType}
+        isHidden={isHidden}
+        isGray={isCompleted || isOpponentClaimed}
+        countInfo={countInfo}
+      />
+    </div>
   );
 
   if (countPosition === "inset") {

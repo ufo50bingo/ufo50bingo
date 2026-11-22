@@ -46,7 +46,7 @@ export default async function joinGame(
         FALSE,
         ${overrideName}
     )`,
-    broadcastToWebsockets(String(gameId), JSON.stringify(feedItem)),
+    broadcastToWebsockets(gameId, JSON.stringify(feedItem)),
   ]);
   refresh();
 }

@@ -37,6 +37,6 @@ export default async function sendChat(
         ${message},
         ${visibleToPlayers}
     )`,
-    broadcastToWebsockets(String(gameId), JSON.stringify(feedItem)),
+    broadcastToWebsockets(gameId, JSON.stringify(feedItem)),
   ]);
 }

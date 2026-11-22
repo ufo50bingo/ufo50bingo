@@ -42,6 +42,6 @@ export default async function changeColor(
       ${color},
       ${isClear}
   )`,
-    broadcastToWebsockets(String(gameId), JSON.stringify(feedItem)),
+    broadcastToWebsockets(gameId, JSON.stringify(feedItem)),
   ]);
 }

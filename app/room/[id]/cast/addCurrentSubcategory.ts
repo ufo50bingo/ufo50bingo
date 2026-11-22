@@ -38,6 +38,6 @@ export default async function addCurrentSubcategory({
         ${userId},
         ${subcategoryId}
     )`,
-    broadcastToWebsockets(String(gameId), JSON.stringify(feedItem)),
+    broadcastToWebsockets(gameId, JSON.stringify(feedItem)),
   ]);
 }

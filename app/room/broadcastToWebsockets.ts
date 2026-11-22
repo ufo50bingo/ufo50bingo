@@ -1,16 +1,18 @@
+import getBroadcastToken from "./[id]/common/getBroadcastToken";
+
 export default async function broadcastToWebsockets(
-  roomId: string,
+  gameId: number,
   message: string,
 ): Promise<void> {
+  const token = await getBroadcastToken(gameId);
   await fetch(
-    `https://ufo50bingo-websocket.frankthompson-cd2.workers.dev/broadcast/room/${roomId}`,
+    `https://ufo50bingo-websocket.frankthompson-cd2.workers.dev/broadcast/room/${gameId}`,
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // Authorization: `Bearer ${process.env.CLOUDFLARE_INTERNAL_SECRET}`,
       },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ token, message }),
     },
   );
 }

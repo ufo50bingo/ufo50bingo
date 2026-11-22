@@ -497,7 +497,7 @@ export type ParsedGame = {
   name: null | string;
   variant: string;
   dateCreated: number;
-  creatorId: number;
+  creatorId: null | number;
   isCustom: boolean;
   isDraft: boolean;
   isLockout: boolean;

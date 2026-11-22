@@ -21,6 +21,7 @@ type Props = {
 };
 
 const SPEED_MULT_OPTIONS = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512];
+const STEP_SEC = 1;
 
 export default function MatchPlaybackSlider({
   seekSec,
@@ -82,6 +83,15 @@ export default function MatchPlaybackSlider({
     };
   }, [isPlaying, maxSeekSec, setSeekSec, speedMult]);
 
+  // the slider snaps to increments of 1s, so the max value of the slider
+  // must be equal to maxSeekSec rounded up
+  const sliderMax = Math.ceil(maxSeekSec);
+  const sliderValue = seekSec >= maxSeekSec ? sliderMax : seekSec;
+  const onSliderChange = (value: number) =>
+    setSeekSec(Math.min(value, maxSeekSec));
+  const getSliderLabel = (value: number) =>
+    getTime(Math.min(value, maxSeekSec));
+
   const timeText = (
     <Text size="xs" style={{ fontVariantNumeric: "tabular-nums" }}>
       {getTime(seekSec)}/{getTime(maxSeekSec)}
@@ -137,11 +147,11 @@ export default function MatchPlaybackSlider({
         {timeText}
         <Slider
           min={0}
-          max={maxSeekSec}
-          label={getTime}
-          value={seekSec}
-          onChange={setSeekSec}
-          step={0.1}
+          max={sliderMax}
+          label={getSliderLabel}
+          value={sliderValue}
+          onChange={onSliderChange}
+          step={STEP_SEC}
           styles={{ markLabel: { display: "none" } }}
           flex="1"
         />
@@ -157,10 +167,10 @@ export default function MatchPlaybackSlider({
         {timeText}
         <Slider
           min={0}
-          max={maxSeekSec}
+          max={sliderMax}
           label={null}
-          value={seekSec}
-          step={0.1}
+          value={sliderValue}
+          step={STEP_SEC}
           styles={{ markLabel: { display: "none" } }}
           flex="1"
         />

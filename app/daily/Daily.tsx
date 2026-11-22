@@ -44,7 +44,7 @@ import dynamic from "next/dynamic";
 import getRTContent from "./getRTContent";
 import RTView from "./RTView";
 import LinkWithVariant from "../links/LinkWithVariant";
-import useSession from "../session/useSession";
+import { authClient } from "../authClient";
 import StandardBoardCover from "../StandardBoardCover";
 import { PRACTICE_VARIANTS, PracticeVariant } from "../PracticeVariantContext";
 import StandardBoardWrapper from "../StandardBoardWrapper";
@@ -74,7 +74,8 @@ export default function Daily({
   const [isStartingNewAttempt, setIsStartingNewAttempt] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  const isAdmin = useSession()?.admin ?? false;
+  const { data: session } = authClient.useSession();
+  const isAdmin = session?.user.isAdmin === true;
 
   const description: null | JSONContent = useMemo(
     () => getRTContent(dailyData.description),

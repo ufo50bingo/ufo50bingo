@@ -9,6 +9,8 @@ import useEditorHistory from "./useEditorHistory";
 import useSelection from "./useSelection";
 import useUndoRedoShortcuts from "./useUndoRedoShortcuts";
 import useWidgetInteractions from "./useWidgetInteractions";
+import { createWidget } from "./widgetInfo";
+import type { WidgetType } from "./widgetInfo";
 import type { Widget } from "./widgetTypes";
 
 type Props = {
@@ -103,6 +105,25 @@ export default function LayoutEditor(props: Props) {
     redo();
   }, [clearSelection, redo]);
 
+  const handleAddWidget = useCallback(
+    (type: WidgetType) => {
+      const id = crypto.randomUUID();
+      commit((widgets) => {
+        const z = Math.max(0, ...widgets.map((widget) => widget.z + 1));
+        const widget = createWidget(type, id, z);
+        return [
+          ...widgets,
+          {
+            ...widget,
+            x: Math.max(0, (canvasWidth - widget.width) / 2),
+            y: Math.max(0, (canvasHeight - widget.height) / 2),
+          },
+        ];
+      });
+    },
+    [commit, canvasWidth, canvasHeight],
+  );
+
   const handleWidgetChange = useCallback(
     (edited: Widget) =>
       commit((widgets) =>
@@ -123,6 +144,7 @@ export default function LayoutEditor(props: Props) {
         onCanvasSizeChange={handleCanvasSizeChange}
         selectedWidgets={selectedWidgets}
         onDeselect={clearSelection}
+        onAddWidget={handleAddWidget}
         onWidgetChange={handleWidgetChange}
       />
       <CanvasViewport

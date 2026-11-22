@@ -11,6 +11,7 @@ interface BasePlayedGame {
 interface RunningGame extends BasePlayedGame {
   type: "running";
   effectiveStartTime: number;
+  minDuration: number;
 }
 interface PausedGame extends BasePlayedGame {
   type: "paused";
@@ -139,6 +140,7 @@ export default class PlayedGameState {
           type: "running",
           effectiveStartTime: item.time,
           subcategoryId: item.subcategoryId,
+          minDuration: 0,
         };
     gameArr.push(newEntry);
   }
@@ -185,6 +187,7 @@ export default class PlayedGameState {
           type: "running",
           subcategoryId: prevEntry.subcategoryId,
           effectiveStartTime,
+          minDuration: prevEntry.duration,
         };
       }
     }

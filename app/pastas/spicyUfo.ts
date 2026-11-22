@@ -1423,5 +1423,18 @@ export const SPICY_UFO = {
       }
     ]
   },
+    "other_category_counts": [
+    {
+      "rows": 6,
+      "cols": 6,
+      "category_counts": {
+        "easy": 6,
+        "medium": 10,
+        "hard": 10,
+        "veryhard": 4,
+        "general": 6,
+      }
+    }
+  ],
   "current_game_options": "$ufo50"
 } as const;

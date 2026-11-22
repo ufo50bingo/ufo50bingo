@@ -1,5 +1,6 @@
 import getBroadcastToken from "./[id]/common/getBroadcastToken";
 
+// only needed for server broadcasts
 export default async function broadcastToWebsockets(
   gameId: number,
   message: string,

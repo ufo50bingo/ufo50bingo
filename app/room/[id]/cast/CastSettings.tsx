@@ -33,9 +33,10 @@ import { GameToGoals } from "./findAllGames";
 import SelectRightClickBehavior from "@/app/settings/SelectRightClickBehavior";
 import { CasterMember, PlayerMember } from "../common/useMembers";
 import MembersSection from "../common/MembersSection";
+import { NewFeedItem } from "@/app/fetchFeed";
 
 type Props = {
-  gameId: number;
+  userId: number;
   shownDifficulties: ReadonlyArray<Difficulty>;
   setShownDifficulties: (newShown: ReadonlyArray<Difficulty>) => unknown;
   sortType: SortType;
@@ -69,10 +70,11 @@ type Props = {
   timerState: SyncedTimerState;
   players: ReadonlyArray<PlayerMember>;
   casters: ReadonlyArray<CasterMember>;
+  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
 };
 
 export default function CastSettings({
-  gameId,
+  userId,
   shownDifficulties,
   setShownDifficulties,
   sortType,
@@ -106,6 +108,7 @@ export default function CastSettings({
   timerState,
   players,
   casters,
+  sendEvent,
 }: Props) {
   const [isShown, setIsShown] = useState(false);
   const { shouldShortenCast, setShouldShortenCast } = useShouldShortenContext();
@@ -138,16 +141,17 @@ export default function CastSettings({
           <Drawer.Body p={0}>
             <Accordion multiple={true} defaultValue={["members"]}>
               <MembersSection
-                gameId={gameId}
                 players={players}
                 casters={casters}
                 isMobile={false}
                 isCast={true}
+                sendEvent={sendEvent}
               />
               <TimerSection
-                gameId={gameId}
+                userId={userId}
                 timerState={timerState}
                 isMobile={false}
+                sendEvent={sendEvent}
               />
               <Accordion.Item value="display">
                 <Accordion.Control>Display Settings</Accordion.Control>

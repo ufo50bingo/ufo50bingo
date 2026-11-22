@@ -39,12 +39,17 @@ import { Restrictions, GeneralSettings } from "../play/GeneralSection";
 import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
 import useCastRightClickBehavior from "./useCastRightClickBehavior";
 import { RightClickBehaviorContext } from "@/app/settings/RightClickBehaviorContext";
-import { NewFeed, ParsedSubcategory, SquareWithId } from "@/app/fetchFeed";
+import {
+  FeedCurrentSubcategory,
+  FeedGoalProgress,
+  NewFeed,
+  ParsedSubcategory,
+  SquareWithId,
+} from "@/app/fetchFeed";
 import { GeneralCounts } from "./CastPage";
 import useSquareColors from "../common/useSquareColors";
 import useMembers, { PlayerMember } from "../common/useMembers";
-import addGoalProgress from "./addGoalProgress";
-import addCurrentSubcategory from "./addCurrentSubcategory";
+import { useServerOffsetContext } from "../ServerOffsetContext";
 
 const RESTRICTIONS: Restrictions = {
   canTagDifficultyFor: null,
@@ -71,6 +76,7 @@ export type CastProps = {
   squares: ReadonlyArray<SquareWithId>;
   pasta: null | UFOPasta;
   subcategories: ReadonlyArray<ParsedSubcategory>;
+  token: string;
 };
 
 const COUNT_POSITION = ["side_by_side", "inset"] as const;
@@ -82,16 +88,19 @@ export default function Cast({
   userId,
   squares,
   subcategories,
+  token,
 }: CastProps) {
   const isLockout = true;
   const boardSize = 25;
+  const { getServerMsFromClientMs } = useServerOffsetContext();
   const squareNames = useMemo(() => squares.map((s) => s.name), [squares]);
   const [soundChoices, setSoundChoices, playAudio] = useSounds("cast");
-  const { feed, reconnectModal } = useBingosyncSocket({
+  const { feed, reconnectModal, sendEvent } = useBingosyncSocket({
     gameId,
     initialFeed,
     userId,
     playAudio,
+    token,
   });
   const { allMembers, players, casters } = useMembers(feed);
   const squareColors = useSquareColors(feed, boardSize, isLockout);
@@ -314,13 +323,15 @@ export default function Cast({
     const foundSubcategory = subcategories.find(
       (sc) => sc.name === change.game,
     );
-    await addGoalProgress({
-      gameId,
+    const event: FeedGoalProgress = {
+      type: "goal_progress",
       userId: change.userId,
+      time: getServerMsFromClientMs(Date.now()) / 1000,
       goalId: foundSquare!.goalId,
       subcategoryId: foundSubcategory!.subcategoryId,
       count: change.count,
-    });
+    };
+    await sendEvent(event);
   };
 
   const getCard = (g: GeneralItem, h: null | undefined | number) => (
@@ -387,11 +398,14 @@ export default function Cast({
   const addSubcategoryName = async (userId: number, newGame: string | null) => {
     const subcategoryId =
       subcategories.find((sc) => sc.name === newGame)?.subcategoryId ?? null;
-    await addCurrentSubcategory({
-      gameId,
+    const event: FeedCurrentSubcategory = {
+      type: "current_subcategory",
       userId,
+      // eslint-disable-next-line react-hooks/purity
+      time: getServerMsFromClientMs(Date.now()) / 1000,
       subcategoryId,
-    });
+    };
+    sendEvent(event);
   };
   return (
     <RightClickBehaviorContext.Provider value={rightClickBehaviorContextValue}>
@@ -517,8 +531,9 @@ export default function Cast({
             <StartPauseButton
               timerState={timerState}
               isCast={true}
-              gameId={gameId}
+              userId={userId}
               onCountdownStart={() => setIsDetecting(true)}
+              sendEvent={sendEvent}
             />
           </Group>
           <Feed
@@ -529,6 +544,7 @@ export default function Cast({
             squareNames={squareNames}
             isPlay={false}
             style={{ height: `${475 - 44}px` }}
+            sendEvent={sendEvent}
           />
         </Stack>
         {showGameSelector ? (
@@ -599,7 +615,7 @@ export default function Cast({
         )}
       </Group>
       <CastSettings
-        gameId={gameId}
+        userId={userId}
         shownDifficulties={shownDifficulties}
         setShownDifficulties={setShownDifficulties}
         sortType={sortType}
@@ -635,10 +651,12 @@ export default function Cast({
         timerState={timerState}
         players={players}
         casters={casters}
+        sendEvent={sendEvent}
       />
       {editingIndex != null && (
         <EditSquare
-          gameId={gameId}
+          userId={userId}
+          sendEvent={sendEvent}
           squareColors={squareColors}
           squareNames={squareNames}
           editingIndex={editingIndex}

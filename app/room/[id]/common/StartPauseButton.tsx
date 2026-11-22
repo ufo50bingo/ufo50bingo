@@ -2,20 +2,22 @@ import { Button, Popover, Stack, Text } from "@mantine/core";
 import { SyncedTimerState } from "./useSyncedTimer";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import { IconPlayerPlay, IconPlayerPause } from "@tabler/icons-react";
-import addTimerEvent from "./addTimerEvent";
+import { FeedTimerEvent, NewFeedItem } from "@/app/fetchFeed";
 
 type Props = {
   timerState: SyncedTimerState;
   isCast: boolean;
-  gameId: number;
+  userId: number;
   onCountdownStart?: () => void;
+  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
 };
 
 export default function StartPauseButton({
   timerState,
   isCast,
-  gameId,
+  userId,
   onCountdownStart,
+  sendEvent,
 }: Props) {
   const { getServerMsFromClientMs } = useServerOffsetContext();
 
@@ -57,12 +59,14 @@ export default function StartPauseButton({
                 color="green"
                 onClick={async () => {
                   onCountdownStart?.();
-                  await addTimerEvent({
-                    gameId,
+                  const event: FeedTimerEvent = {
+                    type: "timer_event",
+                    userId,
                     time: getServerMsFromClientMs(Date.now() + 6000) / 1000,
                     event: "start",
                     duration: null,
-                  });
+                  };
+                  await sendEvent(event);
                 }}
               >
                 Confirm Start
@@ -104,12 +108,14 @@ export default function StartPauseButton({
                 color="green"
                 onClick={async () => {
                   onCountdownStart?.();
-                  await addTimerEvent({
-                    gameId,
+                  const event: FeedTimerEvent = {
+                    type: "timer_event",
+                    userId,
                     time: getServerMsFromClientMs(Date.now() + 6000) / 1000,
                     event: "start",
                     duration: null,
-                  });
+                  };
+                  await sendEvent(event);
                 }}
               >
                 Confirm Resume
@@ -142,14 +148,16 @@ export default function StartPauseButton({
               <Text>Are you sure you want to pause the match?</Text>
               <Button
                 color="green"
-                onClick={async () =>
-                  await addTimerEvent({
-                    gameId,
+                onClick={async () => {
+                  const event: FeedTimerEvent = {
+                    type: "timer_event",
+                    userId,
                     time: getServerMsFromClientMs(Date.now()) / 1000,
                     event: "pause",
                     duration: null,
-                  })
-                }
+                  };
+                  await sendEvent(event);
+                }}
               >
                 Confirm Pause
               </Button>

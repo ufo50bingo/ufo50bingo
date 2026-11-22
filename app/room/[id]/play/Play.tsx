@@ -8,7 +8,6 @@ import PlaySettings from "./PlaySettings";
 import useShownDifficulties from "./useShownDifficulties";
 import useSounds from "./useSounds";
 import useWakeLock from "./useWakeLock";
-import changeColor from "../cast/changeColor";
 import Feed from "../common/Feed";
 import useBingosyncSocket from "../common/useBingosyncSocket";
 import ScoreSquare from "../common/ScoreSquare";
@@ -38,9 +37,10 @@ import InfoCard from "../cast/InfoCard";
 import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
 import { useSearchParams } from "next/navigation";
 import { Restrictions } from "./GeneralSection";
-import { NewFeed } from "@/app/fetchFeed";
+import { FeedColorMark, NewFeed } from "@/app/fetchFeed";
 import useMembers from "../common/useMembers";
 import useSquareColors from "../common/useSquareColors";
+import { useServerOffsetContext } from "../ServerOffsetContext";
 
 export type FoundItem = {
   foundGoal: FoundGoal<string, string, string>;
@@ -53,6 +53,7 @@ export type Props = {
   initialFeed: NewFeed;
   userId: number;
   squareNames: ReadonlyArray<string>;
+  token: string;
 };
 
 export default function Play({
@@ -60,15 +61,18 @@ export default function Play({
   initialFeed,
   userId,
   squareNames,
+  token,
 }: Props) {
   const isLockout = true;
   const boardSize = 25;
+  const { getServerMsFromClientMs } = useServerOffsetContext();
   const [soundChoices, setSoundChoices, playAudio] = useSounds("play");
-  const { feed, reconnectModal } = useBingosyncSocket({
+  const { feed, reconnectModal, sendEvent } = useBingosyncSocket({
     gameId,
     initialFeed,
     userId,
     playAudio,
+    token,
   });
   const { players, allMembers } = useMembers(feed);
   const squareColors = useSquareColors(feed, boardSize, isLockout);
@@ -289,15 +293,17 @@ export default function Play({
               color: colors.length > 0 ? colors[0] : "blank",
             }))}
             onClickSquare={async (squareIndex) => {
-              const isClearing =
-                squareColors[squareIndex].includes(selectedColor);
+              const isClear = squareColors[squareIndex].includes(selectedColor);
               try {
-                await changeColor(
-                  gameId,
+                const feedItem: FeedColorMark = {
+                  type: "color_mark",
+                  time: getServerMsFromClientMs(Date.now()) / 1000,
+                  userId,
+                  color: selectedColor,
                   squareIndex,
-                  selectedColor,
-                  isClearing,
-                );
+                  isClear,
+                };
+                await sendEvent(feedItem);
               } catch {}
             }}
             shownDifficulties={shownDifficulties}
@@ -348,7 +354,8 @@ export default function Play({
             <StartPauseButton
               timerState={timerState}
               isCast={false}
-              gameId={gameId}
+              userId={userId}
+              sendEvent={sendEvent}
             />
           </Group>
           {showGeneralTracker && generalSettings.type === "simple" && (
@@ -359,7 +366,7 @@ export default function Play({
             />
           )}
           <PlaySettings
-            gameId={gameId}
+            userId={userId}
             color={selectedColor}
             // TODO: Allow changing color
             setColor={() => {}}
@@ -377,6 +384,7 @@ export default function Play({
             generalSettings={generalSettings}
             generalSetters={generalSetters}
             restrictions={restrictions}
+            sendEvent={sendEvent}
           />
         </Stack>
         <Feed
@@ -392,6 +400,7 @@ export default function Play({
                 ? "748px"
                 : "592px",
           }}
+          sendEvent={sendEvent}
         />
         {!isHidden &&
           showGeneralTracker &&

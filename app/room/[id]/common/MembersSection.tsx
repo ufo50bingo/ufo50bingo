@@ -22,14 +22,15 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { IconGripVertical } from "@tabler/icons-react";
 import { CasterMember, PlayerMember } from "./useMembers";
-import addPlayerOrder from "../cast/addPlayerOrder";
+import { FeedPlayerOrder, NewFeedItem } from "@/app/fetchFeed";
+import { useServerOffsetContext } from "../ServerOffsetContext";
 
 interface Props {
-  gameId: number;
   players: ReadonlyArray<PlayerMember>;
   casters: ReadonlyArray<CasterMember>;
   isMobile: boolean;
   isCast: boolean;
+  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
 }
 
 function SortablePlayer({ player }: { player: PlayerMember }) {
@@ -70,7 +71,8 @@ function SortablePlayer({ player }: { player: PlayerMember }) {
   );
 }
 
-export default function MembersSection({ gameId, players, casters }: Props) {
+export default function MembersSection({ players, casters, sendEvent }: Props) {
+  const { getServerMsFromClientMs } = useServerOffsetContext();
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
     useSensor(KeyboardSensor, {
@@ -88,11 +90,12 @@ export default function MembersSection({ gameId, players, casters }: Props) {
     );
     const destIndex = players.findIndex((p) => p.userId.toString() === over.id);
     const newPlayers = arrayMove([...players], sourceIndex, destIndex);
-
-    await addPlayerOrder(
-      gameId,
-      newPlayers.map((p) => p.userId),
-    );
+    const event: FeedPlayerOrder = {
+      type: "player_order",
+      time: getServerMsFromClientMs(Date.now()) / 1000,
+      orderedIds: newPlayers.map((p) => p.userId),
+    };
+    await sendEvent(event);
   };
 
   return (
@@ -102,7 +105,7 @@ export default function MembersSection({ gameId, players, casters }: Props) {
         <Stack>
           <Text>Players</Text>
           <DndContext
-            id={`members-dnd-${gameId}`}
+            id="members-dnd"
             sensors={sensors}
             collisionDetection={closestCenter}
             modifiers={[restrictToVerticalAxis, restrictToParentElement]}

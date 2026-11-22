@@ -2,28 +2,32 @@ import { Alert, Button, Drawer, Stack } from "@mantine/core";
 import ColorSelector from "../common/ColorSelector";
 import { useState } from "react";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
-import changeColor from "./changeColor";
+import { FeedColorMark, NewFeedItem } from "@/app/fetchFeed";
+import { useServerOffsetContext } from "../ServerOffsetContext";
 
 type Props = {
-  gameId: number;
+  userId: number;
   squareNames: ReadonlyArray<string>;
   squareColors: ReadonlyArray<ReadonlyArray<BingosyncColor>>;
   editingIndex: number;
   setEditingIndex: (newEditingIndex: null | number) => unknown;
+  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
 };
 
 export default function EditSquare({
-  gameId,
+  userId,
   squareNames,
   squareColors,
   editingIndex,
   setEditingIndex,
+  sendEvent,
 }: Props) {
   const [newColor, setNewColor] = useState<null | BingosyncColor>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const { getServerMsFromClientMs } = useServerOffsetContext();
 
   // TODO: Support non-lockout
-  const isClearing = squareColors[editingIndex].length > 0;
+  const isClear = squareColors[editingIndex].length > 0;
 
   return (
     <Drawer.Root
@@ -35,7 +39,7 @@ export default function EditSquare({
       <Drawer.Overlay backgroundOpacity={0} />
       <Drawer.Content style={{ boxShadow: "-0.2em 0 0.4em black" }}>
         <Drawer.Header>
-          <Drawer.Title>{isClearing ? "Clear" : "Assign"} Square</Drawer.Title>
+          <Drawer.Title>{isClear ? "Clear" : "Assign"} Square</Drawer.Title>
           <Drawer.CloseButton />
         </Drawer.Header>
         <Drawer.Body>
@@ -47,7 +51,7 @@ export default function EditSquare({
             <span>
               <strong>{squareNames[editingIndex]}</strong>
             </span>
-            {!isClearing && (
+            {!isClear && (
               <ColorSelector
                 label="New color"
                 color={newColor}
@@ -55,22 +59,30 @@ export default function EditSquare({
               />
             )}
             <Button
-              disabled={isSaving || (!isClearing && newColor == null)}
+              disabled={isSaving || (!isClear && newColor == null)}
               onClick={async () => {
                 setIsSaving(true);
                 // TODO: Handle non-lockout
-                const color = isClearing
+                const color = isClear
                   ? squareColors[editingIndex][0]
                   : nullthrows(newColor);
                 try {
-                  await changeColor(gameId, editingIndex, color, isClearing);
+                  const event: FeedColorMark = {
+                    type: "color_mark",
+                    userId,
+                    time: getServerMsFromClientMs(Date.now()) / 1000,
+                    squareIndex: editingIndex,
+                    color,
+                    isClear,
+                  };
+                  await sendEvent(event);
                   setEditingIndex(null);
                 } finally {
                   setIsSaving(false);
                 }
               }}
             >
-              Confirm {isClearing ? "Clear" : "Assignment"}
+              Confirm {isClear ? "Clear" : "Assignment"}
             </Button>
           </Stack>
         </Drawer.Body>

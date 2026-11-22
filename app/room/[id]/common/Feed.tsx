@@ -2,7 +2,7 @@ import { Card, Stack } from "@mantine/core";
 import ChatInput from "./ChatInput";
 import { CSSProperties, useLayoutEffect, useMemo, useRef } from "react";
 import FeedEntry from "./FeedEntry";
-import { NewFeed } from "@/app/fetchFeed";
+import { NewFeed, NewFeedItem } from "@/app/fetchFeed";
 import { GenericMember, PlayerMember } from "./useMembers";
 
 type Props = {
@@ -13,6 +13,7 @@ type Props = {
   isPlay: boolean;
   squareNames: ReadonlyArray<string>;
   players: ReadonlyArray<PlayerMember>;
+  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
 };
 
 export default function Feed({
@@ -22,6 +23,7 @@ export default function Feed({
   squareNames,
   members,
   players,
+  sendEvent,
   style = {},
 }: Props) {
   const feedRef = useRef<HTMLDivElement>(null);
@@ -70,7 +72,7 @@ export default function Feed({
         </Stack>
       </Card.Section>
       <Card.Section inheritPadding={true} withBorder={true} py="sm">
-        <ChatInput userId={userId} players={players} />
+        <ChatInput userId={userId} players={players} sendEvent={sendEvent} />
       </Card.Section>
     </Card>
   );

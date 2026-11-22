@@ -11,6 +11,7 @@ import useWidgetInteractions from "./useWidgetInteractions";
 import type { Widget } from "./layoutTypes";
 import Board from "../Board";
 import { TBoard } from "../matches/parseBingosyncData";
+import PlayedGame from "../room/[id]/cast/PlayedGame";
 
 type Props = {
   canvasWidth: number;
@@ -58,10 +59,18 @@ const initialWidgets: ReadonlyArray<Widget> = [
     id: "2",
     x: 200,
     y: 50,
-    width: 100,
-    height: 100,
+    width: 60,
+    height: 68,
     lockAspectRatio: true,
-    content: <div>Locked aspect ratio</div>,
+    content: (
+      <PlayedGame
+        game="barbuta"
+        startTime={0}
+        endTime={1000}
+        font="default"
+        isNes50={false}
+      />
+    ),
   },
   {
     id: "3",

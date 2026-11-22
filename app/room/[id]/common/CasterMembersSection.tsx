@@ -1,11 +1,4 @@
-import {
-  Accordion,
-  Button,
-  ColorSwatch,
-  Group,
-  Stack,
-  Text,
-} from "@mantine/core";
+import { Accordion, Button, Group, Stack, Text } from "@mantine/core";
 import {
   DndContext,
   DragEndEvent,
@@ -32,8 +25,9 @@ import { FeedMember, FeedPlayerOrder, NewFeedItem } from "@/app/fetchFeed";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import { UserTokenizer } from "@/app/UserTokenizer";
 import { BasicUser } from "@/app/api/users/route";
-import { useMemo, useState } from "react";
-import { getColorHex } from "@/app/color";
+import { useEffect, useMemo, useRef, useState } from "react";
+import TeamPlayers from "@/app/matches/TeamPlayers";
+import MemberLink from "@/app/matches/MemberLink";
 
 interface Props {
   players: ReadonlyArray<PlayerMember>;
@@ -54,11 +48,28 @@ function SortablePlayer({ player }: { player: PlayerMember }) {
     isDragging,
   } = useSortable({ id: player.userId.toString() });
 
+  // try to prevent accidental clicks while dragging users around
+  const wasDraggedRef = useRef(false);
+  useEffect(() => {
+    if (isDragging) {
+      wasDraggedRef.current = true;
+    }
+  }, [isDragging]);
+
   return (
-    <Group
+    <div
       ref={setNodeRef}
       {...attributes}
       {...listeners}
+      onPointerDownCapture={() => {
+        wasDraggedRef.current = false;
+      }}
+      onClickCapture={(event) => {
+        if (wasDraggedRef.current) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      }}
       style={{
         transform: CSS.Transform.toString(transform),
         transition,
@@ -68,9 +79,19 @@ function SortablePlayer({ player }: { player: PlayerMember }) {
         touchAction: "none",
       }}
     >
-      <ColorSwatch color={getColorHex(player.color)} size={14} />
-      <span>{player.name}</span>
-    </Group>
+      <PlayerRow player={player} />
+    </div>
+  );
+}
+
+function PlayerRow({ player }: { player: PlayerMember }) {
+  return (
+    <TeamPlayers
+      team={{ color: player.color, players: [player] }}
+      isWinnerShown={false}
+      isWinner={false}
+      size="md"
+    />
   );
 }
 
@@ -129,10 +150,7 @@ export default function CasterMembersSection({
           {sendEvents == null ? (
             <>
               {players.map((player) => (
-                <Group key={player.userId}>
-                  <ColorSwatch color={getColorHex(player.color)} size={14} />
-                  <span>{player.name}</span>
-                </Group>
+                <PlayerRow key={player.userId} player={player} />
               ))}
             </>
           ) : (
@@ -219,7 +237,13 @@ export default function CasterMembersSection({
           </Text>
           <Stack>
             {casters.map((c) => (
-              <span key={c.userId}>{c.name}</span>
+              <MemberLink
+                key={c.userId}
+                userId={c.userId}
+                name={c.name}
+                image={c.image}
+                size="md"
+              />
             ))}
           </Stack>
         </Stack>

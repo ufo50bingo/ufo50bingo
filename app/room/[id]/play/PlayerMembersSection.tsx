@@ -1,6 +1,7 @@
-import { Accordion, ColorSwatch, Group, Stack, Text } from "@mantine/core";
+import { Accordion, Stack, Text } from "@mantine/core";
 import { CasterMember, PlayerMember } from "../common/useMembers";
-import { getColorHex } from "@/app/color";
+import TeamPlayers from "@/app/matches/TeamPlayers";
+import MemberLink from "@/app/matches/MemberLink";
 
 interface Props {
   players: ReadonlyArray<PlayerMember>;
@@ -17,11 +18,15 @@ export default function PlayerMembersSection({ players, casters }: Props) {
             <strong>Players</strong>
           </Text>
           <Stack>
+            {/* the same as a player on the match list */}
             {players.map((p) => (
-              <Group key={p.userId}>
-                <ColorSwatch color={getColorHex(p.color)} size={14} />
-                <span>{p.name}</span>
-              </Group>
+              <TeamPlayers
+                key={p.userId}
+                team={{ color: p.color, players: [p] }}
+                isWinnerShown={false}
+                isWinner={false}
+                size="md"
+              />
             ))}
           </Stack>
           <Text>
@@ -29,7 +34,13 @@ export default function PlayerMembersSection({ players, casters }: Props) {
           </Text>
           <Stack>
             {casters.map((c) => (
-              <span key={c.userId}>{c.name}</span>
+              <MemberLink
+                key={c.userId}
+                userId={c.userId}
+                name={c.name}
+                image={c.image}
+                size="md"
+              />
             ))}
           </Stack>
         </Stack>

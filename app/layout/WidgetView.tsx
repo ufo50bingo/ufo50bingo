@@ -3,10 +3,19 @@ import Board from "../Board";
 import { BingosyncColor } from "../color";
 import { getWidgetLabel, isAspectRatioLocked } from "./widgetInfo";
 import type { Widget } from "./widgetTypes";
+import PlayedGame from "../room/[id]/cast/PlayedGame";
+import { ORDERED_PROPER_GAMES } from "../goals";
+import getGameList from "../room/[id]/common/getGameList";
+import { STANDARD_UFO } from "../pastas/standardUfo";
 
 type Props = {
   widget: Widget;
 };
+
+const UFO_50_SUBCATEGORIES = new Map(
+  ORDERED_PROPER_GAMES.map((game, idx) => [idx + 1, game]),
+);
+const UFO_50_GAME_LIST = getGameList(STANDARD_UFO);
 
 const squareNames: ReadonlyArray<string> = Array(25).fill(
   "BARBUTA: Speak to 2 different Bean NPCs",
@@ -59,6 +68,20 @@ function WidgetContent({ widget }: Props) {
           minFontSize={widget.canShrink ? widget.minSize : widget.defaultSize}
           rows={5}
           columns={5}
+        />
+      );
+    case "recent_game":
+      return (
+        <PlayedGame
+          recentGame={{
+            subcategoryId: widget.recentGameNumber % 50,
+            type: "finished",
+            duration: 42 * ((widget.recentGameNumber % 20) + 1),
+          }}
+          subcategoryIdToName={UFO_50_SUBCATEGORIES}
+          font="default"
+          gameList={UFO_50_GAME_LIST}
+          showTimer={widget.hasDefaultTimer}
         />
       );
     case "plain_text":

@@ -11,6 +11,7 @@ type Props = {
   subcategoryIdToName: ReadonlyMap<number, string>;
   font: Font;
   gameList: { [game: string]: string };
+  showTimer: boolean;
 };
 
 export default function PlayedGame({
@@ -18,6 +19,7 @@ export default function PlayedGame({
   subcategoryIdToName,
   font,
   gameList,
+  showTimer,
 }: Props) {
   const { getClientMsFromServerMs } = useServerOffsetContext();
   const game = subcategoryIdToName.get(recentGame.subcategoryId);
@@ -33,25 +35,27 @@ export default function PlayedGame({
       ) : (
         <div className={classes.gameIcon}>{game}</div>
       )}
-      <div className={classes.tag}>
-        <span className={getFontClassname(font)}>
-          {recentGame.type === "running" ? (
-            <RunningDuration
-              curStartTime={getClientMsFromServerMs(
-                recentGame.effectiveStartTime * 1000,
-              )}
-              accumulatedDuration={0}
-              minDuration={recentGame.minDuration * 1000}
-              showDecimal={false}
-            />
-          ) : (
-            <Duration
-              duration={recentGame.duration * 1000}
-              showDecimal={false}
-            />
-          )}
-        </span>
-      </div>
+      {showTimer && (
+        <div className={classes.tag}>
+          <span className={getFontClassname(font)}>
+            {recentGame.type === "running" ? (
+              <RunningDuration
+                curStartTime={getClientMsFromServerMs(
+                  recentGame.effectiveStartTime * 1000,
+                )}
+                accumulatedDuration={0}
+                minDuration={recentGame.minDuration * 1000}
+                showDecimal={false}
+              />
+            ) : (
+              <Duration
+                duration={recentGame.duration * 1000}
+                showDecimal={false}
+              />
+            )}
+          </span>
+        </div>
+      )}
     </div>
   );
 }

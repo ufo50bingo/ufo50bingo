@@ -10,6 +10,9 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
+import WidgetEditor from "./WidgetEditor";
+import type { WidgetChangeHandler } from "./WidgetEditor";
+import { getWidgetLabel } from "./widgetInfo";
 import type { Widget } from "./widgetTypes";
 
 const MIN_CANVAS_SIZE = 1;
@@ -23,6 +26,7 @@ type Props = {
   onCanvasSizeChange: (width: number, height: number) => void;
   selectedWidgets: ReadonlyArray<Widget>;
   onDeselect: () => void;
+  onWidgetChange: WidgetChangeHandler;
 };
 
 export default function LayoutSidebar({
@@ -33,6 +37,7 @@ export default function LayoutSidebar({
   onCanvasSizeChange,
   selectedWidgets,
   onDeselect,
+  onWidgetChange,
 }: Props) {
   return (
     <Box
@@ -55,7 +60,13 @@ export default function LayoutSidebar({
           onCanvasSizeChange={onCanvasSizeChange}
         />
       ) : (
-        <ElementProperties widgets={selectedWidgets} onDeselect={onDeselect} />
+        <SelectionProperties
+          widgets={selectedWidgets}
+          canvasWidth={canvasWidth}
+          canvasHeight={canvasHeight}
+          onDeselect={onDeselect}
+          onWidgetChange={onWidgetChange}
+        />
       )}
     </Box>
   );
@@ -67,7 +78,7 @@ function LayoutProperties({
   canvasWidth,
   canvasHeight,
   onCanvasSizeChange,
-}: Omit<Props, "selectedWidgets" | "onDeselect">) {
+}: Omit<Props, "selectedWidgets" | "onDeselect" | "onWidgetChange">) {
   return (
     <Stack>
       <Title order={4}>Layout</Title>
@@ -121,16 +132,26 @@ function CanvasSizeInput({
   );
 }
 
-function ElementProperties({
+function SelectionProperties({
   widgets,
+  canvasWidth,
+  canvasHeight,
   onDeselect,
+  onWidgetChange,
 }: {
   widgets: ReadonlyArray<Widget>;
+  canvasWidth: number;
+  canvasHeight: number;
   onDeselect: () => void;
+  onWidgetChange: WidgetChangeHandler;
 }) {
+  const widget = widgets.length === 1 ? widgets[0] : null;
+
   const header = (
     <Group justify="space-between" wrap="nowrap">
-      <Title order={4}>Edit Element</Title>
+      <Title order={4}>
+        Edit {widget != null ? getWidgetLabel(widget.type) : "Widget"}
+      </Title>
       <CloseButton aria-label="Deselect" onClick={onDeselect} />
     </Group>
   );
@@ -138,9 +159,18 @@ function ElementProperties({
   return (
     <Stack>
       {header}
-      <Text size="sm" c="dimmed">
-        TODO
-      </Text>
+      {widget != null ? (
+        <WidgetEditor
+          widget={widget}
+          canvasWidth={canvasWidth}
+          canvasHeight={canvasHeight}
+          onChange={onWidgetChange}
+        />
+      ) : (
+        <Text size="sm" c="dimmed">
+          TODO
+        </Text>
+      )}
     </Stack>
   );
 }

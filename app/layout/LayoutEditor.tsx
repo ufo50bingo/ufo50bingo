@@ -104,6 +104,14 @@ export default function LayoutEditor(props: Props) {
     redo();
   }, [clearSelection, redo]);
 
+  const handleWidgetChange = useCallback(
+    (edited: Widget) =>
+      commit((widgets) =>
+        widgets.map((widget) => (widget.id === edited.id ? edited : widget)),
+      ),
+    [commit],
+  );
+
   useUndoRedoShortcuts({ undo: handleUndo, redo: handleRedo });
 
   return (
@@ -116,6 +124,7 @@ export default function LayoutEditor(props: Props) {
         onCanvasSizeChange={handleCanvasSizeChange}
         selectedWidgets={selectedWidgets}
         onDeselect={clearSelection}
+        onWidgetChange={handleWidgetChange}
       />
       <CanvasViewport
         canvasWidth={canvasWidth}

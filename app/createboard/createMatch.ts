@@ -9,6 +9,8 @@ import findGoal from "../findGoal";
 import getSql from "../getSql";
 import joinValues from "../joinValues";
 import getUserId from "../getUserId";
+import getAllSubcategories from "./getAllSubcategories";
+import getNonGeneralCategories from "./getNonGeneralCategories";
 
 export interface LeagueInfo {
   season: number;
@@ -51,15 +53,23 @@ export default async function createMatch({
   fullPasta,
 }: Props): Promise<string> {
   const userId = await getUserId();
+  const sql = getSql(false);
   const pastaToStore = getFullPasta(fullPasta, variant);
   let hash: null | bigint = null;
   let json: null | string = null;
+  const subcategoryValues = [];
   if (pastaToStore != null) {
     json = JSON.stringify(pastaToStore);
     hash = hashJson(json);
+    const subcategoriesToStore = getAllSubcategories(
+      pastaToStore.goals,
+      getNonGeneralCategories(pastaToStore),
+    );
+    for (const sc of subcategoriesToStore) {
+      subcategoryValues.push(sql`(${sc})`);
+    }
   }
 
-  const sql = getSql(false);
   const goalTextValues = [];
   const goalIndexValues = goals.map(
     (name, index) => sql`(${name}, ${index}::smallint)`,
@@ -120,6 +130,12 @@ export default async function createMatch({
 
       ON CONFLICT (name) DO NOTHING
       RETURNING id, name
+    ),
+
+    inserted_subcategories AS (
+      INSERT INTO subcategory (name)
+      VALUES ${joinValues(sql, subcategoryValues)}
+      ON CONFLICT (name) DO NOTHING
     ),
 
     new_game AS (

@@ -89,12 +89,13 @@ export default function findGoal(
       plainResult.short == null
         ? null
         : {
-          resolved: plainResult.short,
-          parts: [{ type: "plain", text: plainResult.short }],
-        };
-    const isGeneral = plainResult.category === "general" || (
-      pasta.general_categories != null &&
-      pasta.general_categories.includes(plainResult.category));
+            resolved: plainResult.short,
+            parts: [{ type: "plain", text: plainResult.short }],
+          };
+    const isGeneral =
+      plainResult.category === "general" ||
+      (pasta.general_categories != null &&
+        pasta.general_categories.includes(plainResult.category));
     const res = {
       goal,
       short,
@@ -105,7 +106,9 @@ export default function findGoal(
       tokens: [],
       goalParts: [part],
       cast: plainResult.cast,
-      inferredGames: isGeneral ? inferGames(goal, processed.allGames) : [plainResult.subcategory],
+      inferredGames: isGeneral
+        ? inferGames(goal, processed.allGames)
+        : [plainResult.subcategory],
     };
     goalCache.set(goal, res);
     return res;
@@ -121,7 +124,8 @@ export default function findGoal(
           part.type === "plain" ? part : resolvedTokens[tokenIdx++],
         );
       }
-      const isGeneral = option.tags.category === "general" ||
+      const isGeneral =
+        option.tags.category === "general" ||
         (pasta.general_categories != null &&
           pasta.general_categories.includes(option.tags.category));
       const res = {
@@ -130,9 +134,9 @@ export default function findGoal(
           shortParts == null
             ? null
             : {
-              resolved: shortParts.map((p) => p.text).join(""),
-              parts: shortParts,
-            },
+                resolved: shortParts.map((p) => p.text).join(""),
+                parts: shortParts,
+              },
         resolvedGoal: goal,
         category: option.tags.category,
         isGeneral,
@@ -141,7 +145,9 @@ export default function findGoal(
         goalParts,
         sortTokens: option.sortTokens,
         cast: option.tags.cast,
-        inferredGames: isGeneral ? inferGames(goal, processed.allGames) : [option.tags.subcategory],
+        inferredGames: isGeneral
+          ? inferGames(goal, processed.allGames)
+          : [option.tags.subcategory],
       };
       goalCache.set(goal, res);
       return res;
@@ -225,11 +231,9 @@ function preprocess(pasta: UFOPasta): ProcessedPasta {
     });
   });
   const nonGeneralCategories = getNonGeneralCategories(pasta);
-  const allGames = [
-    ...getAllSubcategories(pasta.goals, nonGeneralCategories),
-  ];
-  // longest first, so we make sure to handle 
-  allGames.sort((a, b) => b.length - a.length)
+  const allGames = [...getAllSubcategories(pasta.goals, nonGeneralCategories)];
+  // longest first, so we make sure to handle
+  allGames.sort((a, b) => b.length - a.length);
   return { plain, withTokens, allGames };
 }
 

@@ -1,6 +1,18 @@
 "use client";
 
-import { Group, NumberInput, Stack } from "@mantine/core";
+import type { FocusEvent } from "react";
+import {
+  Autocomplete,
+  ColorInput,
+  Group,
+  NumberInput,
+  SegmentedControl,
+  Stack,
+  Switch,
+  Textarea,
+  TextInput,
+} from "@mantine/core";
+import { BUILT_IN_ICON_SETS } from "../room/[id]/cast/iconSets";
 import { isAspectRatioLocked } from "./widgetInfo";
 import type { Widget } from "./widgetTypes";
 
@@ -12,6 +24,15 @@ type Props = {
   canvasHeight: number;
   onChange: WidgetChangeHandler;
 };
+
+function commitTextOnBlur(value: string, onChange: (value: string) => void) {
+  return (event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const newValue = event.currentTarget.value;
+    if (newValue !== value) {
+      onChange(newValue);
+    }
+  };
+}
 
 export default function WidgetEditor({
   widget,
@@ -83,6 +104,215 @@ export default function WidgetEditor({
           }
         />
       </Group>
+
+      {widget.type === "plain_text" && (
+        <Textarea
+          key={widget.text}
+          label="Text"
+          autosize
+          minRows={2}
+          defaultValue={widget.text}
+          onBlur={commitTextOnBlur(widget.text, (text) =>
+            onChange({ ...widget, text }),
+          )}
+        />
+      )}
+
+      {"playerNum" in widget && (
+        <NumberField
+          label="Player number"
+          min={1}
+          value={widget.playerNum}
+          onChange={(playerNum) => onChange({ ...widget, playerNum })}
+        />
+      )}
+      {"recentGameNumber" in widget && (
+        <NumberField
+          label="Recent game number"
+          min={1}
+          value={widget.recentGameNumber}
+          onChange={(recentGameNumber) =>
+            onChange({ ...widget, recentGameNumber })
+          }
+        />
+      )}
+      {"generalNumber" in widget && (
+        <NumberField
+          label="General number"
+          min={1}
+          value={widget.generalNumber}
+          onChange={(generalNumber) => onChange({ ...widget, generalNumber })}
+        />
+      )}
+      {widget.type === "general_icon" && (
+        <Autocomplete
+          key={widget.iconSet}
+          label="Icon set"
+          data={BUILT_IN_ICON_SETS}
+          defaultValue={widget.iconSet}
+          onBlur={commitTextOnBlur(widget.iconSet, (iconSet) =>
+            onChange({ ...widget, iconSet }),
+          )}
+        />
+      )}
+
+      <TextInput
+        key={widget.font}
+        label="Font"
+        defaultValue={widget.font}
+        onBlur={commitTextOnBlur(widget.font, (font) =>
+          onChange({ ...widget, font }),
+        )}
+      />
+      {"defaultSize" in widget && (
+        <NumberField
+          label="Font size"
+          min={1}
+          value={widget.defaultSize}
+          onChange={(defaultSize) => onChange({ ...widget, defaultSize })}
+        />
+      )}
+      {"canShrink" in widget && (
+        <>
+          <Switch
+            label="Shrink text to fit"
+            checked={widget.canShrink}
+            onChange={(event) =>
+              onChange({ ...widget, canShrink: event.currentTarget.checked })
+            }
+          />
+          <NumberField
+            label="Minimum font size"
+            min={1}
+            disabled={!widget.canShrink}
+            value={widget.minSize}
+            onChange={(minSize) => onChange({ ...widget, minSize })}
+          />
+        </>
+      )}
+
+      {"color" in widget && (
+        <ColorField
+          color={widget.color}
+          onChange={(color) => onChange({ ...widget, color })}
+        />
+      )}
+
+      {"hasDefaultTimer" in widget && (
+        <Switch
+          label="Show default timer"
+          checked={widget.hasDefaultTimer}
+          onChange={(event) =>
+            onChange({
+              ...widget,
+              hasDefaultTimer: event.currentTarget.checked,
+            })
+          }
+        />
+      )}
+      {"showStart" in widget && (
+        <Switch
+          label="Show start"
+          checked={widget.showStart}
+          onChange={(event) =>
+            onChange({ ...widget, showStart: event.currentTarget.checked })
+          }
+        />
+      )}
+      {"hasInsetCount" in widget && (
+        <Switch
+          label="Show inset count"
+          checked={widget.hasInsetCount}
+          onChange={(event) =>
+            onChange({ ...widget, hasInsetCount: event.currentTarget.checked })
+          }
+        />
+      )}
+      {"hasDefaultBackground" in widget && (
+        <Switch
+          label="Show default background"
+          checked={widget.hasDefaultBackground}
+          onChange={(event) =>
+            onChange({
+              ...widget,
+              hasDefaultBackground: event.currentTarget.checked,
+            })
+          }
+        />
+      )}
+      {"showTiebreaker" in widget && (
+        <Switch
+          label="Show tiebreaker"
+          checked={widget.showTiebreaker}
+          onChange={(event) =>
+            onChange({ ...widget, showTiebreaker: event.currentTarget.checked })
+          }
+        />
+      )}
+      {"allowCustomName" in widget && (
+        <Switch
+          label="Allow custom name"
+          checked={widget.allowCustomName}
+          onChange={(event) =>
+            onChange({
+              ...widget,
+              allowCustomName: event.currentTarget.checked,
+            })
+          }
+        />
+      )}
+    </Stack>
+  );
+}
+
+type WidgetColor = Extract<Widget, { color: unknown }>["color"];
+
+const DEFAULT_CUSTOM_COLOR = "#ffffff";
+const DEFAULT_PLAYER_NUM = 1;
+
+function ColorField({
+  color,
+  onChange,
+}: {
+  color: WidgetColor;
+  onChange: (color: WidgetColor) => void;
+}) {
+  return (
+    <Stack gap={4}>
+      <SegmentedControl
+        data={[
+          { value: "player_color", label: "Player color" },
+          { value: "custom_color", label: "Custom color" },
+        ]}
+        value={color.type}
+        onChange={(type) =>
+          onChange(
+            type === "player_color"
+              ? { type: "player_color", playerNum: DEFAULT_PLAYER_NUM }
+              : { type: "custom_color", color: DEFAULT_CUSTOM_COLOR },
+          )
+        }
+      />
+      {color.type === "player_color" ? (
+        <NumberField
+          label="Color of player number"
+          min={1}
+          value={color.playerNum}
+          onChange={(playerNum) =>
+            onChange({ type: "player_color", playerNum })
+          }
+        />
+      ) : (
+        <ColorInput
+          key={color.color}
+          label="Color"
+          defaultValue={color.color}
+          format="hexa"
+          onBlur={commitTextOnBlur(color.color, (value) =>
+            onChange({ type: "custom_color", color: value }),
+          )}
+        />
+      )}
     </Stack>
   );
 }

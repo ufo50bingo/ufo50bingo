@@ -3,12 +3,20 @@ import { getCastImage } from "./iconSets";
 import { StandardGeneral } from "@/app/pastas/pastaTypes";
 import classes from "./GeneralIcon.module.css";
 import { CastImage } from "@/app/generator/ufoGenerator";
+import { Font } from "@/app/font/useFont";
+import getFontClassname from "@/app/font/getFontClassname";
+import { IconCircleCheckFilled } from "@tabler/icons-react";
 
 type Props = {
   foundGoal: FoundGoalWithCast<string, string, string>;
   iconType: string;
   isHidden: boolean;
   isGray: boolean;
+  countInfo?: {
+    hasCheck: boolean;
+    count: number;
+    font: Font;
+  };
 };
 
 export default function GeneralIcon({
@@ -16,6 +24,7 @@ export default function GeneralIcon({
   iconType,
   isHidden,
   isGray,
+  countInfo,
 }: Props) {
   const image =
     (isHidden ? null : getCastImage(foundGoal.cast, iconType)) ??
@@ -26,8 +35,42 @@ export default function GeneralIcon({
       ? `${classes.icon} ${classes.spritesIcon}`
       : classes.icon;
   const imgClass = isGray ? `${iconClass} ${classes.grayscale}` : iconClass;
-  return (
+
+  const mainImg = (
     <img className={imgClass} src={image.src} alt={foundGoal.resolvedGoal} />
+  );
+
+  if (countInfo == null) {
+    return mainImg;
+  }
+
+  const tag =
+    countInfo.hasCheck && countInfo.font === "ufo50" ? (
+      <div className={classes.tag}>
+        <img
+          className={classes.smallCheck}
+          src="/elf_check.png"
+          alt="checkmark"
+        />
+      </div>
+    ) : countInfo.hasCheck ? (
+      <IconCircleCheckFilled
+        className={classes.tagPosition}
+        color="green"
+        size={24}
+      />
+    ) : (
+      <div className={classes.tag}>
+        <span className={getFontClassname(countInfo.font, countInfo.count > 9)}>
+          {countInfo.count}
+        </span>
+      </div>
+    );
+  return (
+    <>
+      {mainImg}
+      {tag}
+    </>
   );
 }
 

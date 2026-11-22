@@ -23,7 +23,7 @@ import RecentGames from "./RecentGames";
 import ScoreSquare from "../common/ScoreSquare";
 import SideCell from "./SideCell";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
-import findGoal, { FoundGoal, FoundGoalWithCast } from "@/app/findGoal";
+import findGoal, { FoundGoalWithCast } from "@/app/findGoal";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
 import { GENERAL_ORDER } from "./GeneralOrderSelector";
 import useFont from "@/app/font/useFont";
@@ -120,7 +120,7 @@ export default function Cast({
     [rightClickBehavior, setRightClickBehavior],
   );
 
-  const _pasta = useMemo(() => {
+  const pasta = useMemo(() => {
     if (pastaId == null) {
       return null;
     }
@@ -130,11 +130,13 @@ export default function Cast({
     return getMatchingRepoPasta(pastaId);
   }, [fetchedPasta, pastaId]);
 
-  const isNes50 = useMemo(() => getIsNes50(squareNames), [squareNames]);
-  // TODO: Update getGameList to handle other pastas as well
+  const isNes50 = useMemo(
+    () => pasta === NES_50_UFO || getIsNes50(squareNames),
+    [pasta, squareNames],
+  );
   const gameToGoals = useMemo(
-    () => getGameToGoals(squareNames, getGameList(isNes50)),
-    [squareNames, isNes50],
+    () => getGameToGoals(squareNames, getGameList(isNes50), pasta),
+    [squareNames, isNes50, pasta],
   );
   const terminalCodes = useMemo(
     () => getAllTerminalCodes(squareNames),
@@ -266,38 +268,35 @@ export default function Cast({
   const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(() => {
     return squareNames
       .map((name, squareIndex) => {
-        let foundGoal: null | FoundGoal<string, string, string> = null;
-        foundGoal = findGoal(name, STANDARD_UFO);
-        let pasta: UFOPasta = STANDARD_UFO;
-        if (foundGoal == null) {
-          foundGoal = findGoal(name, NES_50_UFO);
-          pasta = NES_50_UFO;
+        const pastasToCheck =
+          pasta != null ? [pasta] : [STANDARD_UFO, NES_50_UFO, EVERY_GAME_UFO];
+        for (const pastaToCheck of pastasToCheck) {
+          const foundGoal = findGoal(name, pastaToCheck);
+          if (foundGoal != null) {
+            if (foundGoal.cast == null) {
+              return null;
+            }
+            return {
+              foundGoal: foundGoal as FoundStandardGeneral,
+              pasta: pastaToCheck,
+              squareIndex,
+            };
+          }
         }
-        if (foundGoal == null) {
-          foundGoal = findGoal(name, EVERY_GAME_UFO);
-          pasta = EVERY_GAME_UFO;
-        }
-        if (foundGoal == null || foundGoal.cast == null) {
-          return null;
-        }
-        return {
-          foundGoal: foundGoal as FoundStandardGeneral,
-          pasta,
-          squareIndex,
-        };
+        return null;
       })
       .filter((item) => item != null);
-  }, [squareNames]);
+  }, [pasta, squareNames]);
 
   // TODO: Fix this
   const sortedGenerals = useMemo<ReadonlyArray<GeneralItem>>(() => {
-    const correctOrder = Object.keys(STANDARD_UFO.goals.general);
+    const correctOrder = Object.keys(pasta ?? STANDARD_UFO.goals.general);
     return generalGoals.toSorted((a, b) => {
       const aIdx = correctOrder.indexOf(a.foundGoal.subcategory);
       const bIdx = correctOrder.indexOf(b.foundGoal.subcategory);
       return aIdx - bIdx;
     });
-  }, [generalGoals]);
+  }, [generalGoals, pasta]);
 
   const generalSettings: GeneralSettings = useMemo(
     () => ({
@@ -469,6 +468,7 @@ export default function Cast({
             )}
           </SideColumn>
           <Board
+            pasta={pasta}
             board={squareColors.map((colors, index) => ({
               name: squareNames[index],
               color: colors.length > 0 ? colors[0] : "blank",

@@ -59,6 +59,7 @@ export default async function createMatch({
   let hash: null | bigint = null;
   let json: null | string = null;
   const subcategoryValues = [];
+  // TODO: should have client pass in hash and confirm it matches
   if (pastaToStore != null) {
     json = JSON.stringify(pastaToStore);
     hash = hashJson(json);

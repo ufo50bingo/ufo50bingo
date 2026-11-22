@@ -7,12 +7,14 @@ type Props = {
   generalGoals: ReadonlyArray<GeneralItem>;
   gameId: number;
   isHidden: boolean;
+  isFinished: (item: GeneralItem) => boolean;
 };
 
 export default function SimpleGeneralTracker({
   generalGoals,
   gameId,
   isHidden,
+  isFinished,
 }: Props) {
   const [state, setState] = useSimpleGeneralState(gameId);
   return (
@@ -31,16 +33,10 @@ export default function SimpleGeneralTracker({
                 label={isHidden ? "<Hidden>" : item.foundGoal.resolvedGoal}
               >
                 <Text size="sm">
-                  {/* TODO: FIX HIDING GENERAL TRACKER */}
-                  {/* {item.color !== null ? ( */}
-                  {false ? (
-                    isHidden ? (
-                      "<Hidden>"
-                    ) : (
-                      <s>{displayGoal}</s>
-                    )
-                  ) : isHidden ? (
+                  {isHidden ? (
                     "<Hidden>"
+                  ) : isFinished(item) ? (
+                    <s>{displayGoal}</s>
                   ) : (
                     displayGoal
                   )}

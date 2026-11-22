@@ -1,8 +1,12 @@
 import { useState, useEffect, useRef, ReactNode, useCallback } from "react";
-import { Modal, Stack, Group, Button } from "@mantine/core";
+import { Modal, Stack, Group, Button, Text } from "@mantine/core";
 import { SoundChoices } from "./NotificationsSection";
 import { NewFeed, NewFeedItem } from "@/app/fetchFeed";
 import persistEvents from "./persistEvents";
+import logSocketDisconnect, {
+  createSocketStats,
+  DisconnectCause,
+} from "./logSocketDisconnect";
 
 const PING_MESSAGE = JSON.stringify({ type: "ping" });
 const HEARTBEAT_INTERVAL_MS = 30000;
@@ -34,6 +38,9 @@ export default function useBingosyncSocket({
 }: Props): Response {
   const [feed, setFeed] = useState(initialFeed);
   const [shouldReconnect, setShouldReconnect] = useState(false);
+  const [disconnectSummary, setDisconnectSummary] = useState<null | string>(
+    null,
+  );
   const socketRef = useRef<null | WebSocket>(null);
   const authenticatedRef = useRef(false);
 
@@ -112,14 +119,20 @@ export default function useBingosyncSocket({
     // prevent showing modal if connection was closed on purpose
     let isCleanedUp = false;
     let isDisconnected = false;
-    let pingSentAt: null | number = null;
+    const stats = createSocketStats();
 
-    const markDisconnected = () => {
-      if (isCleanedUp || isDisconnected) {
+    const markDisconnected = (cause: DisconnectCause) => {
+      if (isCleanedUp) {
+        return;
+      }
+      if (isDisconnected) {
+        // e.g. the close that follows a ping timeout
+        console.info("[socket] Event after disconnecting:", cause);
         return;
       }
       isDisconnected = true;
       authenticatedRef.current = false;
+      setDisconnectSummary(logSocketDisconnect(socket, gameId, cause, stats));
       setShouldReconnect(true);
       try {
         socket.close();
@@ -130,44 +143,85 @@ export default function useBingosyncSocket({
       if (socket.readyState !== WebSocket.OPEN) {
         return;
       }
-      pingSentAt = Date.now();
+      stats.pingSentAt = Date.now();
+      stats.pingCount++;
       socket.send(PING_MESSAGE);
     };
 
     const heartbeat = setInterval(() => {
+      const now = Date.now();
+      if (stats.lastTickAt != null) {
+        stats.longestTickGapMs = Math.max(
+          stats.longestTickGapMs,
+          now - stats.lastTickAt,
+        );
+      }
+      stats.lastTickAt = now;
       if (socket.readyState !== WebSocket.OPEN) {
         return;
       }
-      if (pingSentAt == null) {
+      if (stats.pingSentAt == null) {
         sendPing();
-      } else if (Date.now() - pingSentAt >= PING_TIMEOUT_MS) {
-        markDisconnected();
+      } else if (now - stats.pingSentAt >= PING_TIMEOUT_MS) {
+        markDisconnected({
+          type: "ping_timeout",
+          msSincePing: now - stats.pingSentAt,
+        });
       }
     }, HEARTBEAT_INTERVAL_MS);
 
     const onVisibilityChange = () => {
       if (document.visibilityState === "visible") {
+        stats.lastVisibleAt = Date.now();
         sendPing();
+      } else {
+        stats.lastHiddenAt = Date.now();
       }
     };
-    const onResume = () => sendPing();
+    const onFreeze = () => {
+      stats.lastFreezeAt = Date.now();
+    };
+    const onResume = () => {
+      stats.lastResumeAt = Date.now();
+      sendPing();
+    };
+    const onOffline = () => markDisconnected({ type: "offline" });
+    const onOnline = () => {
+      stats.lastOnlineAt = Date.now();
+    };
 
     document.addEventListener("visibilitychange", onVisibilityChange);
+    document.addEventListener("freeze", onFreeze);
     document.addEventListener("resume", onResume);
-    window.addEventListener("offline", markDisconnected);
+    window.addEventListener("offline", onOffline);
+    window.addEventListener("online", onOnline);
 
     socket.onopen = () => {
+      stats.openedAt = Date.now();
       if (token != null) {
         socket.send(JSON.stringify({ type: "authenticate", token }));
       }
       setShouldReconnect(false);
     };
 
-    socket.onclose = markDisconnected;
+    socket.onerror = () => {
+      stats.errorAt = Date.now();
+      console.warn("[socket] Error event", { readyState: socket.readyState });
+    };
+
+    socket.onclose = (event) =>
+      markDisconnected({
+        type: "close",
+        code: event.code,
+        reason: event.reason,
+        wasClean: event.wasClean,
+      });
 
     socket.onmessage = (evt) => {
       // any message receieved satisfies the heartbeat
-      pingSentAt = null;
+      stats.pingSentAt = null;
+      stats.lastMessageAt = Date.now();
+      stats.messageCount++;
 
       let data;
       try {
@@ -176,9 +230,11 @@ export default function useBingosyncSocket({
         return;
       }
       if (data.type === "pong") {
+        stats.lastPongAt = Date.now();
         return;
       }
       if (data.type === "authenticated") {
+        stats.authenticatedAt = Date.now();
         authenticatedRef.current = true;
         return;
       }
@@ -193,8 +249,10 @@ export default function useBingosyncSocket({
       isCleanedUp = true;
       clearInterval(heartbeat);
       document.removeEventListener("visibilitychange", onVisibilityChange);
+      document.removeEventListener("freeze", onFreeze);
       document.removeEventListener("resume", onResume);
-      window.removeEventListener("offline", markDisconnected);
+      window.removeEventListener("offline", onOffline);
+      window.removeEventListener("online", onOnline);
       socket.close();
       socketRef.current = null;
       authenticatedRef.current = false;
@@ -214,6 +272,11 @@ export default function useBingosyncSocket({
       >
         <Stack>
           <span>You have been disconnected! Please refresh your page.</span>
+          {disconnectSummary != null && (
+            <Text size="sm" c="dimmed">
+              Reason: {disconnectSummary}
+            </Text>
+          )}
           <Group justify="end">
             <Button onClick={() => setShouldReconnect(false)}>Ignore</Button>
             <Button

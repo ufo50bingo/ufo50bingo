@@ -50,7 +50,7 @@ export type Tokens = { [token: string]: ReadonlyArray<string> };
 
 export type Counts = { [difficulty: string]: number };
 
-export type RestrictionOption = string | { option: string; if: string };
+type RestrictionOption = string | { option: string; if: string };
 
 export interface UFOPasta {
   goals: UFODifficulties;

@@ -6,22 +6,6 @@ import { NewFeed } from "@/app/fetchFeed";
 import { GameMembers } from "./useMembers";
 export type SyncedTimerEventName = "set_duration" | "pause" | "start";
 
-interface SyncedTimerEvent {
-  time: number;
-  event: SyncedTimerEventName;
-  duration: null | undefined | number;
-  player_name?: null | undefined | string;
-}
-
-interface SyncedTimerEventFromBroadcast extends SyncedTimerEvent {
-  seed: number;
-}
-
-// TODO: Remove this
-export interface FullSyncedTimerEvent extends SyncedTimerEventFromBroadcast {
-  room_id: string;
-}
-
 type Input = {
   gameId: number;
   feed: NewFeed;

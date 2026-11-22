@@ -40,6 +40,7 @@ type Props = {
   subcategoryIdToName: ReadonlyMap<number, string>;
   playedGameState: PlayedGameState;
   tiebreakWinner: null | BingosyncColor;
+  canShowRecent?: boolean;
 };
 
 export default function CastBoardWithTrackers({
@@ -63,6 +64,7 @@ export default function CastBoardWithTrackers({
   subcategoryIdToName,
   playedGameState,
   tiebreakWinner,
+  canShowRecent = true,
 }: Props) {
   const leftPlayer: null | undefined | PlayerMember = players[0];
   const rightPlayer: null | undefined | PlayerMember = players[1];
@@ -170,6 +172,7 @@ export default function CastBoardWithTrackers({
           shownDifficulties={shownDifficulties}
           viewerColor={null}
           castInfo={{ leftColor, rightColor }}
+          canShowRecent={canShowRecent}
           rows={game.game.rows}
           columns={game.game.cols}
         />

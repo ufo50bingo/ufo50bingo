@@ -407,12 +407,12 @@ function parseGameResult(result: SQLResult): ParsedGame {
     leagueGameId != null
       ? {
           id: leagueGameId,
-          p1Id: row.p1Id,
-          p2Id: row.p2Id,
+          p1Id: row.p1_id,
+          p2Id: row.p2_id,
           season: row.season,
           week: row.week,
           tier: row.tier,
-          gameNumber: row.gameNumber,
+          gameNumber: row.game_number,
         }
       : null;
   const vodUrl = row.vod_url;

@@ -1,26 +1,43 @@
-import { useCallback, useMemo, useReducer } from "react";
-import {
-  historyReducer,
-  initialHistoryState,
-  replayEvents,
-} from "./layoutHistory";
+import { useCallback, useState } from "react";
 import type { Widget } from "./widgetTypes";
-import type { EditorEvent } from "./layoutTypes";
 
-export default function useEditorHistory(initial: ReadonlyArray<Widget>) {
-  const [history, dispatch] = useReducer(historyReducer, initialHistoryState);
+export type WidgetsUpdate = (
+  widgets: ReadonlyArray<Widget>,
+) => ReadonlyArray<Widget>;
 
-  const widgets = useMemo(
-    () => replayEvents(initial, history.events.slice(0, history.index)),
-    [initial, history.events, history.index],
-  );
+type History = {
+  snapshots: ReadonlyArray<ReadonlyArray<Widget>>;
+  index: number;
+};
+
+export default function useEditorHistory(
+  initialWidgets: ReadonlyArray<Widget>,
+) {
+  const [history, setHistory] = useState<History>({
+    snapshots: [initialWidgets],
+    index: 0,
+  });
 
   const commit = useCallback(
-    (event: EditorEvent) => dispatch({ type: "commit", event }),
+    (update: WidgetsUpdate) =>
+      setHistory(({ snapshots, index }) => ({
+        snapshots: [...snapshots.slice(0, index + 1), update(snapshots[index])],
+        index: index + 1,
+      })),
     [],
   );
-  const undo = useCallback(() => dispatch({ type: "undo" }), []);
-  const redo = useCallback(() => dispatch({ type: "redo" }), []);
+  const undo = useCallback(
+    () => setHistory((h) => ({ ...h, index: Math.max(0, h.index - 1) })),
+    [],
+  );
+  const redo = useCallback(
+    () =>
+      setHistory((h) => ({
+        ...h,
+        index: Math.min(h.snapshots.length - 1, h.index + 1),
+      })),
+    [],
+  );
 
-  return { widgets, commit, undo, redo };
+  return { widgets: history.snapshots[history.index], commit, undo, redo };
 }

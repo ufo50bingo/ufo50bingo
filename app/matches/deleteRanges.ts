@@ -1,5 +1,5 @@
 import { google } from "googleapis";
-import { JWT } from "google-auth-library";
+import { JWT } from "googleapis-common";
 
 export default async function deleteRanges(
   ranges: readonly [number, number][],

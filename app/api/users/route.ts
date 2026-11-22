@@ -33,7 +33,7 @@ const getUsers = unstable_cache(
       image,
       color
     FROM "user"
-    WHERE isAnonymous = FALSE
+    WHERE "isAnonymous" = FALSE
   `;
     const users = result.map((raw) => ({
       userId: raw.id,

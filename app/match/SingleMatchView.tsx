@@ -71,7 +71,7 @@ export default function SingleMatchView({ game }: Props) {
     game.squares,
     game.subcategories,
   );
-  // TODO: support non-lockout
+  // TODO: use board state here instead
   const squareColors = useSquareColors(
     game.feed,
     game.game.rows * game.game.cols,
@@ -109,8 +109,13 @@ export default function SingleMatchView({ game }: Props) {
         gameToGoals={gameToGoals}
         shownDifficulties={["easy", "veryhard", "general"]}
         generals={generals}
+        tiebreakWinner={
+          teamsWithResults.length > 0 &&
+          teamsWithResults[0].winType === "Tiebreak"
+            ? teamsWithResults[0].color
+            : null
+        }
       />
-      {/* TODO: space-between if only two teams? */}
       <Stack gap={4}>
         <div className={classes.teams} style={{ maxWidth: "360px" }}>
           {teamsWithResults.map((team) => {
@@ -122,12 +127,7 @@ export default function SingleMatchView({ game }: Props) {
                   isWinnerShown={isFinal && hasWinner}
                   size="lg"
                 />
-                {teamsWithResults.length > 2 ? (
-                  <TeamScoreCell team={team} size="lg" />
-                ) : (
-                  // TODO: show win icon if not showing score??
-                  <div />
-                )}
+                <TeamScoreCell team={team} size="lg" />
               </Fragment>
             );
           })}

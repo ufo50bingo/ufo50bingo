@@ -42,6 +42,8 @@ import StandardBoardWrapper from "@/app/StandardBoardWrapper";
 import usePasta from "../common/usePasta";
 import useGeneralGoals from "../common/useGeneralGoals";
 import { BingosyncColor } from "@/app/color";
+import getFeedWithoutMistakes from "@/app/match/[id]/getFeedWithoutMistakes";
+import getMatchResult from "@/app/match/[id]/getMatchResult";
 
 export type FoundItem = {
   foundGoal: FoundGoal<string, string, string>;
@@ -193,36 +195,22 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
     return [myScore, bestOpponentEntry];
   }, [squareColors, selectedColor, players, userId]);
 
-  const tiebreakWinner = null;
-  // const tiebreakWinner = useMemo<BingosyncColor | null>(() => {
-  //   try {
-  //     if (
-  //       opponent == null ||
-  //       myScore !== opponent.score ||
-  //       selectedColor === opponent.color
-  //     ) {
-  //       return null;
-  //     }
-  //     const changelog = getChangelog(rawFeed);
-  //     const result = getResult(board, changelog.changes, null, null);
-  //     if (result == null) {
-  //       return null;
-  //     }
-  //     const isValid =
-  //       result.winnerScore === myScore &&
-  //       result.opponentScore === myScore &&
-  //       (result.winnerColor === selectedColor ||
-  //         result.winnerColor === opponent.color) &&
-  //       (result.opponentColor === selectedColor ||
-  //         result.opponentColor === opponent.color);
-  //     if (!isValid) {
-  //       return null;
-  //     }
-  //     return result.winnerColor as BingosyncColor;
-  //   } catch {
-  //     return null;
-  //   }
-  // }, [opponent, myScore, selectedColor, rawFeed, board]);
+  const boardStateParams = useMemo(
+    () => ({ rows: game.rows, cols: game.cols, isLockout: game.isLockout }),
+    [game.rows, game.cols, game.isLockout],
+  );
+  const feedWithoutMistakes = useMemo(
+    () => getFeedWithoutMistakes(feed, boardStateParams),
+    [boardStateParams, feed],
+  );
+  const matchResult = useMemo(
+    () => getMatchResult(feedWithoutMistakes, boardStateParams),
+    [boardStateParams, feedWithoutMistakes],
+  );
+  const tiebreakWinner =
+    matchResult.length > 0 && matchResult[0].winType === "Tiebreak"
+      ? matchResult[0].color
+      : null;
 
   const isHidden =
     (timerState.type === "not_started" && !timerState.isForceRevealed) ||

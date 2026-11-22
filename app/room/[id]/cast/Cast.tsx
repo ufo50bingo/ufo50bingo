@@ -43,6 +43,8 @@ import usePasta from "../common/usePasta";
 import useGeneralGoals from "../common/useGeneralGoals";
 import useGeneralCounts from "./useGeneralCounts";
 import PlayedGameState from "./PlayedGameState";
+import getFeedWithoutMistakes from "@/app/match/[id]/getFeedWithoutMistakes";
+import getMatchResult from "@/app/match/[id]/getMatchResult";
 
 export const CASTER_RESTRICTIONS: PlayerTrackerRestrictions = {
   allowed_difficulty_tags: null,
@@ -256,6 +258,19 @@ export default function Cast({
           sendEvents([event]);
         };
 
+  const boardStateParams = useMemo(
+    () => ({ rows: game.rows, cols: game.cols, isLockout: game.isLockout }),
+    [game.rows, game.cols, game.isLockout],
+  );
+  const feedWithoutMistakes = useMemo(
+    () => getFeedWithoutMistakes(feed, boardStateParams),
+    [boardStateParams, feed],
+  );
+  const matchResult = useMemo(
+    () => getMatchResult(feedWithoutMistakes, boardStateParams),
+    [boardStateParams, feedWithoutMistakes],
+  );
+
   return (
     <RightClickBehaviorContext.Provider value={rightClickBehaviorContextValue}>
       <Group align="start">
@@ -286,6 +301,11 @@ export default function Cast({
           shownDifficulties={shownDifficulties}
           generals={generals}
           onClickSquare={setEditingIndex}
+          tiebreakWinner={
+            matchResult.length > 0 && matchResult[0].winType === "Tiebreak"
+              ? matchResult[0].color
+              : null
+          }
         />
         <Stack gap={8}>
           <Group justify="space-between">

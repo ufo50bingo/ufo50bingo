@@ -2,6 +2,7 @@
 
 import { auth } from "@/app/auth";
 import getSession from "@/app/getSession";
+import { refresh } from "next/cache";
 import { cookies, headers } from "next/headers";
 
 export async function confirmAnonymous(

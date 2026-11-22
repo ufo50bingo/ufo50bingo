@@ -43,6 +43,7 @@ type Props = {
   tiebreakWinner: null | BingosyncColor;
   canShowRecent?: boolean;
   overlays?: ReadonlyArray<null | ReactNode>;
+  canShrink?: boolean;
 };
 
 export default function CastBoardWithTrackers({
@@ -68,6 +69,7 @@ export default function CastBoardWithTrackers({
   tiebreakWinner,
   canShowRecent = true,
   overlays,
+  canShrink = false,
 }: Props) {
   const leftPlayer: null | undefined | PlayerMember = players[0];
   const rightPlayer: null | undefined | PlayerMember = players[1];
@@ -121,7 +123,11 @@ export default function CastBoardWithTrackers({
     gameToGoals,
   ]);
   return (
-    <Group gap={0}>
+    <Group
+      gap={0}
+      wrap="nowrap"
+      style={canShrink ? { minWidth: 0 } : undefined}
+    >
       {showRecentGames && generalGoals.length > 0 && (
         <SideColumn isDouble={false} rows={game.game.rows}>
           <RecentGames
@@ -165,7 +171,11 @@ export default function CastBoardWithTrackers({
           />
         )}
       </SideColumn>
-      <StandardBoardWrapper rows={game.game.rows} columns={game.game.cols}>
+      <StandardBoardWrapper
+        rows={game.game.rows}
+        columns={game.game.cols}
+        minSquareWidth={canShrink ? 84 : 105}
+      >
         <Board
           pasta={pasta}
           squareNames={squareNames}

@@ -41,6 +41,7 @@ import useMembers from "../common/useMembers";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import { getMatchingRepoPasta } from "@/app/getMatchingRepoPasta";
 import CastBoardWithTrackers from "./CastBoardWithTrackers";
+import usePasta from "../common/usePasta";
 
 const RESTRICTIONS: Restrictions = {
   canTagDifficultyFor: null,
@@ -109,15 +110,7 @@ export default function Cast({
     [rightClickBehavior, setRightClickBehavior],
   );
 
-  const pasta = useMemo(() => {
-    if (pastaId == null) {
-      return null;
-    }
-    if (fetchedPasta != null) {
-      return fetchedPasta;
-    }
-    return getMatchingRepoPasta(pastaId);
-  }, [fetchedPasta, pastaId]);
+  const pasta = usePasta(fullParsedGame);
 
   const gameList = useMemo(() => getGameList(pasta), [pasta]);
   const sortedGameList = useMemo(

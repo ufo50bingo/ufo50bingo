@@ -11,9 +11,6 @@ import useWidgetInteractions from "./useWidgetInteractions";
 import type { Widget } from "./layoutTypes";
 import Board from "../Board";
 import { TBoard } from "../matches/parseBingosyncData";
-import PlayedGame from "../room/[id]/cast/PlayedGame";
-import { STANDARD_UFO } from "../pastas/standardUfo";
-import getGameList from "../room/[id]/common/getGameList";
 
 type Props = {
   canvasWidth: number;
@@ -64,15 +61,7 @@ const initialWidgets: ReadonlyArray<Widget> = [
     width: 60,
     height: 68,
     lockAspectRatio: true,
-    content: (
-      <PlayedGame
-        game="barbuta"
-        startTime={0}
-        endTime={1000}
-        font="default"
-        gameList={getGameList(STANDARD_UFO)}
-      />
-    ),
+    content: <div />,
   },
   {
     id: "3",

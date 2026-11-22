@@ -5,7 +5,6 @@ import getGameList from "../room/[id]/common/getGameList";
 import usePasta from "../room/[id]/common/usePasta";
 import useGeneralGoals from "../room/[id]/common/useGeneralGoals";
 import useMembers from "../room/[id]/common/useMembers";
-import useAllPlayerGames from "../room/[id]/cast/useAllPlayerGames";
 import { getGameToGoals } from "../room/[id]/cast/findAllGames";
 import useGeneralCounts from "../room/[id]/cast/useGeneralCounts";
 import useSquareColors from "../room/[id]/common/useSquareColors";
@@ -16,6 +15,7 @@ import TeamScoreCell from "../matches/TeamScoreCell";
 import classes from "@/app/matches/MatchRow.module.css";
 import useTeamsWithResults from "../matches/useTeamsWithResults";
 import getFeedWithoutMistakes from "./[id]/getFeedWithoutMistakes";
+import PlayedGameState from "../room/[id]/cast/PlayedGameState";
 
 type Props = {
   game: FullParsedGame;
@@ -58,8 +58,14 @@ export default function SingleMatchView({ game }: Props) {
   // TODO: fill in real value
   const hasStarted = true;
 
-  // TODO: update these based on time slider
-  const allPlayerGames = useAllPlayerGames(game.feed, game.subcategories);
+  const subcategoryIdToName = useMemo(
+    () => new Map(game.subcategories.map((sc) => [sc.subcategoryId, sc.name])),
+    [game.subcategories],
+  );
+  const playedGameState = useMemo(
+    () => PlayedGameState.fromFeed(game.feed),
+    [game.feed],
+  );
   const generals = useGeneralCounts(
     game.feed,
     game.squares,
@@ -87,7 +93,8 @@ export default function SingleMatchView({ game }: Props) {
         players={players}
         areGeneralGoalsHidden={false}
         squareColors={squareColors}
-        allPlayerGames={allPlayerGames}
+        playedGameState={playedGameState}
+        subcategoryIdToName={subcategoryIdToName}
         allMembers={allMembers}
         boardCover={
           hasStarted ? null : (

@@ -26,11 +26,12 @@ import { GameDetection, RewardIconDetection } from "./gamedetector/detector";
 import { RewardIconResult } from "./gamedetector/rewardIcon/detect";
 import { RewardIcon } from "./gamedetector/rewardIcon/model";
 import { FrameResult } from "./gamedetector/types";
-import { AllPlayerGames, CountChange } from "./useSyncedState";
+import { CountChange } from "./useSyncedState";
 import { GeneralItem } from "./Cast";
 import { GeneralCounts } from "./CastPage";
 import { GameToGoals } from "./findAllGames";
 import { PlayerMember } from "../common/useMembers";
+import PlayedGameState from "./PlayedGameState";
 
 const AUTO_GAME_DEBUG = false;
 
@@ -48,7 +49,8 @@ type Capture = {
 };
 
 type Props = {
-  allPlayerGames: AllPlayerGames;
+  playedGameState: PlayedGameState;
+  subcategoryIdToName: ReadonlyMap<number, string>;
   addSubcategoryName: (userId: number, newGame: null | string) => unknown;
   isDetecting: boolean;
   setIsDetecting: (newIsDetecting: boolean) => unknown;
@@ -61,7 +63,8 @@ type Props = {
 
 export default function AutoGameSection({
   players,
-  allPlayerGames,
+  playedGameState,
+  subcategoryIdToName,
   addSubcategoryName,
   isDetecting,
   setIsDetecting,
@@ -89,7 +92,10 @@ export default function AutoGameSection({
     defaultValue: true,
   });
   const sentGamesRef = useRef(
-    new Map<number, { game: null | string; allPlayerGames: AllPlayerGames }>(),
+    new Map<
+      number,
+      { game: null | string; playedGameState: PlayedGameState }
+    >(),
   );
 
   const allRegions = captures.flatMap((capture) => capture.regions);
@@ -112,15 +118,17 @@ export default function AutoGameSection({
 
   const updateCurrentGame = (game: null | string, userId: number) => {
     const sent = sentGamesRef.current.get(userId);
-    const playerGames = allPlayerGames.get(userId);
+    const activeId = playedGameState.getActiveId(userId);
+    const activeName =
+      activeId == null ? null : (subcategoryIdToName.get(activeId) ?? null);
     const currentGame =
-      sent != null && sent.allPlayerGames === allPlayerGames
+      sent != null && sent.playedGameState === playedGameState
         ? sent.game
-        : (playerGames?.[playerGames.length - 1] ?? null);
+        : activeName;
     if (game === currentGame) {
       return;
     }
-    sentGamesRef.current.set(userId, { game, allPlayerGames });
+    sentGamesRef.current.set(userId, { game, playedGameState });
     addSubcategoryName(userId, game);
   };
 
@@ -133,8 +141,9 @@ export default function AutoGameSection({
     if (!shouldAutoTrack) {
       return;
     }
-    const playerGames = allPlayerGames.get(userId);
-    const game = playerGames?.findLast((entry) => entry.game != null)?.game;
+    const recentId = playedGameState.getMostRecentId(userId);
+    const game =
+      recentId == null ? null : (subcategoryIdToName.get(recentId) ?? null);
     if (game == null) {
       return;
     }

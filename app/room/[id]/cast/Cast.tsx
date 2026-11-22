@@ -41,8 +41,8 @@ import { useServerOffsetContext } from "../ServerOffsetContext";
 import CastBoardWithTrackers from "./CastBoardWithTrackers";
 import usePasta from "../common/usePasta";
 import useGeneralGoals from "../common/useGeneralGoals";
-import useAllPlayerGames from "./useAllPlayerGames";
 import useGeneralCounts from "./useGeneralCounts";
+import PlayedGameState from "./PlayedGameState";
 
 export const CASTER_RESTRICTIONS: PlayerTrackerRestrictions = {
   allowed_difficulty_tags: null,
@@ -120,8 +120,11 @@ export default function Cast({
 
   const generals = useGeneralCounts(feed, squares, subcategories);
 
-  const allPlayerGames = useAllPlayerGames(feed, subcategories);
-
+  const subcategoryIdToName = useMemo(
+    () => new Map(subcategories.map((sc) => [sc.subcategoryId, sc.name])),
+    [subcategories],
+  );
+  const playedGameState = useMemo(() => PlayedGameState.fromFeed(feed), [feed]);
   const {
     shownDifficulties,
     showAll,
@@ -267,7 +270,8 @@ export default function Cast({
           players={players}
           areGeneralGoalsHidden={false}
           squareColors={squareColors}
-          allPlayerGames={allPlayerGames}
+          subcategoryIdToName={subcategoryIdToName}
+          playedGameState={playedGameState}
           allMembers={allMembers}
           boardCover={
             <SyncedTimerBoardCover
@@ -319,15 +323,17 @@ export default function Cast({
           <Stack gap={8}>
             <Group wrap="wrap" w={268} gap={8} justify="space-between">
               {players.map((player) => {
-                const playerGames = allPlayerGames.get(player.userId);
+                const activeId = playedGameState.getActiveId(player.userId);
+                const activeGame =
+                  activeId == null
+                    ? null
+                    : (subcategoryIdToName.get(activeId) ?? null);
                 return (
                   <Tooltip key={player.userId} label={player.name}>
                     <div>
                       <GameSelector
                         color={player.color}
-                        game={
-                          playerGames?.[playerGames.length - 1]?.game ?? null
-                        }
+                        game={activeGame}
                         onChange={
                           addSubcategoryName == null
                             ? null
@@ -405,7 +411,6 @@ export default function Cast({
         setHighlightCurrentGame={setHighlightCurrentGame}
         showRecentGames={showRecentGames}
         setShowRecentGames={setShowRecentGames}
-        allPlayerGames={allPlayerGames}
         addSubcategoryName={addSubcategoryName}
         isDetecting={isDetecting}
         setIsDetecting={setIsDetecting}
@@ -420,6 +425,8 @@ export default function Cast({
         casters={casters}
         sendEvents={sendEvents}
         members={allMembers}
+        playedGameState={playedGameState}
+        subcategoryIdToName={subcategoryIdToName}
       />
       {sendEvents != null && userId != null && editingIndex != null && (
         <EditSquare

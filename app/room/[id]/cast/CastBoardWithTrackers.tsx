@@ -10,7 +10,6 @@ import SideColumn from "./SideColumn";
 import { Font } from "@/app/font/useFont";
 import { IconType } from "./useLocalState";
 import { GenericMember, PlayerMember } from "../common/useMembers";
-import { AllPlayerGames } from "./useSyncedState";
 import { ReactNode, useMemo } from "react";
 import { FullParsedGame } from "@/app/fetchFeed";
 import { GameToGoals } from "./findAllGames";
@@ -18,6 +17,7 @@ import { UFOPasta } from "@/app/generator/ufoGenerator";
 import { Difficulty } from "@/app/goals";
 import { GeneralCounts } from "./CastPage";
 import { BingosyncColor } from "@/app/color";
+import PlayedGameState from "./PlayedGameState";
 
 type Props = {
   game: FullParsedGame;
@@ -30,7 +30,6 @@ type Props = {
   players: ReadonlyArray<PlayerMember>;
   areGeneralGoalsHidden: boolean;
   squareColors: ReadonlyArray<ReadonlyArray<BingosyncColor>>;
-  allPlayerGames: AllPlayerGames;
   allMembers: ReadonlyMap<number, GenericMember>;
   boardCover: ReactNode;
   gameList: { [game: string]: string };
@@ -38,6 +37,8 @@ type Props = {
   shownDifficulties: ReadonlyArray<Difficulty>;
   generals: GeneralCounts;
   onClickSquare?: (squareIndex: number) => unknown;
+  subcategoryIdToName: ReadonlyMap<number, string>;
+  playedGameState: PlayedGameState;
 };
 
 export default function CastBoardWithTrackers({
@@ -51,7 +52,6 @@ export default function CastBoardWithTrackers({
   players,
   areGeneralGoalsHidden,
   squareColors,
-  allPlayerGames,
   allMembers,
   boardCover,
   gameList,
@@ -59,6 +59,8 @@ export default function CastBoardWithTrackers({
   shownDifficulties,
   generals,
   onClickSquare,
+  subcategoryIdToName,
+  playedGameState,
 }: Props) {
   const leftPlayer: null | undefined | PlayerMember = players[0];
   const rightPlayer: null | undefined | PlayerMember = players[1];
@@ -104,9 +106,11 @@ export default function CastBoardWithTrackers({
   // }, [leftScore, rightScore, leftColor, rightColor, rawFeed, board]);
 
   const leftGames =
-    leftPlayer != null ? (allPlayerGames.get(leftPlayer.userId) ?? []) : [];
+    leftPlayer != null ? playedGameState.getPlayedGames(leftPlayer.userId) : [];
   const rightGames =
-    rightPlayer != null ? (allPlayerGames.get(rightPlayer.userId) ?? []) : [];
+    rightPlayer != null
+      ? playedGameState.getPlayedGames(rightPlayer.userId)
+      : [];
   const isDouble = generalGoals.length > 0 && countPosition === "side_by_side";
 
   const boardSize = game.game.rows * game.game.cols;
@@ -115,14 +119,11 @@ export default function CastBoardWithTrackers({
     const highlights: Array<Array<BingosyncColor>> = Array(boardSize)
       .fill(null)
       .map((_) => []);
-    for (const [userId, currentGames] of allPlayerGames.entries()) {
-      const currentGame =
-        currentGames.length > 0
-          ? currentGames[currentGames.length - 1].game
-          : null;
-      if (currentGame != null) {
+    for (const { userId, subcategoryId } of playedGameState.getAllActiveIds()) {
+      const subcategoryName = subcategoryIdToName.get(subcategoryId);
+      if (subcategoryName != null) {
         const color = allMembers.get(userId)?.color ?? "red";
-        for (const [_, index] of gameToGoals[currentGame] ?? []) {
+        for (const [_, index] of gameToGoals[subcategoryName] ?? []) {
           if (!highlights[index].includes(color)) {
             highlights[index].push(color);
           }
@@ -130,7 +131,13 @@ export default function CastBoardWithTrackers({
       }
     }
     return highlights;
-  }, [boardSize, allPlayerGames, allMembers, gameToGoals]);
+  }, [
+    boardSize,
+    playedGameState,
+    subcategoryIdToName,
+    allMembers,
+    gameToGoals,
+  ]);
   return (
     <Group gap={0}>
       {showRecentGames && generalGoals.length > 0 && (
@@ -138,6 +145,7 @@ export default function CastBoardWithTrackers({
           <RecentGames
             limit={6}
             recentGames={leftGames}
+            subcategoryIdToName={subcategoryIdToName}
             font={font}
             gameList={gameList}
           />
@@ -169,6 +177,7 @@ export default function CastBoardWithTrackers({
           <RecentGames
             limit={5}
             recentGames={leftGames}
+            subcategoryIdToName={subcategoryIdToName}
             font={font}
             gameList={gameList}
           />
@@ -217,6 +226,7 @@ export default function CastBoardWithTrackers({
           <RecentGames
             limit={5}
             recentGames={rightGames}
+            subcategoryIdToName={subcategoryIdToName}
             font={font}
             gameList={gameList}
           />
@@ -227,6 +237,7 @@ export default function CastBoardWithTrackers({
           <RecentGames
             limit={6}
             recentGames={rightGames}
+            subcategoryIdToName={subcategoryIdToName}
             font={font}
             gameList={gameList}
           />

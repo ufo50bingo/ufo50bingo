@@ -94,6 +94,7 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
     color: selectedColor,
     name: selfMember.overrideName ?? selfMember.name,
     isInvite: selfMember.isInvite,
+    image: selfMember.image,
   };
 
   // 525px is the width of the board, which is also the default width of the modal

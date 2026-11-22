@@ -22,6 +22,7 @@ import { usePathname } from "next/navigation";
 import LinkWithVariant from "./links/LinkWithVariant";
 import PVSelector from "./PVSelector";
 import LoginButton from "./LoginButton";
+import AnonLogin from "./AnonLogin";
 
 const LINKS = [
   {
@@ -160,6 +161,7 @@ export default function Shell({ children }: Props) {
         ))}
         <PVSelector />
         <LoginButton />
+        <AnonLogin />
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>
       <AppShell.Footer>

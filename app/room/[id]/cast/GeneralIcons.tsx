@@ -16,6 +16,7 @@ type IconProps = {
   goal: string;
   color: BingosyncColor;
   markedSquareColors: ReadonlySet<BingosyncColor>;
+  isLockout: boolean;
   src: string;
   count: number;
   countPosition: TCountPosition;
@@ -29,6 +30,7 @@ function Icon({
   count,
   color,
   markedSquareColors,
+  isLockout,
   countPosition,
   isLeft,
   font,
@@ -37,38 +39,38 @@ function Icon({
   const iconClass = isPixel
     ? `${classes.icon} ${classes.spritesIcon}`
     : classes.icon;
-  // TODO: Support non-lockout
-  let squareColor: null | BingosyncColor = null;
-  for (const color of markedSquareColors) {
-    squareColor = color;
-    break;
-  }
+  const isCompleted = markedSquareColors.has(color);
+  // in a non-lockout game we don't want to gray out this general
+  // if another team has completed it
+  const isOpponentClaimed =
+    isLockout && !isCompleted && markedSquareColors.size > 0;
   const imgClass =
-    squareColor != null ? `${iconClass} ${classes.grayscale}` : iconClass;
+    isCompleted || isOpponentClaimed
+      ? `${iconClass} ${classes.grayscale}`
+      : iconClass;
 
   if (countPosition === "inset") {
-    const tag =
-      squareColor === color ? (
-        font === "ufo50" ? (
-          <div className={classes.tag}>
-            <img
-              className={classes.smallCheck}
-              src="/elf_check.png"
-              alt="checkmark"
-            />
-          </div>
-        ) : (
-          <IconCircleCheckFilled
-            className={classes.tagPosition}
-            color="green"
-            size={24}
-          />
-        )
-      ) : (
+    const tag = isCompleted ? (
+      font === "ufo50" ? (
         <div className={classes.tag}>
-          <span className={getFontClassname(font, count > 9)}>{count}</span>
+          <img
+            className={classes.smallCheck}
+            src="/elf_check.png"
+            alt="checkmark"
+          />
         </div>
-      );
+      ) : (
+        <IconCircleCheckFilled
+          className={classes.tagPosition}
+          color="green"
+          size={24}
+        />
+      )
+    ) : (
+      <div className={classes.tag}>
+        <span className={getFontClassname(font, count > 9)}>{count}</span>
+      </div>
+    );
     return (
       <SideCell>
         <img className={imgClass} src={src} alt={goal} />
@@ -76,26 +78,25 @@ function Icon({
       </SideCell>
     );
   } else {
-    const tag =
-      squareColor === color ? (
-        font === "ufo50" ? (
-          <img
-            className={classes.bigCheck}
-            src="/elf_check.png"
-            alt="checkmark"
-          />
-        ) : (
-          <IconCircleCheckFilled color="green" size={30} />
-        )
+    const tag = isCompleted ? (
+      font === "ufo50" ? (
+        <img
+          className={classes.bigCheck}
+          src="/elf_check.png"
+          alt="checkmark"
+        />
       ) : (
-        <div
-          className={`${classes.sideBySideTag} ${squareColor != null ? classes.opponentClaimed : ""}`}
-        >
-          <span className={getFontClassname(font, false, count > 9)}>
-            {count}
-          </span>
-        </div>
-      );
+        <IconCircleCheckFilled color="green" size={30} />
+      )
+    ) : (
+      <div
+        className={`${classes.sideBySideTag} ${isOpponentClaimed ? classes.opponentClaimed : ""}`}
+      >
+        <span className={getFontClassname(font, false, count > 9)}>
+          {count}
+        </span>
+      </div>
+    );
     return (
       <SideCell>
         <Group gap={8}>
@@ -152,6 +153,7 @@ export default function GeneralIcons({
         goal={resolvedGoal}
         color={color}
         markedSquareColors={boardState.squares[item.squareIndex]}
+        isLockout={boardState.isLockout}
         count={
           countState == null
             ? 0

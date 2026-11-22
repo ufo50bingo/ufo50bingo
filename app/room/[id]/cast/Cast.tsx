@@ -229,6 +229,19 @@ export default function Cast({
           await sendEvents([event]);
         };
 
+  const teamColors = useMemo(
+    () => [...new Set(players.map((p) => p.color))],
+    [players],
+  );
+  // in lockout, a general is completed if any team completed it
+  // in non-lockout, it's only completed if every team has finished it
+  const isGeneralFinished = (g: GeneralItem) => {
+    const colors = boardState.squares[g.squareIndex];
+    return isLockout
+      ? colors.size > 0
+      : teamColors.length > 0 && teamColors.every((c) => colors.has(c));
+  };
+
   const getCard = (g: GeneralItem, h: null | undefined | number) => (
     <GeneralGoal
       key={g.foundGoal.resolvedGoal}
@@ -236,8 +249,7 @@ export default function Cast({
       gameToGoals={gameToGoals}
       foundGoal={g.foundGoal}
       setGeneralGameCount={setGeneralGameCount}
-      // TODO: Determine whether all colors have marked this
-      isFinished={isLockout && boardState.squares[g.squareIndex].size > 0}
+      isFinished={isGeneralFinished(g)}
       terminalCodes={terminalCodes}
       countState={generals[g.foundGoal.resolvedGoal]}
       showAll={showAll.includes(g.foundGoal.resolvedGoal)}

@@ -44,7 +44,8 @@ import formatMatchDate from "../matches/formatMatchDate";
 import { getVariantText } from "../matches/matchUtil";
 import { displayTier } from "../matches/tier";
 import { displayWeek } from "../matches/week";
-import { getHost, getVodLink } from "../matches/vodUtil";
+import { getHost, getVodLink, setUrlAtTime } from "../matches/vodUtil";
+import getBaseUrlAndHost from "../matches/getBaseUrlAndHost";
 import {
   SCREENSHOT_HIDDEN_ATTR,
   SCREENSHOT_ONLY_ATTR,
@@ -191,6 +192,25 @@ export default function SingleMatchView({ game }: Props) {
       isTwitch = getHost(new URL(vod.url)) === "twitch";
     } catch {}
   }
+
+  const vodUrl = vod?.url;
+  const vodStartSeconds = vod?.startSeconds;
+  const getFeedEntryLink = useMemo(() => {
+    const urlAndHost = getBaseUrlAndHost(vodUrl);
+    if (
+      matchStartTime == null ||
+      vodStartSeconds == null ||
+      urlAndHost == null
+    ) {
+      return null;
+    }
+    const [baseUrl, host] = urlAndHost;
+    return (time: number) => {
+      const url = new URL(baseUrl);
+      setUrlAtTime(host, url, vodStartSeconds + time - matchStartTime);
+      return url.toString();
+    };
+  }, [matchStartTime, vodStartSeconds, vodUrl]);
 
   const copyImage = async () => {
     const element = ref.current;
@@ -394,6 +414,7 @@ export default function SingleMatchView({ game }: Props) {
                     squareNames={squareNames}
                     isPlay={false}
                     sendEvents={null}
+                    getEntryLink={getFeedEntryLink}
                     style={{ height: `${95 * game.game.rows}px` }}
                   />
                 </div>

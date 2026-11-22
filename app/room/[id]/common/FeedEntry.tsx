@@ -10,10 +10,30 @@ import Duration from "@/app/practice/Duration";
 type Props = {
   entry: DisplayedFeedItem;
   members: ReadonlyMap<number, GenericMember>;
+  link?: null | string;
+};
+
+export default function FeedEntry({ entry, members, link }: Props) {
+  const content = <FeedEntryContent entry={entry} members={members} />;
+  if (link == null) {
+    return content;
+  }
+  return (
+    <div>
+      <a href={link} target="_blank" className={classes.link}>
+        {content}
+      </a>
+    </div>
+  );
+}
+
+type ContentProps = {
+  entry: DisplayedFeedItem;
+  members: ReadonlyMap<number, GenericMember>;
 };
 
 // reference: https://github.com/kbuzsaki/bingosync/blob/b23d3b4e3192e7034573f3e8efc906aa4a83b0b8/bingosync-app/static/bingosync/room/chat_panel.js#L16
-export default function FeedEntry({ entry, members }: Props) {
+function FeedEntryContent({ entry, members }: ContentProps) {
   const timestamp = (
     <span className={`${classes.timestamp} ${classes.defaultColor}`}>
       {getTimestamp(entry.time)}
@@ -46,7 +66,12 @@ export default function FeedEntry({ entry, members }: Props) {
                 </Stack>
               }
             >
-              <IconEyeOff size={12} style={{ marginLeft: "4px" }} />
+              <span
+                className={classes.unlinked}
+                onClick={(event) => event.preventDefault()}
+              >
+                <IconEyeOff size={12} style={{ marginLeft: "4px" }} />
+              </span>
             </Tooltip>
           ) : null}
         </span>

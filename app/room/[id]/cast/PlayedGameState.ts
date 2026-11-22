@@ -43,6 +43,32 @@ export default class PlayedGameState {
     return state;
   }
 
+  // this returns a copy of the state after applying a synthetic "pause" to
+  // so we can see what the timers are at in the single match view
+  pausedAt(time: number): PlayedGameState {
+    const state = new PlayedGameState();
+    state.hasStarted = this.hasStarted;
+    state.isPaused = this.isPaused;
+    for (const [userId, games] of this.playerToGames) {
+      state.playerToGames.set(
+        userId,
+        games.map((game) =>
+          game.type === "running"
+            ? {
+                type: "paused",
+                subcategoryId: game.subcategoryId,
+                duration: Math.max(
+                  game.minDuration,
+                  time - game.effectiveStartTime,
+                ),
+              }
+            : game,
+        ),
+      );
+    }
+    return state;
+  }
+
   getPlayedGames(userId: number): ReadonlyArray<TPlayedGame> {
     return this.playerToGames.get(userId) ?? [];
   }

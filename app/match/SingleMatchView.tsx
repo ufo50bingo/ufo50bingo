@@ -128,9 +128,14 @@ export default function SingleMatchView({ game }: Props) {
     () => new Map(game.subcategories.map((sc) => [sc.subcategoryId, sc.name])),
     [game.subcategories],
   );
-  const playedGameState = useMemo(
+  const feedPlayedGameState = useMemo(
     () => PlayedGameState.fromFeed(shownFeed),
     [shownFeed],
+  );
+  // treat games as paused at the current slider time so their times show accurately
+  const playedGameState = useMemo(
+    () => feedPlayedGameState.pausedAt(curTime),
+    [curTime, feedPlayedGameState],
   );
   const generals = useGeneralCounts(
     shownFeed,

@@ -56,7 +56,6 @@ export type FoundItem = {
 export type Props = {
   gameId: number;
   initialFeed: NewFeed;
-  // initialTimerEvents: ReadonlyArray<FullSyncedTimerEvent>;
   userId: number;
   squareNames: ReadonlyArray<string>;
 };
@@ -115,21 +114,21 @@ export default function Play({
 
   useWakeLock();
 
-  const [gameToGoals, setGameToGoals] = useState(() =>
-    getGameToGoals(squareNames, getGameList(getIsNes50(squareNames))),
+  const gameToGoals = useMemo(
+    () => getGameToGoals(squareNames, getGameList(getIsNes50(squareNames))),
+    [squareNames],
   );
-  const [terminalCodes, setTerminalCodes] = useState(() =>
-    getAllTerminalCodes(squareNames),
+  const terminalCodes = useMemo(
+    () => getAllTerminalCodes(squareNames),
+    [squareNames],
   );
 
-  // const { addEvent, timerState, forceReveal } = useSyncedTimer({
-  //   id,
-  //   seed,
-  //   initialEvents: initialTimerEvents,
-  //   playAudio,
-  //   isCast: false,
-  //   roomBackend,
-  // });
+  const { timerState, forceReveal } = useSyncedTimer({
+    gameId,
+    feed,
+    playAudio,
+    isCast: false,
+  });
 
   const foundItems = useMemo<ReadonlyArray<FoundItem>>(() => {
     return squareNames
@@ -295,12 +294,11 @@ export default function Play({
   //   }
   // }, [opponent, myScore, selectedColor, rawFeed, board]);
 
-  const isHidden = false;
-  // const isHidden =
-  //   (timerState.type === "not_started" && !timerState.isForceRevealed) ||
-  //   (timerState.type === "countdown" &&
-  //     !timerState.wasPaused &&
-  //     !timerState.isForceRevealed);
+  const isHidden =
+    (timerState.type === "not_started" && !timerState.isForceRevealed) ||
+    (timerState.type === "countdown" &&
+      !timerState.wasPaused &&
+      !timerState.isForceRevealed);
   return (
     <>
       <Group align="stretch">
@@ -325,13 +323,12 @@ export default function Play({
             shownDifficulties={shownDifficulties}
             viewerColor={selectedColor}
             boardCover={
-              // <SyncedTimerBoardCover
-              //   isCast={false}
-              //   timerState={timerState}
-              //   isBoardVisibleByDefault={false}
-              //   forceReveal={forceReveal}
-              // />
-              null
+              <SyncedTimerBoardCover
+                isCast={false}
+                timerState={timerState}
+                isBoardVisibleByDefault={false}
+                forceReveal={forceReveal}
+              />
             }
             isPlay={true}
           />
@@ -358,7 +355,7 @@ export default function Play({
                 />
               </div>
             </div>
-            {/* <div
+            <div
               style={{
                 textAlign: "right",
                 fontVariantNumeric: "tabular-nums",
@@ -371,10 +368,9 @@ export default function Play({
             <StartPauseButton
               timerState={timerState}
               isCast={false}
-              addEvent={addEvent}
-              seed={seed}
-              playerName={playerName}
-            /> */}
+              gameId={gameId}
+              userId={userId}
+            />
           </Group>
           {showGeneralTracker && generalSettings.type === "simple" && (
             <SimpleGeneralTracker

@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import getSupabaseClient from "../cast/getSupabaseClient";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import { SoundChoices } from "./NotificationsSection";
 import useLocalNumber from "@/app/localStorage/useLocalNumber";
-import revealBoard from "../play/revealBoard";
-import { RoomBackend } from "@/app/roomApi";
+import { NewFeed } from "../play/PlayPage";
 
-type SyncedTimerEventName = "set_duration" | "pause" | "start";
+export type SyncedTimerEventName = "set_duration" | "pause" | "start";
 
 interface SyncedTimerEvent {
   time: number;
@@ -19,17 +17,16 @@ interface SyncedTimerEventFromBroadcast extends SyncedTimerEvent {
   seed: number;
 }
 
+// TODO: Remove this
 export interface FullSyncedTimerEvent extends SyncedTimerEventFromBroadcast {
   room_id: string;
 }
 
 type Input = {
-  id: string;
-  seed: number;
-  initialEvents: ReadonlyArray<SyncedTimerEvent>;
+  gameId: number;
+  feed: NewFeed;
   playAudio: (soundType: keyof SoundChoices) => void;
   isCast: boolean;
-  roomBackend: RoomBackend;
 };
 
 interface TimerStateBase {
@@ -63,33 +60,25 @@ interface Running extends TimerStateBase {
 export type SyncedTimerState = Running | Paused | NotStarted | Countdown;
 
 type Return = {
-  addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
   timerState: SyncedTimerState;
   forceReveal: () => void;
 };
 
 export default function useSyncedTimer({
-  id,
-  seed,
-  initialEvents,
-  playAudio,
+  gameId,
+  feed,
   isCast,
-  roomBackend,
 }: Input): Return {
-  const [events, setEvents] =
-    useState<ReadonlyArray<SyncedTimerEvent>>(initialEvents);
-
-  const supabase = getSupabaseClient();
-
   const [lastForceReveal, setLastForceReveal] = useLocalNumber({
-    key: `last-force-reveal-${id}-${seed}`,
+    key: `last-force-reveal-${gameId}`,
     defaultValue: 0,
   });
 
   const forceReveal = useCallback(async () => {
     setLastForceReveal(Date.now());
-    await revealBoard(id, roomBackend);
-  }, [id, roomBackend, setLastForceReveal]);
+    // TODO: Sync reveal info
+    // await revealBoard(id, roomBackend);
+  }, [setLastForceReveal]);
 
   const { getClientMsFromServerMs } = useServerOffsetContext();
 
@@ -102,26 +91,29 @@ export default function useSyncedTimer({
     let pauseRequester: null | undefined | string = null;
     let lastPauseTime: null | number = null;
 
-    events.forEach((item) => {
+    feed.forEach((item) => {
+      if (item.type !== "timer_event") {
+        return;
+      }
       switch (item.event) {
         case "set_duration":
-          accumulatedDuration = item.duration!;
+          accumulatedDuration = item.duration! * 1000;
           if (curStartTime != null) {
-            curStartTime = item.time;
+            curStartTime = item.time * 1000;
           }
           return;
         case "pause":
           if (curStartTime != null) {
-            accumulatedDuration += item.time - curStartTime;
+            accumulatedDuration += item.time * 1000 - curStartTime;
             curStartTime = null;
           }
-          pauseRequester = item.player_name;
-          lastPauseTime = item.time;
+          pauseRequester = item.user.name;
+          lastPauseTime = item.time * 1000;
           return;
         case "start":
           hasStarted = true;
           if (curStartTime == null) {
-            curStartTime = item.time;
+            curStartTime = item.time * 1000;
           }
           return;
         default:
@@ -156,7 +148,7 @@ export default function useSyncedTimer({
           };
     // including `now` to force it to re-run to change from countdown to running
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [events, getClientMsFromServerMs, lastForceReveal, now]);
+  }, [feed, getClientMsFromServerMs, lastForceReveal, now]);
 
   useEffect(() => {
     if (timerState.type !== "countdown") {
@@ -182,71 +174,13 @@ export default function useSyncedTimer({
   useEffect(() => {
     const prevIsBeforeReveal = prevIsBeforeRevealRef.current;
     if (!isCast && prevIsBeforeReveal && !isBeforeReveal) {
-      revealBoard(id, roomBackend);
+      // TOOD: Reveal board
+      // revealBoard(id, roomBackend);
     }
     prevIsBeforeRevealRef.current = isBeforeReveal;
-  }, [id, isBeforeReveal, isCast, roomBackend]);
-
-  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
-  const seedRef = useRef<number>(seed);
-  if (seedRef.current !== seed) {
-    setEvents([]);
-    seedRef.current = seed;
-  }
-  const playAudioRef = useRef(playAudio);
-
-  useEffect(() => {
-    const newChannel = supabase.channel(`room:${id}:all_sync`, {
-      config: { private: false },
-    });
-
-    newChannel
-      .on(
-        "broadcast",
-        { event: "add_timer_event" },
-        (payload: { payload: SyncedTimerEventFromBroadcast }) => {
-          const event = payload.payload;
-          if (seedRef.current === event.seed) {
-            {
-              setEvents((prevEvents) =>
-                [...prevEvents, event].toSorted((a, b) => a.time - b.time),
-              );
-              if (event.event === "pause") {
-                playAudioRef.current("pause");
-              }
-            }
-          }
-        },
-      )
-      .subscribe();
-
-    channelRef.current = newChannel;
-
-    return () => {
-      supabase.removeChannel(newChannel);
-      channelRef.current = null;
-    };
-  }, [id, supabase]);
-
-  const addEvent = useCallback(
-    async (newEvent: FullSyncedTimerEvent) => {
-      setEvents((prevEvents) =>
-        [...prevEvents, newEvent].toSorted((a, b) => a.time - b.time),
-      );
-      if (channelRef.current != null) {
-        channelRef.current.send({
-          type: "broadcast",
-          event: "add_timer_event",
-          payload: newEvent,
-        });
-      }
-      await supabase.from("timer_event").upsert(newEvent);
-    },
-    [supabase],
-  );
+  }, [isBeforeReveal, isCast]);
 
   return {
-    addEvent,
     timerState,
     forceReveal,
   };

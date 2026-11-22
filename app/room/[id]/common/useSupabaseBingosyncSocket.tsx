@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef, ReactNode, useCallback } from "react";
+import { Modal, Stack, Group, Button, Text } from "@mantine/core";
+import { REALTIME_SUBSCRIBE_STATES } from "@supabase/supabase-js";
 import { SoundChoices } from "./NotificationsSection";
 import { NewFeed, NewFeedItem } from "@/app/fetchFeed";
 import persistEvents from "./persistEvents";
@@ -8,6 +10,13 @@ import getSupabaseClient, {
   FeedBroadcastPayload,
   getFeedTopic,
 } from "./getSupabaseClient";
+
+const CONNECT_TIMEOUT_MS = 10000;
+
+type ConnectionWarning = {
+  hasConnected: boolean;
+  reason: string;
+};
 
 type Props = {
   gameId: number;
@@ -38,6 +47,7 @@ export default function useSupabaseBingosyncSocket({
   const isEnded = useIsEnded(feed);
   // used to ensure that broadcasts from this tab are ignored
   const [senderId] = useState(() => crypto.randomUUID());
+  const [warning, setWarning] = useState<null | ConnectionWarning>(null);
 
   const playAudioRef = useRef(playAudio);
   // eslint-disable-next-line react-hooks/refs
@@ -79,6 +89,25 @@ export default function useSupabaseBingosyncSocket({
     if (isEnded) {
       return;
     }
+    // removing the channel on cleanup reports CLOSED, which isn't a failure
+    let isCleanedUp = false;
+    let hasConnected = false;
+    let isDisconnected = false;
+
+    const onFailure = (reason: string) => {
+      if (isCleanedUp || isDisconnected) {
+        return;
+      }
+      isDisconnected = true;
+      setWarning({ hasConnected, reason });
+    };
+
+    const connectTimer = setTimeout(() => {
+      if (!hasConnected) {
+        onFailure(`Not connected after ${CONNECT_TIMEOUT_MS / 1000}s`);
+      }
+    }, CONNECT_TIMEOUT_MS);
+
     const newChannel = supabase.channel(getFeedTopic(gameId), {
       config: { private: true },
     });
@@ -98,9 +127,22 @@ export default function useSupabaseBingosyncSocket({
       )
       .subscribe((status, error) => {
         console.info("[supabase]", new Date().toISOString(), status, error);
+        if (status === REALTIME_SUBSCRIBE_STATES.SUBSCRIBED) {
+          hasConnected = true;
+          isDisconnected = false;
+          clearTimeout(connectTimer);
+          return;
+        }
+        onFailure(
+          error?.message != null && error.message !== ""
+            ? `${status}: ${error.message}`
+            : status,
+        );
       });
 
     return () => {
+      isCleanedUp = true;
+      clearTimeout(connectTimer);
       supabase.removeChannel(newChannel);
     };
   }, [gameId, supabase, addItems, onMessage, senderId, isEnded]);
@@ -120,6 +162,37 @@ export default function useSupabaseBingosyncSocket({
   return {
     feed,
     sendEvents: token != null ? sendEvents : null,
-    reconnectModal: null,
+    reconnectModal: warning != null && (
+      <Modal
+        fullScreen={false}
+        centered={true}
+        onClose={() => setWarning(null)}
+        opened={true}
+        title={warning.hasConnected ? "Connection lost" : "Could not connect"}
+      >
+        <Stack>
+          <span>
+            {warning.hasConnected
+              ? "You lost connection to live updates, so you may have missed changes from other people."
+              : "Could not connect to live updates, so you won't see changes from other people."}{" "}
+            Please refresh your page.
+          </span>
+          <Text size="sm" c="dimmed">
+            Reason: {warning.reason}
+          </Text>
+          <Group justify="end">
+            <Button onClick={() => setWarning(null)}>Ignore</Button>
+            <Button
+              color="green"
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Refresh
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
+    ),
   };
 }

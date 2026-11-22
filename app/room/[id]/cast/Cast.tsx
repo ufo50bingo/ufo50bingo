@@ -25,7 +25,6 @@ import SideCell from "./SideCell";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import findGoal, { FoundGoalWithCast } from "@/app/findGoal";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
-import { GENERAL_ORDER } from "./GeneralOrderSelector";
 import useFont from "@/app/font/useFont";
 import useSyncedTimer from "../common/useSyncedTimer";
 import SyncedTimerBoardCover from "../common/SyncedTimerBoardCover";
@@ -214,12 +213,6 @@ export default function Cast({
     members: allMembers,
   });
 
-  const [generalOrder, setGeneralOrder] = useLocalEnum({
-    key: "general-order",
-    options: GENERAL_ORDER,
-    defaultValue: "reading",
-  });
-
   const [font, setFont] = useFont();
 
   const [countPosition, setCountPosition] = useLocalEnum({
@@ -294,16 +287,6 @@ export default function Cast({
       })
       .filter((item) => item != null);
   }, [pasta, squareNames]);
-
-  // TODO: Fix this
-  const sortedGenerals = useMemo<ReadonlyArray<GeneralItem>>(() => {
-    const correctOrder = Object.keys(pasta ?? STANDARD_UFO.goals.general);
-    return generalGoals.toSorted((a, b) => {
-      const aIdx = correctOrder.indexOf(a.foundGoal.subcategory);
-      const bIdx = correctOrder.indexOf(b.foundGoal.subcategory);
-      return aIdx - bIdx;
-    });
-  }, [generalGoals, pasta]);
 
   const generalSettings: GeneralSettings = useMemo(
     () => ({
@@ -471,9 +454,7 @@ export default function Cast({
               playerId={leftPlayer?.userId}
               isLeft={true}
               color={leftColor}
-              generalGoals={
-                generalOrder === "reading" ? generalGoals : sortedGenerals
-              }
+              generalGoals={generalGoals}
               generalState={generals}
               iconType={iconType}
               isHidden={areGeneralIconsHidden}
@@ -533,9 +514,7 @@ export default function Cast({
               isLeft={false}
               playerId={rightPlayer?.userId}
               color={rightColor}
-              generalGoals={
-                generalOrder === "reading" ? generalGoals : sortedGenerals
-              }
+              generalGoals={generalGoals}
               generalState={generals}
               iconType={iconType}
               isHidden={areGeneralIconsHidden}
@@ -623,7 +602,7 @@ export default function Cast({
               })}
             </Group>
             {generalGoals.length > 0 ? (
-              getCard(sortedGenerals[0], 475 - gameSelectorHeight)
+              getCard(generalGoals[0], 475 - gameSelectorHeight)
             ) : (
               <InfoCard
                 title="Multi-goal games"
@@ -638,7 +617,7 @@ export default function Cast({
             )}
           </Stack>
         ) : generalGoals.length > 0 ? (
-          getCard(sortedGenerals[0], 475)
+          getCard(generalGoals[0], 475)
         ) : (
           <InfoCard title="Multi-goal games" style={{ height: `475px` }}>
             <Stack gap={4}>
@@ -650,7 +629,7 @@ export default function Cast({
         )}
         {generalGoals.length > 0 && (
           <Group w="100%">
-            {sortedGenerals.slice(1).map((g) => getCard(g, null))}
+            {generalGoals.slice(1).map((g) => getCard(g, null))}
             <InfoCard
               title="Multi-goal games"
               style={{ height: `300px` }}
@@ -678,9 +657,7 @@ export default function Cast({
         soundChoices={soundChoices}
         setSoundChoices={setSoundChoices}
         generalCounts={generals}
-        generalGoals={
-          generalOrder === "reading" ? generalGoals : sortedGenerals
-        }
+        generalGoals={generalGoals}
         showGameSelector={showGameSelector}
         setShowGameSelector={setShowGameSelector}
         highlightCurrentGame={highlightCurrentGame}
@@ -695,8 +672,6 @@ export default function Cast({
         setGeneralGameCount={setGeneralGameCount}
         countPosition={countPosition}
         setCountPosition={setCountPosition}
-        generalOrder={generalOrder}
-        setGeneralOrder={setGeneralOrder}
         font={font}
         setFont={setFont}
         timerState={timerState}

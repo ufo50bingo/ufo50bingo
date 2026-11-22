@@ -1,4 +1,5 @@
 import { NewFeed } from "@/app/fetchFeed";
+import { MatchClock } from "./MatchClock";
 
 function getSquareCompletionRanges(
   feedWithoutMistakes: NewFeed,
@@ -8,40 +9,17 @@ function getSquareCompletionRanges(
     Array(boardSize).fill(null);
   const prevTimeByPlayer: Map<number, number> = new Map();
 
-  // match time = accumulatedMatchTime + time since runningSince, if running
-  let hasStarted = false;
-  let accumulatedMatchTime = 0;
-  let runningSince: null | number = null;
-  const stopClock = (time: number) => {
-    if (runningSince != null) {
-      accumulatedMatchTime += Math.max(time - runningSince, 0);
-      runningSince = null;
-    }
-  };
+  const clock = new MatchClock();
 
   for (const item of feedWithoutMistakes) {
-    if (item.type === "timer_event") {
-      if (item.event === "start") {
-        hasStarted = true;
-        runningSince ??= item.time;
-      } else if (item.event === "pause") {
-        stopClock(item.time);
-      }
-      continue;
-    }
-    if (item.type === "end_game") {
-      stopClock(item.time);
-      continue;
-    }
+    clock.apply(item);
     if (item.type !== "color_mark") {
       continue;
     }
     if (item.isClear) {
       finalTimes[item.squareIndex] = null;
-    } else if (hasStarted) {
-      const matchTime =
-        accumulatedMatchTime +
-        (runningSince != null ? Math.max(item.time - runningSince, 0) : 0);
+    } else {
+      const matchTime = clock.valueAt(item.time);
       const prevTime = prevTimeByPlayer.get(item.userId) ?? 0;
       finalTimes[item.squareIndex] = [item.userId, prevTime, matchTime];
       prevTimeByPlayer.set(item.userId, matchTime);

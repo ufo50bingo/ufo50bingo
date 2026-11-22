@@ -34,6 +34,7 @@ import { getRoomLink } from "../roomApi";
 import ufoDoubleGenerator from "../generator/ufoDoubleGenerator";
 import findGoal from "../findGoal";
 import { authClient } from "../authClient";
+import { UserTokenizer } from "../UserTokenizer";
 
 type CustomType = "ufo" | "fixed_board";
 
@@ -185,6 +186,8 @@ export default function NonLeagueMatch({ visible }: Props) {
       return newDifficultyCounts;
     });
   };
+
+  const [x, setX] = useState<ReadonlyArray<number>>([1]);
 
   if (!visible) {
     return null;
@@ -665,6 +668,7 @@ export default function NonLeagueMatch({ visible }: Props) {
               </Stack>
             </Alert>
           )}
+          <UserTokenizer selectedUserIds={x} onChange={setX} />
         </Stack>
       </Card.Section>
       {isFilterModalShown && (

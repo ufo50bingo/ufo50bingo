@@ -10,7 +10,6 @@ import {
   Checkbox,
   Chip,
   Group,
-  JsonInput,
   List,
   Select,
   Stack,
@@ -70,7 +69,6 @@ export default function NonLeagueMatch({ visible }: Props) {
   const [allFilterInfo, setAllFilterInfo] = useState<
     ReadonlyMap<string, FilterInfo>
   >(new Map());
-  const [isExtraShown, setIsExtraShown] = useState<boolean>(false);
 
   const filterInfo = allFilterInfo.get(variant) ?? DEFAULT_FILTER_INFO;
   const setFilterInfo = useCallback(
@@ -168,14 +166,14 @@ export default function NonLeagueMatch({ visible }: Props) {
       customUfoErrors: result.errors,
       customUfoWarnings: result.warnings,
     };
-  }, [customType, custom]);
+  }, [custom]);
 
   const fixedBoardMissing = useMemo(() => {
     if (customType !== "fixed_board" || customUfo == null) {
       return [];
     }
     const goals = fixedBoard.trim().split("\n");
-    return goals.filter(g => findGoal(g, customUfo) == null);
+    return goals.filter((g) => findGoal(g, customUfo) == null);
   }, [customType, customUfo, fixedBoard]);
 
   const resetCustomDifficultyCounts = () => {
@@ -221,17 +219,19 @@ export default function NonLeagueMatch({ visible }: Props) {
                   onChange={(newValue) => setCustomType(newValue as CustomType)}
                 />
               </Stack>
-              {customType === "fixed_board" && (<Textarea
-                autosize
-                label="Add goals here, one per line"
-                maxRows={12}
-                minRows={2}
-                onChange={(event) => {
-                  setFixedBoard(event.target.value);
-                }}
-                spellCheck={false}
-                value={fixedBoard}
-              />)}
+              {customType === "fixed_board" && (
+                <Textarea
+                  autosize
+                  label="Add goals here, one per line"
+                  maxRows={12}
+                  minRows={2}
+                  onChange={(event) => {
+                    setFixedBoard(event.target.value);
+                  }}
+                  spellCheck={false}
+                  value={fixedBoard}
+                />
+              )}
               {fixedBoard.trim() !== "" && fixedBoardMissing.length > 0 && (
                 <Alert
                   color="yellow"
@@ -241,18 +241,24 @@ export default function NonLeagueMatch({ visible }: Props) {
                   {fixedBoardMissing.join("\n")}
                 </Alert>
               )}
-              {customType === "fixed_board" && fixedBoard.trim() !== "" && fixedBoard.trim().split("\n").length !== 25 && (
-                <Alert
-                  color="red"
-                  style={{ whiteSpace: "pre-line" }}
-                  title="Error: You must provide exactly 25 goals for a fixed board"
-                >
-                  You have provided {fixedBoard.trim().split("\n").length}.
-                </Alert>
-              )}
+              {customType === "fixed_board" &&
+                fixedBoard.trim() !== "" &&
+                fixedBoard.trim().split("\n").length !== 25 && (
+                  <Alert
+                    color="red"
+                    style={{ whiteSpace: "pre-line" }}
+                    title="Error: You must provide exactly 25 goals for a fixed board"
+                  >
+                    You have provided {fixedBoard.trim().split("\n").length}.
+                  </Alert>
+                )}
               <Textarea
                 autosize
-                label={customType === "fixed_board" ? "Optional - Add a full pasta to enable features like short text and trackers:" : "Add your pasta here:"}
+                label={
+                  customType === "fixed_board"
+                    ? "Optional - Add a full pasta to enable features like short text and trackers:"
+                    : "Add your pasta here:"
+                }
                 maxRows={12}
                 minRows={2}
                 onChange={(event) => {
@@ -293,7 +299,9 @@ export default function NonLeagueMatch({ visible }: Props) {
           )}
           <Group justify="space-between">
             {(metadata.type === "UFO" ||
-              (metadata.type === "Custom" && customUfo != null && customType === "ufo")) &&
+              (metadata.type === "Custom" &&
+                customUfo != null &&
+                customType === "ufo")) &&
               metadata.name !== "10 Cherry Race" && (
                 <Chip.Group
                   multiple={false}
@@ -541,13 +549,9 @@ export default function NonLeagueMatch({ visible }: Props) {
                 setCreatedPassword(password);
 
                 if (format !== "Double") {
-                  window.open(
-                    getRoomLink(ids[0], password),
-                    "_blank",
-                  );
+                  window.open(getRoomLink(ids[0], password), "_blank");
                 }
               } catch (err: unknown) {
-                setIsExtraShown(true);
                 setIsCreationInProgress(false);
                 setCreatedIds([]);
                 setCreatedPassword("");
@@ -562,8 +566,8 @@ export default function NonLeagueMatch({ visible }: Props) {
           >
             Create Bingosync Board
             {format === "Double" &&
-              (metadata.type === "UFO" ||
-                (metadata.type === "Custom" && customUfo != null))
+            (metadata.type === "UFO" ||
+              (metadata.type === "Custom" && customUfo != null))
               ? "s"
               : ""}
           </Button>
@@ -593,10 +597,7 @@ export default function NonLeagueMatch({ visible }: Props) {
               {createdIds.length === 1 && (
                 <>
                   <a
-                    href={getRoomLink(
-                      createdIds[0],
-                      createdPassword,
-                    )}
+                    href={getRoomLink(createdIds[0], createdPassword)}
                     target="_blank"
                   >
                     Your new room is available at here.
@@ -617,12 +618,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                   <List>
                     {createdIds.map((createdId, idx) => (
                       <List.Item key={createdId}>
-                        <a
-                          href={getRoomLink(
-                            createdId,
-                            createdPassword,
-                          )}
-                        >
+                        <a href={getRoomLink(createdId, createdPassword)}>
                           <Text size="sm">Room {idx + 1}</Text>
                         </a>
                       </List.Item>
@@ -660,7 +656,7 @@ export default function NonLeagueMatch({ visible }: Props) {
             </Alert>
           )}
         </Stack>
-      </Card.Section >
+      </Card.Section>
       {isFilterModalShown && (
         <FiltersModal
           pasta={metadata.type === "Custom" ? customUfo! : metadata.pasta}
@@ -669,8 +665,7 @@ export default function NonLeagueMatch({ visible }: Props) {
           setFilterInfo={setFilterInfo}
           variant={variant}
         />
-      )
-      }
+      )}
     </>
   );
 }

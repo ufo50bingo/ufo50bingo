@@ -18,7 +18,7 @@ import NotificationsSection, {
   SoundChoices,
 } from "../common/NotificationsSection";
 import { GeneralCounts } from "./CastPage";
-import { GeneralItem, TCountPosition } from "./Cast";
+import { GeneralItem } from "./Cast";
 import { Font } from "@/app/font/useFont";
 import FontSelector from "@/app/font/FontSelector";
 
@@ -39,6 +39,7 @@ import CasterMembersSection from "../common/CasterMembersSection";
 import { NewFeedItem } from "@/app/fetchFeed";
 import BottomSection from "../common/BottomSection";
 import PlayedGameState from "./PlayedGameState";
+import { TCountPosition } from "./useCountPosition";
 
 type Props = {
   userId: null | number;

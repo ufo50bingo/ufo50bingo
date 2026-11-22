@@ -3,13 +3,14 @@ import { IconCircleCheckFilled } from "@tabler/icons-react";
 import { IconType } from "./useLocalState";
 import { GeneralCounts } from "./CastPage";
 import SideCell from "./SideCell";
-import { GeneralItem, TCountPosition } from "./Cast";
+import { GeneralItem } from "./Cast";
 import { StandardGeneral } from "@/app/pastas/pastaTypes";
 import { Group } from "@mantine/core";
 import { Font } from "@/app/font/useFont";
 import getFontClassname from "@/app/font/getFontClassname";
 import { BingosyncColor } from "@/app/color";
 import BoardState from "@/app/match/[id]/BoardState";
+import { TCountPosition } from "./useCountPosition";
 
 type IconProps = {
   isLeft: boolean;

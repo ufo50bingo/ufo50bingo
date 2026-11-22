@@ -16,7 +16,7 @@ import useFeedSocket from "../common/useFeedSocket";
 import useSounds from "../play/useSounds";
 import GameSelector from "./GameSelector";
 import { FoundGoalWithCast } from "@/app/findGoal";
-import useLocalEnum from "@/app/localStorage/useLocalEnum";
+import useCountPosition, { TCountPosition } from "./useCountPosition";
 import useFont from "@/app/font/useFont";
 import { getColorHex } from "@/app/color";
 import useSyncedTimer from "../common/useSyncedTimer";
@@ -71,9 +71,6 @@ export type CastProps = {
   token: null | string;
   isWatch: boolean;
 };
-
-const COUNT_POSITION = ["side_by_side", "inset"] as const;
-export type TCountPosition = (typeof COUNT_POSITION)[number];
 
 export default function Cast({
   game: fullParsedGame,
@@ -168,11 +165,7 @@ export default function Cast({
 
   const [font, setFont] = useFont();
 
-  const [countPosition, setCountPosition] = useLocalEnum({
-    key: "count-position",
-    defaultValue: "side_by_side",
-    options: COUNT_POSITION,
-  });
+  const [countPosition, setCountPosition] = useCountPosition();
 
   const generalGoals = useGeneralGoals(pasta, squareNames);
   const generalSettings: GeneralSettings = useMemo(

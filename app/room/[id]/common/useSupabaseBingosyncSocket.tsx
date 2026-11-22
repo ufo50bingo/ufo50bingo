@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, ReactNode, useCallback } from "react";
 import { SoundChoices } from "./NotificationsSection";
 import { NewFeed, NewFeedItem } from "@/app/fetchFeed";
 import persistEvents from "./persistEvents";
+import useIsEnded from "./useIsEnded";
 import getSupabaseClient, {
   FEED_EVENT,
   FeedBroadcastPayload,
@@ -34,6 +35,7 @@ export default function useSupabaseBingosyncSocket({
 }: Props): Response {
   const supabase = getSupabaseClient();
   const [feed, setFeed] = useState(initialFeed);
+  const isEnded = useIsEnded(feed);
   // used to ensure that broadcasts from this tab are ignored
   const [senderId] = useState(() => crypto.randomUUID());
 
@@ -74,6 +76,9 @@ export default function useSupabaseBingosyncSocket({
   );
 
   useEffect(() => {
+    if (isEnded) {
+      return;
+    }
     const newChannel = supabase.channel(getFeedTopic(gameId), {
       config: { private: true },
     });
@@ -98,7 +103,7 @@ export default function useSupabaseBingosyncSocket({
     return () => {
       supabase.removeChannel(newChannel);
     };
-  }, [gameId, supabase, addItems, onMessage, senderId]);
+  }, [gameId, supabase, addItems, onMessage, senderId, isEnded]);
 
   const sendEvents = useCallback(
     async (events: ReadonlyArray<NewFeedItem>): Promise<boolean> => {

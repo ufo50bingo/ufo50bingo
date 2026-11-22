@@ -3,6 +3,7 @@ import { Modal, Stack, Group, Button, Text } from "@mantine/core";
 import { SoundChoices } from "./NotificationsSection";
 import { NewFeed, NewFeedItem } from "@/app/fetchFeed";
 import persistEvents from "./persistEvents";
+import useIsEnded from "./useIsEnded";
 import logSocketDisconnect, {
   createSocketStats,
   DisconnectCause,
@@ -41,6 +42,7 @@ export default function useBingosyncSocket({
   const [disconnectSummary, setDisconnectSummary] = useState<null | string>(
     null,
   );
+  const isEnded = useIsEnded(feed);
   const socketRef = useRef<null | WebSocket>(null);
   const authenticatedRef = useRef(false);
 
@@ -111,6 +113,9 @@ export default function useBingosyncSocket({
   );
 
   useEffect(() => {
+    if (isEnded) {
+      return;
+    }
     const socket = new WebSocket(
       `wss://ufo50bingo-websocket.frankthompson-cd2.workers.dev/room/${gameId}`,
     );
@@ -257,7 +262,7 @@ export default function useBingosyncSocket({
       socketRef.current = null;
       authenticatedRef.current = false;
     };
-  }, [onMessage, gameId, token, addItems]);
+  }, [onMessage, gameId, token, addItems, isEnded]);
 
   return {
     feed,

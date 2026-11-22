@@ -70,7 +70,7 @@ type Line = {
   cells: ReadonlyArray<number>;
   min: ReadonlyArray<number>;
   max: ReadonlyArray<number>;
-}
+};
 
 export function getDifficultyLayout(
   difficultyCounts: ReadonlyArray<number>,
@@ -78,7 +78,11 @@ export function getDifficultyLayout(
   cols: number,
   options: GetDifficultyLayoutOptions = {},
 ): GetDifficultyLayoutResult {
-  const { centerWeights = null, searchesPerTarget = 20, maxTargetDraws = 20 } = options;
+  const {
+    centerWeights = null,
+    searchesPerTarget = 20,
+    maxTargetDraws = 20,
+  } = options;
   const cellCount = rows * cols;
   if (difficultyCounts.reduce((a, b) => a + b, 0) !== cellCount) {
     throw new Error("difficultyCounts must sum to rows * cols");
@@ -195,7 +199,7 @@ function drawTargets(
   containsDifficulty: number | null,
 ): Array<number> {
   const cellCount = difficultyCounts.reduce((a, b) => a + b, 0);
-  for (; ;) {
+  for (;;) {
     const targets = difficultyCounts.map((difficultyCOunt) =>
       Math.floor((difficultyCOunt * lineLength) / cellCount),
     );
@@ -360,7 +364,7 @@ function search(
 // correct partner when reflected across the center line. For example, the ONLY
 // valid permutations for a 5x5 board are
 // 01234 03214 10243 14203 30241 34201 41230 43210
-// 
+//
 // We then apply either that exact same permutation or its mirror image to the
 // columns as well. So if we applied the permutation 03214 to the rows, we could
 // apply either 03214 or 41230 to the columns.
@@ -374,7 +378,7 @@ function search(
 // Mirroring the entire board after applying that permutation just swaps the positions
 // of the two diagonals, so that is allowed as well. That's why applying 03214 to rows
 // and 41230 to columns is ok.
-// 
+//
 // Finally, we may randomply transpose the board, because row/col composition must
 // already be the same and it doesn't change diagonal composition.
 function applyRandomSymmetry(
@@ -397,8 +401,10 @@ function applyRandomSymmetry(
       rowPerm[newPair] = flip ? size - 1 - oldPair : oldPair;
       rowPerm[size - 1 - newPair] = size - 1 - rowPerm[newPair];
     });
-    const mirror = Math.random() < 0.5;
-    colPerm = Math.random() < 0.5 ? rowPerm : rowPerm.map((original) => size - 1 - original);
+    colPerm =
+      Math.random() < 0.5
+        ? rowPerm
+        : rowPerm.map((original) => size - 1 - original);
     transpose = Math.random() < 0.5;
   }
 

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 // generating board here to avoid hydration errors
 const INITIAL_COLOR: BingosyncColor = "blank";
-const BOARD = ufoGenerator(STANDARD_UFO).map((name) => ({
+const BOARD = ufoGenerator(STANDARD_UFO, 5, 5).map((name) => ({
   name,
   color: INITIAL_COLOR,
 }));

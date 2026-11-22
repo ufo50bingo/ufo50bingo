@@ -97,13 +97,13 @@ async function constructBoard(
   const pasta = isSpicySunday
     ? SPICY_WITHOUT_GENERAL
     : getPracticePasta(variant);
-  let bestBoard = ufoGenerator(pasta);
+  let bestBoard = ufoGenerator(pasta, 5, 5);
   let bestScore = getSimilarityScore(bestBoard, recentBoards);
   for (let i = 0; i < 100; i++) {
     if (bestScore === 0) {
       return bestBoard;
     }
-    const candidate = ufoGenerator(pasta);
+    const candidate = ufoGenerator(pasta, 5, 5);
     const score = getSimilarityScore(candidate, recentBoards);
     if (score < bestScore) {
       bestBoard = candidate;

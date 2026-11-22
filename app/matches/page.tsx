@@ -3,6 +3,11 @@ import { NeonQueryPromise } from "@neondatabase/serverless";
 import { Metadata } from "next";
 import { MatchList } from "./MatchList";
 import { fetchDataMulti, SQLResult, SQLTemplate } from "../fetchFeed";
+import {
+  MatchFilters,
+  MatchFilterSearchParams,
+  parseMatchFilters,
+} from "./matchFilterParams";
 
 export const metadata: Metadata = {
   title: "UFO 50 Bingo Matches",
@@ -11,35 +16,21 @@ export const metadata: Metadata = {
 
 const PAGE_SIZE = 20;
 
-type FilterParams = {
-  page?: string;
-  season?: string;
-  tier?: string;
-  week?: string;
-  player?: string;
-  admin?: string;
-};
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type SQL = NeonQueryPromise<false, false, Record<string, any>[]>;
 
 export default async function MatchesFetcher(props: {
-  searchParams?: Promise<FilterParams>;
+  searchParams?: Promise<MatchFilterSearchParams>;
 }) {
   const sql = getSql();
   const searchParams = await props.searchParams;
-  // const filterSql = getFilterSql(searchParams);
-  const filterSql = sql``;
+  const filters = parseMatchFilters(searchParams);
 
-  const pageNumber = Number(searchParams?.page ?? "1");
-  const combinedResults = await sql.transaction([
-    fetchGameCountSql(sql, filterSql),
-    fetchRecentGameIdsSql(sql, filterSql, pageNumber),
-  ]);
-  const gameCount = parseGameCountSql(combinedResults[0]);
-  const totalPages = Math.ceil(gameCount / PAGE_SIZE);
-  const recentGameIds = parseRecentGameIdsSql(combinedResults[1]);
-  const games = await fetchDataMulti(sql, recentGameIds, "spectate");
+  const pageNumber = Math.max(1, Math.floor(Number(searchParams?.page)) || 1);
+  const result = await fetchFilteredGameIdsSql(sql, filters, pageNumber);
+  const { gameIds, totalCount } = parseFilteredGameIdsSql(result);
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+  const games = await fetchDataMulti(sql, gameIds, "spectate");
   return <MatchList totalPages={totalPages} games={games} />;
 }
 
@@ -55,88 +46,99 @@ export default async function MatchesFetcher(props: {
 //   }
 // }
 
-// function getFilterSql(searchParams: FilterParams | undefined): SQL {
-//   const sql = getSql();
-
-//   const seasonStr = searchParams?.season;
-//   const season = seasonStr == null ? null : Number(seasonStr);
-//   const seasonSql =
-//     season == null
-//       ? sql``
-//       : season == 0
-//         ? sql`AND league_season IS NULL`
-//         : sql`AND league_season = ${season}`;
-
-//   const weekStr = searchParams?.week;
-//   const weekSql =
-//     weekStr == null || weekStr === ""
-//       ? sql``
-//       : sql`AND league_week = ${weekStr}`;
-
-//   const tierStr = searchParams?.tier;
-//   const tierSql =
-//     tierStr == null || tierStr === ""
-//       ? sql``
-//       : sql`AND league_tier = ${tierStr}`;
-
-//   const playerStr = searchParams?.player;
-//   const player = playerStr == null ? null : playerStr.toLowerCase();
-//   const playerSql =
-//     player != null && player !== ""
-//       ? sql`
-//     AND (
-//       LOWER(winner_name) = LOWER(${player})
-//       OR LOWER(opponent_name) = LOWER(${player})
-//       OR LOWER(league_p1) = LOWER(${player})
-//       OR LOWER(league_p2) = LOWER(${player})
-//     )`
-//       : sql``;
-
-//   const admin = searchParams?.admin;
-//   const adminSql =
-//     admin != null
-//       ? getAdminFilterSql(admin as unknown as AdminFilter, sql)
-//       : sql``;
-
-//   return sql`${seasonSql} ${weekSql} ${tierSql} ${playerSql} ${adminSql}`;
-// }
-
-function fetchGameCountSql(sql: SQLTemplate, filterSql: SQL): SQL {
-  return sql`
-    SELECT COUNT(id) as total_matches
-    FROM game
-    WHERE
-      is_public = TRUE
-      AND is_deleted = FALSE
-      ${filterSql}
-  `;
-}
-
-export function parseGameCountSql(result: SQLResult): number {
-  return result[0].total_matches;
-}
-
-function fetchRecentGameIdsSql(
+function fetchFilteredGameIdsSql(
   sql: SQLTemplate,
-  filterSql: SQL,
+  filters: MatchFilters,
   pageNumber: number,
 ): SQL {
   return sql`
     SELECT
-      id
-    FROM game
+      g.id,
+      COUNT(*) OVER () AS total_count
+    FROM game g
+    LEFT JOIN league_game lg
+    ON g.league_game_id = lg.id
     WHERE
-      is_public = TRUE
-      AND is_deleted = FALSE
-      ${filterSql}
-    ORDER BY date_created DESC
+      g.is_public = TRUE
+      AND g.is_deleted = FALSE
+      ${getLeagueFilterSql(sql, filters)}
+      ${getMemberFilterSql(sql, filters)}
+    ORDER BY g.date_created DESC
     OFFSET ${(pageNumber - 1) * PAGE_SIZE}
     LIMIT ${PAGE_SIZE}
   `;
 }
 
-export function parseRecentGameIdsSql(
-  result: SQLResult,
-): ReadonlyArray<number> {
-  return result.map((row) => row.id);
+function getLeagueFilterSql(sql: SQLTemplate, filters: MatchFilters): SQL {
+  const { season, tiers } = filters;
+  const seasonSql =
+    season == null
+      ? sql``
+      : season === 0
+        ? sql`AND g.league_game_id IS NULL`
+        : sql`AND lg.season = ${season}`;
+  const tierSql = tiers.length === 0 ? sql`` : sql`AND lg.tier = ANY(${tiers})`;
+  return sql`${seasonSql} ${tierSql}`;
+}
+
+// if the latest member/disconnect row is a disconnect, the user is not
+// in the match. If it's a member, then they are caster if color is null
+// and player otherwise
+function getMemberFilterSql(sql: SQLTemplate, filters: MatchFilters): SQL {
+  const { playerIds, casterIds } = filters;
+  const userIds = [...playerIds, ...casterIds];
+  if (userIds.length === 0) {
+    return sql``;
+  }
+  const requiredCount = playerIds.length + casterIds.length;
+  return sql`
+    AND g.id IN (
+      SELECT latest.game_id
+      FROM (
+        SELECT DISTINCT ON (events.game_id, events.user_id)
+          events.game_id,
+          events.user_id,
+          events.is_member,
+          events.is_player
+        FROM (
+          SELECT
+            game_id,
+            user_id,
+            time,
+            TRUE AS is_member,
+            player_color IS NOT NULL AS is_player
+          FROM member
+          WHERE user_id = ANY(${userIds})
+          UNION ALL
+          SELECT
+            game_id,
+            user_id,
+            time,
+            FALSE AS is_member,
+            FALSE AS is_player
+          FROM disconnect
+          WHERE user_id = ANY(${userIds})
+        ) events
+        ORDER BY events.game_id, events.user_id, events.time DESC
+      ) latest
+      WHERE
+        latest.is_member
+        AND (
+          (latest.is_player AND latest.user_id = ANY(${playerIds}))
+          OR (NOT latest.is_player AND latest.user_id = ANY(${casterIds}))
+        )
+      GROUP BY latest.game_id
+      HAVING COUNT(*) = ${requiredCount}
+    )
+  `;
+}
+
+function parseFilteredGameIdsSql(result: SQLResult): {
+  gameIds: ReadonlyArray<number>;
+  totalCount: number;
+} {
+  return {
+    gameIds: result.map((row) => row.id),
+    totalCount: result.length > 0 ? Number(result[0].total_count) : 0,
+  };
 }

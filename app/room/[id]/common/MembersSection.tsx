@@ -22,6 +22,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { IconGripVertical } from "@tabler/icons-react";
 import { CasterMember, PlayerMember } from "./useMembers";
+import addPlayerOrder from "../cast/addPlayerOrder";
 
 interface Props {
   gameId: number;
@@ -88,7 +89,10 @@ export default function MembersSection({ gameId, players, casters }: Props) {
     const destIndex = players.findIndex((p) => p.userId.toString() === over.id);
     const newPlayers = arrayMove([...players], sourceIndex, destIndex);
 
-    console.log(newPlayers);
+    await addPlayerOrder(
+      gameId,
+      newPlayers.map((p) => p.userId),
+    );
   };
 
   return (

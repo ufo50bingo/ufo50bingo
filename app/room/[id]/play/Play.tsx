@@ -247,6 +247,7 @@ export default function Play({
     return multiGoalGames;
   }, [gameToGoals, generalSettings.sort]);
 
+  // TODO: Account for tiebreakers
   const [myScore, opponent] = useMemo(() => {
     const scores: { [color: string]: number } = {};
     squareColors.forEach((colors) => {
@@ -258,13 +259,20 @@ export default function Play({
     const myScore = scores[selectedColor] ?? 0;
     const entries = Object.entries(scores);
     entries.sort((a, b) => a[1] - b[1]);
-    const bestOpponent = entries.find((e) => e[0] !== selectedColor);
+    const highScoreOpponentColor = entries.find(
+      (e) => e[0] !== selectedColor,
+    )?.[0];
+    const bestOpponentColor =
+      highScoreOpponentColor ?? players.find((p) => p.userId !== userId)?.color;
     const bestOpponentEntry =
-      bestOpponent == null
+      bestOpponentColor == null
         ? null
-        : { color: bestOpponent[0] as BingosyncColor, score: bestOpponent[1] };
+        : {
+            color: bestOpponentColor as BingosyncColor,
+            score: scores[bestOpponentColor] ?? 0,
+          };
     return [myScore, bestOpponentEntry];
-  }, [selectedColor, squareColors]);
+  }, [squareColors, selectedColor, players, userId]);
 
   const tiebreakWinner = null;
   // const tiebreakWinner = useMemo<BingosyncColor | null>(() => {
@@ -359,13 +367,15 @@ export default function Play({
                 />
               </div>
               <div style={{ width: "62px", height: "62px" }}>
-                <ScoreSquare
-                  score={opponent?.score ?? 0}
-                  color={opponent?.color ?? "blank"}
-                  hasTiebreaker={tiebreakWinner === opponent?.color}
-                  isDouble={false}
-                  font={font}
-                />
+                {opponent != null && (
+                  <ScoreSquare
+                    score={opponent.score}
+                    color={opponent.color}
+                    hasTiebreaker={tiebreakWinner === opponent?.color}
+                    isDouble={false}
+                    font={font}
+                  />
+                )}
               </div>
             </div>
             <div

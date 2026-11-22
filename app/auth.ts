@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { Pool } from "pg";
 import { anonymous } from "better-auth/plugins";
+import { nextCookies } from "better-auth/next-js";
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -50,5 +51,5 @@ export const auth = betterAuth({
       },
     },
   },
-  plugins: [anonymous()],
+  plugins: [anonymous(), nextCookies()],
 });

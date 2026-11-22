@@ -1,10 +1,10 @@
 "use server";
 
 import getUserId from "@/app/getUserId";
-import { FeedTimerEvent } from "../play/PlayPage";
 import broadcastToWebsockets from "../../broadcastToWebsockets";
 import getSql from "@/app/getSql";
 import { SyncedTimerEventName } from "./useSyncedTimer";
+import { FeedTimerEvent } from "@/app/fetchFeed";
 
 type TimerEventInput = {
   gameId: number;
@@ -25,10 +25,7 @@ export default async function addTimerEvent({
   const feedItem: FeedTimerEvent = {
     type: "timer_event",
     time,
-    user: {
-      id: userId,
-      name: "Unknown",
-    },
+    userId,
     event,
     duration,
   };

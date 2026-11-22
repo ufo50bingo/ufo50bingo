@@ -1,12 +1,9 @@
-import { headers } from "next/headers";
-import { auth } from "./auth";
+import getUserIdNullable from "./getUserIdNullable";
 
 export default async function getUserId(): Promise<number> {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (session == null) {
-    throw new Error("Not authenticated");
+  const userId = await getUserIdNullable();
+  if (userId == null) {
+    throw new Error("You must be logged in!");
   }
-  return Number(session.user.id);
+  return userId;
 }

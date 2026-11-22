@@ -1,9 +1,9 @@
 "use server";
 
 import getUserId from "@/app/getUserId";
-import { NewFeedItem } from "../play/PlayPage";
 import broadcastToWebsockets from "../../broadcastToWebsockets";
 import getSql from "@/app/getSql";
+import { FeedChat } from "@/app/fetchFeed";
 
 export default async function sendChat(
   gameId: number,
@@ -12,13 +12,10 @@ export default async function sendChat(
 ): Promise<void> {
   const userId = await getUserId();
   const now = new Date();
-  const feedItem: NewFeedItem = {
+  const feedItem: FeedChat = {
     type: "chat",
     time: now.getTime() / 1000,
-    user: {
-      id: userId,
-      name: "Unknown",
-    },
+    userId: userId,
     message,
     visibleToPlayers,
   };

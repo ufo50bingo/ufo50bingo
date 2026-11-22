@@ -2,7 +2,7 @@ import { Card, Stack } from "@mantine/core";
 import ChatInput from "./ChatInput";
 import { CSSProperties, useLayoutEffect, useMemo, useRef } from "react";
 import FeedEntry from "./FeedEntry";
-import { NewFeed } from "../play/PlayPage";
+import { NewFeed } from "@/app/fetchFeed";
 
 type Props = {
   userId: number;
@@ -33,7 +33,7 @@ export default function Feed({
           !isPlay ||
           item.type !== "chat" ||
           item.visibleToPlayers == null ||
-          item.user.id === userId ||
+          item.userId === userId ||
           item.visibleToPlayers.includes(userId),
       ),
     [feed, isPlay, userId],

@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 import type { DiscordProfile } from "better-auth/social-providers";
 import { auth } from "@/app/auth";
-import { MAX_NAME_LENGTH } from "./maxNameLength";
+import { MAX_NAME_LENGTH, MAX_PRONOUNS_LENGTH } from "./profileLimits";
 
 async function getDiscordUserSession(requestHeaders: Headers) {
   const session = await auth.api.getSession({ headers: requestHeaders });
@@ -38,16 +38,27 @@ export async function refreshFromDiscord(): Promise<void> {
   });
 }
 
-export async function updateName(name: string): Promise<void> {
+export async function updateNameAndPronouns(
+  name: string,
+  pronouns: string,
+): Promise<void> {
   const requestHeaders = await headers();
   await getDiscordUserSession(requestHeaders);
 
-  const trimmed = name.trim();
-  if (trimmed === "" || trimmed.length > MAX_NAME_LENGTH) {
+  const trimmedName = name.trim();
+  if (trimmedName === "" || trimmedName.length > MAX_NAME_LENGTH) {
     throw new Error("Name can't be empty");
+  }
+  const trimmedPronouns = pronouns.trim();
+  if (trimmedPronouns.length > MAX_PRONOUNS_LENGTH) {
+    throw new Error("Pronouns are too long");
   }
   await auth.api.updateUser({
     headers: requestHeaders,
-    body: { name: trimmed },
+    // empty pronouns clear them
+    body: {
+      name: trimmedName,
+      pronouns: trimmedPronouns === "" ? null : trimmedPronouns,
+    },
   });
 }

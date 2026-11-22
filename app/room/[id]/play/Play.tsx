@@ -98,9 +98,23 @@ export default function Play({
 
   useWakeLock();
 
+  const pasta = useMemo(() => {
+    if (pastaId == null) {
+      return null;
+    }
+    if (fetchedPasta != null) {
+      return fetchedPasta;
+    }
+    return getMatchingRepoPasta(pastaId);
+  }, [fetchedPasta, pastaId]);
+
   const gameToGoals = useMemo(
-    () => getGameToGoals(squareNames, getGameList(getIsNes50(squareNames))),
-    [squareNames],
+    () =>
+      getGameToGoals(
+        squareNames,
+        getGameList(pasta === NES_50_UFO || getIsNes50(squareNames)),
+      ),
+    [pasta, squareNames],
   );
   const terminalCodes = useMemo(
     () => getAllTerminalCodes(squareNames),
@@ -114,16 +128,6 @@ export default function Play({
     isCast: false,
     members: allMembers,
   });
-
-  const _pasta = useMemo(() => {
-    if (pastaId == null) {
-      return null;
-    }
-    if (fetchedPasta != null) {
-      return fetchedPasta;
-    }
-    return getMatchingRepoPasta(pastaId);
-  }, [fetchedPasta, pastaId]);
 
   const foundItems = useMemo<ReadonlyArray<FoundItem>>(() => {
     return squareNames
@@ -172,6 +176,7 @@ export default function Play({
       };
     }
     const isNes50 =
+      pasta === NES_50_UFO ||
       (generalGoals.length >= 5 &&
         generalGoals.every((item) => item.pasta === NES_50_UFO)) ||
       foundItems.filter((item) => item.pasta === NES_50_UFO).length > 15;
@@ -188,6 +193,7 @@ export default function Play({
       };
     }
     const isEveryGame =
+      pasta === EVERY_GAME_UFO ||
       (generalGoals.length >= 5 &&
         generalGoals.every((item) => item.pasta === EVERY_GAME_UFO)) ||
       foundItems.filter((item) => item.pasta === EVERY_GAME_UFO).length > 15;
@@ -214,7 +220,7 @@ export default function Play({
       canUseTerminalCodes: true,
       canShowMultiGoalGames: false,
     };
-  }, [generalGoals, foundItems, override]);
+  }, [override, pasta, generalGoals, foundItems]);
 
   const [shownDifficulties, setShownDifficulties] =
     useShownDifficulties(restrictions);

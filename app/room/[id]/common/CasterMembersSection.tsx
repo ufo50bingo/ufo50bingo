@@ -1,4 +1,11 @@
-import { Accordion, ColorSwatch, Group, Stack, Text } from "@mantine/core";
+import {
+  Accordion,
+  Button,
+  ColorSwatch,
+  Group,
+  Stack,
+  Text,
+} from "@mantine/core";
 import {
   DndContext,
   DragEndEvent,
@@ -21,16 +28,19 @@ import {
 } from "@dnd-kit/modifiers";
 import { CSS } from "@dnd-kit/utilities";
 import { CasterMember, PlayerMember } from "./useMembers";
-import { FeedPlayerOrder, NewFeedItem } from "@/app/fetchFeed";
+import { FeedMember, FeedPlayerOrder, NewFeedItem } from "@/app/fetchFeed";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import getColorHex from "../cast/getColorHex";
+import { UserTokenizer } from "@/app/UserTokenizer";
+import { BasicUser } from "@/app/api/users/route";
+import { useMemo, useState } from "react";
 
 interface Props {
   players: ReadonlyArray<PlayerMember>;
   casters: ReadonlyArray<CasterMember>;
   isMobile: boolean;
   isCast: boolean;
-  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
+  sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
 }
 
 function SortablePlayer({ player }: { player: PlayerMember }) {
@@ -66,7 +76,7 @@ function SortablePlayer({ player }: { player: PlayerMember }) {
 export default function CasterMembersSection({
   players,
   casters,
-  sendEvent,
+  sendEvents,
 }: Props) {
   const { getServerMsFromClientMs } = useServerOffsetContext();
   const sensors = useSensors(
@@ -91,8 +101,21 @@ export default function CasterMembersSection({
       time: getServerMsFromClientMs(Date.now()) / 1000,
       orderedIds: newPlayers.map((p) => p.userId),
     };
-    await sendEvent(event);
+    await sendEvents([event]);
   };
+
+  const [playersToAdd, setPlayersToAdd] = useState<ReadonlyArray<BasicUser>>(
+    [],
+  );
+  const selectedUserIds = useMemo(
+    () => playersToAdd.map((p) => p.userId),
+    [playersToAdd],
+  );
+  const excludedUserIds = useMemo(
+    () => players.map((p) => p.userId).concat(casters.map((c) => c.userId)),
+    [players, casters],
+  );
+  const [isSending, setIsSending] = useState(false);
 
   return (
     <Accordion.Item value="members">
@@ -125,6 +148,57 @@ export default function CasterMembersSection({
               </Stack>
             </SortableContext>
           </DndContext>
+          <Stack gap={4}>
+            <UserTokenizer
+              label="Add players"
+              selectedUserIds={selectedUserIds}
+              onChange={setPlayersToAdd}
+              excludedIds={excludedUserIds}
+            />
+            {playersToAdd.length > 0 && (
+              <Group gap={8} justify="end">
+                <Button
+                  disabled={isSending}
+                  size="xs"
+                  color="red"
+                  onClick={() => setPlayersToAdd([])}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  disabled={isSending}
+                  size="xs"
+                  color="green"
+                  onClick={async () => {
+                    const time = getServerMsFromClientMs(Date.now()) / 1000;
+                    const events: ReadonlyArray<FeedMember> = playersToAdd.map(
+                      (p) => ({
+                        type: "member",
+                        userId: p.userId,
+                        time,
+                        // TODO: use favorite color
+                        playerColor: "red",
+                        isInvite: true,
+                        name: p.name,
+                        overrideName: null,
+                      }),
+                    );
+                    try {
+                      setIsSending(true);
+                      const success = await sendEvents(events);
+                      if (success) {
+                        setPlayersToAdd([]);
+                      }
+                    } finally {
+                      setIsSending(false);
+                    }
+                  }}
+                >
+                  Add
+                </Button>
+              </Group>
+            )}
+          </Stack>
           <Text>
             <strong>Casters</strong>
           </Text>

@@ -8,7 +8,7 @@ type Props = {
   userId: number;
   isMobile: boolean;
   isCast: boolean;
-  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
+  sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
   members: ReadonlyMap<number, GenericMember>;
 };
 
@@ -16,7 +16,7 @@ export default function BottomSection({
   userId,
   isMobile,
   isCast,
-  sendEvent,
+  sendEvents,
   members,
 }: Props) {
   return (
@@ -25,13 +25,13 @@ export default function BottomSection({
         userId={userId}
         isMobile={isMobile}
         isCast={isCast}
-        sendEvent={sendEvent}
+        sendEvents={sendEvents}
         members={members}
       />
       <DisconnectButton
         userId={userId}
         isMobile={isMobile}
-        sendEvent={sendEvent}
+        sendEvents={sendEvents}
       />
     </Stack>
   );

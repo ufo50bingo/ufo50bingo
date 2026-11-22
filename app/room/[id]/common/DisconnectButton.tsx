@@ -7,13 +7,13 @@ import { useServerOffsetContext } from "../ServerOffsetContext";
 type Props = {
   userId: number;
   isMobile: boolean;
-  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
+  sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
 };
 
 export default function DisconnectButton({
   isMobile,
   userId,
-  sendEvent,
+  sendEvents,
 }: Props) {
   const [isDisconnecting, setIsDisconnecting] = useState(false);
   const { getServerMsFromClientMs } = useServerOffsetContext();
@@ -46,7 +46,7 @@ export default function DisconnectButton({
                     userId,
                     time: getServerMsFromClientMs(Date.now()) / 1000,
                   };
-                  await sendEvent(event);
+                  await sendEvents([event]);
                   window.location.reload();
                 }}
               >

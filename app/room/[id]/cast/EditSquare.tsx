@@ -11,7 +11,7 @@ type Props = {
   squareColors: ReadonlyArray<ReadonlyArray<BingosyncColor>>;
   editingIndex: number;
   setEditingIndex: (newEditingIndex: null | number) => unknown;
-  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
+  sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
 };
 
 export default function EditSquare({
@@ -20,7 +20,7 @@ export default function EditSquare({
   squareColors,
   editingIndex,
   setEditingIndex,
-  sendEvent,
+  sendEvents,
 }: Props) {
   const [newColor, setNewColor] = useState<null | BingosyncColor>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -75,7 +75,7 @@ export default function EditSquare({
                     color,
                     isClear,
                   };
-                  await sendEvent(event);
+                  await sendEvents([event]);
                   setEditingIndex(null);
                 } finally {
                   setIsSaving(false);

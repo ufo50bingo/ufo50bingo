@@ -9,7 +9,7 @@ type Props = {
   isCast: boolean;
   userId: number;
   onCountdownStart?: () => void;
-  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
+  sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
 };
 
 export default function StartPauseButton({
@@ -17,7 +17,7 @@ export default function StartPauseButton({
   isCast,
   userId,
   onCountdownStart,
-  sendEvent,
+  sendEvents,
 }: Props) {
   const { getServerMsFromClientMs } = useServerOffsetContext();
 
@@ -66,7 +66,7 @@ export default function StartPauseButton({
                     event: "start",
                     duration: null,
                   };
-                  await sendEvent(event);
+                  await sendEvents([event]);
                 }}
               >
                 Confirm Start
@@ -115,7 +115,7 @@ export default function StartPauseButton({
                     event: "start",
                     duration: null,
                   };
-                  await sendEvent(event);
+                  await sendEvents([event]);
                 }}
               >
                 Confirm Resume
@@ -156,7 +156,7 @@ export default function StartPauseButton({
                     event: "pause",
                     duration: null,
                   };
-                  await sendEvent(event);
+                  await sendEvents([event]);
                 }}
               >
                 Confirm Pause

@@ -11,7 +11,7 @@ type Props = {
   userId: number;
   isMobile: boolean;
   isCast: boolean;
-  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
+  sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
   members: ReadonlyMap<number, GenericMember>;
 };
 
@@ -19,7 +19,7 @@ export default function SwitchViewButton({
   userId,
   isMobile,
   isCast,
-  sendEvent,
+  sendEvents,
   members,
 }: Props) {
   const [isSwitching, setIsSwitching] = useState(false);
@@ -72,7 +72,7 @@ export default function SwitchViewButton({
                     name: member.name,
                     overrideName: member.overrideName,
                   };
-                  await sendEvent(event);
+                  await sendEvents([event]);
                   window.location.reload();
                 }}
               >

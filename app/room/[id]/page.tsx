@@ -50,8 +50,6 @@ export default async function RoomPage({
   const lastDisconnect: null | undefined | FeedDisconnect = disconnectFeed
     .filter((dc) => dc.userId === userId)
     .toSorted((a, b) => b.time - a.time)[0];
-
-  console.log(lastMember, lastDisconnect);
   const userMember =
     lastDisconnect != null &&
     lastMember != null &&

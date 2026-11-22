@@ -75,7 +75,7 @@ type Props = {
   timerState: SyncedTimerState;
   players: ReadonlyArray<PlayerMember>;
   casters: ReadonlyArray<CasterMember>;
-  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
+  sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
   members: ReadonlyMap<number, GenericMember>;
 };
 
@@ -114,7 +114,7 @@ export default function CastSettings({
   timerState,
   players,
   casters,
-  sendEvent,
+  sendEvents,
   members,
 }: Props) {
   const [isShown, setIsShown] = useState(false);
@@ -152,13 +152,13 @@ export default function CastSettings({
                 casters={casters}
                 isMobile={false}
                 isCast={true}
-                sendEvent={sendEvent}
+                sendEvents={sendEvents}
               />
               <TimerSection
                 userId={userId}
                 timerState={timerState}
                 isMobile={false}
-                sendEvent={sendEvent}
+                sendEvents={sendEvents}
               />
               <Accordion.Item value="display">
                 <Accordion.Control>Display Settings</Accordion.Control>
@@ -306,7 +306,7 @@ export default function CastSettings({
               members={members}
               isCast={true}
               isMobile={false}
-              sendEvent={sendEvent}
+              sendEvents={sendEvents}
             />
           </Drawer.Body>
         </Drawer.Content>

@@ -99,7 +99,7 @@ export default function Cast({
   const { getServerMsFromClientMs } = useServerOffsetContext();
   const squareNames = useMemo(() => squares.map((s) => s.name), [squares]);
   const [soundChoices, setSoundChoices, playAudio] = useSounds("cast");
-  const { feed, reconnectModal, sendEvent } = useBingosyncSocket({
+  const { feed, reconnectModal, sendEvents } = useBingosyncSocket({
     gameId,
     initialFeed,
     userId,
@@ -115,7 +115,7 @@ export default function Cast({
       rightClickBehavior,
       setRightClickBehavior,
       customColor: "#ee5f5b",
-      setCustomColor: () => { },
+      setCustomColor: () => {},
     }),
     [rightClickBehavior, setRightClickBehavior],
   );
@@ -174,7 +174,10 @@ export default function Cast({
           const subcategory = subcategories.find(
             (sc) => sc.subcategoryId === item.subcategoryId,
           );
-          userGames.push({ game: subcategory?.name ?? null, start_time: item.time });
+          userGames.push({
+            game: subcategory?.name ?? null,
+            start_time: item.time,
+          });
         }
         allGames.set(item.userId, userGames);
       }
@@ -348,7 +351,7 @@ export default function Cast({
       subcategoryId: foundSubcategory!.subcategoryId,
       count: change.count,
     };
-    await sendEvent(event);
+    await sendEvents([event]);
   };
 
   const getCard = (g: GeneralItem, h: null | undefined | number) => (
@@ -423,7 +426,7 @@ export default function Cast({
       time: getServerMsFromClientMs(Date.now()) / 1000,
       subcategoryId,
     };
-    sendEvent(event);
+    sendEvents([event]);
   };
   return (
     <RightClickBehaviorContext.Provider value={rightClickBehaviorContextValue}>
@@ -552,7 +555,7 @@ export default function Cast({
               isCast={true}
               userId={userId}
               onCountdownStart={() => setIsDetecting(true)}
-              sendEvent={sendEvent}
+              sendEvents={sendEvents}
             />
           </Group>
           <Feed
@@ -563,7 +566,7 @@ export default function Cast({
             squareNames={squareNames}
             isPlay={false}
             style={{ height: `${475 - 44}px` }}
-            sendEvent={sendEvent}
+            sendEvents={sendEvents}
           />
         </Stack>
         {showGameSelector ? (
@@ -670,13 +673,13 @@ export default function Cast({
         timerState={timerState}
         players={players}
         casters={casters}
-        sendEvent={sendEvent}
+        sendEvents={sendEvents}
         members={allMembers}
       />
       {editingIndex != null && (
         <EditSquare
           userId={userId}
-          sendEvent={sendEvent}
+          sendEvents={sendEvents}
           squareColors={squareColors}
           squareNames={squareNames}
           editingIndex={editingIndex}

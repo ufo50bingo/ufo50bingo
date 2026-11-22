@@ -56,7 +56,7 @@ type Props = {
   generalSettings: GeneralSettings;
   restrictions: Restrictions;
   generalSetters: GeneralSetters;
-  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
+  sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
   players: ReadonlyArray<PlayerMember>;
   casters: ReadonlyArray<CasterMember>;
   members: ReadonlyMap<number, GenericMember>;
@@ -79,7 +79,7 @@ export default function PlaySettings({
   restrictions,
   generalSetters,
   generalSettings,
-  sendEvent,
+  sendEvents,
   players,
   casters,
   members,
@@ -127,7 +127,7 @@ export default function PlaySettings({
                         playerColor: newColor,
                         time: getServerMsFromClientMs(Date.now()) / 1000,
                       };
-                      await sendEvent(event);
+                      await sendEvents([event]);
                     }}
                   />
                 </Accordion.Panel>
@@ -136,7 +136,7 @@ export default function PlaySettings({
                 userId={userId}
                 timerState={timerState}
                 isMobile={isMobile}
-                sendEvent={sendEvent}
+                sendEvents={sendEvents}
               />
               <RevealSection forceReveal={forceReveal} />
               <NotificationsSection
@@ -211,7 +211,7 @@ export default function PlaySettings({
               members={members}
               isCast={false}
               isMobile={false}
-              sendEvent={sendEvent}
+              sendEvents={sendEvents}
             />
           </Drawer.Body>
         </Drawer.Content>

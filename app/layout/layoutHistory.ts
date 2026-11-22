@@ -1,9 +1,5 @@
-import type {
-  EditorEvent,
-  HistoryAction,
-  HistoryState,
-  Widget,
-} from "./layoutTypes";
+import type { Widget } from "./widgetTypes";
+import type { EditorEvent, HistoryAction, HistoryState } from "./layoutTypes";
 
 export const initialHistoryState: HistoryState = { events: [], index: 0 };
 
@@ -17,7 +13,7 @@ export function replayEvents(
     switch (event.type) {
       case "geometry":
         for (const geometry of event.geometries) {
-          const widget = widgets.get(geometry.widgetId);
+          const widget = widgets.get(geometry.id);
 
           if (widget != null) {
             Object.assign(widget, {

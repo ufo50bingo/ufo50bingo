@@ -4,7 +4,8 @@ import {
   initialHistoryState,
   replayEvents,
 } from "./layoutHistory";
-import type { EditorEvent, Widget } from "./layoutTypes";
+import type { Widget } from "./widgetTypes";
+import type { EditorEvent } from "./layoutTypes";
 
 export default function useEditorHistory(initial: ReadonlyArray<Widget>) {
   const [history, dispatch] = useReducer(historyReducer, initialHistoryState);

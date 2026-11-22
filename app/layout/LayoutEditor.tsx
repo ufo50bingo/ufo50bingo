@@ -9,60 +9,55 @@ import useEditorHistory from "./useEditorHistory";
 import useSelection from "./useSelection";
 import useUndoRedoShortcuts from "./useUndoRedoShortcuts";
 import useWidgetInteractions from "./useWidgetInteractions";
-import type { Widget } from "./layoutTypes";
-import Board from "../Board";
-import { BingosyncColor } from "../color";
+import type { Widget } from "./widgetTypes";
 
 type Props = {
   canvasWidth: number;
   canvasHeight: number;
 };
 
-const squareNames: ReadonlyArray<string> = Array(25).fill(
-  "BARBUTA: Speak to 2 different Bean NPCs",
-);
-const squareColors: ReadonlyArray<ReadonlyArray<BingosyncColor>> = Array(
-  25,
-).fill([]);
-
 const initialWidgets: ReadonlyArray<Widget> = [
   {
     id: "1",
+    type: "plain_text",
     x: 50,
     y: 50,
+    z: 0,
     width: 100,
     height: 100,
-    content: <div>Random widget</div>,
+    text: "Random widget",
+    font: "sans-serif",
+    defaultSize: 24,
+    canShrink: true,
+    minSize: 8,
   },
   {
     id: "2",
+    type: "general_icon",
     x: 200,
     y: 50,
+    z: 0,
     width: 60,
     height: 68,
-    lockAspectRatio: true,
-    content: <div />,
+    playerNum: 1,
+    generalNumber: 1,
+    hasInsetCount: true,
+    iconSet: "WinnerBit",
+    font: "sans-serif",
   },
   {
     id: "3",
+    type: "board",
     x: 350,
     y: 50,
+    z: 0,
     width: 525,
     height: 475,
-    content: (
-      <Board
-        squareNames={squareNames}
-        squareColors={squareColors}
-        onClickSquare={() => {}}
-        boardCover={null}
-        shownDifficulties={[]}
-        viewerColor="red"
-        maxFontSize={100}
-        minFontSize={9.1}
-        rows={5}
-        columns={5}
-      />
-    ),
+    font: "sans-serif",
+    defaultSize: 100,
+    canShrink: true,
+    minSize: 9.1,
+    color: { type: "custom_color", color: "#ffffff" },
   },
 ];
 
@@ -87,7 +82,7 @@ export default function LayoutEditor(props: Props) {
 
   const selectedWidgets = useMemo(() => {
     const selectedIds = new Set(
-      selectedTargets.map((element) => element.dataset.id),
+      selectedTargets.map((target) => target.dataset.id),
     );
     return widgets.filter((widget) => selectedIds.has(widget.id));
   }, [selectedTargets, widgets]);

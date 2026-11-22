@@ -205,8 +205,9 @@ export default function Board({
     ) {
       return null;
     }
-    const newHighlights: null | Array<null | ReadonlyArray<string>> =
-      Array(25).fill(null);
+    const newHighlights: null | Array<null | ReadonlyArray<string>> = Array(
+      rows * columns,
+    ).fill(null);
     rightClickCounts.forEach((behaviorIndex, squareIndex) => {
       if (behaviorIndex == null) {
         return;
@@ -222,7 +223,14 @@ export default function Board({
       }
     });
     return newHighlights;
-  }, [highlights, rightClickBehavior, rightClickCounts, viewerColor]);
+  }, [
+    columns,
+    highlights,
+    rightClickBehavior,
+    rightClickCounts,
+    rows,
+    viewerColor,
+  ]);
   const resolvedHighlights = highlights ?? rightClickHighlights;
   return (
     <div

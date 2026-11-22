@@ -2,7 +2,6 @@ import { NeonQueryFunction } from "@neondatabase/serverless";
 import { SQL } from "./matches/page";
 import { BingosyncColor } from "./matches/parseBingosyncData";
 import { SyncedTimerEventName } from "./room/[id]/common/useSyncedTimer";
-import getSql from "./getSql";
 import { fetchPastas } from "./pastaStorage";
 import { UFOPasta } from "./generator/ufoGenerator";
 import getAllSubcategories from "./createboard/getAllSubcategories";
@@ -11,6 +10,7 @@ import joinValues from "./joinValues";
 import { getMatchingRepoPasta } from "./getMatchingRepoPasta";
 import getAllCastOptions from "./createboard/getAllCastOptions";
 import getGameList from "./room/[id]/common/getGameList";
+import { LEAGUE_TIER, WEEK } from "./createboard/leagueConstants";
 
 export type FeedColorMark = {
   type: "color_mark";
@@ -342,20 +342,70 @@ function parseSquaresResult(result: SQLResult): ReadonlyArray<SquareWithId> {
 function fetchGameSql(sql: SQLTemplate, gameId: number): SQL {
   return sql`
     SELECT
-      pasta_id
-    FROM game
-    WHERE id = ${gameId}
+      g.id,
+      g.name,
+      EXTRACT(EPOCH FROM g.date_created)::DOUBLE PRECISION AS unixtime,
+      g.creator_id,
+      g.variant,
+      g.is_lockout,
+      g.width,
+      g.height,
+      g.vod_url,
+      g.vod_match_start_seconds,
+      g.is_custom,
+      g.is_draft,
+      g.pasta_id,
+      lg.id AS league_game_id,
+      lg.p1_id,
+      lg.p2_id,
+      lg.season,
+      lg.week,
+      lg.tier,
+      lg.game_number
+    FROM game g
+    LEFT JOIN league_game lg
+    ON g.league_game_id = lg.id
+    WHERE g.id = ${gameId}
   `;
 }
 
-type ParsedGame = {
-  pastaId: bigint | null;
-};
-
 function parseGameResult(result: SQLResult): ParsedGame {
-  const pastaIdRaw = result[0].pasta_id;
+  const row = result[0];
+  const pastaIdRaw = row.pasta_id;
   const pastaId = pastaIdRaw == null ? null : BigInt(pastaIdRaw);
-  return { pastaId };
+  const leagueGameId = row.league_game_id;
+  const leagueGame: null | LeagueGame =
+    leagueGameId != null
+      ? {
+          id: leagueGameId,
+          p1Id: row.p1Id,
+          p2Id: row.p2Id,
+          season: row.season,
+          week: row.week,
+          tier: row.tier,
+          gameNumber: row.gameNumber,
+        }
+      : null;
+  const vodUrl = row.vod_url;
+  const vod: Vod | null =
+    vodUrl != null
+      ? { url: vodUrl, startSeconds: row.vod_match_start_seconds }
+      : null;
+  return {
+    id: row.id,
+    width: row.width,
+    height: row.height,
+    name: row.name,
+    variant: row.variant,
+    dateCreated: row.unixtime,
+    creatorId: row.creator_id,
+    isLockout: row.is_lockout,
+    isCustom: row.is_custom,
+    isDraft: row.is_draft,
+    leagueGame,
+    vod,
+    pastaId,
+  };
 }
 
 function getAllSubcategoriesToLoad(pasta: null | UFOPasta): Set<string> {
@@ -399,29 +449,57 @@ function parseSubcategories(
 type FetchDataView = "cast" | "play" | "spectate";
 
 export async function fetchData(
+  sql: SQLTemplate,
   gameId: number,
   view: FetchDataView,
 ): Promise<FullParsedGame> {
-  return (await fetchDataMulti([gameId], view))[0];
+  return (await fetchDataMulti(sql, [gameId], view))[0];
 }
 
-type FullParsedGame = {
-  gameId: number;
-  squares: ReadonlyArray<SquareWithId>;
-  feed: NewFeed;
+export type Vod = {
+  url: string;
+  startSeconds: null | number;
+};
+
+export type LeagueGame = {
+  id: number;
+  p1Id: number;
+  p2Id: number;
+  season: number;
+  week: WEEK;
+  tier: LEAGUE_TIER;
+  gameNumber: number;
+};
+
+export type ParsedGame = {
+  id: number;
+  width: number;
+  height: number;
+  name: null | string;
+  variant: string;
+  dateCreated: number;
+  creatorId: number;
+  isCustom: boolean;
+  isDraft: boolean;
+  isLockout: boolean;
+  leagueGame: null | LeagueGame;
+  vod: null | Vod;
   pastaId: null | bigint;
+};
+
+export interface FullParsedGame extends PartialParsedGame {
   fetchedPasta: null | UFOPasta;
   subcategories: ReadonlyArray<ParsedSubcategory>;
-};
+}
 
-type PartialParsedGame = {
-  gameId: number;
+interface PartialParsedGame {
+  game: ParsedGame;
   squares: ReadonlyArray<SquareWithId>;
   feed: NewFeed;
-  pastaId: null | bigint;
-};
+}
 
 export async function fetchDataMulti(
+  sql: SQLTemplate,
   gameIds: ReadonlyArray<number>,
   view: FetchDataView,
 ): Promise<ReadonlyArray<FullParsedGame>> {
@@ -444,7 +522,6 @@ export async function fetchDataMulti(
       [fetchDisconnectSql, parseDisconnectResult],
     ]);
   }
-  const sql = getSql(false);
   const allFeedFetches = gameIds.flatMap((gameId) =>
     feedFetchPairs.map((pair) => pair[0](sql, gameId)),
   );
@@ -474,13 +551,13 @@ export async function fetchDataMulti(
       feed.sort((a, b) => a.time - b.time);
 
       const squares = parseSquaresResult(otherResults[0]);
-      const { pastaId } = parseGameResult(otherResults[1]);
-      return { gameId, feed, squares, pastaId };
+      const game = parseGameResult(otherResults[1]);
+      return { game, feed, squares };
     },
   );
 
   const uniquePastaIds = new Set(
-    parsed.map((p) => p.pastaId).filter((pastaId) => pastaId != null),
+    parsed.map((p) => p.game.pastaId).filter((pastaId) => pastaId != null),
   );
   const pastaIdToPasta: Map<bigint, UFOPasta | null> = new Map(
     [...uniquePastaIds].map((pastaId) => {
@@ -512,7 +589,7 @@ export async function fetchDataMulti(
     );
 
     const nullPastaNames: null | Set<string> = parsed.some(
-      (p) => p.pastaId == null,
+      (p) => p.game.pastaId == null,
     )
       ? getAllSubcategoriesToLoad(null)
       : null;
@@ -547,10 +624,12 @@ export async function fetchDataMulti(
   return parsed.map((p) => ({
     ...p,
     fetchedPasta:
-      p.pastaId != null ? (fetchedPastas.get(p.pastaId) ?? null) : null,
+      p.game.pastaId != null
+        ? (fetchedPastas.get(p.game.pastaId) ?? null)
+        : null,
     subcategories:
-      p.pastaId != null
-        ? (pastaIdToParsedSubcategories.get(p.pastaId) ?? [])
+      p.game.pastaId != null
+        ? (pastaIdToParsedSubcategories.get(p.game.pastaId) ?? [])
         : nullPastaSubcategories,
   }));
 }

@@ -9,7 +9,6 @@ import {
   Stack,
   TextInput,
 } from "@mantine/core";
-import { Match } from "./Matches";
 import { useState } from "react";
 import {
   ALL_PLAYERS,
@@ -21,11 +20,13 @@ import {
 import updateLeagueInfo, { LeagueInfoUpdate } from "./updateLeagueInfo";
 import runWithMaybeRefresh from "./runWithMaybeRefresh";
 import { useRouter } from "next/navigation";
+import { FullParsedGame } from "../fetchFeed";
+import { WEEK } from "./week";
 
 type Props = {
   matchesUrl: string | null;
   isMobile: boolean;
-  match: Match;
+  match: FullParsedGame;
   onClose: () => void;
 };
 
@@ -52,15 +53,15 @@ export default function EditLeagueModal({
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
 
-  const { leagueInfo } = match;
+  const { leagueGame } = match.game;
 
-  const [season, setSeason] = useState<null | Season>(
-    getSeason(leagueInfo?.season ?? null),
+  const [season, setSeason] = useState<null | number>(
+    leagueGame?.season ?? null,
   );
-  const [week, setWeek] = useState<null | string>(
-    leagueInfo?.week ?? getCurrentWeek(),
+  const [week, setWeek] = useState<null | WEEK>(
+    leagueGame?.week ?? getCurrentWeek(),
   );
-  const [p1, setP1] = useState<null | string>(leagueInfo?.p1 ?? null);
+  const [p1, setP1] = useState<null | string>(league?.p1 ?? null);
   const [p2, setP2] = useState<null | string>(leagueInfo?.p2 ?? null);
   const [name, setName] = useState<string>(match.name);
   const [gameNumber, setGameNumber] = useState<number | null>(

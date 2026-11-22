@@ -18,14 +18,19 @@ export type OptionList = {
   hidden: ReadonlyArray<OptionListEntry>;
 };
 export type Descriptions = { [subcategory: string]: string };
+export type CastImage = {
+  src: string;
+  is_pixel?: boolean;
+};
+// One image for every icon set, or an image per icon set, keyed by the icon
+// set's name (e.g. "WinnerBit"). Every per-set image in a pasta must use the
+// same icon sets.
+export type CastImages = CastImage | { [iconSet: string]: CastImage };
 export type CastConfig = {
   type: "check" | "counter";
   options: string | OptionList;
   on_card_only: boolean;
-  image?: {
-    src: string;
-    is_pixel?: boolean;
-  };
+  image?: CastImages;
   descriptions?: string | Descriptions;
 };
 

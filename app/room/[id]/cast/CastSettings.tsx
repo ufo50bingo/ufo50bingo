@@ -48,6 +48,7 @@ type Props = {
   sortType: SortType;
   setSortType: (newSortType: SortType) => unknown;
   iconType: IconType;
+  iconSets: ReadonlyArray<IconType>;
   setIconType: (newIconType: IconType) => unknown;
   hideByDefault: boolean;
   setHideByDefault: (newHideByDefault: boolean) => unknown;
@@ -89,6 +90,7 @@ export default function CastSettings({
   sortType,
   setSortType,
   iconType,
+  iconSets,
   setIconType,
   hideByDefault,
   setHideByDefault,
@@ -224,18 +226,18 @@ export default function CastSettings({
                         setSortType((newSortType ?? "fast") as SortType)
                       }
                     />
-                    <Select
-                      label="Icon type"
-                      data={[
-                        { value: "winnerbit", label: "WinnerBit" },
-                        { value: "sprites", label: "Sprites" },
-                        { value: "classic", label: "Classic" },
-                      ]}
-                      value={iconType}
-                      onChange={(newIconType: string | null) =>
-                        setIconType((newIconType ?? "winnerbit") as IconType)
-                      }
-                    />
+                    {iconSets.length > 1 && (
+                      <Select
+                        label="Icon type"
+                        data={iconSets}
+                        value={iconType}
+                        onChange={(newIconType: string | null) => {
+                          if (newIconType != null) {
+                            setIconType(newIconType);
+                          }
+                        }}
+                      />
+                    )}
                     <Select
                       label="Count position"
                       data={[

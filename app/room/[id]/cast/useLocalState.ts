@@ -1,10 +1,13 @@
 import { Difficulty } from "@/app/goals";
 import useLocalBool from "@/app/localStorage/useLocalBool";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
+import useLocalString from "@/app/localStorage/useLocalString";
 import { useMemo, useState } from "react";
+import { BUILT_IN_ICON_SETS, normalizeStoredIconSet } from "./iconSets";
 
 export type SortType = "fast" | "alphabetical" | "chronological";
-export type IconType = "winnerbit" | "sprites" | "classic";
+// TODO: get rid of this
+export type IconType = string;
 
 interface BaseState {
   shownDifficulties: ReadonlyArray<Difficulty>;
@@ -43,11 +46,12 @@ export default function useLocalState(gameId: number): CasterState {
     defaultValue: "fast",
     options: ["fast", "alphabetical", "chronological"],
   });
-  const [iconType, setIconType] = useLocalEnum<IconType>({
+  const [storedIconType, setIconType] = useLocalString({
     key: "icon_type",
-    defaultValue: "winnerbit",
-    options: ["winnerbit", "sprites", "classic"],
+    defaultValue: BUILT_IN_ICON_SETS[0],
   });
+  // older versions stored lowercase names like "winnerbit"
+  const iconType = normalizeStoredIconSet(storedIconType);
   const [hideByDefault, setHideByDefault] = useLocalBool({
     key: "hide_by_default",
     defaultValue: false,

@@ -648,44 +648,959 @@ export const SEASON_2_UFO = {
       cyberowls: ["CYBER OWLS: HAWK-BASE allowed; beat Antarctica"],
     },
     general: {
-      gift: ["Collect {{gift_count}} gifts from games on this card"],
+      gift: [
+        {
+          name: "Collect {{gift_count}} gifts from games on this card",
+          cast: {
+            type: "check",
+            options: "$gift",
+            on_card_only: true,
+            descriptions: "$gift_desc",
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Gift.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconGarden.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
+      ],
       goldcherry: [
-        "Collect {{cherry_count}} cherry disks from games on this card",
-        "Collect {{gold_count}} gold disks from games on this card",
+        {
+          name: "Collect {{cherry_count}} cherry disks from games on this card",
+          cast: {
+            type: "check",
+            options: "$cherry",
+            on_card_only: true,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Cherry.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconCherry.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
+        {
+          name: "Collect {{gold_count}} gold disks from games on this card",
+          cast: {
+            type: "check",
+            options: "$gold",
+            on_card_only: true,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Gold.png",
+                is_pixel: false,
+              },
+              Classic: { src: "/general/sprites/IconGold.png", is_pixel: true },
+            },
+          },
+        },
       ],
       collectathon: [
-        "Buy an item from a shop in 10 games",
-        "Collect a beverage in 6 games",
-        "Collect a food item in 8 games",
-        "Collect a key in 7 games",
-        "Earn an extra life/1UP in 8 games",
-        "Enter a top 5 score on 4 arcade leaderboards",
-        "Find an easter egg UFO in 5 games",
-        "Find an egg in 10 games",
-        "Increase your base HP in 6 games",
-        "Open 2 chests in 5 games",
+        {
+          name: "Buy an item from a shop in 10 games",
+          cast: {
+            type: "check",
+            options: {
+              shown: [
+                "divers",
+                "partyhouse",
+                "quibblerace",
+                "avianos",
+                "bughunter",
+                "waldorfsjourney",
+                "rockonisland",
+                "grimstone",
+                "lordsofdiskonia",
+                "pilotquest",
+                "miniandmax",
+              ],
+              shown_if_on_card: [
+                "overbold",
+                "velgress",
+                "campanella2",
+                "fisthell",
+                "barbuta",
+                "planetzoldath",
+                "valbrace",
+              ],
+              hidden: [],
+            },
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Shop.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconShops.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
+        {
+          name: "Collect a beverage in 6 games",
+          cast: {
+            type: "check",
+            options: {
+              shown: [
+                "divers",
+                "campanella",
+                "magicgarden",
+                "lordsofdiskonia",
+                "miniandmax",
+                "hotfoot",
+                "valbrace",
+              ],
+              shown_if_on_card: ["warptank", "ninpek"],
+              hidden: ["grimstone"],
+            },
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Beverage.png",
+                is_pixel: false,
+              },
+              Classic: { src: "/general/sprites/IconBev.png", is_pixel: true },
+            },
+          },
+        },
+        {
+          name: "Collect a food item in 8 games",
+          cast: {
+            type: "check",
+            options: {
+              shown: [
+                "kickclub",
+                "ninpek",
+                "waldorfsjourney",
+                "fisthell",
+                "combatants",
+                "rockonisland",
+                "cyberowls",
+                "camouflage",
+              ],
+              shown_if_on_card: [
+                "planetzoldath",
+                "grimstone",
+                "valbrace",
+                "campanella2",
+                "pilotquest",
+                "miniandmax",
+                "barbuta",
+              ],
+              hidden: [],
+            },
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Food.png",
+                is_pixel: false,
+              },
+              Classic: { src: "/general/sprites/IconFood.png", is_pixel: true },
+            },
+          },
+        },
+        {
+          name: "Collect a key in 7 games",
+          cast: {
+            type: "check",
+            options: {
+              shown: [
+                "mortolii",
+                "valbrace",
+                "waldorfsjourney",
+                "velgress",
+                "cyberowls",
+                "barbuta",
+                "nightmanor",
+              ],
+              shown_if_on_card: ["miniandmax", "vainger", "campanella2"],
+              hidden: ["grimstone"],
+            },
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Key.png",
+                is_pixel: false,
+              },
+              Classic: { src: "/general/sprites/IconKey.png", is_pixel: true },
+            },
+          },
+        },
+        {
+          name: "Earn an extra life/1UP in 8 games",
+          cast: {
+            type: "check",
+            options: {
+              shown: [
+                "mortol",
+                "waldorfsjourney",
+                "campanella",
+                "cyberowls",
+                "kickclub",
+                "rakshasa",
+                "caramelcaramel",
+                "ninpek",
+                "starwaspir",
+              ],
+              shown_if_on_card: [
+                "vainger",
+                "elfazarshat",
+                "seasidedrive",
+                "campanella3",
+                "paintchase",
+                "barbuta",
+              ],
+              hidden: [],
+            },
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Life.png",
+                is_pixel: false,
+              },
+              Classic: { src: "/general/sprites/Icon1up.png", is_pixel: true },
+            },
+          },
+        },
+        {
+          name: "Enter a top 5 score on 4 arcade leaderboards",
+          cast: {
+            type: "check",
+            options: {
+              shown: [
+                "campanella",
+                "magicgarden",
+                "ninpek",
+                "kickclub",
+                "starwaspir",
+                "caramelcaramel",
+              ],
+              shown_if_on_card: ["rakshasa", "seasidedrive", "paintchase"],
+              hidden: [],
+            },
+            on_card_only: false,
+            descriptions: {
+              campanella: "5k",
+              magicgarden: "6k",
+              ninpek: "5k",
+              starwaspir: "60k",
+              caramelcaramel: "20k",
+              kickclub: "25k",
+              rakshasa: "10k",
+              seasidedrive: "40k",
+              paintchase: "240",
+            },
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Leaderboard.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconLeaderboard.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
+        {
+          name: "Find an easter egg UFO in 5 games",
+          cast: {
+            type: "check",
+            options: {
+              shown: [
+                "starwaspir",
+                "pingolf",
+                "oniondelivery",
+                "fisthell",
+                "golfaria",
+                "rakshasa",
+              ],
+              shown_if_on_card: ["elfazarshat", "partyhouse", "seasidedrive"],
+              hidden: ["divers", "nightmanor"],
+            },
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_UFO.png",
+                is_pixel: false,
+              },
+              Classic: { src: "/general/sprites/IconUfo.png", is_pixel: true },
+            },
+          },
+        },
+        {
+          name: "Find an egg in 10 games",
+          cast: {
+            type: "check",
+            options: {
+              shown: [
+                "barbuta",
+                "thebigbellrace",
+                "divers",
+                "starwaspir",
+                "ninpek",
+                "oniondelivery",
+                "campanella2",
+                "rakshasa",
+                "caramelcaramel",
+                "bughunter",
+              ],
+              shown_if_on_card: [
+                "miniandmax",
+                "nightmanor",
+                "avianos",
+                "mooncat",
+                "porgy",
+              ],
+              hidden: ["valbrace", "elfazarshat", "campanella3"],
+            },
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Egg.png",
+                is_pixel: false,
+              },
+              Classic: { src: "/general/sprites/IconEgg.png", is_pixel: true },
+            },
+          },
+        },
+        {
+          name: "Increase your base HP in 6 games",
+          cast: {
+            type: "check",
+            options: {
+              shown: [
+                "porgy",
+                "planetzoldath",
+                "elfazarshat",
+                "lordsofdiskonia",
+                "golfaria",
+                "overbold",
+                "campanella2",
+                "grimstone",
+                "divers",
+                "miniandmax",
+                "vainger",
+              ],
+              shown_if_on_card: ["valbrace"],
+              hidden: [],
+            },
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_HP.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconHealth.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
+        {
+          name: "Open 2 chests in 5 games",
+          cast: {
+            type: "check",
+            options: {
+              shown: [
+                "valbrace",
+                "divers",
+                "nightmanor",
+                "barbuta",
+                "grimstone",
+                "waldorfsjourney",
+              ],
+              shown_if_on_card: ["campanella2", "pilotquest", "elfazarshat"],
+              hidden: [],
+            },
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Chest.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconChest.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
       ],
       bosslevel: [
-        "Beat 2 levels in 8 different games",
-        "Beat 4 levels in 5 different games",
-        "Beat 8 levels in 3 different games",
-        "Defeat 2 bosses in 4 different games",
-        "Defeat 7 bosses",
-        "Defeat a boss in 6 different games",
+        {
+          name: "Beat 2 levels in 8 different games",
+          cast: {
+            type: "check",
+            options: {
+              shown: [
+                "campanella",
+                "pingolf",
+                "kickclub",
+                "mooncat",
+                "overbold",
+                "devilition",
+                "camouflage",
+                "warptank",
+                "railheist",
+                "attactics",
+                "bushidoball",
+                "campanella3",
+                "hotfoot",
+                "paintchase",
+                "velgress",
+                "blockkoala",
+                "thebigbellrace",
+              ],
+              shown_if_on_card: [
+                "hypercontender",
+                "starwaspir",
+                "campanella2",
+                "combatants",
+                "oniondelivery",
+                "cyberowls",
+                "bughunter",
+                "avianos",
+                "mortol",
+                "rockonisland",
+                "lordsofdiskonia",
+                "valbrace",
+                "partyhouse",
+                "caramelcaramel",
+                "fisthell",
+                "elfazarshat",
+                "seasidedrive",
+                "rakshasa",
+              ],
+              hidden: [],
+            },
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Level.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconLevel.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
+        {
+          name: "Beat 4 levels in 5 different games",
+          cast: {
+            type: "check",
+            options: "$four_levels",
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Level.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconLevel.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
+        {
+          name: "Beat 8 levels in 3 different games",
+          cast: {
+            type: "check",
+            options: "$eight_levels",
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Level.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconLevel.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
+        {
+          name: "Defeat 2 bosses in 4 different games",
+          cast: {
+            type: "check",
+            options: {
+              shown: ["campanella", "starwaspir", "fisthell", "cyberowls"],
+              shown_if_on_card: [
+                "rakshasa",
+                "seasidedrive",
+                "campanella3",
+                "kickclub",
+                "vainger",
+                "miniandmax",
+                "caramelcaramel",
+                "mooncat",
+                "pilotquest",
+                "elfazarshat",
+                "porgy",
+              ],
+              hidden: [
+                "rockonisland",
+                "ninpek",
+                "valbrace",
+                "warptank",
+                "divers",
+                "grimstone",
+              ],
+            },
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Boss.png",
+                is_pixel: false,
+              },
+              Classic: { src: "/general/sprites/IconBoss.png", is_pixel: true },
+            },
+          },
+        },
+        {
+          name: "Defeat 7 bosses",
+          cast: {
+            type: "counter",
+            options: {
+              shown: [
+                { type: "include", has_extra: "OPEN-TOMB", option: "mortol" },
+                {
+                  type: "include",
+                  has_extra: "EVEN-COAT",
+                  option: "paintchase",
+                },
+                {
+                  type: "include",
+                  has_extra: "WORM-1234",
+                  option: "blockkoala",
+                },
+                "campanella",
+                "starwaspir",
+                "fisthell",
+                "miniandmax",
+                "cyberowls",
+                "elfazarshat",
+                "rakshasa",
+                "seasidedrive",
+                "mortolii",
+                "kickclub",
+              ],
+              shown_if_on_card: [
+                "pilotquest",
+                {
+                  type: "include",
+                  has_extra: "LAZY-COPS",
+                  option: "railheist",
+                },
+                {
+                  type: "include",
+                  has_extra: "ANTS-ANTS",
+                  option: "combatants",
+                },
+                "vainger",
+                "campanella3",
+                "velgress",
+                "caramelcaramel",
+                "mooncat",
+                "porgy",
+                "hotfoot",
+                "barbuta",
+                "rockonisland",
+                "overbold",
+                "ninpek",
+                "valbrace",
+                "nightmanor",
+              ],
+              hidden: [
+                "grimstone",
+                "devilition",
+                "campanella2",
+                {
+                  type: "exclude",
+                  has_extra: "EVEN-COAT",
+                  option: "paintchase",
+                },
+                "divers",
+                "golfaria",
+                { type: "exclude", has_extra: "OPEN-TOMB", option: "mortol" },
+                "warptank",
+                {
+                  type: "exclude",
+                  has_extra: "LAZY-COPS",
+                  option: "railheist",
+                },
+                {
+                  type: "exclude",
+                  has_extra: "ANTS-ANTS",
+                  option: "combatants",
+                },
+                {
+                  type: "exclude",
+                  has_extra: "WORM-1234",
+                  option: "blockkoala",
+                },
+                "lordsofdiskonia",
+              ],
+            },
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Boss.png",
+                is_pixel: false,
+              },
+              Classic: { src: "/general/sprites/IconBoss.png", is_pixel: true },
+            },
+          },
+        },
+        {
+          name: "Defeat a boss in 6 different games",
+          cast: {
+            type: "check",
+            options: {
+              shown: [
+                { type: "include", has_extra: "OPEN-TOMB", option: "mortol" },
+                {
+                  type: "include",
+                  has_extra: "EVEN-COAT",
+                  option: "paintchase",
+                },
+                {
+                  type: "include",
+                  has_extra: "WORM-1234",
+                  option: "blockkoala",
+                },
+                "campanella",
+                "starwaspir",
+                "fisthell",
+                "miniandmax",
+                "cyberowls",
+                "elfazarshat",
+                "rakshasa",
+                "seasidedrive",
+                "mortolii",
+                "kickclub",
+              ],
+              shown_if_on_card: [
+                "pilotquest",
+                {
+                  type: "include",
+                  has_extra: "LAZY-COPS",
+                  option: "railheist",
+                },
+                {
+                  type: "include",
+                  has_extra: "ANTS-ANTS",
+                  option: "combatants",
+                },
+                "vainger",
+                "campanella3",
+                "velgress",
+                "caramelcaramel",
+                "mooncat",
+                "porgy",
+                "hotfoot",
+                "barbuta",
+                "rockonisland",
+                "overbold",
+                "ninpek",
+                "valbrace",
+                "nightmanor",
+              ],
+              hidden: [
+                "grimstone",
+                "devilition",
+                "campanella2",
+                {
+                  type: "exclude",
+                  has_extra: "EVEN-COAT",
+                  option: "paintchase",
+                },
+                "divers",
+                "golfaria",
+                { type: "exclude", has_extra: "OPEN-TOMB", option: "mortol" },
+                "warptank",
+                {
+                  type: "exclude",
+                  has_extra: "LAZY-COPS",
+                  option: "railheist",
+                },
+                {
+                  type: "exclude",
+                  has_extra: "ANTS-ANTS",
+                  option: "combatants",
+                },
+                {
+                  type: "exclude",
+                  has_extra: "WORM-1234",
+                  option: "blockkoala",
+                },
+                "lordsofdiskonia",
+              ],
+            },
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Boss.png",
+                is_pixel: false,
+              },
+              Classic: { src: "/general/sprites/IconBoss.png", is_pixel: true },
+            },
+          },
+        },
       ],
       theme: [
-        "ALPHA TRILOGY: Gold Velgress, Overbold, and Quibble Race as Alpha",
-        "AMY: Playing as Amy, beat 1 level in Party House, 2 in Hot Foot, 2 in Fist Hell",
-        "ARCADE ACE: Gold Disk any 3 of the 16 “ARCADE” games",
-        "CAMPANELLA TRILOGY: Beat two worlds in Campanella, two in Campanella 2, one in Campanella 3",
-        "DAY JOB: Beat 1 level in Bug Hunter, 2 in Onion Delivery, 3 in Rail Heist",
-        "METROIDVANIA: Collect Abilities: 3 in Porgy, 2 in Vainger, 1 in Golfaria",
-        "PILOT PARTY: Collect 4 gifts: Campanella 1/2/3, Planet Zoldath, Pilot Quest, The Big Bell Race",
-        "PUZZLER: Beat 5 levels in Block Koala, Camouflage, Warptank",
-        "RACER: Win 4 races in Paint Chase, The Big Bell Race, Quibble Race",
-        "ROLE-PLAYER: Level up all your characters twice in Divers, Valbrace, Grimstone",
-        "TRIATHLON: Gold Disk any 3 of the 5 “SPORT” games",
-        "WAR IS BAD: Win 3 battles in Attactics, Avianos, Combatants",
+        {
+          name: "ALPHA TRILOGY: Gold Velgress, Overbold, and Quibble Race as Alpha",
+          cast: {
+            type: "check",
+            options: "$infer",
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconAlpha.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
+        {
+          name: "AMY: Playing as Amy, beat 1 level in Party House, 2 in Hot Foot, 2 in Fist Hell",
+          cast: {
+            type: "check",
+            options: "$infer",
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                is_pixel: false,
+              },
+              Classic: { src: "/general/sprites/IconAmy.png", is_pixel: true },
+            },
+          },
+        },
+        {
+          name: "ARCADE ACE: Gold Disk any 3 of the 16 “ARCADE” games",
+          cast: {
+            type: "check",
+            options: {
+              shown: ["waldorfsjourney", "velgress", "magicgarden", "overbold"],
+              shown_if_on_card: [
+                "starwaspir",
+                "ninpek",
+                "oniondelivery",
+                "campanella",
+                "caramelcaramel",
+                "kickclub",
+                "seasidedrive",
+                "campanella3",
+                "fisthell",
+                "elfazarshat",
+              ],
+              hidden: ["paintchase", "attactics"],
+            },
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                is_pixel: false,
+              },
+              Classic: { src: "/general/sprites/IconAce.png", is_pixel: true },
+            },
+          },
+        },
+        {
+          name: "CAMPANELLA TRILOGY: Beat two worlds in Campanella, two in Campanella 2, one in Campanella 3",
+          cast: {
+            type: "check",
+            options: "$infer",
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconCampTrilogy.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
+        {
+          name: "DAY JOB: Beat 1 level in Bug Hunter, 2 in Onion Delivery, 3 in Rail Heist",
+          cast: {
+            type: "check",
+            options: "$infer",
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconDayJob.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
+        {
+          name: "METROIDVANIA: Collect Abilities: 3 in Porgy, 2 in Vainger, 1 in Golfaria",
+          cast: {
+            type: "check",
+            options: "$infer",
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconMetroidvania.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
+        {
+          name: "PILOT PARTY: Collect 4 gifts: Campanella 1/2/3, Planet Zoldath, Pilot Quest, The Big Bell Race",
+          cast: {
+            type: "check",
+            options: "$infer",
+            on_card_only: false,
+            descriptions: "$gift_desc",
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconPilot.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
+        {
+          name: "PUZZLER: Beat 5 levels in Block Koala, Camouflage, Warptank",
+          cast: {
+            type: "check",
+            options: "$infer",
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconPuzzler.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
+        {
+          name: "RACER: Win 4 races in Paint Chase, The Big Bell Race, Quibble Race",
+          cast: {
+            type: "check",
+            options: "$infer",
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconRacer.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
+        {
+          name: "ROLE-PLAYER: Level up all your characters twice in Divers, Valbrace, Grimstone",
+          cast: {
+            type: "check",
+            options: "$infer",
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconRoleplayer.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
+        {
+          name: "TRIATHLON: Gold Disk any 3 of the 5 “SPORT” games",
+          cast: {
+            type: "check",
+            options: {
+              shown: [
+                "bushidoball",
+                "pingolf",
+                "hotfoot",
+                "hypercontender",
+                "thebigbellrace",
+              ],
+              shown_if_on_card: [],
+              hidden: [],
+            },
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconTriathlon.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
+        {
+          name: "WAR IS BAD: Win 3 battles in Attactics, Avianos, Combatants",
+          cast: {
+            type: "check",
+            options: "$infer",
+            on_card_only: false,
+            image: {
+              WinnerBit: {
+                src: "/general/winnerbit/Icon_Multi-Game_Generic.png",
+                is_pixel: false,
+              },
+              Classic: {
+                src: "/general/sprites/IconWarIsBad.png",
+                is_pixel: true,
+              },
+            },
+          },
+        },
       ],
     },
   },

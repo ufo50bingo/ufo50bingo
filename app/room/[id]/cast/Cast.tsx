@@ -115,7 +115,7 @@ export default function Cast({
       rightClickBehavior,
       setRightClickBehavior,
       customColor: "#ee5f5b",
-      setCustomColor: () => { },
+      setCustomColor: () => {},
     }),
     [rightClickBehavior, setRightClickBehavior],
   );
@@ -350,6 +350,7 @@ export default function Cast({
   const getCard = (g: GeneralItem, h: null | undefined | number) => (
     <GeneralGoal
       key={g.foundGoal.resolvedGoal}
+      isPlay={false}
       gameToGoals={gameToGoals}
       foundGoal={g.foundGoal}
       setGeneralGameCount={setGeneralGameCount}

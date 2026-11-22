@@ -16,28 +16,23 @@ import NotificationsSection, {
   SetSoundChoices,
   SoundChoices,
 } from "../common/NotificationsSection";
-import CreateBoardSection from "../common/CreateBoardSection";
-import BottomSection from "../common/BottomSection";
 import { Font } from "@/app/font/useFont";
 import FontSelector from "@/app/font/FontSelector";
 import SelectRightClickBehavior from "@/app/settings/SelectRightClickBehavior";
-import {
-  FullSyncedTimerEvent,
-  SyncedTimerState,
-} from "../common/useSyncedTimer";
+import { SyncedTimerState } from "../common/useSyncedTimer";
 import TimerSection from "../common/TimerSection";
 import RevealSection from "./RevealSection";
 import { useShouldShortenContext } from "@/app/settings/ShouldShortenContext";
-import { RoomBackend } from "@/app/roomApi";
 import GeneralSection, {
   GeneralSettings,
   Restrictions,
   GeneralSetters,
 } from "./GeneralSection";
 import { useShouldShowRecentContext } from "@/app/settings/ShouldShowRecentContext";
+import DisconnectButton from "../common/DisconnectButton";
 
 type Props = {
-  id: string;
+  gameId: number;
   color: null | BingosyncColor;
   setColor: (newcolor: BingosyncColor) => unknown;
   shownDifficulties: ReadonlyArray<Difficulty>;
@@ -50,17 +45,14 @@ type Props = {
   font: Font;
   setFont: (newFont: Font) => unknown;
   timerState: SyncedTimerState;
-  addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
-  seed: number;
   forceReveal: () => unknown;
-  roomBackend: RoomBackend;
   generalSettings: GeneralSettings;
   restrictions: Restrictions;
   generalSetters: GeneralSetters;
 };
 
 export default function PlaySettings({
-  id,
+  gameId,
   color,
   setColor,
   shownDifficulties,
@@ -72,11 +64,8 @@ export default function PlaySettings({
   setShowGeneralTracker,
   font,
   setFont,
-  addEvent,
-  seed,
   timerState,
   forceReveal,
-  roomBackend,
   restrictions,
   generalSetters,
   generalSettings,
@@ -123,9 +112,8 @@ export default function PlaySettings({
                 </Accordion.Panel>
               </Accordion.Item>
               <TimerSection
+                gameId={gameId}
                 timerState={timerState}
-                addEvent={addEvent}
-                seed={seed}
                 isMobile={isMobile}
               />
               <RevealSection forceReveal={forceReveal} />
@@ -173,15 +161,18 @@ export default function PlaySettings({
                             event.currentTarget.checked
                               ? [...shownDifficulties, difficulty]
                               : shownDifficulties.filter(
-                                (d) => d !== difficulty,
-                              ),
+                                  (d) => d !== difficulty,
+                                ),
                           )
                         }
                         label={DIFFICULTY_NAMES[difficulty]}
                       />
                     ))}
                     <FontSelector font={font} setFont={setFont} />
-                    <SelectRightClickBehavior label="Square right click behavior" isCast={false} />
+                    <SelectRightClickBehavior
+                      label="Square right click behavior"
+                      isCast={false}
+                    />
                   </Stack>
                 </Accordion.Panel>
               </Accordion.Item>
@@ -192,17 +183,8 @@ export default function PlaySettings({
                 showGeneralTracker={showGeneralTracker}
                 setShowGeneralTracker={setShowGeneralTracker}
               />
-              <CreateBoardSection
-                id={id}
-                isMobile={isMobile}
-                roomBackend={roomBackend}
-              />
             </Accordion>
-            <BottomSection
-              id={id}
-              isMobile={isMobile}
-              roomBackend={roomBackend}
-            />
+            <DisconnectButton isMobile={isMobile} />
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>

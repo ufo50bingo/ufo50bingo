@@ -1,15 +1,14 @@
 import { Accordion, Button, Group, Modal, Stack, Text } from "@mantine/core";
 import { useState } from "react";
 import DurationInput from "./DurationInput";
-import { FullSyncedTimerEvent, SyncedTimerState } from "./useSyncedTimer";
+import { SyncedTimerState } from "./useSyncedTimer";
 import { useServerOffsetContext } from "../ServerOffsetContext";
-import { useParams } from "next/navigation";
+import addTimerEvent from "./addTimerEvent";
 
 interface Props {
+  gameId: number;
   timerState: SyncedTimerState;
-  addEvent: (newEvent: FullSyncedTimerEvent) => unknown;
   isMobile: boolean;
-  seed: number;
 }
 
 interface ModalProps extends Props {
@@ -40,14 +39,7 @@ export default function TimerSection(props: Props) {
   );
 }
 
-function TimerModal({
-  timerState,
-  close,
-  isMobile,
-  addEvent,
-  seed,
-}: ModalProps) {
-  const { id } = useParams<{ id: string }>();
+function TimerModal({ gameId, timerState, close, isMobile }: ModalProps) {
   const { getServerMsFromClientMs } = useServerOffsetContext();
   const [accumulatedDuration, setAccumulatedDuration] = useState<null | number>(
     () =>
@@ -78,12 +70,11 @@ function TimerModal({
               if (accumulatedDuration == null) {
                 return;
               }
-              await addEvent({
-                room_id: id,
-                seed: seed,
-                time: getServerMsFromClientMs(Date.now()),
+              await addTimerEvent({
+                gameId,
+                time: getServerMsFromClientMs(Date.now()) / 1000,
                 event: "set_duration",
-                duration: accumulatedDuration,
+                duration: accumulatedDuration / 1000,
               });
               close();
             }}

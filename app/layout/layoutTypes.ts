@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface Widget {
   id: string;
   x: number;
@@ -5,6 +7,7 @@ export interface Widget {
   width: number;
   height: number;
   lockAspectRatio?: boolean;
+  content: ReactNode;
 }
 
 export interface Rect {

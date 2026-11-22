@@ -7,6 +7,7 @@ import { useState } from "react";
 import { BingosyncColor, TBoard } from "../matches/parseBingosyncData";
 import LinkWithVariant from "../links/LinkWithVariant";
 import StandardBoardCover from "../StandardBoardCover";
+import StandardBoardWrapper from "../StandardBoardWrapper";
 
 const COLOR: BingosyncColor = "red";
 
@@ -39,23 +40,25 @@ export default function About({ initialBoard }: Props) {
           simultaneously. For example, you might see a board like this:
         </p>
         <div style={{ alignSelf: "center" }}>
-          <Board
-            board={board}
-            onClickSquare={(squareIndex: number) => {
-              const newBoard = [...board];
-              const newSquare = { ...board[squareIndex] };
-              newSquare.color = newSquare.color === "blank" ? COLOR : "blank";
-              newBoard[squareIndex] = newSquare;
-              setBoard(newBoard);
-            }}
-            boardCover={
-              isHidden && (
-                <StandardBoardCover onReveal={() => setIsHidden(false)} />
-              )
-            }
-            shownDifficulties={[]}
-            viewerColor={COLOR}
-          />
+          <StandardBoardWrapper>
+            <Board
+              board={board}
+              onClickSquare={(squareIndex: number) => {
+                const newBoard = [...board];
+                const newSquare = { ...board[squareIndex] };
+                newSquare.color = newSquare.color === "blank" ? COLOR : "blank";
+                newBoard[squareIndex] = newSquare;
+                setBoard(newBoard);
+              }}
+              boardCover={
+                isHidden && (
+                  <StandardBoardCover onReveal={() => setIsHidden(false)} />
+                )
+              }
+              shownDifficulties={[]}
+              viewerColor={COLOR}
+            />
+          </StandardBoardWrapper>
         </div>
         <p>
           After revealing the board you will have one minute to plan your
@@ -144,15 +147,16 @@ export default function About({ initialBoard }: Props) {
         <Title order={2}>Variants and Customization</Title>
         <p>
           Most players use the Standard variant (goal list), but UFO 50 Bingo
-          supports other variants as well. Select other variants on
-          the Non-League section of the{" "}
+          supports other variants as well. Select other variants on the
+          Non-League section of the{" "}
           <LinkWithVariant prefetch={false} href="/">
             Create Match
           </LinkWithVariant>{" "}
           tab to explore them!
         </p>
         <p>
-          In addition to selecting alternate goal lists, the "Custom" button on the Non-League section of the{" "}
+          In addition to selecting alternate goal lists, the "Custom" button on
+          the Non-League section of the{" "}
           <LinkWithVariant prefetch={false} href="/">
             Create Match
           </LinkWithVariant>{" "}

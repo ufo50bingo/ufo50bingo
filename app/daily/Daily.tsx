@@ -48,6 +48,7 @@ import LinkWithVariant from "../links/LinkWithVariant";
 import useSession from "../session/useSession";
 import StandardBoardCover from "../StandardBoardCover";
 import { PRACTICE_VARIANTS, PracticeVariant } from "../PracticeVariantContext";
+import StandardBoardWrapper from "../StandardBoardWrapper";
 
 const EditDaily = dynamic(() => import("./EditDaily"), { ssr: false });
 
@@ -94,9 +95,9 @@ export default function Daily({
   const finalMark = feed.findLastIndex((item) => item.type === "mark");
   const finalBoard =
     finalMark >= 0 &&
-      finalMark !== bingo &&
-      finalMark !== majority &&
-      finalMark !== blackout
+    finalMark !== bingo &&
+    finalMark !== majority &&
+    finalMark !== blackout
       ? finalMark
       : null;
 
@@ -172,7 +173,11 @@ export default function Daily({
                   </ActionIcon>
                 </Tooltip>
                 <Title order={1}>
-                  Daily {variant !== "standard" ? PRACTICE_VARIANTS[variant] + " " : ""}Bingo {date.month}/{date.day}
+                  Daily{" "}
+                  {variant !== "standard"
+                    ? PRACTICE_VARIANTS[variant] + " "
+                    : ""}
+                  Bingo {date.month}/{date.day}
                   {dailyData.title != null && dailyData.title != ""
                     ? ` — ${dailyData.title}`
                     : null}
@@ -227,63 +232,65 @@ export default function Daily({
                   color={color}
                   setColor={setColor}
                 />
-                <Board
-                  board={board}
-                  onClickSquare={async (squareIndex: number) => {
-                    if (completedIndexes.has(squareIndex)) {
-                      await db.dailyFeed.add({
-                        type: "clear",
-                        time: Date.now(),
-                        squareIndex,
-                        date: isoDate,
-                        attempt,
-                        variant,
-                      });
-                    } else {
-                      await db.dailyFeed.add({
-                        type: "mark",
-                        time: Date.now(),
-                        squareIndex,
-                        date: isoDate,
-                        attempt,
-                        variant,
-                      });
-                    }
-                  }}
-                  boardCover={
-                    isHidden && (
-                      <StandardBoardCover
-                        onReveal={async () => {
-                          await db.dailyFeed.add({
-                            type: "reveal",
-                            time: Date.now(),
-                            date: isoDate,
-                            attempt,
-                            squareIndex: null,
-                            variant,
-                          });
-                        }}
-                        content={
-                          <>
-                            <div>Click to reveal today's board.</div>
-                            <div>
-                              Your timer will start as soon as you reveal.
-                            </div>
-                            {attempt > 0 ? (
-                              <div>Start playing as soon as you reveal!</div>
-                            ) : (
+                <StandardBoardWrapper>
+                  <Board
+                    board={board}
+                    onClickSquare={async (squareIndex: number) => {
+                      if (completedIndexes.has(squareIndex)) {
+                        await db.dailyFeed.add({
+                          type: "clear",
+                          time: Date.now(),
+                          squareIndex,
+                          date: isoDate,
+                          attempt,
+                          variant,
+                        });
+                      } else {
+                        await db.dailyFeed.add({
+                          type: "mark",
+                          time: Date.now(),
+                          squareIndex,
+                          date: isoDate,
+                          attempt,
+                          variant,
+                        });
+                      }
+                    }}
+                    boardCover={
+                      isHidden && (
+                        <StandardBoardCover
+                          onReveal={async () => {
+                            await db.dailyFeed.add({
+                              type: "reveal",
+                              time: Date.now(),
+                              date: isoDate,
+                              attempt,
+                              squareIndex: null,
+                              variant,
+                            });
+                          }}
+                          content={
+                            <>
+                              <div>Click to reveal today's board.</div>
                               <div>
-                                Start playing when the timer hits 0:00.0!
+                                Your timer will start as soon as you reveal.
                               </div>
-                            )}
-                          </>
-                        }
-                      />
-                    )
-                  }
-                  shownDifficulties={["general"]}
-                  viewerColor={color}
-                />
+                              {attempt > 0 ? (
+                                <div>Start playing as soon as you reveal!</div>
+                              ) : (
+                                <div>
+                                  Start playing when the timer hits 0:00.0!
+                                </div>
+                              )}
+                            </>
+                          }
+                        />
+                      )
+                    }
+                    shownDifficulties={["general"]}
+                    viewerColor={color}
+                  />
+                </StandardBoardWrapper>
                 <Group justify="space-between">
                   <Text>
                     Seed: {dailyData.seed.toString().padStart(6, "0")}
@@ -387,9 +394,10 @@ export default function Daily({
               }
               leftSection={<IconClipboard size={16} />}
               onClick={() => {
-                const href = variant === "standard"
-                  ? `https://ufo50.bingo/daily?date=${isoDate}`
-                  : `https://ufo50.bingo/daily?date=${isoDate}&v=${variant}`;
+                const href =
+                  variant === "standard"
+                    ? `https://ufo50.bingo/daily?date=${isoDate}`
+                    : `https://ufo50.bingo/daily?date=${isoDate}&v=${variant}`;
                 let summary = `[Daily ${variant !== "standard" ? PRACTICE_VARIANTS[variant] + " " : ""}Bingo ${date.month}/${date.day}](<${href}>) — `;
                 let isFirst = true;
                 if (bingo != null) {
@@ -457,8 +465,9 @@ export default function Daily({
                         ? duration - completions[index - 1][2]
                         : duration;
                     const formattedDur = getDurationText(ms, false);
-                    return `${index + 1}. ${formattedDur} — ${plainBoard[squareIndex]
-                      }`;
+                    return `${index + 1}. ${formattedDur} — ${
+                      plainBoard[squareIndex]
+                    }`;
                   },
                 );
                 summary += "\n";

@@ -42,6 +42,7 @@ import useMembers, { PlayerMember } from "../common/useMembers";
 import useSquareColors from "../common/useSquareColors";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import { getMatchingRepoPasta } from "@/app/getMatchingRepoPasta";
+import StandardBoardWrapper from "@/app/StandardBoardWrapper";
 
 export type FoundItem = {
   foundGoal: FoundGoal<string, string, string>;
@@ -320,45 +321,48 @@ export default function Play({
     <>
       <Group align="stretch">
         <Stack gap={8}>
-          <Board
-            pasta={pasta}
-            board={squareColors.map((colors, index) => ({
-              name: squareNames[index],
-              color: colors.length > 0 ? colors[0] : "blank",
-            }))}
-            onClickSquare={async (squareIndex) => {
-              const isClear = squareColors[squareIndex].includes(selectedColor);
-              if (
-                !isClear &&
-                isLockout &&
-                squareColors[squareIndex].length > 0
-              ) {
-                return;
+          <StandardBoardWrapper>
+            <Board
+              pasta={pasta}
+              board={squareColors.map((colors, index) => ({
+                name: squareNames[index],
+                color: colors.length > 0 ? colors[0] : "blank",
+              }))}
+              onClickSquare={async (squareIndex) => {
+                const isClear =
+                  squareColors[squareIndex].includes(selectedColor);
+                if (
+                  !isClear &&
+                  isLockout &&
+                  squareColors[squareIndex].length > 0
+                ) {
+                  return;
+                }
+                try {
+                  const feedItem: FeedColorMark = {
+                    type: "color_mark",
+                    time: getServerMsFromClientMs(Date.now()) / 1000,
+                    userId,
+                    color: selectedColor,
+                    squareIndex,
+                    isClear,
+                  };
+                  await sendEvents([feedItem]);
+                } catch {}
+              }}
+              shownDifficulties={shownDifficulties}
+              viewerColor={selectedColor}
+              boardCover={
+                <SyncedTimerBoardCover
+                  isCast={false}
+                  timerState={timerState}
+                  isBoardVisibleByDefault={false}
+                  forceReveal={forceReveal}
+                />
               }
-              try {
-                const feedItem: FeedColorMark = {
-                  type: "color_mark",
-                  time: getServerMsFromClientMs(Date.now()) / 1000,
-                  userId,
-                  color: selectedColor,
-                  squareIndex,
-                  isClear,
-                };
-                await sendEvents([feedItem]);
-              } catch {}
-            }}
-            shownDifficulties={shownDifficulties}
-            viewerColor={selectedColor}
-            boardCover={
-              <SyncedTimerBoardCover
-                isCast={false}
-                timerState={timerState}
-                isBoardVisibleByDefault={false}
-                forceReveal={forceReveal}
-              />
-            }
-            isPlay={true}
-          />
+              isPlay={true}
+            />
+          </StandardBoardWrapper>
           <Group justify="space-between">
             <div style={{ display: "flex" }}>
               <div

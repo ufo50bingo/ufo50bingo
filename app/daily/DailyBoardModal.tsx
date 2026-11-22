@@ -7,6 +7,7 @@ import { useMemo, useRef } from "react";
 import getBoardAtIndex from "./getBoardAtIndex";
 import { BingosyncColor, TBoard } from "../matches/parseBingosyncData";
 import getDailyOverlays from "./getDailyOverlays";
+import StandardBoardWrapper from "../StandardBoardWrapper";
 
 type Props = {
   board: ReadonlyArray<string>;
@@ -51,14 +52,17 @@ export default function DailyBoardModal({
     >
       <Stack>
         <div ref={ref}>
-          <Board
-            board={board}
-            overlays={overlays}
-            onClickSquare={() => {}}
-            boardCover={null}
-            shownDifficulties={["general"]}
-            viewerColor={color}
-          />
+          <StandardBoardWrapper>
+            {" "}
+            <Board
+              board={board}
+              overlays={overlays}
+              onClickSquare={() => {}}
+              boardCover={null}
+              shownDifficulties={["general"]}
+              viewerColor={color}
+            />
+          </StandardBoardWrapper>
         </div>
         <Button
           leftSection={<IconClipboard size={16} />}

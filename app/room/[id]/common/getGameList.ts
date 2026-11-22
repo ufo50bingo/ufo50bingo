@@ -6,7 +6,7 @@ import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
 
 export type GameList = { [game: string]: string };
 
-const UFO_50_GAME_LIST = Object.fromEntries(
+export const UFO_50_GAME_LIST = Object.fromEntries(
   ORDERED_PROPER_GAMES.map((game) => [game, `/games/${game}.png`]),
 );
 const NES_50_GAME_LIST = Object.fromEntries(

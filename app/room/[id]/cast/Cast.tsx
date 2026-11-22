@@ -26,7 +26,7 @@ import {
   PlayerTrackerRestrictions,
   UFOPasta,
 } from "@/app/generator/ufoGenerator";
-import getGameList from "../common/getGameList";
+import getGameList, { UFO_50_GAME_LIST } from "../common/getGameList";
 import { GeneralSettings } from "../play/GeneralSection";
 import useCastRightClickBehavior from "./useCastRightClickBehavior";
 import { RightClickBehaviorContext } from "@/app/settings/RightClickBehaviorContext";
@@ -105,6 +105,7 @@ export default function Cast({
   const pasta = usePasta(fullParsedGame);
 
   const gameList = useMemo(() => getGameList(pasta), [pasta]);
+  const isUfo50GameList = gameList === UFO_50_GAME_LIST;
   const sortedGameList = useMemo(
     () => Object.keys(gameList).toSorted((a, b) => b.length - a.length),
     [gameList],
@@ -118,7 +119,7 @@ export default function Cast({
     [squareNames],
   );
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
-  const [isDetecting, setIsDetecting] = useState(false);
+  const [isDetecting, setIsDetecting] = useState(true);
 
   const generals = useGeneralCounts(feed, squares, subcategories);
 
@@ -328,7 +329,6 @@ export default function Cast({
                 timerState={timerState}
                 isCast={true}
                 userId={userId}
-                onCountdownStart={() => setIsDetecting(true)}
                 sendEvents={sendEvents}
               />
             )}
@@ -457,6 +457,7 @@ export default function Cast({
         members={allMembers}
         playedGameState={playedGameState}
         subcategoryIdToName={subcategoryIdToName}
+        isUfo50GameList={isUfo50GameList}
       />
       {sendEvents != null && userId != null && editingIndex != null && (
         <EditSquare

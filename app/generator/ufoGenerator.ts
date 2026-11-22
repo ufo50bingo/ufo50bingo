@@ -52,6 +52,13 @@ export type Counts = { [difficulty: string]: number };
 
 type RestrictionOption = string | { option: string; if: string };
 
+export type PlayerTrackerRestrictions = {
+  allowed_difficulty_tags: null | ReadonlyArray<string>;
+  allow_fast_sort: boolean;
+  show_on_card_tooltips: boolean;
+  show_multi_goal_games: boolean;
+};
+
 export interface UFOPasta {
   goals: UFODifficulties;
   tokens: Tokens;
@@ -69,6 +76,7 @@ export interface UFOPasta {
     category_counts: ReadonlyArray<{ [category: string]: number }>;
   };
   current_game_options?: string | { [game: string]: string };
+  player_tracker_restrictions?: PlayerTrackerRestrictions;
 }
 
 const SAME_LINE_INDICES = [

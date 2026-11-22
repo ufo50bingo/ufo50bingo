@@ -25,7 +25,6 @@ import RevealSection from "./RevealSection";
 import { useShouldShortenContext } from "@/app/settings/ShouldShortenContext";
 import GeneralSection, {
   GeneralSettings,
-  Restrictions,
   GeneralSetters,
 } from "./GeneralSection";
 import { useShouldShowRecentContext } from "@/app/settings/ShouldShowRecentContext";
@@ -38,6 +37,7 @@ import {
 } from "../common/useMembers";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import BottomSection from "../common/BottomSection";
+import { PlayerTrackerRestrictions } from "@/app/generator/ufoGenerator";
 
 type Props = {
   userId: number;
@@ -54,7 +54,7 @@ type Props = {
   timerState: SyncedTimerState;
   forceReveal: () => unknown;
   generalSettings: GeneralSettings;
-  restrictions: Restrictions;
+  restrictions: PlayerTrackerRestrictions;
   generalSetters: GeneralSetters;
   sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
   players: ReadonlyArray<PlayerMember>;
@@ -172,8 +172,10 @@ export default function PlaySettings({
                     <Text size="sm">Display difficulty tags for:</Text>
                     {ORDERED_DIFFICULTY.filter(
                       (difficulty) =>
-                        restrictions.canTagDifficultyFor == null ||
-                        restrictions.canTagDifficultyFor.includes(difficulty),
+                        restrictions.allowed_difficulty_tags == null ||
+                        restrictions.allowed_difficulty_tags.includes(
+                          difficulty,
+                        ),
                     ).map((difficulty) => (
                       <Checkbox
                         key={difficulty}

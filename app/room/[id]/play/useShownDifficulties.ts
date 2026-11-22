@@ -1,6 +1,6 @@
+import { PlayerTrackerRestrictions } from "@/app/generator/ufoGenerator";
 import { Difficulty, ORDERED_DIFFICULTY } from "@/app/goals";
 import { useCallback, useState } from "react";
-import { Restrictions } from "./GeneralSection";
 
 const DEFAULT_SHOWN: ReadonlyArray<Difficulty> = [
   "easy",
@@ -9,7 +9,7 @@ const DEFAULT_SHOWN: ReadonlyArray<Difficulty> = [
 ];
 
 export default function useShownDifficulties(
-  restrictions: Restrictions,
+  restrictions: PlayerTrackerRestrictions,
 ): [
   ReadonlyArray<Difficulty>,
   (newShownDifficulties: ReadonlyArray<Difficulty>) => unknown,
@@ -17,7 +17,8 @@ export default function useShownDifficulties(
   const [shownDifficulties, setShownDifficultiesRaw] = useState<
     ReadonlyArray<Difficulty>
   >(() => {
-    const allowed = restrictions.canTagDifficultyFor ?? ORDERED_DIFFICULTY;
+    const allowed = (restrictions.allowed_difficulty_tags ??
+      ORDERED_DIFFICULTY) as ReadonlyArray<Difficulty>;
     const defaultShown = allowed.filter((difficulty) =>
       DEFAULT_SHOWN.includes(difficulty),
     );

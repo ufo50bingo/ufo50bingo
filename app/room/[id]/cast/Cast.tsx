@@ -15,19 +15,19 @@ import useLocalState from "./useLocalState";
 import useBingosyncSocket from "../common/useBingosyncSocket";
 import useSounds from "../play/useSounds";
 import GameSelector from "./GameSelector";
-import { STANDARD_UFO } from "@/app/pastas/standardUfo";
-import findGoal, { FoundGoalWithCast } from "@/app/findGoal";
+import { FoundGoalWithCast } from "@/app/findGoal";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
 import useFont from "@/app/font/useFont";
 import useSyncedTimer from "../common/useSyncedTimer";
 import SyncedTimerBoardCover from "../common/SyncedTimerBoardCover";
 import SyncedTimer from "../common/SyncedTimer";
 import StartPauseButton from "../common/StartPauseButton";
-import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
-import { UFOPasta } from "@/app/generator/ufoGenerator";
+import {
+  PlayerTrackerRestrictions,
+  UFOPasta,
+} from "@/app/generator/ufoGenerator";
 import getGameList from "../common/getGameList";
-import { Restrictions, GeneralSettings } from "../play/GeneralSection";
-import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
+import { GeneralSettings } from "../play/GeneralSection";
 import useCastRightClickBehavior from "./useCastRightClickBehavior";
 import { RightClickBehaviorContext } from "@/app/settings/RightClickBehaviorContext";
 import {
@@ -39,19 +39,15 @@ import { GeneralCounts } from "./CastPage";
 import useSquareColors from "../common/useSquareColors";
 import useMembers from "../common/useMembers";
 import { useServerOffsetContext } from "../ServerOffsetContext";
-import { getMatchingRepoPasta } from "@/app/getMatchingRepoPasta";
 import CastBoardWithTrackers from "./CastBoardWithTrackers";
 import usePasta from "../common/usePasta";
+import useGeneralGoals from "../common/useGeneralGoals";
 
-const RESTRICTIONS: Restrictions = {
-  canTagDifficultyFor: null,
-  canUseFull: true,
-  canFilterOnCard: true,
-  canShowOnCardTooltips: true,
-  canFastSort: true,
-  canSegment: true,
-  canUseTerminalCodes: true,
-  canShowMultiGoalGames: true,
+export const CASTER_RESTRICTIONS: PlayerTrackerRestrictions = {
+  allowed_difficulty_tags: null,
+  allow_fast_sort: true,
+  show_on_card_tooltips: true,
+  show_multi_goal_games: true,
 };
 
 export type FoundStandardGeneral = FoundGoalWithCast<string, string, string>;
@@ -75,15 +71,8 @@ export default function Cast({
   userId,
   token,
 }: CastProps) {
-  const {
-    game,
-    feed: initialFeed,
-    fetchedPasta,
-    squares,
-    subcategories,
-  } = fullParsedGame;
+  const { game, feed: initialFeed, squares, subcategories } = fullParsedGame;
   const gameId = game.id;
-  const pastaId = game.pastaId;
   const isLockout = game.isLockout;
   const boardSize = game.width * game.height;
   const { getServerMsFromClientMs } = useServerOffsetContext();
@@ -203,29 +192,7 @@ export default function Cast({
     options: COUNT_POSITION,
   });
 
-  const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(() => {
-    return squareNames
-      .map((name, squareIndex) => {
-        const pastasToCheck =
-          pasta != null ? [pasta] : [STANDARD_UFO, NES_50_UFO, EVERY_GAME_UFO];
-        for (const pastaToCheck of pastasToCheck) {
-          const foundGoal = findGoal(name, pastaToCheck);
-          if (foundGoal != null) {
-            if (foundGoal.cast == null) {
-              return null;
-            }
-            return {
-              foundGoal: foundGoal as FoundStandardGeneral,
-              pasta: pastaToCheck,
-              squareIndex,
-            };
-          }
-        }
-        return null;
-      })
-      .filter((item) => item != null);
-  }, [pasta, squareNames]);
-
+  const generalGoals = useGeneralGoals(pasta, squareNames);
   const generalSettings: GeneralSettings = useMemo(
     () => ({
       sort: sortType,
@@ -297,7 +264,7 @@ export default function Cast({
       style={{ height: `${h ?? 300}px` }}
       settings={generalSettings}
       pasta={g.pasta}
-      restrictions={RESTRICTIONS}
+      restrictions={CASTER_RESTRICTIONS}
     />
   );
 

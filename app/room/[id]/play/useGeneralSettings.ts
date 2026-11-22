@@ -1,15 +1,12 @@
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
-import {
-  Restrictions,
-  GeneralSetters,
-  GeneralSettings,
-} from "./GeneralSection";
+import { GeneralSetters, GeneralSettings } from "./GeneralSection";
 import useLocalBool from "@/app/localStorage/useLocalBool";
+import { PlayerTrackerRestrictions } from "@/app/generator/ufoGenerator";
 
 export default function useGeneralSettings(
-  restrictions: Restrictions,
+  restrictions: PlayerTrackerRestrictions,
 ): [GeneralSettings, GeneralSetters] {
-  const [rawType, setType] = useLocalEnum({
+  const [type, setType] = useLocalEnum({
     key: "general_type",
     defaultValue: "full",
     options: ["full", "simple"],
@@ -19,16 +16,15 @@ export default function useGeneralSettings(
     defaultValue: "fast",
     options: ["fast", "alphabetical", "chronological"],
   });
-  const [rawShouldSegment, setShouldSegment] = useLocalBool({
+  const [shouldSegment, setShouldSegment] = useLocalBool({
     key: "should_segment",
     defaultValue: true,
   });
 
-  const type =
-    !restrictions.canUseFull && rawType === "full" ? "simple" : rawType;
   const sort =
-    !restrictions.canFastSort && rawSort === "fast" ? "chronological" : rawSort;
-  const shouldSegment = rawShouldSegment && restrictions.canSegment;
+    !restrictions.allow_fast_sort && rawSort === "fast"
+      ? "chronological"
+      : rawSort;
 
   return [
     { type, sort, shouldSegment },

@@ -97,6 +97,14 @@ const UfoPasta = zod.strictObject({
   current_game_options: zod
     .union([zod.string(), zod.record(zod.string(), zod.string())])
     .optional(),
+  player_tracker_restrictions: zod
+    .strictObject({
+      allowed_difficulty_tags: zod.union([zod.null(), zod.array(zod.string())]),
+      allow_fast_sort: zod.boolean(),
+      show_on_card_tooltips: zod.boolean(),
+      show_multi_goal_games: zod.boolean(),
+    })
+    .optional(),
 });
 
 export default function validateStr(json: string): Return {

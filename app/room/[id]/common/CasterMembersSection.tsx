@@ -192,8 +192,7 @@ export default function CasterMembersSection({
                           type: "member",
                           userId: p.userId,
                           time,
-                          // TODO: use favorite color
-                          playerColor: "red",
+                          playerColor: p.color ?? "red",
                           isInvite: true,
                           name: p.name,
                           overrideName: null,

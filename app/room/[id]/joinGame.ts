@@ -6,6 +6,8 @@ import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import broadcastToWebsockets from "../broadcastToWebsockets";
 import getSession from "@/app/getSession";
 import { refresh } from "next/cache";
+import { auth } from "@/app/auth";
+import { headers } from "next/headers";
 
 export default async function joinGame(
   gameId: number,
@@ -47,6 +49,10 @@ export default async function joinGame(
         ${overrideName}
     )`,
     broadcastToWebsockets(gameId, JSON.stringify(feedItem)),
+    auth.api.updateUser({
+      headers: await headers(),
+      body: { color: playerColor },
+    }),
   ]);
   refresh();
 }

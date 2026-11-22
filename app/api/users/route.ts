@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { unstable_cache } from "next/cache";
 import getSql from "@/app/getSql";
+import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 
 export const USER_CACHE_TAG = "user-cache";
 
@@ -9,6 +10,7 @@ export type BasicUser = {
   name: string;
   username: null | string;
   image: null | string;
+  color: null | BingosyncColor;
 };
 
 export async function GET() {
@@ -28,7 +30,8 @@ const getUsers = unstable_cache(
       id,
       name,
       username,
-      image
+      image,
+      color
     FROM "user";
   `;
     const users = result.map((raw) => ({
@@ -36,6 +39,7 @@ const getUsers = unstable_cache(
       name: raw.name,
       username: raw.username ?? null,
       image: raw.image ?? null,
+      color: raw.color ?? null,
     }));
     return users;
   },

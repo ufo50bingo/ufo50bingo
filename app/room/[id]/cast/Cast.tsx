@@ -18,6 +18,7 @@ import GameSelector from "./GameSelector";
 import { FoundGoalWithCast } from "@/app/findGoal";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
 import useFont from "@/app/font/useFont";
+import { getColorHex } from "@/app/color";
 import useSyncedTimer from "../common/useSyncedTimer";
 import SyncedTimerBoardCover from "../common/SyncedTimerBoardCover";
 import SyncedTimer from "../common/SyncedTimer";
@@ -97,7 +98,7 @@ export default function Cast({
     () => ({
       rightClickBehavior,
       setRightClickBehavior,
-      customColor: "#ee5f5b",
+      customColor: getColorHex("red"),
       setCustomColor: () => {},
     }),
     [rightClickBehavior, setRightClickBehavior],
@@ -473,6 +474,7 @@ export default function Cast({
           squareNames={squareNames}
           editingIndex={editingIndex}
           setEditingIndex={setEditingIndex}
+          isLockout={isLockout}
         />
       )}
       {reconnectModal}

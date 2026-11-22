@@ -1,9 +1,9 @@
-import { Alert, Button, Drawer, Stack } from "@mantine/core";
+import { Alert, Button, Drawer, SegmentedControl, Stack } from "@mantine/core";
 import ColorSelector from "../common/ColorSelector";
 import { useState } from "react";
 import { FeedColorMark, NewFeedItem } from "@/app/fetchFeed";
 import { useServerOffsetContext } from "../ServerOffsetContext";
-import { BingosyncColor } from "@/app/color";
+import { BingosyncColor, COLORS } from "@/app/color";
 
 type Props = {
   userId: number;
@@ -12,6 +12,7 @@ type Props = {
   editingIndex: number;
   setEditingIndex: (newEditingIndex: null | number) => unknown;
   sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
+  isLockout: boolean;
 };
 
 export default function EditSquare({
@@ -21,13 +22,23 @@ export default function EditSquare({
   editingIndex,
   setEditingIndex,
   sendEvents,
+  isLockout,
 }: Props) {
   const [newColor, setNewColor] = useState<null | BingosyncColor>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const activeColors = squareColors[editingIndex];
+  // for non-lockout you have to manually choose whether to clear or mark a color
+  const [isClearRaw, setIsClearRaw] = useState(() => activeColors.length > 0);
   const { getServerMsFromClientMs } = useServerOffsetContext();
 
-  // TODO: Support non-lockout
-  const isClear = squareColors[editingIndex].length > 0;
+  const isClear = isLockout ? activeColors.length > 0 : isClearRaw;
+  const showColorSelector = !isLockout || !isClear;
+  const selectableColors = isClear
+    ? activeColors
+    : COLORS.filter((color) => !activeColors.includes(color));
+
+  const selectedColor =
+    newColor != null && selectableColors.includes(newColor) ? newColor : null;
 
   return (
     <Drawer.Root
@@ -46,26 +57,40 @@ export default function EditSquare({
           <Stack>
             <Alert
               color="red"
-              title="Please be absolutely certain you need to manually change this square. If you aren't sure, carefully review the stream VOD or ask the players to pause."
+              title="Please be absolutely certain you need to manually change this square. If you aren't sure, pause the game and carefully review the VOD."
             />
             <span>
               <strong>{squareNames[editingIndex]}</strong>
             </span>
-            {!isClear && (
+            {!isLockout && (
+              <SegmentedControl
+                data={[
+                  { label: "Clear color", value: "clear" },
+                  { label: "Add color", value: "add" },
+                ]}
+                value={isClearRaw ? "clear" : "add"}
+                onChange={(value) => {
+                  setIsClearRaw(value === "clear");
+                  setNewColor(null);
+                }}
+              />
+            )}
+            {showColorSelector && (
               <ColorSelector
-                label="New color"
-                color={newColor}
+                label={isClear ? "Color to clear" : "New color"}
+                color={selectedColor}
                 setColor={setNewColor}
+                colors={selectableColors}
               />
             )}
             <Button
-              disabled={isSaving || (!isClear && newColor == null)}
+              disabled={
+                isSaving || (showColorSelector && selectedColor == null)
+              }
               onClick={async () => {
                 setIsSaving(true);
-                // TODO: Handle non-lockout
-                const color = isClear
-                  ? squareColors[editingIndex][0]
-                  : nullthrows(newColor);
+                const color =
+                  isLockout && isClear ? activeColors[0] : selectedColor!;
                 try {
                   const event: FeedColorMark = {
                     type: "color_mark",
@@ -89,11 +114,4 @@ export default function EditSquare({
       </Drawer.Content>
     </Drawer.Root>
   );
-}
-
-function nullthrows(color: null | BingosyncColor): BingosyncColor {
-  if (color == null) {
-    throw new Error("Must select a color before confirming!");
-  }
-  return color;
 }

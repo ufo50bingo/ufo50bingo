@@ -10,40 +10,19 @@ import useUndoRedoShortcuts from "./useUndoRedoShortcuts";
 import useWidgetInteractions from "./useWidgetInteractions";
 import type { Widget } from "./layoutTypes";
 import Board from "../Board";
-import { TBoard } from "../matches/parseBingosyncData";
+import { BingosyncColor } from "../color";
 
 type Props = {
   canvasWidth: number;
   canvasHeight: number;
 };
 
-const board: TBoard = [
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-  { name: "BARBUTA: Speak to 2 different Bean NPCs", color: null },
-];
+const squareNames: ReadonlyArray<string> = Array(25).fill(
+  "BARBUTA: Speak to 2 different Bean NPCs",
+);
+const squareColors: ReadonlyArray<ReadonlyArray<BingosyncColor>> = Array(
+  25,
+).fill([]);
 
 const initialWidgets: ReadonlyArray<Widget> = [
   {
@@ -71,7 +50,8 @@ const initialWidgets: ReadonlyArray<Widget> = [
     height: 475,
     content: (
       <Board
-        board={board}
+        squareNames={squareNames}
+        squareColors={squareColors}
         onClickSquare={() => {}}
         boardCover={null}
         shownDifficulties={[]}

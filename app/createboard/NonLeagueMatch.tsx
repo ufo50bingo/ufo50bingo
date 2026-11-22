@@ -94,7 +94,7 @@ export default function NonLeagueMatch({ visible }: Props) {
   const [roomName, setRoomName] = useState("");
   const [password, setPassword] = useState("");
   const [isLockout, setIsLockout] = useState(true);
-  const [isPublicRaw, setIsPublicRaw] = useState(true);
+  const [isPublic, setIsPublic] = useState(true);
   const [isCreationInProgress, setIsCreationInProgress] = useState(false);
   const [createdPassword, setCreatedPassword] = useState("");
   const [createdIds, setCreatedIds] = useState<ReadonlyArray<string>>([]);
@@ -121,7 +121,6 @@ export default function NonLeagueMatch({ visible }: Props) {
     });
   }, []);
 
-  const isPublic = isPublicRaw && isLockout;
   const metadata = METADATA.find((d) => d.name === variant)!;
 
   const format = metadata.name === "10 Cherry Race" ? "Custom" : rawFormat;
@@ -500,27 +499,19 @@ export default function NonLeagueMatch({ visible }: Props) {
             />
             <Tooltip
               label={
-                isLockout ? (
-                  <span>
-                    Stats about public games will be visible to all users on the
-                    Matches tab.
-                    <br />
-                    Users will still need the password to join the Bingosync
-                    room.
-                  </span>
-                ) : (
-                  <span>Only Lockout games can be made Public.</span>
-                )
+                <span>
+                  Stats about public games will be visible to all users on the
+                  Matches tab.
+                  <br />
+                  Users will still need the password to join the Bingosync room.
+                </span>
               }
             >
               <div>
                 <Checkbox
                   checked={isPublic}
-                  disabled={!isLockout}
                   label="Public"
-                  onChange={(event) =>
-                    setIsPublicRaw(event.currentTarget.checked)
-                  }
+                  onChange={(event) => setIsPublic(event.currentTarget.checked)}
                 />
               </div>
             </Tooltip>

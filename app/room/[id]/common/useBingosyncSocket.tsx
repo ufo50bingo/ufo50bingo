@@ -4,6 +4,9 @@ import { SoundChoices } from "./NotificationsSection";
 import { NewFeed, NewFeedItem } from "@/app/fetchFeed";
 import persistEvents from "./persistEvents";
 
+const PING_MESSAGE = JSON.stringify({ type: "ping" });
+const HEARTBEAT_INTERVAL_MS = 10000;
+
 type Props = {
   gameId: number;
   initialFeed: NewFeed;
@@ -16,8 +19,7 @@ type Response = {
   feed: NewFeed;
   reconnectModal: null | undefined | ReactNode;
   sendEvents:
-    | null
-    | ((newEvents: ReadonlyArray<NewFeedItem>) => Promise<boolean>);
+    null | ((newEvents: ReadonlyArray<NewFeedItem>) => Promise<boolean>);
 };
 
 export default function useBingosyncSocket({
@@ -99,32 +101,77 @@ export default function useBingosyncSocket({
     );
     authenticatedRef.current = false;
 
+    // prevent showing modal if connection was closed on purpose
+    let isCleanedUp = false;
+    let isDisconnected = false;
+    let awaitingReply = false;
+
+    const markDisconnected = () => {
+      if (isCleanedUp || isDisconnected) {
+        return;
+      }
+      isDisconnected = true;
+      authenticatedRef.current = false;
+      setShouldReconnect(true);
+      try {
+        socket.close();
+      } catch {}
+    };
+
+    const sendPing = () => {
+      if (socket.readyState !== WebSocket.OPEN) {
+        return;
+      }
+      awaitingReply = true;
+      socket.send(PING_MESSAGE);
+    };
+
+    const heartbeat = setInterval(() => {
+      if (socket.readyState !== WebSocket.OPEN) {
+        return;
+      }
+      if (awaitingReply) {
+        // we didn't get a response from the last ping, so assume disconnection
+        markDisconnected();
+        return;
+      }
+      sendPing();
+    }, HEARTBEAT_INTERVAL_MS);
+
+    // after sleep or a long time in the background, the socket may be dead.
+    // ping right away
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        awaitingReply = false;
+        sendPing();
+      }
+    };
+
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    window.addEventListener("offline", markDisconnected);
+
     socket.onopen = () => {
       if (token != null) {
-        socket.send(
-          JSON.stringify({
-            type: "authenticate",
-            token,
-          }),
-        );
+        socket.send(JSON.stringify({ type: "authenticate", token }));
       }
       setShouldReconnect(false);
     };
 
-    socket.onclose = () => {
-      console.log("*** Disconnected from server, try refreshing. ***");
-      setTimeout(() => {
-        if (
-          socketRef.current == null ||
-          socketRef.current.readyState !== socketRef.current.OPEN
-        ) {
-          setShouldReconnect(true);
-        }
-      }, 1000);
-    };
+    socket.onclose = markDisconnected;
 
-    socket.onmessage = async (evt) => {
-      const data = JSON.parse(evt.data);
+    socket.onmessage = (evt) => {
+      // any message receieved satisfies the heartbeat
+      awaitingReply = false;
+
+      let data;
+      try {
+        data = JSON.parse(evt.data);
+      } catch {
+        return;
+      }
+      if (data.type === "pong") {
+        return;
+      }
       if (data.type === "authenticated") {
         authenticatedRef.current = true;
         return;
@@ -137,6 +184,10 @@ export default function useBingosyncSocket({
     socketRef.current = socket;
 
     return () => {
+      isCleanedUp = true;
+      clearInterval(heartbeat);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      window.removeEventListener("offline", markDisconnected);
       socket.close();
       socketRef.current = null;
       authenticatedRef.current = false;

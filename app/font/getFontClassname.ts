@@ -6,6 +6,9 @@ const UFO_50_FONT = localFont({
   src: "./ufo50.woff2",
 });
 
+// for places that set their own font size, e.g. layout widgets
+export const UFO_50_FONT_FAMILY = UFO_50_FONT.style.fontFamily;
+
 export default function getFontClassname(
   font: Font,
   isSmall: boolean = false,

@@ -1,17 +1,21 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
 
 type Props = {
-  text: string;
-  hasOverlays: boolean;
+  text: ReactNode;
   maxFontSize: number;
   minFontSize: number;
+  // total space in px to leave free inside the parent on each axis
+  horizontalPadding?: number;
+  verticalPadding?: number;
 };
 
 export default function SquareText({
   text,
-  hasOverlays,
   maxFontSize,
   minFontSize,
+  horizontalPadding = 0,
+  verticalPadding = 0,
 }: Props) {
   const divRef = useRef<HTMLDivElement>(null);
   const [fontSize, setFontSize] = useState(maxFontSize);
@@ -25,8 +29,8 @@ export default function SquareText({
       return;
     }
 
-    const maxWidth = parent.clientWidth - 10;
-    const maxHeight = parent.clientHeight - (hasOverlays ? 30 : 10);
+    const maxWidth = parent.clientWidth - horizontalPadding;
+    const maxHeight = parent.clientHeight - verticalPadding;
 
     cur.style.width = `${maxWidth}px`;
 
@@ -51,7 +55,14 @@ export default function SquareText({
     }
     cur.style.fontSize = `${lower}px`;
     setFontSize(lower);
-  }, [text, hasOverlays, maxFontSize, minFontSize, dummy]);
+  }, [
+    text,
+    maxFontSize,
+    minFontSize,
+    horizontalPadding,
+    verticalPadding,
+    dummy,
+  ]);
 
   useEffect(() => {
     const parent = divRef.current?.parentElement;

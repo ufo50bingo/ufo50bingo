@@ -10,7 +10,7 @@ export interface BaseWidget extends Rect {
   z: number;
 }
 
-interface HasColor {
+export interface HasColor {
   color:
     | { type: "player_color"; playerNum: number }
     | { type: "custom_color"; color: string };

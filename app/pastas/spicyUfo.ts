@@ -33,6 +33,9 @@ export const SPICY_UFO = {
         "VELGRESS: Beat lv 1 defeating all enemies with the blaster AND lv 2 stepping on all bomb blocks in one run",
         "VELGRESS: Hold 101+ coins and all three keys at once",
         "VELGRESS: Hold 111+ coins at once"
+	    ],
+	    "planetzoldath": [
+	      "PLANET ZOLDATH: Have 5+ of each resource at once"
       ],
       "devilition": [
         "DEVILITION: Beat Round 5; Bomb, rocket, and cannon cannot kill any demons in the run",
@@ -112,12 +115,13 @@ export const SPICY_UFO = {
       "railheist": [
         "RAIL HEIST: Beat levels 1, 2, and 3 while knocking every lawman off the train",
         "RAIL HEIST: Beat levels 1 through 5 with a speed record of 18 or less",
-        "RAIL HEIST: LAZY-COPS allowed; Collect the Angel and Devil stars on {{rh_level}}, {{rh_level}}, and {{rh_level}}",
+		    "RAIL HEIST: Beat 6 levels, punching every lawman at least once",
         "RAIL HEIST: LAZY-COPS allowed; Obtain both the Devil Star & Time Star on 5 levels (Levels 1-3 excluded)"
       ],
       "vainger": [
         "VAINGER: Defeat {{vainger_boss}} with at least two modules in {{vainger_slot}}",
         "VAINGER: Obtain {{vainger_item}} from three different sectors",
+		    "VAINGER: Collect 7 shield upgrades",
         "VAINGER: Collect a keycode with zero game-overs in the run (no resets)"
       ],
       "rockonisland": [
@@ -180,7 +184,8 @@ export const SPICY_UFO = {
         "PILOT QUEST: Obtain the Blaster & defeat both Unktomi and Big Borlg at least once"
       ],
       "miniandmax": [
-        "MINI & MAX: Collect a big shiny, then escape the cave",
+        "MINI & MAX: Collect a big shiny, then escape the cave the way you entered",
+		    "MINI & MAX: Collect a shiny quest reward from 6 NPCs",
         "MINI & MAX: Free the brainwashed mouse by defeating the Plasmage, using only blocks in combat"
       ],
       "combatants": [
@@ -229,7 +234,7 @@ export const SPICY_UFO = {
       "planetzoldath": [
         "PLANET ZOLDATH: Collect the dungeon map piece in under 7 minutes of Zoldath time",
         "PLANET ZOLDATH: Collect the trade map piece in under 8 minutes of Zoldath time",
-        "PLANET ZOLDATH: Have 5+ of each resource at once"
+		    "PLANET ZOLDATH: Collect the dungeon or trade Map Piece without picking up any energy cubes"
       ],
       "attactics": [
         "ATTACTICS: Beat levels 1-12 at least once each without losing any flags",
@@ -317,11 +322,9 @@ export const SPICY_UFO = {
         "DIVERS: Win a fight against at least one Mech"
       ],
       "railheist": [
-        "RAIL HEIST: Beat 6 levels, punching every lawman at least once",
-        "RAIL HEIST: LAZY-COPS allowed; Beat levels 9-15 bringing back a money crate intact"
+		    "RAIL HEIST: LAZY-COPS allowed; Beat levels {{rh_hard_lv}} {{rh_hard_req2}}"
       ],
       "vainger": [
-        "VAINGER: Collect 7 shield upgrades",
         "VAINGER: Collect 2 Clone materials"
       ],
       "rockonisland": [
@@ -386,13 +389,13 @@ export const SPICY_UFO = {
         "ELFAZAR’S HAT: Defeat every possible enemy and boss in stages 1 & 3 in a run"
       ],
       "pilotquest": [
-        "PILOT QUEST: Activate all 4 teleporters",
+        "PILOT QUEST: Activate all 4 teleporters at once",
         "PILOT QUEST: Have 2 friends working at the crash site",
         "PILOT QUEST: Purchase a yo-yo upgrade"
       ],
       "miniandmax": [
         "MINI & MAX: Collect 5 Big Shinies",
-        "MINI & MAX: Fill 12/16 upgrade slots"
+		    "MINI & MAX: In one run, obtain the Dog Armor, Chitin Armor, Mol-Dok Food, and Sacred Wings"
       ],
       "combatants": [
         "COMBATANTS: ANTS-ANTS allowed; Beat {{ants_med}}, {{ants_med}}, and {{ants_med}}",
@@ -412,7 +415,7 @@ export const SPICY_UFO = {
       ],
       "cyberowls": [
         "CYBER OWLS: Beat Chicago without using charged fist & Beat Congo without exploding any barrels or trucks",
-        "CYBER OWLS: Use GETM-EOUT; Beat 8 random rescue minigames in a row"
+        "CYBER OWLS: Use GETM-EOUT; Beat Rescue 10"
       ]
     },
     "hard": {
@@ -448,8 +451,7 @@ export const SPICY_UFO = {
         "VELGRESS: Gold disk without being stunned by anything"
       ],
       "planetzoldath": [
-        "PLANET ZOLDATH: Collect 2 map pieces, always killing all enemies on every screen if you hold capable equipment",
-        "PLANET ZOLDATH: Collect the dungeon or trade Map Piece without picking up any energy cubes"
+        "PLANET ZOLDATH: Collect 2 map pieces, always killing all enemies on every screen if you hold capable equipment"
       ],
       "attactics": [
         "ATTACTICS: Gold disk",
@@ -531,8 +533,7 @@ export const SPICY_UFO = {
         "DIVERS: Reach level 5 and collect an emblem"
       ],
       "railheist": [
-        "RAIL HEIST: LAZY-COPS allowed; Beat 6 levels (1-3 & 18 excluded) {{rh_hard_req1}}",
-        "RAIL HEIST: LAZY-COPS allowed; Beat levels {{rh_hard_lv}} {{rh_hard_req2}}"
+        "RAIL HEIST: LAZY-COPS allowed; Beat 6 levels (1-3 & 18 excluded) {{rh_hard_req1}}"
       ],
       "vainger": [
         "VAINGER: Equip 3+ modules, then obtain the Keycode in Theta Sector",
@@ -592,11 +593,10 @@ export const SPICY_UFO = {
         "ELFAZAR’S HAT: Max out the bonus game meter twice in a run"
       ],
       "pilotquest": [
-        "PILOT QUEST: Activate 3 teleporters",
+        "PILOT QUEST: Activate 3 teleporters at once",
         "PILOT QUEST: Craft 8 ingots at the table"
       ],
       "miniandmax": [
-        "MINI & MAX: Collect a shiny quest reward from 6 NPCs",
         "MINI & MAX: Have 350 shinies at once without collecting any Big Shinies"
       ],
       "combatants": [
@@ -701,12 +701,12 @@ export const SPICY_UFO = {
         "WARPTANK: Collect 21 coffees"
       ],
       "waldorfsjourney": [
-        "WALDORF’S JOURNEY: Cherry disk with at least 91 shells",
+        "WALDORF’S JOURNEY: Cherry disk with 91+ shells",
         "WALDORF’S JOURNEY: Cherry disk; No puffins collected & at least 4 weather vanes must be activated during the run"
       ],
       "porgy": [
-        "PORGY: Show 35%+ Completion in the library with 2 bosses defeated",
-        "PORGY: Defeat 3 bosses"
+        "PORGY: Show 40%+ Completion in the library with 2 bosses defeated",
+        "PORGY: Defeat 4 bosses"
       ],
       "oniondelivery": [
         "ONION DELIVERY: Cherry disk with 7+ onions delivered each day",
@@ -736,7 +736,8 @@ export const SPICY_UFO = {
       ],
       "vainger": [
         "VAINGER: Equip all 4 modules and collect both stabilizers",
-        "VAINGER: Collect 3 clones and 15 shield upgrades"
+        "VAINGER: Collect 3 clones and 15 shield upgrades",
+		    "VAINGER: Enter Central Control"
       ],
       "rockonisland": [
         "ROCK ON! ISLAND: CLUB-PASS allowed; Beat {{roi_vh_level}}, {{roi_vh_level}}, and {{roi_vh_level}} all perfect with {{roi_vh_rest}}",
@@ -818,39 +819,96 @@ export const SPICY_UFO = {
         "CAMPANELLA 3: Beat the game with at least 16/20 star waves"
       ],
       "cyberowls": [
-        "CYBER OWLS: Cherry disk (No OOB)"
+        "CYBER OWLS: Cherry disk (No OOB)",
+		    "CYBER OWLS: Use GETM-EOUT; Beat Rescue 25"
       ]
     },
     "general": {
-      "goldcherry1": [
-        "Cherry Disk 3 games in a single column ({{chrono_alpha}})",
-        "Cherry Disk 4 games from 4 columns ({{chrono_alpha}})",
-        "Cherry Disk 5 games from 5 rows of the library ({{chrono_alpha}})",
-        "Gold Disk 5 games in a single row ({{chrono_alpha}})",
-        "Gold Disk 4 games in a single genre (platform, arcade, puzzle, etc.)",
-        "Gold disk 7 games with at least one from each row ({{chrono_alpha}})",
-        "Gold Disk {{cons_games}}",
-        "Gold disk 8 games from 8 different columns ({{chrono_alpha}})",
-        "Gold Disk a 2x2 square of games in the library ({{2x2}})"
+      "gift": [
+    		"Collect {{gifts_card}} gifts from games on this card",
+    		"Collect 10 gifts - 2 from each row ({{chrono_alpha}})",
+        "Collect 10 gifts - 1 from each column ({{chrono_alpha}})"
       ],
-      "giftbossleaderboard": [
-        "Collect 10 gifts - 2 from each row ({{chrono_alpha}})",
-        "Collect 10 gifts - 1 from each column ({{chrono_alpha}})",
-        "Collect 12 gifts - 6 from the first 25, 6 from the second 25 in {{chrono_alpha}}",
-        "Collect {{gifts_card}} gifts from games on this card",
-        "Collect {{gifts_card}} gifts from games on this card",
-        "Defeat {{gen_boss}}",
-        "Defeat {{gen_boss}}",
-        "Defeat {{gen_boss}}",
-        "Beat {{gen_board}}"
-      ],
-      "misc": [
-        "Beat {{levels_special}}",
-        "Gold Disk {{gold_option}} or {{gold_option}}",
-        "Cherry Disk {{cherry_option}} or {{cherry_option}}",
-        "Gold Disk {{gold_rows_chrono}}",
-        "Gold Disk {{gold_rows_alpha}}",
-        "{{levels_option}} or {{levels_option}}"
+      "bossleaderboard": [
+        "Defeat 12 bosses from games on this card",
+        {
+          "name": "Defeat a boss in 9 games on this card",
+          "restriction": {
+            "count": 9,
+            "options": [
+              "barbuta",
+              "ninpek",
+              {
+                "option": "paintchase",
+                "if": "EVEN-COAT"
+              },
+              {
+                "option": "mortol",
+                "if": "OPEN-TOMB"
+              },
+              "velgress",
+              "kickclub",
+              "mooncat",
+              {
+                "option": "blockkoala",
+                "if": "WORM-1234"
+              },
+              "campanella",
+              "porgy",
+              "caramelcaramel",
+              "hotfoot",
+              {
+                "option": "railheist",
+                "if": "LAZY-COPS"
+              },
+              "vainger",
+              "mortolii",
+              "fisthell",
+              "overbold",
+              "campanella2",
+			        "valbrace",
+              "rakshasa",
+              "starwaspir",
+              "elfazarshat",
+              "miniandmax",
+              {
+                "option": "combatants",
+                "if": "ANTS-ANTS"
+              },
+              "seasidedrive",
+              "campanella3",
+              "cyberowls"
+            ],
+            "fallback": "Defeat a boss in 9 games"
+          }
+        },
+        {
+          "name": "Defeat 2 bosses in 6 games on this card",
+          "restriction": {
+            "count": 7,
+            "options": [
+              "kickclub",
+              "campanella",
+              "porgy",
+              "caramelcaramel",
+              "hotfoot",
+              "vainger",
+              "mortolii",
+              "fisthell",
+              "campanella2",
+              "rakshasa",
+              "starwaspir",
+              "elfazarshat",
+              "miniandmax",
+              "seasidedrive",
+              "campanella3",
+              "cyberowls"
+            ],
+            "fallback": "Defeat 2 bosses in 6 games"
+          }
+        },
+    		"Beat {{gen_board}}",
+    		"{{gen_boss}}"
       ],
       "goldcherrydarkcherry": [
         "Gold disk {{gold_card}} games on this card",
@@ -859,21 +917,263 @@ export const SPICY_UFO = {
         "Satisfy the Dark Cherry condition for 2 games on this card"
       ],
       "theme": [
-        "TRIATHLON II: Cherry Disk 3 of the 5 “SPORT” games",
-        "EPIC GAMER: Gold disk 3 “EPIC PLAY” games",
-        "PUZZLER II: Gold disk 3 “PUZZLE” games",
-        "CAMPANELLA TRILOGY II: Cherry disk 2 of the 3 Campanella Trilogy games & collect the gift in the third",
-        "ALPHA TRILOGY II: Cherry Disk Velgress, Overbold, and Quibble Race",
-        "ARCADE ACE II: Cherry Disk 4 of the 16 “ARCADE” games",
-        "RACER II: Cherry Disk Paint Chase, The Big Bell Race, and Quibble Race",
-        "DAY JOB II: Earn the gift in 2 and gold disk the third: Rail Heist, Bug Hunter, Onion Delivery",
-        "EXPLORER: Visit 30+ rooms in Barbuta, 20+ in Mooncat, and reach 40%+ exploration in Vainger",
-        "AMY II: Gold disk 2/3 and earn the gift in the other, using Amy: Fist Hell, Party House, Hot Foot",
-        "PILOT PARTY II: Collect the Gift in ALL 6 games: Campanella 1/2/3, Planet Zoldath, Pilot Quest, The Big Bell Race",
-        "WAR IS GOOD: Beat story missions: 2 in Avianos, 5 in Combatants, 12 in Attactics",
-        "SHOOTER: Gold disk 3 of the 8 “SHOOTER” games",
-        "ADVENTUREVANIA: Defeat 9 total bosses across Vainger, Porgy, Mini & Max, and Warptank, with 1+ in 3 of the games"
+        {
+          "name": "TRIATHLON II: Cherry Disk 3 of the 5 “SPORT” games",
+          "restriction": {
+            "count": 1,
+            "options": [
+              "bushidoball",
+              "thebigbellrace",
+              "hotfoot",
+              "pingolf",
+              "hypercontender"
+            ],
+            "fallback": "TRIATHLON II: Cherry Disk 3 of the 5 “SPORT” games"
+          }
+        },
+        {
+          "name": "EPIC GAMER: Gold disk 3 “EPIC PLAY” games",
+          "restriction": {
+            "count": 1,
+            "options": [
+              "mortol",
+              "attactics",
+              "avianos",
+              "blockkoala",
+              "camouflage",
+              "golfaria",
+              "warptank",
+              "porgy",
+              "partyhouse",
+              "divers",
+              "railheist",
+              "vainger",
+              "rockonisland",
+              "valbrace",
+              "grimstone",
+              "lordsofdiskonia",
+              "nightmanor",
+              "pilotquest",
+              "miniandmax",
+              "combatants"
+            ],
+            "fallback": "EPIC GAMER: Gold disk 3 “EPIC PLAY” games"
+          }
+        },
+        {
+          "name": "PUZZLER II: Gold disk 3 “PUZZLE” games",
+          "restriction": {
+            "count": 1,
+            "options": [
+              "bughunter",
+              "mortol",
+              "devilition",
+              "blockkoala",
+              "camouflage",
+              "warptank",
+              "nightmanor"
+            ],
+            "fallback": "PUZZLER II: Gold disk 3 “PUZZLE” games"
+          }
+        },
+        {
+          "name": "CAMPANELLA TRILOGY II: Cherry disk 2 of the 3 Campanella Trilogy games & collect the gift in the third",
+          "restriction": {
+            "count": 1,
+            "options": [
+              "campanella",
+              "campanella2",
+              "campanella3"
+            ],
+            "fallback": "CAMPANELLA TRILOGY II: Cherry disk 2 of the 3 Campanella Trilogy games & collect the gift in the third"
+          }
+        },
+        {
+          "name": "ALPHA TRILOGY II: Cherry Disk Velgress, Overbold, and Quibble Race",
+          "restriction": {
+            "count": 1,
+            "options": [
+              "velgress",
+              "overbold",
+              "quibblerace"
+            ],
+            "fallback": "ALPHA TRILOGY II: Cherry Disk Velgress, Overbold, and Quibble Race"
+          }
+        },
+        {
+          "name": "ARCADE ACE II: Cherry Disk 4 of the 16 “ARCADE” games",
+          "restriction": {
+            "count": 1,
+            "options": [
+              "ninpek",
+              "paintchase",
+              "magicgarden",
+              "velgress",
+              "attactics",
+              "kickclub",
+              "campanella",
+              "waldorfsjourney",
+              "oniondelivery",
+              "caramelcaramel",
+              "fisthell",
+              "overbold",
+              "starwaspir",
+              "elfazarshat",
+              "seasidedrive",
+              "campanella3"
+            ],
+            "fallback": "ARCADE ACE II: Cherry Disk 4 of the 16 “ARCADE” games"
+          }
+        },
+        {
+          "name": "RACER II: Cherry Disk Paint Chase, The Big Bell Race, and Quibble Race",
+          "restriction": {
+            "count": 1,
+            "options": [
+              "paintchase",
+              "thebigbellrace",
+              "quibblerace"
+            ],
+            "fallback": "RACER II: Cherry Disk Paint Chase, The Big Bell Race, and Quibble Race"
+          }
+        },
+        {
+          "name": "DAY JOB II: Earn the gift in 2 and gold disk the third: Rail Heist, Bug Hunter, Onion Delivery",
+          "restriction": {
+            "count": 1,
+            "options": [
+              "railheist",
+              "bughunter",
+              "oniondelivery"
+            ],
+            "fallback": "DAY JOB II: Earn the gift in 2 and gold disk the third: Rail Heist, Bug Hunter, Onion Delivery"
+          }
+        },
+        {
+          "name": "EXPLORER: Visit 30+ rooms in Barbuta, 20+ in Mooncat, and reach 40%+ exploration in Vainger",
+          "restriction": {
+            "count": 1,
+            "options": [
+              "barbuta",
+              "mooncat",
+              "vainger"
+            ],
+            "fallback": "EXPLORER: Visit 30+ rooms in Barbuta, 20+ in Mooncat, and reach 40%+ exploration in Vainger"
+          }
+        },
+        {
+          "name": "AMY II: Gold disk 2/3 and earn the gift in the other, using Amy: Fist Hell, Party House, Hot Foot",
+          "restriction": {
+            "count": 1,
+            "options": [
+              "fisthell",
+              "partyhouse",
+              "hotfoot"
+            ],
+            "fallback": "AMY II: Gold disk 2/3 and earn the gift in the other, using Amy: Fist Hell, Party House, Hot Foot"
+          }
+        },
+        {
+          "name": "PILOT PARTY II: Collect the Gift in ALL 6 games: Campanella 1/2/3, Planet Zoldath, Pilot Quest, The Big Bell Race",
+          "restriction": {
+            "count": 1,
+            "options": [
+              "campanella",
+              "campanella2",
+              "campanella3",
+              "planetzoldath",
+              "pilotquest",
+              "thebigbellrace"
+            ],
+            "fallback": "PILOT PARTY II: Collect the Gift in ALL 6 games: Campanella 1/2/3, Planet Zoldath, Pilot Quest, The Big Bell Race"
+          }
+        },
+        {
+          "name": "WAR IS GOOD: Beat story missions: 2 in Avianos, 5 in Combatants, 12 in Attactics",
+          "restriction": {
+            "count": 1,
+            "options": [
+              "avianos",
+              "combatants",
+              "attactics"
+            ],
+            "fallback": "WAR IS GOOD: Beat story missions: 2 in Avianos, 5 in Combatants, 12 in Attactics"
+          }
+        },
+        {
+          "name": "SHOOTER: Gold disk 3 of the 8 “SHOOTER” games",
+          "restriction": {
+            "count": 1,
+            "options": [
+              "porgy",
+              "caramelcaramel",
+              "overbold",
+              "starwaspir",
+              "elfazarshat",
+              "seasidedrive",
+              "campanella3",
+              "cyberowls"
+            ],
+            "fallback": "SHOOTER: Gold disk 3 of the 8 “SHOOTER” games"
+          }
+        },
+        {
+          "name": "ROLE PLAYER II: Level up all your highest-level character 9 total times across Grimstone, Divers, and Valbrace, w/ 3+ in 2 games)",
+          "restriction": {
+            "count": 1,
+            "options": [
+              "grimstone",
+              "divers",
+              "valbrace"
+            ],
+            "fallback": "ROLE PLAYER II: Level up all your highest-level character 9 total times across Grimstone, Divers, and Valbrace, w/ 3+ in 2 games)"
+          }
+        },
+        {
+          "name": "REVOLUTIONARY II: Do 2/3: Mortol gold disk, Cyber Owls gold disk (no OOB), Rock On! Island gift",
+          "restriction": {
+            "count": 1,
+            "options": [
+              "mortol",
+              "cyberowls",
+              "rockonisland"
+            ],
+            "fallback": "REVOLUTIONARY II: Do 2/3: Mortol gold disk, Cyber Owls gold disk (no OOB), Rock On! Island gift"
+          }
+        },
+        {
+          "name": "ADVENTUREVANIA: Defeat 9 total bosses across Vainger, Porgy, Mini & Max, and Warptank, with 1+ in 3 of the games",
+          "restriction": {
+            "count": 1,
+            "options": [
+              "vainger",
+              "porgy",
+              "miniandmax",
+              "warptank"
+            ],
+            "fallback": "ADVENTUREVANIA: Defeat 9 total bosses across Vainger, Porgy, Mini & Max, and Warptank, with 1+ in 3 of the games"
+          }
+        }
       ]
+    },
+    "Misc": {
+      "Misc": [
+        "Beat {{levels_special}}",
+        "Gold Disk {{gold_option}} or {{gold_option}}",
+        "Cherry Disk {{cherry_option}} or {{cherry_option}}",
+        "Gold Disk {{gold_rows_chrono}}",
+        "Gold Disk {{gold_rows_alpha}}",
+        "{{levels_option}} or {{levels_option}}",
+		    "Cherry Disk 3 games in a single column ({{chrono_alpha}})",
+        "Cherry Disk 4 games from 4 columns ({{chrono_alpha}})",
+        "Cherry Disk 5 games from 5 rows of the library ({{chrono_alpha}})",
+        "Gold Disk 5 games in any row ({{chrono_alpha}})",
+        "Gold Disk 4 games in a single genre (platform, arcade, puzzle, etc.)",
+        "Gold disk 7 games, with at least one from each row ({{chrono_alpha}})",
+        "Gold Disk {{cons_games}}",
+        "Gold disk 8 games from 8 different columns ({{chrono_alpha}})",
+        "Gold Disk a 2x2 square of games in the library ({{2x2}})"
+      ],
     }
   },
   "tokens": {
@@ -892,9 +1192,6 @@ export const SPICY_UFO = {
     "gold_card": [
       "5",
       "6"
-    ],
-    "dark_cherry": [
-      "2"
     ],
     "cherry_option": [
       "Rail Heist",
@@ -964,7 +1261,7 @@ export const SPICY_UFO = {
       "15 bosses"
     ],
     "gen_board": [
-      "a number 1 top score on 2 arcade leaderboards; must gold disk the games to count",
+      "a number 1 top score on 2 arcade leaderboards; must gold disk to count",
       "a top 2 score on 3 arcade leaderboards"
     ],
     "chrono_alpha": [
@@ -973,7 +1270,8 @@ export const SPICY_UFO = {
     ],
     "gifts_card": [
       "10",
-      "11"
+      "11",
+	    "12"
     ],
     "2x2": [
       "Chronology",
@@ -1399,10 +1697,45 @@ export const SPICY_UFO = {
     "medium": 6,
     "hard": 5,
     "veryhard": 4,
-    "general": 5
+    "general": 4,
+    "Misc": 1,
   },
+  "other_category_counts": [
+    {
+      "rows": 6,
+      "cols": 6,
+      "category_counts": {
+        "easy": 6,
+        "medium": 10,
+        "hard": 10,
+        "veryhard": 4,
+        "general": 4,
+        "Misc": 2,
+      }
+    }
+  ],
+  "current_game_options": "$ufo50",
   "general_categories": [
-    "general"
+    "general",
+    "Misc"
+  ],
+  "category_difficulty_tiers": [
+    [
+      "easy"
+    ],
+    [
+      "medium"
+    ],
+    [
+      "hard"
+    ],
+    [
+      "veryhard"
+    ],
+    [
+      "general",
+      "Misc"
+    ]
   ],
   "draft": {
     "excluded_categories": [
@@ -1422,19 +1755,5 @@ export const SPICY_UFO = {
         "veryhard": 2
       }
     ]
-  },
-    "other_category_counts": [
-    {
-      "rows": 6,
-      "cols": 6,
-      "category_counts": {
-        "easy": 6,
-        "medium": 10,
-        "hard": 10,
-        "veryhard": 4,
-        "general": 6,
-      }
-    }
-  ],
-  "current_game_options": "$ufo50"
+  }
 } as const;

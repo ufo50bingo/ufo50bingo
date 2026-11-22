@@ -66,10 +66,11 @@ export const CAMPANELLA3_UFO = {
       ],
     },
   },
-  "general_categories": ["general"],
+  general_categories: ["general"],
   tokens: {},
   category_counts: {
     medium: 24,
     general: 1,
   },
+  current_game_options: "$infer",
 };

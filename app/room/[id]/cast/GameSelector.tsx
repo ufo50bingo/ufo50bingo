@@ -10,7 +10,7 @@ type Props = {
   game: string | null;
   onChange: (newGame: ProperGame | null) => void;
   terminalCodes: Set<string>;
-  gameList: ReadonlyArray<string>;
+  gameList: { [game: string]: string };
 };
 
 export default function GameSelector({
@@ -22,7 +22,7 @@ export default function GameSelector({
 }: Props) {
   const data = useMemo(
     () =>
-      gameList.map((game) => ({
+      Object.keys(gameList).map((game) => ({
         value: game,
         label:
           GAME_NAMES[game as ProperGame] != null

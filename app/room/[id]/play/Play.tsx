@@ -30,7 +30,6 @@ import GeneralGoal from "../cast/GeneralGoal";
 import useShowAll from "../common/useShowAll";
 import { getAllTerminalCodes, getGameToGoals } from "../cast/findAllGames";
 import getGameList from "../common/getGameList";
-import getIsNes50 from "../common/getIsNes50";
 import { Game, ORDERED_GAMES } from "@/app/goals";
 import GameInfo from "../cast/GameInfo";
 import InfoCard from "../cast/InfoCard";
@@ -116,12 +115,7 @@ export default function Play({
   }, [fetchedPasta, pastaId]);
 
   const gameToGoals = useMemo(
-    () =>
-      getGameToGoals(
-        squareNames,
-        getGameList(pasta === NES_50_UFO || getIsNes50(squareNames)),
-        pasta,
-      ),
+    () => getGameToGoals(squareNames, Object.keys(getGameList(pasta)), pasta),
     [pasta, squareNames],
   );
   const terminalCodes = useMemo(

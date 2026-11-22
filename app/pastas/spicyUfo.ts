@@ -1422,5 +1422,6 @@ export const SPICY_UFO = {
         "veryhard": 2
       }
     ]
-  }
+  },
+  "current_game_options": "$ufo50"
 } as const;

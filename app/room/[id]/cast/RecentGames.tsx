@@ -9,14 +9,14 @@ type Props = {
   recentGames: ReadonlyArray<CurrentGame>;
   limit: number;
   font: Font;
-  isNes50: boolean;
+  gameList: { [game: string]: string };
 };
 
 export default function RecentGames({
   recentGames,
   limit,
   font,
-  isNes50,
+  gameList,
 }: Props) {
   const filtered = recentGames.filter((recentGame, index) => {
     const prevGame = index > 0 ? recentGames[index - 1] : null;
@@ -46,7 +46,7 @@ export default function RecentGames({
             startTime={startTime}
             endTime={endTime}
             font={font}
-            isNes50={isNes50}
+            gameList={gameList}
           />
         </div>
       </SideCell>,

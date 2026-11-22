@@ -10,6 +10,7 @@ import getNonGeneralCategories from "./createboard/getNonGeneralCategories";
 import joinValues from "./joinValues";
 import { getMatchingRepoPasta } from "./getMatchingRepoPasta";
 import getAllCastOptions from "./createboard/getAllCastOptions";
+import getGameList from "./room/[id]/common/getGameList";
 
 export type FeedColorMark = {
   type: "color_mark";
@@ -354,11 +355,13 @@ function parseGame(result: SQLResult): ParsedGame {
   return { pastaId };
 }
 
-function fetchSubcategoriesSql(sql: SQLTemplate, pasta: UFOPasta): SQL {
-  const toFetch = getAllSubcategories(
-    pasta.goals,
-    getNonGeneralCategories(pasta),
-  ).union(getAllCastOptions(pasta));
+function fetchSubcategoriesSql(sql: SQLTemplate, pasta: null | UFOPasta): SQL {
+  let toFetch = new Set(Object.keys(getGameList(pasta)));
+  if (pasta != null) {
+    toFetch = toFetch
+      .union(getAllSubcategories(pasta.goals, getNonGeneralCategories(pasta)))
+      .union(getAllCastOptions(pasta));
+  }
   const subcategoryValues = [];
   for (const sc of toFetch) {
     subcategoryValues.push(sql`${sc}`);
@@ -383,10 +386,12 @@ function parseSubcategories(
   return result.map((raw) => ({ subcategoryId: raw.id, name: raw.name }));
 }
 
+type FetchDataView = "cast" | "play" | "spectate";
+
 export async function fetchData(
   gameId: number,
   alreadyFetched: ReadonlyArray<NewFeedItem>,
-  isPlay: boolean,
+  view: FetchDataView,
 ): Promise<{
   squares: ReadonlyArray<SquareWithId>;
   feed: NewFeed;
@@ -402,11 +407,17 @@ export async function fetchData(
     [fetchPlayerColorChangeSql(sql, gameId), parsePlayerColorChangeResult],
     [fetchDisconnectSql(sql, gameId), parseDisconnectResult],
   ];
-  if (!isPlay) {
+  if (view !== "play") {
     feedFetchPairs = feedFetchPairs.concat([
       [fetchGoalProgressSql(sql, gameId), parseGoalProgressResult],
       [fetchCurrentSubcategorySql(sql, gameId), parseCurrentSubcategoryResult],
       [fetchPlayerOrderSql(sql, gameId), parsePlayerOrderResult],
+    ]);
+  }
+  if (view === "spectate") {
+    feedFetchPairs = feedFetchPairs.concat([
+      [fetchMemberSql(sql, gameId), parseMemberResult],
+      [fetchDisconnectSql(sql, gameId), parseDisconnectResult],
     ]);
   }
   const results = await sql.transaction([
@@ -430,7 +441,7 @@ export async function fetchData(
   }
   const pasta = fetchedPasta ?? repoPasta;
   let subcategories: ReadonlyArray<ParsedSubcategory> = [];
-  if (pasta != null && !isPlay) {
+  if (view !== "play") {
     subcategories = parseSubcategories(await fetchSubcategoriesSql(sql, pasta));
   }
   return { squares, feed, fetchedPasta, pastaId, subcategories };

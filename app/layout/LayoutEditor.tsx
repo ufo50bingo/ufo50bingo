@@ -12,6 +12,8 @@ import type { Widget } from "./layoutTypes";
 import Board from "../Board";
 import { TBoard } from "../matches/parseBingosyncData";
 import PlayedGame from "../room/[id]/cast/PlayedGame";
+import { STANDARD_UFO } from "../pastas/standardUfo";
+import getGameList from "../room/[id]/common/getGameList";
 
 type Props = {
   canvasWidth: number;
@@ -68,7 +70,7 @@ const initialWidgets: ReadonlyArray<Widget> = [
         startTime={0}
         endTime={1000}
         font="default"
-        isNes50={false}
+        gameList={getGameList(STANDARD_UFO)}
       />
     ),
   },

@@ -387,18 +387,17 @@ export const NOZZLO_UFO = {
     Normal: 20,
     general: 5,
   },
-  "general_categories": ["general"],
-  "draft": {
-    "excluded_categories": [
-      "general"
-    ],
-    "category_counts": [
+  general_categories: ["general"],
+  draft: {
+    excluded_categories: ["general"],
+    category_counts: [
       {
-        "Normal": 13
+        Normal: 13,
       },
       {
-        "Normal": 12
-      }
-    ]
-  }
+        Normal: 12,
+      },
+    ],
+  },
+  current_game_options: "$ufo50",
 } as const;

@@ -68,6 +68,7 @@ export interface UFOPasta {
     excluded_categories: ReadonlyArray<string>;
     category_counts: ReadonlyArray<{ [category: string]: number }>;
   };
+  current_game_options?: string | { [game: string]: string };
 }
 
 const SAME_LINE_INDICES = [

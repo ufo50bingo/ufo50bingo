@@ -387,18 +387,17 @@ export const BLITZ_UFO = {
     medium: 20,
     general: 5,
   },
-  "general_categories": ["general"],
-  "draft": {
-    "excluded_categories": [
-      "general"
-    ],
-    "category_counts": [
+  general_categories: ["general"],
+  draft: {
+    excluded_categories: ["general"],
+    category_counts: [
       {
-        "medium": 13,
+        medium: 13,
       },
       {
-        "medium": 12,
-      }
-    ]
-  }
+        medium: 12,
+      },
+    ],
+  },
+  current_game_options: "$ufo50",
 } as const;

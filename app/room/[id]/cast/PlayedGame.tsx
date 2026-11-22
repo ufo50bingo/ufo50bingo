@@ -4,14 +4,13 @@ import Duration from "@/app/practice/Duration";
 import { Font } from "@/app/font/useFont";
 import getFontClassname from "@/app/font/getFontClassname";
 import { useServerOffsetContext } from "../ServerOffsetContext";
-import { ORDERED_PROPER_GAMES, ProperGame } from "@/app/goals";
 
 type Props = {
   game: string;
   startTime: number;
   endTime: null | undefined | number;
   font: Font;
-  isNes50: boolean;
+  gameList: { [game: string]: string };
 };
 
 export default function PlayedGame({
@@ -19,17 +18,21 @@ export default function PlayedGame({
   startTime,
   endTime,
   font,
-  isNes50,
+  gameList,
 }: Props) {
   const { getClientMsFromServerMs } = useServerOffsetContext();
-  const href = isNes50
-    ? `/nes50boxart/${encodeURIComponent(game)}.png`
-    : ORDERED_PROPER_GAMES.includes(game as ProperGame)
-      ? `/games/${game}.png`
-      : `/cobwebs/cobwebs0.png`;
+  const href = gameList[game];
   return (
     <div className={classes.container}>
-      <img alt={game} src={href} className={classes.gameIcon} />
+      {href != null && href !== "" ? (
+        <img
+          alt={game}
+          src={href == null || href === "" ? undefined : href}
+          className={classes.gameIcon}
+        />
+      ) : (
+        <div className={classes.gameIcon}>{game}</div>
+      )}
       <div className={classes.tag}>
         <span className={getFontClassname(font)}>
           {endTime == null ? (

@@ -2218,6 +2218,20 @@ export const STANDARD_UFO = {
           }
         }
       ]
+    },
+    "Library General": {
+      "Golds in Row": [
+        "Gold disk 3 games in row {{library_row}}"
+      ],
+      "Cherries in Row": [
+        "Cherry disk 2 games in row {{library_row}}"
+      ],
+      "Gifts in Row": [
+        "Collect 5 gifts from row {{library_row}}"
+      ],
+      "Golds in Col": [
+        "Gold disk 2 games in column {{library_col}}"
+      ]
     }
   },
   "tokens": {
@@ -2578,18 +2592,26 @@ export const STANDARD_UFO = {
       "7",
       "8",
       "9"
+    ],
+    "library_row": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "library_col": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
     ]
   },
-  "category_counts": {
-    "easy": 5,
-    "medium": 7,
-    "hard": 6,
-    "veryhard": 2,
-    "general": 5
-  },
-  "general_categories": [
-    "general"
-  ],
   "sort_orders": {
     "railheist_order": [
       "A Simple Heist",
@@ -2656,9 +2678,54 @@ export const STANDARD_UFO = {
       "This Is It"
     ]
   },
+  "general_categories": [
+    "general",
+    "Library General"
+  ],
+  "category_difficulty_tiers": [
+    [
+      "easy"
+    ],
+    [
+      "medium"
+    ],
+    [
+      "hard"
+    ],
+    [
+      "veryhard"
+    ],
+    [
+      "general",
+      "Library General"
+    ]
+  ],
+  "category_counts": {
+    "easy": 5,
+    "medium": 7,
+    "hard": 6,
+    "veryhard": 2,
+    "general": 5,
+    "Library General": 0
+  },
+  "other_category_counts": [
+    {
+      "rows": 6,
+      "cols": 6,
+      "category_counts": {
+        "easy": 6,
+        "medium": 11,
+        "hard": 10,
+        "veryhard": 3,
+        "general": 5,
+        "Library General": 1
+      }
+    }
+  ],
   "draft": {
     "excluded_categories": [
-      "general"
+      "general",
+      "Library General"
     ],
     "category_counts": [
       {
@@ -2674,5 +2741,6 @@ export const STANDARD_UFO = {
         "veryhard": 2
       }
     ]
-  }
+  },
+  "current_game_options": "$ufo50"
 } as const;

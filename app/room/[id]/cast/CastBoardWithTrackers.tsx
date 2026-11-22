@@ -107,7 +107,7 @@ export default function CastBoardWithTrackers({
     rightPlayer != null ? (allPlayerGames.get(rightPlayer.userId) ?? []) : [];
   const isDouble = generalGoals.length > 0 && countPosition === "side_by_side";
 
-  const boardSize = game.game.width * game.game.height;
+  const boardSize = game.game.rows * game.game.cols;
 
   const highlights = useMemo(() => {
     const highlights: Array<Array<BingosyncColor>> = Array(boardSize)
@@ -172,7 +172,7 @@ export default function CastBoardWithTrackers({
           />
         )}
       </SideColumn>
-      <StandardBoardWrapper rows={game.game.height} columns={game.game.width}>
+      <StandardBoardWrapper rows={game.game.rows} columns={game.game.cols}>
         <Board
           pasta={pasta}
           board={squareColors.map((colors, index) => ({
@@ -185,8 +185,8 @@ export default function CastBoardWithTrackers({
           shownDifficulties={shownDifficulties}
           viewerColor={null}
           castInfo={{ leftColor, rightColor }}
-          rows={game.game.height}
-          columns={game.game.width}
+          rows={game.game.rows}
+          columns={game.game.cols}
         />
       </StandardBoardWrapper>
       <SideColumn isDouble={isDouble}>

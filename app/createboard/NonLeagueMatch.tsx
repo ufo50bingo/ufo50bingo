@@ -438,6 +438,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                         [metadata.name]: newCounts,
                       });
                     }}
+                    targetSum={boardSize.rows * boardSize.cols}
                   />
                 </>
               )}
@@ -557,6 +558,8 @@ export default function NonLeagueMatch({ visible }: Props) {
                       ...common,
                       roomName: roomName + " — Card 1",
                       goals: card1,
+                      rows: 5,
+                      cols: 5,
                     }),
                   );
                   promises.push(
@@ -564,6 +567,8 @@ export default function NonLeagueMatch({ visible }: Props) {
                       ...common,
                       roomName: roomName + " — Card 2",
                       goals: card2,
+                      rows: 5,
+                      cols: 5,
                     }),
                   );
                 } else {
@@ -583,6 +588,8 @@ export default function NonLeagueMatch({ visible }: Props) {
                           (metadata.type === "Custom" && customUfo != null)),
                       isLockout,
                       goals: getSerializedPasta(),
+                      rows: format === "Custom" ? boardSize.rows : 5,
+                      cols: format === "Custom" ? boardSize.cols : 5,
                       fullPasta: metadata.type === "Custom" ? customUfo : null,
                       leagueInfo: null,
                     }),

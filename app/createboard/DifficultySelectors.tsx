@@ -8,12 +8,14 @@ type Props = {
   counts: Counts;
   setCounts: (newCounts: Counts) => unknown;
   availableCounts: Counts;
+  targetSum: number;
 };
 
 export default function DifficultySelectors({
   counts,
   setCounts,
   availableCounts,
+  targetSum,
 }: Props) {
   const sum = Object.keys(counts).reduce((acc, key) => acc + counts[key], 0);
   const hasEnoughGoals = Object.keys(counts).every(
@@ -50,11 +52,11 @@ export default function DifficultySelectors({
           </Group>
         </>
       )}
-      {sum !== 25 && (
+      {sum !== targetSum && (
         <Alert
           variant="light"
           color="red"
-          title="Error: Difficulty counts must sum to 25"
+          title={`Error: Difficulty counts must sum to ${targetSum}`}
         />
       )}
       {!hasEnoughGoals && (

@@ -8,6 +8,7 @@ type Props = {
   counts: Counts;
   setCounts: (newCounts: Counts) => unknown;
   excludedGames?: ReadonlySet<string>;
+  targetSum: number;
 };
 
 export default function UFODifficultySelectors({
@@ -16,6 +17,7 @@ export default function UFODifficultySelectors({
   counts,
   setCounts,
   excludedGames,
+  targetSum,
 }: Props) {
   const availableCounts = useMemo(() => {
     const available: { [key: string]: number } = {};
@@ -36,6 +38,7 @@ export default function UFODifficultySelectors({
       availableCounts={availableCounts}
       counts={counts}
       setCounts={setCounts}
+      targetSum={targetSum}
     />
   );
 }

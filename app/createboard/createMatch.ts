@@ -32,6 +32,8 @@ interface CommonMatchProps {
   isCustom: boolean;
   isDraft: boolean;
   isLockout: boolean;
+  rows: number;
+  cols: number;
 }
 
 interface Props extends CommonMatchProps {
@@ -47,11 +49,12 @@ export default async function createMatch({
   isCustom,
   isDraft,
   isLockout,
-  goals: goalsRaw,
+  goals,
   leagueInfo: _leagueInfo,
   fullPasta,
+  rows,
+  cols,
 }: Props): Promise<string> {
-  const goals = goalsRaw.concat(goalsRaw.slice(0, 11));
   const userId = await getUserId();
   const sql = getSql(false);
   const pastaToStore = getFullPasta(fullPasta, variant);
@@ -101,8 +104,8 @@ export default async function createMatch({
     is_lockout,
     creator_id,
     pasta_id,
-    width,
-    height
+    rows,
+    cols
   ) VALUES (
     ${roomName},
     ${password},
@@ -113,8 +116,8 @@ export default async function createMatch({
     ${bool(isLockout)},
     ${userId},
     ${hash},
-    6,
-    6
+    ${rows},
+    ${cols}
   ) RETURNING id`;
 
   const mainCreateSql = sql`

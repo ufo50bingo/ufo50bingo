@@ -349,8 +349,8 @@ function fetchGameSql(sql: SQLTemplate, gameId: number): SQL {
       g.creator_id,
       g.variant,
       g.is_lockout,
-      g.width,
-      g.height,
+      g.rows,
+      g.cols,
       g.vod_url,
       g.vod_match_start_seconds,
       g.is_custom,
@@ -394,8 +394,8 @@ function parseGameResult(result: SQLResult): ParsedGame {
       : null;
   return {
     id: row.id,
-    width: row.width,
-    height: row.height,
+    rows: row.rows,
+    cols: row.cols,
     name: row.name,
     variant: row.variant,
     dateCreated: row.unixtime,
@@ -474,8 +474,8 @@ export type LeagueGame = {
 
 export type ParsedGame = {
   id: number;
-  width: number;
-  height: number;
+  rows: number;
+  cols: number;
   name: null | string;
   variant: string;
   dateCreated: number;

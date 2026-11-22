@@ -48,7 +48,7 @@ export default function SingleMatchView({ game }: Props) {
   // TODO: support non-lockout
   const squareColors = useSquareColors(
     game.feed,
-    game.game.width * game.game.height,
+    game.game.rows * game.game.cols,
     true,
   );
   const getScore = useGetScore(squareColors);

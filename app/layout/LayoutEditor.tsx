@@ -52,7 +52,7 @@ const initialWidgets: ReadonlyArray<Widget> = [
     y: 50,
     width: 100,
     height: 100,
-    content: <div>Widget 1</div>,
+    content: <div>Random widget</div>,
   },
   {
     id: "2",
@@ -61,24 +61,24 @@ const initialWidgets: ReadonlyArray<Widget> = [
     width: 100,
     height: 100,
     lockAspectRatio: true,
-    content: <div>Widget 2</div>,
+    content: <div>Locked aspect ratio</div>,
   },
   {
     id: "3",
     x: 350,
     y: 50,
-    width: 100,
-    height: 100,
+    width: 525,
+    height: 475,
     content: (
       <Board
-        board={board.slice(0, 20)}
+        board={board}
         onClickSquare={() => {}}
         boardCover={null}
         shownDifficulties={[]}
         viewerColor="red"
-        maxFontSize={30}
-        minFontSize={10}
-        rows={4}
+        maxFontSize={100}
+        minFontSize={9.1}
+        rows={5}
         columns={5}
       />
     ),

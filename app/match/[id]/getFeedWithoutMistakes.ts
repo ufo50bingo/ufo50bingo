@@ -1,5 +1,6 @@
 import { BingosyncColor } from "@/app/color";
 import { NewFeed, NewFeedItem } from "@/app/fetchFeed";
+import BoardState, { BoardStateParams } from "./BoardState";
 
 // if a square has a color T -> F -> T or F -> T -> F within 5 seconds,
 // it's considered a mistake and both changes are removed.
@@ -7,13 +8,10 @@ import { NewFeed, NewFeedItem } from "@/app/fetchFeed";
 // anything
 export default function getFeedWithoutMistakes(
   feed: NewFeed,
-  boardSize: number,
-  isLockout: boolean,
+  boardStateParams: BoardStateParams,
 ): NewFeed {
   const finalFeed: Array<NewFeedItem | null> = [];
-  const allSquareColors: Array<Set<BingosyncColor>> = Array(boardSize)
-    .fill(null)
-    .map((_) => new Set());
+  const boardState = new BoardState(boardStateParams);
   // value is an array of size boardSize with either null (if this square
   // has never changed to this color) or {time, feedFinalIndex} where time
   // is the actual server time the change happened, and index is the index
@@ -28,27 +26,16 @@ export default function getFeedWithoutMistakes(
       finalFeed.push(item);
       continue;
     }
-    const squareColors = allSquareColors[item.squareIndex];
+    const wasMeaningful = boardState.apply(item);
+    if (!wasMeaningful) {
+      continue;
+    }
     let lastChanges = lastColorChangeTimeAndIndex.get(item.color);
     if (lastChanges == null) {
-      lastChanges = Array(boardSize).fill(null);
+      lastChanges = Array(boardState.rows * boardState.cols).fill(null);
       lastColorChangeTimeAndIndex.set(item.color, lastChanges);
     }
     const lastChange = lastChanges[item.squareIndex];
-    if (item.isClear) {
-      if (!squareColors.has(item.color)) {
-        continue;
-      }
-      squareColors.delete(item.color);
-    } else {
-      if (
-        squareColors.has(item.color) ||
-        (isLockout && squareColors.size > 0)
-      ) {
-        continue;
-      }
-      squareColors.add(item.color);
-    }
     // we only get here if this item made a legitimate change to a square color
     if (lastChange != null && item.time - lastChange.time < 5) {
       finalFeed[lastChange.finalFeedIndex] = null;

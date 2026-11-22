@@ -68,18 +68,25 @@ export function MatchRow({ game, isMobile }: Props) {
   const { players, casters } = useMembers(feed);
   const teamsMap = useTeams(players);
 
-  const feedWithoutMistakes = useMemo(
-    () => getFeedWithoutMistakes(feed, info.rows * info.cols, info.isLockout),
-    [feed, info.cols, info.isLockout, info.rows],
+  const boardStateParams = useMemo(
+    () => ({
+      rows: info.rows,
+      cols: info.cols,
+      isLockout: info.isLockout,
+    }),
+    [info.cols, info.isLockout, info.rows],
   );
 
-  const teamsWithResults = useTeamsWithResults({
+  const feedWithoutMistakes = useMemo(
+    () => getFeedWithoutMistakes(feed, boardStateParams),
+    [boardStateParams, feed],
+  );
+
+  const teamsWithResults = useTeamsWithResults(
+    teamsMap,
     feedWithoutMistakes,
-    teams: teamsMap,
-    isLockout: info.isLockout,
-    rows: info.rows,
-    cols: info.cols,
-  });
+    boardStateParams,
+  );
 
   const hasWinner =
     teamsWithResults.length > 0 && teamsWithResults[0].winType != null;

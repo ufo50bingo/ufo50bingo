@@ -1,7 +1,7 @@
 import { BingosyncColor } from "@/app/color";
 import { NewFeed } from "@/app/fetchFeed";
-import getBingoLines from "@/app/generator/getBingoLines";
 import { WinType } from "@/app/matches/matchUtil";
+import BoardState, { BoardStateParams } from "./BoardState";
 
 type TeamResult = {
   color: BingosyncColor;
@@ -9,24 +9,11 @@ type TeamResult = {
   winType: null | WinType;
 };
 
-type Props = {
-  feedWithoutMistakes: NewFeed;
-  isLockout: boolean;
-  rows: number;
-  cols: number;
-};
-
-export default function getMatchResult({
-  feedWithoutMistakes,
-  isLockout,
-  rows,
-  cols,
-}: Props) {
-  const allSquareColors: Array<Set<BingosyncColor>> = Array(rows * cols)
-    .fill(null)
-    .map((_) => new Set());
-  const bingoLinesObj = getBingoLines(rows, cols);
-  const bingoLines = bingoLinesObj.rowsAndCols.concat(bingoLinesObj.diagonals);
+export default function getMatchResult(
+  feedWithoutMistakes: NewFeed,
+  boardStateParams: BoardStateParams,
+) {
+  const boardState = new BoardState(boardStateParams);
   // the 0th index is the first time reaching score 1. The 1st index
   // is the first time reaching score 2. We keep this as an array so mismarks
   // (where a player reaches score N and then later goes back to N-1) still have
@@ -38,31 +25,21 @@ export default function getMatchResult({
     if (item.type !== "color_mark") {
       continue;
     }
-    const squareColors = allSquareColors[item.squareIndex];
+    const wasMeaningful = boardState.apply(item);
+    if (!wasMeaningful) {
+      continue;
+    }
     let firstScoreTimes = firstTimeReachingScore.get(item.color);
     if (firstScoreTimes == null) {
       firstScoreTimes = [];
       firstTimeReachingScore.set(item.color, firstScoreTimes);
     }
     if (item.isClear) {
-      if (!squareColors.has(item.color)) {
-        continue;
-      }
-      squareColors.delete(item.color);
       firstScoreTimes.pop();
     } else {
-      if (
-        squareColors.has(item.color) ||
-        (isLockout && squareColors.size > 0)
-      ) {
-        continue;
-      }
-      squareColors.add(item.color);
       firstScoreTimes.push(feedIndex);
     }
-    const hasBingo = bingoLines.some((line) =>
-      line.every((squareIndex) => allSquareColors[squareIndex].has(item.color)),
-    );
+    const hasBingo = boardState.hasBingo(item.color);
     const prevFirstBingoTime = firstBingoTime.get(item.color);
     if (hasBingo && prevFirstBingoTime == null) {
       firstBingoTime.set(item.color, feedIndex);
@@ -71,12 +48,7 @@ export default function getMatchResult({
     }
   }
 
-  const scores = new Map<BingosyncColor, number>();
-  for (const squareColors of allSquareColors) {
-    for (const color of squareColors) {
-      scores.set(color, (scores.get(color) ?? 0) + 1);
-    }
-  }
+  const scores = boardState.getScores();
 
   const teams: Array<TeamResult> = [...scores.entries()].map(
     ([color, score]) => ({ color, score, winType: null }),

@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import getSql from "../getSql";
 import getIsAdmin from "../getIsAdmin";
 import { LocalDate, toISODate } from "./localDate";
@@ -25,4 +26,5 @@ export default async function saveDailyBoard(
       WHERE
         date = ${toISODate(date)}
         AND variant = ${variant}`;
+  revalidatePath(`/daily/b/${variant}/${toISODate(date)}`);
 }

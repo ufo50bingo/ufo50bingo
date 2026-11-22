@@ -81,7 +81,8 @@ export default function Play({
   });
   const [font, setFont] = useFont();
 
-  const selectedColor = members.get(userId)?.playerColor ?? "red";
+  const selfUser = members.get(userId)!;
+  const selectedColor = selfUser.playerColor!;
 
   // 525px is the width of the board, which is also the default width of the modal
   const isMobile = useMediaQuery("(max-width: 525px)");
@@ -199,7 +200,10 @@ export default function Play({
   const [shownDifficulties, setShownDifficulties] =
     useShownDifficulties(restrictions);
   const [generalSettings, generalSetters] = useGeneralSettings(restrictions);
-  const [fullGeneralState, setGeneralGameCount] = useFullGeneralState(gameId);
+  const [fullGeneralState, setGeneralGameCount] = useFullGeneralState(
+    gameId,
+    userId,
+  );
   const [showAll, addShowAll] = useShowAll(`player-showall-${gameId}`);
 
   const multiGoalGames = useMemo(() => {
@@ -406,7 +410,7 @@ export default function Play({
               showAll={showAll.includes(g.foundGoal.resolvedGoal)}
               setGeneralGameCount={setGeneralGameCount}
               addShowAll={addShowAll}
-              playerColors={[selectedColor]}
+              generalTrackerPlayers={[{ userId, color: selectedColor }]}
               style={{
                 minHeight: "300px",
                 maxHeight: "592px",

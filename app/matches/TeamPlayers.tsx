@@ -1,4 +1,5 @@
 import { Avatar, Group, Text } from "@mantine/core";
+import Link from "next/link";
 import { MatchTeam } from "./useTeams";
 import classes from "./MatchRow.module.css";
 import { getColorHex } from "../color";
@@ -41,25 +42,39 @@ export default function TeamPlayers({
         aria-label={`${team.color} team`}
       />
       <Group wrap="wrap" miw={0} style={{ columnGap: 12, rowGap: 4 }}>
-        {players.map((p) => (
-          <Group key={p.userId} gap={6} wrap="nowrap" miw={0}>
-            <Avatar
-              name={p.name}
-              src={p.image}
-              color={"initials"}
-              size={size === "md" ? 20 : 24}
-              radius="xl"
-              style={{ flexShrink: 0 }}
-            />
-            <Text
-              size={size === "md" ? "sm" : "md"}
-              c={!isWinner && isWinnerShown ? "dimmed" : undefined}
-              className={classes.name}
-            >
-              {isWinner && isWinnerShown ? <strong>{p.name}</strong> : p.name}
-            </Text>
-          </Group>
-        ))}
+        {players.map((p) => {
+          const nameEl =
+            isWinner && isWinnerShown ? <strong>{p.name}</strong> : p.name;
+          return (
+            <Group key={p.userId} gap={6} wrap="nowrap" miw={0}>
+              <Avatar
+                name={p.name}
+                src={p.image}
+                color={"initials"}
+                size={size === "md" ? 20 : 24}
+                radius="xl"
+                style={{ flexShrink: 0 }}
+              />
+              <Text
+                size={size === "md" ? "sm" : "md"}
+                c={!isWinner && isWinnerShown ? "dimmed" : undefined}
+                className={classes.name}
+              >
+                {p.userId === 0 ? (
+                  nameEl
+                ) : (
+                  <Link
+                    href={`/user/${p.userId}`}
+                    prefetch={false}
+                    className={classes.playerLink}
+                  >
+                    {nameEl}
+                  </Link>
+                )}
+              </Text>
+            </Group>
+          );
+        })}
       </Group>
     </Group>
   );

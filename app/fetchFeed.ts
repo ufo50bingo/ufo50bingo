@@ -68,6 +68,13 @@ export type FeedPlayerOrder = {
   orderedIds: ReadonlyArray<number>;
 };
 
+export type FeedPlayerColorChange = {
+  type: "player_color_change";
+  time: number;
+  userId: number;
+  playerColor: BingosyncColor;
+};
+
 export type NewFeedItem =
   | FeedColorMark
   | FeedChat
@@ -75,7 +82,8 @@ export type NewFeedItem =
   | FeedMember
   | FeedGoalProgress
   | FeedCurrentSubcategory
-  | FeedPlayerOrder;
+  | FeedPlayerOrder
+  | FeedPlayerColorChange;
 
 export type NewFeed = ReadonlyArray<NewFeedItem>;
 
@@ -258,6 +266,31 @@ export function parsePlayerOrderResult(
   }));
 }
 
+export function fetchPlayerColorChangeSql(
+  sql: SQLTemplate,
+  gameId: number,
+): SQL {
+  return sql`
+    SELECT
+      EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
+      user_id,
+      player_color
+    FROM player_color_change
+    WHERE game_id = ${gameId}
+  `;
+}
+
+export function parsePlayerColorChangeResult(
+  result: SQLResult,
+): Array<FeedPlayerColorChange> {
+  return result.map((raw) => ({
+    type: "player_color_change",
+    time: Number(raw.unixtime),
+    userId: raw.user_id,
+    playerColor: raw.player_color,
+  }));
+}
+
 function fetchSquaresSql(sql: SQLTemplate, gameId: number): SQL {
   return sql`
     SELECT
@@ -339,6 +372,7 @@ export async function fetchData(
     [fetchColorMarkSql(sql, gameId), parseColorMarkResult],
     [fetchChatSql(sql, gameId), parseChatResult],
     [fetchTimerEventSql(sql, gameId), parseTimerEventResult],
+    [fetchPlayerColorChangeSql(sql, gameId), parsePlayerColorChangeResult],
   ];
   if (!isPlay) {
     feedFetchPairs = feedFetchPairs.concat([

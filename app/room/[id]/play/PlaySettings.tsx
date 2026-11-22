@@ -30,14 +30,14 @@ import GeneralSection, {
 } from "./GeneralSection";
 import { useShouldShowRecentContext } from "@/app/settings/ShouldShowRecentContext";
 import DisconnectButton from "../common/DisconnectButton";
-import { NewFeedItem } from "@/app/fetchFeed";
+import { FeedPlayerColorChange, NewFeedItem } from "@/app/fetchFeed";
 import PlayerMembersSection from "./PlayerMembersSection";
 import { PlayerMember, CasterMember } from "../common/useMembers";
+import { useServerOffsetContext } from "../ServerOffsetContext";
 
 type Props = {
   userId: number;
   color: null | BingosyncColor;
-  setColor: (newcolor: BingosyncColor) => unknown;
   shownDifficulties: ReadonlyArray<Difficulty>;
   setShownDifficulties: (newShown: ReadonlyArray<Difficulty>) => unknown;
   soundChoices: SoundChoices;
@@ -60,7 +60,6 @@ type Props = {
 export default function PlaySettings({
   userId,
   color,
-  setColor,
   shownDifficulties,
   setShownDifficulties,
   soundChoices,
@@ -80,6 +79,7 @@ export default function PlaySettings({
   casters,
 }: Props) {
   const [isShown, setIsShown] = useState(color == null);
+  const { getServerMsFromClientMs } = useServerOffsetContext();
   const { shouldShortenPlay, setShouldShortenPlay } = useShouldShortenContext();
   const { shouldShowRecentPlay, setShouldShowRecentPlay } =
     useShouldShowRecentContext();
@@ -114,7 +114,15 @@ export default function PlaySettings({
                   <ColorSelector
                     label={null}
                     color={color}
-                    setColor={setColor}
+                    setColor={async (newColor: BingosyncColor) => {
+                      const event: FeedPlayerColorChange = {
+                        type: "player_color_change",
+                        userId,
+                        playerColor: newColor,
+                        time: getServerMsFromClientMs(Date.now()) / 1000,
+                      };
+                      await sendEvent(event);
+                    }}
                   />
                 </Accordion.Panel>
               </Accordion.Item>

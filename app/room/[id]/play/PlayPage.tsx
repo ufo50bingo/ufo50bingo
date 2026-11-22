@@ -20,6 +20,8 @@ export default async function PlayPage({ gameId, userId, memberFeed }: Props) {
       squareNames={data.squares.map((square) => square.name)}
       userId={userId}
       token={token}
+      fetchedPasta={data.fetchedPasta}
+      pastaId={data.pastaId}
     />
   );
 }

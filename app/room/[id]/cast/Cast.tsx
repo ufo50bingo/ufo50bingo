@@ -50,6 +50,7 @@ import { GeneralCounts } from "./CastPage";
 import useSquareColors from "../common/useSquareColors";
 import useMembers, { PlayerMember } from "../common/useMembers";
 import { useServerOffsetContext } from "../ServerOffsetContext";
+import { getMatchingRepoPasta } from "@/app/getMatchingRepoPasta";
 
 const RESTRICTIONS: Restrictions = {
   canTagDifficultyFor: null,
@@ -74,9 +75,10 @@ export type CastProps = {
   initialFeed: NewFeed;
   userId: number;
   squares: ReadonlyArray<SquareWithId>;
-  pasta: null | UFOPasta;
   subcategories: ReadonlyArray<ParsedSubcategory>;
   token: string;
+  pastaId: null | bigint;
+  fetchedPasta: null | UFOPasta;
 };
 
 const COUNT_POSITION = ["side_by_side", "inset"] as const;
@@ -89,6 +91,8 @@ export default function Cast({
   squares,
   subcategories,
   token,
+  pastaId,
+  fetchedPasta,
 }: CastProps) {
   const isLockout = true;
   const boardSize = 25;
@@ -115,6 +119,16 @@ export default function Cast({
     }),
     [rightClickBehavior, setRightClickBehavior],
   );
+
+  const _pasta = useMemo(() => {
+    if (pastaId == null) {
+      return null;
+    }
+    if (fetchedPasta != null) {
+      return fetchedPasta;
+    }
+    return getMatchingRepoPasta(pastaId);
+  }, [fetchedPasta, pastaId]);
 
   const isNes50 = useMemo(() => getIsNes50(squareNames), [squareNames]);
   // TODO: Update getGameList to handle other pastas as well

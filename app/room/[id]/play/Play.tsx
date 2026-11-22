@@ -41,6 +41,7 @@ import { FeedColorMark, NewFeed } from "@/app/fetchFeed";
 import useMembers from "../common/useMembers";
 import useSquareColors from "../common/useSquareColors";
 import { useServerOffsetContext } from "../ServerOffsetContext";
+import { getMatchingRepoPasta } from "@/app/getMatchingRepoPasta";
 
 export type FoundItem = {
   foundGoal: FoundGoal<string, string, string>;
@@ -54,6 +55,8 @@ export type Props = {
   userId: number;
   squareNames: ReadonlyArray<string>;
   token: string;
+  pastaId: null | bigint;
+  fetchedPasta: null | UFOPasta;
 };
 
 export default function Play({
@@ -62,6 +65,8 @@ export default function Play({
   userId,
   squareNames,
   token,
+  pastaId,
+  fetchedPasta,
 }: Props) {
   const isLockout = true;
   const boardSize = 25;
@@ -109,6 +114,16 @@ export default function Play({
     isCast: false,
     members: allMembers,
   });
+
+  const _pasta = useMemo(() => {
+    if (pastaId == null) {
+      return null;
+    }
+    if (fetchedPasta != null) {
+      return fetchedPasta;
+    }
+    return getMatchingRepoPasta(pastaId);
+  }, [fetchedPasta, pastaId]);
 
   const foundItems = useMemo<ReadonlyArray<FoundItem>>(() => {
     return squareNames

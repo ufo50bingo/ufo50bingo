@@ -62,7 +62,6 @@ const RESTRICTIONS: Restrictions = {
 
 export type FoundStandardGeneral = FoundGoalWithCast<string, string, string>;
 export type GeneralItem = {
-  color: BingosyncColor;
   foundGoal: FoundStandardGeneral;
   pasta: UFOPasta;
 };
@@ -106,7 +105,7 @@ export default function Cast({
       rightClickBehavior,
       setRightClickBehavior,
       customColor: "#ee5f5b",
-      setCustomColor: () => { },
+      setCustomColor: () => {},
     }),
     [rightClickBehavior, setRightClickBehavior],
   );

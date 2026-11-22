@@ -18,11 +18,13 @@ import getSql from "@/app/getSql";
 import { SQL } from "@/app/matches/page";
 import { revalidatePath } from "next/cache";
 import { env } from "process";
+import broadcastToSupabase from "../../broadcastToSupabase";
 
 export default async function persistEvents(
   gameId: number,
   token: string,
   events: ReadonlyArray<NewFeedItem>,
+  senderId: null | string = null,
 ): Promise<void> {
   const isValidated = await validateToken(gameId, token);
   if (!isValidated) {
@@ -56,7 +58,10 @@ export default async function persistEvents(
         throw new Error(`Unexpected event: ${JSON.stringify(event)}`);
     }
   });
-  await sql.transaction(allSqls);
+  await Promise.all([
+    sql.transaction(allSqls),
+    senderId != null ? broadcastToSupabase(gameId, events, senderId) : null,
+  ]);
   revalidatePath("/matches");
   revalidatePath(`/match/${gameId}`);
 }

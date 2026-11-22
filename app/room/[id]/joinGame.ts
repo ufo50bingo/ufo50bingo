@@ -3,6 +3,8 @@
 import { FeedMember } from "@/app/fetchFeed";
 import getSql from "@/app/getSql";
 import broadcastToWebsockets from "../broadcastToWebsockets";
+import broadcastToSupabase from "../broadcastToSupabase";
+import { USE_SUPABASE } from "./common/useSupabase";
 import getSession from "@/app/getSession";
 import { refresh } from "next/cache";
 import { auth } from "@/app/auth";
@@ -70,7 +72,9 @@ export default async function joinGame(
         FALSE,
         ${overrideName}
     )`,
-    broadcastToWebsockets(gameId, JSON.stringify(feedItem)),
+    USE_SUPABASE
+      ? broadcastToSupabase(gameId, [feedItem], null)
+      : broadcastToWebsockets(gameId, JSON.stringify(feedItem)),
     auth.api.updateUser({
       headers: await headers(),
       body: { color: playerColor },

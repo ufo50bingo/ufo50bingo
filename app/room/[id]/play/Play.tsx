@@ -8,7 +8,7 @@ import useShownDifficulties from "./useShownDifficulties";
 import useSounds from "./useSounds";
 import useWakeLock from "./useWakeLock";
 import Feed from "../common/Feed";
-import useBingosyncSocket from "../common/useBingosyncSocket";
+import useFeedSocket from "../common/useFeedSocket";
 import ScoreSquare from "../common/ScoreSquare";
 import { useMediaQuery } from "@mantine/hooks";
 import SimpleGeneralTracker from "./SimpleGeneralTracker";
@@ -61,7 +61,7 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
     feed,
     reconnectModal,
     sendEvents: sendEventsRaw,
-  } = useBingosyncSocket({
+  } = useFeedSocket({
     gameId,
     initialFeed,
     userId,

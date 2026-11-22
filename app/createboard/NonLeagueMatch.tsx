@@ -34,6 +34,7 @@ import { getRoomLink } from "../roomApi";
 import ufoDoubleGenerator from "../generator/ufoDoubleGenerator";
 import findGoal from "../findGoal";
 import { authClient } from "../authClient";
+import { getDifficultyLayout } from "../generator/getDifficultyLayout";
 
 type CustomType = "ufo" | "fixed_board";
 
@@ -593,6 +594,21 @@ export default function NonLeagueMatch({ visible }: Props) {
             }
             onClick={() => {
               navigator.clipboard.writeText(getSerializedPasta().join("\n"));
+              // const row1Difficulties = [0, 0, 0, 0, 0];
+              // const diagDifficulties = [0, 0, 0, 0, 0];
+              // const trials = 10000;
+              // for (let i = 0; i < 10000; i++) {
+              //   const l = getDifficultyLayout([5, 7, 6, 2, 5], 5, 5, {
+              //     // restarts: 1,
+              //   });
+              //   const board = l.board;
+              //   for (let j = 0; j < 5; j++) {
+              //     row1Difficulties[board[j]] += 1;
+              //     diagDifficulties[board[j * 6]] += 1;
+              //   }
+              // }
+              // console.log(row1Difficulties.map((r) => r / trials));
+              // console.log(diagDifficulties.map((r) => r / trials));
             }}
           >
             Copy Goals to Clipboard

@@ -314,6 +314,13 @@ export default function Play({
             }))}
             onClickSquare={async (squareIndex) => {
               const isClear = squareColors[squareIndex].includes(selectedColor);
+              if (
+                !isClear &&
+                isLockout &&
+                squareColors[squareIndex].length > 0
+              ) {
+                return;
+              }
               try {
                 const feedItem: FeedColorMark = {
                   type: "color_mark",

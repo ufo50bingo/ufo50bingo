@@ -208,23 +208,6 @@ function removeMistakesForSquare(changes: Change[]): void {
   }
 }
 
-function getTopPlayer(playerToNetAdditiosn: {
-  [player: string]: number;
-}): string {
-  return Object.keys(playerToNetAdditiosn).reduce((a, b) =>
-    playerToNetAdditiosn[a] > playerToNetAdditiosn[b] ? a : b,
-  );
-}
-
-function getSimilarity(verifiedName: string, name: string): number {
-  const aliases = ALIASES[verifiedName] ?? [];
-  const allNames = [verifiedName, ...aliases];
-  const allScores = allNames.map((verifiedOrAlias) =>
-    new SequenceMatcher(null, verifiedOrAlias, name).ratio(),
-  );
-  return Math.max(...allScores);
-}
-
 export function getColorToVerifiedName(
   _changes: ReadonlyArray<Change>,
   _verifiedP1: string,

@@ -1,4 +1,4 @@
-import { Accordion, Checkbox, Select, Stack, Tooltip } from "@mantine/core";
+import { Accordion, Checkbox, Select, Stack } from "@mantine/core";
 import { SortType } from "../cast/useLocalState";
 import { useMemo } from "react";
 import { PlayerTrackerRestrictions } from "@/app/generator/ufoGenerator";

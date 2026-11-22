@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import classes from "./BingosyncColored.module.css";
 import { BingosyncColor, BLANK_WHITE, getColorHex } from "../color";
 
 type Props = {

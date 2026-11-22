@@ -340,6 +340,7 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
         </Stack>
         <Feed
           feed={feed}
+          boardStateParams={boardStateParams}
           userId={userId}
           members={allMembers}
           players={players}

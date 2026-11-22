@@ -339,6 +339,7 @@ export default function Cast({
           </Group>
           <Feed
             feed={feed}
+            boardStateParams={boardStateParams}
             userId={userId}
             members={allMembers}
             players={players}

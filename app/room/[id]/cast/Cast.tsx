@@ -520,6 +520,7 @@ export default function Cast({
             feed={feed}
             userId={userId}
             members={allMembers}
+            players={players}
             squareNames={squareNames}
             isPlay={false}
             style={{ height: `${475 - 44}px` }}

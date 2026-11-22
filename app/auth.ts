@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth";
 import { Pool } from "pg";
 import { anonymous } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { USER_CACHE_TAG } from "./api/users/route";
 
 const pool = new Pool({
@@ -69,6 +69,20 @@ export const auth = betterAuth({
       create: {
         after: async () => {
           revalidateTag(USER_CACHE_TAG, "max");
+        },
+      },
+      update: {
+        after: async (user, context) => {
+          // color can be updated whenever a player joins a game, and we don't want
+          // that to mess up our caching
+          const body: unknown = context?.body;
+          const keys =
+            body != null && typeof body === "object" ? Object.keys(body) : [];
+          if (keys.length > 0 && keys.every((key) => key === "color")) {
+            return;
+          }
+          revalidateTag(USER_CACHE_TAG, "max");
+          revalidatePath(`/user/${user.id}`);
         },
       },
     },

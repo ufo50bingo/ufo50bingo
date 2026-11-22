@@ -1,5 +1,5 @@
 import getSql from "../getSql";
-import { NeonQueryFunction, NeonQueryPromise } from "@neondatabase/serverless";
+import { NeonQueryPromise } from "@neondatabase/serverless";
 import { Metadata } from "next";
 import { MatchList } from "./MatchList";
 import { fetchDataMulti, SQLResult, SQLTemplate } from "../fetchFeed";

@@ -137,7 +137,7 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
     const restrictions = pasta?.player_tracker_restrictions;
     return (
       restrictions ?? {
-        allowed_difficulty_tags: ["general"],
+        allowed_difficulty_tags: null,
         allow_fast_sort: false,
         show_on_card_tooltips: false,
         show_multi_goal_games: false,

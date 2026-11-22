@@ -70,7 +70,7 @@ export default function Play({
     userId,
     playAudio,
   });
-  const { allMembers } = useMembers(feed);
+  const { players, allMembers } = useMembers(feed);
   const squareColors = useSquareColors(feed, boardSize, isLockout);
   const searchParams = useSearchParams();
   const override = searchParams.get("override");
@@ -81,8 +81,8 @@ export default function Play({
   });
   const [font, setFont] = useFont();
 
-  const selfUser = allMembers.get(userId)!;
-  const selectedColor = selfUser.color ?? "red";
+  const selfPlayer = players.find((p) => p.userId === userId)!;
+  const selectedColor = selfPlayer.color;
 
   // 525px is the width of the board, which is also the default width of the modal
   const isMobile = useMediaQuery("(max-width: 525px)");
@@ -410,7 +410,7 @@ export default function Play({
               showAll={showAll.includes(g.foundGoal.resolvedGoal)}
               setGeneralGameCount={setGeneralGameCount}
               addShowAll={addShowAll}
-              generalTrackerPlayers={[{ userId, color: selectedColor }]}
+              generalTrackerPlayers={[selfPlayer]}
               style={{
                 minHeight: "300px",
                 maxHeight: "592px",

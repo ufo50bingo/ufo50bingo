@@ -2,7 +2,7 @@
 
 import Board from "@/app/Board";
 import { BingosyncColor } from "@/app/matches/parseBingosyncData";
-import { Group, Stack, Text } from "@mantine/core";
+import { Group, Stack, Text, Tooltip } from "@mantine/core";
 import { useMemo, useState } from "react";
 import Feed from "../common/Feed";
 import { Game, ORDERED_GAMES, ProperGame } from "@/app/goals";
@@ -43,7 +43,7 @@ import { RightClickBehaviorContext } from "@/app/settings/RightClickBehaviorCont
 import { NewFeed, ParsedSubcategory, SquareWithId } from "@/app/fetchFeed";
 import { GeneralCounts } from "./CastPage";
 import useSquareColors from "../common/useSquareColors";
-import useMembers from "../common/useMembers";
+import useMembers, { PlayerMember } from "../common/useMembers";
 import addGoalProgress from "./addGoalProgress";
 import addCurrentSubcategory from "./addCurrentSubcategory";
 
@@ -120,12 +120,6 @@ export default function Cast({
   );
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
   const [isDetecting, setIsDetecting] = useState(false);
-
-  // TODO: Use leftUserId and rightUserId
-  const [leftColor, rightColor]: [BingosyncColor, BingosyncColor] =
-    useMemo(() => {
-      return ["red", "blue"];
-    }, []);
 
   const generals: GeneralCounts = useMemo(() => {
     const generalCounts: GeneralCounts = {};
@@ -206,6 +200,12 @@ export default function Cast({
     defaultValue: "side_by_side",
     options: COUNT_POSITION,
   });
+
+  const leftPlayer: null | undefined | PlayerMember = players[0];
+  const rightPlayer: null | undefined | PlayerMember = players[1];
+
+  const leftColor = leftPlayer?.color ?? "red";
+  const rightColor = rightPlayer?.color ?? "red";
 
   const leftScore = squareColors.filter((colors) =>
     colors.includes(leftColor),
@@ -314,13 +314,6 @@ export default function Cast({
     />
   ));
 
-  const leftUserId = 1;
-  const rightUserId = 2;
-  const generalTrackerPlayers = [
-    { userId: leftUserId, color: leftColor },
-    { userId: rightUserId, color: rightColor },
-  ];
-
   const setGeneralGameCount = async (change: CountChange) => {
     const foundSquare = squares.find((square) => square.name === change.goal);
     const foundSubcategory = subcategories.find(
@@ -347,7 +340,7 @@ export default function Cast({
       countState={generals[g.foundGoal.resolvedGoal]}
       showAll={showAll.includes(g.foundGoal.resolvedGoal)}
       addShowAll={addShowAll}
-      generalTrackerPlayers={generalTrackerPlayers}
+      generalTrackerPlayers={[players[0], players[1]]}
       style={{ height: `${h ?? 300}px` }}
       settings={generalSettings}
       pasta={g.pasta}
@@ -379,8 +372,10 @@ export default function Cast({
     return highlights;
   }, [highlightCurrentGame, allPlayerGames, allMembers, gameToGoals]);
 
-  const leftGames = allPlayerGames.get(leftUserId) ?? [];
-  const rightGames = allPlayerGames.get(rightUserId) ?? [];
+  const leftGames =
+    leftPlayer != null ? (allPlayerGames.get(leftPlayer.userId) ?? []) : [];
+  const rightGames =
+    rightPlayer != null ? (allPlayerGames.get(rightPlayer.userId) ?? []) : [];
 
   const numRows = Math.ceil(numPlayers / 2);
   const gameSelectorHeight = numRows * 44;
@@ -418,7 +413,8 @@ export default function Cast({
               />
             </SideCell>
             <GeneralIcons
-              playerNum={0}
+              playerId={leftPlayer?.userId}
+              isLeft={true}
               color={leftColor}
               generalGoals={
                 generalOrder === "reading" ? generalGoals : sortedGenerals
@@ -469,7 +465,8 @@ export default function Cast({
               />
             </SideCell>
             <GeneralIcons
-              playerNum={1}
+              isLeft={false}
+              playerId={rightPlayer?.userId}
               color={rightColor}
               generalGoals={
                 generalOrder === "reading" ? generalGoals : sortedGenerals
@@ -531,29 +528,29 @@ export default function Cast({
         {showGameSelector ? (
           <Stack gap={8}>
             <Group wrap="wrap" w={268} gap={8} justify="space-between">
-              {/* TODO: use player list here instead of numPlayers */}
-              {new Array(numPlayers).fill(null).map((_, playerNum) => (
-                <GameSelector
-                  key={playerNum}
-                  color={playerNum % 2 === 0 ? leftColor : rightColor}
-                  game={
-                    allPlayerGames.get(
-                      playerNum % 2 === 0 ? leftUserId : rightUserId,
-                    )?.[0]?.game ?? null
-                  }
-                  onChange={async (newGame: ProperGame | null) => {
-                    const subcategoryId =
-                      subcategories.find((sc) => sc.name === newGame)
-                        ?.subcategoryId ?? null;
-                    await addCurrentSubcategory({
-                      gameId,
-                      userId: playerNum % 2 == 0 ? leftUserId : rightUserId,
-                      subcategoryId,
-                    });
-                  }}
-                  terminalCodes={terminalCodes}
-                  gameList={gameList}
-                />
+              {players.map((player) => (
+                <Tooltip key={player.userId} label={player.name}>
+                  <div>
+                    <GameSelector
+                      color={player.color}
+                      game={
+                        allPlayerGames.get(player.userId)?.[0]?.game ?? null
+                      }
+                      onChange={async (newGame: ProperGame | null) => {
+                        const subcategoryId =
+                          subcategories.find((sc) => sc.name === newGame)
+                            ?.subcategoryId ?? null;
+                        await addCurrentSubcategory({
+                          gameId,
+                          userId: player.userId,
+                          subcategoryId,
+                        });
+                      }}
+                      terminalCodes={terminalCodes}
+                      gameList={gameList}
+                    />
+                  </div>
+                </Tooltip>
               ))}
             </Group>
             {generalGoals.length > 0 ? (
@@ -601,11 +598,6 @@ export default function Cast({
       </Group>
       <CastSettings
         gameId={gameId}
-        leftColor={leftColor}
-        rightColor={rightColor}
-        // TODO: add server actions
-        setLeftColor={() => {}}
-        setRightColor={() => {}}
         shownDifficulties={shownDifficulties}
         setShownDifficulties={setShownDifficulties}
         sortType={sortType}
@@ -616,8 +608,6 @@ export default function Cast({
         setHideByDefault={setHideByDefault}
         soundChoices={soundChoices}
         setSoundChoices={setSoundChoices}
-        leftScore={leftScore}
-        rightScore={rightScore}
         generalCounts={generals}
         generalGoals={
           generalOrder === "reading" ? generalGoals : sortedGenerals

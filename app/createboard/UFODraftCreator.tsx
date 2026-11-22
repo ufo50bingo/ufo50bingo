@@ -1,10 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Alert, Group, NumberInput, Stack, Text } from "@mantine/core";
 import DraftChecker from "./DraftChecker";
-import { UFODifficulties, UFOPasta } from "../generator/ufoGenerator";
+import { Counts, UFODifficulties, UFOPasta } from "../generator/ufoGenerator";
 import { CheckerSort } from "./CheckerSortSelector";
 import getCategoryName from "../generator/getCategoryName";
 import { IconAlertSquareRounded } from "@tabler/icons-react";
+import { BoardSize } from "./NonLeagueMatch";
+import BoardSizeSelectors from "./BoardSizeSelectors";
+import scaleCounts from "./scaleCounts";
 
 type Props = {
   draftCheckState: Map<string, number>;
@@ -16,6 +19,8 @@ type Props = {
   sort: CheckerSort;
   setSort: (newSort: CheckerSort) => unknown;
   excludedGames?: ReadonlySet<string>;
+  boardSize: BoardSize;
+  setBoardSize: (newBoardSize: BoardSize) => unknown;
 };
 
 export default function UFODraftCreator({
@@ -28,6 +33,8 @@ export default function UFODraftCreator({
   sort,
   setSort,
   excludedGames,
+  boardSize,
+  setBoardSize,
 }: Props) {
   // TODO: Maybe order these based on category_counts
   const draftCategories = useMemo(() => {
@@ -48,14 +55,18 @@ export default function UFODraftCreator({
   const [rawDifficultyCountsByPlayer, setDifficultyCountsByPlayer] = useState<
     ReadonlyArray<Map<string, number>>
   >(
-    pasta.draft != null
-      ? pasta.draft.category_counts.map(
-          (counts) => new Map(Object.entries(counts)),
-        )
-      : [pasta.category_counts, pasta.category_counts].map(
-          (counts) => new Map(Object.entries(counts)),
-        ),
+    getDefaultDifficultyCounts(pasta, boardSize.rows, boardSize.cols).map(
+      (counts) => new Map(Object.entries(counts)),
+    ),
   );
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDifficultyCountsByPlayer(
+      getDefaultDifficultyCounts(pasta, boardSize.rows, boardSize.cols).map(
+        (counts) => new Map(Object.entries(counts)),
+      ),
+    );
+  }, [boardSize.rows, boardSize.cols, pasta]);
   const difficultyCountsByPlayer = useMemo(
     () => rawDifficultyCountsByPlayer.slice(0, numPlayers),
     [rawDifficultyCountsByPlayer, numPlayers],
@@ -150,7 +161,7 @@ export default function UFODraftCreator({
     [customizedPasta.goals, draftCategories, numPlayers],
   );
 
-  const hasWrongSum = difficultySum != 25;
+  const hasWrongSum = difficultySum != boardSize.rows * boardSize.cols;
   const hasTooFewGoals = playerToAvailableGoalDifficultyCounts.some(
     (difficultyCounts, playerIndex) =>
       difficultyCounts
@@ -201,6 +212,7 @@ export default function UFODraftCreator({
         setSort={setSort}
         excludedGames={excludedGames}
       />
+      <BoardSizeSelectors boardSize={boardSize} setBoardSize={setBoardSize} />
       <Text>
         <strong>Choose difficulty distribution</strong>
       </Text>
@@ -272,7 +284,7 @@ export default function UFODraftCreator({
         <Alert
           variant="light"
           color="red"
-          title="Error: Difficulty counts must sum to 25"
+          title={`Error: Difficulty counts must sum to ${boardSize.rows * boardSize.cols}`}
         />
       )}
       {hasTooFewGoals && (
@@ -295,4 +307,43 @@ export default function UFODraftCreator({
 
 function getCategoryKey(playerNum: number, category: string): string {
   return `p${playerNum}-${category}`;
+}
+
+function getDefaultDifficultyCounts(
+  pasta: UFOPasta,
+  rows: number,
+  cols: number,
+): ReadonlyArray<Counts> {
+  const draft = pasta.draft;
+  if (draft == null) {
+    return [pasta.category_counts, pasta.category_counts];
+  }
+  if (rows === 5 && cols === 5) {
+    return draft.category_counts;
+  }
+  const foundConfig = draft.other_category_counts?.find(
+    (config) => config.rows === rows && config.cols === cols,
+  );
+  if (foundConfig != null) {
+    return foundConfig.category_counts;
+  }
+  const transformedCounts: Counts = {};
+  for (const [idx, counts] of draft.category_counts.entries()) {
+    for (const [category, count] of Object.entries(counts)) {
+      const key = getCategoryKey(idx, category);
+      transformedCounts[key] = count;
+    }
+  }
+  const scaledCounts = scaleCounts(transformedCounts, rows * cols);
+
+  const finalCounts: Array<Counts> = [];
+  for (const [idx, counts] of draft.category_counts.entries()) {
+    const newPlayerCounts: Counts = {};
+    for (const category of Object.keys(counts)) {
+      const key = getCategoryKey(idx, category);
+      newPlayerCounts[category] = scaledCounts[key];
+    }
+    finalCounts.push(newPlayerCounts);
+  }
+  return finalCounts;
 }

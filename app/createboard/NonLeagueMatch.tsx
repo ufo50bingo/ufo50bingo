@@ -35,6 +35,7 @@ import ufoDoubleGenerator from "../generator/ufoDoubleGenerator";
 import findGoal from "../findGoal";
 import { authClient } from "../authClient";
 import BoardSizeSelectors from "./BoardSizeSelectors";
+import scaleCounts from "./scaleCounts";
 
 type CustomType = "ufo" | "fixed_board";
 
@@ -125,26 +126,36 @@ export default function NonLeagueMatch({ visible }: Props) {
 
   const format = metadata.name === "10 Cherry Race" ? "Custom" : rawFormat;
 
+  const actualRows =
+    rawFormat === "Custom" || rawFormat === "Draft"
+      ? boardSize.rows
+      : rawFormat === "6x6"
+        ? 6
+        : 5;
+
+  const actualCols =
+    rawFormat === "Custom" || rawFormat === "Draft"
+      ? boardSize.rows
+      : rawFormat === "6x6"
+        ? 6
+        : 5;
+
   const getSerializedPasta = (): ReadonlyArray<string> => {
     const getUFOPastaWithCustomSelectors = (
       pasta: UFOPasta,
     ): ReadonlyArray<string> => {
-      const rowsToUse =
-        format === "Custom" ? boardSize.rows : format === "6x6" ? 6 : 5;
-      const colsToUse =
-        format === "Custom" ? boardSize.cols : format === "6x6" ? 6 : 5;
       const countsFor6x6 = getDefaultDifficultyCounts(
         pasta,
-        rowsToUse,
-        colsToUse,
+        actualRows,
+        actualCols,
       );
       if (format !== "Custom" && !metadata.hasFilters) {
         return ufoGenerator(
           format === "6x6"
             ? { ...pasta, category_counts: countsFor6x6 }
             : pasta,
-          rowsToUse,
-          colsToUse,
+          actualRows,
+          actualCols,
         );
       }
       const finalUncheckedGames =
@@ -160,13 +171,13 @@ export default function NonLeagueMatch({ visible }: Props) {
           category_counts:
             format === "Custom"
               ? (difficultyCounts[metadata.name] ??
-                getDefaultDifficultyCounts(pasta, rowsToUse, colsToUse))
+                getDefaultDifficultyCounts(pasta, actualRows, actualCols))
               : format === "6x6"
                 ? countsFor6x6
                 : pasta.category_counts,
         },
-        rowsToUse,
-        colsToUse,
+        actualRows,
+        actualCols,
       );
       if (metadata.name === "10 Cherry Race") {
         goals = goals.toSorted();
@@ -183,7 +194,7 @@ export default function NonLeagueMatch({ visible }: Props) {
         }
         if (format === "Draft") {
           if (draftPasta != null) {
-            return ufoGenerator(draftPasta, 5, 5);
+            return ufoGenerator(draftPasta, boardSize.rows, boardSize.cols);
           } else {
             throw new Error("draftPasta expected to be nonnull");
           }
@@ -193,7 +204,7 @@ export default function NonLeagueMatch({ visible }: Props) {
       case "UFO":
         if (format === "Draft") {
           if (draftPasta != null) {
-            return ufoGenerator(draftPasta, 5, 5);
+            return ufoGenerator(draftPasta, boardSize.rows, boardSize.cols);
           } else {
             throw new Error("draftPasta expected to be nonnull");
           }
@@ -295,11 +306,12 @@ export default function NonLeagueMatch({ visible }: Props) {
               )}
               {customType === "fixed_board" &&
                 fixedBoard.trim() !== "" &&
-                fixedBoard.trim().split("\n").length !== 25 && (
+                fixedBoard.trim().split("\n").length !==
+                  actualRows * actualCols && (
                   <Alert
                     color="red"
                     style={{ whiteSpace: "pre-line" }}
-                    title="Error: You must provide exactly 25 goals for a fixed board"
+                    title={`Error: You must provide exactly ${actualRows * actualCols} goals for a fixed board`}
                   >
                     You have provided {fixedBoard.trim().split("\n").length}.
                   </Alert>
@@ -442,8 +454,8 @@ export default function NonLeagueMatch({ visible }: Props) {
                         metadata.type === "Custom"
                           ? customUfo!
                           : metadata.pasta,
-                        boardSize.rows,
-                        boardSize.cols,
+                        actualRows,
+                        actualCols,
                       )
                     }
                     setCounts={(newCounts) => {
@@ -452,7 +464,7 @@ export default function NonLeagueMatch({ visible }: Props) {
                         [metadata.name]: newCounts,
                       });
                     }}
-                    targetSum={boardSize.rows * boardSize.cols}
+                    targetSum={actualRows * actualCols}
                   />
                 </>
               )}
@@ -471,6 +483,8 @@ export default function NonLeagueMatch({ visible }: Props) {
                   excludedGames={
                     metadata.hasFilters ? filterInfo.excludedGames : undefined
                   }
+                  boardSize={boardSize}
+                  setBoardSize={setBoardSize}
                 />
               )}
             </Stack>
@@ -564,8 +578,8 @@ export default function NonLeagueMatch({ visible }: Props) {
                       ...common,
                       roomName: roomName + " — Card 1",
                       goals: card1,
-                      rows: 5,
-                      cols: 5,
+                      rows: actualRows,
+                      cols: actualCols,
                     }),
                   );
                   promises.push(
@@ -573,8 +587,8 @@ export default function NonLeagueMatch({ visible }: Props) {
                       ...common,
                       roomName: roomName + " — Card 2",
                       goals: card2,
-                      rows: 5,
-                      cols: 5,
+                      rows: actualRows,
+                      cols: actualCols,
                     }),
                   );
                 } else {
@@ -594,18 +608,8 @@ export default function NonLeagueMatch({ visible }: Props) {
                           (metadata.type === "Custom" && customUfo != null)),
                       isLockout,
                       goals: getSerializedPasta(),
-                      rows:
-                        format === "Custom"
-                          ? boardSize.rows
-                          : format === "6x6"
-                            ? 6
-                            : 5,
-                      cols:
-                        format === "Custom"
-                          ? boardSize.cols
-                          : format === "6x6"
-                            ? 6
-                            : 5,
+                      rows: actualRows,
+                      cols: actualCols,
                       fullPasta: metadata.type === "Custom" ? customUfo : null,
                       leagueInfo: null,
                     }),
@@ -654,21 +658,6 @@ export default function NonLeagueMatch({ visible }: Props) {
             }
             onClick={() => {
               navigator.clipboard.writeText(getSerializedPasta().join("\n"));
-              // const row1Difficulties = [0, 0, 0, 0, 0];
-              // const diagDifficulties = [0, 0, 0, 0, 0];
-              // const trials = 10000;
-              // for (let i = 0; i < 10000; i++) {
-              //   const l = getDifficultyLayout([5, 7, 6, 2, 5], 5, 5, {
-              //     // restarts: 1,
-              //   });
-              //   const board = l.board;
-              //   for (let j = 0; j < 5; j++) {
-              //     row1Difficulties[board[j]] += 1;
-              //     diagDifficulties[board[j * 6]] += 1;
-              //   }
-              // }
-              // console.log(row1Difficulties.map((r) => r / trials));
-              // console.log(diagDifficulties.map((r) => r / trials));
             }}
           >
             Copy Goals to Clipboard
@@ -771,44 +760,4 @@ function getDefaultDifficultyCounts(
     return foundConfig.category_counts;
   }
   return scaleCounts(pasta.category_counts, rows * cols);
-}
-
-function scaleCounts(counts: Counts, targetTotal: number): Counts {
-  const entries = Object.entries(counts);
-  const originalTotal = entries.reduce((acc, [, value]) => acc + value, 0);
-
-  if (originalTotal === 0 || targetTotal === 0) {
-    throw new Error("Cannot scale to/from 0");
-  }
-
-  const scaledCounts = entries.map(([difficulty, count], index) => {
-    const exact = (count / originalTotal) * targetTotal;
-    const floor = Math.floor(exact);
-
-    return {
-      difficulty,
-      value: floor,
-      remainder: exact - floor,
-      order: index,
-    };
-  });
-  const byRemainder = [...scaledCounts].sort((a, b) => {
-    const remainderDiff = b.remainder - a.remainder;
-    if (remainderDiff !== 0) {
-      return remainderDiff;
-    }
-    return a.order - b.order;
-  });
-
-  const remaining =
-    targetTotal - scaledCounts.reduce((acc, item) => acc + item.value, 0);
-  for (let i = 0; i < remaining; i++) {
-    // byRemainder shares the same objects as scaledCounts, so updating value
-    // here also updates scaledCounts
-    byRemainder[i].value += 1;
-  }
-
-  return Object.fromEntries(
-    scaledCounts.map((item) => [item.difficulty, item.value]),
-  );
 }

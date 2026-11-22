@@ -1,15 +1,19 @@
-import useWindowSize from "./useWindowSize";
+import useElementSize from "./useElementSize";
 
 export default function useCanvasScale(
+  viewportEl: HTMLElement | null,
   canvasWidth: number,
   canvasHeight: number,
 ): number {
-  const windowSize = useWindowSize();
+  const viewportSize = useElementSize(viewportEl);
 
-  return windowSize.width > 0 &&
-    windowSize.height > 0 &&
+  return viewportSize.width > 0 &&
+    viewportSize.height > 0 &&
     canvasWidth > 0 &&
     canvasHeight > 0
-    ? Math.min(windowSize.width / canvasWidth, windowSize.height / canvasHeight)
+    ? Math.min(
+        viewportSize.width / canvasWidth,
+        viewportSize.height / canvasHeight,
+      )
     : 1;
 }

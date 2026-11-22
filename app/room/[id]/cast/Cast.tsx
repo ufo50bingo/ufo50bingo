@@ -277,6 +277,8 @@ export default function Cast({
     [boardStateParams, feedWithoutMistakes],
   );
 
+  const boardHeight = 95 * game.rows;
+
   return (
     <RightClickBehaviorContext.Provider value={rightClickBehaviorContextValue}>
       <Group align="start">
@@ -340,7 +342,7 @@ export default function Cast({
             players={players}
             squareNames={squareNames}
             isPlay={false}
-            style={{ height: `${475 - 44}px` }}
+            style={{ height: `${boardHeight - 44}px` }}
             sendEvents={sendEvents}
           />
         </Stack>
@@ -379,11 +381,11 @@ export default function Cast({
               })}
             </Group>
             {generalGoals.length > 0 ? (
-              getCard(generalGoals[0], 475 - gameSelectorHeight)
+              getCard(generalGoals[0], boardHeight - gameSelectorHeight)
             ) : (
               <InfoCard
                 title="Multi-goal games"
-                style={{ height: `${475 - gameSelectorHeight}px` }}
+                style={{ height: `${boardHeight - gameSelectorHeight}px` }}
               >
                 <Stack gap={4}>
                   {multiGoalGameElements.length > 0
@@ -394,9 +396,12 @@ export default function Cast({
             )}
           </Stack>
         ) : generalGoals.length > 0 ? (
-          getCard(generalGoals[0], 475)
+          getCard(generalGoals[0], boardHeight)
         ) : (
-          <InfoCard title="Multi-goal games" style={{ height: `475px` }}>
+          <InfoCard
+            title="Multi-goal games"
+            style={{ height: `${boardHeight}px` }}
+          >
             <Stack gap={4}>
               {multiGoalGameElements.length > 0
                 ? multiGoalGameElements

@@ -113,9 +113,9 @@ export default function CastBoardWithTrackers({
   return (
     <Group gap={0}>
       {showRecentGames && generalGoals.length > 0 && (
-        <SideColumn isDouble={false}>
+        <SideColumn isDouble={false} rows={game.game.rows}>
           <RecentGames
-            limit={6}
+            limit={game.game.rows + 1}
             recentGames={leftGames}
             subcategoryIdToName={subcategoryIdToName}
             font={font}
@@ -123,7 +123,7 @@ export default function CastBoardWithTrackers({
           />
         </SideColumn>
       )}
-      <SideColumn isDouble={isDouble}>
+      <SideColumn isDouble={isDouble} rows={game.game.rows}>
         <SideCell>
           <ScoreSquare
             color={leftColor}
@@ -147,7 +147,7 @@ export default function CastBoardWithTrackers({
         />
         {showRecentGames && generalGoals.length === 0 && (
           <RecentGames
-            limit={5}
+            limit={game.game.rows}
             recentGames={leftGames}
             subcategoryIdToName={subcategoryIdToName}
             font={font}
@@ -172,7 +172,7 @@ export default function CastBoardWithTrackers({
           columns={game.game.cols}
         />
       </StandardBoardWrapper>
-      <SideColumn isDouble={isDouble}>
+      <SideColumn isDouble={isDouble} rows={game.game.rows}>
         <SideCell>
           <ScoreSquare
             color={rightColor}
@@ -196,7 +196,7 @@ export default function CastBoardWithTrackers({
         />
         {showRecentGames && generalGoals.length === 0 && (
           <RecentGames
-            limit={5}
+            limit={game.game.rows}
             recentGames={rightGames}
             subcategoryIdToName={subcategoryIdToName}
             font={font}
@@ -205,9 +205,9 @@ export default function CastBoardWithTrackers({
         )}
       </SideColumn>
       {showRecentGames && generalGoals.length > 0 && (
-        <SideColumn isDouble={false}>
+        <SideColumn isDouble={false} rows={game.game.rows}>
           <RecentGames
-            limit={6}
+            limit={game.game.rows + 1}
             recentGames={rightGames}
             subcategoryIdToName={subcategoryIdToName}
             font={font}

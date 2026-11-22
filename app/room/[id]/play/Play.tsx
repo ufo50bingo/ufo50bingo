@@ -217,6 +217,8 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
     (timerState.type === "countdown" &&
       !timerState.wasPaused &&
       !timerState.isForceRevealed);
+
+  const boardHeight = game.rows * 95;
   return (
     <>
       <Group align="stretch">
@@ -347,8 +349,8 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
           style={{
             height:
               showGeneralTracker && generalSettings.type === "simple"
-                ? "748px"
-                : "592px",
+                ? `${boardHeight + 273}px`
+                : `${boardHeight + 117}px`,
           }}
           sendEvents={sendEvents}
         />
@@ -374,7 +376,7 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
               generalTrackerPlayers={[selfPlayer]}
               style={{
                 minHeight: "300px",
-                maxHeight: "592px",
+                maxHeight: `${boardHeight + 117}px`,
                 flex: "1 1 auto",
               }}
               settings={generalSettings}

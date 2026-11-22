@@ -20,17 +20,19 @@ const HASHES: Array<[UFOPasta, null | bigint]> = [
 ];
 
 function getFilename(hash: bigint): string {
-  return hash.toString() + ".json.br";
+  return "pasta" + hash.toString() + ".json.br";
 }
 
 async function isStored(hash: bigint): Promise<boolean> {
   return await files.exists(getFilename(hash));
 }
 
-export async function storePasta(pasta: UFOPasta): Promise<void> {
+export function hashJson(json: string): bigint {
+  return BigInt.asIntN(64, xxh64(json));
+}
+
+export async function storePasta(json: string, hash: bigint): Promise<void> {
   try {
-    const json = JSON.stringify(pasta);
-    const hash = xxh64(json);
     const alreadyExists = await isStored(hash);
     if (alreadyExists) {
       return;
@@ -43,10 +45,9 @@ export async function storePasta(pasta: UFOPasta): Promise<void> {
 export async function fetchPasta(hash: bigint): Promise<null | UFOPasta> {
   for (const pair of HASHES) {
     if (pair[1] == null) {
-      pair[1] = xxh64(JSON.stringify(pair[0]));
+      pair[1] = hashJson(JSON.stringify(pair[0]));
     }
     if (pair[1] === hash) {
-      console.log("found standard pasta");
       return pair[0];
     }
   }

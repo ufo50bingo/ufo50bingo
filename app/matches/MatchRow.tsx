@@ -24,10 +24,9 @@ import { Fragment, useMemo, useState } from "react";
 import classes from "./MatchRow.module.css";
 import { FullParsedGame } from "../fetchFeed";
 import useMembers from "../room/[id]/common/useMembers";
-import useSquareColors from "../room/[id]/common/useSquareColors";
 import { displayWeek } from "./week";
 import { displayTier } from "./tier";
-import { getVariantText, WinType } from "./matchUtil";
+import { getVariantText } from "./matchUtil";
 import { getHost } from "./vodUtil";
 import formatMatchDate from "./formatMatchDate";
 import { db } from "../db";
@@ -39,10 +38,10 @@ import EditVodModal from "./EditVodModal";
 import { LEAGUE_SEASON } from "../createboard/leagueConstants";
 import MatchModal from "./MatchModal";
 import useTeams from "./useTeams";
-import useGetScore from "./useGetScore";
 import TeamPlayers from "./TeamPlayers";
 import TeamScoreCell from "./TeamScoreCell";
-import { BingosyncColor } from "../color";
+import getFeedWithoutMistakes from "../match/[id]/getFeedWithoutMistakes";
+import useTeamsWithResults from "./useTeamsWithResults";
 
 const ICON_SIZE = 16;
 
@@ -65,31 +64,25 @@ export function MatchRow({ game, isMobile }: Props) {
   const [isEditingLeague, setIsEditingLeague] = useState(false);
 
   const { game: info, feed } = game;
-  const boardSize = info.rows * info.cols;
 
   const { players, casters } = useMembers(feed);
-  const squareColors = useSquareColors(feed, boardSize, info.isLockout);
-  const getScore = useGetScore(squareColors);
-  const teams = useTeams(players);
+  const teamsMap = useTeams(players);
 
-  // TODO: fix up winner logic
-  const winInfo: null | { color: BingosyncColor; winType: WinType } =
-    useMemo(() => {
-      if (teams.length === 0) {
-        return null;
-      }
-      const sorted = [...teams].sort(
-        (a, b) => getScore(a.color) - getScore(b.color),
-      );
-      if (
-        sorted.length > 1 &&
-        getScore(sorted[0].color) === getScore(sorted[1].color)
-      ) {
-        return { color: sorted[0].color, winType: "Tiebreak" };
-      }
-      return { color: sorted[0].color, winType: "Majority" };
-    }, [getScore, teams]);
+  const feedWithoutMistakes = useMemo(
+    () => getFeedWithoutMistakes(feed, info.rows * info.cols, info.isLockout),
+    [feed, info.cols, info.isLockout, info.rows],
+  );
 
+  const teamsWithResults = useTeamsWithResults({
+    feedWithoutMistakes,
+    teams: teamsMap,
+    isLockout: info.isLockout,
+    rows: info.rows,
+    cols: info.cols,
+  });
+
+  const hasWinner =
+    teamsWithResults.length > 0 && teamsWithResults[0].winType != null;
   const isVisible =
     !hideByDefault || revealedMatchIDs?.has(String(info.id)) === true;
   const name = info.name ?? `Match #${info.id}`;
@@ -193,33 +186,25 @@ export function MatchRow({ game, isMobile }: Props) {
         </div>
 
         <div className={classes.teams}>
-          {teams.map((team, idx) => {
-            const isWinner = team.color === winInfo?.color;
+          {teamsWithResults.map((team, idx) => {
             return (
               <Fragment key={team.color}>
                 <TeamPlayers
                   team={team}
-                  isWinner={isWinner}
-                  isVisible={isVisible}
+                  isWinner={team.winType != null}
+                  isWinnerShown={isVisible && hasWinner}
                   size="md"
                 />
                 {isVisible ? (
-                  <TeamScoreCell
-                    getScore={getScore}
-                    team={team}
-                    winType={
-                      winInfo != null && winInfo.color === team.color
-                        ? winInfo.winType
-                        : null
-                    }
-                    size="md"
-                  />
+                  <TeamScoreCell team={team} size="md" />
                 ) : (
                   idx === 0 && (
                     <Tooltip label="Show result" withArrow>
                       <ActionIcon
                         className={classes.reveal}
-                        style={{ gridRow: `1 / span ${teams.length}` }}
+                        style={{
+                          gridRow: `1 / span ${teamsWithResults.length}`,
+                        }}
                         variant="light"
                         w="auto"
                         h="auto"

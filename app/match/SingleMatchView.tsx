@@ -40,6 +40,7 @@ import { getClockZeroTime } from "./[id]/MatchClock";
 import NotStartedBoardCover from "../room/[id]/common/NotStartedBoardCover";
 import PlayedGameState from "../room/[id]/cast/PlayedGameState";
 import MatchPlaybackSlider from "./MatchPlaybackSlider";
+import useIsEnded from "../room/[id]/common/useIsEnded";
 import MatchDisplaySubmenus from "./MatchDisplaySubmenus";
 import useLocalState from "../room/[id]/cast/useLocalState";
 import useCountPosition from "../room/[id]/cast/useCountPosition";
@@ -154,8 +155,11 @@ export default function SingleMatchView({ game }: Props) {
         : null,
     [feedWithoutMistakes, game.game.cols, game.game.isLockout, game.game.rows],
   );
+  const isEnded = useIsEnded(game.feed);
   const hasWinner =
-    teamsWithResults.length > 0 && teamsWithResults[0].winType != null;
+    isEnded &&
+    teamsWithResults.length > 0 &&
+    teamsWithResults[0].winType != null;
   const subcategoryIdToName = useMemo(
     () => new Map(game.subcategories.map((sc) => [sc.subcategoryId, sc.name])),
     [game.subcategories],
@@ -419,6 +423,7 @@ export default function SingleMatchView({ game }: Props) {
                 shownDifficulties={shownDifficulties}
                 generals={generals}
                 tiebreakWinner={
+                  isEnded &&
                   teamsWithResults.length > 0 &&
                   teamsWithResults[0].winType === "Tiebreak"
                     ? teamsWithResults[0].color
@@ -447,7 +452,7 @@ export default function SingleMatchView({ game }: Props) {
             </Group>
             <Stack gap={4}>
               <div className={classes.teams} style={{ maxWidth: "360px" }}>
-                {teamsWithResults.map((team) => {
+                {teamsWithResults.map((team, idx) => {
                   return (
                     <Fragment key={team.color}>
                       <TeamPlayers
@@ -460,6 +465,7 @@ export default function SingleMatchView({ game }: Props) {
                         team={team}
                         size="lg"
                         isWinnerShown={isFinal && hasWinner}
+                        isInProgress={isFinal && !isEnded && idx === 0}
                       />
                     </Fragment>
                   );

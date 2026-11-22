@@ -96,3 +96,10 @@
 .winIcon {
   display: inline-flex;
 }
+
+.inProgressSlot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: none;
+}

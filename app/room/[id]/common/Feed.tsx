@@ -6,14 +6,16 @@ import { NewFeed, NewFeedItem } from "@/app/fetchFeed";
 import { GenericMember, PlayerMember } from "./useMembers";
 
 type Props = {
-  userId: number;
+  userId: null | number;
   feed: NewFeed;
   members: ReadonlyMap<number, GenericMember>;
   style?: CSSProperties;
   isPlay: boolean;
   squareNames: ReadonlyArray<string>;
   players: ReadonlyArray<PlayerMember>;
-  sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
+  sendEvents:
+    | null
+    | ((newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>);
 };
 
 export default function Feed({
@@ -41,7 +43,7 @@ export default function Feed({
           item.type !== "chat" ||
           item.visibleToPlayers == null ||
           item.userId === userId ||
-          item.visibleToPlayers.includes(userId),
+          (userId !== null && item.visibleToPlayers.includes(userId)),
       ),
     [feed, isPlay, userId],
   );
@@ -71,9 +73,15 @@ export default function Feed({
           ))}
         </Stack>
       </Card.Section>
-      <Card.Section inheritPadding={true} withBorder={true} py="sm">
-        <ChatInput userId={userId} players={players} sendEvents={sendEvents} />
-      </Card.Section>
+      {sendEvents != null && userId != null && (
+        <Card.Section inheritPadding={true} withBorder={true} py="sm">
+          <ChatInput
+            userId={userId}
+            players={players}
+            sendEvents={sendEvents}
+          />
+        </Card.Section>
+      )}
     </Card>
   );
 }

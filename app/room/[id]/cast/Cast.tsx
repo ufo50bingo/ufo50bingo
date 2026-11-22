@@ -74,10 +74,10 @@ export type GeneralItem = {
 export type CastProps = {
   game: ParsedGame;
   initialFeed: NewFeed;
-  userId: number;
+  userId: null | number;
   squares: ReadonlyArray<SquareWithId>;
   subcategories: ReadonlyArray<ParsedSubcategory>;
-  token: string;
+  token: null | string;
   fetchedPasta: null | UFOPasta;
 };
 
@@ -338,21 +338,26 @@ export default function Cast({
     />
   ));
 
-  const setGeneralGameCount = async (change: CountChange) => {
-    const foundSquare = squares.find((square) => square.name === change.goal);
-    const foundSubcategory = subcategories.find(
-      (sc) => sc.name === change.game,
-    );
-    const event: FeedGoalProgress = {
-      type: "goal_progress",
-      userId: change.userId,
-      time: getServerMsFromClientMs(Date.now()) / 1000,
-      goalId: foundSquare!.goalId,
-      subcategoryId: foundSubcategory!.subcategoryId,
-      count: change.count,
-    };
-    await sendEvents([event]);
-  };
+  const setGeneralGameCount =
+    sendEvents == null
+      ? null
+      : async (change: CountChange) => {
+          const foundSquare = squares.find(
+            (square) => square.name === change.goal,
+          );
+          const foundSubcategory = subcategories.find(
+            (sc) => sc.name === change.game,
+          );
+          const event: FeedGoalProgress = {
+            type: "goal_progress",
+            userId: change.userId,
+            time: getServerMsFromClientMs(Date.now()) / 1000,
+            goalId: foundSquare!.goalId,
+            subcategoryId: foundSubcategory!.subcategoryId,
+            count: change.count,
+          };
+          await sendEvents([event]);
+        };
 
   const getCard = (g: GeneralItem, h: null | undefined | number) => (
     <GeneralGoal
@@ -422,18 +427,22 @@ export default function Cast({
         !timerState.wasPaused &&
         !timerState.isForceRevealed));
 
-  const addSubcategoryName = async (userId: number, newGame: string | null) => {
-    const subcategoryId =
-      subcategories.find((sc) => sc.name === newGame)?.subcategoryId ?? null;
-    const event: FeedCurrentSubcategory = {
-      type: "current_subcategory",
-      userId,
-      // eslint-disable-next-line react-hooks/purity
-      time: getServerMsFromClientMs(Date.now()) / 1000,
-      subcategoryId,
-    };
-    sendEvents([event]);
-  };
+  const addSubcategoryName =
+    sendEvents == null
+      ? null
+      : async (userId: number, newGame: string | null) => {
+          const subcategoryId =
+            subcategories.find((sc) => sc.name === newGame)?.subcategoryId ??
+            null;
+          const event: FeedCurrentSubcategory = {
+            type: "current_subcategory",
+            userId,
+            // eslint-disable-next-line react-hooks/purity
+            time: getServerMsFromClientMs(Date.now()) / 1000,
+            subcategoryId,
+          };
+          sendEvents([event]);
+        };
   return (
     <RightClickBehaviorContext.Provider value={rightClickBehaviorContextValue}>
       <Group align="start">
@@ -489,7 +498,12 @@ export default function Cast({
                 color: colors.length > 0 ? colors[0] : "blank",
               }))}
               highlights={highlights}
-              onClickSquare={setEditingIndex}
+              onClickSquare={(newIndex: number) => {
+                if (sendEvents == null) {
+                  return null;
+                }
+                setEditingIndex(newIndex);
+              }}
               boardCover={
                 <SyncedTimerBoardCover
                   isCast={true}
@@ -560,13 +574,15 @@ export default function Cast({
             >
               <SyncedTimer timerState={timerState} />
             </Text>
-            <StartPauseButton
-              timerState={timerState}
-              isCast={true}
-              userId={userId}
-              onCountdownStart={() => setIsDetecting(true)}
-              sendEvents={sendEvents}
-            />
+            {sendEvents != null && userId != null && (
+              <StartPauseButton
+                timerState={timerState}
+                isCast={true}
+                userId={userId}
+                onCountdownStart={() => setIsDetecting(true)}
+                sendEvents={sendEvents}
+              />
+            )}
           </Group>
           <Feed
             feed={feed}
@@ -592,8 +608,11 @@ export default function Cast({
                         game={
                           playerGames?.[playerGames.length - 1]?.game ?? null
                         }
-                        onChange={async (newGame: ProperGame | null) =>
-                          await addSubcategoryName(player.userId, newGame)
+                        onChange={
+                          addSubcategoryName == null
+                            ? null
+                            : async (newGame: ProperGame | null) =>
+                                await addSubcategoryName(player.userId, newGame)
                         }
                         terminalCodes={terminalCodes}
                         gameList={gameList}
@@ -686,7 +705,7 @@ export default function Cast({
         sendEvents={sendEvents}
         members={allMembers}
       />
-      {editingIndex != null && (
+      {sendEvents != null && userId != null && editingIndex != null && (
         <EditSquare
           userId={userId}
           sendEvents={sendEvents}

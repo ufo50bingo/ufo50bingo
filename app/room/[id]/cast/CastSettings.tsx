@@ -41,7 +41,7 @@ import { NewFeedItem } from "@/app/fetchFeed";
 import BottomSection from "../common/BottomSection";
 
 type Props = {
-  userId: number;
+  userId: null | number;
   shownDifficulties: ReadonlyArray<Difficulty>;
   setShownDifficulties: (newShown: ReadonlyArray<Difficulty>) => unknown;
   sortType: SortType;
@@ -61,11 +61,13 @@ type Props = {
   showRecentGames: boolean;
   setShowRecentGames: (newShowRecentGames: boolean) => unknown;
   allPlayerGames: AllPlayerGames;
-  addSubcategoryName: (userId: number, newGame: null | string) => unknown;
+  addSubcategoryName:
+    | null
+    | ((userId: number, newGame: null | string) => unknown);
   isDetecting: boolean;
   setIsDetecting: (newIsDetecting: boolean) => unknown;
   gameToGoals: GameToGoals;
-  setGeneralGameCount: (change: CountChange) => unknown;
+  setGeneralGameCount: null | ((change: CountChange) => unknown);
   countPosition: TCountPosition;
   setCountPosition: (newCountPosition: TCountPosition) => unknown;
   generalOrder: TGeneralOrder;
@@ -75,7 +77,9 @@ type Props = {
   timerState: SyncedTimerState;
   players: ReadonlyArray<PlayerMember>;
   casters: ReadonlyArray<CasterMember>;
-  sendEvents: (newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>;
+  sendEvents:
+    | null
+    | ((newEvent: ReadonlyArray<NewFeedItem>) => Promise<boolean>);
   members: ReadonlyMap<number, GenericMember>;
 };
 
@@ -154,12 +158,14 @@ export default function CastSettings({
                 isCast={true}
                 sendEvents={sendEvents}
               />
-              <TimerSection
-                userId={userId}
-                timerState={timerState}
-                isMobile={false}
-                sendEvents={sendEvents}
-              />
+              {sendEvents != null && userId != null && (
+                <TimerSection
+                  userId={userId}
+                  timerState={timerState}
+                  isMobile={false}
+                  sendEvents={sendEvents}
+                />
+              )}
               <Accordion.Item value="display">
                 <Accordion.Control>Display Settings</Accordion.Control>
                 <Accordion.Panel>
@@ -289,25 +295,31 @@ export default function CastSettings({
                 soundChoices={soundChoices}
                 setSoundChoices={setSoundChoices}
               />
-              <AutoGameSection
-                allPlayerGames={allPlayerGames}
-                addSubcategoryName={addSubcategoryName}
-                isDetecting={isDetecting}
-                setIsDetecting={setIsDetecting}
-                generalGoals={generalGoals}
-                generalCounts={generalCounts}
-                gameToGoals={gameToGoals}
-                setGeneralGameCount={setGeneralGameCount}
-                players={players}
-              />
+              {sendEvents != null &&
+                addSubcategoryName != null &&
+                setGeneralGameCount != null && (
+                  <AutoGameSection
+                    allPlayerGames={allPlayerGames}
+                    addSubcategoryName={addSubcategoryName}
+                    isDetecting={isDetecting}
+                    setIsDetecting={setIsDetecting}
+                    generalGoals={generalGoals}
+                    generalCounts={generalCounts}
+                    gameToGoals={gameToGoals}
+                    setGeneralGameCount={setGeneralGameCount}
+                    players={players}
+                  />
+                )}
             </Accordion>
-            <BottomSection
-              userId={userId}
-              members={members}
-              isCast={true}
-              isMobile={false}
-              sendEvents={sendEvents}
-            />
+            {sendEvents != null && userId != null && (
+              <BottomSection
+                userId={userId}
+                members={members}
+                isCast={true}
+                isMobile={false}
+                sendEvents={sendEvents}
+              />
+            )}
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>

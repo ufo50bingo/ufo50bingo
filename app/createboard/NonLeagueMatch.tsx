@@ -31,11 +31,11 @@ import useLocalEnum from "../localStorage/useLocalEnum";
 import validateStr from "../generator/validateStr";
 import getFilteredDifficulties from "./getFilteredDifficulties";
 import FiltersModal, { FilterInfo } from "./FiltersModal";
-import { getRoomLink, RoomBackend } from "../roomApi";
-import ExtraOptions from "./ExtraOptions";
+import { getRoomLink } from "../roomApi";
 import ufoDoubleGenerator from "../generator/ufoDoubleGenerator";
+import findGoal from "../findGoal";
 
-type CustomType = "srl_v5" | "ufo" | "fixed_board" | "randomized";
+type CustomType = "ufo" | "fixed_board";
 
 const FORMAT_OPTIONS = ["Normal", "Draft", "Custom", "Double"] as const;
 type Format = (typeof FORMAT_OPTIONS)[number];
@@ -58,6 +58,7 @@ export default function NonLeagueMatch({ visible }: Props) {
   });
   const [variant, setVariant] = useState<Variant>(METADATA[0].name);
   const [custom, setCustom] = useState("");
+  const [fixedBoard, setFixedBoard] = useState("");
   const [uncheckedGames, setUncheckedGames] = useState<Set<string>>(new Set());
   const [numPlayers, setNumPlayers] = useState(2);
   const [draftCheckState, setDraftCheckState] = useState<Map<string, number>>(
@@ -69,7 +70,6 @@ export default function NonLeagueMatch({ visible }: Props) {
   const [allFilterInfo, setAllFilterInfo] = useState<
     ReadonlyMap<string, FilterInfo>
   >(new Map());
-  const [roomBackend, setRoomBackend] = useState<RoomBackend>("bingosync");
   const [isExtraShown, setIsExtraShown] = useState<boolean>(false);
 
   const filterInfo = allFilterInfo.get(variant) ?? DEFAULT_FILTER_INFO;
@@ -131,8 +131,11 @@ export default function NonLeagueMatch({ visible }: Props) {
     };
     switch (metadata.type) {
       case "Custom":
-        if (customType !== "ufo" || customUfo == null) {
-          throw new Error("TODO!");
+        if (customType === "fixed_board") {
+          return fixedBoard.trim().split("\n");
+        }
+        if (customUfo == null) {
+          throw new Error("Pasta has errors!");
         }
         if (format === "Draft") {
           if (draftPasta != null) {
@@ -156,7 +159,7 @@ export default function NonLeagueMatch({ visible }: Props) {
   };
 
   const { customUfo, customUfoErrors, customUfoWarnings } = useMemo(() => {
-    if (customType !== "ufo" || custom === "") {
+    if (custom === "") {
       return { customUfo: null, customUfoErrors: [], customUfoWarnings: [] };
     }
     const result = validateStr(custom);
@@ -166,6 +169,14 @@ export default function NonLeagueMatch({ visible }: Props) {
       customUfoWarnings: result.warnings,
     };
   }, [customType, custom]);
+
+  const fixedBoardMissing = useMemo(() => {
+    if (customType !== "fixed_board" || customUfo == null) {
+      return [];
+    }
+    const goals = fixedBoard.trim().split("\n");
+    return goals.filter(g => findGoal(g, customUfo) == null);
+  }, [customType, customUfo, fixedBoard]);
 
   const resetCustomDifficultyCounts = () => {
     setDifficultyCounts((prevDifficultyCounts) => {
@@ -203,80 +214,86 @@ export default function NonLeagueMatch({ visible }: Props) {
                 <Select
                   data={[
                     { value: "ufo", label: "UFO" },
-                    { value: "srl_v5", label: "SRL v5" },
                     { value: "fixed_board", label: "Fixed Board" },
-                    { value: "randomized", label: "Randomized" },
                   ]}
                   label="Custom Type"
                   value={customType}
                   onChange={(newValue) => setCustomType(newValue as CustomType)}
                 />
-                {customType === "ufo" && (
-                  <Anchor
-                    size="xs"
-                    target="_blank"
-                    href="https://docs.google.com/document/d/1af04BI8p1-_FtcO8iRHiyrsNlsiqSormkYEJn-4DlLk/edit?tab=t.0"
-                  >
-                    View the specification for the UFO format here.
-                  </Anchor>
-                )}
               </Stack>
-
-              {customType === "ufo" ? (
-                <>
-                  <Textarea
-                    autosize
-                    label="Add your pasta here:"
-                    maxRows={12}
-                    minRows={2}
-                    onChange={(event) => {
-                      resetCustomDifficultyCounts();
-                      setFilterInfo(DEFAULT_FILTER_INFO);
-                      setCustom(event.currentTarget.value);
-                    }}
-                    spellCheck={false}
-                    value={custom}
-                    data-monospace
-                  />
-                  {customUfoErrors.length > 0 && (
-                    <Alert
-                      color="red"
-                      style={{ whiteSpace: "pre-line" }}
-                      title="Error: Pasta format is incorrect"
-                    >
-                      {customUfoErrors.join("\n")}
-                    </Alert>
-                  )}
-                  {customUfoWarnings.length > 0 && (
-                    <Alert
-                      color="yellow"
-                      style={{ whiteSpace: "pre-line" }}
-                      title="Warning: Pasta may have mistakes"
-                    >
-                      {customUfoWarnings.join("\n")}
-                    </Alert>
-                  )}
-                </>
-              ) : (
-                <JsonInput
-                  autosize
-                  label="Add your pasta here:"
-                  maxRows={12}
-                  minRows={2}
-                  onChange={(value) => {
-                    setCustom(value);
-                    resetCustomDifficultyCounts();
-                  }}
-                  spellCheck={false}
-                  validationError="Invalid JSON"
-                  value={custom}
-                />
+              {customType === "fixed_board" && (<Textarea
+                autosize
+                label="Add goals here, one per line"
+                maxRows={12}
+                minRows={2}
+                onChange={(event) => {
+                  setFixedBoard(event.target.value);
+                }}
+                spellCheck={false}
+                value={fixedBoard}
+              />)}
+              {fixedBoard.trim() !== "" && fixedBoardMissing.length > 0 && (
+                <Alert
+                  color="yellow"
+                  style={{ whiteSpace: "pre-line" }}
+                  title="These goals are missing from your full pasta:"
+                >
+                  {fixedBoardMissing.join("\n")}
+                </Alert>
               )}
+              {customType === "fixed_board" && fixedBoard.trim() !== "" && fixedBoard.trim().split("\n").length !== 25 && (
+                <Alert
+                  color="red"
+                  style={{ whiteSpace: "pre-line" }}
+                  title="Error: You must provide exactly 25 goals for a fixed board"
+                >
+                  You have provided {fixedBoard.trim().split("\n").length}.
+                </Alert>
+              )}
+              <Textarea
+                autosize
+                label={customType === "fixed_board" ? "Optional - Add a full pasta to enable features like short text and trackers:" : "Add your pasta here:"}
+                maxRows={12}
+                minRows={2}
+                onChange={(event) => {
+                  resetCustomDifficultyCounts();
+                  setFilterInfo(DEFAULT_FILTER_INFO);
+                  setCustom(event.currentTarget.value);
+                }}
+                spellCheck={false}
+                value={custom}
+                data-monospace
+              />
+              {customUfoErrors.length > 0 && (
+                <Alert
+                  color="red"
+                  style={{ whiteSpace: "pre-line" }}
+                  title="Error: Pasta format is incorrect"
+                >
+                  {customUfoErrors.join("\n")}
+                </Alert>
+              )}
+              {customUfoWarnings.length > 0 && (
+                <Alert
+                  color="yellow"
+                  style={{ whiteSpace: "pre-line" }}
+                  title="Warning: Pasta may have mistakes"
+                >
+                  {customUfoWarnings.join("\n")}
+                </Alert>
+              )}
+              <Anchor
+                size="xs"
+                target="_blank"
+                href="https://docs.google.com/document/d/1af04BI8p1-_FtcO8iRHiyrsNlsiqSormkYEJn-4DlLk/edit?tab=t.0"
+              >
+                View the specification for the UFO format here.
+              </Anchor>
             </>
           )}
           <Group justify="space-between">
             {(metadata.type === "UFO" ||
-              (metadata.type === "Custom" && customUfo != null)) &&
+              (metadata.type === "Custom" && customUfo != null && customType === "ufo")) &&
               metadata.name !== "10 Cherry Race" && (
                 <Chip.Group
                   multiple={false}
@@ -438,12 +455,6 @@ export default function NonLeagueMatch({ visible }: Props) {
               </div>
             </Tooltip>
           </Group>
-          <ExtraOptions
-            isExtraShown={isExtraShown}
-            setIsExtraShown={setIsExtraShown}
-            roomBackend={roomBackend}
-            setRoomBackend={setRoomBackend}
-          />
         </Stack>
       </Card.Section>
       <Card.Section withBorder={true} inheritPadding={true} py="xs">
@@ -462,29 +473,8 @@ export default function NonLeagueMatch({ visible }: Props) {
                 draftPasta == null)
             }
             onClick={async () => {
-              setIsCreationInProgress(true);
-
               try {
-                let bingosyncVariant;
-                switch (metadata.type) {
-                  case "UFO":
-                    bingosyncVariant = "18";
-                    break;
-                  case "Custom":
-                    switch (customType) {
-                      case "srl_v5":
-                        bingosyncVariant = "187";
-                        break;
-                      case "ufo":
-                      case "fixed_board":
-                        bingosyncVariant = "18";
-                        break;
-                      case "randomized":
-                        bingosyncVariant = "172";
-                        break;
-                    }
-                    break;
-                }
+                setIsCreationInProgress(true);
 
                 const pasta =
                   metadata.type === "Custom" ? customUfo! : metadata.pasta;
@@ -499,12 +489,10 @@ export default function NonLeagueMatch({ visible }: Props) {
                     password,
                     isPublic,
                     variant,
-                    bingosyncVariant,
                     isCustom: true,
                     isDraft: false,
                     isLockout,
                     leagueInfo: null,
-                    roomBackend,
                     fullPasta: metadata.type === "Custom" ? customUfo : null,
                   };
                   const [card1, card2] = ufoDoubleGenerator(pasta);
@@ -529,7 +517,6 @@ export default function NonLeagueMatch({ visible }: Props) {
                       password,
                       isPublic,
                       variant,
-                      bingosyncVariant,
                       isCustom:
                         format === "Custom" &&
                         (metadata.type === "UFO" ||
@@ -542,7 +529,6 @@ export default function NonLeagueMatch({ visible }: Props) {
                       goals: getSerializedPasta(),
                       fullPasta: metadata.type === "Custom" ? customUfo : null,
                       leagueInfo: null,
-                      roomBackend,
                     }),
                   );
                 }
@@ -556,7 +542,7 @@ export default function NonLeagueMatch({ visible }: Props) {
 
                 if (format !== "Double") {
                   window.open(
-                    getRoomLink(ids[0], password, roomBackend),
+                    getRoomLink(ids[0], password),
                     "_blank",
                   );
                 }
@@ -576,8 +562,8 @@ export default function NonLeagueMatch({ visible }: Props) {
           >
             Create Bingosync Board
             {format === "Double" &&
-            (metadata.type === "UFO" ||
-              (metadata.type === "Custom" && customUfo != null))
+              (metadata.type === "UFO" ||
+                (metadata.type === "Custom" && customUfo != null))
               ? "s"
               : ""}
           </Button>
@@ -610,7 +596,6 @@ export default function NonLeagueMatch({ visible }: Props) {
                     href={getRoomLink(
                       createdIds[0],
                       createdPassword,
-                      roomBackend,
                     )}
                     target="_blank"
                   >
@@ -636,7 +621,6 @@ export default function NonLeagueMatch({ visible }: Props) {
                           href={getRoomLink(
                             createdId,
                             createdPassword,
-                            roomBackend,
                           )}
                         >
                           <Text size="sm">Room {idx + 1}</Text>
@@ -676,7 +660,7 @@ export default function NonLeagueMatch({ visible }: Props) {
             </Alert>
           )}
         </Stack>
-      </Card.Section>
+      </Card.Section >
       {isFilterModalShown && (
         <FiltersModal
           pasta={metadata.type === "Custom" ? customUfo! : metadata.pasta}
@@ -685,7 +669,8 @@ export default function NonLeagueMatch({ visible }: Props) {
           setFilterInfo={setFilterInfo}
           variant={variant}
         />
-      )}
+      )
+      }
     </>
   );
 }

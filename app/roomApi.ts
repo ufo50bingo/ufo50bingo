@@ -31,13 +31,9 @@ export function getFeedUrl(id: string, roomBackend: RoomBackend): string {
 export function getRoomLink(
   id: string,
   password: string,
-  roomBackend: RoomBackend,
 ): string {
   const searchParams = new URLSearchParams({
     p: password,
   });
-  if (roomBackend !== "bingosync") {
-    searchParams.append("b", roomBackend);
-  }
   return `/room/${id}?${searchParams.toString()}`;
 }

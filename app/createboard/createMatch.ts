@@ -1,6 +1,5 @@
 "use server";
 
-import { RoomBackend } from "../roomApi";
 import { UFOPasta } from "../generator/ufoGenerator";
 import { storePasta } from "../pastaStorage";
 
@@ -12,6 +11,7 @@ import getAllSubcategories from "./getAllSubcategories";
 import getNonGeneralCategories from "./getNonGeneralCategories";
 import { METADATA, Variant } from "../pastas/metadata";
 import { hashJson } from "../hashJson";
+import getAllCastOptions from "./getAllCastOptions";
 
 export interface LeagueInfo {
   season: number;
@@ -31,12 +31,10 @@ interface CommonMatchProps {
   isCustom: boolean;
   isDraft: boolean;
   isLockout: boolean;
-  roomBackend: RoomBackend;
 }
 
 interface Props extends CommonMatchProps {
   goals: ReadonlyArray<string>;
-  bingosyncVariant: string;
   fullPasta: null | UFOPasta;
 }
 
@@ -50,7 +48,6 @@ export default async function createMatch({
   isLockout,
   goals,
   leagueInfo: _leagueInfo,
-  roomBackend: _roomBackend,
   fullPasta,
 }: Props): Promise<string> {
   const userId = await getUserId();
@@ -67,7 +64,9 @@ export default async function createMatch({
       pastaToStore.goals,
       getNonGeneralCategories(pastaToStore),
     );
-    for (const sc of subcategoriesToStore) {
+    const castOptionsToStore = getAllCastOptions(pastaToStore);
+
+    for (const sc of subcategoriesToStore.union(castOptionsToStore)) {
       subcategoryValues.push(sql`(${sc})`);
     }
   }

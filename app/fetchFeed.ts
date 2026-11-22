@@ -9,6 +9,7 @@ import getAllSubcategories from "./createboard/getAllSubcategories";
 import getNonGeneralCategories from "./createboard/getNonGeneralCategories";
 import joinValues from "./joinValues";
 import { getMatchingRepoPasta } from "./getMatchingRepoPasta";
+import getAllCastOptions from "./createboard/getAllCastOptions";
 
 export type FeedColorMark = {
   type: "color_mark";
@@ -297,7 +298,7 @@ function fetchSubcategoriesSql(sql: SQLTemplate, pasta: UFOPasta): SQL {
   const toFetch = getAllSubcategories(
     pasta.goals,
     getNonGeneralCategories(pasta),
-  );
+  ).union(getAllCastOptions(pasta));
   const subcategoryValues = [];
   for (const sc of toFetch) {
     subcategoryValues.push(sql`${sc}`);

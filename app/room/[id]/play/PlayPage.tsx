@@ -57,7 +57,19 @@ export type FeedTimerEvent = {
   duration: null | number;
 };
 
-export type NewFeedItem = FeedColorMark | FeedChat | FeedTimerEvent;
+export type FeedMember = {
+  type: "member";
+  user: NewFeedUser;
+  time: number;
+  playerColor: null | string;
+  isInvite: boolean;
+};
+
+export type NewFeedItem =
+  | FeedColorMark
+  | FeedChat
+  | FeedTimerEvent
+  | FeedMember;
 
 export type NewFeed = ReadonlyArray<NewFeedItem>;
 
@@ -76,6 +88,7 @@ async function fetchData(
     [fetchColorMarkSql(sql, gameId), parseColorMarkResult],
     [fetchChatSql(sql, gameId), parseChatResult],
     [fetchTimerEventSql(sql, gameId), parseTimerEventResult],
+    [fetchMemberSql(sql, gameId), parseMemberResult],
   ];
   const results = await sql.transaction([
     ...feedFetchPairs.map((pair) => pair[0]),
@@ -182,5 +195,30 @@ function parseTimerEventResult(result: SQLResult): Array<FeedTimerEvent> {
     time: Number(raw.unixtime),
     event: raw.event,
     duration: raw.duration,
+  }));
+}
+
+function fetchMemberSql(sql: SQLTemplate, gameId: number): SQL {
+  return sql`
+    SELECT
+      EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
+      user_id,
+      player_color,
+      is_invite
+    FROM member
+    WHERE game_id = ${gameId}
+  `;
+}
+
+function parseMemberResult(result: SQLResult): Array<FeedMember> {
+  return result.map((raw) => ({
+    type: "member",
+    user: {
+      id: Number(raw.user_id),
+      name: "Unknown",
+    },
+    time: Number(raw.unixtime),
+    playerColor: raw.player_color,
+    isInvite: raw.is_invite,
   }));
 }

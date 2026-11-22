@@ -14,7 +14,7 @@ type IconProps = {
   playerNum: number;
   goal: string;
   color: BingosyncColor;
-  squareColor: BingosyncColor;
+  squareColors: ReadonlyArray<ReadonlyArray<BingosyncColor>>;
   src: string;
   count: number;
   countPosition: TCountPosition;
@@ -27,7 +27,7 @@ function Icon({
   src,
   count,
   color,
-  squareColor,
+  squareColors,
   countPosition,
   playerNum,
   font,
@@ -36,6 +36,8 @@ function Icon({
   const iconClass = isPixel
     ? `${classes.icon} ${classes.spritesIcon}`
     : classes.icon;
+  // TODO: Support non-lockout
+  const squareColor = squareColors.length > 0 ? squareColors[0] : "blank";
   const imgClass =
     squareColor !== "blank" ? `${iconClass} ${classes.grayscale}` : iconClass;
 
@@ -118,6 +120,7 @@ type Props = {
   isHidden: boolean;
   countPosition: TCountPosition;
   font: Font;
+  squareColors: ReadonlyArray<ReadonlyArray<BingosyncColor>>;
 };
 
 export default function GeneralIcons({
@@ -129,6 +132,7 @@ export default function GeneralIcons({
   isHidden,
   countPosition,
   font,
+  squareColors,
 }: Props) {
   return generalGoals.map((item) => {
     const { goal, resolvedGoal } = item.foundGoal;
@@ -139,7 +143,7 @@ export default function GeneralIcons({
         key={resolvedGoal}
         goal={resolvedGoal}
         color={color}
-        squareColor={item.color}
+        squareColors={squareColors}
         count={
           countState == null
             ? 0

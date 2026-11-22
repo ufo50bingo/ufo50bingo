@@ -21,8 +21,6 @@ import NotificationsSection, {
   SetSoundChoices,
   SoundChoices,
 } from "../common/NotificationsSection";
-import CreateBoardSection from "../common/CreateBoardSection";
-import BottomSection from "../common/BottomSection";
 import FileSyncSection from "./FileSyncSection";
 import { GeneralCounts } from "./CastPage";
 import { GeneralItem, TCountPosition } from "./Cast";
@@ -31,13 +29,9 @@ import { Font } from "@/app/font/useFont";
 import FontSelector from "@/app/font/FontSelector";
 
 import classes from "./CastSettings.module.css";
-import {
-  FullSyncedTimerEvent,
-  SyncedTimerState,
-} from "../common/useSyncedTimer";
+import { SyncedTimerState } from "../common/useSyncedTimer";
 import TimerSection from "../common/TimerSection";
 import { useShouldShortenContext } from "@/app/settings/ShouldShortenContext";
-import { RoomBackend } from "@/app/roomApi";
 import { useShouldShowRecentContext } from "@/app/settings/ShouldShowRecentContext";
 import AutoGameSection from "./AutoGameSection";
 import { AllPlayerGames, CountChange } from "./useSyncedState";
@@ -45,8 +39,7 @@ import { GameToGoals } from "./findAllGames";
 import SelectRightClickBehavior from "@/app/settings/SelectRightClickBehavior";
 
 type Props = {
-  id: string;
-  seed: number;
+  gameId: number;
   leftColor: BingosyncColor;
   rightColor: BingosyncColor;
   setLeftColor: (newColor: BingosyncColor) => unknown;
@@ -85,14 +78,11 @@ type Props = {
   setGeneralOrder: (newGeneralOrder: TGeneralOrder) => unknown;
   font: Font;
   setFont: (newFont: Font) => unknown;
-  addEvent: (newEvent: FullSyncedTimerEvent) => Promise<void>;
   timerState: SyncedTimerState;
-  roomBackend: RoomBackend;
 };
 
 export default function CastSettings({
-  id,
-  seed,
+  gameId,
   leftColor,
   rightColor,
   setLeftColor,
@@ -131,9 +121,7 @@ export default function CastSettings({
   setGeneralOrder,
   font,
   setFont,
-  addEvent,
   timerState,
-  roomBackend,
 }: Props) {
   const [isShown, setIsShown] = useState(leftColor === rightColor);
   const { shouldShortenCast, setShouldShortenCast } = useShouldShortenContext();
@@ -160,7 +148,7 @@ export default function CastSettings({
         <Drawer.Overlay backgroundOpacity={0} />
         <Drawer.Content style={{ boxShadow: "-0.2em 0 0.4em black" }}>
           <Drawer.Header>
-            <Drawer.Title>Tools — Seed {seed}</Drawer.Title>
+            <Drawer.Title>Tools</Drawer.Title>
             <Drawer.CloseButton />
           </Drawer.Header>
           <Drawer.Body p={0}>
@@ -183,55 +171,54 @@ export default function CastSettings({
                   />
                   {((leftColor === "pink" && rightColor === "blue") ||
                     (leftColor === "blue" && rightColor === "pink")) && (
-                      <Group mt={8} gap={4}>
-                        <img
-                          className={classes.emoji}
-                          src="/transflag.svg"
-                          alt="trans flag"
-                        />
-                        <img
-                          className={classes.emoji}
-                          src="/transflag.svg"
-                          alt="trans flag"
-                        />
-                        <img
-                          className={classes.emoji}
-                          src="/transflag.svg"
-                          alt="trans flag"
-                        />
-                        <img
-                          className={classes.emoji}
-                          src="/transflag.svg"
-                          alt="trans flag"
-                        />
-                        <img
-                          className={classes.emoji}
-                          src="/transflag.svg"
-                          alt="trans flag"
-                        />
-                        <img
-                          className={classes.emoji}
-                          src="/transflag.svg"
-                          alt="trans flag"
-                        />
-                        <img
-                          className={classes.emoji}
-                          src="/transflag.svg"
-                          alt="trans flag"
-                        />
-                        <img
-                          className={classes.emoji}
-                          src="/transflag.svg"
-                          alt="trans flag"
-                        />
-                      </Group>
-                    )}
+                    <Group mt={8} gap={4}>
+                      <img
+                        className={classes.emoji}
+                        src="/transflag.svg"
+                        alt="trans flag"
+                      />
+                      <img
+                        className={classes.emoji}
+                        src="/transflag.svg"
+                        alt="trans flag"
+                      />
+                      <img
+                        className={classes.emoji}
+                        src="/transflag.svg"
+                        alt="trans flag"
+                      />
+                      <img
+                        className={classes.emoji}
+                        src="/transflag.svg"
+                        alt="trans flag"
+                      />
+                      <img
+                        className={classes.emoji}
+                        src="/transflag.svg"
+                        alt="trans flag"
+                      />
+                      <img
+                        className={classes.emoji}
+                        src="/transflag.svg"
+                        alt="trans flag"
+                      />
+                      <img
+                        className={classes.emoji}
+                        src="/transflag.svg"
+                        alt="trans flag"
+                      />
+                      <img
+                        className={classes.emoji}
+                        src="/transflag.svg"
+                        alt="trans flag"
+                      />
+                    </Group>
+                  )}
                 </Accordion.Panel>
               </Accordion.Item>
               <TimerSection
+                gameId={gameId}
                 timerState={timerState}
-                addEvent={addEvent}
-                seed={seed}
                 isMobile={false}
               />
               <Accordion.Item value="display">
@@ -273,8 +260,8 @@ export default function CastSettings({
                               event.currentTarget.checked
                                 ? [...shownDifficulties, difficulty]
                                 : shownDifficulties.filter(
-                                  (d) => d !== difficulty,
-                                ),
+                                    (d) => d !== difficulty,
+                                  ),
                             )
                           }
                           label={DIFFICULTY_NAMES[difficulty]}
@@ -324,7 +311,10 @@ export default function CastSettings({
                       }
                     />
                     <FontSelector font={font} setFont={setFont} />
-                    <SelectRightClickBehavior label="Square right click behavior" isCast={true} />
+                    <SelectRightClickBehavior
+                      label="Square right click behavior"
+                      isCast={true}
+                    />
                     <Checkbox
                       label="Hide board by default"
                       checked={hideByDefault}
@@ -399,13 +389,8 @@ export default function CastSettings({
                 generalCounts={generalCounts}
                 generalGoals={generalGoals}
               />
-              <CreateBoardSection
-                id={id}
-                isMobile={false}
-                roomBackend={roomBackend}
-              />
             </Accordion>
-            <BottomSection id={id} isMobile={false} roomBackend={roomBackend} />
+            {/* TODO: Add disconnect? */}
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>

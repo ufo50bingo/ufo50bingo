@@ -1,14 +1,9 @@
 "use client";
 
 import Board from "@/app/Board";
-import {
-  BingosyncColor,
-  getChangelog,
-  RawFeed,
-  TBoard,
-} from "@/app/matches/parseBingosyncData";
+import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { Group, Stack, Text } from "@mantine/core";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Feed from "../common/Feed";
 import { Game, ORDERED_GAMES, ProperGame } from "@/app/goals";
 import { getAllTerminalCodes, getGameToGoals } from "./findAllGames";
@@ -18,8 +13,7 @@ import GameInfo from "./GameInfo";
 import CastSettings from "./CastSettings";
 import GeneralIcons from "./GeneralIcons";
 import EditSquare from "./EditSquare";
-import { getResult } from "@/app/matches/computeResult";
-import useSyncedState, { AllPlayerGames, CountState } from "./useSyncedState";
+import { AllPlayerGames } from "./useSyncedState";
 import useLocalState from "./useLocalState";
 import useBingosyncSocket from "../common/useBingosyncSocket";
 import useSounds from "../play/useSounds";
@@ -35,19 +29,22 @@ import useLocalNumber from "@/app/localStorage/useLocalNumber";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
 import { GENERAL_ORDER } from "./GeneralOrderSelector";
 import useFont from "@/app/font/useFont";
-import useSyncedTimer, { FullSyncedTimerEvent } from "../common/useSyncedTimer";
+import useSyncedTimer from "../common/useSyncedTimer";
 import SyncedTimerBoardCover from "../common/SyncedTimerBoardCover";
 import SyncedTimer from "../common/SyncedTimer";
 import StartPauseButton from "../common/StartPauseButton";
 import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
 import { UFOPasta } from "@/app/generator/ufoGenerator";
-import { RoomBackend } from "@/app/roomApi";
 import getGameList from "../common/getGameList";
 import getIsNes50 from "../common/getIsNes50";
 import { Restrictions, GeneralSettings } from "../play/GeneralSection";
 import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
 import useCastRightClickBehavior from "./useCastRightClickBehavior";
 import { RightClickBehaviorContext } from "@/app/settings/RightClickBehaviorContext";
+import { NewFeed } from "@/app/fetchFeed";
+import { GeneralCounts } from "./CastPage";
+import useSquareColors from "../common/useSquareColors";
+import useMembers from "../common/useMembers";
 
 const RESTRICTIONS: Restrictions = {
   canTagDifficultyFor: null,
@@ -68,37 +65,32 @@ export type GeneralItem = {
 };
 
 export type CastProps = {
-  id: string;
-  board: TBoard;
-  rawFeed: RawFeed;
-  socketKey: string;
-  initialSeed: number;
-  initialCounts: { [goal: string]: CountState };
-  initialLeftColor: BingosyncColor;
-  initialRightColor: BingosyncColor;
-  initialAllPlayerGames: AllPlayerGames;
-  initialTimerEvents: ReadonlyArray<FullSyncedTimerEvent>;
-  playerName: string;
-  roomBackend: RoomBackend;
+  gameId: number;
+  initialFeed: NewFeed;
+  userId: number;
+  squareNames: ReadonlyArray<string>;
 };
 
 const COUNT_POSITION = ["side_by_side", "inset"] as const;
 export type TCountPosition = (typeof COUNT_POSITION)[number];
 
 export default function Cast({
-  id,
-  board: initialBoard,
-  rawFeed: initialRawFeed,
-  socketKey,
-  initialSeed,
-  initialCounts,
-  initialLeftColor,
-  initialRightColor,
-  initialAllPlayerGames,
-  initialTimerEvents,
-  playerName,
-  roomBackend,
+  gameId,
+  initialFeed,
+  userId,
+  squareNames,
 }: CastProps) {
+  const isLockout = true;
+  const boardSize = 25;
+  const [soundChoices, setSoundChoices, playAudio] = useSounds("cast");
+  const { feed, reconnectModal } = useBingosyncSocket({
+    gameId,
+    initialFeed,
+    userId,
+    playAudio,
+  });
+  const members = useMembers(feed);
+  const squareColors = useSquareColors(feed, boardSize, isLockout);
   const [rightClickBehavior, setRightClickBehavior] =
     useCastRightClickBehavior();
   const rightClickBehaviorContextValue = useMemo(
@@ -110,51 +102,36 @@ export default function Cast({
     }),
     [rightClickBehavior, setRightClickBehavior],
   );
+
+  const isNes50 = useMemo(() => getIsNes50(squareNames), [squareNames]);
   // TODO: Update getGameList to handle other pastas as well
-  const [gameToGoals, setGameToGoals] = useState(() =>
-    getGameToGoals(initialBoard, getGameList(getIsNes50(initialBoard))),
+  const gameToGoals = useMemo(
+    () => getGameToGoals(squareNames, getGameList(isNes50)),
+    [squareNames, isNes50],
   );
-  const [terminalCodes, setTerminalCodes] = useState(() =>
-    getAllTerminalCodes(initialBoard),
+  const terminalCodes = useMemo(
+    () => getAllTerminalCodes(squareNames),
+    [squareNames],
   );
-  const onNewCard = useCallback((newBoard: TBoard) => {
-    setGameToGoals(getGameToGoals(newBoard, getGameList(getIsNes50(newBoard))));
-    setTerminalCodes(getAllTerminalCodes(newBoard));
-  }, []);
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
   const [isDetecting, setIsDetecting] = useState(false);
 
-  const [soundChoices, setSoundChoices, playAudio] = useSounds("cast");
+  // TODO: Use leftUserId and rightUserId
+  const [leftColor, rightColor]: [BingosyncColor, BingosyncColor] =
+    useMemo(() => {
+      return ["red", "blue"];
+    }, []);
 
-  const { board, rawFeed, seed, reconnectModal } = useBingosyncSocket({
-    id,
-    initialBoard,
-    initialRawFeed,
-    initialSeed,
-    socketKey,
-    onNewCard,
-    playerName,
-    playAudio,
-    roomBackend,
-  });
+  // TODO: CountState should be a userId map
+  const generals: GeneralCounts = useMemo(() => {
+    return {};
+  }, []);
 
-  const {
-    leftColor,
-    setLeftColor,
-    rightColor,
-    setRightColor,
-    generals,
-    setGeneralGameCount,
-    allPlayerGames,
-    addGame,
-  } = useSyncedState({
-    id,
-    seed,
-    initialCounts,
-    initialLeftColor,
-    initialRightColor,
-    initialAllPlayerGames,
-  });
+  // TODO: use map for player IDs
+  const allPlayerGames: AllPlayerGames = useMemo(() => {
+    return [];
+  }, []);
+
   const {
     shownDifficulties,
     showAll,
@@ -172,19 +149,16 @@ export default function Cast({
     setHighlightCurrentGame,
     showRecentGames,
     setShowRecentGames,
-  } = useLocalState(id, seed);
-
-  const isNes50 = useMemo(() => getIsNes50(board), [board]);
+  } = useLocalState(gameId);
 
   const gameList = useMemo(() => getGameList(isNes50), [isNes50]);
 
-  const { addEvent, timerState, forceReveal } = useSyncedTimer({
-    id,
-    seed,
-    initialEvents: initialTimerEvents,
+  const { timerState, forceReveal } = useSyncedTimer({
+    gameId,
+    feed,
     playAudio,
-    isCast: true,
-    roomBackend,
+    isCast: false,
+    members,
   });
 
   const [generalOrder, setGeneralOrder] = useLocalEnum({
@@ -205,66 +179,69 @@ export default function Cast({
     options: COUNT_POSITION,
   });
 
-  const leftScore = board.filter((square) => square.color === leftColor).length;
-  const rightScore = board.filter(
-    (square) => square.color === rightColor,
+  const leftScore = squareColors.filter((colors) =>
+    colors.includes(leftColor),
+  ).length;
+  const rightScore = squareColors.filter((colors) =>
+    colors.includes(rightColor),
   ).length;
 
-  const tiebreakWinner = useMemo<BingosyncColor | null>(() => {
-    try {
-      if (
-        leftScore !== rightScore ||
-        leftColor === rightColor ||
-        leftScore === 0
-      ) {
-        return null;
-      }
-      const changelog = getChangelog(rawFeed);
-      const result = getResult(board, changelog.changes, null, null);
-      if (result == null) {
-        return null;
-      }
-      const isValid =
-        result.winnerScore === leftScore &&
-        result.opponentScore === leftScore &&
-        (result.winnerColor === leftColor ||
-          result.winnerColor === rightColor) &&
-        (result.opponentColor === leftColor ||
-          result.opponentColor === rightColor);
-      if (!isValid) {
-        return null;
-      }
-      return result.winnerColor as BingosyncColor;
-    } catch {
-      return null;
-    }
-  }, [leftScore, rightScore, leftColor, rightColor, rawFeed, board]);
+  const tiebreakWinner = null;
+  // const tiebreakWinner = useMemo<BingosyncColor | null>(() => {
+  //   try {
+  //     if (
+  //       leftScore !== rightScore ||
+  //       leftColor === rightColor ||
+  //       leftScore === 0
+  //     ) {
+  //       return null;
+  //     }
+  //     const changelog = getChangelog(rawFeed);
+  //     const result = getResult(board, changelog.changes, null, null);
+  //     if (result == null) {
+  //       return null;
+  //     }
+  //     const isValid =
+  //       result.winnerScore === leftScore &&
+  //       result.opponentScore === leftScore &&
+  //       (result.winnerColor === leftColor ||
+  //         result.winnerColor === rightColor) &&
+  //       (result.opponentColor === leftColor ||
+  //         result.opponentColor === rightColor);
+  //     if (!isValid) {
+  //       return null;
+  //     }
+  //     return result.winnerColor as BingosyncColor;
+  //   } catch {
+  //     return null;
+  //   }
+  // }, [leftScore, rightScore, leftColor, rightColor, rawFeed, board]);
 
   const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(() => {
-    return board
-      .map((square) => {
+    return squareNames
+      .map((name, squareIndex) => {
         let foundGoal: null | FoundGoal<string, string, string> = null;
-        foundGoal = findGoal(square.name, STANDARD_UFO);
+        foundGoal = findGoal(name, STANDARD_UFO);
         let pasta: UFOPasta = STANDARD_UFO;
         if (foundGoal == null) {
-          foundGoal = findGoal(square.name, NES_50_UFO);
+          foundGoal = findGoal(name, NES_50_UFO);
           pasta = NES_50_UFO;
         }
         if (foundGoal == null) {
-          foundGoal = findGoal(square.name, EVERY_GAME_UFO);
+          foundGoal = findGoal(name, EVERY_GAME_UFO);
           pasta = EVERY_GAME_UFO;
         }
         if (foundGoal == null || foundGoal.cast == null) {
           return null;
         }
         return {
-          color: square.color,
           foundGoal: foundGoal as FoundStandardGeneral,
           pasta,
+          squareIndex,
         };
       })
       .filter((item) => item != null);
-  }, [board]);
+  }, [squareNames]);
 
   // TODO: Fix this
   const sortedGenerals = useMemo<ReadonlyArray<GeneralItem>>(() => {
@@ -314,11 +291,13 @@ export default function Cast({
       key={g.foundGoal.resolvedGoal}
       gameToGoals={gameToGoals}
       foundGoal={g.foundGoal}
-      isFinished={g.color !== "blank"}
+      // TODO: Use server action
+      setGeneralGameCount={() => {}}
+      // TODO: Determine whether all colors have marked this
+      isFinished={isLockout && squareColors[g.squareIndex].length > 0}
       terminalCodes={terminalCodes}
       countState={generals[g.foundGoal.resolvedGoal]}
       showAll={showAll.includes(g.foundGoal.resolvedGoal)}
-      setGeneralGameCount={setGeneralGameCount}
       addShowAll={addShowAll}
       playerColors={[leftColor, rightColor]}
       style={{ height: `${h ?? 300}px` }}
@@ -421,6 +400,7 @@ export default function Cast({
               isHidden={areGeneralIconsHidden}
               countPosition={countPosition}
               font={font}
+              squareColors={squareColors}
             />
             {showRecentGames && generalGoals.length === 0 && (
               <RecentGames
@@ -432,7 +412,10 @@ export default function Cast({
             )}
           </SideColumn>
           <Board
-            board={board}
+            board={squareColors.map((colors, index) => ({
+              name: squareNames[index],
+              color: colors.length > 0 ? colors[0] : "blank",
+            }))}
             highlights={highlights}
             onClickSquare={setEditingIndex}
             boardCover={
@@ -468,6 +451,7 @@ export default function Cast({
               isHidden={areGeneralIconsHidden}
               countPosition={countPosition}
               font={font}
+              squareColors={squareColors}
             />
             {showRecentGames && generalGoals.length === 0 && (
               <RecentGames
@@ -503,16 +487,17 @@ export default function Cast({
             <StartPauseButton
               timerState={timerState}
               isCast={true}
-              addEvent={addEvent}
-              seed={seed}
-              playerName={playerName}
+              gameId={gameId}
               onCountdownStart={() => setIsDetecting(true)}
             />
           </Group>
           <Feed
+            feed={feed}
+            userId={userId}
+            members={members}
+            squareNames={squareNames}
+            isPlay={false}
             style={{ height: `${475 - 44}px` }}
-            rawFeed={rawFeed}
-            roomBackend={roomBackend}
           />
         </Stack>
         {showGameSelector ? (
@@ -526,9 +511,10 @@ export default function Cast({
                     getGamesForPlayer(allPlayerGames, playerNum)[0]?.game ??
                     null
                   }
-                  onChange={(newGame: ProperGame | null) =>
-                    addGame(newGame, playerNum)
-                  }
+                  onChange={(_newGame: ProperGame | null) => {
+                    // TODO: Call server action here
+                    // addGame(newGame, playerNum);
+                  }}
                   terminalCodes={terminalCodes}
                   gameList={gameList}
                 />
@@ -578,12 +564,12 @@ export default function Cast({
         )}
       </Group>
       <CastSettings
-        id={id}
-        seed={seed}
+        gameId={gameId}
         leftColor={leftColor}
-        setLeftColor={setLeftColor}
         rightColor={rightColor}
-        setRightColor={setRightColor}
+        // TODO: add server actions
+        setLeftColor={() => {}}
+        setRightColor={() => {}}
         shownDifficulties={shownDifficulties}
         setShownDifficulties={setShownDifficulties}
         sortType={sortType}
@@ -609,28 +595,28 @@ export default function Cast({
         numPlayers={numPlayers}
         setNumPlayers={setNumPlayers}
         allPlayerGames={allPlayerGames}
-        addGame={addGame}
+        // TODO: add server actions
+        addGame={() => {}}
         isDetecting={isDetecting}
         setIsDetecting={setIsDetecting}
         gameToGoals={gameToGoals}
-        setGeneralGameCount={setGeneralGameCount}
+        // TODO: add server actions
+        setGeneralGameCount={() => {}}
         countPosition={countPosition}
         setCountPosition={setCountPosition}
         generalOrder={generalOrder}
         setGeneralOrder={setGeneralOrder}
         font={font}
         setFont={setFont}
-        addEvent={addEvent}
         timerState={timerState}
-        roomBackend={roomBackend}
       />
       {editingIndex != null && (
         <EditSquare
-          id={id}
-          board={board}
+          gameId={gameId}
+          squareColors={squareColors}
+          squareNames={squareNames}
           editingIndex={editingIndex}
           setEditingIndex={setEditingIndex}
-          roomBackend={roomBackend}
         />
       )}
       {reconnectModal}

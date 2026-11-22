@@ -5,6 +5,7 @@ import getSql from "@/app/getSql";
 import Login from "./Login";
 import getSession from "@/app/getSession";
 import { cookies } from "next/headers";
+import CastPage from "./cast/CastPage";
 
 export default async function RoomPage({
   params,
@@ -42,10 +43,9 @@ export default async function RoomPage({
     );
   }
 
-  // switch (roomCookie.view) {
-  //   case "cast":
-  //     return <CastPage id={id} roomCookie={roomCookie} roomBackend={roomBackend} />;
-  //   case "play":
-  return <PlayPage gameId={gameId} userId={userId} memberFeed={memberFeed} />;
-  // }
+  if (userMember.playerColor == null) {
+    return <CastPage gameId={gameId} userId={userId} memberFeed={memberFeed} />;
+  } else {
+    return <PlayPage gameId={gameId} userId={userId} memberFeed={memberFeed} />;
+  }
 }

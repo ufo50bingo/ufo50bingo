@@ -3,7 +3,7 @@ import { SQL } from "./matches/page";
 import { BingosyncColor } from "./matches/parseBingosyncData";
 import { SyncedTimerEventName } from "./room/[id]/common/useSyncedTimer";
 import getSql from "./getSql";
-import { fetchPasta } from "./pastaStorage";
+import { fetchPastas } from "./pastaStorage";
 import { UFOPasta } from "./generator/ufoGenerator";
 import getAllSubcategories from "./createboard/getAllSubcategories";
 import getNonGeneralCategories from "./createboard/getNonGeneralCategories";
@@ -95,7 +95,10 @@ export type NewFeedItem =
 
 export type NewFeed = ReadonlyArray<NewFeedItem>;
 
-type FeedFetchPairs = [SQL, (result: SQLResult) => ReadonlyArray<NewFeedItem>];
+type FeedParsePair = [
+  (sql: SQLTemplate, gameId: number) => SQL,
+  (result: SQLResult) => ReadonlyArray<NewFeedItem>,
+];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type SQLResult = ReadonlyArray<Record<string, any>>;
@@ -332,7 +335,7 @@ function fetchSquaresSql(sql: SQLTemplate, gameId: number): SQL {
   `;
 }
 
-function parseSquares(result: SQLResult): ReadonlyArray<SquareWithId> {
+function parseSquaresResult(result: SQLResult): ReadonlyArray<SquareWithId> {
   return result.map((raw) => ({ goalId: raw.id, name: raw.name }));
 }
 
@@ -349,21 +352,28 @@ type ParsedGame = {
   pastaId: bigint | null;
 };
 
-function parseGame(result: SQLResult): ParsedGame {
+function parseGameResult(result: SQLResult): ParsedGame {
   const pastaIdRaw = result[0].pasta_id;
   const pastaId = pastaIdRaw == null ? null : BigInt(pastaIdRaw);
   return { pastaId };
 }
 
-function fetchSubcategoriesSql(sql: SQLTemplate, pasta: null | UFOPasta): SQL {
+function getAllSubcategoriesToLoad(pasta: null | UFOPasta): Set<string> {
   let toFetch = new Set(Object.keys(getGameList(pasta)));
   if (pasta != null) {
     toFetch = toFetch
       .union(getAllSubcategories(pasta.goals, getNonGeneralCategories(pasta)))
       .union(getAllCastOptions(pasta));
   }
+  return toFetch;
+}
+
+function fetchSubcategoriesSql(
+  sql: SQLTemplate,
+  allSubcategories: Set<string>,
+): SQL {
   const subcategoryValues = [];
-  for (const sc of toFetch) {
+  for (const sc of allSubcategories) {
     subcategoryValues.push(sql`${sc}`);
   }
   return sql`
@@ -390,59 +400,157 @@ type FetchDataView = "cast" | "play" | "spectate";
 
 export async function fetchData(
   gameId: number,
-  alreadyFetched: ReadonlyArray<NewFeedItem>,
   view: FetchDataView,
-): Promise<{
+): Promise<FullParsedGame> {
+  return (await fetchDataMulti([gameId], view))[0];
+}
+
+type FullParsedGame = {
+  gameId: number;
   squares: ReadonlyArray<SquareWithId>;
   feed: NewFeed;
   pastaId: null | bigint;
   fetchedPasta: null | UFOPasta;
   subcategories: ReadonlyArray<ParsedSubcategory>;
-}> {
-  const sql = getSql(false);
-  let feedFetchPairs: ReadonlyArray<FeedFetchPairs> = [
-    [fetchColorMarkSql(sql, gameId), parseColorMarkResult],
-    [fetchChatSql(sql, gameId), parseChatResult],
-    [fetchTimerEventSql(sql, gameId), parseTimerEventResult],
-    [fetchPlayerColorChangeSql(sql, gameId), parsePlayerColorChangeResult],
-    [fetchDisconnectSql(sql, gameId), parseDisconnectResult],
+};
+
+type PartialParsedGame = {
+  gameId: number;
+  squares: ReadonlyArray<SquareWithId>;
+  feed: NewFeed;
+  pastaId: null | bigint;
+};
+
+export async function fetchDataMulti(
+  gameIds: ReadonlyArray<number>,
+  view: FetchDataView,
+): Promise<ReadonlyArray<FullParsedGame>> {
+  let feedFetchPairs: ReadonlyArray<FeedParsePair> = [
+    [fetchColorMarkSql, parseColorMarkResult],
+    [fetchChatSql, parseChatResult],
+    [fetchTimerEventSql, parseTimerEventResult],
+    [fetchPlayerColorChangeSql, parsePlayerColorChangeResult],
   ];
   if (view !== "play") {
     feedFetchPairs = feedFetchPairs.concat([
-      [fetchGoalProgressSql(sql, gameId), parseGoalProgressResult],
-      [fetchCurrentSubcategorySql(sql, gameId), parseCurrentSubcategoryResult],
-      [fetchPlayerOrderSql(sql, gameId), parsePlayerOrderResult],
+      [fetchGoalProgressSql, parseGoalProgressResult],
+      [fetchCurrentSubcategorySql, parseCurrentSubcategoryResult],
+      [fetchPlayerOrderSql, parsePlayerOrderResult],
     ]);
   }
   if (view === "spectate") {
     feedFetchPairs = feedFetchPairs.concat([
-      [fetchMemberSql(sql, gameId), parseMemberResult],
-      [fetchDisconnectSql(sql, gameId), parseDisconnectResult],
+      [fetchMemberSql, parseMemberResult],
+      [fetchDisconnectSql, parseDisconnectResult],
     ]);
   }
-  const results = await sql.transaction([
-    ...feedFetchPairs.map((pair) => pair[0]),
+  const sql = getSql(false);
+  const allFeedFetches = gameIds.flatMap((gameId) =>
+    feedFetchPairs.map((pair) => pair[0](sql, gameId)),
+  );
+  const allOtherFetches = gameIds.flatMap((gameId) => [
     fetchSquaresSql(sql, gameId),
     fetchGameSql(sql, gameId),
   ]);
-  const feedResults = results.slice(0, feedFetchPairs.length);
-  const otherResults = results.slice(feedFetchPairs.length);
-  const feed = feedResults
-    .flatMap((result, index) => feedFetchPairs[index][1](result))
-    .concat(alreadyFetched);
-  feed.sort((a, b) => a.time - b.time);
 
-  const squares = parseSquares(otherResults[0]);
-  const { pastaId } = parseGame(otherResults[1]);
-  let fetchedPasta: null | UFOPasta = null;
-  const repoPasta = pastaId == null ? null : getMatchingRepoPasta(pastaId);
-  if (repoPasta == null && pastaId != null) {
-    fetchedPasta = await fetchPasta(pastaId);
+  const results = await sql.transaction(allFeedFetches.concat(allOtherFetches));
+
+  const numFeedFetches = feedFetchPairs.length;
+  const feedResultsPartitioned = gameIds.map((_, idx) =>
+    results.slice(idx * numFeedFetches, (idx + 1) * numFeedFetches),
+  );
+  const allOtherResults = results.slice(numFeedFetches * gameIds.length);
+  const otherResultsPartitioned = gameIds.map((_, idx) =>
+    allOtherResults.slice(2 * idx, 2 * (idx + 1)),
+  );
+
+  const parsed: ReadonlyArray<PartialParsedGame> = gameIds.map(
+    (gameId, idx) => {
+      const feedResults = feedResultsPartitioned[idx];
+      const otherResults = otherResultsPartitioned[idx];
+      const feed = feedResults.flatMap((result, index) =>
+        feedFetchPairs[index][1](result),
+      );
+      feed.sort((a, b) => a.time - b.time);
+
+      const squares = parseSquaresResult(otherResults[0]);
+      const { pastaId } = parseGameResult(otherResults[1]);
+      return { gameId, feed, squares, pastaId };
+    },
+  );
+
+  const uniquePastaIds = new Set(
+    parsed.map((p) => p.pastaId).filter((pastaId) => pastaId != null),
+  );
+  const pastaIdToPasta: Map<bigint, UFOPasta | null> = new Map(
+    [...uniquePastaIds].map((pastaId) => {
+      return [pastaId, getMatchingRepoPasta(pastaId)];
+    }),
+  );
+  const missingPastaIds = [
+    ...pastaIdToPasta
+      .entries()
+      .filter(([_, pasta]) => pasta == null)
+      .map(([pastaId, _]) => pastaId),
+  ];
+  const fetchedPastas = await fetchPastas(missingPastaIds);
+  for (const [pastaId, fetchedPasta] of fetchedPastas) {
+    pastaIdToPasta.set(pastaId, fetchedPasta);
   }
-  const pasta = fetchedPasta ?? repoPasta;
-  let subcategories: ReadonlyArray<ParsedSubcategory> = [];
+
+  const pastaIdToParsedSubcategories: Map<
+    bigint,
+    ReadonlyArray<ParsedSubcategory>
+  > = new Map();
+  let nullPastaSubcategories: ReadonlyArray<ParsedSubcategory> = [];
+
   if (view !== "play") {
-    subcategories = parseSubcategories(await fetchSubcategoriesSql(sql, pasta));
+    const pastaIdToSubcategoryNames: Map<bigint, Set<string>> = new Map(
+      pastaIdToPasta
+        .entries()
+        .map(([pastaId, pasta]) => [pastaId, getAllSubcategoriesToLoad(pasta)]),
+    );
+
+    const nullPastaNames: null | Set<string> = parsed.some(
+      (p) => p.pastaId == null,
+    )
+      ? getAllSubcategoriesToLoad(null)
+      : null;
+
+    const allToLoad: Set<string> = new Set(nullPastaNames ?? []);
+    for (const names of pastaIdToSubcategoryNames.values()) {
+      for (const name of names) {
+        allToLoad.add(name);
+      }
+    }
+
+    let parsedSubcategories: ReadonlyArray<ParsedSubcategory> = [];
+    if (allToLoad.size > 0) {
+      parsedSubcategories = parseSubcategories(
+        await fetchSubcategoriesSql(sql, allToLoad),
+      );
+    }
+    const scNameToParsed = new Map(parsedSubcategories.map((p) => [p.name, p]));
+    const getParsedFromNames = (names: Set<string>) =>
+      [...names]
+        .map((name) => scNameToParsed.get(name))
+        .filter((p) => p != null);
+
+    for (const [pastaId, scNames] of pastaIdToSubcategoryNames) {
+      pastaIdToParsedSubcategories.set(pastaId, getParsedFromNames(scNames));
+    }
+    if (nullPastaNames != null) {
+      nullPastaSubcategories = getParsedFromNames(nullPastaNames);
+    }
   }
-  return { squares, feed, fetchedPasta, pastaId, subcategories };
+
+  return parsed.map((p) => ({
+    ...p,
+    fetchedPasta:
+      p.pastaId != null ? (fetchedPastas.get(p.pastaId) ?? null) : null,
+    subcategories:
+      p.pastaId != null
+        ? (pastaIdToParsedSubcategories.get(p.pastaId) ?? [])
+        : nullPastaSubcategories,
+  }));
 }

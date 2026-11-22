@@ -17,13 +17,15 @@ export default async function CastPage({
   alreadyFetched,
 }: Props) {
   const [data, token] = await Promise.all([
-    fetchData(gameId, alreadyFetched, "cast"),
+    fetchData(gameId, "cast"),
     getBroadcastToken(gameId),
   ]);
+  const feed = data.feed.concat(alreadyFetched);
+  feed.sort((a, b) => a.time - b.time);
   return (
     <CastWrapper
       gameId={gameId}
-      initialFeed={data.feed}
+      initialFeed={feed}
       squares={data.squares}
       fetchedPasta={data.fetchedPasta}
       pastaId={data.pastaId}

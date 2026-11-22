@@ -14,13 +14,15 @@ export default async function PlayPage({
   alreadyFetched,
 }: Props) {
   const [data, token] = await Promise.all([
-    fetchData(gameId, alreadyFetched, "play"),
+    fetchData(gameId, "play"),
     getBroadcastToken(gameId),
   ]);
+  const feed = data.feed.concat(alreadyFetched);
+  feed.sort((a, b) => a.time - b.time);
   return (
     <PlayWrapper
       gameId={gameId}
-      initialFeed={data.feed}
+      initialFeed={feed}
       squareNames={data.squares.map((square) => square.name)}
       userId={userId}
       token={token}

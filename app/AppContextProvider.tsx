@@ -17,6 +17,7 @@ import { usePracticePasta } from "./usePracticePasta";
 import { UFOPasta } from "./generator/ufoGenerator";
 import { STANDARD_UFO } from "./pastas/standardUfo";
 import getFlatGoals, { UFOGoal } from "./generator/getFlatGoals";
+import isInNormalFormat from "./generator/isInNormalFormat";
 
 export enum NextGoalChoice {
   RANDOM = "RANDOM",
@@ -27,7 +28,12 @@ type AppContextType = {
   attempts: AttemptRow[];
   playlist: PlaylistRow[];
   goalStats: Map<string, GoalStats>;
-  unselectedGoals: Set<string>;
+  // Normal goals are selected unless unchecked, other goals like "Library General" are unselected unless checked
+  isGoalSelected: (goal: UFOGoal) => boolean;
+  setGoalsSelected: (
+    goals: ReadonlyArray<UFOGoal>,
+    isSelected: boolean,
+  ) => Promise<void>;
   setGoalPartsAndPasta: (
     goalParts: ReadonlyArray<Plain | ResolvedToken>,
     pasta: UFOPasta,
@@ -59,7 +65,7 @@ export function AppContextProvider({
   const [nextGoalChoice, setNextGoalChoiceRaw] = useState(
     global.window != undefined &&
       localStorage?.getItem("nextGoalChoice") ===
-      NextGoalChoice.PREFER_FEWER_ATTEMPTS
+        NextGoalChoice.PREFER_FEWER_ATTEMPTS
       ? NextGoalChoice.PREFER_FEWER_ATTEMPTS
       : NextGoalChoice.RANDOM,
   );
@@ -100,11 +106,54 @@ export function AppContextProvider({
     () => new Set(unselectedGoalsArray?.map((row) => row.goal) ?? []),
     [unselectedGoalsArray],
   );
+  const selectedNonNormalGoalsArray = useLiveQuery(() =>
+    db.selectedNonNormalGoals.toArray(),
+  );
+  const selectedNonNormalGoals = useMemo(
+    () => new Set(selectedNonNormalGoalsArray?.map((row) => row.goal) ?? []),
+    [selectedNonNormalGoalsArray],
+  );
+
+  const isGoalSelected = useCallback(
+    (goal: UFOGoal) =>
+      isInNormalFormat(goal.category, pasta)
+        ? !unselectedGoals.has(goal.name)
+        : selectedNonNormalGoals.has(goal.name),
+    [pasta, unselectedGoals, selectedNonNormalGoals],
+  );
+
+  const setGoalsSelected = useCallback(
+    async (goals: ReadonlyArray<UFOGoal>, isSelected: boolean) => {
+      const normalNames: Array<string> = [];
+      const nonNormalNames: Array<string> = [];
+      for (const goal of goals) {
+        (isInNormalFormat(goal.category, pasta)
+          ? normalNames
+          : nonNormalNames
+        ).push(goal.name);
+      }
+      const toRows = (names: ReadonlyArray<string>) =>
+        names.map((name) => ({ goal: name }));
+      await db.transaction(
+        "rw",
+        db.unselectedGoals,
+        db.selectedNonNormalGoals,
+        async () => {
+          if (isSelected) {
+            await db.unselectedGoals.bulkDelete(normalNames);
+            await db.selectedNonNormalGoals.bulkPut(toRows(nonNormalNames));
+          } else {
+            await db.unselectedGoals.bulkPut(toRows(normalNames));
+            await db.selectedNonNormalGoals.bulkDelete(nonNormalNames);
+          }
+        },
+      );
+    },
+    [pasta],
+  );
 
   const getRandomGoal = useCallback(() => {
-    const selectedGoals = getFlatGoals(pasta).filter(
-      (goal) => !unselectedGoals.has(goal.name),
-    );
+    const selectedGoals = getFlatGoals(pasta).filter(isGoalSelected);
     let goal;
     switch (nextGoalChoice) {
       case NextGoalChoice.PREFER_FEWER_ATTEMPTS:
@@ -123,7 +172,7 @@ export function AppContextProvider({
       ),
       pasta,
     };
-  }, [nextGoalChoice, unselectedGoals, goalStats, pasta]);
+  }, [nextGoalChoice, isGoalSelected, goalStats, pasta]);
 
   // useEffect sets the initial state to avoid hydration errors
   const [goalPartsAndPasta, setGoalPartsAndPastaRaw] =
@@ -139,7 +188,7 @@ export function AppContextProvider({
   useEffect(() => {
     setHideByDefaultRaw(
       global.window != undefined &&
-      localStorage?.getItem("hideByDefault") === "true",
+        localStorage?.getItem("hideByDefault") === "true",
     );
   }, []);
   const setHideByDefault = useCallback(
@@ -167,7 +216,8 @@ export function AppContextProvider({
       attempts,
       playlist,
       goalStats,
-      unselectedGoals,
+      isGoalSelected,
+      setGoalsSelected,
       setGoalPartsAndPasta,
       getRandomGoal,
       setNextGoalChoice,
@@ -182,7 +232,8 @@ export function AppContextProvider({
       attempts,
       playlist,
       goalStats,
-      unselectedGoals,
+      isGoalSelected,
+      setGoalsSelected,
       setGoalPartsAndPasta,
       getRandomGoal,
       setNextGoalChoice,

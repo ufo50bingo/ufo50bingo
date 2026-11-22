@@ -20,6 +20,8 @@ import MigrateHistory from "./MigrateHistory";
 import { Metadata } from "next";
 import SelectRightClickBehavior from "./SelectRightClickBehavior";
 import { useShouldShortenContext } from "./ShouldShortenContext";
+import { authClient } from "../authClient";
+import SignOutButton from "./SignOutButton";
 
 export const metadata: Metadata = {
   title: "UFO 50 Bingo Settings",
@@ -30,6 +32,7 @@ export default function Settings() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const { nextGoalChoice, setNextGoalChoice } = useAppContext();
   const { shouldShortenPlay, setShouldShortenPlay } = useShouldShortenContext();
+  const { data: session } = authClient.useSession();
   return (
     <Container my="md">
       <Table variant="vertical" withTableBorder>
@@ -131,6 +134,16 @@ export default function Settings() {
               <SelectRightClickBehavior isCast={false} />
             </Table.Td>
           </Table.Tr>
+          {session != null && (
+            <Table.Tr>
+              <Table.Th>Sign out</Table.Th>
+              <Table.Td>
+                <SignOutButton
+                  isAnonymous={session.user.isAnonymous === true}
+                />
+              </Table.Td>
+            </Table.Tr>
+          )}
         </Table.Tbody>
       </Table>
     </Container>

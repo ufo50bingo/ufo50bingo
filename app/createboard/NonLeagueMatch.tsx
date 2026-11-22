@@ -33,6 +33,7 @@ import FiltersModal, { FilterInfo } from "./FiltersModal";
 import { getRoomLink } from "../roomApi";
 import ufoDoubleGenerator from "../generator/ufoDoubleGenerator";
 import findGoal from "../findGoal";
+import { authClient } from "../authClient";
 
 type CustomType = "ufo" | "fixed_board";
 
@@ -49,6 +50,7 @@ const DEFAULT_FILTER_INFO: FilterInfo = {
 };
 
 export default function NonLeagueMatch({ visible }: Props) {
+  const { data: session, isPending } = authClient.useSession();
   const [isFilterModalShown, setIsFilterModalShown] = useState(false);
   const [checkerSort, setCheckerSort] = useLocalEnum({
     key: "checker-sort",
@@ -192,6 +194,12 @@ export default function NonLeagueMatch({ visible }: Props) {
     <>
       <Card.Section withBorder={true} inheritPadding={true} py="xs">
         <Stack gap={8}>
+          {!isPending && session == null && (
+            <Alert color="yellow">
+              Please sign in from the bottom of the left sidebar before creating
+              a match.
+            </Alert>
+          )}
           <Text>
             <strong>Choose variant</strong>
           </Text>
@@ -469,6 +477,8 @@ export default function NonLeagueMatch({ visible }: Props) {
         <Stack gap={8}>
           <Button
             disabled={
+              isPending ||
+              session == null ||
               isCreationInProgress ||
               roomName === "" ||
               password === "" ||

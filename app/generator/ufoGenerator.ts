@@ -2,9 +2,11 @@ import getAllSubcategories from "../createboard/getAllSubcategories";
 import getNonGeneralCategories from "../createboard/getNonGeneralCategories";
 import shuffle from "../createboard/shuffle";
 import { getTerminalCode } from "../room/[id]/cast/findAllGames";
+import getBingoLines from "./getBingoLines";
 import { getDifficultyLayout } from "./getDifficultyLayout";
 import getGoalAndFallback from "./getGoalAndFallback";
 import { inferGames } from "./inferGames";
+import range from "./range";
 import replaceTokens from "./replaceTokens";
 import splitAtTokens from "./splitAtTokens";
 
@@ -85,34 +87,6 @@ export interface UFOPasta {
   player_tracker_restrictions?: PlayerTrackerRestrictions;
 }
 
-const SAME_LINE_INDICES = [
-  [1, 2, 3, 4, 5, 10, 15, 20, 6, 12, 18, 24],
-  [0, 2, 3, 4, 6, 11, 16, 21],
-  [0, 1, 3, 4, 7, 12, 17, 22],
-  [0, 1, 2, 4, 8, 13, 18, 23],
-  [0, 1, 2, 3, 8, 12, 16, 20, 9, 14, 19, 24],
-  [0, 10, 15, 20, 6, 7, 8, 9],
-  [0, 12, 18, 24, 5, 7, 8, 9, 1, 11, 16, 21],
-  [5, 6, 8, 9, 2, 12, 17, 22],
-  [4, 12, 16, 20, 9, 7, 6, 5, 3, 13, 18, 23],
-  [4, 14, 19, 24, 8, 7, 6, 5],
-  [0, 5, 15, 20, 11, 12, 13, 14],
-  [1, 6, 16, 21, 10, 12, 13, 14],
-  [0, 6, 12, 18, 24, 20, 16, 8, 4, 2, 7, 17, 22, 10, 11, 13, 14],
-  [3, 8, 18, 23, 10, 11, 12, 14],
-  [4, 9, 19, 24, 10, 11, 12, 13],
-  [0, 5, 10, 20, 16, 17, 18, 19],
-  [15, 17, 18, 19, 1, 6, 11, 21, 20, 12, 8, 4],
-  [15, 16, 18, 19, 2, 7, 12, 22],
-  [15, 16, 17, 19, 23, 13, 8, 3, 24, 12, 6, 0],
-  [4, 9, 14, 24, 15, 16, 17, 18],
-  [0, 5, 10, 15, 16, 12, 8, 4, 21, 22, 23, 24],
-  [20, 22, 23, 24, 1, 6, 11, 16],
-  [2, 7, 12, 17, 20, 21, 23, 24],
-  [20, 21, 22, 24, 3, 8, 13, 18],
-  [0, 6, 12, 18, 20, 21, 22, 23, 19, 14, 9, 4],
-];
-
 const MAX_TRIES = 100;
 export default function ufoGenerator(
   pasta: UFOPasta,
@@ -143,17 +117,38 @@ function generateCandidate(
   // fill squares in order of how many bingo lines they're on
   // this helps prevent having two goals from the same game on one line
   // TODO: should we add a more complex search algorithm here as well?
-  // const centerIndex = rows === cols && rows % 2 === 1 ? [(rows * cols - 1) / 2] : [];
-  // const diagonalIndices =
-  // TODO: What can we reuse from difficulty seletion? Lines?
-  const centerIndex = 12;
-  const diagonalIndices = [0, 6, 18, 24, 4, 8, 16, 20];
-  const remainingIndices = [
-    1, 2, 3, 5, 7, 9, 10, 11, 13, 14, 15, 17, 19, 21, 22, 23,
-  ];
-  shuffle(diagonalIndices);
+  const bingoLines = getBingoLines(rows, cols);
+  const maybeCenterIndex =
+    rows === cols && rows % 2 === 1 ? [(rows * cols - 1) / 2] : [];
+  const allDiagonalIndices = bingoLines.diagonals.flatMap(
+    (cellIndex) => cellIndex,
+  );
+  const diagonalIndicesWithoutCenter = allDiagonalIndices.filter(
+    (cellIndex) =>
+      maybeCenterIndex.length > 0 && cellIndex !== maybeCenterIndex[0],
+  );
+  const remainingIndices = range(rows * cols).filter(
+    (cellIndex) => !allDiagonalIndices.includes(cellIndex),
+  );
+  shuffle(diagonalIndicesWithoutCenter);
   shuffle(remainingIndices);
-  const fillOrder = [centerIndex, ...diagonalIndices, ...remainingIndices];
+  const fillOrder = [
+    ...maybeCenterIndex,
+    ...diagonalIndicesWithoutCenter,
+    ...remainingIndices,
+  ];
+
+  const allBingoLines = bingoLines.rowsAndCols.concat(bingoLines.diagonals);
+  const sameLineIndices = range(rows * cols).map((_) => new Set<number>());
+  for (const line of allBingoLines) {
+    for (const cellToUpdate of line) {
+      for (const otherCell of line) {
+        if (cellToUpdate !== otherCell) {
+          sameLineIndices[cellToUpdate].add(otherCell);
+        }
+      }
+    }
+  }
 
   const difficultyTiers =
     pasta.category_difficulty_tiers ??
@@ -207,10 +202,12 @@ function generateCandidate(
       shuffle(games);
     }
     for (const game of games) {
-      const synergy = SAME_LINE_INDICES[index].reduce(
-        (acc, checkGame) => (gameByIndex[checkGame] === game ? acc + 1 : acc),
-        0,
-      );
+      let synergy = 0;
+      for (const sameLineIndex of sameLineIndices[index]) {
+        if (gameByIndex[sameLineIndex] === game) {
+          synergy += 1;
+        }
+      }
       if (synergy > bestSynergy) {
         continue;
       }

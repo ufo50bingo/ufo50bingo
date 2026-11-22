@@ -87,6 +87,7 @@ export default function Cast({
     userId,
     playAudio,
     token,
+    isPlay: false,
   });
   const { allMembers, players, casters } = useMembers(feed);
   const squareColors = useSquareColors(feed, boardSize, isLockout);

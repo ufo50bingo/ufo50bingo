@@ -21,6 +21,7 @@ import useFont from "@/app/font/useFont";
 import { getColorHex } from "@/app/color";
 import useSyncedTimer from "../common/useSyncedTimer";
 import SyncedTimerBoardCover from "../common/SyncedTimerBoardCover";
+import NotStartedBoardCover from "../common/NotStartedBoardCover";
 import SyncedTimer from "../common/SyncedTimer";
 import StartPauseButton from "../common/StartPauseButton";
 import {
@@ -68,6 +69,7 @@ export type CastProps = {
   game: FullParsedGame;
   userId: null | number;
   token: null | string;
+  isWatch: boolean;
 };
 
 const COUNT_POSITION = ["side_by_side", "inset"] as const;
@@ -77,6 +79,7 @@ export default function Cast({
   game: fullParsedGame,
   userId,
   token,
+  isWatch,
 }: CastProps) {
   const { game, feed: initialFeed, squares, subcategories } = fullParsedGame;
   const gameId = game.id;
@@ -248,6 +251,7 @@ export default function Cast({
   const gameSelectorHeight = numRows * 44;
 
   const canAddSubcategory = timerState.type !== "not_started";
+  const isHiddenForWatch = isWatch && timerState.type === "not_started";
 
   const addSubcategoryName =
     sendEvents == null
@@ -298,18 +302,22 @@ export default function Cast({
           font={font}
           iconType={iconType}
           players={players}
-          areGeneralGoalsHidden={false}
+          areGeneralGoalsHidden={isHiddenForWatch}
           squareColors={squareColors}
           subcategoryIdToName={subcategoryIdToName}
           playedGameState={playedGameState}
           allMembers={allMembers}
           boardCover={
-            <SyncedTimerBoardCover
-              isCast={true}
-              timerState={timerState}
-              isBoardVisibleByDefault={!hideByDefault}
-              forceReveal={forceReveal}
-            />
+            isHiddenForWatch ? (
+              <NotStartedBoardCover />
+            ) : (
+              <SyncedTimerBoardCover
+                isCast={true}
+                timerState={timerState}
+                isBoardVisibleByDefault={!hideByDefault}
+                forceReveal={forceReveal}
+              />
+            )
           }
           gameList={gameList}
           gameToGoals={gameToGoals}
@@ -413,7 +421,7 @@ export default function Cast({
                 );
               })}
             </Group>
-            {generalGoals.length > 0 ? (
+            {isHiddenForWatch ? null : generalGoals.length > 0 ? (
               getCard(generalGoals[0], boardHeight - gameSelectorHeight)
             ) : (
               <InfoCard
@@ -428,7 +436,7 @@ export default function Cast({
               </InfoCard>
             )}
           </Stack>
-        ) : generalGoals.length > 0 ? (
+        ) : isHiddenForWatch ? null : generalGoals.length > 0 ? (
           getCard(generalGoals[0], boardHeight)
         ) : (
           <InfoCard
@@ -442,7 +450,7 @@ export default function Cast({
             </Stack>
           </InfoCard>
         )}
-        {generalGoals.length > 0 && (
+        {!isHiddenForWatch && generalGoals.length > 0 && (
           <Group w="100%">
             {generalGoals.slice(1).map((g) => getCard(g, null))}
             <InfoCard

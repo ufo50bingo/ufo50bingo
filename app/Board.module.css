@@ -45,18 +45,18 @@
 }
 
 
-.boardCover:hover {
+.boardCoverClickable:hover {
     cursor: pointer;
 }
 
-.boardCoverOpaque:hover {
+.boardCoverClickable.boardCoverOpaque:hover {
     background: rgb(5, 19, 46);
     box-shadow: inset 0px 0px 100px rgba(0, 0, 0, 0.6);
     -moz-box-shadow: inset 0px 0px 100px rgba(0, 0, 0, 0.6);
     -webkit-box-shadow: inset 0px 0px 100px rgba(0, 0, 0, 0.6);
 }
 
-.boardCoverTranslucent:hover {
+.boardCoverClickable.boardCoverTranslucent:hover {
     background: rgba(5, 19, 46, 0.9);
 }
 

@@ -6,6 +6,7 @@ type Props = {
   onReveal?: () => unknown;
   isTranslucent?: boolean;
   hasRedBorder?: boolean;
+  isClickable?: boolean;
 };
 
 export default function StandardBoardCover({
@@ -13,10 +14,11 @@ export default function StandardBoardCover({
   onReveal,
   isTranslucent,
   hasRedBorder,
+  isClickable = true,
 }: Props) {
   return (
     <div
-      className={`${classes.boardCover} ${hasRedBorder ? classes.pauseRequestShadow : classes.boardCoverShadow} ${isTranslucent ? classes.boardCoverTranslucent : classes.boardCoverOpaque} ${classes.unselectable}`}
+      className={`${classes.boardCover} ${hasRedBorder ? classes.pauseRequestShadow : classes.boardCoverShadow} ${isTranslucent ? classes.boardCoverTranslucent : classes.boardCoverOpaque} ${isClickable ? classes.boardCoverClickable : ""} ${classes.unselectable}`}
       onClick={() => {
         if (onReveal != null) {
           onReveal();

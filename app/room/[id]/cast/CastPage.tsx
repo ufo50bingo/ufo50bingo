@@ -25,53 +25,7 @@ export default async function CastPage({
   const feed = data.feed.concat(alreadyFetched);
   feed.sort((a, b) => a.time - b.time);
   data.feed = feed;
-  return <CastWrapper game={data} userId={userId} token={token} />;
+  return (
+    <CastWrapper game={data} userId={userId} token={token} isWatch={false} />
+  );
 }
-
-// async function getGeneralCounts(id: string): Promise<CountChangeRow[]> {
-//   const supabase = getSupabaseClient();
-//   const { data } = await supabase
-//     .from("general_count")
-//     .select()
-//     .eq("room_id", id);
-//   return data ?? [];
-// }
-
-// async function getColors(
-//   id: string,
-// ): Promise<{ left: BingosyncColor; right: BingosyncColor }> {
-//   const supabase = getSupabaseClient();
-//   const { data } = await supabase.from("color").select().eq("room_id", id);
-//   if (data == null) {
-//     return { left: "red", right: "red" };
-//   }
-//   const left = data.find((entry) => entry.is_left === true)?.color ?? "red";
-//   const right = data.find((entry) => entry.is_left === false)?.color ?? "red";
-//   return { left, right };
-// }
-
-// async function getCurrentGames(id: string): Promise<CurrentGameRow[]> {
-//   const supabase = getSupabaseClient();
-//   const { data } = await supabase
-//     .from("current_game")
-//     .select()
-//     .eq("room_id", id)
-//     .order("start_time", { ascending: false });
-//   return data ?? [];
-// }
-
-// function structureCounts(
-//   rawCounts: ReadonlyArray<CountChangeRow>,
-// ): GeneralCounts {
-//   const generals: GeneralCounts = {};
-//   rawCounts.forEach((rawCount) => {
-//     const goalState: CountState = generals[rawCount.goal] ?? [];
-//     const toUpdate = goalState[rawCount.player_num] ?? {};
-//     toUpdate[rawCount.game] = rawCount.count;
-
-//     const newGoalState = [...goalState];
-//     newGoalState[rawCount.player_num] = toUpdate;
-//     generals[rawCount.goal] = newGoalState;
-//   });
-//   return generals;
-// }

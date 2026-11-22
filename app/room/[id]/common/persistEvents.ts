@@ -5,6 +5,7 @@ import {
   FeedColorMark,
   FeedCurrentSubcategory,
   FeedDisconnect,
+  FeedEndGame,
   FeedGoalProgress,
   FeedMember,
   FeedPlayerColorChange,
@@ -48,6 +49,8 @@ export default async function persistEvents(
         return getPlayerColorChangeSql(sql, gameId, event);
       case "disconnect":
         return getDisconnectSql(sql, gameId, event);
+      case "end_game":
+        return getEndGameSql(sql, gameId, event);
       default:
         event satisfies never;
         throw new Error(`Unexpected event: ${JSON.stringify(event)}`);
@@ -247,6 +250,25 @@ function getDisconnectSql(
 ): SQL {
   return sql`
     INSERT INTO disconnect (
+      game_id,
+      time,
+      user_id
+    )
+    VALUES (
+      ${gameId},
+      ${getISO(event.time)},
+      ${event.userId}
+    )
+  `;
+}
+
+function getEndGameSql(
+  sql: SQLTemplate,
+  gameId: number,
+  event: FeedEndGame,
+): SQL {
+  return sql`
+    INSERT INTO end_game (
       game_id,
       time,
       user_id

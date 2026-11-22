@@ -1,5 +1,6 @@
 import {
   FeedCurrentSubcategory,
+  FeedEndGame,
   FeedTimerEvent,
   NewFeed,
   NewFeedItem,
@@ -82,6 +83,8 @@ export default class PlayedGameState {
       this.applyCurrentSubcategory(item);
     } else if (item.type === "timer_event") {
       this.applyTimerEvent(item);
+    } else if (item.type === "end_game") {
+      this.applyEndGame(item);
     }
   }
 
@@ -191,6 +194,10 @@ export default class PlayedGameState {
         };
       }
     }
+  }
+
+  applyEndGame(item: FeedEndGame) {
+    this.applyPause(item.time);
   }
 
   applyTimerEvent(item: FeedTimerEvent) {

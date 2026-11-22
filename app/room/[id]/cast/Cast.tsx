@@ -1,6 +1,6 @@
 "use client";
 
-import { Group, Stack, Text, Tooltip } from "@mantine/core";
+import { Button, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { useMemo, useState } from "react";
 import Feed from "../common/Feed";
 import { Game, ORDERED_GAMES, ProperGame } from "@/app/goals";
@@ -46,6 +46,9 @@ import useGeneralCounts from "./useGeneralCounts";
 import PlayedGameState from "./PlayedGameState";
 import getFeedWithoutMistakes from "@/app/match/[id]/getFeedWithoutMistakes";
 import getMatchResult from "@/app/match/[id]/getMatchResult";
+import EndMatchPopover from "../common/EndMatchPopover";
+import { IconFlagCheck } from "@tabler/icons-react";
+import useIsEnded from "../common/useIsEnded";
 
 export const CASTER_RESTRICTIONS: PlayerTrackerRestrictions = {
   allowed_difficulty_tags: null,
@@ -281,6 +284,8 @@ export default function Cast({
 
   const boardHeight = 95 * game.rows;
 
+  const isEnded = useIsEnded(feed);
+
   return (
     <RightClickBehaviorContext.Provider value={rightClickBehaviorContextValue}>
       <Group align="start">
@@ -329,12 +334,37 @@ export default function Cast({
               <SyncedTimer timerState={timerState} />
             </Text>
             {sendEvents != null && userId != null && (
-              <StartPauseButton
-                timerState={timerState}
-                isCast={true}
-                userId={userId}
-                sendEvents={sendEvents}
-              />
+              <Group>
+                {isEnded ? (
+                  <Button
+                    disabled={true}
+                    color="red"
+                    leftSection={<IconFlagCheck />}
+                  >
+                    End
+                  </Button>
+                ) : (
+                  <EndMatchPopover
+                    isCast={true}
+                    userId={userId}
+                    hasCasters={true}
+                    sendEvents={sendEvents}
+                    button={
+                      <Button color="red" leftSection={<IconFlagCheck />}>
+                        End
+                      </Button>
+                    }
+                  />
+                )}
+                <StartPauseButton
+                  disabled={isEnded}
+                  timerState={timerState}
+                  isCast={true}
+                  userId={userId}
+                  onCountdownStart={() => setIsDetecting(true)}
+                  sendEvents={sendEvents}
+                />
+              </Group>
             )}
           </Group>
           <Feed

@@ -1,7 +1,7 @@
 "use client";
 
 import Board from "@/app/Board";
-import { Group, Stack, Text } from "@mantine/core";
+import { Button, Group, Stack, Text } from "@mantine/core";
 import { useMemo } from "react";
 import PlaySettings from "./PlaySettings";
 import useShownDifficulties from "./useShownDifficulties";
@@ -44,6 +44,9 @@ import useGeneralGoals from "../common/useGeneralGoals";
 import { BingosyncColor } from "@/app/color";
 import getFeedWithoutMistakes from "@/app/match/[id]/getFeedWithoutMistakes";
 import getMatchResult from "@/app/match/[id]/getMatchResult";
+import { IconFlagCheck } from "@tabler/icons-react";
+import EndMatchPopover from "../common/EndMatchPopover";
+import useIsEnded from "../common/useIsEnded";
 
 export type FoundItem = {
   foundGoal: FoundGoal<string, string, string>;
@@ -220,6 +223,8 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
       !timerState.isForceRevealed);
 
   const boardHeight = game.rows * 95;
+
+  const isEnded = useIsEnded(feed);
   return (
     <>
       <Group align="stretch">
@@ -230,6 +235,9 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
               squareNames={squareNames}
               squareColors={squareColors}
               onClickSquare={async (squareIndex) => {
+                if (isEnded) {
+                  return;
+                }
                 const isClear =
                   squareColors[squareIndex].includes(selectedColor);
                 if (
@@ -302,6 +310,7 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
               </Text>
             </div>
             <StartPauseButton
+              disabled={isEnded}
               timerState={timerState}
               isCast={false}
               userId={userId}
@@ -315,28 +324,56 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
               generalGoals={generalGoals}
             />
           )}
-          <PlaySettings
-            userId={userId}
-            color={selectedColor}
-            players={players}
-            casters={casters}
-            shownDifficulties={shownDifficulties}
-            setShownDifficulties={setShownDifficulties}
-            soundChoices={soundChoices}
-            setSoundChoices={setSoundChoices}
-            isMobile={isMobile}
-            showGeneralTracker={showGeneralTracker}
-            setShowGeneralTracker={setShowGeneralTracker}
-            font={font}
-            setFont={setFont}
-            timerState={timerState}
-            forceReveal={forceReveal}
-            generalSettings={generalSettings}
-            generalSetters={generalSetters}
-            restrictions={restrictions}
-            sendEvents={sendEvents}
-            members={allMembers}
-          />
+          <Group>
+            {isEnded ? (
+              <Button
+                disabled={true}
+                color="red"
+                w={132}
+                leftSection={<IconFlagCheck size={16} />}
+              >
+                End match
+              </Button>
+            ) : (
+              <EndMatchPopover
+                userId={userId}
+                isCast={false}
+                hasCasters={casters.length > 0}
+                sendEvents={sendEvents}
+                button={
+                  <Button
+                    color="red"
+                    w={132}
+                    leftSection={<IconFlagCheck size={16} />}
+                  >
+                    End match
+                  </Button>
+                }
+              />
+            )}
+            <PlaySettings
+              userId={userId}
+              color={selectedColor}
+              players={players}
+              casters={casters}
+              shownDifficulties={shownDifficulties}
+              setShownDifficulties={setShownDifficulties}
+              soundChoices={soundChoices}
+              setSoundChoices={setSoundChoices}
+              isMobile={isMobile}
+              showGeneralTracker={showGeneralTracker}
+              setShowGeneralTracker={setShowGeneralTracker}
+              font={font}
+              setFont={setFont}
+              timerState={timerState}
+              forceReveal={forceReveal}
+              generalSettings={generalSettings}
+              generalSetters={generalSetters}
+              restrictions={restrictions}
+              sendEvents={sendEvents}
+              members={allMembers}
+            />
+          </Group>
         </Stack>
         <Feed
           feed={feed}

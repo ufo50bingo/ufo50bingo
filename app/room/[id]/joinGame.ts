@@ -25,7 +25,8 @@ export default async function joinGame(
     userId,
     isInvite: false,
     playerColor,
-    name: overrideName ?? session.user.name,
+    name: session.user.name,
+    overrideName,
   };
   await Promise.all([
     sql`

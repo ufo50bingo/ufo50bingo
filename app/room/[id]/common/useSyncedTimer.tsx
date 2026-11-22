@@ -3,7 +3,7 @@ import { useServerOffsetContext } from "../ServerOffsetContext";
 import { SoundChoices } from "./NotificationsSection";
 import useLocalNumber from "@/app/localStorage/useLocalNumber";
 import { NewFeed } from "@/app/fetchFeed";
-import { GameMembers } from "./useMembers";
+import { GenericMember } from "./useMembers";
 export type SyncedTimerEventName = "set_duration" | "pause" | "start";
 
 type Input = {
@@ -11,7 +11,7 @@ type Input = {
   feed: NewFeed;
   playAudio: (soundType: keyof SoundChoices) => void;
   isCast: boolean;
-  members: GameMembers;
+  members: ReadonlyMap<number, GenericMember>;
 };
 
 interface TimerStateBase {
@@ -93,8 +93,9 @@ export default function useSyncedTimer({
             accumulatedDuration += item.time * 1000 - curStartTime;
             curStartTime = null;
           }
+          const member = members.get(item.userId);
           pauseRequester =
-            members.get(item.userId)?.name ?? String(item.userId);
+            member?.overrideName ?? member?.name ?? String(item.userId);
           lastPauseTime = item.time * 1000;
           return;
         case "start":

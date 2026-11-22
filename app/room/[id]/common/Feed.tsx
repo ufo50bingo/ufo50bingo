@@ -3,12 +3,12 @@ import ChatInput from "./ChatInput";
 import { CSSProperties, useLayoutEffect, useMemo, useRef } from "react";
 import FeedEntry from "./FeedEntry";
 import { NewFeed } from "@/app/fetchFeed";
-import { GameMembers } from "./useMembers";
+import { GenericMember } from "./useMembers";
 
 type Props = {
   userId: number;
   feed: NewFeed;
-  members: GameMembers;
+  members: ReadonlyMap<number, GenericMember>;
   style?: CSSProperties;
   isPlay: boolean;
   squareNames: ReadonlyArray<string>;

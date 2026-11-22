@@ -37,6 +37,8 @@ import AutoGameSection from "./AutoGameSection";
 import { AllPlayerGames, CountChange } from "./useSyncedState";
 import { GameToGoals } from "./findAllGames";
 import SelectRightClickBehavior from "@/app/settings/SelectRightClickBehavior";
+import { CasterMember, PlayerMember } from "../common/useMembers";
+import MembersSection from "../common/MembersSection";
 
 type Props = {
   gameId: number;
@@ -79,6 +81,8 @@ type Props = {
   font: Font;
   setFont: (newFont: Font) => unknown;
   timerState: SyncedTimerState;
+  players: ReadonlyArray<PlayerMember>;
+  casters: ReadonlyArray<CasterMember>;
 };
 
 export default function CastSettings({
@@ -122,6 +126,8 @@ export default function CastSettings({
   font,
   setFont,
   timerState,
+  players,
+  casters,
 }: Props) {
   const [isShown, setIsShown] = useState(leftColor === rightColor);
   const { shouldShortenCast, setShouldShortenCast } = useShouldShortenContext();
@@ -152,10 +158,13 @@ export default function CastSettings({
             <Drawer.CloseButton />
           </Drawer.Header>
           <Drawer.Body p={0}>
-            <Accordion
-              multiple={true}
-              defaultValue={leftColor === rightColor ? ["color"] : []}
-            >
+            <Accordion multiple={true} defaultValue={["members"]}>
+              <MembersSection
+                gameId={gameId}
+                players={players}
+                casters={casters}
+                isMobile={false}
+              />
               <Accordion.Item value="color">
                 <Accordion.Control>Select Colors</Accordion.Control>
                 <Accordion.Panel>

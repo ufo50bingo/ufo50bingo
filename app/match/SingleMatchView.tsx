@@ -35,6 +35,7 @@ import TeamScoreCell from "../matches/TeamScoreCell";
 import classes from "@/app/matches/MatchRow.module.css";
 import useTeamsWithResults from "../matches/useTeamsWithResults";
 import getFeedWithoutMistakes from "./[id]/getFeedWithoutMistakes";
+import getOverlays from "./[id]/getOverlays";
 import PlayedGameState from "../room/[id]/cast/PlayedGameState";
 import MatchPlaybackSlider from "./MatchPlaybackSlider";
 import Feed from "../room/[id]/common/Feed";
@@ -78,23 +79,23 @@ export default function SingleMatchView({ game }: Props) {
     [game.game.cols, game.game.isLockout, game.game.rows],
   );
 
-  const { startTime, maxSeekSec } = useMemo(() => {
+  const { matchStartTime, maxSeekSec } = useMemo(() => {
     const feed = game.feed;
     const firstStart = feed.find(
       (item) => item.type === "timer_event" && item.event === "start",
     );
     if (firstStart == null || feed.length === 0) {
-      return { startTime: 0, maxSeekSec: 0 };
+      return { matchStartTime: null, maxSeekSec: 0 };
     }
     const endTime = feed[feed.length - 1].time;
     return {
-      startTime: firstStart.time,
+      matchStartTime: firstStart.time,
       maxSeekSec: Math.max(endTime - firstStart.time, 0),
     };
   }, [game.feed]);
   const hasPlayback = maxSeekSec > 0;
   const [seekSec, setSeekSec] = useState(maxSeekSec);
-  const curTime = startTime + seekSec;
+  const curTime = (matchStartTime ?? 0) + seekSec;
   const endIndex = useMemo(() => {
     if (seekSec >= maxSeekSec) {
       return game.feed.length;
@@ -118,6 +119,14 @@ export default function SingleMatchView({ game }: Props) {
     teamsMap,
     feedWithoutMistakes,
     boardStateParams,
+  );
+  // Times are only shown for lockout matches
+  const overlays = useMemo(
+    () =>
+      game.game.isLockout
+        ? getOverlays(feedWithoutMistakes, game.game.rows * game.game.cols)
+        : null,
+    [feedWithoutMistakes, game.game.cols, game.game.isLockout, game.game.rows],
   );
   const hasWinner =
     teamsWithResults.length > 0 && teamsWithResults[0].winType != null;
@@ -151,7 +160,6 @@ export default function SingleMatchView({ game }: Props) {
 
   const isMobile = useMediaQuery("(max-width: 525px)");
   const [showFeed, setShowFeed] = useState(false);
-  // TODO: compute completion times
   const [showTimes, setShowTimes] = useState(true);
   const [isEditingVod, setIsEditingVod] = useState(false);
 
@@ -314,12 +322,14 @@ export default function SingleMatchView({ game }: Props) {
                     </ActionIcon>
                   </Menu.Target>
                   <Menu.Dropdown>
-                    <Menu.Item
-                      leftSection={<IconClock size={16} />}
-                      onClick={() => setShowTimes(!showTimes)}
-                    >
-                      {showTimes ? "Hide Times" : "Show Times"}
-                    </Menu.Item>
+                    {overlays != null && (
+                      <Menu.Item
+                        leftSection={<IconClock size={16} />}
+                        onClick={() => setShowTimes(!showTimes)}
+                      >
+                        {showTimes ? "Hide Times" : "Show Times"}
+                      </Menu.Item>
+                    )}
                     <Menu.Item
                       leftSection={<IconList size={16} />}
                       onClick={() => setShowFeed(!showFeed)}
@@ -371,6 +381,7 @@ export default function SingleMatchView({ game }: Props) {
                     : null
                 }
                 canShowRecent={false}
+                overlays={showTimes && overlays != null ? overlays : undefined}
               />
               {showFeed && (
                 <div style={{ flexShrink: 0 }}>

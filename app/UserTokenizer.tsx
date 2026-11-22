@@ -73,6 +73,7 @@ export function UserTokenizer({
 }: Props) {
   const { users, error, load, isLoading } = useAllUsers();
   const [search, setSearch] = useState("");
+  const [dropdownOpened, setDropdownOpened] = useState(false);
 
   const hasInitialValue = selectedUserIds.length > 0;
   useEffect(() => {
@@ -141,11 +142,10 @@ export function UserTokenizer({
 
   const filter: OptionsFilter = useCallback(
     ({ search, limit }) => {
-      if (fuse == null) {
+      if (fuse == null || search.trim().length < 2) {
         return [];
       }
       const searchResults = fuse.search(search);
-      console.log(searchResults);
       const hasUsername = searchResults.filter((r) => r.item.username != null);
       const missingUsername = searchResults.filter(
         (r) => r.item.username == null,
@@ -173,7 +173,12 @@ export function UserTokenizer({
       limit={8}
       filter={filter}
       searchValue={search}
-      onSearchChange={setSearch}
+      onSearchChange={(newSearch) => {
+        setSearch(newSearch);
+        setDropdownOpened(newSearch.trim().length > 1);
+      }}
+      dropdownOpened={dropdownOpened}
+      onDropdownClose={() => setDropdownOpened(false)}
       onFocus={load}
       error={error}
       rightSection={isLoading ? <Loader size="xs" /> : undefined}

@@ -11,24 +11,26 @@ import getFontClassname from "@/app/font/getFontClassname";
 import { BingosyncColor } from "@/app/color";
 import BoardState from "@/app/match/[id]/BoardState";
 import { TCountPosition } from "./useCountPosition";
-import { getCastImage } from "./iconSets";
+import GeneralIcon from "./GeneralIcon";
+import { FoundGoalWithCast } from "@/app/findGoal";
 
 type IconProps = {
+  foundGoal: FoundGoalWithCast<string, string, string>;
+  iconType: string;
+  isHidden: boolean;
   isLeft: boolean;
-  goal: string;
   color: BingosyncColor;
   markedSquareColors: ReadonlySet<BingosyncColor>;
   isLockout: boolean;
-  src: string;
   count: number;
   countPosition: TCountPosition;
   font: Font;
-  isPixel: boolean;
 };
 
 function Icon({
-  goal,
-  src,
+  foundGoal,
+  iconType,
+  isHidden,
   count,
   color,
   markedSquareColors,
@@ -36,20 +38,21 @@ function Icon({
   countPosition,
   isLeft,
   font,
-  isPixel,
 }: IconProps) {
-  const iconClass = isPixel
-    ? `${classes.icon} ${classes.spritesIcon}`
-    : classes.icon;
   const isCompleted = markedSquareColors.has(color);
   // in a non-lockout game we don't want to gray out this general
   // if another team has completed it
   const isOpponentClaimed =
     isLockout && !isCompleted && markedSquareColors.size > 0;
-  const imgClass =
-    isCompleted || isOpponentClaimed
-      ? `${iconClass} ${classes.grayscale}`
-      : iconClass;
+
+  const icon = (
+    <GeneralIcon
+      foundGoal={foundGoal}
+      iconType={iconType}
+      isHidden={isHidden}
+      isGray={isCompleted || isOpponentClaimed}
+    />
+  );
 
   if (countPosition === "inset") {
     const tag = isCompleted ? (
@@ -75,7 +78,7 @@ function Icon({
     );
     return (
       <SideCell>
-        <img className={imgClass} src={src} alt={goal} />
+        {icon}
         {tag}
       </SideCell>
     );
@@ -104,13 +107,13 @@ function Icon({
         <Group gap={8}>
           {isLeft ? (
             <>
-              <img className={imgClass} src={src} alt={goal} />
+              {icon}
               {tag}
             </>
           ) : (
             <>
               {tag}
-              <img className={imgClass} src={src} alt={goal} />
+              {icon}
             </>
           )}
         </Group>
@@ -145,15 +148,15 @@ export default function GeneralIcons({
   boardState,
 }: Props) {
   return generalGoals.map((item) => {
-    const { goal, resolvedGoal } = item.foundGoal;
+    const { resolvedGoal } = item.foundGoal;
     const countState =
       playerId != null ? generalState[resolvedGoal]?.[playerId] : null;
-    const image = isHidden ? null : getCastImage(item.foundGoal.cast, iconType);
-    const builtIn = getBuiltInIcon(iconType, goal as StandardGeneral, isHidden);
     return (
       <Icon
         key={resolvedGoal}
-        goal={resolvedGoal}
+        foundGoal={item.foundGoal}
+        iconType={iconType}
+        isHidden={isHidden}
         color={color}
         markedSquareColors={boardState.squares[item.squareIndex]}
         isLockout={boardState.isLockout}
@@ -165,184 +168,10 @@ export default function GeneralIcons({
                 0,
               )
         }
-        isPixel={image != null ? image.is_pixel !== false : builtIn.isPixel}
-        src={image?.src ?? builtIn.src}
         countPosition={countPosition}
         isLeft={isLeft}
         font={font}
       />
     );
   });
-}
-
-// dummy update to force push
-function getBuiltInIcon(
-  iconSet: string,
-  goal: StandardGeneral,
-  isHidden: boolean,
-): { src: string; isPixel: boolean } {
-  switch (iconSet) {
-    case "Sprites":
-      return { src: getSpritesSrc(goal, isHidden), isPixel: true };
-    case "Classic":
-      return { src: getClassicSrc(goal, isHidden), isPixel: true };
-    default:
-      return { src: getWinnerBitSrc(goal, isHidden), isPixel: false };
-  }
-}
-
-function getWinnerBitSrc(goal: StandardGeneral, isHidden: boolean): string {
-  if (isHidden) {
-    return "/general/winnerbit/Icon_Unrevealed_Goal.png";
-  }
-  switch (goal) {
-    // GIFT
-    case "Collect {{gift_count}} gifts from games on this card":
-      return "/general/winnerbit/Icon_Gift.png";
-    // GOLD/CHERRY
-    case "Cherry disk {{cherry_count}} games on this card":
-      return "/general/winnerbit/Icon_Cherry.png";
-    case "Gold disk {{gold_count}} games on this card":
-      return "/general/winnerbit/Icon_Gold.png";
-    // LEVEL
-    case "Beat 2 levels in 6 games on this card":
-    case "Beat 2 levels in 6 games":
-    case "Beat 4 levels in 5 games on this card":
-    case "Beat 4 levels in 5 games":
-    case "Beat 8 levels in 3 games on this card":
-    case "Beat 8 levels in 3 games":
-      return "/general/winnerbit/Icon_Level.png";
-    // BOSS/ENEMY
-    case "Defeat 2 bosses in 4 games on this card":
-    case "Defeat 2 bosses in 4 games":
-    case "Defeat 8 bosses from games on this card":
-    case "Defeat a boss in 6 games on this card":
-    case "Defeat a boss in 6 games":
-      return "/general/winnerbit/Icon_Boss.png";
-    // THEME
-    case "SHOOTER: Beat 5 levels across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
-    case "DAY JOB: Beat 9 levels across Rail Heist, Onion Delivery, and Bug Hunter":
-    case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
-    case "PUZZLER: Beat 12 levels across Block Koala, Devilition, and Warptank":
-    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
-    case "WAR IS BAD: Win 7 battles across Avianos, Combatants, and Lords of Diskonia":
-    case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
-    case "ROLE PLAYER: Level up your highest-level character 5 total times across Grimstone, Divers, Valbrace":
-    case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
-    case "TRADER: Buy or Trade in 7 places across Barbuta, Planet Zoldath, Pilot Quest":
-      return "/general/winnerbit/Icon_Multi-Game_Generic.png";
-    default:
-      goal satisfies never;
-      return "/general/winnerbit/Icon_Unknown_Goal.png";
-  }
-}
-
-function getClassicSrc(goal: StandardGeneral, isHidden: boolean): string {
-  if (isHidden) {
-    return "/general/sprites/IconUnknown.png";
-  }
-  switch (goal) {
-    // GIFT
-    case "Collect {{gift_count}} gifts from games on this card":
-      return "/general/sprites/IconGarden.png";
-    // GOLD/CHERRY
-    case "Cherry disk {{cherry_count}} games on this card":
-      return "/general/sprites/IconCherry.png";
-    case "Gold disk {{gold_count}} games on this card":
-      return "/general/sprites/IconGold.png";
-    // LEVEL
-    case "Beat 2 levels in 6 games on this card":
-    case "Beat 2 levels in 6 games":
-    case "Beat 4 levels in 5 games on this card":
-    case "Beat 4 levels in 5 games":
-    case "Beat 8 levels in 3 games on this card":
-    case "Beat 8 levels in 3 games":
-      return "/general/sprites/IconLevel.png";
-    // BOSS/ENEMY
-    case "Defeat 2 bosses in 4 games on this card":
-    case "Defeat 2 bosses in 4 games":
-    case "Defeat 8 bosses from games on this card":
-    case "Defeat a boss in 6 games on this card":
-    case "Defeat a boss in 6 games":
-      return "/general/sprites/IconBoss.png";
-    // THEME
-    case "SHOOTER: Beat 5 levels across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
-      return "/general/sprites/IconShooter.png";
-    case "DAY JOB: Beat 9 levels across Rail Heist, Onion Delivery, and Bug Hunter":
-      return "/general/sprites/IconDayJob.png";
-    case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
-      return "/general/sprites/IconRacer.png";
-    case "PUZZLER: Beat 12 levels across Block Koala, Devilition, and Warptank":
-      return "/general/sprites/IconPuzzler.png";
-    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
-      return "/general/sprites/IconAmy.png";
-    case "WAR IS BAD: Win 7 battles across Avianos, Combatants, and Lords of Diskonia":
-      return "/general/sprites/IconWarIsBad.png";
-    case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
-      return "/general/sprites/IconMetroidvania.png";
-    case "ROLE PLAYER: Level up your highest-level character 5 total times across Grimstone, Divers, Valbrace":
-      return "/general/sprites/IconRoleplayer.png";
-    case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
-      return "/general/sprites/IconRevolutionary.png";
-    case "TRADER: Buy or Trade in 7 places across Barbuta, Planet Zoldath, Pilot Quest":
-      return "/general/sprites/IconTrader.png";
-    default:
-      goal satisfies never;
-      return "/general/sprites/IconUnknown.png";
-  }
-}
-
-function getSpritesSrc(goal: StandardGeneral, isHidden: boolean): string {
-  if (isHidden) {
-    return "/general/sprites/IconUnknown.png";
-  }
-  switch (goal) {
-    // GIFT
-    case "Collect {{gift_count}} gifts from games on this card":
-      return "/general/matt/GIFT.png";
-    // GOLD/CHERRY
-    case "Cherry disk {{cherry_count}} games on this card":
-      return "/general/matt/CHERRY.png";
-    case "Gold disk {{gold_count}} games on this card":
-      return "/general/matt/GOLD.png";
-    // LEVEL
-    case "Beat 2 levels in 6 games on this card":
-    case "Beat 2 levels in 6 games":
-    case "Beat 4 levels in 5 games on this card":
-    case "Beat 4 levels in 5 games":
-    case "Beat 8 levels in 3 games on this card":
-    case "Beat 8 levels in 3 games":
-      return "/general/matt/LEVEL.png";
-    // BOSS/ENEMY
-    case "Defeat 2 bosses in 4 games on this card":
-    case "Defeat 2 bosses in 4 games":
-    case "Defeat 8 bosses from games on this card":
-    case "Defeat a boss in 6 games on this card":
-    case "Defeat a boss in 6 games":
-      return "/general/matt/BOSS.png";
-    // THEME
-    case "SHOOTER: Beat 5 levels across Elfazar's Hat, Seaside Drive, and Caramel Caramel":
-      return "/general/matt/SHOOTER.png";
-    case "DAY JOB: Beat 9 levels across Rail Heist, Onion Delivery, and Bug Hunter":
-      return "/general/matt/DAYJOB.png";
-    case "RACER: Win 12 races across Paint Chase, The Big Bell Race, and Quibble Race":
-      return "/general/matt/RACER.png";
-    case "PUZZLER: Beat 12 levels across Block Koala, Devilition, and Warptank":
-      return "/general/matt/PUZZLER.png";
-    case "AMY: Beat 5 levels across Party House, Fist Hell, and Hot Foot, with 1+ in each":
-      return "/general/matt/AMY.png";
-    case "WAR IS BAD: Win 7 battles across Avianos, Combatants, and Lords of Diskonia":
-      return "/general/matt/WARISBAD.png";
-    case "METROIDVANIA: Collect 6 abilities across Porgy, Vainger, and Golfaria":
-      return "/general/matt/METROIDVANIA.png";
-    case "ROLE PLAYER: Level up your highest-level character 5 total times across Grimstone, Divers, Valbrace":
-      return "/general/matt/ROLEPLAYER.png";
-    case "REVOLUTIONARY: Beat 5 levels across Mortol, Cyber Owls, Rock On! Island":
-      return "/general/matt/REVOLUTIONARY.png";
-    case "TRADER: Buy or Trade in 7 places across Barbuta, Planet Zoldath, Pilot Quest":
-      return "/general/matt/TRADER.png";
-    default:
-      goal satisfies never;
-      return "/general/sprites/IconUnknown.png";
-  }
 }

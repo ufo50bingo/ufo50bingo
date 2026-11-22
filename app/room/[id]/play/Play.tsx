@@ -41,6 +41,7 @@ import { EVERY_GAME_UFO } from "@/app/pastas/everyGameUfo";
 import { useSearchParams } from "next/navigation";
 import { Restrictions } from "./GeneralSection";
 import { NewFeed } from "@/app/fetchFeed";
+import useMembers from "../common/useMembers";
 
 export type FoundItem = {
   foundGoal: FoundGoal<string, string, string>;
@@ -70,6 +71,7 @@ export default function Play({
     userId,
     playAudio,
   });
+  const members = useMembers(feed);
   const squareColors = useMemo(() => {
     const colors: Array<Array<BingosyncColor>> = Array(boardSize)
       .fill(null)
@@ -99,10 +101,9 @@ export default function Play({
     key: "show_general_tracker",
     defaultValue: true,
   });
-  const [color, setColor] = useState<BingosyncColor>("red");
   const [font, setFont] = useFont();
 
-  const selectedColor = color ?? "red";
+  const selectedColor = members.get(userId)?.playerColor ?? "red";
 
   // 525px is the width of the board, which is also the default width of the modal
   const isMobile = useMediaQuery("(max-width: 525px)");
@@ -123,6 +124,7 @@ export default function Play({
     feed,
     playAudio,
     isCast: false,
+    members,
   });
 
   const foundItems = useMemo<ReadonlyArray<FoundItem>>(() => {
@@ -376,8 +378,9 @@ export default function Play({
           )}
           <PlaySettings
             gameId={gameId}
-            color={color}
-            setColor={setColor}
+            color={selectedColor}
+            // TODO: Allow changing color
+            setColor={() => {}}
             shownDifficulties={shownDifficulties}
             setShownDifficulties={setShownDifficulties}
             soundChoices={soundChoices}
@@ -397,6 +400,7 @@ export default function Play({
         <Feed
           feed={feed}
           userId={userId}
+          members={members}
           squareNames={squareNames}
           isPlay={true}
           style={{

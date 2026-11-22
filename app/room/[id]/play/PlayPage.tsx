@@ -22,10 +22,10 @@ type Props = {
   memberFeed: ReadonlyArray<FeedMember>;
 };
 
-export default async function PlayPage({ gameId }: Props) {
+export default async function PlayPage({ gameId, memberFeed }: Props) {
   const [userId, data] = await Promise.all([
     getUserId(),
-    fetchData(Number(gameId)),
+    fetchData(Number(gameId), memberFeed),
   ]);
   return (
     <PlayWrapper
@@ -39,6 +39,7 @@ export default async function PlayPage({ gameId }: Props) {
 
 async function fetchData(
   gameId: number,
+  memberFeed: ReadonlyArray<FeedMember>,
 ): Promise<{ squareNames: ReadonlyArray<string>; feed: NewFeed }> {
   const sql = getSql(false);
   const feedFetchPairs: ReadonlyArray<FeedFetchPairs> = [
@@ -52,9 +53,9 @@ async function fetchData(
   ]);
   const feedResults = results.slice(0, feedFetchPairs.length);
   const otherResults = results.slice(feedFetchPairs.length);
-  const feed = feedResults.flatMap((result, index) =>
-    feedFetchPairs[index][1](result),
-  );
+  const feed = feedResults
+    .flatMap((result, index) => feedFetchPairs[index][1](result))
+    .concat(memberFeed);
   feed.sort((a, b) => a.time - b.time);
 
   const squareNames = parseSquareNames(otherResults[0]);

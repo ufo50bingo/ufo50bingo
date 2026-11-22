@@ -1,21 +1,22 @@
 import BingosyncColored from "@/app/matches/BingosyncColored";
-import { RawFeedItem } from "@/app/matches/parseBingosyncData";
 import classes from "./FeedEntry.module.css";
+import { NewFeedItem } from "../play/PlayPage";
 
 type Props = {
-  entry: RawFeedItem;
+  entry: NewFeedItem;
 };
 
 // reference: https://github.com/kbuzsaki/bingosync/blob/b23d3b4e3192e7034573f3e8efc906aa4a83b0b8/bingosync-app/static/bingosync/room/chat_panel.js#L16
 export default function FeedEntry({ entry }: Props) {
   const timestamp = (
     <span className={`${classes.timestamp} ${classes.defaultColor}`}>
-      {getTimestamp(entry.timestamp)}
+      {getTimestamp(entry.time)}
     </span>
   );
-  const player = <strong>{entry.player.name}</strong>;
+  const player = <strong>{entry.user.name}</strong>;
   const coloredPlayer = (
-    <BingosyncColored color={entry.player_color}>{player}</BingosyncColored>
+    // TODO: Use proper color
+    <BingosyncColored color="red">{player}</BingosyncColored>
   );
   switch (entry.type) {
     case "chat":
@@ -23,63 +24,50 @@ export default function FeedEntry({ entry }: Props) {
         <span>
           {timestamp} {coloredPlayer}
           <span className={classes.defaultColor}>: </span>
-          <BingosyncColored color="blank">{entry.text}</BingosyncColored>
+          <BingosyncColored color="blank">{entry.message}</BingosyncColored>
         </span>
       );
-    case "new-card":
-      return (
-        <em>
-          {timestamp} {coloredPlayer}{" "}
-          <span className={classes.defaultColor}>generated a new card for</span>{" "}
-          <BingosyncColored color="blank">
-            <strong>{entry.game}</strong>
-          </BingosyncColored>
-          . seed:{" "}
-          <BingosyncColored color="blank">
-            <strong>{entry.seed}</strong>
-          </BingosyncColored>
-        </em>
-      );
-    case "goal":
+    case "color_mark":
       return (
         <em>
           {timestamp} {coloredPlayer}{" "}
           <span className={classes.defaultColor}>
-            {entry.remove ? "cleared" : "marked"}
+            {entry.isClear ? "cleared" : "marked"}
           </span>{" "}
-          <BingosyncColored color={entry.remove ? "blank" : entry.color}>
-            <strong>{entry.square.name}</strong>
+          <BingosyncColored color={entry.isClear ? "blank" : entry.color}>
+            {/* Fill in square text */}
+            <strong>{entry.squareIndex}</strong>
           </BingosyncColored>
         </em>
       );
-    case "color":
-      return (
-        <em>
-          {timestamp} {coloredPlayer}{" "}
-          <span className={classes.defaultColor}>changed color to</span>{" "}
-          <BingosyncColored color={entry.color}>
-            <strong>{entry.color}</strong>
-          </BingosyncColored>
-        </em>
-      );
-    case "revealed":
-      return (
-        <em>
-          {timestamp} {coloredPlayer}{" "}
-          <span className={classes.defaultColor}>revealed the card</span>
-        </em>
-      );
-    case "connection":
-      return (
-        <em>
-          {timestamp}{" "}
-          <span className={classes.defaultColor}>
-            {entry.player.name} {entry.event_type}
-          </span>
-        </em>
-      );
-    case "other":
-      return null;
+    // case "color":
+    //   return (
+    //     <em>
+    //       {timestamp} {coloredPlayer}{" "}
+    //       <span className={classes.defaultColor}>changed color to</span>{" "}
+    //       <BingosyncColored color={entry.color}>
+    //         <strong>{entry.color}</strong>
+    //       </BingosyncColored>
+    //     </em>
+    //   );
+    // case "revealed":
+    //   return (
+    //     <em>
+    //       {timestamp} {coloredPlayer}{" "}
+    //       <span className={classes.defaultColor}>revealed the card</span>
+    //     </em>
+    //   );
+    // case "connection":
+    //   return (
+    //     <em>
+    //       {timestamp}{" "}
+    //       <span className={classes.defaultColor}>
+    //         {entry.player.name} {entry.event_type}
+    //       </span>
+    //     </em>
+    //   );
+    // case "other":
+    //   return null;
   }
 }
 

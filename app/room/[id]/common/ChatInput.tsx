@@ -2,23 +2,19 @@ import { Button, Group, TextInput } from "@mantine/core";
 import { useState } from "react";
 import sendChat from "./sendChat";
 import { useParams } from "next/navigation";
-import { RoomBackend } from "@/app/roomApi";
 
-type Props = {
-  roomBackend: RoomBackend;
-};
-
-export default function ChatInput({ roomBackend }: Props) {
+export default function ChatInput() {
   const [text, setText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { id } = useParams<{ id: string }>();
+  const gameId = Number(id);
 
   const submit = async () => {
     if (text !== "" && !isSubmitting) {
       setIsSubmitting(true);
       try {
-        await sendChat(id, text, roomBackend);
+        await sendChat(gameId, text, [3, 4, 5]);
       } finally {
         setIsSubmitting(false);
       }

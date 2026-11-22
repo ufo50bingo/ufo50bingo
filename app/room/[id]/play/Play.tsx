@@ -414,68 +414,66 @@ export default function Play({ gameId, initialFeed, userId }: Props) {
             restrictions={restrictions}
           /> */}
         </Stack>
-        {/* <Feed
-          rawFeed={rawFeed}
+        <Feed
+          feed={feed}
           style={{
             height:
-              showGeneralTracker && generalSettings.type === "simple"
-                ? "748px"
-                : "592px",
+              // showGeneralTracker && generalSettings.type === "simple"
+              false ? "748px" : "592px",
           }}
-          roomBackend={roomBackend}
         />
-        {!isHidden &&
-          showGeneralTracker &&
-          generalSettings.type === "full" &&
-          generalGoals.map((g) => (
-            <GeneralGoal
-              key={g.foundGoal.resolvedGoal}
-              gameToGoals={gameToGoals}
-              foundGoal={g.foundGoal}
-              isFinished={g.color !== "blank"}
-              terminalCodes={terminalCodes}
-              countState={fullGeneralState[g.foundGoal.resolvedGoal]}
-              showAll={showAll.includes(g.foundGoal.resolvedGoal)}
-              setGeneralGameCount={setGeneralGameCount}
-              addShowAll={addShowAll}
-              playerColors={[selectedColor]}
-              style={{
-                minHeight: "300px",
-                maxHeight: "592px",
-                flex: "1 1 auto",
-              }}
-              settings={generalSettings}
-              pasta={g.pasta}
-              restrictions={restrictions}
-            />
-          ))}
-        {!isHidden &&
-          showGeneralTracker &&
-          generalSettings.type === "full" &&
-          restrictions.canShowMultiGoalGames && (
-            <InfoCard
-              title="Multi-goal games"
-              style={{
-                minHeight: "300px",
-                maxHeight: "592px",
-                flex: "1 1 auto",
-              }}
-            >
-              <Stack gap={4}>
-                {multiGoalGames.length > 0
-                  ? multiGoalGames.map((game) => (
-                      <GameInfo
-                        key={game}
-                        game={game as Game}
-                        goals={gameToGoals[game]}
-                        description={null}
-                        canShowTooltip={restrictions.canShowOnCardTooltips}
-                      />
-                    ))
-                  : "No multi-goal games on this card!"}
-              </Stack>
-            </InfoCard>
-          )} */}
+        {/* {!isHidden &&
+           showGeneralTracker &&
+           generalSettings.type === "full" &&
+           generalGoals.map((g) => (
+             <GeneralGoal
+               key={g.foundGoal.resolvedGoal}
+               gameToGoals={gameToGoals}
+               foundGoal={g.foundGoal}
+               isFinished={g.color !== "blank"}
+               terminalCodes={terminalCodes}
+               countState={fullGeneralState[g.foundGoal.resolvedGoal]}
+               showAll={showAll.includes(g.foundGoal.resolvedGoal)}
+               setGeneralGameCount={setGeneralGameCount}
+               addShowAll={addShowAll}
+               playerColors={[selectedColor]}
+               style={{
+                 minHeight: "300px",
+                 maxHeight: "592px",
+                 flex: "1 1 auto",
+               }}
+               settings={generalSettings}
+               pasta={g.pasta}
+               restrictions={restrictions}
+             />
+           ))}
+         {!isHidden &&
+           showGeneralTracker &&
+           generalSettings.type === "full" &&
+           restrictions.canShowMultiGoalGames && (
+             <InfoCard
+               title="Multi-goal games"
+               style={{
+                 minHeight: "300px",
+                 maxHeight: "592px",
+                 flex: "1 1 auto",
+               }}
+             >
+               <Stack gap={4}>
+                 {multiGoalGames.length > 0
+                   ? multiGoalGames.map((game) => (
+                       <GameInfo
+                         key={game}
+                         game={game as Game}
+                         goals={gameToGoals[game]}
+                         description={null}
+                         canShowTooltip={restrictions.canShowOnCardTooltips}
+                       />
+                     ))
+                   : "No multi-goal games on this card!"}
+               </Stack>
+             </InfoCard>
+           )}} */}
       </Group>
       {reconnectModal}
     </>

@@ -55,21 +55,22 @@ export type FoundItem = {
 };
 
 export type Props = {
-  id: string;
-  rawFeed: NewFeed;
-  initialTimerEvents: ReadonlyArray<FullSyncedTimerEvent>;
-  playerName: string;
+  gameId: number;
+  initialFeed: NewFeed;
+  // initialTimerEvents: ReadonlyArray<FullSyncedTimerEvent>;
+  userId: number;
 };
 
-export default function Play({
-  id,
-  rawFeed: initialRawFeed,
-  playerName,
-  initialTimerEvents,
-}: Props) {
+export default function Play({ gameId, initialFeed, userId }: Props) {
   const isLockout = true;
   const boardSize = 25;
-  const [feed, _setFeed] = useState(initialRawFeed);
+  const [soundChoices, setSoundChoices, playAudio] = useSounds("play");
+  const { feed, reconnectModal } = useBingosyncSocket({
+    gameId,
+    initialFeed,
+    userId,
+    playAudio,
+  });
   const squareColors = useMemo(() => {
     const colors: Array<Array<BingosyncColor>> = Array(boardSize)
       .fill(null)
@@ -99,7 +100,6 @@ export default function Play({
   //   key: "show_general_tracker",
   //   defaultValue: true,
   // });
-  // const [soundChoices, setSoundChoices, playAudio] = useSounds("play");
   const [color, setColor] = useState<BingosyncColor>("red");
   const [font, setFont] = useFont();
 
@@ -121,18 +121,6 @@ export default function Play({
   //   setGameToGoals(getGameToGoals(newBoard, getGameList(getIsNes50(newBoard))));
   //   setTerminalCodes(getAllTerminalCodes(newBoard));
   // }, []);
-
-  // const { board, rawFeed, seed, reconnectModal } = useBingosyncSocket({
-  //   id,
-  //   initialBoard,
-  //   initialRawFeed,
-  //   initialSeed,
-  //   socketKey,
-  //   playerName,
-  //   onNewCard,
-  //   playAudio,
-  //   roomBackend,
-  // });
 
   // const { addEvent, timerState, forceReveal } = useSyncedTimer({
   //   id,
@@ -328,7 +316,7 @@ export default function Play({
                 squareColors[squareIndex].includes(selectedColor);
               try {
                 await changeColor(
-                  Number(id),
+                  gameId,
                   squareIndex,
                   selectedColor,
                   isClearing,
@@ -489,7 +477,7 @@ export default function Play({
             </InfoCard>
           )} */}
       </Group>
-      {/* {reconnectModal} */}
+      {reconnectModal}
     </>
   );
 }

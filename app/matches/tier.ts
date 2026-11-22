@@ -10,6 +10,18 @@ export const enum LEAGUE_TIER {
   C2,
 }
 
+export const ALL_LEAGUE_TIERS: ReadonlyArray<LEAGUE_TIER> = [
+  LEAGUE_TIER.A,
+  LEAGUE_TIER.A1,
+  LEAGUE_TIER.A2,
+  LEAGUE_TIER.B,
+  LEAGUE_TIER.B1,
+  LEAGUE_TIER.B2,
+  LEAGUE_TIER.C,
+  LEAGUE_TIER.C1,
+  LEAGUE_TIER.C2,
+];
+
 export function displayTier(tier: LEAGUE_TIER): string {
   switch (tier) {
     case LEAGUE_TIER.A:

@@ -202,6 +202,12 @@ export function UserTokenizer({
           </Group>
         );
       }}
+      // HACK: If the user hasn't typed yet, make the text input smaller
+      // so we can fit more pills
+      styles={{
+        inputField: { minWidth: search.length > 0 ? "6rem" : "1rem" },
+        pill: { flex: "none" },
+      }}
       comboboxProps={{
         preventPositionChangeWhenVisible: true,
       }}

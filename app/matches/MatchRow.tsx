@@ -51,9 +51,7 @@ type Props = {
 };
 
 export function MatchRow({ game, isMobile }: Props) {
-  const { revealedMatchIDs } = useAppContext();
-  // TODO: Read from context
-  const hideByDefault = true;
+  const { revealedMatchIDs, hideByDefault } = useAppContext();
   const oldSession = useSession();
   const { data: session } = authClient.useSession();
 

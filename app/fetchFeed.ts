@@ -46,6 +46,7 @@ export type FeedMember = {
   isInvite: boolean;
   name: string;
   overrideName: null | string;
+  image: null | string;
 };
 
 export type FeedGoalProgress = {
@@ -186,8 +187,9 @@ export function fetchMemberSql(sql: SQLTemplate, gameId: number): SQL {
       member.user_id,
       member.player_color,
       member.is_invite,
+      member.override_name,
       "user".name,
-      member.override_name
+      "user".image
     FROM member
     INNER JOIN "user"
     ON member.user_id = "user".id
@@ -204,6 +206,7 @@ export function parseMemberResult(result: SQLResult): Array<FeedMember> {
     isInvite: raw.is_invite,
     name: raw.name,
     overrideName: raw.override_name,
+    image: raw.image,
   }));
 }
 

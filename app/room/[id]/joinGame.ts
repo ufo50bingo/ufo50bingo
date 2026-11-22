@@ -13,6 +13,7 @@ export default async function joinGame(
   gameId: number,
   playerColor: null | BingosyncColor,
   overrideName: null | string,
+  password: null | string,
 ): Promise<void> {
   const session = await getSession();
   if (session == null) {
@@ -20,6 +21,26 @@ export default async function joinGame(
   }
   const userId = Number(session.user.id);
   const sql = getSql(false);
+  const [passwordResult, isInvitedResult] = await sql.transaction([
+    sql`
+      SELECT password
+      FROM game
+      WHERE id = ${gameId}
+    `,
+    sql`
+      SELECT 1 as dummy
+      FROM member
+      WHERE
+        user_id = ${userId}
+        AND game_id = ${gameId}
+      LIMIT 1
+    `,
+  ]);
+  const passwordsMatch = passwordResult[0].password === password;
+  const isInvited = isInvitedResult.length > 0;
+  if (!passwordsMatch && !isInvited) {
+    throw new Error("Incorrect password provided");
+  }
   const now = new Date();
   const feedItem: FeedMember = {
     type: "member",

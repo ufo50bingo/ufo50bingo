@@ -241,10 +241,15 @@ export default function Cast({
   const numRows = Math.ceil(players.length / 2);
   const gameSelectorHeight = numRows * 44;
 
+  const canAddSubcategory = timerState.type !== "not_started";
+
   const addSubcategoryName =
     sendEvents == null
       ? null
       : async (userId: number, newGame: string | null) => {
+          if (!canAddSubcategory) {
+            return;
+          }
           const subcategoryId =
             subcategories.find((sc) => sc.name === newGame)?.subcategoryId ??
             null;
@@ -352,6 +357,11 @@ export default function Cast({
                   <Tooltip key={player.userId} label={player.name}>
                     <div>
                       <GameSelector
+                        disabledReason={
+                          canAddSubcategory
+                            ? undefined
+                            : "Current games can be selected after the match has started"
+                        }
                         color={player.color}
                         game={activeGame}
                         onChange={

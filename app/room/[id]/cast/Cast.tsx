@@ -13,7 +13,7 @@ import GameInfo from "./GameInfo";
 import CastSettings from "./CastSettings";
 import GeneralIcons from "./GeneralIcons";
 import EditSquare from "./EditSquare";
-import { AllPlayerGames, CountChange } from "./useSyncedState";
+import { AllPlayerGames, CountChange, CurrentGame } from "./useSyncedState";
 import useLocalState from "./useLocalState";
 import useBingosyncSocket from "../common/useBingosyncSocket";
 import useSounds from "../play/useSounds";
@@ -24,7 +24,6 @@ import ScoreSquare from "../common/ScoreSquare";
 import SideCell from "./SideCell";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import findGoal, { FoundGoal, FoundGoalWithCast } from "@/app/findGoal";
-import getGamesForPlayer from "./getGamesForPlayer";
 import useLocalNumber from "@/app/localStorage/useLocalNumber";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
 import { GENERAL_ORDER } from "./GeneralOrderSelector";
@@ -46,6 +45,7 @@ import { GeneralCounts } from "./CastPage";
 import useSquareColors from "../common/useSquareColors";
 import useMembers from "../common/useMembers";
 import addGoalProgress from "./addGoalProgress";
+import addCurrentSubcategory from "./addCurrentSubcategory";
 
 const RESTRICTIONS: Restrictions = {
   canTagDifficultyFor: null,
@@ -87,16 +87,6 @@ export default function Cast({
   const isLockout = true;
   const boardSize = 25;
   const squareNames = useMemo(() => squares.map((s) => s.name), [squares]);
-  const squareNameToId: Map<string, number> = useMemo(() => {
-    const nameToId = new Map();
-    for (const square of squares) {
-      nameToId.set(square.name, square.goalId);
-    }
-    return nameToId;
-  }, [squares]);
-  const subcategoryNameToId: Map<string, number> = useMemo(() => {
-    return new Map();
-  }, []);
   const [soundChoices, setSoundChoices, playAudio] = useSounds("cast");
   const { feed, reconnectModal } = useBingosyncSocket({
     gameId,
@@ -155,10 +145,20 @@ export default function Cast({
     return generalCounts;
   }, [feed, squares, subcategories]);
 
-  // TODO: use map for player IDs
   const allPlayerGames: AllPlayerGames = useMemo(() => {
-    return [];
-  }, []);
+    const allGames: Map<number, Array<CurrentGame>> = new Map();
+    for (const item of feed) {
+      if (item.type === "current_subcategory") {
+        const userGames = allGames.get(item.userId) ?? [];
+        const subcategory = subcategories.find(
+          (sc) => sc.subcategoryId === item.subcategoryId,
+        )!;
+        userGames.push({ game: subcategory.name, start_time: item.time });
+        allGames.set(item.userId, userGames);
+      }
+    }
+    return allGames;
+  }, [feed, subcategories]);
 
   const {
     shownDifficulties,
@@ -359,48 +359,28 @@ export default function Cast({
     if (!highlightCurrentGame) {
       return undefined;
     }
-    const currentGames = allPlayerGames.map((playerGames) =>
-      playerGames == null ? null : playerGames[0],
-    );
-    const currentLeftGames = currentGames.filter(
-      (g, index) => g != null && index % 2 === 0,
-    );
-    const currentRightGames = currentGames.filter(
-      (g, index) => g != null && index % 2 === 1,
-    );
-    const leftIndices = currentLeftGames
-      .flatMap((game) =>
-        game?.game != null ? (gameToGoals[game.game] ?? []) : [],
-      )
-      .map((item) => item[1]);
-    const rightIndices = currentRightGames
-      .flatMap((game) =>
-        game?.game != null ? (gameToGoals[game.game] ?? []) : [],
-      )
-      .map((item) => item[1]);
-    const highlights = Array(25)
+    const highlights: Array<Array<BingosyncColor>> = Array(boardSize)
       .fill(null)
-      .map((_, index) => {
-        const colors: Array<BingosyncColor> = [];
-        if (leftIndices.includes(index)) {
-          colors.push(leftColor);
+      .map((_) => []);
+    for (const [userId, currentGames] of allPlayerGames.entries()) {
+      const currentGame =
+        currentGames.length > 0
+          ? currentGames[currentGames.length - 1].game
+          : null;
+      if (currentGame != null) {
+        const color = members.get(userId)?.playerColor ?? "red";
+        for (const [_, index] of gameToGoals[currentGame] ?? []) {
+          if (!highlights[index].includes(color)) {
+            highlights[index].push(color);
+          }
         }
-        if (rightIndices.includes(index)) {
-          colors.push(rightColor);
-        }
-        return colors;
-      });
+      }
+    }
     return highlights;
-  }, [
-    allPlayerGames,
-    leftColor,
-    rightColor,
-    gameToGoals,
-    highlightCurrentGame,
-  ]);
+  }, [highlightCurrentGame, allPlayerGames, members, gameToGoals]);
 
-  const leftGames = getGamesForPlayer(allPlayerGames, 0);
-  const rightGames = getGamesForPlayer(allPlayerGames, 1);
+  const leftGames = allPlayerGames.get(leftUserId) ?? [];
+  const rightGames = allPlayerGames.get(rightUserId) ?? [];
 
   const numRows = Math.ceil(numPlayers / 2);
   const gameSelectorHeight = numRows * 44;
@@ -551,17 +531,25 @@ export default function Cast({
         {showGameSelector ? (
           <Stack gap={8}>
             <Group wrap="wrap" w={268} gap={8} justify="space-between">
+              {/* TODO: use player list here instead of numPlayers */}
               {new Array(numPlayers).fill(null).map((_, playerNum) => (
                 <GameSelector
                   key={playerNum}
                   color={playerNum % 2 === 0 ? leftColor : rightColor}
                   game={
-                    getGamesForPlayer(allPlayerGames, playerNum)[0]?.game ??
-                    null
+                    allPlayerGames.get(
+                      playerNum % 2 === 0 ? leftUserId : rightUserId,
+                    )?.[0]?.game ?? null
                   }
-                  onChange={(_newGame: ProperGame | null) => {
-                    // TODO: Call server action here
-                    // addGame(newGame, playerNum);
+                  onChange={async (newGame: ProperGame | null) => {
+                    const subcategoryId =
+                      subcategories.find((sc) => sc.name === newGame)
+                        ?.subcategoryId ?? null;
+                    await addCurrentSubcategory({
+                      gameId,
+                      userId: playerNum % 2 == 0 ? leftUserId : rightUserId,
+                      subcategoryId,
+                    });
                   }}
                   terminalCodes={terminalCodes}
                   gameList={gameList}

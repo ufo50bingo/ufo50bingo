@@ -1,6 +1,5 @@
 import { NeonQueryFunction } from "@neondatabase/serverless";
 import { SQL } from "./matches/page";
-import { BingosyncColor } from "./matches/parseBingosyncData";
 import { SyncedTimerEventName } from "./room/[id]/common/useSyncedTimer";
 import { fetchPastas } from "./pastaStorage";
 import { UFOPasta } from "./generator/ufoGenerator";
@@ -12,6 +11,7 @@ import getAllCastOptions from "./createboard/getAllCastOptions";
 import getGameList from "./room/[id]/common/getGameList";
 import { LEAGUE_TIER } from "./matches/tier";
 import { WEEK } from "./matches/week";
+import { BingosyncColor } from "./color";
 
 export type FeedColorMark = {
   type: "color_mark";

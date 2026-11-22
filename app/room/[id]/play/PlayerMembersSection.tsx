@@ -1,6 +1,6 @@
 import { Accordion, ColorSwatch, Group, Stack, Text } from "@mantine/core";
-import getColorHex from "../cast/getColorHex";
 import { CasterMember, PlayerMember } from "../common/useMembers";
+import { getColorHex } from "@/app/color";
 
 interface Props {
   players: ReadonlyArray<PlayerMember>;

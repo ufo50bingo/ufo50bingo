@@ -1,3 +1,4 @@
+// TODO: Dead code
 import { ReactNode } from "react";
 import { getSquareCompletionRanges } from "./analyzeMatch";
 import { Change } from "./parseBingosyncData";
@@ -11,7 +12,7 @@ export default function getOverlays(
   const ranges = getSquareCompletionRanges(matchStartTime, changes);
 
   changes.forEach((change) => {
-    if (change.color == "blank") {
+    if (change.color == null) {
       const oldOrder = orders[change.index];
       orders[change.index] = null;
       if (oldOrder != null) {

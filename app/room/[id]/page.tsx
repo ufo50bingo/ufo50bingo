@@ -14,7 +14,7 @@ import Login from "./Login";
 import getSession from "@/app/getSession";
 import { cookies } from "next/headers";
 import CastPage from "./cast/CastPage";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
+import { BingosyncColor } from "@/app/color";
 
 export default async function RoomPage({
   params,

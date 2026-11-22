@@ -26,9 +26,7 @@ export default function FeedEntry({ entry, squareNames, members }: Props) {
     <strong>{member?.overrideName ?? member?.name ?? entry.userId}</strong>
   );
   const coloredPlayer = (
-    <BingosyncColored color={member?.color ?? "blank"}>
-      {player}
-    </BingosyncColored>
+    <BingosyncColored color={member?.color ?? null}>{player}</BingosyncColored>
   );
   switch (entry.type) {
     case "chat":
@@ -36,7 +34,7 @@ export default function FeedEntry({ entry, squareNames, members }: Props) {
         <span>
           {timestamp} {coloredPlayer}
           <span className={classes.defaultColor}>: </span>
-          <BingosyncColored color="blank">{entry.message}</BingosyncColored>
+          <BingosyncColored color={null}>{entry.message}</BingosyncColored>
           {entry.visibleToPlayers != null ? (
             <Tooltip
               label={
@@ -63,7 +61,7 @@ export default function FeedEntry({ entry, squareNames, members }: Props) {
           <span className={classes.defaultColor}>
             {entry.isClear ? "cleared" : "marked"}
           </span>{" "}
-          <BingosyncColored color={entry.isClear ? "blank" : entry.color}>
+          <BingosyncColored color={entry.isClear ? null : entry.color}>
             <strong>{squareNames[entry.squareIndex]}</strong>
           </BingosyncColored>
         </em>

@@ -10,7 +10,6 @@ import SideColumn from "./SideColumn";
 import { Font } from "@/app/font/useFont";
 import { IconType } from "./useLocalState";
 import { GenericMember, PlayerMember } from "../common/useMembers";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { AllPlayerGames } from "./useSyncedState";
 import { ReactNode, useMemo } from "react";
 import { FullParsedGame } from "@/app/fetchFeed";
@@ -18,6 +17,7 @@ import { GameToGoals } from "./findAllGames";
 import { UFOPasta } from "@/app/generator/ufoGenerator";
 import { Difficulty } from "@/app/goals";
 import { GeneralCounts } from "./CastPage";
+import { BingosyncColor } from "@/app/color";
 
 type Props = {
   game: FullParsedGame;
@@ -177,7 +177,7 @@ export default function CastBoardWithTrackers({
           pasta={pasta}
           board={squareColors.map((colors, index) => ({
             name: game.squares[index].name,
-            color: colors.length > 0 ? colors[0] : "blank",
+            color: colors.length > 0 ? colors[0] : null,
           }))}
           highlights={highlights}
           onClickSquare={(_newIndex: number) => {}}

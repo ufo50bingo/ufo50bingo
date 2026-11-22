@@ -1,15 +1,5 @@
-export type BingosyncColor =
-  | "blank"
-  | "red"
-  | "blue"
-  | "green"
-  | "orange"
-  | "purple"
-  | "navy"
-  | "teal"
-  | "pink"
-  | "brown"
-  | "yellow";
+// TODO: None of this file should be needed anymore
+import { BingosyncColor } from "../color";
 
 type RawSquare = {
   // goal text
@@ -26,7 +16,7 @@ export type RawBoard = ReadonlyArray<RawSquare>;
 
 export type Square = {
   name: string;
-  color: BingosyncColor;
+  color: BingosyncColor | null;
 };
 
 export type Change = {
@@ -181,64 +171,16 @@ function getReveals(
 }
 
 function getChanges(
-  relevantEvents: ReadonlyArray<RawFeedItem>,
+  _relevantEvents: ReadonlyArray<RawFeedItem>,
 ): ReadonlyArray<Change> {
-  return relevantEvents
-    .filter((event) => event.type === "goal")
-    .map((event) => ({
-      time: event.timestamp,
-      name: event.player.name,
-      // use event.color since it's the color the square was marked
-      // at the time of the event. The player object has
-      // their *current color* instead
-      color: event.remove ? "blank" : event.color,
-      index: Number(event.square.slot.slice(4)) - 1,
-    }));
+  // TODO: dead code
+  return [];
 }
 
 export type PlayerToColors = { [name: string]: ReadonlyArray<BingosyncColor> };
 export function getPlayerColors(
-  changes: ReadonlyArray<Change>,
+  _changes: ReadonlyArray<Change>,
 ): PlayerToColors {
-  const boardColors: Array<BingosyncColor> = Array(25).fill("blank");
-  const playerToColorToNetAdditions: {
-    [name: string]: { [color: string]: number };
-  } = {};
-  changes.forEach((change) => {
-    const { name, color } = change;
-
-    const colorToNetAdditions = playerToColorToNetAdditions[name] ?? {};
-
-    const actualColor = color === "blank" ? boardColors[change.index] : color;
-    if (actualColor === "blank") {
-      return;
-    }
-    const netAdditions = colorToNetAdditions[actualColor] ?? 0;
-    const newNetAdditions =
-      change.color === "blank" ? netAdditions - 1 : netAdditions + 1;
-    colorToNetAdditions[actualColor] = newNetAdditions;
-    playerToColorToNetAdditions[name] = colorToNetAdditions;
-
-    boardColors[change.index] = color;
-  });
-
-  const playerToColors: PlayerToColors = {};
-  // if removals >= marks, then the player is likely
-  // a ref/streamer instead of a participant
-  Object.keys(playerToColorToNetAdditions).forEach((name) => {
-    if (name.endsWith("(admin)")) {
-      return;
-    }
-    const colors: Array<BingosyncColor> = [];
-    const colorToNetAdditions = playerToColorToNetAdditions[name];
-    Object.keys(colorToNetAdditions).forEach((color) => {
-      if (colorToNetAdditions[color] > 0) {
-        colors.push(color as BingosyncColor);
-      }
-    });
-    if (colors.length > 0) {
-      playerToColors[name] = colors;
-    }
-  });
-  return playerToColors;
+  // TODO: dead code
+  return {};
 }

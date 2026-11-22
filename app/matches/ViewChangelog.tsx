@@ -1,9 +1,8 @@
+// TODO: Dead code
 import { ReactNode } from "react";
 import { TBoard, Change, Changelog } from "./parseBingosyncData";
 import { Stack } from "@mantine/core";
-import BingosyncColored, { getColorClass } from "./BingosyncColored";
 import { setUrlAtTime } from "./vodUtil";
-import classes from "./ViewChangelog.module.css";
 import { getMatchStartTime } from "./analyzeMatch";
 import getBaseUrlAndHost from "./getBaseUrlAndHost";
 
@@ -65,29 +64,11 @@ type ChangeTextProps = {
   change: Change;
   getLink: null | ((time: number) => string);
 };
-function ChangeText({ board, change, getLink }: ChangeTextProps): ReactNode {
-  const { time, index, name, color } = change;
-  const goalText = board[index].name;
-  const verb = color === "blank" ? "cleared" : "marked";
-  const text = (
-    <BingosyncColored color={change.color}>
-      {getTimestamp(time)} {name} {verb} <strong>{goalText}</strong>
-    </BingosyncColored>
-  );
-  const link = getLink != null ? getLink(change.time) : null;
-  return (
-    <span style={{ fontSize: "14px" }}>
-      {link != null ? (
-        <a
-          href={link}
-          className={classes.changelogLink + " " + getColorClass(change.color)}
-          target="_blank"
-        >
-          {text}
-        </a>
-      ) : (
-        text
-      )}
-    </span>
-  );
+function ChangeText({
+  board: _board,
+  change: _change,
+  getLink: _getLink,
+}: ChangeTextProps): ReactNode {
+  // TODO: Dead code
+  return <span />;
 }

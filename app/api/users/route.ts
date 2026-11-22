@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { unstable_cache } from "next/cache";
 import getSql from "@/app/getSql";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
+import { BingosyncColor } from "@/app/color";
 
 export const USER_CACHE_TAG = "user-cache";
 

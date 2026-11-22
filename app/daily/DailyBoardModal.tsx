@@ -5,9 +5,10 @@ import Board from "../Board";
 import html2canvas from "html2canvas";
 import { useMemo, useRef } from "react";
 import getBoardAtIndex from "./getBoardAtIndex";
-import { BingosyncColor, TBoard } from "../matches/parseBingosyncData";
+import { TBoard } from "../matches/parseBingosyncData";
 import getDailyOverlays from "./getDailyOverlays";
 import StandardBoardWrapper from "../StandardBoardWrapper";
+import { BingosyncColor } from "../color";
 
 type Props = {
   board: ReadonlyArray<string>;
@@ -34,7 +35,7 @@ export default function DailyBoardModal({
     );
     return rawBoard.map((name, index) => ({
       name,
-      color: boardMarked[index] ? color : "blank",
+      color: boardMarked[index] ? color : null,
     }));
   }, [feedWithDuration, feedIndex, color, rawBoard]);
   const overlays = useMemo(

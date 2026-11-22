@@ -4,10 +4,11 @@ import Link from "next/link";
 import { Card, Container, Divider, List, Title } from "@mantine/core";
 import Board from "../Board";
 import { useState } from "react";
-import { BingosyncColor, TBoard } from "../matches/parseBingosyncData";
+import { TBoard } from "../matches/parseBingosyncData";
 import LinkWithVariant from "../links/LinkWithVariant";
 import StandardBoardCover from "../StandardBoardCover";
 import StandardBoardWrapper from "../StandardBoardWrapper";
+import { BingosyncColor } from "../color";
 
 const COLOR: BingosyncColor = "red";
 
@@ -46,7 +47,7 @@ export default function About({ initialBoard }: Props) {
               onClickSquare={(squareIndex: number) => {
                 const newBoard = [...board];
                 const newSquare = { ...board[squareIndex] };
-                newSquare.color = newSquare.color === "blank" ? COLOR : "blank";
+                newSquare.color = newSquare.color == null ? COLOR : null;
                 newBoard[squareIndex] = newSquare;
                 setBoard(newBoard);
               }}

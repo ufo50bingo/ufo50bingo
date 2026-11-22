@@ -2,12 +2,12 @@
 
 import { FeedMember } from "@/app/fetchFeed";
 import getSql from "@/app/getSql";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import broadcastToWebsockets from "../broadcastToWebsockets";
 import getSession from "@/app/getSession";
 import { refresh } from "next/cache";
 import { auth } from "@/app/auth";
 import { headers } from "next/headers";
+import { BingosyncColor } from "@/app/color";
 
 export default async function joinGame(
   gameId: number,

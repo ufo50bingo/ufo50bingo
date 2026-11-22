@@ -124,7 +124,7 @@ export default function Daily({
     () =>
       plainBoard.map((name, index) => ({
         name,
-        color: completedIndexes.has(index) ? color : "blank",
+        color: completedIndexes.has(index) ? color : null,
       })),
     [plainBoard, completedIndexes, color],
   );

@@ -1,5 +1,5 @@
+import { BingosyncColor } from "@/app/color";
 import { NewFeed } from "@/app/fetchFeed";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { useMemo } from "react";
 
 export interface CasterMember {

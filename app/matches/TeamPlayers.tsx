@@ -1,7 +1,7 @@
 import { Avatar, Group, Text } from "@mantine/core";
 import { MatchTeam } from "./useTeams";
-import getColorHex from "../room/[id]/cast/getColorHex";
 import classes from "./MatchRow.module.css";
+import { getColorHex } from "../color";
 
 type Props = {
   team: MatchTeam;

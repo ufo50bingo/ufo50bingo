@@ -1,23 +1,9 @@
 import { ColorSwatch, Select, Group } from "@mantine/core";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
-import getColorHex from "../cast/getColorHex";
+import { BingosyncColor, COLOR_INFO, getColorHex } from "@/app/color";
 
-export const COLORS: ReadonlyArray<BingosyncColor> = [
-  "orange",
-  "red",
-  "blue",
-  "green",
-  "purple",
-  "navy",
-  "teal",
-  "brown",
-  "pink",
-  "yellow",
-];
-
-const COLOR_OPTIONS = COLORS.map((c) => ({
-  value: c,
-  label: c.charAt(0).toUpperCase() + c.slice(1),
+const COLOR_OPTIONS = COLOR_INFO.map((c) => ({
+  value: c.key,
+  label: c.name,
 }));
 
 type Props = {

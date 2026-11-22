@@ -1,3 +1,4 @@
+// TODO: Dead code
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -131,7 +132,7 @@ export async function refreshMatch(
   }
 
   const result = getResult(board, changelog.changes, leagueP1, leagueP2);
-  const isAllBlank = board.every((square) => square.color === "blank");
+  const isAllBlank = board.every((square) => square.color === null);
 
   const changelogJson = changelog != null ? JSON.stringify(changelog) : null;
   const changes = changelog?.changes;
@@ -159,6 +160,6 @@ export async function refreshMatch(
     const rawMatch = sqlResult[0];
     const match = getMatchFromRaw(rawMatch);
     await syncToGSheet(match);
-  } catch { }
+  } catch {}
   return false;
 }

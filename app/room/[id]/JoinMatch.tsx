@@ -16,8 +16,8 @@ import { RoomView } from "./roomCookie";
 import { useSearchParams } from "next/navigation";
 import { FeedMember } from "@/app/fetchFeed";
 import ColorSelector from "./common/ColorSelector";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import joinGame from "./joinGame";
+import { BingosyncColor } from "@/app/color";
 
 type Props = {
   gameId: number;

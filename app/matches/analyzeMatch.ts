@@ -1,12 +1,13 @@
+// TODO: Get rid of all of this
 import { SequenceMatcher } from "difflib";
 import {
-  BingosyncColor,
   TBoard,
   Change,
   Changelog,
   PlayerToColors,
 } from "./parseBingosyncData";
 import { ALIASES } from "../createboard/leagueConstants";
+import { BingosyncColor } from "../color";
 
 export const BINGO_LINES = [
   // rows
@@ -116,40 +117,10 @@ export function getFirstBingoPlayer(
 }
 
 export function getPlayerWithLeastRecentClaim(
-  changes: ReadonlyArray<Change>,
-  players: PlayerToColors,
+  _changes: ReadonlyArray<Change>,
+  _players: PlayerToColors,
 ): string {
-  // time that player most recently claimed each square
-  // has null if square is not claimed. Set back to null
-  // if square is claimed and then unclaimed.
-  // The "time" is the position in the changelog
-  const playerClaimTimes: { [player: string]: (null | number)[] } = {};
-  Object.keys(players).forEach(
-    (player) => (playerClaimTimes[player] = Array(25).fill(null)),
-  );
-
-  changes.forEach((change, changePosition) => {
-    if (change.color === "blank") {
-      Object.keys(players).forEach((player) => {
-        playerClaimTimes[player][change.index] = null;
-      });
-      return;
-    }
-    Object.keys(players).forEach((player) => {
-      if (players[player].includes(change.color)) {
-        playerClaimTimes[player][change.index] = changePosition;
-      }
-    });
-  });
-
-  const finalClaimTimes = Object.keys(players).map((player) =>
-    Math.max(
-      ...playerClaimTimes[player].filter((position) => position != null),
-    ),
-  );
-  const minClaimTime = Math.min(...finalClaimTimes);
-  const indexOfBest = finalClaimTimes.findIndex((v) => v === minClaimTime);
-  return Object.keys(players)[indexOfBest];
+  return "Dead code";
 }
 
 export function getMatchStartTime(
@@ -161,25 +132,11 @@ export function getMatchStartTime(
 }
 
 export function getSquareCompletionRanges(
-  matchStartTime: null | number,
-  changesWithoutMistakes: ReadonlyArray<Change>,
+  _matchStartTime: null | number,
+  _changesWithoutMistakes: ReadonlyArray<Change>,
 ): ReadonlyArray<[string, number, number] | null> {
-  const finalTimes: ([string, number, number] | null)[] = Array(25).fill(null);
-  const prevTimeByPlayer: { [player: string]: number } = {};
-
-  changesWithoutMistakes.forEach((change) => {
-    if (change.color === "blank") {
-      finalTimes[change.index] = null;
-    } else {
-      const prevTime: null | number =
-        prevTimeByPlayer[change.name] ?? matchStartTime;
-      if (prevTime != null) {
-        finalTimes[change.index] = [change.name, prevTime, change.time];
-      }
-      prevTimeByPlayer[change.name] = change.time;
-    }
-  });
-  return finalTimes;
+  // Dead code
+  return [];
 }
 
 function getChangesWithoutDuplicates(
@@ -269,79 +226,13 @@ function getSimilarity(verifiedName: string, name: string): number {
 }
 
 export function getColorToVerifiedName(
-  changes: ReadonlyArray<Change>,
-  verifiedP1: string,
-  verifiedP2: string,
+  _changes: ReadonlyArray<Change>,
+  _verifiedP1: string,
+  _verifiedP2: string,
 ): null | {
   [color: string]: string;
 } {
-  const board = Array(25).fill("blank");
-  const colorToPlayerToNetAdditions: {
-    [color: string]: { [player: string]: number };
-  } = {};
-  changes.forEach((change) => {
-    let relevantColor = change.color;
-    if (change.color === "blank") {
-      relevantColor = board[change.index];
-      if (relevantColor === "blank") {
-        return;
-      }
-    }
-    board[change.index] = change.color;
-    const playerToAdditions = colorToPlayerToNetAdditions[relevantColor] ?? {};
-    const curCount = playerToAdditions[change.name] ?? 0;
-    const newCount = change.color === "blank" ? curCount - 1 : curCount + 1;
-    playerToAdditions[change.name] = newCount;
-    colorToPlayerToNetAdditions[relevantColor] = playerToAdditions;
-  });
-
-  // if a color has no net additions, remove it from the object
-  Object.keys(colorToPlayerToNetAdditions).forEach((color) => {
-    const counts = colorToPlayerToNetAdditions[color];
-    if (Object.keys(counts).every((name) => counts[name] === 0)) {
-      delete colorToPlayerToNetAdditions[color];
-    }
-  });
-
-  if (Object.keys(colorToPlayerToNetAdditions).length === 2) {
-    const c1 = Object.keys(colorToPlayerToNetAdditions)[0];
-    const c2 = Object.keys(colorToPlayerToNetAdditions)[1];
-    const c1Player = getTopPlayer(colorToPlayerToNetAdditions[c1]);
-    const c2Player = getTopPlayer(colorToPlayerToNetAdditions[c2]);
-
-    const sumP1EqC1 =
-      getSimilarity(verifiedP1, c1Player) + getSimilarity(verifiedP2, c2Player);
-    const sumP1EqC2 =
-      getSimilarity(verifiedP1, c2Player) + getSimilarity(verifiedP2, c1Player);
-
-    const result: { [color: string]: string } = {};
-    if (sumP1EqC1 >= sumP1EqC2) {
-      result[c1] = verifiedP1;
-      result[c2] = verifiedP2;
-    } else {
-      result[c1] = verifiedP2;
-      result[c2] = verifiedP1;
-    }
-    return result;
-  } else if (Object.keys(colorToPlayerToNetAdditions).length === 1) {
-    const c1 = Object.keys(colorToPlayerToNetAdditions)[0];
-    const c1Player = getTopPlayer(colorToPlayerToNetAdditions[c1]);
-
-    const sumP1EqC1 = getSimilarity(verifiedP1, c1Player);
-    const sumP1EqC2 = getSimilarity(verifiedP2, c1Player);
-
-    const c2: BingosyncColor = c1 === "red" ? "blue" : "red";
-
-    const result: { [color: string]: string } = {};
-    if (sumP1EqC1 >= sumP1EqC2) {
-      result[c1] = verifiedP1;
-      result[c2] = verifiedP2;
-    } else {
-      result[c1] = verifiedP2;
-      result[c2] = verifiedP1;
-    }
-    return result;
-  }
+  // Dead code
   return null;
 }
 

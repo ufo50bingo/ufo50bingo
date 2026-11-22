@@ -1,6 +1,7 @@
+// TODO: Dead code
 "use client";
 
-import { BingosyncColor } from "./parseBingosyncData";
+import { BingosyncColor } from "../color";
 import { LeagueInfo } from "../createboard/createMatch";
 import { RoomBackend } from "../roomApi";
 

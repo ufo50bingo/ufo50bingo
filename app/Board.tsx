@@ -8,20 +8,24 @@ import {
   useRef,
   useState,
 } from "react";
-import { BingosyncColor, TBoard } from "./matches/parseBingosyncData";
+import { TBoard } from "./matches/parseBingosyncData";
 import { Difficulty } from "./goals";
-import getColorHex from "./room/[id]/cast/getColorHex";
 import findGoal, { FoundGoal } from "./findGoal";
 import { STANDARD_UFO } from "./pastas/standardUfo";
 import { SPICY_UFO } from "./pastas/spicyUfo";
 import { useRightClickBehaviorContext } from "./settings/RightClickBehaviorContext";
-import { COLORS } from "./room/[id]/common/ColorSelector";
 import { useShouldShortenContext } from "./settings/ShouldShortenContext";
 import { NES_50_UFO } from "./pastas/nes50Ufo";
 import { EVERY_GAME_UFO } from "./pastas/everyGameUfo";
 import { useShouldShowRecentContext } from "./settings/ShouldShowRecentContext";
 import HeldHandIcon from "./HeldHandIcon";
 import { UFOPasta } from "./generator/ufoGenerator";
+import {
+  BingosyncColor,
+  BLANK_SQUARE_CLASS,
+  COLOR_INFO,
+  getColorSquareClass,
+} from "./color";
 
 type Props = {
   board: TBoard;
@@ -39,35 +43,6 @@ type Props = {
   maxFontSize?: number;
   minFontSize?: number;
 };
-
-function getColorClass(color: string): string {
-  const firstColor = color.split(" ")[0] as BingosyncColor;
-
-  switch (firstColor) {
-    case "blank":
-      return classes.blanksquare;
-    case "red":
-      return classes.redsquare;
-    case "blue":
-      return classes.bluesquare;
-    case "green":
-      return classes.greensquare;
-    case "orange":
-      return classes.orangesquare;
-    case "purple":
-      return classes.purplesquare;
-    case "navy":
-      return classes.navysquare;
-    case "teal":
-      return classes.tealsquare;
-    case "pink":
-      return classes.pinksquare;
-    case "brown":
-      return classes.brownsquare;
-    case "yellow":
-      return classes.yellowsquare;
-  }
-}
 
 function getDifficulty(
   foundGoal: FoundGoal<string, string, string>,
@@ -113,8 +88,9 @@ function getDifficulty(
 }
 
 function getColorHexOrCustom(color: string): string {
-  if (COLORS.includes(color as BingosyncColor)) {
-    return getColorHex(color as BingosyncColor);
+  const info = COLOR_INFO.find((c) => c.key === color);
+  if (info != null) {
+    return info.hex;
   }
   return color;
 }
@@ -262,7 +238,7 @@ export default function Board({
         if (
           castInfo != null &&
           rightClickCount != null &&
-          board[squareIndex].color === "blank"
+          board[squareIndex].color == null
         ) {
           const curBehavior =
             rightClickBehavior[
@@ -276,10 +252,13 @@ export default function Board({
         }
         const recentClass =
           isRecent[squareIndex] && shouldShowRecent ? classes.recent : "";
+        const color = board[squareIndex].color;
+        const colorClass =
+          color == null ? BLANK_SQUARE_CLASS : getColorSquareClass(color);
         return (
           <div
             key={squareIndex}
-            className={`${classes.unselectable} ${classes.square} ${recentClass} ${getColorClass(board[squareIndex].color)}`}
+            className={`${classes.unselectable} ${classes.square} ${recentClass} ${colorClass}`}
             onClick={() => onClickSquare != null && onClickSquare(squareIndex)}
             onAnimationEnd={() => {
               setIsRecent((prev) => {
@@ -302,7 +281,7 @@ export default function Board({
               setRightClickCounts(newRightClickCounts);
             }}
             style={
-              resolvedHighlights == null || board[squareIndex].color !== "blank"
+              resolvedHighlights == null || board[squareIndex].color != null
                 ? undefined
                 : getBorderStyles(resolvedHighlights[squareIndex])
             }
@@ -311,7 +290,7 @@ export default function Board({
             {heldColor != null && (
               <>
                 <div
-                  className={`${classes.held} ${getColorClass(heldColor)}`}
+                  className={`${classes.held} ${getColorSquareClass(heldColor)}`}
                 />
                 <HeldHandIcon color={heldColor} className={classes.hand} />
               </>

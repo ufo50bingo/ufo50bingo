@@ -2,10 +2,10 @@ import { Button, Modal, Stack, Group } from "@mantine/core";
 import { IconSwitch3 } from "@tabler/icons-react";
 import { useState } from "react";
 import ColorSelector from "./ColorSelector";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { FeedMember, NewFeedItem } from "@/app/fetchFeed";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import { GenericMember } from "./useMembers";
+import { BingosyncColor } from "@/app/color";
 
 type Props = {
   userId: number;
@@ -23,6 +23,7 @@ export default function SwitchViewButton({
   members,
 }: Props) {
   const [isSwitching, setIsSwitching] = useState(false);
+  // TODO: Get color from session
   const [color, setColor] = useState<BingosyncColor>("red");
   const { getServerMsFromClientMs } = useServerOffsetContext();
   return (

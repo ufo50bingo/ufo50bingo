@@ -10,7 +10,7 @@ import InfoCard from "./InfoCard";
 import GameInfo from "./GameInfo";
 import CastSettings from "./CastSettings";
 import EditSquare from "./EditSquare";
-import { AllPlayerGames, CountChange, CurrentGame } from "./useSyncedState";
+import { CountChange } from "./useSyncedState";
 import useLocalState from "./useLocalState";
 import useBingosyncSocket from "../common/useBingosyncSocket";
 import useSounds from "../play/useSounds";
@@ -35,13 +35,14 @@ import {
   FeedGoalProgress,
   FullParsedGame,
 } from "@/app/fetchFeed";
-import { GeneralCounts } from "./CastPage";
 import useSquareColors from "../common/useSquareColors";
 import useMembers from "../common/useMembers";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import CastBoardWithTrackers from "./CastBoardWithTrackers";
 import usePasta from "../common/usePasta";
 import useGeneralGoals from "../common/useGeneralGoals";
+import useAllPlayerGames from "./useAllPlayerGames";
+import useGeneralCounts from "./useGeneralCounts";
 
 export const CASTER_RESTRICTIONS: PlayerTrackerRestrictions = {
   allowed_difficulty_tags: null,
@@ -117,45 +118,9 @@ export default function Cast({
   const [editingIndex, setEditingIndex] = useState<null | number>(null);
   const [isDetecting, setIsDetecting] = useState(false);
 
-  const generals: GeneralCounts = useMemo(() => {
-    const generalCounts: GeneralCounts = {};
-    for (const item of feed) {
-      if (item.type === "goal_progress") {
-        const goalName = squares.find((sq) => sq.goalId === item.goalId)!.name;
-        const subcategoryName = subcategories.find(
-          (sc) => sc.subcategoryId === item.subcategoryId,
-        )!.name;
-        const goalCounts = generalCounts[goalName] ?? {};
-        const playerCounts = goalCounts[item.userId] ?? {};
-        playerCounts[subcategoryName] = item.count;
-        goalCounts[item.userId] = playerCounts;
-        generalCounts[goalName] = goalCounts;
-      }
-    }
-    return generalCounts;
-  }, [feed, squares, subcategories]);
+  const generals = useGeneralCounts(feed, squares, subcategories);
 
-  const allPlayerGames: AllPlayerGames = useMemo(() => {
-    const allGames: Map<number, Array<CurrentGame>> = new Map();
-    for (const item of feed) {
-      if (item.type === "current_subcategory") {
-        const userGames = allGames.get(item.userId) ?? [];
-        if (item.subcategoryId == null) {
-          userGames.push({ game: null, start_time: item.time });
-        } else {
-          const subcategory = subcategories.find(
-            (sc) => sc.subcategoryId === item.subcategoryId,
-          );
-          userGames.push({
-            game: subcategory?.name ?? null,
-            start_time: item.time,
-          });
-        }
-        allGames.set(item.userId, userGames);
-      }
-    }
-    return allGames;
-  }, [feed, subcategories]);
+  const allPlayerGames = useAllPlayerGames(feed, subcategories);
 
   const {
     shownDifficulties,

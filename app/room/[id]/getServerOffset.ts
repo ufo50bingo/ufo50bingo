@@ -5,11 +5,11 @@ export default async function getServerOffset(
   const maxAttemptedTrials = numTrials * 5;
 
   const bestTrials: { latency: number; offset: number }[] = [];
+  let numSuccessfulTrials = 0;
 
   for (
     let numAttemptedTrials = 0;
-    numAttemptedTrials < maxAttemptedTrials &&
-    numAttemptedTrials < numTrials * 5;
+    numAttemptedTrials < maxAttemptedTrials && numSuccessfulTrials < numTrials;
     numAttemptedTrials++
   ) {
     const start = Date.now();
@@ -33,6 +33,7 @@ export default async function getServerOffset(
       const clientTime = start + latency;
       const offset = timestamp - clientTime;
 
+      numSuccessfulTrials++;
       bestTrials.push({ latency, offset });
       bestTrials.sort((a, b) => a.latency - b.latency);
       if (bestTrials.length > keepBest) {

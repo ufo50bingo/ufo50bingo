@@ -112,6 +112,8 @@ export default function Shell({ children }: Props) {
     title = "Matches";
   } else if (title == null && pathname.startsWith("/room/")) {
     return <div style={{ padding: "16px" }}>{children}</div>;
+  } else if (pathname.startsWith("/layout")) {
+    return <div>{children}</div>;
   }
 
   return (

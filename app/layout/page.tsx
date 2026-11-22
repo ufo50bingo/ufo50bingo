@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import LayoutEditor from "./LayoutEditor";
+import LayoutEditorClient from "./LayoutEditorClient";
 
 export const metadata: Metadata = {
   title: "UFO 50 Bingo Layout Editor",
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function LayoutPage() {
-  return <LayoutEditor canvasHeight={1080} canvasWidth={1920} />;
+  return <LayoutEditorClient canvasHeight={1080} canvasWidth={1920} />;
 }

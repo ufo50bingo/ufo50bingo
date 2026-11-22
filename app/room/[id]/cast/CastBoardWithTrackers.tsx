@@ -17,6 +17,7 @@ import { UFOPasta } from "@/app/generator/ufoGenerator";
 import { Difficulty } from "@/app/goals";
 import { GeneralCounts } from "./CastPage";
 import { BingosyncColor } from "@/app/color";
+import BoardState from "@/app/match/[id]/BoardState";
 import PlayedGameState from "./PlayedGameState";
 
 type Props = {
@@ -29,7 +30,7 @@ type Props = {
   iconType: IconType;
   players: ReadonlyArray<PlayerMember>;
   areGeneralGoalsHidden: boolean;
-  squareColors: ReadonlyArray<ReadonlyArray<BingosyncColor>>;
+  boardState: BoardState;
   allMembers: ReadonlyMap<number, GenericMember>;
   boardCover: ReactNode;
   gameList: { [game: string]: string };
@@ -54,7 +55,7 @@ export default function CastBoardWithTrackers({
   iconType,
   players,
   areGeneralGoalsHidden,
-  squareColors,
+  boardState,
   allMembers,
   boardCover,
   gameList,
@@ -74,12 +75,13 @@ export default function CastBoardWithTrackers({
   const leftColor = leftPlayer?.color ?? "red";
   const rightColor = rightPlayer?.color ?? "red";
 
-  const leftScore = squareColors.filter((colors) =>
-    colors.includes(leftColor),
-  ).length;
-  const rightScore = squareColors.filter((colors) =>
-    colors.includes(rightColor),
-  ).length;
+  const squareColors = useMemo(
+    () => boardState.squares.map((colors) => [...colors]),
+    [boardState],
+  );
+  const scores = boardState.getScores();
+  const leftScore = scores.get(leftColor) ?? 0;
+  const rightScore = scores.get(rightColor) ?? 0;
 
   const leftGames =
     leftPlayer != null ? playedGameState.getPlayedGames(leftPlayer.userId) : [];
@@ -151,7 +153,7 @@ export default function CastBoardWithTrackers({
           isHidden={areGeneralGoalsHidden}
           countPosition={countPosition}
           font={font}
-          squareColors={squareColors}
+          boardState={boardState}
         />
         {showRecentGames && generalGoals.length === 0 && (
           <RecentGames
@@ -200,7 +202,7 @@ export default function CastBoardWithTrackers({
           isHidden={areGeneralGoalsHidden}
           countPosition={countPosition}
           font={font}
-          squareColors={squareColors}
+          boardState={boardState}
         />
         {showRecentGames && generalGoals.length === 0 && (
           <RecentGames

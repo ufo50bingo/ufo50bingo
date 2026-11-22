@@ -1,5 +1,5 @@
 import { BingosyncColor } from "@/app/color";
-import { FeedColorMark } from "@/app/fetchFeed";
+import { FeedColorMark, NewFeed } from "@/app/fetchFeed";
 import getBingoLines from "@/app/generator/getBingoLines";
 
 export interface BoardStateParams {
@@ -24,6 +24,16 @@ export default class BoardState {
     this.squares = Array(rows * cols)
       .fill(null)
       .map((_) => new Set());
+  }
+
+  static fromFeed(feed: NewFeed, params: BoardStateParams): BoardState {
+    const boardState = new BoardState(params);
+    for (const item of feed) {
+      if (item.type === "color_mark") {
+        boardState.apply(item);
+      }
+    }
+    return boardState;
   }
 
   // if change is illegal or redundant, return false

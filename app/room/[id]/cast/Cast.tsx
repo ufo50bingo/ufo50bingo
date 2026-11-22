@@ -37,7 +37,7 @@ import {
   FeedGoalProgress,
   FullParsedGame,
 } from "@/app/fetchFeed";
-import useSquareColors from "../common/useSquareColors";
+import useBoardState from "@/app/match/[id]/useBoardState";
 import useMembers from "../common/useMembers";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import CastBoardWithTrackers from "./CastBoardWithTrackers";
@@ -84,7 +84,6 @@ export default function Cast({
   const { game, feed: initialFeed, squares, subcategories } = fullParsedGame;
   const gameId = game.id;
   const isLockout = game.isLockout;
-  const boardSize = game.rows * game.cols;
   const { getServerMsFromClientMs } = useServerOffsetContext();
   const squareNames = useMemo(() => squares.map((s) => s.name), [squares]);
   const [soundChoices, setSoundChoices, playAudio] = useSounds("cast");
@@ -97,7 +96,11 @@ export default function Cast({
     isPlay: false,
   });
   const { allMembers, players, casters } = useMembers(feed);
-  const squareColors = useSquareColors(feed, boardSize, isLockout);
+  const boardStateParams = useMemo(
+    () => ({ rows: game.rows, cols: game.cols, isLockout: game.isLockout }),
+    [game.rows, game.cols, game.isLockout],
+  );
+  const boardState = useBoardState(feed, boardStateParams);
   const [rightClickBehavior, setRightClickBehavior] =
     useCastRightClickBehavior();
   const rightClickBehaviorContextValue = useMemo(
@@ -234,7 +237,7 @@ export default function Cast({
       foundGoal={g.foundGoal}
       setGeneralGameCount={setGeneralGameCount}
       // TODO: Determine whether all colors have marked this
-      isFinished={isLockout && squareColors[g.squareIndex].length > 0}
+      isFinished={isLockout && boardState.squares[g.squareIndex].size > 0}
       terminalCodes={terminalCodes}
       countState={generals[g.foundGoal.resolvedGoal]}
       showAll={showAll.includes(g.foundGoal.resolvedGoal)}
@@ -273,10 +276,6 @@ export default function Cast({
           sendEvents([event]);
         };
 
-  const boardStateParams = useMemo(
-    () => ({ rows: game.rows, cols: game.cols, isLockout: game.isLockout }),
-    [game.rows, game.cols, game.isLockout],
-  );
   const feedWithoutMistakes = useMemo(
     () => getFeedWithoutMistakes(feed, boardStateParams),
     [boardStateParams, feed],
@@ -303,7 +302,7 @@ export default function Cast({
           iconType={iconType}
           players={players}
           areGeneralGoalsHidden={isHiddenForWatch}
-          squareColors={squareColors}
+          boardState={boardState}
           subcategoryIdToName={subcategoryIdToName}
           playedGameState={playedGameState}
           allMembers={allMembers}
@@ -509,7 +508,7 @@ export default function Cast({
         <EditSquare
           userId={userId}
           sendEvents={sendEvents}
-          squareColors={squareColors}
+          boardState={boardState}
           squareNames={squareNames}
           editingIndex={editingIndex}
           setEditingIndex={setEditingIndex}

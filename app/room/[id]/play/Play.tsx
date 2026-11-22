@@ -36,7 +36,7 @@ import InfoCard from "../cast/InfoCard";
 import { useSearchParams } from "next/navigation";
 import { FeedColorMark, FullParsedGame } from "@/app/fetchFeed";
 import useMembers, { PlayerMember } from "../common/useMembers";
-import useSquareColors from "../common/useSquareColors";
+import useBoardState from "@/app/match/[id]/useBoardState";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import StandardBoardWrapper from "@/app/StandardBoardWrapper";
 import usePasta from "../common/usePasta";
@@ -65,7 +65,6 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
   const squareNames = useMemo(() => squares.map((s) => s.name), [squares]);
   const gameId = game.id;
   const isLockout = game.isLockout;
-  const boardSize = game.rows * game.cols;
   const { getServerMsFromClientMs } = useServerOffsetContext();
   const [soundChoices, setSoundChoices, playAudio] = useSounds("play");
   const {
@@ -80,10 +79,17 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
     token,
     isPlay: true,
   });
-  // Play always has sendEvents available
   const sendEvents = sendEventsRaw!;
   const { players, casters, allMembers } = useMembers(feed);
-  const squareColors = useSquareColors(feed, boardSize, isLockout);
+  const boardStateParams = useMemo(
+    () => ({ rows: game.rows, cols: game.cols, isLockout: game.isLockout }),
+    [game.rows, game.cols, game.isLockout],
+  );
+  const boardState = useBoardState(feed, boardStateParams);
+  const squareColors = useMemo(
+    () => boardState.squares.map((colors) => [...colors]),
+    [boardState],
+  );
   const searchParams = useSearchParams();
   const override = searchParams.get("override");
 
@@ -131,8 +137,8 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
   const showGeneralTracker = showGeneralTrackerRaw && generalGoals.length > 0;
   const isGeneralFinished = (g: GeneralItem) =>
     isLockout
-      ? squareColors[g.squareIndex].length > 0
-      : squareColors[g.squareIndex].includes(selectedColor);
+      ? boardState.squares[g.squareIndex].size > 0
+      : boardState.hasColor(g.squareIndex, selectedColor);
 
   const restrictions: PlayerTrackerRestrictions = useMemo(() => {
     if (override === "all") {
@@ -178,15 +184,9 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
 
   // TODO: Account for tiebreakers
   const [myScore, opponent] = useMemo(() => {
-    const scores: { [color: string]: number } = {};
-    squareColors.forEach((colors) => {
-      for (const color of colors) {
-        const score = scores[color] ?? 0;
-        scores[color] = score + 1;
-      }
-    });
-    const myScore = scores[selectedColor] ?? 0;
-    const entries = Object.entries(scores);
+    const scores = boardState.getScores();
+    const myScore = scores.get(selectedColor) ?? 0;
+    const entries = [...scores];
     entries.sort((a, b) => a[1] - b[1]);
     const highScoreOpponentColor = entries.find(
       (e) => e[0] !== selectedColor,
@@ -198,15 +198,11 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
         ? null
         : {
             color: bestOpponentColor as BingosyncColor,
-            score: scores[bestOpponentColor] ?? 0,
+            score: scores.get(bestOpponentColor) ?? 0,
           };
     return [myScore, bestOpponentEntry];
-  }, [squareColors, selectedColor, players, userId]);
+  }, [boardState, selectedColor, players, userId]);
 
-  const boardStateParams = useMemo(
-    () => ({ rows: game.rows, cols: game.cols, isLockout: game.isLockout }),
-    [game.rows, game.cols, game.isLockout],
-  );
   const feedWithoutMistakes = useMemo(
     () => getFeedWithoutMistakes(feed, boardStateParams),
     [boardStateParams, feed],
@@ -242,12 +238,11 @@ export default function Play({ game: fullParsedGame, userId, token }: Props) {
                 if (isEnded) {
                   return;
                 }
-                const isClear =
-                  squareColors[squareIndex].includes(selectedColor);
+                const isClear = boardState.hasColor(squareIndex, selectedColor);
                 if (
                   !isClear &&
                   isLockout &&
-                  squareColors[squareIndex].length > 0
+                  boardState.squares[squareIndex].size > 0
                 ) {
                   return;
                 }

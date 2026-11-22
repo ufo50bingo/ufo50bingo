@@ -206,7 +206,7 @@ export function MatchRow({ game, isMobile }: Props) {
             <Stack gap={0}>
               <Text size="sm">
                 <strong>
-                  Season {info.leagueGame.season} · Tier{" "}
+                  Season {info.leagueGame.season} ·{" "}
                   {displayTier(info.leagueGame.tier)}
                 </strong>
               </Text>

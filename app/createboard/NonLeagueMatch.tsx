@@ -134,8 +134,19 @@ export default function NonLeagueMatch({ visible }: Props) {
         format === "Custom" ? boardSize.rows : format === "6x6" ? 6 : 5;
       const colsToUse =
         format === "Custom" ? boardSize.cols : format === "6x6" ? 6 : 5;
+      const countsFor6x6 = getDefaultDifficultyCounts(
+        pasta,
+        rowsToUse,
+        colsToUse,
+      );
       if (format !== "Custom" && !metadata.hasFilters) {
-        return ufoGenerator(pasta, rowsToUse, colsToUse);
+        return ufoGenerator(
+          format === "6x6"
+            ? { ...pasta, category_counts: countsFor6x6 }
+            : pasta,
+          rowsToUse,
+          colsToUse,
+        );
       }
       const finalUncheckedGames =
         metadata.hasFilters && format === "Custom"
@@ -151,7 +162,9 @@ export default function NonLeagueMatch({ visible }: Props) {
             format === "Custom"
               ? (difficultyCounts[metadata.name] ??
                 getDefaultDifficultyCounts(pasta, rowsToUse, colsToUse))
-              : pasta.category_counts,
+              : format === "6x6"
+                ? countsFor6x6
+                : pasta.category_counts,
         },
         rowsToUse,
         colsToUse,
@@ -590,8 +603,18 @@ export default function NonLeagueMatch({ visible }: Props) {
                           (metadata.type === "Custom" && customUfo != null)),
                       isLockout,
                       goals: getSerializedPasta(),
-                      rows: format === "Custom" ? boardSize.rows : 5,
-                      cols: format === "Custom" ? boardSize.cols : 5,
+                      rows:
+                        format === "Custom"
+                          ? boardSize.rows
+                          : format === "6x6"
+                            ? 6
+                            : 5,
+                      cols:
+                        format === "Custom"
+                          ? boardSize.cols
+                          : format === "6x6"
+                            ? 6
+                            : 5,
                       fullPasta: metadata.type === "Custom" ? customUfo : null,
                       leagueInfo: null,
                     }),

@@ -6,6 +6,7 @@ export interface CasterMember {
   userId: number;
   name: string;
   isInvite: boolean;
+  image: null | string;
 }
 
 export interface PlayerMember extends CasterMember {
@@ -19,6 +20,7 @@ export type GenericMember = {
   color: null | BingosyncColor;
   initialTime: number;
   isInvite: boolean;
+  image: null | string;
 };
 
 export default function useMembers(feed: NewFeed): {
@@ -40,6 +42,7 @@ export default function useMembers(feed: NewFeed): {
           color: item.playerColor,
           isInvite: item.isInvite,
           initialTime: existing?.initialTime ?? item.time,
+          image: item.image,
         });
         disconnected.delete(item.userId);
       } else if (item.type === "player_color_change") {
@@ -86,12 +89,14 @@ export default function useMembers(feed: NewFeed): {
           userId: member.userId,
           isInvite: member.isInvite,
           color: member.color,
+          image: member.image,
         });
       } else {
         casters.push({
           name: member.overrideName ?? member.name,
           userId: member.userId,
           isInvite: member.isInvite,
+          image: member.image,
         });
       }
     }

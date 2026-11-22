@@ -29,6 +29,7 @@ export default function TeamPlayers({
           <Group key={p.userId} gap={6} wrap="nowrap" miw={0}>
             <Avatar
               name={p.name}
+              src={p.image}
               color="initials"
               size={size === "md" ? 20 : 24}
               radius="xl"

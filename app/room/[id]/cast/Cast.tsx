@@ -1,7 +1,5 @@
 "use client";
 
-import Board from "@/app/Board";
-import { BingosyncColor } from "@/app/matches/parseBingosyncData";
 import { Group, Stack, Text, Tooltip } from "@mantine/core";
 import { useMemo, useState } from "react";
 import Feed from "../common/Feed";
@@ -11,17 +9,12 @@ import GeneralGoal from "./GeneralGoal";
 import InfoCard from "./InfoCard";
 import GameInfo from "./GameInfo";
 import CastSettings from "./CastSettings";
-import GeneralIcons from "./GeneralIcons";
 import EditSquare from "./EditSquare";
 import { AllPlayerGames, CountChange, CurrentGame } from "./useSyncedState";
 import useLocalState from "./useLocalState";
 import useBingosyncSocket from "../common/useBingosyncSocket";
 import useSounds from "../play/useSounds";
 import GameSelector from "./GameSelector";
-import SideColumn from "./SideColumn";
-import RecentGames from "./RecentGames";
-import ScoreSquare from "../common/ScoreSquare";
-import SideCell from "./SideCell";
 import { STANDARD_UFO } from "@/app/pastas/standardUfo";
 import findGoal, { FoundGoalWithCast } from "@/app/findGoal";
 import useLocalEnum from "@/app/localStorage/useLocalEnum";
@@ -40,17 +33,13 @@ import { RightClickBehaviorContext } from "@/app/settings/RightClickBehaviorCont
 import {
   FeedCurrentSubcategory,
   FeedGoalProgress,
-  NewFeed,
-  ParsedGame,
-  ParsedSubcategory,
-  SquareWithId,
+  FullParsedGame,
 } from "@/app/fetchFeed";
 import { GeneralCounts } from "./CastPage";
 import useSquareColors from "../common/useSquareColors";
-import useMembers, { PlayerMember } from "../common/useMembers";
+import useMembers from "../common/useMembers";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import { getMatchingRepoPasta } from "@/app/getMatchingRepoPasta";
-import StandardBoardWrapper from "@/app/StandardBoardWrapper";
 import CastBoardWithTrackers from "./CastBoardWithTrackers";
 
 const RESTRICTIONS: Restrictions = {
@@ -72,27 +61,26 @@ export type GeneralItem = {
 };
 
 export type CastProps = {
-  game: ParsedGame;
-  initialFeed: NewFeed;
+  game: FullParsedGame;
   userId: null | number;
-  squares: ReadonlyArray<SquareWithId>;
-  subcategories: ReadonlyArray<ParsedSubcategory>;
   token: null | string;
-  fetchedPasta: null | UFOPasta;
 };
 
 const COUNT_POSITION = ["side_by_side", "inset"] as const;
 export type TCountPosition = (typeof COUNT_POSITION)[number];
 
 export default function Cast({
-  game,
-  initialFeed,
+  game: fullParsedGame,
   userId,
-  squares,
-  subcategories,
   token,
-  fetchedPasta,
 }: CastProps) {
+  const {
+    game,
+    feed: initialFeed,
+    fetchedPasta,
+    squares,
+    subcategories,
+  } = fullParsedGame;
   const gameId = game.id;
   const pastaId = game.pastaId;
   const isLockout = game.isLockout;
@@ -222,50 +210,6 @@ export default function Cast({
     options: COUNT_POSITION,
   });
 
-  const leftPlayer: null | undefined | PlayerMember = players[0];
-  const rightPlayer: null | undefined | PlayerMember = players[1];
-
-  const leftColor = leftPlayer?.color ?? "red";
-  const rightColor = rightPlayer?.color ?? "red";
-
-  const leftScore = squareColors.filter((colors) =>
-    colors.includes(leftColor),
-  ).length;
-  const rightScore = squareColors.filter((colors) =>
-    colors.includes(rightColor),
-  ).length;
-
-  const tiebreakWinner = null;
-  // const tiebreakWinner = useMemo<BingosyncColor | null>(() => {
-  //   try {
-  //     if (
-  //       leftScore !== rightScore ||
-  //       leftColor === rightColor ||
-  //       leftScore === 0
-  //     ) {
-  //       return null;
-  //     }
-  //     const changelog = getChangelog(rawFeed);
-  //     const result = getResult(board, changelog.changes, null, null);
-  //     if (result == null) {
-  //       return null;
-  //     }
-  //     const isValid =
-  //       result.winnerScore === leftScore &&
-  //       result.opponentScore === leftScore &&
-  //       (result.winnerColor === leftColor ||
-  //         result.winnerColor === rightColor) &&
-  //       (result.opponentColor === leftColor ||
-  //         result.opponentColor === rightColor);
-  //     if (!isValid) {
-  //       return null;
-  //     }
-  //     return result.winnerColor as BingosyncColor;
-  //   } catch {
-  //     return null;
-  //   }
-  // }, [leftScore, rightScore, leftColor, rightColor, rawFeed, board]);
-
   const generalGoals = useMemo<ReadonlyArray<GeneralItem>>(() => {
     return squareNames
       .map((name, squareIndex) => {
@@ -364,52 +308,8 @@ export default function Cast({
     />
   );
 
-  const highlights = useMemo(() => {
-    if (!highlightCurrentGame) {
-      return undefined;
-    }
-    const highlights: Array<Array<BingosyncColor>> = Array(boardSize)
-      .fill(null)
-      .map((_) => []);
-    for (const [userId, currentGames] of allPlayerGames.entries()) {
-      const currentGame =
-        currentGames.length > 0
-          ? currentGames[currentGames.length - 1].game
-          : null;
-      if (currentGame != null) {
-        const color = allMembers.get(userId)?.color ?? "red";
-        for (const [_, index] of gameToGoals[currentGame] ?? []) {
-          if (!highlights[index].includes(color)) {
-            highlights[index].push(color);
-          }
-        }
-      }
-    }
-    return highlights;
-  }, [
-    highlightCurrentGame,
-    boardSize,
-    allPlayerGames,
-    allMembers,
-    gameToGoals,
-  ]);
-
-  const leftGames =
-    leftPlayer != null ? (allPlayerGames.get(leftPlayer.userId) ?? []) : [];
-  const rightGames =
-    rightPlayer != null ? (allPlayerGames.get(rightPlayer.userId) ?? []) : [];
-
   const numRows = Math.ceil(players.length / 2);
   const gameSelectorHeight = numRows * 44;
-
-  const isDouble = generalGoals.length > 0 && countPosition === "side_by_side";
-
-  const areGeneralIconsHidden =
-    hideByDefault &&
-    ((timerState.type === "not_started" && !timerState.isForceRevealed) ||
-      (timerState.type === "countdown" &&
-        !timerState.wasPaused &&
-        !timerState.isForceRevealed));
 
   const addSubcategoryName =
     sendEvents == null
@@ -430,7 +330,32 @@ export default function Cast({
   return (
     <RightClickBehaviorContext.Provider value={rightClickBehaviorContextValue}>
       <Group align="start">
-        <CastBoardWithTrackers />
+        <CastBoardWithTrackers
+          game={fullParsedGame}
+          pasta={pasta}
+          countPosition={countPosition}
+          showRecentGames={showRecentGames}
+          generalGoals={generalGoals}
+          font={font}
+          iconType={iconType}
+          players={players}
+          areGeneralGoalsHidden={false}
+          squareColors={squareColors}
+          allPlayerGames={allPlayerGames}
+          allMembers={allMembers}
+          boardCover={
+            <SyncedTimerBoardCover
+              isCast={true}
+              timerState={timerState}
+              isBoardVisibleByDefault={!hideByDefault}
+              forceReveal={forceReveal}
+            />
+          }
+          gameList={gameList}
+          gameToGoals={gameToGoals}
+          shownDifficulties={shownDifficulties}
+          generals={generals}
+        />
         <Stack gap={8}>
           <Group justify="space-between">
             <Text

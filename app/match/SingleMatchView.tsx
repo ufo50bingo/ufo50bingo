@@ -23,6 +23,7 @@ import {
   IconBrandYoutube,
   IconCamera,
   IconClock,
+  IconDeviceTv,
   IconLink,
   IconList,
   IconSettings,
@@ -107,6 +108,8 @@ export default function SingleMatchView({ game }: Props) {
     [endIndex, game.feed],
   );
 
+  const isFinal = shownFeed.length === game.feed.length;
+
   const feedWithoutMistakes = useMemo(
     () => getFeedWithoutMistakes(shownFeed, boardStateParams),
     [boardStateParams, shownFeed],
@@ -140,8 +143,6 @@ export default function SingleMatchView({ game }: Props) {
     game.game.rows * game.game.cols,
     true,
   );
-  // TODO: check whether this is the final result
-  const isFinal = false;
 
   const isMobile = useMediaQuery("(max-width: 525px)");
   const [showFeed, setShowFeed] = useState(false);
@@ -262,6 +263,19 @@ export default function SingleMatchView({ game }: Props) {
                     <IconLink size={20} />
                   </ActionIcon>
                 </Tooltip>
+                <Tooltip label="Watch live board">
+                  <ActionIcon
+                    component="a"
+                    href={`/watch/${info.id}`}
+                    variant="subtle"
+                    color="gray"
+                    size="lg"
+                    aria-label="Watch live board"
+                    target="_blank"
+                  >
+                    <IconDeviceTv size={20} />
+                  </ActionIcon>
+                </Tooltip>
                 <Tooltip
                   label={
                     <span>
@@ -380,7 +394,11 @@ export default function SingleMatchView({ game }: Props) {
                         isWinnerShown={isFinal && hasWinner}
                         size="lg"
                       />
-                      <TeamScoreCell team={team} size="lg" />
+                      <TeamScoreCell
+                        team={team}
+                        size="lg"
+                        isWinnerShown={isFinal && hasWinner}
+                      />
                     </Fragment>
                   );
                 })}

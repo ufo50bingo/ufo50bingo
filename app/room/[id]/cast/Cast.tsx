@@ -667,6 +667,7 @@ export default function Cast({
         players={players}
         casters={casters}
         sendEvent={sendEvent}
+        members={allMembers}
       />
       {editingIndex != null && (
         <EditSquare

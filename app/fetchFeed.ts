@@ -75,6 +75,12 @@ export type FeedPlayerColorChange = {
   playerColor: BingosyncColor;
 };
 
+export type FeedDisconnect = {
+  type: "disconnect";
+  time: number;
+  userId: number;
+};
+
 export type NewFeedItem =
   | FeedColorMark
   | FeedChat
@@ -83,7 +89,8 @@ export type NewFeedItem =
   | FeedGoalProgress
   | FeedCurrentSubcategory
   | FeedPlayerOrder
-  | FeedPlayerColorChange;
+  | FeedPlayerColorChange
+  | FeedDisconnect;
 
 export type NewFeed = ReadonlyArray<NewFeedItem>;
 
@@ -291,6 +298,26 @@ export function parsePlayerColorChangeResult(
   }));
 }
 
+export function fetchDisconnectSql(sql: SQLTemplate, gameId: number): SQL {
+  return sql`
+    SELECT
+      EXTRACT(EPOCH FROM time)::DOUBLE PRECISION AS unixtime,
+      user_id
+    FROM disconnect
+    WHERE game_id = ${gameId}
+  `;
+}
+
+export function parseDisconnectResult(
+  result: SQLResult,
+): Array<FeedDisconnect> {
+  return result.map((raw) => ({
+    type: "disconnect",
+    time: Number(raw.unixtime),
+    userId: raw.user_id,
+  }));
+}
+
 function fetchSquaresSql(sql: SQLTemplate, gameId: number): SQL {
   return sql`
     SELECT
@@ -358,7 +385,7 @@ function parseSubcategories(
 
 export async function fetchData(
   gameId: number,
-  memberFeed: ReadonlyArray<FeedMember>,
+  alreadyFetched: ReadonlyArray<NewFeedItem>,
   isPlay: boolean,
 ): Promise<{
   squares: ReadonlyArray<SquareWithId>;
@@ -373,6 +400,7 @@ export async function fetchData(
     [fetchChatSql(sql, gameId), parseChatResult],
     [fetchTimerEventSql(sql, gameId), parseTimerEventResult],
     [fetchPlayerColorChangeSql(sql, gameId), parsePlayerColorChangeResult],
+    [fetchDisconnectSql(sql, gameId), parseDisconnectResult],
   ];
   if (!isPlay) {
     feedFetchPairs = feedFetchPairs.concat([
@@ -390,7 +418,7 @@ export async function fetchData(
   const otherResults = results.slice(feedFetchPairs.length);
   const feed = feedResults
     .flatMap((result, index) => feedFetchPairs[index][1](result))
-    .concat(memberFeed);
+    .concat(alreadyFetched);
   feed.sort((a, b) => a.time - b.time);
 
   const squares = parseSquares(otherResults[0]);

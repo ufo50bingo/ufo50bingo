@@ -29,11 +29,15 @@ import GeneralSection, {
   GeneralSetters,
 } from "./GeneralSection";
 import { useShouldShowRecentContext } from "@/app/settings/ShouldShowRecentContext";
-import DisconnectButton from "../common/DisconnectButton";
 import { FeedPlayerColorChange, NewFeedItem } from "@/app/fetchFeed";
 import PlayerMembersSection from "./PlayerMembersSection";
-import { PlayerMember, CasterMember } from "../common/useMembers";
+import {
+  PlayerMember,
+  CasterMember,
+  GenericMember,
+} from "../common/useMembers";
 import { useServerOffsetContext } from "../ServerOffsetContext";
+import BottomSection from "../common/BottomSection";
 
 type Props = {
   userId: number;
@@ -55,6 +59,7 @@ type Props = {
   sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
   players: ReadonlyArray<PlayerMember>;
   casters: ReadonlyArray<CasterMember>;
+  members: ReadonlyMap<number, GenericMember>;
 };
 
 export default function PlaySettings({
@@ -77,6 +82,7 @@ export default function PlaySettings({
   sendEvent,
   players,
   casters,
+  members,
 }: Props) {
   const [isShown, setIsShown] = useState(color == null);
   const { getServerMsFromClientMs } = useServerOffsetContext();
@@ -200,7 +206,13 @@ export default function PlaySettings({
                 setShowGeneralTracker={setShowGeneralTracker}
               />
             </Accordion>
-            <DisconnectButton isMobile={isMobile} />
+            <BottomSection
+              userId={userId}
+              members={members}
+              isCast={false}
+              isMobile={false}
+              sendEvent={sendEvent}
+            />
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>

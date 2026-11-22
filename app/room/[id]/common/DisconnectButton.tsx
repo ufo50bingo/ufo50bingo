@@ -1,15 +1,22 @@
+import { FeedDisconnect, NewFeedItem } from "@/app/fetchFeed";
 import { Button, Modal, Stack, Group } from "@mantine/core";
 import { IconPlugConnectedX } from "@tabler/icons-react";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useServerOffsetContext } from "../ServerOffsetContext";
 
 type Props = {
+  userId: number;
   isMobile: boolean;
+  sendEvent: (newEvent: NewFeedItem) => Promise<boolean>;
 };
 
-export default function DisconnectButton({ isMobile }: Props) {
-  const pathname = usePathname();
+export default function DisconnectButton({
+  isMobile,
+  userId,
+  sendEvent,
+}: Props) {
   const [isDisconnecting, setIsDisconnecting] = useState(false);
+  const { getServerMsFromClientMs } = useServerOffsetContext();
   return (
     <>
       <Button
@@ -33,8 +40,13 @@ export default function DisconnectButton({ isMobile }: Props) {
               <Button onClick={() => setIsDisconnecting(false)}>Cancel</Button>
               <Button
                 color="red"
-                onClick={() => {
-                  document.cookie = `room=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${pathname};`;
+                onClick={async () => {
+                  const event: FeedDisconnect = {
+                    type: "disconnect",
+                    userId,
+                    time: getServerMsFromClientMs(Date.now()) / 1000,
+                  };
+                  await sendEvent(event);
                   window.location.reload();
                 }}
               >

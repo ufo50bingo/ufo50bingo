@@ -1,12 +1,7 @@
-import Matches, { AdminFilter, Match } from "./Matches";
 import getSql from "../getSql";
-import { getMatchFromRaw, MATCH_FIELDS } from "./getMatchFromRaw";
 import { NeonQueryFunction, NeonQueryPromise } from "@neondatabase/serverless";
 import { Metadata } from "next";
-import { Alert } from "@mantine/core";
-import { MatchSummary } from "./MatchRow";
 import { MatchList } from "./MatchList";
-import DummyMatches from "./DummyMatches";
 import { fetchDataMulti, SQLResult, SQLTemplate } from "../fetchFeed";
 
 export const metadata: Metadata = {
@@ -33,7 +28,8 @@ export default async function MatchesFetcher(props: {
 }) {
   const sql = getSql();
   const searchParams = await props.searchParams;
-  const filterSql = getFilterSql(searchParams);
+  // const filterSql = getFilterSql(searchParams);
+  const filterSql = sql``;
 
   const pageNumber = Number(searchParams?.page ?? "1");
   const combinedResults = await sql.transaction([
@@ -45,66 +41,65 @@ export default async function MatchesFetcher(props: {
   const recentGameIds = parseRecentGameIdsSql(combinedResults[1]);
   const games = await fetchDataMulti(sql, recentGameIds, "spectate");
   return <MatchList totalPages={totalPages} games={games} />;
-  // return <Matches matches={matches} totalPages={totalPages} />;
 }
 
-function getAdminFilterSql(
-  adminFilter: AdminFilter,
-  sql: NeonQueryFunction<false, false>,
-): SQL {
-  switch (adminFilter) {
-    case "missingTimestamps":
-      return sql`AND vod_url IS NOT NULL AND vod_url != '' AND vod_match_start_seconds IS NULL`;
-    case "leagueMissingVods":
-      return sql`AND league_season IS NOT NULL AND (vod_url IS NULL OR vod_url = '')`;
-  }
-}
+// function getAdminFilterSql(
+//   adminFilter: AdminFilter,
+//   sql: NeonQueryFunction<false, false>,
+// ): SQL {
+//   switch (adminFilter) {
+//     case "missingTimestamps":
+//       return sql`AND vod_url IS NOT NULL AND vod_url != '' AND vod_match_start_seconds IS NULL`;
+//     case "leagueMissingVods":
+//       return sql`AND league_season IS NOT NULL AND (vod_url IS NULL OR vod_url = '')`;
+//   }
+// }
 
-function getFilterSql(searchParams: FilterParams | undefined): SQL {
-  const sql = getSql();
+// function getFilterSql(searchParams: FilterParams | undefined): SQL {
+//   const sql = getSql();
 
-  const seasonStr = searchParams?.season;
-  const season = seasonStr == null ? null : Number(seasonStr);
-  const seasonSql =
-    season == null
-      ? sql``
-      : season == 0
-        ? sql`AND league_season IS NULL`
-        : sql`AND league_season = ${season}`;
+//   const seasonStr = searchParams?.season;
+//   const season = seasonStr == null ? null : Number(seasonStr);
+//   const seasonSql =
+//     season == null
+//       ? sql``
+//       : season == 0
+//         ? sql`AND league_season IS NULL`
+//         : sql`AND league_season = ${season}`;
 
-  const weekStr = searchParams?.week;
-  const weekSql =
-    weekStr == null || weekStr === ""
-      ? sql``
-      : sql`AND league_week = ${weekStr}`;
+//   const weekStr = searchParams?.week;
+//   const weekSql =
+//     weekStr == null || weekStr === ""
+//       ? sql``
+//       : sql`AND league_week = ${weekStr}`;
 
-  const tierStr = searchParams?.tier;
-  const tierSql =
-    tierStr == null || tierStr === ""
-      ? sql``
-      : sql`AND league_tier = ${tierStr}`;
+//   const tierStr = searchParams?.tier;
+//   const tierSql =
+//     tierStr == null || tierStr === ""
+//       ? sql``
+//       : sql`AND league_tier = ${tierStr}`;
 
-  const playerStr = searchParams?.player;
-  const player = playerStr == null ? null : playerStr.toLowerCase();
-  const playerSql =
-    player != null && player !== ""
-      ? sql`
-    AND (
-      LOWER(winner_name) = LOWER(${player})
-      OR LOWER(opponent_name) = LOWER(${player})
-      OR LOWER(league_p1) = LOWER(${player})
-      OR LOWER(league_p2) = LOWER(${player})
-    )`
-      : sql``;
+//   const playerStr = searchParams?.player;
+//   const player = playerStr == null ? null : playerStr.toLowerCase();
+//   const playerSql =
+//     player != null && player !== ""
+//       ? sql`
+//     AND (
+//       LOWER(winner_name) = LOWER(${player})
+//       OR LOWER(opponent_name) = LOWER(${player})
+//       OR LOWER(league_p1) = LOWER(${player})
+//       OR LOWER(league_p2) = LOWER(${player})
+//     )`
+//       : sql``;
 
-  const admin = searchParams?.admin;
-  const adminSql =
-    admin != null
-      ? getAdminFilterSql(admin as unknown as AdminFilter, sql)
-      : sql``;
+//   const admin = searchParams?.admin;
+//   const adminSql =
+//     admin != null
+//       ? getAdminFilterSql(admin as unknown as AdminFilter, sql)
+//       : sql``;
 
-  return sql`${seasonSql} ${weekSql} ${tierSql} ${playerSql} ${adminSql}`;
-}
+//   return sql`${seasonSql} ${weekSql} ${tierSql} ${playerSql} ${adminSql}`;
+// }
 
 function fetchGameCountSql(sql: SQLTemplate, filterSql: SQL): SQL {
   return sql`

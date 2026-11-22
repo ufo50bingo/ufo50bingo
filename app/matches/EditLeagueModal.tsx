@@ -1,24 +1,5 @@
-import {
-  Alert,
-  Button,
-  Checkbox,
-  Group,
-  Modal,
-  NumberInput,
-  Select,
-  Stack,
-  TextInput,
-} from "@mantine/core";
+import { Alert, Modal, Stack } from "@mantine/core";
 import { useState } from "react";
-import {
-  ALL_PLAYERS,
-  getCurrentWeek,
-  LEAGUE_SEASON,
-  PLAYER_TO_TIER,
-  WEEKS,
-} from "../createboard/leagueConstants";
-import updateLeagueInfo, { LeagueInfoUpdate } from "./updateLeagueInfo";
-import runWithMaybeRefresh from "./runWithMaybeRefresh";
 import { useRouter } from "next/navigation";
 import { FullParsedGame } from "../fetchFeed";
 import { WEEK } from "./week";
@@ -30,26 +11,7 @@ type Props = {
   onClose: () => void;
 };
 
-const SEASONS = ["Season 4", "Non-League"] as const;
-type Season = (typeof SEASONS)[number];
-
-function getSeason(num: null | number): null | Season {
-  switch (num) {
-    case 4:
-      return "Season 4";
-    case null:
-      return "Non-League";
-    default:
-      return null;
-  }
-}
-
-export default function EditLeagueModal({
-  matchesUrl,
-  isMobile,
-  match,
-  onClose,
-}: Props) {
+export default function EditLeagueModal({ isMobile, match, onClose }: Props) {
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
 
@@ -59,28 +21,32 @@ export default function EditLeagueModal({
     leagueGame?.season ?? null,
   );
   const [week, setWeek] = useState<null | WEEK>(
-    leagueGame?.week ?? getCurrentWeek(),
+    leagueGame?.week ?? WEEK.WEEK_1,
   );
-  const [p1, setP1] = useState<null | string>(league?.p1 ?? null);
-  const [p2, setP2] = useState<null | string>(leagueInfo?.p2 ?? null);
-  const [name, setName] = useState<string>(match.name);
+  // const [p1, setP1] = useState<null | string>(league?.p1 ?? null);
+  // const [p2, setP2] = useState<null | string>(leagueInfo?.p2 ?? null);
+  const [name, setName] = useState<string>(match.game.name ?? "");
   const [gameNumber, setGameNumber] = useState<number | null>(
-    leagueInfo?.game ?? null,
+    leagueGame?.gameNumber ?? null,
   );
 
-  const p1Tier = p1 != null ? PLAYER_TO_TIER[p1] : null;
-  const p2Tier = p2 != null ? PLAYER_TO_TIER[p2] : null;
+  // const p1Tier = p1 != null ? PLAYER_TO_TIER[p1] : null;
+  // const p2Tier = p2 != null ? PLAYER_TO_TIER[p2] : null;
 
-  const tierMismatch = p1 != null && p2 != null && p1Tier != p2Tier;
+  // const tierMismatch = p1 != null && p2 != null && p1Tier != p2Tier;
 
-  const isStandard = match.variant === "Standard" && match.isCustom === false;
+  const isStandard =
+    match.game.variant === "Standard" &&
+    match.game.isCustom === false &&
+    match.game.isDraft === false &&
+    match.game.isLockout === true;
   return (
     <Modal
       fullScreen={isMobile}
       centered={true}
       onClose={onClose}
       opened={true}
-      title={`Edit League Info for ${match.name}`}
+      title={`Edit League Info for ${match.game.name}`}
       size={800}
     >
       {season == null ? (
@@ -97,7 +63,7 @@ export default function EditLeagueModal({
         />
       ) : (
         <Stack>
-          <Select
+          {/* <Select
             label="Season"
             data={SEASONS}
             value={season}
@@ -223,7 +189,7 @@ export default function EditLeagueModal({
             >
               Save
             </Button>
-          </Group>
+          </Group> */}
         </Stack>
       )}
     </Modal>

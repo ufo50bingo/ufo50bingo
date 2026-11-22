@@ -23,7 +23,11 @@ export default function ScoreSquare({
       className={`${classes.score} ${isDouble ? classes.double : classes.normal} ${getColorSquareClass(color)}`}
     >
       <span className={getFontClassname(font, !isDouble)}>
-        {hasTiebreaker ? <u>{score}</u> : score}
+        {hasTiebreaker ? (
+          <span className={classes.tiebreak}>{score}</span>
+        ) : (
+          score
+        )}
       </span>
     </div>
   );

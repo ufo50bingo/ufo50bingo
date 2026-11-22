@@ -368,7 +368,7 @@ export default function SingleMatchView({ game }: Props) {
                 canShowRecent={false}
               />
               {showFeed && (
-                <div {...screenshotHiddenProps} style={{ flexShrink: 0 }}>
+                <div style={{ flexShrink: 0 }}>
                   <Feed
                     feed={shownFeed}
                     boardStateParams={boardStateParams}

@@ -89,7 +89,7 @@ type ColorInfo = {
 export const BLANK_WHITE = "#c8c8c8";
 export const BLANK_SQUARE_CLASS = classes.blanksquare;
 
-export function getColorInfo(color: BingosyncColor): ColorInfo {
+function getColorInfo(color: BingosyncColor): ColorInfo {
   return COLOR_INFO.find((c) => c.key === color)!;
 }
 

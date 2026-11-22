@@ -9,7 +9,7 @@ import type {
 import type { RewardIconResult } from "./rewardIcon/detect";
 import type { FrameResult } from "./types";
 
-export type Region = { x: number; y: number; width: number; height: number };
+type Region = { x: number; y: number; width: number; height: number };
 
 /**
  * Draw a region of a video/canvas into a reusable canvas and return its pixels.
@@ -47,7 +47,7 @@ function captureRegion(
   return ctx.getImageData(0, 0, w, h);
 }
 
-export type DetectionLoopOptions = DetectorOptions & {
+type DetectionLoopOptions = DetectorOptions & {
   /** Time between analyzed frames. Default 250 ms. */
   intervalMs?: number;
   /** Captures wider than this are downscaled first. Default 1152 px. */

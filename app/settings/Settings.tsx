@@ -17,16 +17,10 @@ import { NextGoalChoice, useAppContext } from "../AppContextProvider";
 import ExportCSV from "./ExportCSV";
 import ImportCSV from "./ImportCSV";
 import MigrateHistory from "./MigrateHistory";
-import { Metadata } from "next";
 import SelectRightClickBehavior from "./SelectRightClickBehavior";
 import { useShouldShortenContext } from "./ShouldShortenContext";
 import { authClient } from "../authClient";
 import SignOutButton from "./SignOutButton";
-
-export const metadata: Metadata = {
-  title: "UFO 50 Bingo Settings",
-  description: "Manage your UFO 50 Bingo Settings",
-};
 
 export default function Settings() {
   const { colorScheme, setColorScheme } = useMantineColorScheme();

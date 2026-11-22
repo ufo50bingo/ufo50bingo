@@ -42,7 +42,7 @@ import shuffle from "../createboard/shuffle";
 import getBingoLines from "./getBingoLines";
 import range from "./range";
 
-export interface GetDifficultyLayoutOptions {
+interface GetDifficultyLayoutOptions {
   // setting this allows you to bias the center square toward being a given difficulty.
   // If provided, the array length should match the length of the difficulties array.
   // Supplied weights are multiplied by difficultyCounts to get the final weights.
@@ -61,7 +61,7 @@ export interface GetDifficultyLayoutOptions {
   endTemp?: number;
 }
 
-export interface GetDifficultyLayoutResult {
+interface GetDifficultyLayoutResult {
   board: Array<number>;
   // 0 if every line is in range
   cost: number;

@@ -1,5 +1,9 @@
 import { DailyFeedRow } from "../db";
-import { BINGO_LINES } from "../matches/analyzeMatch";
+import getBingoLines from "../generator/getBingoLines";
+
+// daily boards are always 5x5
+const { rowsAndCols, diagonals } = getBingoLines(5, 5);
+const BINGO_LINES = rowsAndCols.concat(diagonals);
 
 type Return = {
   bingo: null | number;

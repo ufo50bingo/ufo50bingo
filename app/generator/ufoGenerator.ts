@@ -50,12 +50,12 @@ export type UFODifficulties = { [difficulty: string]: UFOGameGoals };
 export type Tokens = { [token: string]: ReadonlyArray<string> };
 
 export type Counts = { [difficulty: string]: number };
-export type OtherCounts = {
+type OtherCounts = {
   rows: number;
   cols: number;
   category_counts: Counts;
 };
-export type OtherDraftCounts = {
+type OtherDraftCounts = {
   rows: number;
   cols: number;
   category_counts: ReadonlyArray<Counts>;

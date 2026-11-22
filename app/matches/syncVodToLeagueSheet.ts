@@ -1,19 +1,19 @@
 "use server";
 
 import { google } from "googleapis";
-import { Match } from "./Matches";
 import { LEAGUE_SHEET_ID } from "../schedule/fetchSchedule";
 
+// TODO: Fix this
 export default async function syncVodToLeagueSheet(
-  match: Match,
+  game: unknown,
 ): Promise<void> {
-  if (
-    match.leagueInfo == null ||
-    match.leagueInfo.season < 3 ||
-    match.vod?.url == null
-  ) {
-    return;
-  }
+  // if (
+  //   match.leagueInfo == null ||
+  //   match.leagueInfo.season < 3 ||
+  //   match.vod?.url == null
+  // ) {
+  //   return;
+  // }
 
   const auth = new google.auth.JWT({
     email: process.env.GSHEETS_ACCOUNT_EMAIL,
@@ -27,7 +27,9 @@ export default async function syncVodToLeagueSheet(
     range: "Matches with VODs",
     valueInputOption: "RAW",
     requestBody: {
-      values: [[match.id]],
+      // todo: do we need to make sure that substrings don't mess this up?
+      // values: [[match.id]],
+      values: [[]],
     },
   });
 }

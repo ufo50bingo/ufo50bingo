@@ -4,7 +4,7 @@ import { UFOPasta } from "@/app/generator/ufoGenerator";
 import { ORDERED_PROPER_GAMES } from "@/app/goals";
 import { NES_50_UFO } from "@/app/pastas/nes50Ufo";
 
-export type GameList = { [game: string]: string };
+type GameList = { [game: string]: string };
 
 export const UFO_50_GAME_LIST = Object.fromEntries(
   ORDERED_PROPER_GAMES.map((game) => [game, `/games/${game}.png`]),

@@ -1,6 +1,6 @@
 import { NewFeed, NewFeedItem } from "@/app/fetchFeed";
 
-export const DEFAULT_CLOCK_START_SECONDS = -60;
+const DEFAULT_CLOCK_START_SECONDS = -60;
 
 export class MatchClock {
   hasStarted = false;

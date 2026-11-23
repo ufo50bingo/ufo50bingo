@@ -32,7 +32,7 @@ export const COLOR_INFO = [
   {
     key: "forestgreen",
     name: "Forest green",
-    hex: "#228b22",
+    hex: "#005700",
     emoji: "🟩",
     squareClass: classes.forestgreensquare,
   },

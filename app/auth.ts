@@ -12,7 +12,13 @@ const pool = new Pool({
 export const auth = betterAuth({
   database: pool,
   baseURL: {
-    allowedHosts: ["localhost:3000", "*.vercel.app", "ufo50bingo.com"],
+    allowedHosts: [
+      "localhost:3000",
+      "*.vercel.app",
+      "ufo50bingo.com",
+      "ufo50.bingo",
+      "www.ufo50.bingo",
+    ],
   },
   user: {
     additionalFields: {

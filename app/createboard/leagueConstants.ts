@@ -155,5 +155,5 @@ export const ALL_PLAYERS: ReadonlyArray<string> = Object.keys(
   PLAYER_TO_TIER,
 ).toSorted((a, b) => a.toLocaleLowerCase().localeCompare(b.toLowerCase()));
 
-export const LEAGUE_SEASON: null | number = 4;
+export const LEAGUE_SEASON: null | number = null;
 export const LATEST_SEASON: number = 4;

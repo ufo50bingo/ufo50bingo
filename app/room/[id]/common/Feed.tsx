@@ -41,14 +41,20 @@ export default function Feed({
 
   const filteredFeed = useMemo(
     () =>
-      displayedFeed.filter(
-        (item) =>
-          !isPlay ||
+      displayedFeed.filter((item) => {
+        if (!isPlay) {
+          return true;
+        }
+        if (item.type === "failed_mark") {
+          return false;
+        }
+        return (
           item.type !== "chat" ||
           item.visibleToPlayerIds == null ||
           item.userId === userId ||
-          (userId !== null && item.visibleToPlayerIds.includes(userId)),
-      ),
+          (userId !== null && item.visibleToPlayerIds.includes(userId))
+        );
+      }),
     [displayedFeed, isPlay, userId],
   );
 

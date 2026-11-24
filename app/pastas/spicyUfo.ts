@@ -94,7 +94,8 @@ export const SPICY_UFO = {
       ],
       "oniondelivery": [
         "ONION DELIVERY: Complete 3 days in a run with 8+ onions and 25+ seconds left on the timer",
-        "ONION DELIVERY: Finish with 10+ onions 3 days in a row"
+        "ONION DELIVERY: Finish with 10+ onions 3 days in a row",
+		"ONION DELIVERY: Delivery 10 onions and finish the day with no timeboxes hit"
       ],
       "caramelcaramel": [
         "CARAMEL CARAMEL: Score 50,000+ points by the end of Orb Shower A",
@@ -510,7 +511,7 @@ export const SPICY_UFO = {
         "PORGY: Recover 6 items hidden behind scenery (walls, ceiling, floor, coral, etc.)"
       ],
       "oniondelivery": [
-        "ONION DELIVERY: Deliver 10+ onions and complete the day on 4 days in a run",
+        "ONION DELIVERY: Cherry disk with no timeboxes hit",
         "ONION DELIVERY: Make 20+ overtime deliveries in a week (finish days to count)",
         "ONION DELIVERY: Gold Disk without landing in any slime pits",
         "ONION DELIVERY: Gold Disk with no failed days"
@@ -709,7 +710,7 @@ export const SPICY_UFO = {
         "PORGY: Defeat 4 bosses"
       ],
       "oniondelivery": [
-        "ONION DELIVERY: Cherry disk with 7+ onions delivered each day",
+        "ONION DELIVERY: Cherry disk with all overtime deliveries on Rain, Sludge, and Zombies",
         "ONION DELIVERY: Cherry disk with exactly 5 onions delivered on days 1 & 2",
         "ONION DELIVERY: Cherry disk with 64+ onions delivered"
       ],

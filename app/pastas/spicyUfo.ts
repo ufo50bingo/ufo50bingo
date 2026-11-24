@@ -614,7 +614,7 @@ export const SPICY_UFO = {
       ],
       "campanella3": [
         "CAMPANELLA 3: Beat Stages A, B, and C shooting only in boss fights",
-        "CAMPANELLA 3: Win with less than 1500 points"
+        "CAMPANELLA 3: Win with 1600 points or less"
       ],
       "cyberowls": [
         "CYBER OWLS: Gold disk with 3 or fewer deaths",

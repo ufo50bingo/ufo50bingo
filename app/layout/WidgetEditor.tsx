@@ -332,13 +332,16 @@ function NumberField({
   disabled?: boolean;
   onChange: (value: number) => void;
 }) {
+  // dragging and resizing can leave long decimals, so show at most one
+  const shownValue = Math.round(value * 10) / 10;
   return (
     <NumberInput
       key={value}
       label={label}
       min={min}
       max={max}
-      defaultValue={value}
+      defaultValue={shownValue}
+      decimalScale={1}
       disabled={disabled}
       // this only updates the main widget when the input is blurred, so we
       // aren't spamming the history with a million entries as the user types
@@ -348,7 +351,14 @@ function NumberField({
           max ?? Infinity,
           Math.max(min ?? -Infinity, Number(typed)),
         );
-        if (typed !== "" && Number.isFinite(newValue) && newValue !== value) {
+        // compare to what was shown, so blurring without typing doesn't round
+        // the real value
+        if (
+          typed !== "" &&
+          Number.isFinite(newValue) &&
+          newValue !== shownValue &&
+          newValue !== value
+        ) {
           onChange(newValue);
         }
       }}

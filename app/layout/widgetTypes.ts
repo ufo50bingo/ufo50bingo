@@ -24,7 +24,7 @@ interface HasFontWithSize extends HasFont {
   defaultSize: number;
 }
 
-interface CanShrinkFont extends HasFontWithSize {
+export interface CanShrinkFont extends HasFontWithSize {
   canShrink: boolean;
   minSize: number;
 }

@@ -59,6 +59,10 @@ const initialWidgets: ReadonlyArray<Widget> = [
     canShrink: true,
     minSize: 9.1,
     color: { type: "custom_color", color: "#ffffff" },
+    squarePadding: 5,
+    borderWidth: 1,
+    borderColor: "#424242",
+    blankSquareColor: "#181818",
   },
 ];
 

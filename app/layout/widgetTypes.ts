@@ -51,6 +51,10 @@ export interface RecentGameTimer extends BaseWidget, CanShrinkFont, HasColor {
 
 export interface LayoutBoard extends BaseWidget, CanShrinkFont, HasColor {
   type: "board";
+  squarePadding: number;
+  borderWidth: number;
+  borderColor: string;
+  blankSquareColor: string;
 }
 
 export interface MatchTimer extends BaseWidget, CanShrinkFont, HasColor {

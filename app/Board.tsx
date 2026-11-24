@@ -44,7 +44,17 @@ type Props = {
   maxFontSize?: number;
   minFontSize?: number;
   canShowRecent?: boolean;
+  squarePadding?: number;
+  borderWidth?: number;
+  borderColor?: string;
+  blankSquareColor?: string;
+  fontFamily?: string;
+  textColor?: string;
 };
+
+// px height of the completion time overlays
+const OVERLAY_HEIGHT = 20;
+const DEFAULT_BORDER_COLOR = "#424242";
 
 function getDifficulty(
   foundGoal: FoundGoal<string, string, string>,
@@ -157,6 +167,12 @@ export default function Board({
   maxFontSize = 14,
   minFontSize = 9.1,
   canShowRecent = true,
+  squarePadding = 5,
+  borderWidth = 1,
+  borderColor = DEFAULT_BORDER_COLOR,
+  blankSquareColor,
+  fontFamily,
+  textColor,
 }: Props) {
   const { rightClickBehavior } = useRightClickBehaviorContext();
   const { shouldShortenPlay, shouldShortenCast } = useShouldShortenContext();
@@ -318,7 +334,17 @@ export default function Board({
                     : oldCount + 1;
               setRightClickCounts(newRightClickCounts);
             }}
-            style={style}
+            style={{
+              // before style, so highlight border colors still win
+              borderColor,
+              ...style,
+              backgroundColor:
+                colors.length === 0 ? blankSquareColor : undefined,
+              padding: squarePadding,
+              borderWidth,
+              fontFamily,
+              color: textColor,
+            }}
           >
             {isStarred && <div className={classes.starred} />}
             {heldColor != null && (
@@ -335,8 +361,10 @@ export default function Board({
             <SquareText
               key={displayGoal}
               text={displayGoal}
-              horizontalPadding={10}
-              verticalPadding={overlays != null ? 30 : 10}
+              horizontalPadding={2 * squarePadding}
+              verticalPadding={
+                2 * squarePadding + (overlays != null ? OVERLAY_HEIGHT : 0)
+              }
               maxFontSize={maxFontSize}
               minFontSize={minFontSize}
             />

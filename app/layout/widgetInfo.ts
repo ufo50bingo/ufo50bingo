@@ -75,6 +75,10 @@ export function createWidget(type: WidgetType, id: string, z: number): Widget {
         color: WHITE,
         width: 525,
         height: 475,
+        squarePadding: 5,
+        borderWidth: 1,
+        borderColor: "#424242",
+        blankSquareColor: "#181818",
       };
     case "plain_text":
       return { type, ...base, ...TEXT, text: "Content" };

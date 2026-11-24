@@ -9,7 +9,11 @@ import getGameList from "../room/[id]/common/getGameList";
 import { STANDARD_UFO } from "../pastas/standardUfo";
 import GeneralIcon from "../room/[id]/cast/GeneralIcon";
 import StandaloneGeneralCount from "./StandaloneGeneralCount";
-import StandaloneText, { getSamplePlayerColor } from "./StandaloneText";
+import StandaloneText, {
+  getSamplePlayerColor,
+  getWidgetColor,
+  getWidgetFontFamily,
+} from "./StandaloneText";
 import getDurationText from "../practice/getDurationText";
 import findGoal, { FoundGoalWithCast } from "../findGoal";
 
@@ -89,8 +93,6 @@ function WidgetView({ widget }: Props) {
         height: widget.height,
         zIndex: widget.z,
         boxSizing: "border-box",
-        border: "2px solid red",
-        background: "white",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -117,6 +119,12 @@ function WidgetContent({ widget }: Props) {
           minFontSize={widget.canShrink ? widget.minSize : widget.defaultSize}
           rows={5}
           columns={5}
+          squarePadding={widget.squarePadding}
+          borderWidth={widget.borderWidth}
+          borderColor={widget.borderColor}
+          blankSquareColor={widget.blankSquareColor}
+          fontFamily={getWidgetFontFamily(widget.font)}
+          textColor={getWidgetColor(widget.color)}
         />
       );
     case "recent_game":

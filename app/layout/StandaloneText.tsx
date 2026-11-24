@@ -29,7 +29,7 @@ export default function StandaloneText({
         justifyContent: "center",
         textAlign: "center",
         lineHeight: 1,
-        fontFamily: widget.font === "ufo50" ? UFO_50_FONT_FAMILY : widget.font,
+        fontFamily: getWidgetFontFamily(widget.font),
         fontWeight: "bold",
         fontVariantNumeric: "tabular-nums",
         color: getWidgetColor(widget.color),
@@ -50,7 +50,11 @@ export function getSamplePlayerColor(playerNum: number): BingosyncColor {
   return COLORS[(playerNum - 1) % COLORS.length];
 }
 
-function getWidgetColor(color: HasColor["color"]): string {
+export function getWidgetFontFamily(font: string): string {
+  return font === "ufo50" ? UFO_50_FONT_FAMILY : font;
+}
+
+export function getWidgetColor(color: HasColor["color"]): string {
   switch (color.type) {
     case "custom_color":
       return color.color;

@@ -118,6 +118,46 @@ export default function WidgetEditor({
         />
       )}
 
+      {widget.type === "board" && (
+        <Group grow gap="xs">
+          <NumberField
+            label="Square padding"
+            min={0}
+            value={widget.squarePadding}
+            onChange={(squarePadding) => onChange({ ...widget, squarePadding })}
+          />
+          <NumberField
+            label="Border width"
+            min={0}
+            value={widget.borderWidth}
+            onChange={(borderWidth) => onChange({ ...widget, borderWidth })}
+          />
+        </Group>
+      )}
+      {widget.type === "board" && (
+        <Group grow gap="xs">
+          <ColorInput
+            key={widget.borderColor}
+            label="Border color"
+            defaultValue={widget.borderColor}
+            format="hexa"
+            onBlur={commitTextOnBlur(widget.borderColor, (borderColor) =>
+              onChange({ ...widget, borderColor }),
+            )}
+          />
+          <ColorInput
+            key={widget.blankSquareColor}
+            label="Blank square color"
+            defaultValue={widget.blankSquareColor}
+            format="hexa"
+            onBlur={commitTextOnBlur(
+              widget.blankSquareColor,
+              (blankSquareColor) => onChange({ ...widget, blankSquareColor }),
+            )}
+          />
+        </Group>
+      )}
+
       {"playerNum" in widget && (
         <NumberField
           label="Player number"

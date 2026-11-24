@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { NeonQueryFunction } from "@neondatabase/serverless";
 import getSql from "../getSql";
 import { getPrevISODates, LocalDate, toISODate } from "./localDate";
 import { isGift, isGoldCherry } from "./giftGoldCherry";
@@ -97,12 +98,11 @@ function getSimilarityScore(
   return score;
 }
 
-export default async function getDailyBoard(
-  date: LocalDate,
+async function fetchSavedBoard(
+  sql: NeonQueryFunction<false, false>,
+  isoDate: string,
   variant: PracticeVariant,
-): Promise<DailyData> {
-  const isoDate = toISODate(date);
-  const sql = getSql();
+): Promise<null | DailyData> {
   const sqlResult = await sql`
       SELECT
         board,
@@ -119,9 +119,23 @@ export default async function getDailyBoard(
   const description: null | undefined | string = sqlResult?.[0]?.description;
   const creator: null | undefined | string = sqlResult?.[0]?.creator;
   const seed: null | undefined | number = sqlResult?.[0]?.seed;
-  if (board != null && seed != null) {
-    const parsed = JSON.parse(board);
-    return { board: parsed, title, description, creator, seed, variant };
+  if (board == null || seed == null) {
+    return null;
+  }
+  const parsed = JSON.parse(board);
+  return { board: parsed, title, description, creator, seed, variant };
+}
+
+export default async function getDailyBoard(
+  date: LocalDate,
+  variant: PracticeVariant,
+): Promise<DailyData> {
+  const isoDate = toISODate(date);
+  // remove caching to try to fix runtime issue where pages are trying to save duplicate data into table
+  const sql = getSql(false);
+  const savedBoard = await fetchSavedBoard(sql, isoDate, variant);
+  if (savedBoard != null) {
+    return savedBoard;
   }
   const isSpicySunday = variant == "standard" && isDateSunday(date);
   const newBoard = await constructBoard(date, variant, isSpicySunday);
@@ -154,7 +168,7 @@ export default async function getDailyBoard(
       })
     : null;
   const newSeed = Math.ceil(999999 * Math.random());
-  await sql`INSERT INTO daily (
+  const inserted = await sql`INSERT INTO daily (
     date,
     board,
     title,
@@ -168,7 +182,17 @@ export default async function getDailyBoard(
     ${newDescription},
     ${newSeed},
     ${variant}
-  );`;
+  )
+  ON CONFLICT DO NOTHING
+  RETURNING date;`;
+  if (inserted.length === 0) {
+    // another render saved this day's board first, so use that instead
+    const otherBoard = await fetchSavedBoard(sql, isoDate, variant);
+    if (otherBoard == null) {
+      throw new Error(`Could not save or load the daily board for ${isoDate}`);
+    }
+    return otherBoard;
+  }
   return {
     board: newBoard,
     title: newTitle,

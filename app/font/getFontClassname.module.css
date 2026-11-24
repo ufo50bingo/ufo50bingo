@@ -1,18 +1,17 @@
 .ufo50 {
-    font-size: 80%;
-    text-shadow: black 2px 2px;
+  text-shadow: black 2px 2px;
 }
 
 .ufo50small {
-    font-size: 60%;
-    text-shadow: black 2px 2px;
+  font-size: 75%;
+  text-shadow: black 2px 2px;
 }
 
 .ufo50DoubleSideBySide {
-    font-size: 45%;
-    text-shadow: black 2px 2px;
+  font-size: 56.25%;
+  text-shadow: black 2px 2px;
 }
 
 .normalDoubleSideBySide {
-    font-size: 80%;
+  font-size: 80%;
 }

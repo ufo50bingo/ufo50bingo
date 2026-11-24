@@ -2427,6 +2427,20 @@ export const NES_50_UFO = {
     "general": 3,
     "theme": 2
   },
+  "other_category_counts": [
+    {
+      "rows": 6,
+      "cols": 6,
+      "category_counts": {
+        "easy": 6,
+        "medium": 11,
+        "hard": 10,
+        "veryhard": 3,
+        "general": 3,
+        "theme": 3
+      }
+    }
+  ],
   "category_difficulty_tiers": [
     [
       "easy"

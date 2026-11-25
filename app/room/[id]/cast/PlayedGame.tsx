@@ -1,7 +1,7 @@
 import classes from "./PlayedGame.module.css";
 import RunningDuration from "@/app/practice/RunningDuration";
 import Duration from "@/app/practice/Duration";
-import { Font } from "@/app/font/useFont";
+import { LayoutFont } from "@/app/font/useFont";
 import getFontClassname from "@/app/font/getFontClassname";
 import { useServerOffsetContext } from "../ServerOffsetContext";
 import { TPlayedGame } from "./PlayedGameState";
@@ -9,7 +9,7 @@ import { TPlayedGame } from "./PlayedGameState";
 type Props = {
   recentGame: TPlayedGame;
   subcategoryIdToName: ReadonlyMap<number, string>;
-  font: Font;
+  font: LayoutFont;
   gameList: { [game: string]: string };
   showTimer: boolean;
 };

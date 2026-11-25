@@ -12,8 +12,8 @@ import StandaloneGeneralCount from "./StandaloneGeneralCount";
 import StandaloneText, {
   getSamplePlayerColor,
   getWidgetColor,
-  getWidgetFontFamily,
 } from "./StandaloneText";
+import { getFontFamily } from "../font/getFontClassname";
 import getDurationText from "../practice/getDurationText";
 import findGoal, { FoundGoalWithCast } from "../findGoal";
 
@@ -123,7 +123,7 @@ function WidgetContent({ widget }: Props) {
           borderWidth={widget.borderWidth}
           borderColor={widget.borderColor}
           blankSquareColor={widget.blankSquareColor}
-          fontFamily={getWidgetFontFamily(widget.font)}
+          fontFamily={getFontFamily(widget.font) ?? undefined}
           textColor={getWidgetColor(widget.color)}
         />
       );
@@ -136,7 +136,7 @@ function WidgetContent({ widget }: Props) {
             duration: getSampleRecentGameSeconds(widget.recentGameNumber),
           }}
           subcategoryIdToName={UFO_50_SUBCATEGORIES}
-          font="default"
+          font={widget.font}
           gameList={UFO_50_GAME_LIST}
           showTimer={widget.hasDefaultTimer}
         />
@@ -150,7 +150,7 @@ function WidgetContent({ widget }: Props) {
           isGray={false}
           countInfo={
             widget.hasInsetCount
-              ? { hasCheck: false, count: 3, font: "default" }
+              ? { hasCheck: false, count: 3, font: widget.font }
               : undefined
           }
         />
@@ -212,7 +212,7 @@ function WidgetContent({ widget }: Props) {
       return (
         <div
           style={{
-            fontFamily: widget.font,
+            fontFamily: getFontFamily(widget.font) ?? undefined,
             fontSize: widget.defaultSize,
             whiteSpace: "pre-wrap",
           }}

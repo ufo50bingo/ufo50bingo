@@ -3,14 +3,14 @@ import { getCastImage } from "./iconSets";
 import { StandardGeneral } from "@/app/pastas/pastaTypes";
 import classes from "./GeneralIcon.module.css";
 import { CastImage } from "@/app/generator/ufoGenerator";
-import { Font } from "@/app/font/useFont";
+import { LayoutFont } from "@/app/font/useFont";
 import getFontClassname from "@/app/font/getFontClassname";
 import { IconCircleCheckFilled } from "@tabler/icons-react";
 
 type CountInfo = {
   hasCheck: boolean;
   count: number;
-  font: Font;
+  font: LayoutFont;
 };
 
 type Props = {

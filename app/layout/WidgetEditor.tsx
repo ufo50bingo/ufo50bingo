@@ -10,8 +10,8 @@ import {
   Stack,
   Switch,
   Textarea,
-  TextInput,
 } from "@mantine/core";
+import LayoutFontSelector from "./LayoutFontSelector";
 import { BUILT_IN_ICON_SETS } from "../room/[id]/cast/iconSets";
 import { isAspectRatioLocked } from "./widgetInfo";
 import type { Widget } from "./widgetTypes";
@@ -196,13 +196,9 @@ export default function WidgetEditor({
         />
       )}
 
-      <TextInput
-        key={widget.font}
-        label="Font"
-        defaultValue={widget.font}
-        onBlur={commitTextOnBlur(widget.font, (font) =>
-          onChange({ ...widget, font }),
-        )}
+      <LayoutFontSelector
+        font={widget.font}
+        setFont={(font) => onChange({ ...widget, font })}
       />
       {"defaultSize" in widget && (
         <NumberField

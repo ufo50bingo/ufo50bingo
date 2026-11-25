@@ -1,3 +1,5 @@
+import type { LayoutFont } from "../font/useFont";
+
 export interface Rect {
   x: number;
   y: number;
@@ -17,7 +19,7 @@ export interface HasColor {
 }
 
 interface HasFont {
-  font: string;
+  font: LayoutFont;
 }
 
 interface HasFontWithSize extends HasFont {

@@ -57,7 +57,7 @@ export function isAspectRatioLocked(type: WidgetType): boolean {
   }
 }
 
-const FONT = { font: "sans-serif" };
+const FONT = { font: "default" } as const;
 const TEXT = { ...FONT, defaultSize: 24, canShrink: true, minSize: 8 };
 const PLAYER_COLOR = {
   color: { type: "player_color", playerNum: 1 } as const,

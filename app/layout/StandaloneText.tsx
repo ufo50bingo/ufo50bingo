@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { BingosyncColor, COLORS, getColorHex } from "../color";
-import { UFO_50_FONT_FAMILY } from "../font/getFontClassname";
+import { getFontFamily } from "../font/getFontClassname";
 import SquareText from "../SquareText";
 import type { CanShrinkFont, HasColor } from "./widgetTypes";
 
@@ -29,7 +29,7 @@ export default function StandaloneText({
         justifyContent: "center",
         textAlign: "center",
         lineHeight: 1,
-        fontFamily: getWidgetFontFamily(widget.font),
+        fontFamily: getFontFamily(widget.font) ?? undefined,
         fontWeight: "bold",
         fontVariantNumeric: "tabular-nums",
         color: getWidgetColor(widget.color),
@@ -48,10 +48,6 @@ export default function StandaloneText({
 // TODO: Replace with the player's real color
 export function getSamplePlayerColor(playerNum: number): BingosyncColor {
   return COLORS[(playerNum - 1) % COLORS.length];
-}
-
-export function getWidgetFontFamily(font: string): string {
-  return font === "ufo50" ? UFO_50_FONT_FAMILY : font;
 }
 
 export function getWidgetColor(color: HasColor["color"]): string {

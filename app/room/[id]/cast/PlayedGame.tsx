@@ -1,10 +1,8 @@
 import classes from "./PlayedGame.module.css";
-import RunningDuration from "@/app/practice/RunningDuration";
-import Duration from "@/app/practice/Duration";
 import { LayoutFont } from "@/app/font/useFont";
 import getFontClassname from "@/app/font/getFontClassname";
-import { useServerOffsetContext } from "../ServerOffsetContext";
 import { TPlayedGame } from "./PlayedGameState";
+import PlayedGameDuration from "./PlayedGameDuration";
 
 type Props = {
   recentGame: TPlayedGame;
@@ -21,7 +19,6 @@ export default function PlayedGame({
   gameList,
   showTimer,
 }: Props) {
-  const { getClientMsFromServerMs } = useServerOffsetContext();
   const game = subcategoryIdToName.get(recentGame.subcategoryId);
   const href = game != null ? gameList[game] : null;
   return (
@@ -38,21 +35,7 @@ export default function PlayedGame({
       {showTimer && (
         <div className={classes.tag}>
           <span className={getFontClassname(font)}>
-            {recentGame.type === "running" ? (
-              <RunningDuration
-                curStartTime={getClientMsFromServerMs(
-                  recentGame.effectiveStartTime * 1000,
-                )}
-                accumulatedDuration={0}
-                minDuration={recentGame.minDuration * 1000}
-                showDecimal={false}
-              />
-            ) : (
-              <Duration
-                duration={recentGame.duration * 1000}
-                showDecimal={false}
-              />
-            )}
+            <PlayedGameDuration recentGame={recentGame} />
           </span>
         </div>
       )}

@@ -4,13 +4,15 @@ import { SyncedTimerState } from "./useSyncedTimer";
 
 type Props = {
   timerState: SyncedTimerState;
+  showStart?: boolean;
 };
 
-export default function SyncedTimer({ timerState }: Props) {
+export default function SyncedTimer({ timerState, showStart = true }: Props) {
   return timerState.type === "running" ? (
     <RunningTimer
       curStartTime={timerState.startTime}
       accumulatedDuration={timerState.accumulatedDuration}
+      showStart={showStart}
     />
   ) : (
     <Duration

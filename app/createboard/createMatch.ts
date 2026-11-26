@@ -5,7 +5,6 @@ import { storePasta } from "../pastaStorage";
 
 import findGoal from "../findGoal";
 import getSql from "../getSql";
-import joinValues from "../joinValues";
 import getAllSubcategories from "./getAllSubcategories";
 import getNonGeneralCategories from "./getNonGeneralCategories";
 import { METADATA, Variant } from "../pastas/metadata";
@@ -61,7 +60,7 @@ export default async function createMatch({
   const pastaToStore = getFullPasta(fullPasta, variant);
   let hash: null | bigint = null;
   let json: null | string = null;
-  const subcategoryValues = [];
+  const subcategoryNames: string[] = [];
   // TODO: should have client pass in hash and confirm it matches
   if (pastaToStore != null) {
     json = JSON.stringify(pastaToStore);
@@ -76,14 +75,12 @@ export default async function createMatch({
     for (const sc of subcategoriesToStore
       .union(castOptionsToStore)
       .union(currentGameOptions)) {
-      subcategoryValues.push(sql`(${sc})`);
+      subcategoryNames.push(sc);
     }
   }
 
-  const goalTextValues = [];
-  const goalIndexValues = goals.map(
-    (name, index) => sql`(${name}, ${index}::smallint)`,
-  );
+  const unresolvedNames: Array<string | null> = [];
+  const squareIndices = goals.map((_, index) => index);
   for (const name of goals) {
     let unresolvedName = null;
     if (pastaToStore != null) {
@@ -92,7 +89,7 @@ export default async function createMatch({
         unresolvedName = foundGoal.goal;
       }
     }
-    goalTextValues.push(sql`(${name}, ${unresolvedName})`);
+    unresolvedNames.push(unresolvedName);
   }
 
   const matchInsertSql = sql`INSERT INTO game (
@@ -125,7 +122,7 @@ export default async function createMatch({
     WITH
 
     input_texts(name, unresolved_name) AS (
-      VALUES ${joinValues(sql, goalTextValues)}
+      SELECT * FROM unnest(${goals}::text[], ${unresolvedNames}::text[])
     ),
 
     inserted_texts AS (
@@ -144,7 +141,7 @@ export default async function createMatch({
 
     inserted_subcategories AS (
       INSERT INTO subcategory (name)
-      VALUES ${joinValues(sql, subcategoryValues)}
+      SELECT unnest(${subcategoryNames}::text[])
       ON CONFLICT (name) DO NOTHING
     ),
 
@@ -153,7 +150,7 @@ export default async function createMatch({
     ),
 
     goal_indices(name, square_index) AS (
-      VALUES ${joinValues(sql, goalIndexValues)}
+      SELECT * FROM unnest(${goals}::text[], ${squareIndices}::smallint[])
     ),
 
     to_insert_game_goals AS (
@@ -186,7 +183,7 @@ export default async function createMatch({
   // given an unresolved parent, how do we know the token values???
   const setUnresolvedIdSql = sql`
     WITH input_texts(name, unresolved_name) AS (
-      VALUES ${joinValues(sql, goalTextValues)}
+      SELECT * FROM unnest(${goals}::text[], ${unresolvedNames}::text[])
     ),
     text_to_update AS (
       SELECT

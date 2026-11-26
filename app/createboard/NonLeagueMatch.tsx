@@ -545,7 +545,10 @@ export default function NonLeagueMatch({ visible }: Props) {
               isCreationInProgress ||
               roomName === "" ||
               password === "" ||
-              (metadata.type === "Custom" && custom === "") ||
+              (metadata.type === "Custom" &&
+                customType === "fixed_board" &&
+                fixedBoard.trim().split("\n").length !==
+                  actualRows * actualCols) ||
               (metadata.type === "Custom" &&
                 customType === "ufo" &&
                 customUfo == null) ||

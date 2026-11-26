@@ -5,7 +5,6 @@ import { fetchPastas } from "./pastaStorage";
 import { UFOPasta } from "./generator/ufoGenerator";
 import getAllSubcategories from "./createboard/getAllSubcategories";
 import getNonGeneralCategories from "./createboard/getNonGeneralCategories";
-import joinValues from "./joinValues";
 import { getMatchingRepoPasta } from "./getMatchingRepoPasta";
 import getAllCastOptions from "./createboard/getAllCastOptions";
 import getGameList from "./room/[id]/common/getGameList";
@@ -441,16 +440,12 @@ function fetchSubcategoriesSql(
   sql: SQLTemplate,
   allSubcategories: Set<string>,
 ): SQL {
-  const subcategoryValues = [];
-  for (const sc of allSubcategories) {
-    subcategoryValues.push(sql`${sc}`);
-  }
   return sql`
     SELECT
       id,
       name
     FROM subcategory
-    WHERE name IN (${joinValues(sql, subcategoryValues)})
+    WHERE name = ANY(${[...allSubcategories]}::text[])
   `;
 }
 

@@ -466,7 +466,7 @@ export const STANDARD_UFO = {
           "short": "QUIBBLE RACE: Bet against your sponsored Quibble and win"
         },
         {
-          "name": "QUIBBLE RACE: Have $3,000+",
+          "name": "QUIBBLE RACE: Show $3,000+ held",
           "short": "QUIBBLE RACE: $3,000+"
         }
       ],
@@ -712,8 +712,8 @@ export const STANDARD_UFO = {
           "short": "PORGY: 4 torpedo upgrades"
         },
         {
-          "name": "PORGY: Equip the {{porgy_upgrade2}}",
-          "short": "PORGY: Equip the {{porgy_upgrade2}}"
+          "name": "PORGY: Return to base with the {{porgy_upgrade2}}",
+          "short": "PORGY: {{porgy_upgrade2}}"
         }
       ],
       "oniondelivery": [
@@ -951,7 +951,7 @@ export const STANDARD_UFO = {
       ],
       "quibblerace": [
         {
-          "name": "QUIBBLE RACE: WILD-BETS allowed; Have $25,000+",
+          "name": "QUIBBLE RACE: WILD-BETS allowed; Show $25,000+ held",
           "short": "QUIBBLE RACE: WILD-BETS; $25,000+"
         },
         {

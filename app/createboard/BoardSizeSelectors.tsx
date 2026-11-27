@@ -24,7 +24,7 @@ export default function BoardSizeSelectors({ boardSize, setBoardSize }: Props) {
     setBoardSize(newBoardSize);
   };
   const setLockSquare = (newVal: boolean) => {
-    const newBoardSize = { ...boardSize };
+    const newBoardSize = { ...boardSize, lockSquare: newVal };
     if (newVal) {
       newBoardSize.cols = newBoardSize.rows;
     }
